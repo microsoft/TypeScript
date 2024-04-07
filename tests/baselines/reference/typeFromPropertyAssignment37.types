@@ -67,6 +67,6 @@ if (!!false) {
 >existy : () => void
 >       : ^^^^^^^^^^
 >function () { } : () => void
->                : ^^^^^^^^^^
+>                :           
 }
 

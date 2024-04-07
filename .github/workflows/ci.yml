@@ -63,7 +63,10 @@ jobs:
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
-        run: git diff --diff-filter=AM --no-index -- ./tests/baselines/reference ./tests/baselines/local
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+          git diff --staged --exit-code
 
   lint:
     runs-on: ubuntu-latest
@@ -274,6 +277,7 @@ jobs:
           git add tests/baselines/reference
 
       - name: Check baselines
+        id: check-baselines
         run: |
           function print_diff() {
             if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
@@ -286,5 +290,13 @@ jobs:
             print_diff ACR "Missing baselines"
             print_diff MTUXB "Modified baselines"
             print_diff D "Unused baselines"
+            git diff --staged > fix_baselines.patch
             exit 1
           fi
+
+      - name: Upload baseline diff artifact
+        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: fix_baselines.patch
+          path: fix_baselines.patch

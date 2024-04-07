@@ -22,7 +22,7 @@ interface Props {
 
 function Wrapper(props: Props) {
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^     ^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 
@@ -51,7 +51,7 @@ const element = (
 ><Wrapper>    {/* comment */}     <div>Hello</div>    </Wrapper> : JSX.Element
 >                                                                : ^^^^^^^^^^^
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 
     {/* comment */}
      <div>Hello</div>
@@ -64,6 +64,6 @@ const element = (
 
     </Wrapper>
 >Wrapper : (props: Props) => JSX.Element
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 
 )

@@ -1,15 +1,7 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { libContent } from "../helpers/contents";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,

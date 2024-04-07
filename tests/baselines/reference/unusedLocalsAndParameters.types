@@ -6,7 +6,7 @@ export { };
 // function declaration paramter
 function f(a) {
 >f : (a: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 }
@@ -14,16 +14,16 @@ f(0);
 >f(0) : void
 >     : ^^^^
 >f : (a: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
 // function expression paramter
 var fexp = function (a) {
 >fexp : (a: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >function (a) {} : (a: any) => void
->                : ^^^^^^^^^^^^^^^^
+>                :                 
 >a : any
 >  : ^^^
 
@@ -33,16 +33,16 @@ fexp(0);
 >fexp(0) : void
 >        : ^^^^
 >fexp : (a: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
 // arrow function paramter
 var farrow = (a) => {
 >farrow : (a: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >(a) => {} : (a: any) => void
->          : ^^^^^^^^^^^^^^^^
+>          :                 
 >a : any
 >  : ^^^
 
@@ -55,7 +55,7 @@ class C {
     // Method declaration paramter
     method(a) {
 >method : (a: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
     }
@@ -77,7 +77,7 @@ var E = class {
     // Method declaration paramter
     method(a) {
 >method : (a: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
     }
@@ -92,14 +92,14 @@ var E = class {
 
 var o = {
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method(a: any): void; x: number; }
->                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                        : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Object literal method declaration paramter
     method(a) {
 >method : (a: any) => void
->       : ^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -115,14 +115,14 @@ var o = {
 
 o;
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // in a for..in statment
 for (let i in o) {
 >i : string
 >  : ^^^^^^
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // in a for..of statment

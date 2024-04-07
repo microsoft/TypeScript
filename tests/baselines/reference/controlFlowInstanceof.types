@@ -5,7 +5,7 @@
 
 function f1(s: Set<string> | Set<number>) {
 >f1 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -43,18 +43,18 @@ function f1(s: Set<string> | Set<number>) {
 >s.add(42) : Set<number>
 >          : ^^^^^^^^^^^
 >s.add : (value: number) => Set<number>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Set<number>
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
 
 function f2(s: Set<string> | Set<number>) {
 >f2 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -92,18 +92,18 @@ function f2(s: Set<string> | Set<number>) {
 >s.add(42) : Set<number>
 >          : ^^^^^^^^^^^
 >s.add : (value: number) => Set<number>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Set<number>
 >  : ^^^^^^^^^^^
 >add : (value: number) => Set<number>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 }
 
 function f3(s: Set<string> | Set<number>) {
 >f3 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -132,7 +132,7 @@ function f3(s: Set<string> | Set<number>) {
 
 function f4(s: Set<string> | Set<number>) {
 >f4 : (s: Set<string> | Set<number>) => void
->   : ^^^^                         ^^^^^^^^^
+>   : ^ ^^                         ^^^^^^^^^
 >s : Set<string> | Set<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -195,7 +195,7 @@ class C extends A { c: string }
 
 function foo(x: A | undefined) {
 >foo : (x: A | undefined) => void
->    : ^^^^             ^^^^^^^^^
+>    : ^ ^^             ^^^^^^^^^
 >x : A | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -326,7 +326,7 @@ class Y {
 
 function goo(x: X) {
 >goo : (x: X) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : X
 >  : ^
 

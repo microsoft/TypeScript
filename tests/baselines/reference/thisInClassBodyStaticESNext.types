@@ -22,7 +22,7 @@ class Foo {
 >at : () => typeof Foo
 >   : ^^^^^^^^^^^^^^^^
 >() => this : () => typeof Foo
->           : ^^^^^^^^^^^^^^^^
+>           :                 
 >this : typeof Foo
 >     : ^^^^^^^^^^
 
@@ -30,7 +30,7 @@ class Foo {
 >ft : () => any
 >   : ^^^^^^^^^
 >function () { return this } : () => any
->                            : ^^^^^^^^^
+>                            :          
 >this : any
 
     static mt() { return this }

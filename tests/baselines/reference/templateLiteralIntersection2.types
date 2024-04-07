@@ -13,7 +13,7 @@ type JoinedPath = `${Path}/${Path}`;
 
 declare function joinedPath(p: JoinedPath): void;
 >joinedPath : (p: JoinedPath) => void
->           : ^^^^          ^^^^^    
+>           : ^ ^^          ^^^^^    
 >p : `${Path}/${Path}`
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -21,7 +21,7 @@ joinedPath("foo/bar");
 >joinedPath("foo/bar") : void
 >                      : ^^^^
 >joinedPath : (p: `${Path}/${Path}`) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo/bar" : "foo/bar"
 >          : ^^^^^^^^^
 
@@ -33,7 +33,7 @@ joinedPath(`${somePath}/${somePath}`);
 >joinedPath(`${somePath}/${somePath}`) : void
 >                                      : ^^^^
 >joinedPath : (p: `${Path}/${Path}`) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`${somePath}/${somePath}` : `${Path}/${Path}`
 >                          : ^^^^^^^^^^^^^^^^^
 >somePath : Path
@@ -53,7 +53,7 @@ type EndsWithA = `${string}a`;
 
 declare function withinAs(p: StartsWithA & EndsWithA): void;
 >withinAs : (p: StartsWithA & EndsWithA) => void
->         : ^^^^                       ^^^^^    
+>         : ^ ^^                       ^^^^^    
 >p : `a${string}` & `${string}a`
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -61,7 +61,7 @@ withinAs("");
 >withinAs("") : void
 >             : ^^^^
 >withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -69,7 +69,7 @@ withinAs("a");
 >withinAs("a") : void
 >              : ^^^^
 >withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
@@ -77,7 +77,7 @@ withinAs("ab");
 >withinAs("ab") : void
 >               : ^^^^
 >withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"ab" : "ab"
 >     : ^^^^
 
@@ -85,7 +85,7 @@ withinAs("aba");
 >withinAs("aba") : void
 >                : ^^^^
 >withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"aba" : "aba"
 >      : ^^^^^
 
@@ -93,7 +93,7 @@ withinAs("abavvvva");
 >withinAs("abavvvva") : void
 >                     : ^^^^
 >withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"abavvvva" : "abavvvva"
 >           : ^^^^^^^^^^
 

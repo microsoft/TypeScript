@@ -22,7 +22,7 @@ const obj = {
   /** @type {function(number): number} */
   method1(n1) {
 >method1 : (n1: number) => number
->        : ^^^^^^^^^^^^^^^^      
+>        : ^  ^^^^^^^^^^^^^      
 >n1 : number
 >   : ^^^^^^
 
@@ -36,7 +36,7 @@ const obj = {
 >method2 : (arg0: number) => number
 >        : ^^^^^^^      ^^^^^      
 >(n1) => "lol" : (n1: number) => number
->              : ^^^^^^^^^^^^^^^^      
+>              : ^  ^^^^^^^^^^^^^      
 >n1 : number
 >   : ^^^^^^
 >"lol" : "lol"
@@ -47,7 +47,7 @@ const obj = {
 >arrowFunc : (arg0: number) => number
 >          : ^^^^^^^      ^^^^^      
 >(num="0") => num + 42 : (num?: number) => number
->                      : ^^^^^^^^^^^^^^^^^^      
+>                      : ^   ^^^^^^^^^^^^^^      
 >num : number
 >    : ^^^^^^
 >"0" : "0"

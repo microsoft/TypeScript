@@ -19,15 +19,14 @@
         "arrowFunction.useParentheses": "preferNone",
         "conditionalExpression.linePerExpression": false, // Keep our "match/case"-ish conditionals.
         "functionExpression.spaceAfterFunctionKeyword": true,
-        "importDeclaration.forceMultiLine": true,
+        "importDeclaration.forceMultiLine": "whenMultiple",
         "constructorType.spaceAfterNewKeyword": true,
         "constructSignature.spaceAfterNewKeyword": true,
 
-        // Let eslint-plugin-simple-import-sort handle this.
-        "module.sortImportDeclarations": "maintain",
-        "module.sortExportDeclarations": "maintain",
-        "exportDeclaration.sortNamedExports": "maintain",
-        "importDeclaration.sortNamedImports": "maintain"
+        "module.sortImportDeclarations": "caseInsensitive",
+        "module.sortExportDeclarations": "caseInsensitive",
+        "exportDeclaration.sortNamedExports": "caseInsensitive",
+        "importDeclaration.sortNamedImports": "caseInsensitive"
     },
     "prettier": {
         "newLineKind": "lf",
@@ -53,12 +52,13 @@
         "tests/**",
         "internal/**",
         "**/*.generated.*",
-        "scripts/*.d.*"
+        "scripts/*.d.*",
+        "**/_namespaces/**"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [
-        "https://plugins.dprint.dev/typescript-0.88.9.wasm",
-        "https://plugins.dprint.dev/json-0.19.1.wasm",
-        "https://plugins.dprint.dev/prettier-0.35.0.json@0df49c4d878bb1051af2fa1d1f69ba6400f4b78633f49baa1f38954a6fd32b40"
+        "https://plugins.dprint.dev/typescript-0.90.0.wasm",
+        "https://plugins.dprint.dev/json-0.19.2.wasm",
+        "https://plugins.dprint.dev/prettier-0.39.0.json@896b70f29ef8213c1b0ba81a93cee9c2d4f39ac2194040313cd433906db7bc7c"
     ]
 }

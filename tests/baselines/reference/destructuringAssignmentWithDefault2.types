@@ -2,8 +2,8 @@
 
 === destructuringAssignmentWithDefault2.ts ===
 const a: { x?: number; y?: number } = { };
->a : { x?: number | undefined; y?: number | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { x?: number; y?: number; }
+>  : ^^^^^^      ^^^^^^      ^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : number | undefined
@@ -174,11 +174,11 @@ let value;
 >r.next() : IteratorResult<number, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : Iterator<number, any, undefined>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ({ done: done = false, value } = r.next());
 >({ done: done = false, value } = r.next()) : IteratorResult<number, any>
@@ -200,9 +200,9 @@ let value;
 >r.next() : IteratorResult<number, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : Iterator<number, any, undefined>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

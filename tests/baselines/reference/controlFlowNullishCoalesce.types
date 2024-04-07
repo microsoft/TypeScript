@@ -24,11 +24,11 @@ a.toString();
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number | undefined) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // assignment flow
 declare const o: { x: number } | undefined;

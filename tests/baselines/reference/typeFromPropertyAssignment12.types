@@ -3,9 +3,9 @@
 === module.js ===
 var Outer = function(element, config) {};
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >function(element, config) {} : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             :                                                                      
 >element : any
 >config : any
 
@@ -17,7 +17,7 @@ Outer.Pos = function (line, ch) {};
 >Outer.Pos : typeof Pos
 >          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
 >    : ^^^^^^^^^^
 >function (line, ch) {} : typeof Pos
@@ -33,7 +33,7 @@ Outer.Pos.prototype.line;
 >Outer.Pos : typeof Pos
 >          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
 >    : ^^^^^^^^^^
 >prototype : any
@@ -49,7 +49,7 @@ var pos = new Outer.Pos(1, 'x');
 >Outer.Pos : typeof Pos
 >          : ^^^^^^^^^^
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >Pos : typeof Pos
 >    : ^^^^^^^^^^
 >1 : 1

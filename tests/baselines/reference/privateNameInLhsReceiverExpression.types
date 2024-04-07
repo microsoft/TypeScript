@@ -13,7 +13,7 @@ class Test {
 
     static something(obj: { [key: string]: Test }) {
 >something : (obj: { [key: string]: Test; }) => void
->          : ^^^^^^                        ^^^^^^^^^
+>          : ^   ^^                        ^^^^^^^^^
 >obj : { [key: string]: Test; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string

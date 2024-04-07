@@ -5,13 +5,13 @@ const f = function() {};
 >f : () => void
 >  : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 
 var g = f;
 >g : () => void
 >  : ^^^^^^^^^^
 >f : () => void
->  : ^^^^^^^^^^
+>  :           
 
 g.prototype.m = function () {
 >g.prototype.m = function () {  this;} : () => void

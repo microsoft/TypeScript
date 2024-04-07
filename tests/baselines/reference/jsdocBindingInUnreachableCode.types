@@ -10,9 +10,9 @@ if (false) {
      */
     const x = function (s) {
 >x : (s: string) => void
->  : ^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >function (s) {    } : (s: string) => void
->                    : ^^^^      ^^^^^^^^^
+>                    :                    
 >s : string
 >  : ^^^^^^
 

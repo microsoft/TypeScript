@@ -74,11 +74,11 @@ complicatedArrayVar.push({ x: 30, y : 'hello world' });
 >complicatedArrayVar.push({ x: 30, y : 'hello world' }) : number
 >                                                       : ^^^^^^
 >complicatedArrayVar.push : (...items: { x: number; y: string; }[]) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >complicatedArrayVar : { x: number; y: string; }[]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >push : (...items: { x: number; y: string; }[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 30, y : 'hello world' } : { x: number; y: string; }
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -169,11 +169,11 @@ var n4: {
 
 var d4: {
 >d4 : { foo(n: string, x: { x: number; y: number; }): { x: number; y: number; }; }
->   : ^^^^^^^^^      ^^^^^                         ^^^                         ^^^
+>   : ^^^^^^ ^^      ^^ ^^                         ^^^                         ^^^
 
     foo(n: string, x: { x: number; y: number; }): {
 >foo : (n: string, x: { x: number; y: number; }) => { x: number; y: number; }
->    : ^^^^      ^^^^^                         ^^^^^                         
+>    : ^ ^^      ^^ ^^                         ^^^^^                         
 >n : string
 >  : ^^^^^^
 >x : { x: number; y: number; }
@@ -299,7 +299,7 @@ var z;
 
 function foo(a2) {
 >foo : (a2: any) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^
 >a2 : any
 
     var a = 10;

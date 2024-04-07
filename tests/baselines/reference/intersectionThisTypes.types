@@ -31,7 +31,7 @@ type Thing4 = Thing3 & string[];
 
 function f1(t: Thing3) {
 >f1 : (t: Thing3) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >t : Thing3
 >  : ^^^^^^
 
@@ -84,7 +84,7 @@ interface Thing5 extends Thing4 {
 
 function f2(t: Thing5) {
 >f2 : (t: Thing5) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >t : Thing5
 >  : ^^^^^^
 
@@ -132,7 +132,7 @@ function f2(t: Thing5) {
 interface Component {
     extend<T>(props: T): this & T;
 >extend : <T>(props: T) => this & T
->       : ^ ^^^^^^^^^ ^^^^^        
+>       : ^ ^^     ^^ ^^^^^        
 >props : T
 >      : ^
 }
@@ -145,7 +145,7 @@ interface Label extends Component {
 
 function test(label: Label) {
 >test : (label: Label) => void
->     : ^^^^^^^^     ^^^^^^^^^
+>     : ^     ^^     ^^^^^^^^^
 >label : Label
 >      : ^^^^^
 
@@ -153,17 +153,17 @@ function test(label: Label) {
 >extended : Label & { id: number; } & { tag: string; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend({ id: 67 }).extend({ tag: "hello" }) : Label & { id: number; } & { tag: string; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^^^               ^^^                
 >label.extend({ id: 67 }).extend : <T>(props: T) => Label & { id: number; } & T
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend({ id: 67 }) : Label & { id: number; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >label.extend : <T>(props: T) => Label & T
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^
 >label : Label
 >      : ^^^^^
 >extend : <T>(props: T) => Label & T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^^^^^^
 >{ id: 67 } : { id: number; }
 >           : ^^^^^^^^^^^^^^^
 >id : number
@@ -171,7 +171,7 @@ function test(label: Label) {
 >67 : 67
 >   : ^^
 >extend : <T>(props: T) => Label & { id: number; } & T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ tag: "hello" } : { tag: string; }
 >                 : ^^^^^^^^^^^^^^^^
 >tag : string

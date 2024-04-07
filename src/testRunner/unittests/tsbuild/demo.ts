@@ -3,12 +3,8 @@ import {
     getFsContentsForDemoProjectReferencesCoreConfig,
     getFsForDemoProjectReferences,
 } from "../helpers/demoProjectReferences";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import {
-    prependText,
-} from "../helpers/vfs";
+import { verifyTsc } from "../helpers/tsc";
+import { prependText } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: on demo project", () => {
     let projFs: vfs.FileSystem;

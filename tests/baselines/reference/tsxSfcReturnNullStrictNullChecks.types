@@ -7,16 +7,16 @@ import React = require('react');
 
 const Foo = (props: any) => null;
 >Foo : (props: any) => null
->    : ^^^^^^^^   ^^^^^^^^^
+>    : ^     ^^   ^^^^^^^^^
 >(props: any) => null : (props: any) => null
->                     : ^^^^^^^^   ^^^^^^^^^
+>                     :                     
 >props : any
 
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => null
->      : ^^^^                  ^^^^^^^^^
->x : { name?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^
+>x : { name?: string; }
+>  : ^^^^^^^^^      ^^^
 >name : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 
@@ -29,7 +29,7 @@ const foo = <Foo />;
 ><Foo /> : JSX.Element
 >        : ^^^^^^^^^^^
 >Foo : (props: any) => null
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^
 
 const G = <Greet />;
 >G : JSX.Element
@@ -37,5 +37,5 @@ const G = <Greet />;
 ><Greet /> : JSX.Element
 >          : ^^^^^^^^^^^
 >Greet : (x: { name?: string | undefined; }) => null
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -1,12 +1,6 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { verifyTsc } from "../helpers/tsc";
 import {
     appendText,
     loadProjectFromFiles,

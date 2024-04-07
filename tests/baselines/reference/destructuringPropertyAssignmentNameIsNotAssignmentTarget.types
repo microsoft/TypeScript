@@ -4,7 +4,7 @@
 // test for #10668
 function qux(bar: { value: number }) {
 >qux : (bar: { value: number; }) => void
->    : ^^^^^^                  ^^^^^^^^^
+>    : ^   ^^                  ^^^^^^^^^
 >bar : { value: number; }
 >    : ^^^^^^^^^      ^^^
 >value : number
@@ -32,7 +32,7 @@ function qux(bar: { value: number }) {
 >x : () => { value: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => bar : () => { value: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>          :                         
 >bar : { value: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 }

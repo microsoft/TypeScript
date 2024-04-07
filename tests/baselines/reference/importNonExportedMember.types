@@ -15,7 +15,7 @@ export { foo, bar as baz };
 >bar : () => any
 >    : ^^^^^^^^^
 >baz : () => any
->    : ^^^^^^^^^
+>    :          
 
 === b.ts ===
 import { foo, bar } from "./a";

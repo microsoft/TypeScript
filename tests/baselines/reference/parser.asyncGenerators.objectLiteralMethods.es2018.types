@@ -39,13 +39,13 @@ const o3 = {
 === awaitParameterIsError.ts ===
 const o4 = {
 >o4 : { f(await: any): AsyncGenerator<never, void, unknown>; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    async * f(await) {    }} : { f(await: any): AsyncGenerator<never, void, unknown>; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f(await) {
 >f : (await: any) => AsyncGenerator<never, void, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
 >      : ^^^
     }
@@ -53,13 +53,13 @@ const o4 = {
 === yieldParameterIsError.ts ===
 const o5 = {
 >o5 : { f(yield: any): AsyncGenerator<never, void, unknown>; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    async * f(yield) {    }} : { f(yield: any): AsyncGenerator<never, void, unknown>; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f(yield) {
 >f : (yield: any) => AsyncGenerator<never, void, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
 >      : ^^^
     }
@@ -67,13 +67,13 @@ const o5 = {
 === awaitInParameterInitializerIsError.ts ===
 const o6 = {
 >o6 : { f(a?: number): AsyncGenerator<never, void, unknown>; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    async * f(a = await 1) {    }} : { f(a?: number): AsyncGenerator<never, void, unknown>; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f(a = await 1) {
 >f : (a?: number) => AsyncGenerator<never, void, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >await 1 : 1
@@ -85,13 +85,13 @@ const o6 = {
 === yieldInParameterInitializerIsError.ts ===
 const o7 = {
 >o7 : { f(a?: any): AsyncGenerator<never, void, unknown>; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    async * f(a = yield) {    }} : { f(a?: any): AsyncGenerator<never, void, unknown>; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     async * f(a = yield) {
 >f : (a?: any) => AsyncGenerator<never, void, unknown>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >yield : any
@@ -147,7 +147,7 @@ const o10 = {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {        } : () => void
->                            : ^^^^^^^^^^
+>                            :           
 >yield : () => void
 >      : ^^^^^^^^^^
 
@@ -186,7 +186,7 @@ const o12 = {
 >x : () => void
 >  : ^^^^^^^^^^
 >function await() {        } : () => void
->                            : ^^^^^^^^^^
+>                            :           
 >await : () => void
 >      : ^^^^^^^^^^
 
@@ -378,15 +378,15 @@ const o22 = {
 === asyncGeneratorSetAccessorIsError.ts ===
 const o23 = {
 >o23 : { set(): any; x(value: number): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 >{    async * set x(value: number) {    }} : { set(): any; x(value: number): void; }
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 
     async * set x(value: number) {
 >set : () => any
 >    : ^^^^^^^^^
 >x : (value: number) => void
->  : ^^^^^^^^      ^^^^^^^^^
+>  : ^     ^^      ^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }

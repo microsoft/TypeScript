@@ -19,7 +19,7 @@ var t = function () {
 >t : () => void
 >  : ^^^^^^^^^^
 >function () {    var p = this;    var p: any;} : () => void
->                                               : ^^^^^^^^^^
+>                                               :           
 
     var p = this;
 >p : any
@@ -33,7 +33,7 @@ var t2 = function f() {
 >t2 : () => void
 >   : ^^^^^^^^^^
 >function f() {    var x = this;    var x: any;} : () => void
->                                                : ^^^^^^^^^^
+>                                                :           
 >f : () => void
 >  : ^^^^^^^^^^
 
@@ -53,7 +53,7 @@ class C {
 >x : () => void
 >  : ^^^^^^^^^^
 >function () {        var q: any;        var q = this;    } : () => void
->                                                           : ^^^^^^^^^^
+>                                                           :           
 
         var q: any;
 >q : any
@@ -66,7 +66,7 @@ class C {
 >y : () => void
 >  : ^^^^^^^^^^
 >function ff() {        var q: any;        var q = this;    } : () => void
->                                                             : ^^^^^^^^^^
+>                                                             :           
 >ff : () => void
 >   : ^^^^^^^^^^
 
@@ -99,7 +99,7 @@ module M {
 >t : () => void
 >  : ^^^^^^^^^^
 >function () {        var p = this;        var p: any;    } : () => void
->                                                           : ^^^^^^^^^^
+>                                                           :           
 
         var p = this;
 >p : any
@@ -113,7 +113,7 @@ module M {
 >t2 : () => void
 >   : ^^^^^^^^^^
 >function f() {        var x = this;        var x: any;    } : () => void
->                                                            : ^^^^^^^^^^
+>                                                            :           
 >f : () => void
 >  : ^^^^^^^^^^
 

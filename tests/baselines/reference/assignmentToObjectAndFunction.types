@@ -15,11 +15,11 @@ var goodObj: Object = {
 >goodObj : Object
 >        : ^^^^^^
 >{    toString(x?) {        return "";    }} : { toString(x?: any): string; }
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     toString(x?) {
 >toString : (x?: any) => string
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -66,7 +66,7 @@ module bar {
 
     export function apply(thisArg: string, argArray?: string) { }
 >apply : (thisArg: string, argArray?: string) => void
->      : ^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^
+>      : ^       ^^      ^^        ^^^      ^^^^^^^^^
 >thisArg : string
 >        : ^^^^^^
 >argArray : string

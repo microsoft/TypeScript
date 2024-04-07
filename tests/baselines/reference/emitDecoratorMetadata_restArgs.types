@@ -27,7 +27,7 @@ class A {
 
     method(...args) {}
 >method : (...args: any[]) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^    ^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 }
@@ -50,7 +50,7 @@ class B {
 
     method(this: this, ...args: string[]) {}
 >method : (this: this, ...args: string[]) => void
->       : ^^^^^^^    ^^^^^^^^^^^        ^^^^^^^^^
+>       : ^    ^^    ^^^^^    ^^        ^^^^^^^^^
 >this : this
 >     : ^^^^
 >args : string[]

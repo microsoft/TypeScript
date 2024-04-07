@@ -3,7 +3,7 @@
 === noImplicitThisFunctions.ts ===
 function f1(x) {
 >f1 : (x: any) => any
->   : ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -19,7 +19,7 @@ function f1(x) {
 
 function f2(y: number) {
 >f2 : (y: number) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ function f2(y: number) {
 
 function f3(z: number): number {
 >f3 : (z: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >z : number
 >  : ^^^^^^
 
@@ -56,11 +56,11 @@ function f3(z: number): number {
 // error: `this` is `window`, but is still of type `any`
 let f4: (b: number) => number = b => this.c + b;
 >f4 : (b: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >b : number
 >  : ^^^^^^
 >b => this.c + b : (b: number) => any
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >this.c + b : any
@@ -78,7 +78,7 @@ let f5 = () => () => this;
 >f5 : () => () => typeof globalThis
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => this : () => () => typeof globalThis
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 :                              
 >() => this : () => typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
@@ -88,7 +88,7 @@ let f6 = function() { return () => this; };
 >f6 : () => () => any
 >   : ^^^^^^^^^^^^^^^
 >function() { return () => this; } : () => () => any
->                                  : ^^^^^^^^^^^^^^^
+>                                  :                
 >() => this : () => any
 >           : ^^^^^^^^^
 >this : any
@@ -98,7 +98,7 @@ let f7 = function() { return function() { return this } };
 >f7 : () => () => any
 >   : ^^^^^^^^^^^^^^^
 >function() { return function() { return this } } : () => () => any
->                                                 : ^^^^^^^^^^^^^^^
+>                                                 :                
 >function() { return this } : () => any
 >                           : ^^^^^^^^^
 >this : any

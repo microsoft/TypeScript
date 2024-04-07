@@ -9,7 +9,7 @@ class LazyArray<T> {
 >objects : { [objectId: string]: T; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><{ [objectId: string]: T; }>{} : { [objectId: string]: T; }
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               :                           
 >objectId : string
 >         : ^^^^^^
 >{} : {}

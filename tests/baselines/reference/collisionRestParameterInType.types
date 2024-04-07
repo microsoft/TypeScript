@@ -3,7 +3,7 @@
 === collisionRestParameterInType.ts ===
 var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 >v1 : (_i: number, ...restParameters: any[]) => void
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^  ^^      ^^^^^              ^^^^^^^^^^^^    
 >_i : number
 >   : ^^^^^^
 >restParameters : any[]
@@ -11,7 +11,7 @@ var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 
 var v2: {
 >v2 : { (_i: number, ...restParameters: any[]): any; new (_i: number, ...restParameters: any[]): any; foo(_i: number, ...restParameters: any[]): any; prop: (_i: number, ...restParameters: any) => void; }
->   : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                ^^^         ^^^
+>   : ^^^  ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^^^                                ^^^         ^^^
 
     (_i: number, ...restParameters); // no error - no code gen
 >_i : number
@@ -27,7 +27,7 @@ var v2: {
 
     foo(_i: number, ...restParameters); // no error - no code gen
 >foo : (_i: number, ...restParameters: any[]) => any
->    : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^              ^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >restParameters : any[]
@@ -35,7 +35,7 @@ var v2: {
 
     prop: (_i: number, ...restParameters) => void; // no error - no code gen
 >prop : (_i: number, ...restParameters: any[]) => void
->     : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^  ^^      ^^^^^              ^^^^^^^^^^^^    
 >_i : number
 >   : ^^^^^^
 >restParameters : any[]

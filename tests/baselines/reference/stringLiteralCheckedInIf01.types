@@ -11,7 +11,7 @@ type T = S[] | S;
 
 function f(foo: T) {
 >f : (foo: T) => S
->  : ^^^^^^ ^^^^^^
+>  : ^   ^^ ^^^^^^
 >foo : T
 >    : ^
 

@@ -14,9 +14,9 @@ export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<inf
 export interface InterfaceA<T> {
     filter(callback: (newValue: T, oldValue: T) => boolean): InterfaceA<T>;
 >filter : (callback: (newValue: T, oldValue: T) => boolean) => InterfaceA<T>
->       : ^^^^^^^^^^^                                     ^^^^^             
+>       : ^        ^^                                     ^^^^^             
 >callback : (newValue: T, oldValue: T) => boolean
->         : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^       
+>         : ^        ^^ ^^        ^^ ^^^^^       
 >newValue : T
 >         : ^
 >oldValue : T
@@ -24,9 +24,9 @@ export interface InterfaceA<T> {
 
     map<D>(callback: (value: T) => D): InterfaceA<D>;
 >map : <D>(callback: (value: T) => D) => InterfaceA<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^             
+>    : ^ ^^        ^^               ^^^^^             
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -78,9 +78,9 @@ export interface InterfaceA<T> {
 export interface InterfaceB<T> extends InterfaceA<T> {
     map<D>(callback: (value: T) => D): InterfaceB<D>;
 >map : <D>(callback: (value: T) => D) => InterfaceB<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^             
+>    : ^ ^^        ^^               ^^^^^             
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -135,9 +135,9 @@ export class A<T> implements InterfaceB<T> {
 
     public filter(callback: (newValue: T, oldValue: T) => boolean): B<T> {
 >filter : (callback: (newValue: T, oldValue: T) => boolean) => B<T>
->       : ^^^^^^^^^^^                                     ^^^^^    
+>       : ^        ^^                                     ^^^^^    
 >callback : (newValue: T, oldValue: T) => boolean
->         : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^       
+>         : ^        ^^ ^^        ^^ ^^^^^       
 >newValue : T
 >         : ^
 >oldValue : T
@@ -151,9 +151,9 @@ export class A<T> implements InterfaceB<T> {
 
     public map<D>(callback: (value: T) => D): B<D> {
 >map : <D>(callback: (value: T) => D) => B<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^    
+>    : ^ ^^        ^^               ^^^^^    
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 

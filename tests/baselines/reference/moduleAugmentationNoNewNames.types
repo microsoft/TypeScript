@@ -30,9 +30,9 @@ declare module "./observable" {
     interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
->    : ^ ^^^^^^^^           ^^^^^             
+>    : ^ ^^    ^^           ^^^^^             
 >proj : (e: T) => U
->     : ^^^^ ^^^^^ 
+>     : ^ ^^ ^^^^^ 
 >e : T
 >  : ^
     }
@@ -70,9 +70,9 @@ export declare class Observable<T> {
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
->       : ^^^^^^^                 ^^^^^             
+>       : ^    ^^                 ^^^^^             
 >pred : (e: T) => boolean
->     : ^^^^ ^^^^^       
+>     : ^ ^^ ^^^^^       
 >e : T
 >  : ^
 }
@@ -94,13 +94,13 @@ let y = x.map(x => x + 1);
 >x.map(x => x + 1) : Observable<number>
 >                  : ^^^^^^^^^^^^^^^^^^
 >x.map : <U>(proj: (e: number) => U) => Observable<U>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Observable<number>
 >  : ^^^^^^^^^^^^^^^^^^
 >map : <U>(proj: (e: number) => U) => Observable<U>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => x + 1 : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number

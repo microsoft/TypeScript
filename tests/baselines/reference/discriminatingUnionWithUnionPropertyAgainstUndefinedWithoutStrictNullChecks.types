@@ -72,9 +72,9 @@ interface B2 {
 
 const testMethod = (m: A2 | B2) => {
 >testMethod : (m: A2 | B2) => void
->           : ^^^^       ^^^^^^^^^
+>           : ^ ^^       ^^^^^^^^^
 >(m: A2 | B2) => {    if (m.error) {        m; // should be A2 | B2    } else {        m; // should be A2 | B2    }} : (m: A2 | B2) => void
->                                                                                                                    : ^^^^       ^^^^^^^^^
+>                                                                                                                    :                     
 >m : A2 | B2
 >  : ^^^^^^^
 

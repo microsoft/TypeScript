@@ -5,9 +5,7 @@
  * bundle as namespaces again, even though the project is modules.
  */
 
-import assert, {
-    fail,
-} from "assert";
+import assert, { fail } from "assert";
 import cp from "child_process";
 import fs from "fs";
 import minimist from "minimist";

@@ -12,7 +12,7 @@ class Message {
 
 function saySize(message: Message | Message[]) {
 >saySize : (message: Message | Message[]) => number
->        : ^^^^^^^^^^                   ^^^^^^^^^^^
+>        : ^       ^^                   ^^^^^^^^^^^
 >message : Message | Message[]
 >        : ^^^^^^^^^^^^^^^^^^^
 

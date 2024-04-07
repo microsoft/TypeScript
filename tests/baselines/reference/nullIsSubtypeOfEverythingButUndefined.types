@@ -172,7 +172,7 @@ var r7 = true ? () => { } : null;
 >r7 : () => void
 >   : ^^^^^^^^^^
 >true ? () => { } : null : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >true : true
 >     : ^^^^
 >() => { } : () => void
@@ -190,13 +190,13 @@ var r7 = true ? null : () => { };
 
 var r8 = true ? <T>(x: T) => { return x } : null;
 >r8 : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >true ? <T>(x: T) => { return x } : null : <T>(x: T) => T
->                                        : ^ ^^^^^ ^^^^^^
+>                                        :               
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T>(x: T) => T
->                          : ^ ^^^^^ ^^^^^^
+>                          : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -204,13 +204,13 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 
 var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identical across declarations
 >r8b : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >true ? null : <T>(x: T) => { return x } : <T>(x: T) => T
->                                        : ^ ^^^^^ ^^^^^^
+>                                        :               
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T>(x: T) => T
->                          : ^ ^^^^^ ^^^^^^
+>                          : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -442,7 +442,7 @@ var r16 = true ? null : ac;
 
 function f17<T>(x: T) {
 >f17 : <T>(x: T) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -469,7 +469,7 @@ function f17<T>(x: T) {
 
 function f18<T, U>(x: U) {
 >f18 : <T, U>(x: U) => void
->    : ^^^^ ^^^^^ ^^^^^^^^^
+>    : ^^^^ ^^ ^^ ^^^^^^^^^
 >x : U
 >  : ^
 
