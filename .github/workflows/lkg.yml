@@ -32,6 +32,8 @@ jobs:
           ref: ${{ inputs.branch_name }}
           token: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
+        with:
+          node-version: 'lts/*'
       - run: |
           npm --version
           # corepack enable npm
