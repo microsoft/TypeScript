@@ -1,11 +1,7 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "./baseline";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "./baseline";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,
@@ -24,7 +20,6 @@ export function createSolutionBuilderHostForBaseline(
     const { cb } = commandLineCallbacks(sys, originalRead);
     const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
-    host.afterEmitBundle = cb;
     return host;
 }
 

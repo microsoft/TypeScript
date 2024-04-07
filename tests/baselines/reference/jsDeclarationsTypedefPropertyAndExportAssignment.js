@@ -120,16 +120,10 @@ export type TaskGroup = {
 /**
  * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
  */
-export const taskGroups: {
-    parseHTML: {
-        id: "parseHTML";
-        label: string;
-    };
-    styleLayout: {
-        id: "styleLayout";
-        label: string;
-    };
-};
+export const taskGroups: { [P in TaskGroupIds]: {
+    id: P;
+    label: string;
+}; };
 /** @type {Object<string, TaskGroup>} */
 export const taskNameToGroup: {
     [x: string]: TaskGroup;

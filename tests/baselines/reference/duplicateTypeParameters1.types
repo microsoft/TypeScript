@@ -3,4 +3,5 @@
 === duplicateTypeParameters1.ts ===
 function A<X, X>() { }
 >A : <X>() => void
+>  : ^^^^^^^^^^^^^
 

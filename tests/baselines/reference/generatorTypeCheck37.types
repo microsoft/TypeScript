@@ -3,9 +3,11 @@
 === generatorTypeCheck37.ts ===
 function* g() {
 >g : () => Generator<any, any, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return yield yield 0;
 >yield yield 0 : any
 >yield 0 : any
 >0 : 0
+>  : ^
 }

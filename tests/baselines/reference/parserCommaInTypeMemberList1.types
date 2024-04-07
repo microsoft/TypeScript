@@ -3,6 +3,8 @@
 === parserCommaInTypeMemberList1.ts ===
 var v: { workItem: any, width: string };
 >v : { workItem: any; width: string; }
+>  : ^^^^^^^^^^^^   ^^^^^^^^^      ^^^
 >workItem : any
 >width : string
+>      : ^^^^^^
 

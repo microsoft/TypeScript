@@ -3,9 +3,11 @@
 === checkForObjectTooStrict.ts ===
 module Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     export class Object {
 >Object : Object
+>       : ^^^^^^
 
     }
 
@@ -15,15 +17,21 @@ module Foo {
 
 class Bar extends Foo.Object { // should work
 >Bar : Bar
+>    : ^^^
 >Foo.Object : Foo.Object
+>           : ^^^^^^^^^^
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 >Object : typeof Foo.Object
+>       : ^^^^^^^^^^^^^^^^^
 
     constructor () {
 
         super();
 >super() : void
+>        : ^^^^
 >super : typeof Foo.Object
+>      : ^^^^^^^^^^^^^^^^^
 
     }
 
@@ -32,13 +40,17 @@ class Bar extends Foo.Object { // should work
 
 class Baz extends Object {
 >Baz : Baz
+>    : ^^^
 >Object : Object
+>       : ^^^^^^
 
     constructor () { // ERROR, as expected
 
         super();
 >super() : void
+>        : ^^^^
 >super : ObjectConstructor
+>      : ^^^^^^^^^^^^^^^^^
 
     }
 

@@ -40,7 +40,6 @@ import {
     EmitAndSemanticDiagnosticsBuilderProgram,
     emitFilesAndReportErrors,
     EmitResult,
-    emitUsingBuildInfo,
     emptyArray,
     ExitStatus,
     ExtendedConfigCacheEntry,
@@ -75,7 +74,6 @@ import {
     isIgnoredFileFromWildCardWatching,
     isIncrementalCompilation,
     isPackageJsonInfo,
-    isString,
     listFiles,
     loadWithModeAwareCache,
     maybeBind,
@@ -84,7 +82,6 @@ import {
     mutateMap,
     mutateMapSkippingNewValues,
     noop,
-    outFile,
     OutputFile,
     ParseConfigFileHost,
     parseConfigHostFromCompilerHostLike,
@@ -93,7 +90,6 @@ import {
     PollingInterval,
     Program,
     ProgramBuildInfo,
-    ProgramBundleEmitBuildInfo,
     ProgramHost,
     ProgramMultiFileEmitBuildInfo,
     ProgramUpdateLevel,
@@ -243,8 +239,6 @@ export interface SolutionBuilderHostBase<T extends BuilderProgram> extends Progr
     // TODO: To do better with watch mode and normal build mode api that creates program and emits files
     // This currently helps enable --diagnostics and --extendedDiagnostics
     afterProgramEmitAndDiagnostics?(program: T): void;
-    /** @deprecated @internal */ beforeEmitBundle?(config: ParsedCommandLine): void;
-    /** @deprecated @internal */ afterEmitBundle?(config: ParsedCommandLine): void;
 
     // For testing
     /** @internal */ now?(): Date;
@@ -829,7 +823,6 @@ function setupInitialBuild<T extends BuilderProgram>(state: SolutionBuilderState
 
 export enum InvalidatedProjectKind {
     Build,
-    /** @deprecated */ UpdateBundle,
     UpdateOutputFileStamps,
 }
 
@@ -881,13 +874,7 @@ export interface BuildInvalidedProject<T extends BuilderProgram> extends Invalid
     // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
 }
 
-/** @deprecated */
-export interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
-    readonly kind: InvalidatedProjectKind.UpdateBundle;
-    emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
-}
-
-export type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+export type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T>;
 
 function doneInvalidatedProject<T extends BuilderProgram>(
     state: SolutionBuilderState<T>,
@@ -933,111 +920,92 @@ enum BuildStep {
     SyntaxDiagnostics,
     SemanticDiagnostics,
     Emit,
-    /** @deprecated */ EmitBundle,
     EmitBuildInfo,
-    /** @deprecated */ BuildInvalidatedProjectOfBundle,
     QueueReferencingProjects,
     Done,
 }
 
 function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
-    kind: InvalidatedProjectKind.Build | InvalidatedProjectKind.UpdateBundle,
     state: SolutionBuilderState<T>,
     project: ResolvedConfigFileName,
     projectPath: ResolvedConfigFilePath,
     projectIndex: number,
     config: ParsedCommandLine,
     buildOrder: readonly ResolvedConfigFileName[],
-): BuildInvalidedProject<T> | UpdateBundleProject<T> {
-    let step = kind === InvalidatedProjectKind.Build ? BuildStep.CreateProgram : BuildStep.EmitBundle;
+): BuildInvalidedProject<T> {
+    let step = BuildStep.CreateProgram;
     let program: T | undefined;
     let buildResult: BuildResultFlags | undefined;
-    let invalidatedProjectOfBundle: BuildInvalidedProject<T> | undefined;
 
-    return kind === InvalidatedProjectKind.Build ?
-        {
-            kind,
-            project,
-            projectPath,
-            buildOrder,
-            getCompilerOptions: () => config.options,
-            getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
-            getBuilderProgram: () => withProgramOrUndefined(identity),
-            getProgram: () =>
-                withProgramOrUndefined(
-                    program => program.getProgramOrUndefined(),
-                ),
-            getSourceFile: fileName =>
-                withProgramOrUndefined(
-                    program => program.getSourceFile(fileName),
-                ),
-            getSourceFiles: () =>
-                withProgramOrEmptyArray(
-                    program => program.getSourceFiles(),
-                ),
-            getOptionsDiagnostics: cancellationToken =>
-                withProgramOrEmptyArray(
-                    program => program.getOptionsDiagnostics(cancellationToken),
-                ),
-            getGlobalDiagnostics: cancellationToken =>
-                withProgramOrEmptyArray(
-                    program => program.getGlobalDiagnostics(cancellationToken),
-                ),
-            getConfigFileParsingDiagnostics: () =>
-                withProgramOrEmptyArray(
-                    program => program.getConfigFileParsingDiagnostics(),
-                ),
-            getSyntacticDiagnostics: (sourceFile, cancellationToken) =>
-                withProgramOrEmptyArray(
-                    program => program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-                ),
-            getAllDependencies: sourceFile =>
-                withProgramOrEmptyArray(
-                    program => program.getAllDependencies(sourceFile),
-                ),
-            getSemanticDiagnostics: (sourceFile, cancellationToken) =>
-                withProgramOrEmptyArray(
-                    program => program.getSemanticDiagnostics(sourceFile, cancellationToken),
-                ),
-            getSemanticDiagnosticsOfNextAffectedFile: (cancellationToken, ignoreSourceFile) =>
-                withProgramOrUndefined(
-                    program =>
-                        ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile) &&
-                        (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile),
-                ),
-            emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
-                if (targetSourceFile || emitOnlyDtsFiles) {
-                    return withProgramOrUndefined(
-                        program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project)),
-                    );
-                }
-                executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
-                if (step === BuildStep.EmitBuildInfo) {
-                    return emitBuildInfo(writeFile, cancellationToken);
-                }
-                if (step !== BuildStep.Emit) return undefined;
-                return emit(writeFile, cancellationToken, customTransformers);
-            },
-            done,
-        } :
-        {
-            kind,
-            project,
-            projectPath,
-            buildOrder,
-            getCompilerOptions: () => config.options,
-            getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
-            emit: (writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined) => {
-                if (step !== BuildStep.EmitBundle) return invalidatedProjectOfBundle;
-                return emitBundle(writeFile, customTransformers);
-            },
-            done,
-        };
+    return {
+        kind: InvalidatedProjectKind.Build,
+        project,
+        projectPath,
+        buildOrder,
+        getCompilerOptions: () => config.options,
+        getCurrentDirectory: () => state.compilerHost.getCurrentDirectory(),
+        getBuilderProgram: () => withProgramOrUndefined(identity),
+        getProgram: () =>
+            withProgramOrUndefined(
+                program => program.getProgramOrUndefined(),
+            ),
+        getSourceFile: fileName =>
+            withProgramOrUndefined(
+                program => program.getSourceFile(fileName),
+            ),
+        getSourceFiles: () =>
+            withProgramOrEmptyArray(
+                program => program.getSourceFiles(),
+            ),
+        getOptionsDiagnostics: cancellationToken =>
+            withProgramOrEmptyArray(
+                program => program.getOptionsDiagnostics(cancellationToken),
+            ),
+        getGlobalDiagnostics: cancellationToken =>
+            withProgramOrEmptyArray(
+                program => program.getGlobalDiagnostics(cancellationToken),
+            ),
+        getConfigFileParsingDiagnostics: () =>
+            withProgramOrEmptyArray(
+                program => program.getConfigFileParsingDiagnostics(),
+            ),
+        getSyntacticDiagnostics: (sourceFile, cancellationToken) =>
+            withProgramOrEmptyArray(
+                program => program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            ),
+        getAllDependencies: sourceFile =>
+            withProgramOrEmptyArray(
+                program => program.getAllDependencies(sourceFile),
+            ),
+        getSemanticDiagnostics: (sourceFile, cancellationToken) =>
+            withProgramOrEmptyArray(
+                program => program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            ),
+        getSemanticDiagnosticsOfNextAffectedFile: (cancellationToken, ignoreSourceFile) =>
+            withProgramOrUndefined(
+                program =>
+                    ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile) &&
+                    (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile),
+            ),
+        emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
+            if (targetSourceFile || emitOnlyDtsFiles) {
+                return withProgramOrUndefined(
+                    program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers || state.host.getCustomTransformers?.(project)),
+                );
+            }
+            executeSteps(BuildStep.SemanticDiagnostics, cancellationToken);
+            if (step === BuildStep.EmitBuildInfo) {
+                return emitBuildInfo(writeFile, cancellationToken);
+            }
+            if (step !== BuildStep.Emit) return undefined;
+            return emit(writeFile, cancellationToken, customTransformers);
+        },
+        done,
+    };
 
     function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
         executeSteps(BuildStep.Done, cancellationToken, writeFile, customTransformers);
-        if (kind === InvalidatedProjectKind.Build) performance.mark("SolutionBuilder::Projects built");
-        else performance.mark("SolutionBuilder::Bundles updated");
+        performance.mark("SolutionBuilder::Projects built");
         return doneInvalidatedProject(state, projectPath);
     }
 
@@ -1225,7 +1193,7 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
         if (emitResult.emittedFiles && state.write) {
             emitResult.emittedFiles.forEach(name => listEmittedFile(state, config, name));
         }
-        afterProgramDone(state, program, config);
+        afterProgramDone(state, program);
         step = BuildStep.QueueReferencingProjects;
         return emitResult;
     }
@@ -1261,75 +1229,10 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             type: UpToDateStatusType.UpToDate,
             oldestOutputFileName,
         });
-        afterProgramDone(state, program, config);
+        afterProgramDone(state, program);
         step = BuildStep.QueueReferencingProjects;
         buildResult = resultFlags;
         return emitDiagnostics;
-    }
-
-    function emitBundle(writeFileCallback?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined {
-        Debug.assert(kind === InvalidatedProjectKind.UpdateBundle);
-        if (state.options.dry) {
-            reportStatus(state, Diagnostics.A_non_dry_build_would_update_output_of_project_0, project);
-            buildResult = BuildResultFlags.Success;
-            step = BuildStep.QueueReferencingProjects;
-            return undefined;
-        }
-
-        if (state.options.verbose) reportStatus(state, Diagnostics.Updating_output_of_project_0, project);
-
-        // Update js, and source map
-        const { compilerHost } = state;
-        state.projectCompilerOptions = config.options;
-        state.host.beforeEmitBundle?.(config);
-        const outputFiles = emitUsingBuildInfo(
-            config,
-            compilerHost,
-            ref => {
-                const refName = resolveProjectName(state, ref.path);
-                return parseConfigFile(state, refName, toResolvedConfigFilePath(state, refName));
-            },
-            customTransformers || state.host.getCustomTransformers?.(project),
-        );
-
-        if (isString(outputFiles)) {
-            reportStatus(state, Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, project, relName(state, outputFiles));
-            step = BuildStep.BuildInvalidatedProjectOfBundle;
-            return invalidatedProjectOfBundle = createBuildOrUpdateInvalidedProject(
-                InvalidatedProjectKind.Build,
-                state,
-                project,
-                projectPath,
-                projectIndex,
-                config,
-                buildOrder,
-            ) as BuildInvalidedProject<T>;
-        }
-
-        // Actual Emit
-        Debug.assert(!!outputFiles.length);
-        const emitterDiagnostics = createDiagnosticCollection();
-        const emittedOutputs = new Map<Path, string>();
-        let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-        const existingBuildInfo = state.buildInfoCache.get(projectPath)!.buildInfo || undefined;
-        outputFiles.forEach(({ name, text, writeByteOrderMark, data }) => {
-            emittedOutputs.set(toPath(state, name), name);
-            if (data?.buildInfo) {
-                if ((data.buildInfo.program as ProgramBundleEmitBuildInfo)?.outSignature !== (existingBuildInfo?.program as ProgramBundleEmitBuildInfo)?.outSignature) {
-                    resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                }
-                setBuildInfo(state, data.buildInfo, projectPath, config.options, resultFlags);
-            }
-            writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
-        });
-
-        const emitDiagnostics = finishEmit(
-            emitterDiagnostics,
-            emittedOutputs,
-            outputFiles[0].name,
-            resultFlags,
-        );
-        return { emitSkipped: false, diagnostics: emitDiagnostics };
     }
 
     function executeSteps(till: BuildStep, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
@@ -1356,15 +1259,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
                     emitBuildInfo(writeFile, cancellationToken);
                     break;
 
-                case BuildStep.EmitBundle:
-                    emitBundle(writeFile, customTransformers);
-                    break;
-
-                case BuildStep.BuildInvalidatedProjectOfBundle:
-                    Debug.checkDefined(invalidatedProjectOfBundle).done(cancellationToken, writeFile, customTransformers);
-                    step = BuildStep.Done;
-                    break;
-
                 case BuildStep.QueueReferencingProjects:
                     queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, Debug.checkDefined(buildResult));
                     step++;
@@ -1378,13 +1272,6 @@ function createBuildOrUpdateInvalidedProject<T extends BuilderProgram>(
             Debug.assert(step > currentStep);
         }
     }
-}
-
-function needsBuild<T extends BuilderProgram>({ options }: SolutionBuilderState<T>, status: UpToDateStatus, config: ParsedCommandLine) {
-    if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
-    return config.fileNames.length === 0 ||
-        !!getConfigFileParsingDiagnostics(config).length ||
-        !isIncrementalCompilation(config.options);
 }
 
 interface InvalidateProjectCreateInfo {
@@ -1491,9 +1378,7 @@ function getNextInvalidatedProjectCreateInfo<T extends BuilderProgram>(
         }
 
         return {
-            kind: needsBuild(state, status, config) ?
-                InvalidatedProjectKind.Build :
-                InvalidatedProjectKind.UpdateBundle,
+            kind: InvalidatedProjectKind.Build,
             status,
             project,
             projectPath,
@@ -1513,7 +1398,6 @@ function createInvalidatedProjectWithInfo<T extends BuilderProgram>(
     verboseReportProjectStatus(state, info.project, info.status);
     return info.kind !== InvalidatedProjectKind.UpdateOutputFileStamps ?
         createBuildOrUpdateInvalidedProject(
-            info.kind,
             state,
             info.project,
             info.projectPath,
@@ -1556,7 +1440,6 @@ function getOldProgram<T extends BuilderProgram>({ options, builderPrograms, com
 function afterProgramDone<T extends BuilderProgram>(
     state: SolutionBuilderState<T>,
     program: T | undefined,
-    config: ParsedCommandLine,
 ) {
     if (program) {
         if (state.write) listFiles(program, state.write);
@@ -1564,9 +1447,6 @@ function afterProgramDone<T extends BuilderProgram>(
             state.host.afterProgramEmitAndDiagnostics(program);
         }
         program.releaseProgram();
-    }
-    else if (state.host.afterEmitBundle) {
-        state.host.afterEmitBundle(config);
     }
     state.projectCompilerOptions = state.baseCompilerOptions;
 }
@@ -1581,12 +1461,12 @@ function buildErrors<T extends BuilderProgram>(
     errorType: string,
 ) {
     // Since buildinfo has changeset and diagnostics when doing multi file emit, only --out cannot emit buildinfo if it has errors
-    const canEmitBuildInfo = program && !outFile(program.getCompilerOptions());
+    const canEmitBuildInfo = program && !program.getCompilerOptions().outFile;
 
     reportAndStoreErrors(state, resolvedPath, diagnostics);
     state.projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
     if (canEmitBuildInfo) return { buildResult, step: BuildStep.EmitBuildInfo };
-    afterProgramDone(state, program, config);
+    afterProgramDone(state, program);
     return { buildResult, step: BuildStep.QueueReferencingProjects };
 }
 
@@ -1798,7 +1678,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
                 fileName: buildInfoPath,
             };
         }
-        if ((buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
+        if (buildInfo.program && buildInfo.version !== version) {
             return {
                 type: UpToDateStatusType.TsVersionOutputOfDate,
                 version: buildInfo.version,
@@ -1939,13 +1819,10 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
     }
 
     const buildInfoCacheEntry = state.buildInfoCache.get(resolvedPath);
-    /** Inputs are up-to-date, just need either timestamp update or bundle prepend manipulation to make it look up-to-date */
+    /** Inputs are up-to-date, just need either timestamp update to make it look up-to-date */
     let pseudoUpToDate = false;
-    let usesPrepend = false;
-    let upstreamChangedProject: string | undefined;
     if (referenceStatuses) {
         for (const { ref, refStatus, resolvedConfig, resolvedRefPath } of referenceStatuses) {
-            usesPrepend = usesPrepend || !!(ref.prepend);
             // If the upstream project's newest file is older than our oldest output, we
             // can't be out of date because of it
             if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
@@ -1966,7 +1843,6 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             const newestDeclarationFileContentChangedTime = getLatestChangedDtsTime(state, resolvedConfig.options, resolvedRefPath);
             if (newestDeclarationFileContentChangedTime && newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
                 pseudoUpToDate = true;
-                upstreamChangedProject = ref.path;
                 continue;
             }
 
@@ -1995,14 +1871,6 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
         path => checkConfigFileUpToDateStatus(state, path, oldestOutputFileTime, oldestOutputFileName!),
     );
     if (dependentPackageFileStatus) return dependentPackageFileStatus;
-
-    if (usesPrepend && pseudoUpToDate) {
-        return {
-            type: UpToDateStatusType.OutOfDateWithPrepend,
-            outOfDateOutputFileName: oldestOutputFileName!,
-            newerProjectName: upstreamChangedProject!,
-        };
-    }
 
     // Up to date
     return {
@@ -2136,7 +2004,6 @@ function queueReferencingProjects<T extends BuilderProgram>(
         for (const ref of nextProjectConfig.projectReferences) {
             const resolvedRefPath = resolveProjectName(state, ref.path);
             if (toResolvedConfigFilePath(state, resolvedRefPath) !== projectPath) continue;
-            // If the project is referenced with prepend, always build downstream projects,
             // If declaration output is changed, build the project
             // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
             const status = state.projectStatus.get(nextProjectPath);
@@ -2144,27 +2011,17 @@ function queueReferencingProjects<T extends BuilderProgram>(
                 switch (status.type) {
                     case UpToDateStatusType.UpToDate:
                         if (buildResult & BuildResultFlags.DeclarationOutputUnchanged) {
-                            if (ref.prepend) {
-                                state.projectStatus.set(nextProjectPath, {
-                                    type: UpToDateStatusType.OutOfDateWithPrepend,
-                                    outOfDateOutputFileName: status.oldestOutputFileName,
-                                    newerProjectName: project,
-                                });
-                            }
-                            else {
-                                status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
-                            }
+                            status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
                             break;
                         }
                     // falls through
 
                     case UpToDateStatusType.UpToDateWithInputFileText:
                     case UpToDateStatusType.UpToDateWithUpstreamTypes:
-                    case UpToDateStatusType.OutOfDateWithPrepend:
                         if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
                             state.projectStatus.set(nextProjectPath, {
                                 type: UpToDateStatusType.OutOfDateWithUpstream,
-                                outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
+                                outOfDateOutputFileName: status.oldestOutputFileName,
                                 newerProjectName: project,
                             });
                         }
@@ -2652,13 +2509,6 @@ function reportUpToDateStatus<T extends BuilderProgram>(state: SolutionBuilderSt
             }
             // Don't report anything for "up to date because it was already built" -- too verbose
             break;
-        case UpToDateStatusType.OutOfDateWithPrepend:
-            return reportStatus(
-                state,
-                Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed,
-                relName(state, configFileName),
-                relName(state, status.newerProjectName),
-            );
         case UpToDateStatusType.UpToDateWithUpstreamTypes:
             return reportStatus(
                 state,

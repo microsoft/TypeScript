@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/duplicateIdentifierEnum.ts] ////
 
 //// [duplicateIdentifierEnum_A.ts]
-// Test the error message when attempting to merge an enum with a class, an interface, or a function.
 enum A {
     bar
 }
@@ -39,7 +38,6 @@ enum E {
 }
 
 //// [duplicateIdentifierEnum_A.js]
-// Test the error message when attempting to merge an enum with a class, an interface, or a function.
 var A;
 (function (A) {
     A[A["bar"] = 0] = "bar";

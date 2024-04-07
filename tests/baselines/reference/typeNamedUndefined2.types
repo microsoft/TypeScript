@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/typeNamedUndefined2.ts] ////
+
+=== typeNamedUndefined2.ts ===
+export namespace ns {
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+    export namespace undefined {
+>undefined : typeof undefined
+>          : ^^^^^^^^^^^^^^^^
+
+        export const s = Symbol();
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+        export type undefined = typeof s;
+>undefined : unique symbol
+>          : ^^^^^^^^^^^^^
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+
+    };
+    export function x(p: undefined): undefined {
+>x : (p: undefined) => undefined
+>  : ^ ^^         ^^^^^         
+>p : undefined
+>  : ^^^^^^^^^
+
+        return p;
+>p : undefined
+>  : ^^^^^^^^^
+    }
+}
+
+export function x(p: ns.undefined.undefined) {
+>x : (p: ns.undefined.undefined) => symbol
+>  : ^ ^^                      ^^^^^^^^^^^
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+>ns : any
+>   : ^^^
+>undefined : any
+>          : ^^^
+
+    return p;
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+}
+
+export namespace undefined {
+>undefined : typeof undefined
+>          : ^^^^^^^^^^^^^^^^
+
+    export const s = Symbol();
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+    export type undefined = typeof s;
+>undefined : unique symbol
+>          : ^^^^^^^^^^^^^
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+
+};
+
