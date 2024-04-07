@@ -2276,8 +2276,9 @@ export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpa
             const constructorDeclaration = node as ConstructorDeclaration;
             const start = skipTrivia(sourceFile.text, constructorDeclaration.pos);
             const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, start);
-            while (scanner.scan() !== SyntaxKind.ConstructorKeyword) {
-                // empty
+            let token = scanner.scan();
+            while (token !== SyntaxKind.ConstructorKeyword && token !== SyntaxKind.EndOfFileToken) {
+                token = scanner.scan();
             }
             const end = scanner.getTokenEnd();
             return createTextSpanFromBounds(start, end);
