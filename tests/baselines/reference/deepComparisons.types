@@ -1,5 +1,14 @@
 //// [tests/cases/compiler/deepComparisons.ts] ////
 
+<<<<<<< HEAD
+=======
+=== Performance Stats ===
+Assignability cache: 300 / 300 (nearest 100)
+Type Count: 2,000 / 2,000 (nearest 100)
+Instantiation count: 3,500 / 3,500 (nearest 500)
+Symbol count: 26,500 / 27,000 (nearest 500)
+
+>>>>>>> 326241cd08 (Merge dc966c25e3fe8dcabe581d95a7cf8c32c1d84582 into 10b5059a9501000747e447cefb752c69108b594c)
 === deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
