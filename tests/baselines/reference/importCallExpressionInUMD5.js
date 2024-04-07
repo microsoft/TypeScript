@@ -23,9 +23,8 @@ async function func() {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
-    function foo() { return "foo"; }
     exports.foo = foo;
+    function foo() { return "foo"; }
 });
 //// [1.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {

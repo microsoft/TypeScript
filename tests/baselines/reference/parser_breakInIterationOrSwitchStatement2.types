@@ -6,4 +6,5 @@ do {
 }
 while (true);
 >true : true
+>     : ^^^^
 

@@ -3,8 +3,11 @@
 === parserStrictMode15.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 delete a;
 >delete a : boolean
+>         : ^^^^^^^
 >a : any
+>  : ^^^
 

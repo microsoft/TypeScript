@@ -66,6 +66,7 @@ import {
     IncompleteCompletionsCache,
     IndentStyle,
     isArray,
+    isExternalModuleNameRelative,
     isIgnoredFileFromWildCardWatching,
     isInsideNodeModules,
     isJsonEqual,
@@ -90,7 +91,6 @@ import {
     ParsedCommandLine,
     parseJsonSourceFileConfigFileContent,
     parseJsonText,
-    parsePackageName,
     Path,
     PerformanceEvent,
     PluginImport,
@@ -933,7 +933,16 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
             recursive ? watchedDirectoriesRecursive : watchedDirectories,
             path,
             callback,
-            id => ({ eventName: CreateDirectoryWatcherEvent, data: { id, path, recursive: !!recursive } }),
+            id => ({
+                eventName: CreateDirectoryWatcherEvent,
+                data: {
+                    id,
+                    path,
+                    recursive: !!recursive,
+                    // Special case node_modules as we watch it for changes to closed script infos as well
+                    ignoreUpdate: !path.endsWith("/node_modules") ? true : undefined,
+                },
+            }),
         );
     }
     function getOrCreateFileWatcher<T>(
@@ -963,37 +972,32 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
             },
         };
     }
-    function onWatchChange({ id, path, eventType }: protocol.WatchChangeRequestArgs) {
-        // console.log(`typescript-vscode-watcher:: Invoke:: ${id}:: ${path}:: ${eventType}`);
-        onFileWatcherCallback(id, path, eventType);
-        onDirectoryWatcherCallback(watchedDirectories, id, path, eventType);
-        onDirectoryWatcherCallback(watchedDirectoriesRecursive, id, path, eventType);
+    function onWatchChange(args: protocol.WatchChangeRequestArgs | readonly protocol.WatchChangeRequestArgs[]) {
+        if (isArray(args)) args.forEach(onWatchChangeRequestArgs);
+        else onWatchChangeRequestArgs(args);
     }
 
-    function onFileWatcherCallback(
-        id: number,
-        eventPath: string,
-        eventType: "create" | "delete" | "update",
-    ) {
-        watchedFiles.idToCallbacks.get(id)?.forEach(callback => {
-            const eventKind = eventType === "create" ?
-                FileWatcherEventKind.Created :
-                eventType === "delete" ?
-                FileWatcherEventKind.Deleted :
-                FileWatcherEventKind.Changed;
-            callback(eventPath, eventKind);
-        });
+    function onWatchChangeRequestArgs({ id, created, deleted, updated }: protocol.WatchChangeRequestArgs) {
+        onWatchEventType(id, created, FileWatcherEventKind.Created);
+        onWatchEventType(id, deleted, FileWatcherEventKind.Deleted);
+        onWatchEventType(id, updated, FileWatcherEventKind.Changed);
     }
 
-    function onDirectoryWatcherCallback(
-        { idToCallbacks }: HostWatcherMap<DirectoryWatcherCallback>,
+    function onWatchEventType(id: number, paths: readonly string[] | undefined, eventKind: FileWatcherEventKind) {
+        if (!paths?.length) return;
+        forEachCallback(watchedFiles, id, paths, (callback, eventPath) => callback(eventPath, eventKind));
+        forEachCallback(watchedDirectories, id, paths, (callback, eventPath) => callback(eventPath));
+        forEachCallback(watchedDirectoriesRecursive, id, paths, (callback, eventPath) => callback(eventPath));
+    }
+
+    function forEachCallback<T>(
+        hostWatcherMap: HostWatcherMap<T>,
         id: number,
-        eventPath: string,
-        eventType: "create" | "delete" | "update",
+        eventPaths: readonly string[],
+        cb: (callback: T, eventPath: string) => void,
     ) {
-        if (eventType === "update") return;
-        idToCallbacks.get(id)?.forEach(callback => {
-            callback(eventPath);
+        hostWatcherMap.idToCallbacks.get(id)?.forEach(callback => {
+            eventPaths.forEach(eventPath => cb(callback, normalizeSlashes(eventPath)));
         });
     }
 }
@@ -4202,7 +4206,7 @@ export class ProjectService {
 
     closeExternalProject(uncheckedFileName: string): void;
     /** @internal */
-    closeExternalProject(uncheckedFileName: string, print: boolean): void;
+    closeExternalProject(uncheckedFileName: string, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     closeExternalProject(uncheckedFileName: string, print?: boolean): void {
         const fileName = toNormalizedPath(uncheckedFileName);
         const configuredProjects = this.externalProjectToConfiguredProjectMap.get(fileName);
@@ -4373,7 +4377,7 @@ export class ProjectService {
 
     openExternalProject(proj: protocol.ExternalProject): void;
     /** @internal */
-    openExternalProject(proj: protocol.ExternalProject, print: boolean): void;
+    openExternalProject(proj: protocol.ExternalProject, print: boolean): void; // eslint-disable-line @typescript-eslint/unified-signatures
     openExternalProject(proj: protocol.ExternalProject, print?: boolean): void {
         const existingExternalProject = this.findExternalProjectByProjectName(proj.projectFileName);
         const existingConfiguredProjects = this.externalProjectToConfiguredProjectMap.get(proj.projectFileName);
@@ -4474,7 +4478,11 @@ export class ProjectService {
         }
 
         this.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
-        if (!pluginConfigEntry.name || parsePackageName(pluginConfigEntry.name).rest) {
+        if (
+            !pluginConfigEntry.name ||
+            isExternalModuleNameRelative(pluginConfigEntry.name) ||
+            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+        ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;
         }
@@ -4674,7 +4682,6 @@ export class ProjectService {
                 (fileName, eventKind) => {
                     switch (eventKind) {
                         case FileWatcherEventKind.Created:
-                            return Debug.fail();
                         case FileWatcherEventKind.Changed:
                             this.packageJsonCache.addOrUpdate(fileName, path);
                             this.onPackageJsonChange(result);

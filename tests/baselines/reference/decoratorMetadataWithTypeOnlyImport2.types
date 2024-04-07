@@ -3,20 +3,24 @@
 === services.ts ===
 export namespace Services {
 >Services : typeof Services
+>         : ^^^^^^^^^^^^^^^
 
   export class Service {}
 >Service : Service
+>        : ^^^^^^^
 }
 
 === index.ts ===
 import type { Services } from './services';
 >Services : any
+>         : ^^^
 
 declare const decorator: any;
 >decorator : any
 
 export class Main {
 >Main : Main
+>     : ^^^^
 
   @decorator()
 >decorator() : any
@@ -24,6 +28,8 @@ export class Main {
 
   field: Services.Service;
 >field : Services.Service
+>      : ^^^^^^^^^^^^^^^^
 >Services : any
+>         : ^^^
 }
 

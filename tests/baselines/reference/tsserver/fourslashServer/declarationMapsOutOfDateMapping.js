@@ -284,6 +284,13 @@ watchedFiles::
 /node_modules/a/src/index.ts: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/a/dist/index.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /index.ts (Open)
     version: SVC-1-0
@@ -311,8 +318,11 @@ ScriptInfos::
     declarationInfoPath: /node_modules/a/dist/index.d.ts
     sourceInfos: 1
         /node_modules/a/src/index.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /node_modules/a/src/index.ts *new*
     version: Text-1
     containingProjects: 0
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*

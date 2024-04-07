@@ -1,14 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    CommandLineProgram,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { CommandLineProgram } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
@@ -206,7 +200,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 });
 
                 assert.equal(ts.arrayFrom(state.referencedMap!.keys()).length, 0);
-                assert.equal(ts.arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                 assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                 assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as ts.Path), ts.emptyArray);

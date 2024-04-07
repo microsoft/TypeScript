@@ -7,6 +7,7 @@ import {
     Identifier,
     isExternalModuleReference,
     isIdentifier,
+    isImportDeclaration,
     isImportEqualsDeclaration,
     isNamespaceImport,
     makeImport,
@@ -51,7 +52,7 @@ function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {
         return { importNode: parent, name, moduleSpecifier: parent.moduleReference.expression };
     }
-    else if (isNamespaceImport(parent)) {
+    else if (isNamespaceImport(parent) && isImportDeclaration(parent.parent.parent)) {
         const importNode = parent.parent.parent;
         return { importNode, name, moduleSpecifier: importNode.moduleSpecifier };
     }

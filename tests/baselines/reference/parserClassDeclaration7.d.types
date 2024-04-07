@@ -3,4 +3,5 @@
 === parserClassDeclaration7.d.ts ===
 declare class C {
 >C : C
+>  : ^
 }

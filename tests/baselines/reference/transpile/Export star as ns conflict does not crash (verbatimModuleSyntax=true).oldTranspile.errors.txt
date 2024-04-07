@@ -1,9 +1,0 @@
-error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-
-
-!!! error TS5108: Option 'target=ES3' has been removed. Please remove it from your configuration.
-==== file.ts (0 errors) ====
-    
-    var a;
-    export { a as alias };
-    export * as alias from './file';

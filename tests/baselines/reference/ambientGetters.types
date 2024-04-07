@@ -3,15 +3,20 @@
 === ambientGetters.ts ===
 declare class A {
 >A : A
+>  : ^
 
     get length() : number;
 >length : number
+>       : ^^^^^^
 }
 
 declare class B {
 >B : B
+>  : ^
 
     get length() { return 0; }
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 }

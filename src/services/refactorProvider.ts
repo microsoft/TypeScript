@@ -7,9 +7,7 @@ import {
     RefactorContext,
     RefactorEditInfo,
 } from "./_namespaces/ts";
-import {
-    refactorKindBeginsWith,
-} from "./_namespaces/ts.refactor";
+import { refactorKindBeginsWith } from "./_namespaces/ts.refactor";
 
 // A map with the refactor code as key, the refactor itself as value
 // e.g.  nonSuggestableRefactors[refactorCode] -> the refactor you want

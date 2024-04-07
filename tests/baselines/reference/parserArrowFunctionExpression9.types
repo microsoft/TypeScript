@@ -1,0 +1,36 @@
+//// [tests/cases/conformance/parser/ecmascript5/ArrowFunctionExpressions/parserArrowFunctionExpression9.ts] ////
+
+=== fileJs.js ===
+b ? (c) : d => e // Legal JS
+>b ? (c) : d => e : any
+>                 : ^^^
+>b : any
+>  : ^^^
+>(c) : any
+>    : ^^^
+>c : any
+>  : ^^^
+>d => e : (d: any) => any
+>       : ^ ^^^^^^^^^^^^^
+>d : any
+>  : ^^^
+>e : any
+>  : ^^^
+
+=== fileTs.ts ===
+b ? (c) : d => e
+>b ? (c) : d => e : any
+>                 : ^^^
+>b : any
+>  : ^^^
+>(c) : any
+>    : ^^^
+>c : any
+>  : ^^^
+>d => e : (d: any) => any
+>       : ^ ^^^^^^^^^^^^^
+>d : any
+>  : ^^^
+>e : any
+>  : ^^^
+

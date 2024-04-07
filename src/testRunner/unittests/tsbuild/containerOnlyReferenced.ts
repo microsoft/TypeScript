@@ -1,6 +1,4 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     noChangeOnlyRuns,
     verifyTsc,

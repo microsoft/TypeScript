@@ -3,4 +3,5 @@
 === parserMissingToken2.ts ===
 / b;
 >/ b; : RegExp
+>     : ^^^^^^
 

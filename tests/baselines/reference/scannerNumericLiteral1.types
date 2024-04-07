@@ -3,4 +3,5 @@
 === scannerNumericLiteral1.ts ===
 0
 >0 : 0
+>  : ^
 

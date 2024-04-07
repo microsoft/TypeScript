@@ -1,10 +1,6 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     commonFile1,
     commonFile2,
@@ -22,9 +18,7 @@ import {
     toExternalFiles,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
-import {
-    customTypesMap,
-} from "../helpers/typingsInstaller";
+import { customTypesMap } from "../helpers/typingsInstaller";
 import {
     createServerHost,
     File,

@@ -27,5 +27,5 @@ declare global {
     "type": "module"
 }
 // @filename: /index.ts
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends ImportInterface {}

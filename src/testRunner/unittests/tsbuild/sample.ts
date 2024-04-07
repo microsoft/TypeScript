@@ -2,9 +2,7 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     libContent,
     libPath,
@@ -13,9 +11,7 @@ import {
     getFsForSampleProjectReferences,
     getSysForSampleProjectReferences,
 } from "../helpers/sampleProjectReferences";
-import {
-    createSolutionBuilderHostForBaseline,
-} from "../helpers/solutionBuilder";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -282,7 +278,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             fs: () => projFs,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifyFs: fs => {
-                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es3" } }));
+                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
                 replaceText(fs, "tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{

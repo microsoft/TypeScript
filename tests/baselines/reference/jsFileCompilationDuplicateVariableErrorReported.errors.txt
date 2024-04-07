@@ -1,10 +1,6 @@
-error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-  Use 'outFile' instead.
 a.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'string', but here has type 'number'.
 
 
-!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
-!!! error TS5102:   Use 'outFile' instead.
 ==== b.js (0 errors) ====
     var x = "hello";
     
