@@ -202,11 +202,6 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 
-/**
- * Indicates whether to emit type metadata in the new format.
- */
-const USE_NEW_TYPE_METADATA_FORMAT = false;
-
 const enum TypeScriptSubstitutionFlags {
     /** Enables substitutions for namespace exports. */
     NamespaceExports = 1 << 1,
@@ -1110,11 +1105,9 @@ export function transformTypeScript(context: TransformationContext) {
      * @param node The declaration node.
      */
     function getTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
-        // Decorator metadata is not yet supported for ES decorators.
-        if (!legacyDecorators) return undefined;
-        return USE_NEW_TYPE_METADATA_FORMAT ?
-            getNewTypeMetadata(node, container) :
-            getOldTypeMetadata(node, container);
+        return legacyDecorators ?
+            getOldTypeMetadata(node, container) :
+            getNewTypeMetadata(node, container);
     }
 
     function getOldTypeMetadata(node: Declaration, container: ClassLikeDeclaration) {
@@ -1152,7 +1145,7 @@ export function transformTypeScript(context: TransformationContext) {
                 properties = append(properties, returnTypeProperty);
             }
             if (properties) {
-                const typeInfoMetadata = emitHelpers().createMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true));
+                const typeInfoMetadata = emitHelpers().createESMetadataHelper("design:typeinfo", factory.createObjectLiteralExpression(properties, /*multiLine*/ true));
                 return [factory.createDecorator(typeInfoMetadata)];
             }
         }

@@ -105,6 +105,7 @@ export interface EmitHelperFactory {
     createParamHelper(expression: Expression, parameterOffset: number): Expression;
     // ES Decorators Helpers
     createESDecorateHelper(ctor: Expression, descriptorIn: Expression, decorators: Expression, contextIn: ESDecorateContext, initializers: Expression, extraInitializers: Expression): Expression;
+    createESMetadataHelper(metadataKey: string, metadataValue: Expression): Expression;
     createRunInitializersHelper(thisArg: Expression, initializers: Expression, value?: Expression): Expression;
     // ES2018 Helpers
     createAssignHelper(attributesSegments: readonly Expression[]): Expression;
@@ -155,6 +156,7 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
         createParamHelper,
         // ES Decorators Helpers
         createESDecorateHelper,
+        createESMetadataHelper,
         createRunInitializersHelper,
         // ES2018 Helpers
         createAssignHelper,
@@ -380,6 +382,18 @@ export function createEmitHelperFactory(context: TransformationContext): EmitHel
                 createESDecorateContextObject(contextIn),
                 initializers,
                 extraInitializers,
+            ],
+        );
+    }
+
+    function createESMetadataHelper(metadataKey: string, metadataValue: Expression) {
+        context.requestEmitHelper(esMetadataHelper);
+        return factory.createCallExpression(
+            getUnscopedHelperName("__esMetadata"),
+            /*typeArguments*/ undefined,
+            [
+                factory.createStringLiteral(metadataKey),
+                metadataValue,
             ],
         );
     }
@@ -787,6 +801,20 @@ export const esDecorateHelper: UnscopedEmitHelper = {
             if (target) Object.defineProperty(target, contextIn.name, descriptor);
             done = true;
         };`,
+};
+
+/** @internal */
+export const esMetadataHelper: UnscopedEmitHelper = {
+    name: "typescript:esMetadata",
+    importName: "__esMetadata",
+    scoped: false,
+    priority: 3,
+    text: `
+            var __esMetadata = (this && this.__esMetadata) || function (k, v) {
+                return function (_, c) {
+                    c.metadata[k] = v;
+                }
+            };`,
 };
 
 /** @internal */

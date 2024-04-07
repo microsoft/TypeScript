@@ -4357,13 +4357,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        if (
-            options.emitDecoratorMetadata &&
-            !options.experimentalDecorators
-        ) {
-            createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "emitDecoratorMetadata", "experimentalDecorators");
-        }
-
         if (options.jsxFactory) {
             if (options.reactNamespace) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "reactNamespace", "jsxFactory");
