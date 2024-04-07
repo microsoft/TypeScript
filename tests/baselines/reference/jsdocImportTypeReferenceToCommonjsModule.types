@@ -17,7 +17,7 @@ export = config;
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : (a: { fix: boolean; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^  ^^^^^^^^^^^^^  ^^^^^^^^^
 >a : { fix: boolean; }
 >  : ^^^^^^^^^^^^^^^^^
 

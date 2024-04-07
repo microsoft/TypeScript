@@ -32,9 +32,9 @@ declare class Thenable { then(): void; }
  */
 const f1 = async str => {
 >f1 : (str: string) => string
->   : ^^^^^^      ^^^^^^^^^^^
+>   : ^   ^^      ^^^^^^^^^^^
 >async str => {    return str;} : (str: string) => string
->                               : ^^^^^^      ^^^^^^^^^^^
+>                               :                        
 >str : string
 >    : ^^^^^^
 
@@ -48,7 +48,7 @@ const f2 = async str => {
 >f2 : T1
 >   : ^^
 >async str => {    return str;} : (str: string) => string
->                               : ^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^   ^^^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -63,9 +63,9 @@ const f2 = async str => {
  */
 const f3 = async str => {
 >f3 : (str: string) => Promise<string>
->   : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >async str => {    return str;} : (str: string) => Promise<string>
->                               : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                               :                                 
 >str : string
 >    : ^^^^^^
 
@@ -79,7 +79,7 @@ const f4 = async str => {
 >f4 : T2
 >   : ^^
 >async str => {    return str;} : (str: string) => Promise<string>
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -93,7 +93,7 @@ const f5 = async str => {
 >f5 : T3
 >   : ^^
 >async str => {    return str;} : (str: string) => Thenable
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 

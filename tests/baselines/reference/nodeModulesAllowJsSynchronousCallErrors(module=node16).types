@@ -14,7 +14,7 @@ import {f as _f} from "./index.js";
 >f : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >_f : () => Promise<void>
->   : ^^^^^^^^^^^^^^^^^^^
+>   :                    
 
 import mod2 = require("./index.js");
 >mod2 : typeof mod2
@@ -56,7 +56,7 @@ import {h as _h} from "./index.js";
 >h : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >_h : () => Promise<void>
->   : ^^^^^^^^^^^^^^^^^^^
+>   :                    
 
 import mod = require("./index.js");
 >mod : typeof mod

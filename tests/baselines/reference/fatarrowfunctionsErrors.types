@@ -7,7 +7,7 @@ foo((...Far:any[])=>{return 0;})
 >foo : any
 >    : ^^^
 >(...Far:any[])=>{return 0;} : (...Far: any[]) => number
->                            : ^^^^^^^^^     ^^^^^^^^^^^
+>                            : ^^^^   ^^     ^^^^^^^^^^^
 >Far : any[]
 >    : ^^^^^
 >0 : 0
@@ -35,7 +35,7 @@ foo((x?)=>{return x;})
 >foo : any
 >    : ^^^
 >(x?)=>{return x;} : (x?: any) => any
->                  : ^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -47,7 +47,7 @@ foo((x=0)=>{return x;})
 >foo : any
 >    : ^^^
 >(x=0)=>{return x;} : (x?: number) => number
->                   : ^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -84,29 +84,29 @@ var x1 = () :void {};
 >x1 : () => void
 >   : ^^^^^^    
 >() :void {} : () => void
->            : ^^^^^^    
+>            :           
 
 var x2 = (a:number) :void {};
 >x2 : (a: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >(a:number) :void {} : (a: number) => void
->                    : ^^^^      ^^^^^    
+>                    :                    
 >a : number
 >  : ^^^^^^
 
 var x3 = (a:number) {};
 >x3 : (a: number) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >(a:number) {} : (a: number) => void
->              : ^^^^      ^^^^^^^^^
+>              :                    
 >a : number
 >  : ^^^^^^
 
 var x4= (...a: any[]) { };
 >x4 : (...a: any[]) => void
->   : ^^^^^^^     ^^^^^^^^^
+>   : ^^^^ ^^     ^^^^^^^^^
 >(...a: any[]) { } : (...a: any[]) => void
->                  : ^^^^^^^     ^^^^^^^^^
+>                  :  ^^^                 
 >a : any[]
 >  : ^^^^^
 

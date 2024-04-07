@@ -36,7 +36,7 @@ import { set as yield } from "./t1";
 >set : { foo: number; }
 >    : ^^^^^^^^^^^^^^^^
 >yield : { foo: number; }
->      : ^^^^^^^^^^^^^^^^
+>      :                 
 
 === t4.ts ===
 import { get } from "./t1";

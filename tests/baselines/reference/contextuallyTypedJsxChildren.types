@@ -27,7 +27,7 @@ declare namespace DropdownMenu {
   interface PropsWithChildren extends BaseProps {
     children(props: { onClose: () => void }): JSX.Element;
 >children : (props: { onClose: () => void; }) => JSX.Element
->         : ^^^^^^^^                        ^^^^^           
+>         : ^     ^^                        ^^^^^           
 >props : { onClose: () => void; }
 >      : ^^^^^^^^^^^          ^^^
 >onClose : () => void
@@ -77,7 +77,7 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 
   {({ onClose }) => (
 >({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
->                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClose : () => void
 >        : ^^^^^^^^^^
 >(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element
@@ -126,9 +126,9 @@ declare const DropdownMenu: React.ComponentType<DropdownMenu.Props>;
 
   children={({ onClose }) => (
 >children : ({ onClose }: { onClose: () => void; }) => JSX.Element
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ onClose }) => (    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : ({ onClose }: { onClose: () => void; }) => JSX.Element
->                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onClose : () => void
 >        : ^^^^^^^^^^
 >(    <div>      <button onClick={onClose}>Click me</button>    </div>  ) : JSX.Element

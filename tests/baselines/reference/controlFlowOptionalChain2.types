@@ -25,7 +25,7 @@ type B = {
 
 function funcTwo(arg: A | B | undefined) {
 >funcTwo : (arg: A | B | undefined) => void
->        : ^^^^^^                 ^^^^^^^^^
+>        : ^   ^^                 ^^^^^^^^^
 >arg : A | B | undefined
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ function funcTwo(arg: A | B | undefined) {
 
 function funcThree(arg: A | B | null) {
 >funcThree : (arg: A | B | null) => void
->          : ^^^^^^            ^^^^^^^^^
+>          : ^   ^^            ^^^^^^^^^
 >arg : A | B | null
 >    : ^^^^^^^^^^^^
 
@@ -125,7 +125,7 @@ type X = { kind: 'X', x: 'x' }
 
 function f1(x: X | U | undefined) {
 >f1 : (x: X | U | undefined) => void
->   : ^^^^                 ^^^^^^^^^
+>   : ^ ^^                 ^^^^^^^^^
 >x : U | X | undefined
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -154,7 +154,7 @@ function f1(x: X | U | undefined) {
 
 function f2(x: X | N | undefined) {
 >f2 : (x: X | N | undefined) => void
->   : ^^^^                 ^^^^^^^^^
+>   : ^ ^^                 ^^^^^^^^^
 >x : N | X | undefined
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -183,7 +183,7 @@ function f2(x: X | N | undefined) {
 
 function f3(x: X | U | null) {
 >f3 : (x: X | U | null) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : U | X | null
 >  : ^^^^^^^^^^^^
 
@@ -212,7 +212,7 @@ function f3(x: X | U | null) {
 
 function f4(x: X | N | null) {
 >f4 : (x: X | N | null) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : N | X | null
 >  : ^^^^^^^^^^^^
 
@@ -241,7 +241,7 @@ function f4(x: X | N | null) {
 
 function f5(x: X | U | undefined) {
 >f5 : (x: X | U | undefined) => void
->   : ^^^^                 ^^^^^^^^^
+>   : ^ ^^                 ^^^^^^^^^
 >x : U | X | undefined
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -268,7 +268,7 @@ function f5(x: X | U | undefined) {
 
 function f6(x: X | N | undefined) {
 >f6 : (x: X | N | undefined) => void
->   : ^^^^                 ^^^^^^^^^
+>   : ^ ^^                 ^^^^^^^^^
 >x : N | X | undefined
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -295,7 +295,7 @@ function f6(x: X | N | undefined) {
 
 function f7(x: X | U | null) {
 >f7 : (x: X | U | null) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : U | X | null
 >  : ^^^^^^^^^^^^
 
@@ -322,7 +322,7 @@ function f7(x: X | U | null) {
 
 function f8(x: X | N | null) {
 >f8 : (x: X | N | null) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : N | X | null
 >  : ^^^^^^^^^^^^
 

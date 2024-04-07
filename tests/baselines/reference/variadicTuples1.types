@@ -59,7 +59,7 @@ type TN7 = TV1<never>;
 
 function tup2<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) {
 >tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : [...T]
 >  : ^^^^^^
 >u : [...U]
@@ -92,7 +92,7 @@ const t2 = tup2(['hello'], [10, true]);
 >tup2(['hello'], [10, true]) : readonly [1, string, 2, number, boolean, 3]
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >tup2 : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => readonly [1, ...T, 2, ...U, 3]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['hello'] : [string]
 >          : ^^^^^^^^
 >'hello' : "hello"
@@ -106,7 +106,7 @@ const t2 = tup2(['hello'], [10, true]);
 
 function concat<T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]): [...T, ...U] {
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^            
+>       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^            
 >t : [...T]
 >  : ^^^^^^
 >u : [...U]
@@ -135,7 +135,7 @@ const tc1 = concat([], []);
 >concat([], []) : []
 >               : ^^
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : []
 >   : ^^
 >[] : []
@@ -147,7 +147,7 @@ const tc2 = concat(['hello'], [42]);
 >concat(['hello'], [42]) : [string, number]
 >                        : ^^^^^^^^^^^^^^^^
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >['hello'] : [string]
 >          : ^^^^^^^^
 >'hello' : "hello"
@@ -163,7 +163,7 @@ const tc3 = concat([1, 2, 3], sa);
 >concat([1, 2, 3], sa) : [number, number, number, ...string[]]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -181,7 +181,7 @@ const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, nu
 >concat(sa, [1, 2, 3]) : [...string[], number, number, number]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >concat : <T extends unknown[], U extends unknown[]>(t: [...T], u: [...U]) => [...T, ...U]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >sa : string[]
 >   : ^^^^^^^^
 >[1, 2, 3] : [number, number, number]
@@ -195,7 +195,7 @@ const tc4 = concat(sa, [1, 2, 3]);  // Ideally would be [...string[], number, nu
 
 function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) {
 >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -220,7 +220,7 @@ const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 
 >concat2([1, 2, 3] as const, [4, 5, 6] as const) : (2 | 4 | 1 | 3 | 6 | 5)[]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >concat2 : <T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U) => (T[number] | U[number])[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] as const : readonly [1, 2, 3]
 >                   : ^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : readonly [1, 2, 3]
@@ -246,7 +246,7 @@ const tc5 = concat2([1, 2, 3] as const, [4, 5, 6] as const);  // (1 | 2 | 3 | 4 
 
 declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^      ^^^^^      ^^^^^       ^^^^^^^^        ^^^^^    
+>     : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^ ^^        ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : string
@@ -258,7 +258,7 @@ declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
 
 function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo2 : (t1: [number, string], t2: [boolean], a1: number[]) => void
->     : ^^^^^                ^^^^^^         ^^^^^^        ^^^^^^^^^
+>     : ^  ^^                ^^  ^^         ^^  ^^        ^^^^^^^^^
 >t1 : [number, string]
 >   : ^^^^^^^^^^^^^^^^
 >t2 : [boolean]
@@ -270,7 +270,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(1, 'abc', true, 42, 43, 44) : void
 >                                 : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'abc' : "abc"
@@ -288,7 +288,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(...t1, true, 42, 43, 44) : void
 >                              : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >t1 : [number, string]
@@ -306,7 +306,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(...t1, ...t2, 42, 43, 44) : void
 >                               : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >t1 : [number, string]
@@ -326,7 +326,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(...t1, ...t2, ...a1) : void
 >                          : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >t1 : [number, string]
@@ -344,7 +344,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(...t1) : void
 >            : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >t1 : [number, string]
@@ -354,7 +354,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 >foo1(...t1, 45) : void
 >                : ^^^^
 >foo1 : (a: number, b: string, c: boolean, ...d: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >t1 : [number, string]
@@ -365,7 +365,7 @@ function foo2(t1: [number, string], t2: [boolean], a1: number[]) {
 
 declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^              ^^^^^ 
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^              ^^^^^ 
 >x : number
 >  : ^^^^^^
 >args : [...T, number]
@@ -373,7 +373,7 @@ declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): 
 
 function foo4<U extends unknown[]>(u: U) {
 >foo4 : <U extends unknown[]>(u: U) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >u : U
 >  : ^
 
@@ -381,7 +381,7 @@ function foo4<U extends unknown[]>(u: U) {
 >foo3(1, 2) : []
 >           : ^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -391,7 +391,7 @@ function foo4<U extends unknown[]>(u: U) {
 >foo3(1, 'hello', true, 2) : [string, boolean]
 >                          : ^^^^^^^^^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'hello' : "hello"
@@ -405,7 +405,7 @@ function foo4<U extends unknown[]>(u: U) {
 >foo3(1, ...u, 'hi', 2) : [...U, string]
 >                       : ^^^^^^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >...u : unknown
@@ -421,7 +421,7 @@ function foo4<U extends unknown[]>(u: U) {
 >foo3(1) : unknown[]
 >        : ^^^^^^^^^
 >foo3 : <T extends unknown[]>(x: number, ...args: [...T, number]) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -430,25 +430,25 @@ function foo4<U extends unknown[]>(u: U) {
 
 declare function ft1<T extends unknown[]>(t: T): T;
 >ft1 : <T extends unknown[]>(t: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 >t : T
 >  : ^
 
 declare function ft2<T extends unknown[]>(t: T): readonly [...T];
 >ft2 : <T extends unknown[]>(t: T) => readonly [...T]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^               
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^               
 >t : T
 >  : ^
 
 declare function ft3<T extends unknown[]>(t: [...T]): T;
 >ft3 : <T extends unknown[]>(t: [...T]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^ 
 >t : [...T]
 >  : ^^^^^^
 
 declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
 >ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^               
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^               
 >t : [...T]
 >  : ^^^^^^
 
@@ -456,7 +456,7 @@ ft1(['hello', 42]);  // (string | number)[]
 >ft1(['hello', 42]) : (string | number)[]
 >                   : ^^^^^^^^^^^^^^^^^^^
 >ft1 : <T extends unknown[]>(t: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >['hello', 42] : (string | number)[]
 >              : ^^^^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -468,7 +468,7 @@ ft2(['hello', 42]);  // readonly (string | number)[]
 >ft2(['hello', 42]) : readonly (string | number)[]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ft2 : <T extends unknown[]>(t: T) => readonly [...T]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >['hello', 42] : (string | number)[]
 >              : ^^^^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -480,7 +480,7 @@ ft3(['hello', 42]);  // [string, number]
 >ft3(['hello', 42]) : [string, number]
 >                   : ^^^^^^^^^^^^^^^^
 >ft3 : <T extends unknown[]>(t: [...T]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -492,7 +492,7 @@ ft4(['hello', 42]);  // readonly [string, number]
 >ft4(['hello', 42]) : readonly [string, number]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ft4 : <T extends unknown[]>(t: [...T]) => readonly [...T]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -504,7 +504,7 @@ ft4(['hello', 42]);  // readonly [string, number]
 
 function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 >f0 : <T extends unknown[]>(t: [string, ...T], n: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^      ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^              ^^ ^^      ^^^^^^^^^
 >t : [string, ...T]
 >  : ^^^^^^^^^^^^^^
 >n : number
@@ -553,7 +553,7 @@ function f0<T extends unknown[]>(t: [string, ...T], n: number) {
 
 function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
 >f1 : <T extends unknown[]>(t: [string, ...T, number], n: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^      ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^                      ^^ ^^      ^^^^^^^^^
 >t : [string, ...T, number]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -604,7 +604,7 @@ function f1<T extends unknown[]>(t: [string, ...T, number], n: number) {
 
 function f2<T extends unknown[]>(t: [string, ...T]) {
 >f2 : <T extends unknown[]>(t: [string, ...T]) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^              ^^^^^^^^^
 >t : [string, ...T]
 >  : ^^^^^^^^^^^^^^
 
@@ -635,7 +635,7 @@ function f2<T extends unknown[]>(t: [string, ...T]) {
 
 function f3<T extends unknown[]>(t: [string, ...T, number]) {
 >f3 : <T extends unknown[]>(t: [string, ...T, number]) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >t : [string, ...T, number]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -685,8 +685,8 @@ type TP2<T extends unknown[]> = Partial<[string, ...T, ...number[]]>;  // [strin
 // Reverse mapping through mapped type applied to variadic tuple type
 
 declare function fm1<T extends unknown[]>(t: Arrayify<[string, number, ...T]>): T;
->fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>fm1 : <T extends unknown[]>(t: Arrayify<[string, number, ...T]>) => T
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^                                ^^^^^ 
 >t : [string[], number[], ...Arrayify<T>]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -696,7 +696,7 @@ let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
 >fm1([['abc'], [42], [true], ['def']]) : [boolean, string]
 >                                      : ^^^^^^^^^^^^^^^^^
 >fm1 : <T extends unknown[]>(t: [string[], number[], ...Arrayify<T>]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[['abc'], [42], [true], ['def']] : [string[], number[], true[], string[]]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['abc'] : string[]
@@ -720,7 +720,7 @@ let tm1 = fm1([['abc'], [42], [true], ['def']]);  // [boolean, string]
 
 declare function fx1<T extends unknown[]>(a: string, ...args: T): T;
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >args : T
@@ -728,7 +728,7 @@ declare function fx1<T extends unknown[]>(a: string, ...args: T): T;
 
 function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >gx1 : <U extends unknown[], V extends readonly unknown[]>(u: U, v: V) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >u : U
 >  : ^
 >v : V
@@ -738,7 +738,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx1('abc') : []
 >           : ^^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 
@@ -746,7 +746,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx1('abc', ...u) : U
 >                 : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...u : unknown
@@ -758,7 +758,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx1('abc', ...v) : [...V]
 >                 : ^^^^^^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...v : unknown
@@ -770,7 +770,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx1<U>('abc', ...u) : U
 >                    : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...u : unknown
@@ -782,7 +782,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx1<V>('abc', ...v) : V
 >                    : ^
 >fx1 : <T extends unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...v : unknown
@@ -793,7 +793,7 @@ function gx1<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 
 declare function fx2<T extends readonly unknown[]>(a: string, ...args: T): T;
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >args : T
@@ -801,7 +801,7 @@ declare function fx2<T extends readonly unknown[]>(a: string, ...args: T): T;
 
 function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >gx2 : <U extends unknown[], V extends readonly unknown[]>(u: U, v: V) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >u : U
 >  : ^
 >v : V
@@ -811,7 +811,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx2('abc') : []
 >           : ^^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 
@@ -819,7 +819,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx2('abc', ...u) : U
 >                 : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...u : unknown
@@ -831,7 +831,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx2('abc', ...v) : [...V]
 >                 : ^^^^^^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...v : unknown
@@ -843,7 +843,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx2<U>('abc', ...u) : U
 >                    : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...u : unknown
@@ -855,7 +855,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 >fx2<V>('abc', ...v) : V
 >                    : ^
 >fx2 : <T extends readonly unknown[]>(a: string, ...args: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^    ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...v : unknown
@@ -868,7 +868,7 @@ function gx2<U extends unknown[], V extends readonly unknown[]>(u: U, v: V) {
 
 function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]) {
 >f10 : <T extends string[], U extends T>(x: [string, ...unknown[]], y: [string, ...T], z: [string, ...U]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^                      ^^^^^              ^^^^^              ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^                      ^^ ^^              ^^ ^^              ^^^^^^^^^
 >x : [string, ...unknown[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >y : [string, ...T]
@@ -930,7 +930,7 @@ function f10<T extends string[], U extends T>(x: [string, ...unknown[]], y: [str
 
 function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >f11 : <T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^ ^^               ^^^^^^^^^
 >t : T
 >  : ^
 >m : [...T]
@@ -989,7 +989,7 @@ function f11<T extends unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 
 function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) {
 >f12 : <T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      ^^^^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^ ^^               ^^^^^^^^^
 >t : T
 >  : ^
 >m : [...T]
@@ -1048,7 +1048,7 @@ function f12<T extends readonly unknown[]>(t: T, m: [...T], r: readonly [...T]) 
 
 function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 >f13 : <T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^      ^^^^^^      ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^ ^^  ^^      ^^  ^^      ^^^^^^^^^
 >t0 : T
 >   : ^
 >t1 : [...T]
@@ -1107,7 +1107,7 @@ function f13<T extends string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 
 function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) {
 >f14 : <T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [...U]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^^^^^      ^^^^^^      ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^ ^^  ^^      ^^  ^^      ^^^^^^^^^
 >t0 : T
 >   : ^
 >t1 : [...T]
@@ -1166,7 +1166,7 @@ function f14<T extends readonly string[], U extends T>(t0: T, t1: [...T], t2: [.
 
 function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) {
 >f15 : <T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2: keyof [...U], k3: keyof [1, 2, ...T]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^       ^^^^^^            ^^^^^^            ^^^^^^                  ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^       ^^  ^^            ^^  ^^            ^^  ^^                  ^^^^^^^^^
 >k0 : keyof T
 >   : ^^^^^^^
 >k1 : keyof [...T]
@@ -1253,7 +1253,7 @@ function f15<T extends string[], U extends T>(k0: keyof T, k1: keyof [...T], k2:
 
 function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft16 : <T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^            ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^                  ^^ ^^            ^^^^^^^^^
 >x : [unknown, unknown]
 >  : ^^^^^^^^^^^^^^^^^^
 >y : [...T, ...T]
@@ -1270,7 +1270,7 @@ function ft16<T extends [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 
 function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft17 : <T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^            ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                  ^^ ^^            ^^^^^^^^^
 >x : [unknown, unknown]
 >  : ^^^^^^^^^^^^^^^^^^
 >y : [...T, ...T]
@@ -1287,7 +1287,7 @@ function ft17<T extends [] | [unknown]>(x: [unknown, unknown], y: [...T, ...T]) 
 
 function ft18<T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) {
 >ft18 : <T extends unknown[]>(x: [unknown, unknown], y: [...T, ...T]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^            ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^                  ^^ ^^            ^^^^^^^^^
 >x : [unknown, unknown]
 >  : ^^^^^^^^^^^^^^^^^^
 >y : [...T, ...T]
@@ -1603,9 +1603,9 @@ type R36 = DropLast<readonly []>;
 
 function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) {
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                            ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >f : (...args: [...T, ...U]) => R
->  : ^^^^^^^^^^            ^^^^^ 
+>  : ^^^^    ^^            ^^^^^ 
 >args : [...T, ...U]
 >     : ^^^^^^^^^^^^
 >a : T
@@ -1613,13 +1613,13 @@ function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, 
 
     return (...b: U) => f(...a, ...b);
 >(...b: U) => f(...a, ...b) : (...b: U) => R
->                           : ^^^^^^^ ^^^^^^
+>                           : ^^^^ ^^ ^^^^^^
 >b : U
 >  : ^
 >f(...a, ...b) : R
 >              : ^
 >f : (...args: [...T, ...U]) => R
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^^^^^^^^^^^^^^^^^^^
 >...a : unknown
 >     : ^^^^^^^
 >a : T
@@ -1632,9 +1632,9 @@ function curry<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, 
 
 const fn1 = (a: number, b: string, c: boolean, d: string[]) => 0;
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^      ^^^^^      ^^^^^       ^^^^^        ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
 >(a: number, b: string, c: boolean, d: string[]) => 0 : (a: number, b: string, c: boolean, d: string[]) => number
->                                                     : ^^^^      ^^^^^      ^^^^^       ^^^^^        ^^^^^^^^^^^
+>                                                     :                                                          
 >a : number
 >  : ^^^^^^
 >b : string
@@ -1650,21 +1650,21 @@ const c0 = curry(fn1);  // (a: number, b: string, c: boolean, d: string[]) => nu
 >c0 : (a: number, b: string, c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1) : (a: number, b: string, c: boolean, d: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           :                                                          
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 
 const c1 = curry(fn1, 1);  // (b: string, c: boolean, d: string[]) => number
 >c1 : (b: string, c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1) : (b: string, c: boolean, d: string[]) => number
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              :                                               
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -1672,11 +1672,11 @@ const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 >c2 : (c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1, 'abc') : (c: boolean, d: string[]) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     :                                    
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'abc' : "abc"
@@ -1686,11 +1686,11 @@ const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 >c3 : (d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1, 'abc', true) : (d: string[]) => number
->                           : ^^^^^^^^^^^^^^^^^^^^^^^
+>                           :                        
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'abc' : "abc"
@@ -1702,11 +1702,11 @@ const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
 >c4 : () => number
 >   : ^^^^^^^^^^^^
 >curry(fn1, 1, 'abc', true, ['x', 'y']) : () => number
->                                       : ^^^^^^^^^^^^
+>                                       :             
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >'abc' : "abc"
@@ -1722,9 +1722,9 @@ const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
 
 const fn2 = (x: number, b: boolean, ...args: string[]) => 0;
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
->    : ^^^^      ^^^^^       ^^^^^^^^^^^        ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
 >(x: number, b: boolean, ...args: string[]) => 0 : (x: number, b: boolean, ...args: string[]) => number
->                                                : ^^^^      ^^^^^       ^^^^^^^^^^^        ^^^^^^^^^^^
+>                                                :                         ^^^                         
 >x : number
 >  : ^^^^^^
 >b : boolean
@@ -1738,33 +1738,33 @@ const c10 = curry(fn2);  // (x: number, b: boolean, ...args: string[]) => number
 >c10 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2) : (x: number, b: boolean, ...args: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           :                         ^^^                         
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 
 const c11 = curry(fn2, 1);  // (b: boolean, ...args: string[]) => number
 >c11 : (b: boolean, ...args: string[]) => number
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1) : (b: boolean, ...args: string[]) => number
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              :              ^^^                         
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
 const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 >c12 : (...b: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1, true) : (...b: string[]) => number
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    :  ^^^                      
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >true : true
@@ -1772,13 +1772,13 @@ const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 
 const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
 >c13 : (...b: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1, true, 'abc', 'def') : (...b: string[]) => number
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  :  ^^^                      
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >true : true
@@ -1790,9 +1790,9 @@ const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
 
 const fn3 = (...args: string[]) => 0;
 >fn3 : (...args: string[]) => number
->    : ^^^^^^^^^^        ^^^^^^^^^^^
+>    : ^^^^    ^^        ^^^^^^^^^^^
 >(...args: string[]) => 0 : (...args: string[]) => number
->                         : ^^^^^^^^^^        ^^^^^^^^^^^
+>                         :  ^^^                         
 >args : string[]
 >     : ^^^^^^^^
 >0 : 0
@@ -1800,23 +1800,23 @@ const fn3 = (...args: string[]) => 0;
 
 const c20 = curry(fn3);  // (...args: string[]) => number
 >c20 : (...b: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3) : (...b: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           :  ^^^                      
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn3 : (...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^
 
 const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 >c21 : (...b: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3, 'abc', 'def') : (...b: string[]) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         :  ^^^                      
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn3 : (...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >'def' : "def"
@@ -1824,13 +1824,13 @@ const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 
 const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 >c22 : (...b: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3, ...sa) : (...b: string[]) => number
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :  ^^^                      
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^
 >fn3 : (...args: string[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >...sa : string
 >      : ^^^^^^
 >sa : string[]
@@ -1840,9 +1840,9 @@ const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 
 function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) {
 >curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
->       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^                            ^^^^^      ^^^^^      ^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^ ^^      ^^ ^^      ^^^^^^
 >f : (...args: [...T, ...U]) => R
->  : ^^^^^^^^^^            ^^^^^ 
+>  : ^^^^    ^^            ^^^^^ 
 >args : [...T, ...U]
 >     : ^^^^^^^^^^^^
 >t : [...T]
@@ -1854,7 +1854,7 @@ function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T,
 >f(...t, ...u) : R
 >              : ^
 >f : (...args: [...T, ...U]) => R
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^^^^^^^^^^^^^^^^^^^
 >...t : T[number]
 >     : ^^^^^^^^^
 >t : [...T]
@@ -1867,7 +1867,7 @@ function curry2<T extends unknown[], U extends unknown[], R>(f: (...args: [...T,
 
 declare function fn10(a: string, b: number, c: boolean): string[];
 >fn10 : (a: string, b: number, c: boolean) => string[]
->     : ^^^^      ^^^^^      ^^^^^       ^^^^^        
+>     : ^ ^^      ^^ ^^      ^^ ^^       ^^^^^        
 >a : string
 >  : ^^^^^^
 >b : number
@@ -1879,9 +1879,9 @@ curry2(fn10, ['hello', 42], [true]);
 >curry2(fn10, ['hello', 42], [true]) : string[]
 >                                    : ^^^^^^^^
 >curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >fn10 : (a: string, b: number, c: boolean) => string[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >['hello', 42] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
 >'hello' : "hello"
@@ -1897,9 +1897,9 @@ curry2(fn10, ['hello'], [42, true]);
 >curry2(fn10, ['hello'], [42, true]) : string[]
 >                                    : ^^^^^^^^
 >curry2 : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, t: [...T], u: [...U]) => R
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >fn10 : (a: string, b: number, c: boolean) => string[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >['hello'] : [string]
 >          : ^^^^^^^^
 >'hello' : "hello"
@@ -1915,7 +1915,7 @@ curry2(fn10, ['hello'], [42, true]);
 
 declare function ft<T extends unknown[]>(t1: [...T], t2: [...T, number?]): T;
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, number?]) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^               ^^^^^ 
+>   : ^ ^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^               ^^^^^ 
 >t1 : [...T]
 >   : ^^^^^^
 >t2 : [...T, (number | undefined)?]
@@ -1925,7 +1925,7 @@ ft([1, 2, 3], [1, 2, 3]);
 >ft([1, 2, 3], [1, 2, 3]) : [number, number, number]
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -1947,7 +1947,7 @@ ft([1, 2], [1, 2, 3]);
 >ft([1, 2], [1, 2, 3]) : [number, number]
 >                      : ^^^^^^^^^^^^^^^^
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
 >1 : 1
@@ -1967,7 +1967,7 @@ ft(['a', 'b'], ['c', 'd'])
 >ft(['a', 'b'], ['c', 'd']) : [string, string]
 >                           : ^^^^^^^^^^^^^^^^
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['a', 'b'] : [string, string]
 >           : ^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -1985,7 +1985,7 @@ ft(['a', 'b'], ['c', 'd', 42])
 >ft(['a', 'b'], ['c', 'd', 42]) : [string, string]
 >                               : ^^^^^^^^^^^^^^^^
 >ft : <T extends unknown[]>(t1: [...T], t2: [...T, (number | undefined)?]) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['a', 'b'] : [string, string]
 >           : ^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -2005,9 +2005,9 @@ ft(['a', 'b'], ['c', 'd', 42])
 
 declare function call<T extends unknown[], R>(...args: [...T, (...args: T) => R]): [T, R];
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^                         ^^^^^      
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^    ^^                         ^^^^^      
 >args : [...T, (...args: T) => R]
->     : ^^^^^^^^^^^^^^^^^ ^^^^^ ^
+>     : ^^^^^^^^^^^    ^^ ^^^^^ ^
 >args : T
 >     : ^
 
@@ -2015,13 +2015,13 @@ call('hello', 32, (a, b) => 42);
 >call('hello', 32, (a, b) => 42) : [[string, number], number]
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 >32 : 32
 >   : ^^
 >(a, b) => 42 : (a: string, b: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -2033,13 +2033,13 @@ call(...sa, (...x) => 42);
 >call(...sa, (...x) => 42) : [string[], number]
 >                          : ^^^^^^^^^^^^^^^^^^
 >call : <T extends unknown[], R>(...args: [...T, (...args: T) => R]) => [T, R]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >...sa : string
 >      : ^^^^^^
 >sa : string[]
 >   : ^^^^^^^^
 >(...x) => 42 : (...x: string[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
 >42 : 42
@@ -2049,13 +2049,13 @@ call(...sa, (...x) => 42);
 
 declare function f20<T extends unknown[] = []>(args: [...T, number?]): T;
 >f20 : <T extends unknown[] = []>(args: [...T, number?]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^ 
 >args : [...T, (number | undefined)?]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f21<U extends string[]>(args: [...U, number?]) {
 >f21 : <U extends string[]>(args: [...U, number?]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^
 >args : [...U, (number | undefined)?]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2065,7 +2065,7 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >f20(args) : U
 >          : ^
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : [...U, (number | undefined)?]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2075,7 +2075,7 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >f20(["foo", "bar"]) : [string]
 >                    : ^^^^^^^^
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["foo", "bar"] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -2089,7 +2089,7 @@ function f21<U extends string[]>(args: [...U, number?]) {
 >f20(["foo", 42]) : [string]
 >                 : ^^^^^^^^
 >f20 : <T extends unknown[] = []>(args: [...T, (number | undefined)?]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -2100,19 +2100,19 @@ function f21<U extends string[]>(args: [...U, number?]) {
 
 declare function f22<T extends unknown[] = []>(args: [...T, number]): T;
 >f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
 >args : [...T, number]
 >     : ^^^^^^^^^^^^^^
 
 declare function f22<T extends unknown[] = []>(args: [...T]): T;
 >f22 : { <T_1 extends unknown[] = []>(args: [...T_1, number]): T_1; <T extends unknown[] = []>(args: [...T]): T; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^ ^^^
 >args : [...T]
 >     : ^^^^^^
 
 function f23<U extends string[]>(args: [...U, number]) {
 >f23 : <U extends string[]>(args: [...U, number]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^
 >args : [...U, number]
 >     : ^^^^^^^^^^^^^^
 
@@ -2122,7 +2122,7 @@ function f23<U extends string[]>(args: [...U, number]) {
 >f22(args) : U
 >          : ^
 >f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
 >args : [...U, number]
 >     : ^^^^^^^^^^^^^^
 
@@ -2132,7 +2132,7 @@ function f23<U extends string[]>(args: [...U, number]) {
 >f22(["foo", "bar"]) : [string, string]
 >                    : ^^^^^^^^^^^^^^^^
 >f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
 >["foo", "bar"] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -2146,7 +2146,7 @@ function f23<U extends string[]>(args: [...U, number]) {
 >f22(["foo", 42]) : [string]
 >                 : ^^^^^^^^
 >f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -2160,13 +2160,13 @@ function f23<U extends string[]>(args: [...U, number]) {
 interface Desc<A extends unknown[], T> {
     readonly f: (...args: A) => T;
 >f : (...args: A) => T
->  : ^^^^^^^^^^ ^^^^^ 
+>  : ^^^^    ^^ ^^^^^ 
 >args : A
 >     : ^
 
     bind<T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T): Desc<[...U], R>;
 >bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
->     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^                     ^^^^^^^^^^^ ^^^^^               
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^    ^^                     ^^^^^    ^^ ^^^^^               
 >this : Desc<[...T, ...U], R>
 >     : ^^^^^^^^^^^^^^^^^^^^^
 >args : T
@@ -2183,11 +2183,11 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 >a.bind("", 1) : Desc<[boolean], object>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >a.bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >a : Desc<[string, number, boolean], object>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bind : <T extends unknown[], U extends unknown[], R>(this: Desc<[...T, ...U], R>, ...args: T) => Desc<[...U], R>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >1 : 1
@@ -2197,7 +2197,7 @@ const b = a.bind("", 1);  // Desc<[boolean], object>
 
 declare function getUser(id: string, options?: { x?: string }): string;
 >getUser : (id: string, options?: { x?: string; }) => string
->        : ^^^^^      ^^^^^^^^^^^^               ^^^^^      
+>        : ^  ^^      ^^       ^^^               ^^^^^      
 >id : string
 >   : ^^^^^^
 >options : { x?: string; } | undefined
@@ -2207,7 +2207,7 @@ declare function getUser(id: string, options?: { x?: string }): string;
 
 declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z?: boolean }): void;
 >getOrgUser : (id: string, orgId: number, options?: { y?: number; z?: boolean; }) => void
->           : ^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^                            ^^^^^    
+>           : ^  ^^      ^^     ^^      ^^       ^^^                            ^^^^^    
 >id : string
 >   : ^^^^^^
 >orgId : number
@@ -2221,9 +2221,9 @@ declare function getOrgUser(id: string, orgId: number, options?: { y?: number, z
 
 function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) {
 >callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^
 >method : (...args: [...T, object]) => U
->       : ^^^^^^^^^^              ^^^^^ 
+>       : ^^^^    ^^              ^^^^^ 
 >args : [...T, object]
 >     : ^^^^^^^^^^^^^^
 
@@ -2235,7 +2235,7 @@ function callApi<T extends unknown[] = [], U = void>(method: (...args: [...T, ob
 >method(...args, {}) : U
 >                    : ^
 >method : (...args: [...T, object]) => U
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >...args : T[number]
 >        : ^^^^^^^^^
 >args : [...T]
@@ -2248,17 +2248,17 @@ callApi(getUser);
 >callApi(getUser) : (id: string) => string
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getUser : (id: string, options?: { x?: string | undefined; } | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 callApi(getOrgUser);
 >callApi(getOrgUser) : (id: string, orgId: number) => void
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >callApi : <T extends unknown[] = [], U = void>(method: (...args: [...T, object]) => U) => (...args_0: T) => U
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getOrgUser : (id: string, orgId: number, options?: { y?: number | undefined; z?: boolean | undefined; } | undefined) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^  ^^^^^^^^^^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Repro from #40235
 

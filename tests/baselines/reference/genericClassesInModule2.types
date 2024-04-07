@@ -7,7 +7,7 @@ export class A<T1>{
 
     constructor( public callback: (self: A<T1>) => void) {
 >callback : (self: A<T1>) => void
->         : ^^^^^^^     ^^^^^    
+>         : ^    ^^     ^^^^^    
 >self : A<T1>
 >     : ^^^^^
 
@@ -23,9 +23,9 @@ export class A<T1>{
     }
     AAA( callback: (self: A<T1>) => void) {
 >AAA : (callback: (self: A<T1>) => void) => void
->    : ^^^^^^^^^^^                     ^^^^^^^^^
+>    : ^        ^^                     ^^^^^^^^^
 >callback : (self: A<T1>) => void
->         : ^^^^^^^     ^^^^^    
+>         : ^    ^^     ^^^^^    
 >self : A<T1>
 >     : ^^^^^
 
@@ -52,7 +52,7 @@ export interface C<T1>{
 
     new(callback: (self: C<T1>) => void)
 >callback : (self: C<T1>) => void
->         : ^^^^^^^     ^^^^^    
+>         : ^    ^^     ^^^^^    
 >self : C<T1>
 >     : ^^^^^
 }

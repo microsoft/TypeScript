@@ -27,7 +27,7 @@ const asyncArrowFunc = async (): Promise<void> => {
 >asyncArrowFunc : () => Promise<void>
 >               : ^^^^^^             
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
->                                          : ^^^^^^             
+>                                          :                    
 
     await 0;
 >await 0 : 0
@@ -111,7 +111,7 @@ class AsyncClass {
 >asyncPropFunc : () => Promise<void>
 >              : ^^^^^^             
 >async function(): Promise<void> {        await 2;    } : () => Promise<void>
->                                                       : ^^^^^^             
+>                                                       :                    
 
         await 2;
 >await 2 : 2
@@ -124,7 +124,7 @@ class AsyncClass {
 >asyncPropNamedFunc : () => Promise<void>
 >                   : ^^^^^^             
 >async function namedFunc(): Promise<void> {        await 2;    } : () => Promise<void>
->                                                                 : ^^^^^^             
+>                                                                 :                    
 >namedFunc : () => Promise<void>
 >          : ^^^^^^             
 
@@ -139,7 +139,7 @@ class AsyncClass {
 >asyncPropArrowFunc : () => Promise<void>
 >                   : ^^^^^^             
 >async (): Promise<void> => {        await 2;    } : () => Promise<void>
->                                                  : ^^^^^^             
+>                                                  :                    
 
         await 2;
 >await 2 : 2

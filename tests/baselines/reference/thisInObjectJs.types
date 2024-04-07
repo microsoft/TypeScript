@@ -6,7 +6,7 @@ let obj = {
 >obj : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  x: 10,  y: [1],  fun: function() {    this.x = 1    this/*1*/  },  f2: function() {    this.x    this/*2*/  },  f3: (function() {    this.x = 1    this/*3*/  }),} : { x: number; y: number[]; fun: typeof fun; f2: () => void; f3: typeof (Anonymous function); }
->                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   x: 10,
 >x : number
@@ -49,7 +49,7 @@ let obj = {
 >f2 : () => void
 >   : ^^^^^^^^^^
 >function() {    this.x    this/*2*/  } : () => void
->                                       : ^^^^^^^^^^
+>                                       :           
 
     this.x
 >this.x : number

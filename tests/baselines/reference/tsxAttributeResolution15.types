@@ -9,7 +9,7 @@ class BigGreeter extends React.Component<{ }, {}> {
 >BigGreeter : BigGreeter
 >           : ^^^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^  ^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
@@ -52,9 +52,9 @@ let b = <BigGreeter ref={(input) => { this.textInput = input; }} />
 >BigGreeter : typeof BigGreeter
 >           : ^^^^^^^^^^^^^^^^^
 >ref : (input: BigGreeter) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^^^^^^^^^^^^^^^^^^^^
 >(input) => { this.textInput = input; } : (input: BigGreeter) => void
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^     ^^^^^^^^^^^^^^^^^^^^^
 >input : BigGreeter
 >      : ^^^^^^^^^^
 >this.textInput = input : BigGreeter

@@ -9,13 +9,13 @@ import { ios as ios2 } from "some-library/index";
 >ios : () => void
 >    : ^^^^^^^^^^
 >ios2 : () => void
->     : ^^^^^^^^^^
+>     :           
 
 import { ios as ios3 } from "some-library/index.js";
 >ios : () => void
 >    : ^^^^^^^^^^
 >ios3 : () => void
->     : ^^^^^^^^^^
+>     :           
 
 === /node_modules/some-library/lib/index.ios.d.ts ===
 export declare function ios(): void;

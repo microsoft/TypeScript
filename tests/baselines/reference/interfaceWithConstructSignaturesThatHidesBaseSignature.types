@@ -23,7 +23,7 @@ var r = new d();
 >r : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new d() : { a: number; b: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        :                          
 >d : Derived
 >  : ^^^^^^^
 

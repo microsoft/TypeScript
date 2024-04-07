@@ -14,7 +14,7 @@
 
 function SwitchTest(value){
 >SwitchTest : (value: any) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 
@@ -63,7 +63,7 @@ var x = SwitchTest(0);
 >SwitchTest(0) : number
 >              : ^^^^^^
 >SwitchTest : (value: any) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

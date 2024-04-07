@@ -7,9 +7,9 @@
 >function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : () => void
 >                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^
 >function outer (f) { return f } : (f: () => void) => () => void
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^ ^^^^^^^^^^^^^^^^^          
 >outer : (f: () => void) => () => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^          
 >f : () => void
 >  : ^^^^^^^^^^
 >f : () => void
@@ -17,7 +17,7 @@
 
     function inner () {
 >function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    } : () => void
->                                                                                                                                                                                                                                                                           : ^^^^^^^^^^
+>                                                                                                                                                                                                                                                                           :           
 >inner : () => void
 >      : ^^^^^^^^^^
 
@@ -39,7 +39,7 @@
 
         Async.prototype.disableTrampolineIfNecessary = function dtin(b) {
 >Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
->                                                                                                                                                            : ^^^^^^^^^^^^^^^^
+>                                                                                                                                                            : ^ ^^^^^^^^^^^^^^
 >Async.prototype.disableTrampolineIfNecessary : any
 >Async.prototype : any
 >                : ^^^
@@ -50,9 +50,9 @@
 >disableTrampolineIfNecessary : any
 >                             : ^^^
 >function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        } : (b: any) => void
->                                                                                                             : ^^^^^^^^^^^^^^^^
+>                                                                                                             : ^ ^^^^^^^^^^^^^^
 >dtin : (b: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >b : any
 
             if (b) {

@@ -7,7 +7,7 @@ class Foo {
 
     public banana (x: break) { }
 >banana : (x: break) => void
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^
 >x : break
 >  : ^^^^^
 }

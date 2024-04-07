@@ -112,7 +112,7 @@ var y = new g<string>() || new m.g<number>() || (() => new c());
 >y : g<string> | m.g<number> | (() => c)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new g<string>() || new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
->                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^
 >new g<string>() || new m.g<number>() : g<string> | m.g<number>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >new g<string>() : g<string>

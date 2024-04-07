@@ -3,9 +3,9 @@
 === emitDefaultParametersFunctionExpressionES6.ts ===
 var lambda1 = (y = "hello") => { }
 >lambda1 : (y?: string) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^
 >(y = "hello") => { } : (y?: string) => void
->                     : ^^^^^^^^^^^^^^^^^^^^
+>                     :   ^                 
 >y : string
 >  : ^^^^^^
 >"hello" : "hello"
@@ -13,9 +13,9 @@ var lambda1 = (y = "hello") => { }
 
 var lambda2 = (x: number, y = "hello") => { }
 >lambda2 : (x: number, y?: string) => void
->        : ^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >(x: number, y = "hello") => { } : (x: number, y?: string) => void
->                                : ^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>                                :              ^                 
 >x : number
 >  : ^^^^^^
 >y : string
@@ -25,9 +25,9 @@ var lambda2 = (x: number, y = "hello") => { }
 
 var lambda3 = (x: number, y = "hello", ...rest) => { }
 >lambda3 : (x: number, y?: string, ...rest: any[]) => void
->        : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >(x: number, y = "hello", ...rest) => { } : (x: number, y?: string, ...rest: any[]) => void
->                                         : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         :              ^          ^^^                    
 >x : number
 >  : ^^^^^^
 >y : string
@@ -39,9 +39,9 @@ var lambda3 = (x: number, y = "hello", ...rest) => { }
 
 var lambda4 = (y = "hello", ...rest) => { }
 >lambda4 : (y?: string, ...rest: any[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >(y = "hello", ...rest) => { } : (y?: string, ...rest: any[]) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              :   ^          ^^^                    
 >y : string
 >  : ^^^^^^
 >"hello" : "hello"
@@ -51,9 +51,9 @@ var lambda4 = (y = "hello", ...rest) => { }
 
 var x = function (str = "hello", ...rest) { }
 >x : (str?: string, ...rest: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >function (str = "hello", ...rest) { } : (str?: string, ...rest: any[]) => void
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      :     ^          ^^^                    
 >str : string
 >    : ^^^^^^
 >"hello" : "hello"
@@ -67,9 +67,9 @@ var y = (function (num = 10, boo = false, ...rest) { })()
 >(function (num = 10, boo = false, ...rest) { })() : void
 >                                                  : ^^^^
 >(function (num = 10, boo = false, ...rest) { }) : (num?: number, boo?: boolean) => void
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^   ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >function (num = 10, boo = false, ...rest) { } : (num?: number, boo?: boolean) => void
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^   ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 >10 : 10
@@ -87,9 +87,9 @@ var z = (function (num: number, boo = false, ...rest) { })(10)
 >(function (num: number, boo = false, ...rest) { })(10) : void
 >                                                       : ^^^^
 >(function (num: number, boo = false, ...rest) { }) : (num: number, boo?: boolean) => void
->                                                   : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^   ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >function (num: number, boo = false, ...rest) { } : (num: number, boo?: boolean) => void
->                                                 : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^   ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 >boo : boolean

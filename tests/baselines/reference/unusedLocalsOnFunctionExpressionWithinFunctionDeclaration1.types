@@ -3,7 +3,7 @@
 === unusedLocalsOnFunctionExpressionWithinFunctionDeclaration1.ts ===
 function greeter(person: string, person2: string) {
 >greeter : (person: string, person2: string) => void
->        : ^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^
+>        : ^      ^^      ^^       ^^      ^^^^^^^^^
 >person : string
 >       : ^^^^^^
 >person2 : string
@@ -17,9 +17,9 @@ function greeter(person: string, person2: string) {
 
     var maker = function (child: string): void {
 >maker : (child: string) => void
->      : ^^^^^^^^      ^^^^^    
+>      : ^     ^^      ^^^^^    
 >function (child: string): void {        var unused2 = 22;    } : (child: string) => void
->                                                               : ^^^^^^^^      ^^^^^    
+>                                                               :                        
 >child : string
 >      : ^^^^^^
 

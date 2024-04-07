@@ -44,7 +44,7 @@ declare let someUnion: Something | SomethingElse;
 
 function fn<T extends Table>(o: T) {
 >fn : <T extends Table>(o: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >o : T
 >  : ^
 
@@ -83,7 +83,7 @@ function fn<T extends Table>(o: T) {
 
 function fn2<T extends TableClass>(o: T) {
 >fn2 : <T extends TableClass<any>>(o: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >o : T
 >  : ^
 

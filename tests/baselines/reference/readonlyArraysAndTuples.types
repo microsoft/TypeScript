@@ -43,7 +43,7 @@ type T33 = readonly Array<string>;  // Error
 
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
 >f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => void
->   : ^^^^^        ^^^^^^                 ^^^^^^                ^^^^^^                         ^^^^^^^^^
+>   : ^  ^^        ^^  ^^                 ^^  ^^                ^^  ^^                         ^^^^^^^^^
 >ma : string[]
 >   : ^^^^^^^^
 >ra : readonly string[]

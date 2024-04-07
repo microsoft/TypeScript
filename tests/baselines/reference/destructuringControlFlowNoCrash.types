@@ -9,7 +9,7 @@ const {
 
 } = (inspectedElement: any) => 0;
 >(inspectedElement: any) => 0 : (inspectedElement: any) => number
->                             : ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^
+>                             : ^                ^^   ^^^^^^^^^^^
 >inspectedElement : any
 >                 : ^^^
 >0 : 0
@@ -33,7 +33,7 @@ const {
 
 } = (inspectedElement: any).props;
 >(inspectedElement: any) : (inspectedElement: any) => any
->                        : ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^
+>                        : ^                ^^   ^^^^^^^^
 >inspectedElement : any
 >                 : ^^^
 > : any

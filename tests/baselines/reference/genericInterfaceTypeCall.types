@@ -4,7 +4,7 @@
 interface Foo<T> {
     reject(arg: T): void;
 >reject : (arg: T) => void
->       : ^^^^^^ ^^^^^    
+>       : ^   ^^ ^^^^^    
 >arg : T
 >    : ^
 }
@@ -15,17 +15,17 @@ var foo: Foo<string>
 interface bar<T> {
     fail(func: (arg: T) => void ): void;
 >fail : (func: (arg: T) => void) => void
->     : ^^^^^^^                ^^^^^    
+>     : ^    ^^                ^^^^^    
 >func : (arg: T) => void
->     : ^^^^^^ ^^^^^    
+>     : ^   ^^ ^^^^^    
 >arg : T
 >    : ^
 
     fail2(func2: { (arg: T): void; }): void;
 >fail2 : (func2: { (arg: T): void; }) => void
->      : ^^^^^^^^                   ^^^^^    
+>      : ^     ^^                   ^^^^^    
 >func2 : (arg: T) => void
->      : ^^^^^^ ^^^^^    
+>      : ^   ^^ ^^^^^    
 >arg : T
 >    : ^
 }
@@ -37,23 +37,23 @@ test.fail(arg => foo.reject(arg));
 >test.fail(arg => foo.reject(arg)) : void
 >                                  : ^^^^
 >test.fail : (func: (arg: string) => void) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : bar<string>
 >     : ^^^^^^^^^^^
 >fail : (func: (arg: string) => void) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg => foo.reject(arg) : (arg: string) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >foo.reject(arg) : void
 >                : ^^^^
 >foo.reject : (arg: string) => void
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^
 >foo : Foo<string>
 >    : ^^^^^^^^^^^
 >reject : (arg: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 
@@ -61,23 +61,23 @@ test.fail2(arg => foo.reject(arg)); // Error: Supplied parameters do not match a
 >test.fail2(arg => foo.reject(arg)) : void
 >                                   : ^^^^
 >test.fail2 : (func2: (arg: string) => void) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : bar<string>
 >     : ^^^^^^^^^^^
 >fail2 : (func2: (arg: string) => void) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg => foo.reject(arg) : (arg: string) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >foo.reject(arg) : void
 >                : ^^^^
 >foo.reject : (arg: string) => void
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^
 >foo : Foo<string>
 >    : ^^^^^^^^^^^
 >reject : (arg: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 

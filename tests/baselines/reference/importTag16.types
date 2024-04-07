@@ -14,7 +14,7 @@ export interface I {}
  */
 export function foo(a, b) {}
 >foo : (a: Foo, b: I) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^
 >a : Foo
 >  : ^^^
 >b : I

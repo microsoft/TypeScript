@@ -37,7 +37,7 @@ function C() {
 /** @param {import('./mod1').Con} k */
 function f(k) {
 >f : (k: import('./mod1').Con) => any
->  : ^^^^                    ^^^^^^^^
+>  : ^ ^^                    ^^^^^^^^
 >k : import("mod1").Con
 >  : ^^^^^^^^^^^^^^^^^^
 

@@ -22,9 +22,9 @@ interface C2<T> { }
 // interfaces
 interface C3<T> { a(c: (p: T) => void): void; }
 >a : (c: (p: T) => void) => void
->  : ^^^^              ^^^^^    
+>  : ^ ^^              ^^^^^    
 >c : (p: T) => void
->  : ^^^^ ^^^^^    
+>  : ^ ^^ ^^^^^    
 >p : T
 >  : ^
 

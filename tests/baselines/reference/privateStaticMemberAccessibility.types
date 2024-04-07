@@ -30,7 +30,7 @@ class Derived extends Base {
 >bing : () => string
 >     : ^^^^^^^^^^^^
 >() => Base.foo : () => string
->               : ^^^^^^^^^^^^
+>               :             
 >Base.foo : string
 >         : ^^^^^^
 >Base : typeof Base

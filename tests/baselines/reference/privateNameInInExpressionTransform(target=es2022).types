@@ -27,7 +27,7 @@ class Foo {
 
     check(v: any) {
 >check : (v: any) => void
->      : ^^^^   ^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -65,7 +65,7 @@ class Foo {
     }
     precedence(v: any) {
 >precedence : (v: any) => void
->           : ^^^^   ^^^^^^^^^
+>           : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -151,7 +151,7 @@ class Foo {
     }
     invalidLHS(v: any) {
 >invalidLHS : (v: any) => void
->           : ^^^^   ^^^^^^^^^
+>           : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -189,7 +189,7 @@ class Bar {
 
     check(v: any) {
 >check : (v: any) => void
->      : ^^^^   ^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^
 >v : any
 >  : ^^^
 
@@ -205,7 +205,7 @@ class Bar {
 
 function syntaxError(v: Foo) {
 >syntaxError : (v: Foo) => boolean
->            : ^^^^   ^^^^^^^^^^^^
+>            : ^ ^^   ^^^^^^^^^^^^
 >v : Foo
 >  : ^^^
 

@@ -11,7 +11,7 @@ var f = () => this;
 >f : () => typeof globalThis
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           :                        
 >this : typeof globalThis
 >     : ^^^^^^^^^^^^^^^^^
 

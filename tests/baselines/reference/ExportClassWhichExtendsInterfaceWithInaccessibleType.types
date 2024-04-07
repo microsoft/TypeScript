@@ -16,7 +16,7 @@ module A {
 
         fromOrigin(p: Point): number;
 >fromOrigin : (p: Point) => number
->           : ^^^^     ^^^^^      
+>           : ^ ^^     ^^^^^      
 >p : Point
 >  : ^^^^^
     }
@@ -33,7 +33,7 @@ module A {
 
         fromOrigin(p: Point) {
 >fromOrigin : (p: Point) => number
->           : ^^^^     ^^^^^^^^^^^
+>           : ^ ^^     ^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 

@@ -8,7 +8,7 @@ class X {
 
 	method(readonly x: number) {}
 >method : (x: number) => void
->       : ^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -20,7 +20,7 @@ class X {
 }
 (readonly x) => 0;
 >(readonly x) => 0 : (x: any) => number
->                  : ^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >0 : 0
@@ -29,7 +29,7 @@ class X {
 // OK to use `readonly` as a name
 (readonly) => 0;
 >(readonly) => 0 : (readonly: any) => number
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^^^^^^^^^^^^^^^
 >readonly : any
 >         : ^^^
 >0 : 0

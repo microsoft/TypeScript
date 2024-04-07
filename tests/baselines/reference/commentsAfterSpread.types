@@ -3,9 +3,9 @@
 === commentsAfterSpread.ts ===
 const identity = (a) => a;
 >identity : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^
 >(a) => a : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         :                
 >a : any
 >a : any
 
@@ -16,7 +16,7 @@ const a = {
   .../*#__PURE__*/identity({
 >identity({    b: 1  }) : any
 >identity : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^
 >{    b: 1  } : { b: number; }
 >             : ^^^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ const b = {
   /*#__PURE__*/identity({
 >identity({    b: 1  }) : any
 >identity : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^
 >{    b: 1  } : { b: number; }
 >             : ^^^^^^^^^^^^^^
 
@@ -59,7 +59,7 @@ const c = {
   identity({
 >identity({    b: 1  }) : any
 >identity : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^
 >{    b: 1  } : { b: number; }
 >             : ^^^^^^^^^^^^^^
 
@@ -80,7 +80,7 @@ const d = {
   identity({
 >identity({    b: 1  }) : any
 >identity : (a: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^
 >{    b: 1  } : { b: number; }
 >             : ^^^^^^^^^^^^^^
 
@@ -95,7 +95,7 @@ const d = {
 
 function e (.../* comment e */args) {
 >e : (...args: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -121,7 +121,7 @@ function e (.../* comment e */args) {
 
 function f (
 >f : (first: any, ...rest: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 
   first,
 >first : any
@@ -142,7 +142,7 @@ function f (
 
 function g (
 >g : (first: any, ...rest: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 
   first,
 >first : any
@@ -178,9 +178,9 @@ function g (
 
 const h = (.../* comment h */args) => args.length;
 >h : (...args: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^^^^^^^^^^^^^^^^^
 >(.../* comment h */args) => args.length : (...args: any[]) => number
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        :  ^^^                      
 >args : any[]
 >     : ^^^^^
 >args.length : number
@@ -192,9 +192,9 @@ const h = (.../* comment h */args) => args.length;
 
 const i = (
 >i : (first: any, ...rest: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 >(  first, .../* comment i */rest) => rest.length : (first: any, ...rest: any[]) => number
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 :              ^^^                      
 
   first, .../* comment i */rest
 >first : any
@@ -211,9 +211,9 @@ const i = (
 
 const j = (
 >j : (first: any, ...rest: any[]) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
 >(  first,  .../* comment j */  rest) => rest.length : (first: any, ...rest: any[]) => number
->                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                    :              ^^^                      
 
   first,
 >first : any
@@ -233,7 +233,7 @@ const j = (
 
 function k ({
 >k : ({ first, ...rest }: { [x: string]: any; first: any; }) => { [x: string]: any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   first,
 >first : any

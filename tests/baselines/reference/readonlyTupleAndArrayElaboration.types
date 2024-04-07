@@ -18,7 +18,7 @@ let point = [3, 4] as const;
 
 function distanceFromOrigin([x, y]: [number, number]) {
 >distanceFromOrigin : ([x, y]: [number, number]) => number
->                   : ^^^^^^^^^                ^^^^^^^^^^^
+>                   : ^      ^^                ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -28,11 +28,11 @@ function distanceFromOrigin([x, y]: [number, number]) {
 >Math.sqrt(x ** 2 + y ** 2) : number
 >                           : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >x ** 2 + y ** 2 : number
 >                : ^^^^^^
 >x ** 2 : number
@@ -53,13 +53,13 @@ distanceFromOrigin(point);
 >distanceFromOrigin(point) : number
 >                          : ^^^^^^
 >distanceFromOrigin : ([x, y]: [number, number]) => number
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >point : readonly [3, 4]
 >      : ^^^^^^^^^^^^^^^
 
 declare function arryFn(x: number[]): void;
 >arryFn : (x: number[]) => void
->       : ^^^^        ^^^^^    
+>       : ^ ^^        ^^^^^    
 >x : number[]
 >  : ^^^^^^^^
 
@@ -67,13 +67,13 @@ arryFn(point);
 >arryFn(point) : void
 >              : ^^^^
 >arryFn : (x: number[]) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >point : readonly [3, 4]
 >      : ^^^^^^^^^^^^^^^
 
 declare function arryFn2(x: Array<number>): void;
 >arryFn2 : (x: Array<number>) => void
->        : ^^^^             ^^^^^    
+>        : ^ ^^             ^^^^^    
 >x : number[]
 >  : ^^^^^^^^
 
@@ -81,7 +81,7 @@ arryFn2(point);
 >arryFn2(point) : void
 >               : ^^^^
 >arryFn2 : (x: number[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >point : readonly [3, 4]
 >      : ^^^^^^^^^^^^^^^
 
@@ -101,7 +101,7 @@ arryFn2(a);
 >arryFn2(a) : void
 >           : ^^^^
 >arryFn2 : (x: number[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >a : readonly number[]
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -109,7 +109,7 @@ arryFn2(b);
 >arryFn2(b) : void
 >           : ^^^^
 >arryFn2 : (x: number[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >b : readonly number[]
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -117,7 +117,7 @@ arryFn2(c);
 >arryFn2(c) : void
 >           : ^^^^
 >arryFn2 : (x: number[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^
 >c : readonly number[]
 >  : ^^^^^^^^^^^^^^^^^
 

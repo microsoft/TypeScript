@@ -96,15 +96,15 @@ var ResultIsAny5 = void { x: 1, y: (n: number) => { return n; } };
 >void { x: 1, y: (n: number) => { return n; } } : undefined
 >                                               : ^^^^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->                                          : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >y : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             : ^^^^      ^^^^^^^^^^^
+>                             :                      
 >n : number
 >  : ^^^^^^
 >n : number

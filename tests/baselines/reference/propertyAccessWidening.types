@@ -5,7 +5,7 @@
 
 function g1(headerNames: any) {
 >g1 : (headerNames: any) => void
->   : ^^^^^^^^^^^^^^   ^^^^^^^^^
+>   : ^           ^^   ^^^^^^^^^
 >headerNames : any
 >            : ^^^
 
@@ -29,9 +29,9 @@ function g1(headerNames: any) {
 >table : { cells: any; }[]
 >      : ^^^^^^^^^^^^^^^^^
 >[{cells: headerNames }].concat(t) : { cells: any; }[]
->                                  : ^^^^^^^^^^^^^^^^^
+>                                  :                ^^
 >[{cells: headerNames }].concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^               ^^^^^
 >[{cells: headerNames }] : { cells: any; }[]
 >                        : ^^^^^^^^^^^^^^^^^
 >{cells: headerNames } : { cells: any; }
@@ -41,14 +41,14 @@ function g1(headerNames: any) {
 >headerNames : any
 >            : ^^^
 >concat : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^               ^^^^^
 >t : { hasLineBreak: boolean; cells: never[]; }[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function g2(headerNames: any) {
 >g2 : (headerNames: any) => void
->   : ^^^^^^^^^^^^^^   ^^^^^^^^^
+>   : ^           ^^   ^^^^^^^^^
 >headerNames : any
 >            : ^^^
 
@@ -72,9 +72,9 @@ function g2(headerNames: any) {
 >table : { cells: any; }[]
 >      : ^^^^^^^^^^^^^^^^^
 >[{cells: headerNames }]["concat"](t) : { cells: any; }[]
->                                     : ^^^^^^^^^^^^^^^^^
+>                                     :                ^^
 >[{cells: headerNames }]["concat"] : { (...items: ConcatArray<{ cells: any; }>[]): { cells: any; }[]; (...items: ({ cells: any; } | ConcatArray<{ cells: any; }>)[]): { cells: any; }[]; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^^^^^               ^^^^^
 >[{cells: headerNames }] : { cells: any; }[]
 >                        : ^^^^^^^^^^^^^^^^^
 >{cells: headerNames } : { cells: any; }
@@ -93,7 +93,7 @@ function g2(headerNames: any) {
 
 function foo(options?: { a: string, b: number }) {
 >foo : (options?: { a: string; b: number; }) => void
->    : ^^^^^^^^^^^                         ^^^^^^^^^
+>    : ^       ^^^                         ^^^^^^^^^
 >options : { a: string; b: number; } | undefined
 >        : ^^^^^      ^^^^^      ^^^^^^^^^^^^^^^
 >a : string
