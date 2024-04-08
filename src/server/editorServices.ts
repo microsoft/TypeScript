@@ -849,6 +849,12 @@ export function updateProjectIfDirty(project: Project) {
     return project.dirty && !project.updateGraph();
 }
 
+function updateConfiguredProjectWithoutConfigDiagIfDirty(project: ConfiguredProject) {
+    project.skipConfigDiagEvent = true;
+    updateProjectIfDirty(project);
+    project.skipConfigDiagEvent = undefined;
+}
+
 function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
     if (isConfiguredProject(project)) {
         project.projectOptions = true;
@@ -2511,6 +2517,7 @@ export class ProjectService {
     /** @internal */
     private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath, reason: string) {
         const project = this.createAndLoadConfiguredProject(configFileName, reason);
+        project.skipConfigDiagEvent = true;
         project.updateGraph();
         return project;
     }
@@ -2839,6 +2846,7 @@ export class ProjectService {
 
         // Load project from the disk
         this.loadConfiguredProject(project, reason);
+        project.skipConfigDiagEvent = true;
         project.updateGraph();
 
         this.sendConfigFileDiagEvent(project, configFileName);
@@ -2852,17 +2860,22 @@ export class ProjectService {
         project.markAsDirty();
     }
 
-    private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
+    /** @internal */
+    sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath | undefined) {
         if (!this.eventHandler || this.suppressDiagnosticEvents) {
             return;
         }
         const diagnostics = project.getLanguageService().getCompilerOptionsDiagnostics();
         diagnostics.push(...project.getAllProjectErrors());
 
+        if (!triggerFile && !!diagnostics.length === !!project.hasConfigFileDiagnostics) return;
+
+        project.hasConfigFileDiagnostics = !!diagnostics.length;
+
         this.eventHandler(
             {
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile },
+                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile: triggerFile ?? project.getConfigFilePath() },
             } satisfies ConfigFileDiagEvent,
         );
     }
@@ -3785,7 +3798,7 @@ export class ProjectService {
                 }
                 else {
                     // Ensure project is ready to check if it contains opened script info
-                    updateProjectIfDirty(project);
+                    updateConfiguredProjectWithoutConfigDiagIfDirty(project);
                 }
 
                 projectForConfigFileDiag = project.containsScriptInfo(info) ? project : undefined;
@@ -3798,7 +3811,7 @@ export class ProjectService {
                         project,
                         info.path,
                         child => {
-                            updateProjectIfDirty(child);
+                            updateConfiguredProjectWithoutConfigDiagIfDirty(child);
                             // Retain these projects
                             if (!isArray(retainProjects)) {
                                 retainProjects = [project as ConfiguredProject, child];
