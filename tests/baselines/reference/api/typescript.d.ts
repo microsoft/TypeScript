@@ -3233,7 +3233,6 @@ declare namespace ts {
             private addFilesToNonInferredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
-            private sendConfigFileDiagEvent;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
