@@ -221,7 +221,6 @@ declare namespace Intl {
 
     interface PluralRulesConstructor {
         new (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
-        (locales?: LocalesArgument, options?: PluralRulesOptions): PluralRules;
 
         /**
          * Takes a list of locales, and returns the subset of locale identifiers that are supported by the current implementation of `PluralRules`.

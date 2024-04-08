@@ -603,9 +603,9 @@ new Intl.NumberFormat(mixed);
 >mixed : readonly ["en", Intl.Locale]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Intl.PluralRules(locale);
->Intl.PluralRules(locale) : Intl.PluralRules
->                         : ^^^^^^^^^^^^^^^^
+Intl.PluralRules(locale); // expect error
+>Intl.PluralRules(locale) : any
+>                         : ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -615,9 +615,9 @@ Intl.PluralRules(locale);
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 
-Intl.PluralRules(mixed);
->Intl.PluralRules(mixed) : Intl.PluralRules
->                        : ^^^^^^^^^^^^^^^^
+Intl.PluralRules(mixed); // expect error
+>Intl.PluralRules(mixed) : any
+>                        : ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl

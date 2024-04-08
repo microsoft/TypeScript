@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es2018/es2018IntlAPIs.ts] ////
 
 === es2018IntlAPIs.ts ===
-Intl.PluralRules();
+Intl.PluralRules(); // expect error
 >Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
@@ -22,18 +22,18 @@ new Intl.PluralRules([ 'en' ] as const);
 >PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >const : Symbol(const)
 
-const { pluralCategories } = Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
+const { pluralCategories } = new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
 >pluralCategories : Symbol(pluralCategories, Decl(es2018IntlAPIs.ts, 4, 7))
->Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions : Symbol(Intl.PluralRules.resolvedOptions, Decl(lib.es2018.intl.d.ts, --, --))
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions : Symbol(Intl.PluralRules.resolvedOptions, Decl(lib.es2018.intl.d.ts, --, --))
 >Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
->localeMatcher : Symbol(localeMatcher, Decl(es2018IntlAPIs.ts, 4, 53))
->type : Symbol(type, Decl(es2018IntlAPIs.ts, 4, 80))
+>localeMatcher : Symbol(localeMatcher, Decl(es2018IntlAPIs.ts, 4, 57))
+>type : Symbol(type, Decl(es2018IntlAPIs.ts, 4, 84))
 >resolvedOptions : Symbol(Intl.PluralRules.resolvedOptions, Decl(lib.es2018.intl.d.ts, --, --))
 
-Intl.PluralRules().select(10);
->Intl.PluralRules().select : Symbol(Intl.PluralRules.select, Decl(lib.es2018.intl.d.ts, --, --))
+new Intl.PluralRules().select(10);
+>new Intl.PluralRules().select : Symbol(Intl.PluralRules.select, Decl(lib.es2018.intl.d.ts, --, --))
 >Intl.PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))
 >PluralRules : Symbol(Intl.PluralRules, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --))

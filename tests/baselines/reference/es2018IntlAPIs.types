@@ -1,9 +1,9 @@
 //// [tests/cases/conformance/es2018/es2018IntlAPIs.ts] ////
 
 === es2018IntlAPIs.ts ===
-Intl.PluralRules();
->Intl.PluralRules() : Intl.PluralRules
->                   : ^^^^^^^^^^^^^^^^
+Intl.PluralRules(); // expect error
+>Intl.PluralRules() : any
+>                   : ^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -49,15 +49,15 @@ new Intl.PluralRules([ 'en' ] as const);
 >'en' : "en"
 >     : ^^^^
 
-const { pluralCategories } = Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
+const { pluralCategories } = new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
 >pluralCategories : Intl.LDMLPluralRule[]
 >                 : ^^^^^^^^^^^^^^^^^^^^^
->Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions() : Intl.ResolvedPluralRulesOptions
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions : () => Intl.ResolvedPluralRulesOptions
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }) : Intl.PluralRules
->                                                                       : ^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions() : Intl.ResolvedPluralRulesOptions
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions : () => Intl.ResolvedPluralRulesOptions
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }) : Intl.PluralRules
+>                                                                           : ^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -79,13 +79,13 @@ const { pluralCategories } = Intl.PluralRules('en', { localeMatcher: 'best fit',
 >resolvedOptions : () => Intl.ResolvedPluralRulesOptions
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Intl.PluralRules().select(10);
->Intl.PluralRules().select(10) : Intl.LDMLPluralRule
->                              : ^^^^^^^^^^^^^^^^^^^
->Intl.PluralRules().select : (n: number) => Intl.LDMLPluralRule
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.PluralRules() : Intl.PluralRules
->                   : ^^^^^^^^^^^^^^^^
+new Intl.PluralRules().select(10);
+>new Intl.PluralRules().select(10) : Intl.LDMLPluralRule
+>                                  : ^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules().select : (n: number) => Intl.LDMLPluralRule
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.PluralRules() : Intl.PluralRules
+>                       : ^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl

@@ -41,8 +41,8 @@ Intl.NumberFormat(locale);
 Intl.NumberFormat(mixed);
 new Intl.NumberFormat(locale);
 new Intl.NumberFormat(mixed);
-Intl.PluralRules(locale);
-Intl.PluralRules(mixed);
+Intl.PluralRules(locale); // expect error
+Intl.PluralRules(mixed); // expect error
 new Intl.PluralRules(locale);
 new Intl.PluralRules(mixed);
 

@@ -1,9 +1,11 @@
 es2020IntlAPIs.ts(4,1): error TS2348: Value of type 'LocaleConstructor' is not callable. Did you mean to include 'new'?
 es2020IntlAPIs.ts(5,1): error TS2554: Expected 1-2 arguments, but got 0.
 es2020IntlAPIs.ts(8,1): error TS2348: Value of type 'RelativeTimeFormatConstructor' is not callable. Did you mean to include 'new'?
+es2020IntlAPIs.ts(42,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+es2020IntlAPIs.ts(43,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
 
 
-==== es2020IntlAPIs.ts (3 errors) ====
+==== es2020IntlAPIs.ts (5 errors) ====
     const locale = new Intl.Locale('en');
     const mixed = [ 'en', locale ] as const;
     
@@ -52,8 +54,12 @@ es2020IntlAPIs.ts(8,1): error TS2348: Value of type 'RelativeTimeFormatConstruct
     Intl.NumberFormat(mixed);
     new Intl.NumberFormat(locale);
     new Intl.NumberFormat(mixed);
-    Intl.PluralRules(locale);
-    Intl.PluralRules(mixed);
+    Intl.PluralRules(locale); // expect error
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+    Intl.PluralRules(mixed); // expect error
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
     new Intl.PluralRules(locale);
     new Intl.PluralRules(mixed);
     

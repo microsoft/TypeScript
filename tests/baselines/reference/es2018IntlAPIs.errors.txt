@@ -1,0 +1,19 @@
+es2018IntlAPIs.ts(1,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+
+
+==== es2018IntlAPIs.ts (1 errors) ====
+    Intl.PluralRules(); // expect error
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+    new Intl.PluralRules();
+    new Intl.PluralRules('en');
+    new Intl.PluralRules([ 'en' ] as const);
+    const { pluralCategories } = new Intl.PluralRules('en', { localeMatcher: 'best fit', type: 'ordinal' }).resolvedOptions();
+    new Intl.PluralRules().select(10);
+    Intl.PluralRules.supportedLocalesOf('en');
+    Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' });
+    
+    const { hourCycle } = Intl.DateTimeFormat('en', { hourCycle: 'h23' }).resolvedOptions();
+    
+    new Intl.NumberFormat().formatToParts()[0];
+    
