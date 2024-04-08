@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/keyofInIntersections.ts] ////
+
+=== keyofInIntersections.ts ===
+type Foo = { x: string } | undefined;
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+>x : Symbol(x, Decl(keyofInIntersections.ts, 0, 12))
+
+type Bar = { y: string };
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+>y : Symbol(y, Decl(keyofInIntersections.ts, 1, 12))
+
+type Keys1<T, U> = keyof (T & U);
+>Keys1 : Symbol(Keys1, Decl(keyofInIntersections.ts, 1, 25))
+>T : Symbol(T, Decl(keyofInIntersections.ts, 3, 11))
+>U : Symbol(U, Decl(keyofInIntersections.ts, 3, 13))
+>T : Symbol(T, Decl(keyofInIntersections.ts, 3, 11))
+>U : Symbol(U, Decl(keyofInIntersections.ts, 3, 13))
+
+type Keys2<T, U> = keyof T | keyof U;
+>Keys2 : Symbol(Keys2, Decl(keyofInIntersections.ts, 3, 33))
+>T : Symbol(T, Decl(keyofInIntersections.ts, 4, 11))
+>U : Symbol(U, Decl(keyofInIntersections.ts, 4, 13))
+>T : Symbol(T, Decl(keyofInIntersections.ts, 4, 11))
+>U : Symbol(U, Decl(keyofInIntersections.ts, 4, 13))
+
+type K1 = keyof Foo;  // never
+>K1 : Symbol(K1, Decl(keyofInIntersections.ts, 4, 37))
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+
+type K2 = keyof Bar;  // "y"
+>K2 : Symbol(K2, Decl(keyofInIntersections.ts, 6, 20))
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+
+type K3 = keyof (Foo & Bar);  // "x" | "y"
+>K3 : Symbol(K3, Decl(keyofInIntersections.ts, 7, 20))
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+
+type K4 = keyof Foo | keyof Bar;  // "y"
+>K4 : Symbol(K4, Decl(keyofInIntersections.ts, 8, 28))
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+
+type K5 = Keys1<Foo, Bar>;  // "x" | "y"
+>K5 : Symbol(K5, Decl(keyofInIntersections.ts, 9, 32))
+>Keys1 : Symbol(Keys1, Decl(keyofInIntersections.ts, 1, 25))
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+
+type K6 = Keys2<Foo, Bar>;  // "y"
+>K6 : Symbol(K6, Decl(keyofInIntersections.ts, 10, 26))
+>Keys2 : Symbol(Keys2, Decl(keyofInIntersections.ts, 3, 33))
+>Foo : Symbol(Foo, Decl(keyofInIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(keyofInIntersections.ts, 0, 37))
+
+// Repro from #51331
+
+type GestureKey = "drag";
+>GestureKey : Symbol(GestureKey, Decl(keyofInIntersections.ts, 11, 26))
+
+type DragState = { movement: [number, number]; };
+>DragState : Symbol(DragState, Decl(keyofInIntersections.ts, 15, 25))
+>movement : Symbol(movement, Decl(keyofInIntersections.ts, 16, 18))
+
+interface State {
+>State : Symbol(State, Decl(keyofInIntersections.ts, 16, 49))
+
+    drag?: DragState;
+>drag : Symbol(State.drag, Decl(keyofInIntersections.ts, 18, 17))
+>DragState : Symbol(DragState, Decl(keyofInIntersections.ts, 15, 25))
+}
+
+type SharedGestureState = {
+>SharedGestureState : Symbol(SharedGestureState, Decl(keyofInIntersections.ts, 20, 1))
+
+    dragging?: boolean;
+>dragging : Symbol(dragging, Decl(keyofInIntersections.ts, 22, 27))
+
+};
+
+type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>;
+>FullGestureState : Symbol(FullGestureState, Decl(keyofInIntersections.ts, 24, 2))
+>Key : Symbol(Key, Decl(keyofInIntersections.ts, 26, 22))
+>GestureKey : Symbol(GestureKey, Decl(keyofInIntersections.ts, 11, 26))
+>SharedGestureState : Symbol(SharedGestureState, Decl(keyofInIntersections.ts, 20, 1))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>State : Symbol(State, Decl(keyofInIntersections.ts, 16, 49))
+>Key : Symbol(Key, Decl(keyofInIntersections.ts, 26, 22))
+
+type Handler<Key extends GestureKey> = (state: Omit<FullGestureState<Key>, "event">) => void;
+>Handler : Symbol(Handler, Decl(keyofInIntersections.ts, 26, 93))
+>Key : Symbol(Key, Decl(keyofInIntersections.ts, 28, 13))
+>GestureKey : Symbol(GestureKey, Decl(keyofInIntersections.ts, 11, 26))
+>state : Symbol(state, Decl(keyofInIntersections.ts, 28, 40))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>FullGestureState : Symbol(FullGestureState, Decl(keyofInIntersections.ts, 24, 2))
+>Key : Symbol(Key, Decl(keyofInIntersections.ts, 28, 13))
+
+const f1 = (state: Omit<FullGestureState<"drag">, "event">) => {
+>f1 : Symbol(f1, Decl(keyofInIntersections.ts, 30, 5))
+>state : Symbol(state, Decl(keyofInIntersections.ts, 30, 12))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>FullGestureState : Symbol(FullGestureState, Decl(keyofInIntersections.ts, 24, 2))
+
+  state;
+>state : Symbol(state, Decl(keyofInIntersections.ts, 30, 12))
+
+  state.movement;
+>state.movement : Symbol(movement, Decl(keyofInIntersections.ts, 16, 18))
+>state : Symbol(state, Decl(keyofInIntersections.ts, 30, 12))
+>movement : Symbol(movement, Decl(keyofInIntersections.ts, 16, 18))
+
+};
+
+const f2: Handler<"drag"> = (state) => {
+>f2 : Symbol(f2, Decl(keyofInIntersections.ts, 35, 5))
+>Handler : Symbol(Handler, Decl(keyofInIntersections.ts, 26, 93))
+>state : Symbol(state, Decl(keyofInIntersections.ts, 35, 29))
+
+  state;
+>state : Symbol(state, Decl(keyofInIntersections.ts, 35, 29))
+
+  state.movement;
+>state.movement : Symbol(movement, Decl(keyofInIntersections.ts, 16, 18))
+>state : Symbol(state, Decl(keyofInIntersections.ts, 35, 29))
+>movement : Symbol(movement, Decl(keyofInIntersections.ts, 16, 18))
+
+};
+
