@@ -6569,10 +6569,6 @@ export interface SyntheticDefaultModuleType extends Type {
 export interface InstantiableType extends Type {
     /** @internal */
     resolvedBaseConstraint?: Type;
-    /** @internal */
-    resolvedIndexType?: IndexType;
-    /** @internal */
-    resolvedStringIndexType?: IndexType;
 }
 
 // Type parameters (TypeFlags.TypeParameter)
@@ -6629,8 +6625,9 @@ export type TypeVariable = TypeParameter | IndexedAccessType;
 export const enum IndexFlags {
     None = 0,
     StringsOnly = 1 << 0,
-    NoIndexSignatures = 1 << 1,
-    NoReducibleCheck = 1 << 2,
+    FromIntersection = 1 << 1,
+    NoIndexSignatures = 1 << 2,
+    NoReducibleCheck = 1 << 3,
 }
 
 // keyof T types (TypeFlags.Index)

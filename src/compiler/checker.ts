@@ -18075,9 +18075,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getIndexTypeForGenericType(type: InstantiableType | UnionOrIntersectionType, indexFlags: IndexFlags) {
-        return indexFlags & IndexFlags.StringsOnly ?
-            type.resolvedStringIndexType || (type.resolvedStringIndexType = createIndexType(type, IndexFlags.StringsOnly)) :
-            type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, IndexFlags.None));
+        const persistentFlags = indexFlags & (IndexFlags.StringsOnly | IndexFlags.FromIntersection);
+        const key = `K${getTypeId(type)},${persistentFlags}`;
+        return getCachedType(key) ?? setCachedType(key, createIndexType(type, persistentFlags));
     }
 
     /**
@@ -18211,11 +18211,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return isNoInferType(type) ? getNoInferType(getIndexType((type as SubstitutionType).baseType, indexFlags)) :
             shouldDeferIndexType(type, indexFlags) ? getIndexTypeForGenericType(type as InstantiableType | UnionOrIntersectionType, indexFlags) :
             type.flags & TypeFlags.Union ? getIntersectionType(map((type as UnionType).types, t => getIndexType(t, indexFlags))) :
-            type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags))) :
+            type.flags & TypeFlags.Intersection ? getUnionType(map((type as IntersectionType).types, t => getIndexType(t, indexFlags | IndexFlags.FromIntersection))) :
             getObjectFlags(type) & ObjectFlags.Mapped ? getIndexTypeForMappedType(type as MappedType, indexFlags) :
             type === wildcardType ? wildcardType :
             type.flags & TypeFlags.Unknown ? neverType :
-            type.flags & (TypeFlags.Any | TypeFlags.Never) ? stringNumberSymbolType :
+            type.flags & (TypeFlags.Any | TypeFlags.Never) || type.flags & TypeFlags.Nullable && indexFlags & IndexFlags.FromIntersection ? stringNumberSymbolType :
             getLiteralTypeFromProperties(type, (indexFlags & IndexFlags.NoIndexSignatures ? TypeFlags.StringLiteral : TypeFlags.StringLike) | (indexFlags & IndexFlags.StringsOnly ? 0 : TypeFlags.NumberLike | TypeFlags.ESSymbolLike), indexFlags === IndexFlags.None);
     }
 
@@ -20286,7 +20286,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 getUnionType(newTypes, UnionReduction.Literal, newAliasSymbol, newAliasTypeArguments);
         }
         if (flags & TypeFlags.Index) {
-            return getIndexType(instantiateType((type as IndexType).type, mapper));
+            return getIndexType(instantiateType((type as IndexType).type, mapper), (type as IndexType).indexFlags);
         }
         if (flags & TypeFlags.TemplateLiteral) {
             return getTemplateLiteralType((type as TemplateLiteralType).texts, instantiateTypes((type as TemplateLiteralType).types, mapper));
