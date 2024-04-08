@@ -840,10 +840,13 @@ export function projectContainsInfoDirectly(project: Project, info: ScriptInfo) 
         !project.isSourceOfProjectReferenceRedirect(info.path);
 }
 
-/** @internal */
+/**
+ * returns true if project updated with new program
+ * @internal
+ */
 export function updateProjectIfDirty(project: Project) {
     project.invalidateResolutionsOfFailedLookupLocations();
-    return project.dirty && project.updateGraph();
+    return project.dirty && !project.updateGraph();
 }
 
 function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
