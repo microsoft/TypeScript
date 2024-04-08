@@ -1,6 +1,10 @@
-const { AST_NODE_TYPES, TSESTree, ESLintUtils } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES, ESLintUtils } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 const ts = require("typescript");
+
+/**
+ * @typedef {import("@typescript-eslint/utils").TSESTree.CallExpression | import("@typescript-eslint/utils").TSESTree.NewExpression} CallOrNewExpression
+ */
 
 const unset = Symbol();
 /**
@@ -18,7 +22,6 @@ function memoize(fn) {
         return value;
     };
 }
-
 
 module.exports = createRule({
     name: "argument-trivia",
@@ -42,9 +45,9 @@ module.exports = createRule({
         const sourceCodeText = sourceCode.getText();
 
         /** @type {(name: string) => boolean} */
-        const isSetOrAssert = (name) => name.startsWith("set") || name.startsWith("assert");
-        /** @type {(node: TSESTree.Node) => boolean} */
-        const isTrivia = (node) => {
+        const isSetOrAssert = name => name.startsWith("set") || name.startsWith("assert");
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        const isTrivia = node => {
             if (node.type === AST_NODE_TYPES.Identifier) {
                 return node.name === "undefined";
             }
@@ -57,8 +60,8 @@ module.exports = createRule({
             return false;
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => boolean} */
-        const shouldIgnoreCalledExpression = (node) => {
+        /** @type {(node: CallOrNewExpression) => boolean} */
+        const shouldIgnoreCalledExpression = node => {
             if (node.callee && node.callee.type === AST_NODE_TYPES.MemberExpression) {
                 const methodName = node.callee.property.type === AST_NODE_TYPES.Identifier
                     ? node.callee.property.name
@@ -98,8 +101,7 @@ module.exports = createRule({
             return false;
         };
 
-
-        /** @type {(node: TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node, i: number, getSignature: () => ts.Signature | undefined) => void} */
         const checkArg = (node, i, getSignature) => {
             if (!isTrivia(node)) {
                 return;
@@ -121,7 +123,7 @@ module.exports = createRule({
             });
 
             const comments = sourceCode.getCommentsBefore(node);
-            /** @type {TSESTree.Comment | undefined} */
+            /** @type {import("@typescript-eslint/utils").TSESTree.Comment | undefined} */
             const comment = comments[comments.length - 1];
 
             if (!comment || comment.type !== "Block") {
@@ -130,9 +132,9 @@ module.exports = createRule({
                     context.report({
                         messageId: "argumentTriviaArgumentError",
                         node,
-                        fix: (fixer) => {
+                        fix: fixer => {
                             return fixer.insertTextBefore(node, `/*${expectedName}*/ `);
-                        }
+                        },
                     });
                 }
                 else {
@@ -151,7 +153,7 @@ module.exports = createRule({
                         messageId: "argumentTriviaArgumentNameError",
                         data: { got, want: expectedName },
                         node: comment,
-                        fix: (fixer) => {
+                        fix: fixer => {
                             return fixer.replaceText(comment, `/*${expectedName}*/`);
                         },
                     });
@@ -159,28 +161,28 @@ module.exports = createRule({
                 }
             }
 
-            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).indexOf("\n") >= 0;
+            const hasNewLine = sourceCodeText.slice(commentRangeEnd, argRangeStart).includes("\n");
             if (argRangeStart !== commentRangeEnd + 1 && !hasNewLine) {
                 // TODO(jakebailey): range should be whitespace
                 context.report({
                     messageId: "argumentTriviaArgumentSpaceError",
                     node,
-                    fix: (fixer) => {
+                    fix: fixer => {
                         return fixer.replaceTextRange([commentRangeEnd, argRangeStart], " ");
-                    }
+                    },
                 });
             }
         };
 
-        /** @type {(node: TSESTree.CallExpression | TSESTree.NewExpression) => void} */
-        const checkArgumentTrivia = (node) => {
+        /** @type {(node: CallOrNewExpression) => void} */
+        const checkArgumentTrivia = node => {
             if (shouldIgnoreCalledExpression(node)) {
                 return;
             }
 
             const getSignature = memoize(() => {
-                if (context.parserServices?.program) {
-                    const parserServices = ESLintUtils.getParserServices(context);
+                const parserServices = ESLintUtils.getParserServices(context, /*allowWithoutFullTypeInformation*/ true);
+                if (parserServices.program) {
                     const checker = parserServices.program.getTypeChecker();
                     const tsNode = parserServices.esTreeNodeToTSNodeMap.get(node);
                     return checker.getResolvedSignature(tsNode);

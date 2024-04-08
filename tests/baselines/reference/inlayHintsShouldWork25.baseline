@@ -1,8 +1,0 @@
-foo((a) => { })
-      ^
-{
-  "text": ": string",
-  "position": 48,
-  "kind": "Type",
-  "whitespaceBefore": true
-}

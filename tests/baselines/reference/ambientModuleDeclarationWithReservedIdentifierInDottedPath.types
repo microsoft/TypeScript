@@ -1,0 +1,38 @@
+//// [tests/cases/conformance/ambient/ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts] ////
+
+=== ambientModuleDeclarationWithReservedIdentifierInDottedPath.ts ===
+// https://github.com/microsoft/TypeScript/issues/7840
+
+declare module chrome.debugger {
+>chrome : typeof chrome
+>       : ^^^^^^^^^^^^^
+>debugger : typeof debugger
+>         : ^^^^^^^^^^^^^^^
+
+    declare var tabId: number;
+>tabId : number
+>      : ^^^^^^
+}
+
+export const tabId = chrome.debugger.tabId;
+>tabId : number
+>      : ^^^^^^
+>chrome.debugger.tabId : number
+>                      : ^^^^^^
+>chrome.debugger : typeof chrome.debugger
+>                : ^^^^^^^^^^^^^^^^^^^^^^
+>chrome : typeof chrome
+>       : ^^^^^^^^^^^^^
+>debugger : typeof chrome.debugger
+>         : ^^^^^^^^^^^^^^^^^^^^^^
+>tabId : number
+>      : ^^^^^^
+
+declare module test.class {}
+
+declare module debugger {} // still an error
+>declare : any
+>        : ^^^
+>module : any
+>       : ^^^
+

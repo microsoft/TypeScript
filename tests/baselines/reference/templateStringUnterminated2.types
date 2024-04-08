@@ -3,4 +3,5 @@
 === templateStringUnterminated2.ts ===
 `\`
 >`\` : "`"
+>    : ^^^
 

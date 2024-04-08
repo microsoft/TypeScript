@@ -3,7 +3,9 @@
 === es6ExportEquals.ts ===
 export function f() { }
 >f : typeof f
+>  : ^^^^^^^^
 
 export = f;
 >f : typeof f
+>  : ^^^^^^^^
 

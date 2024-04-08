@@ -23,3 +23,11 @@ interface Symbol {
 export interface FsContents {
     [path: string]: string;
 }
+
+export function libPath(forLib: string) {
+    return `${ts.getDirectoryPath(libFile.path)}/lib.${forLib}.d.ts`;
+}
+
+export function getProjectConfigWithNodeNext(withNodeNext: boolean | undefined) {
+    return withNodeNext ? { module: "nodenext", target: "es5" } : undefined;
+}

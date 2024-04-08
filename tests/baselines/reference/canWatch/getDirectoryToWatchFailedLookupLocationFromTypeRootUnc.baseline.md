@@ -37,6 +37,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/                                                                                        |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/                                                                                        |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/                                                                                        |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/                                                                                        |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot
 
@@ -70,6 +76,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1
 
@@ -103,6 +115,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2
 
@@ -136,6 +154,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3
 
@@ -169,6 +193,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -202,6 +232,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -235,6 +271,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users
 
@@ -268,6 +310,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username
 
@@ -301,6 +349,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot
 
@@ -334,6 +388,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1
 
@@ -367,6 +427,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2
 
@@ -400,6 +466,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3
 
@@ -433,6 +505,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -466,6 +544,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -499,6 +583,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user
 
@@ -532,6 +622,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username
 
@@ -565,6 +661,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot
 
@@ -598,6 +700,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1
 
@@ -631,6 +739,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2
 
@@ -664,6 +778,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3
 
@@ -697,6 +817,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -730,6 +856,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -763,6 +895,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr
 
@@ -796,6 +934,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username
 
@@ -829,6 +973,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot
 
@@ -862,6 +1012,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1
 
@@ -895,6 +1051,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2
 
@@ -928,6 +1090,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3
 
@@ -961,6 +1129,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -994,6 +1168,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1027,6 +1207,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home
 
@@ -1060,6 +1246,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home                                                                                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home                                                                                    |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home                                                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username
 
@@ -1093,6 +1285,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username                                                                           |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username                                                                           |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username                                                                           |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot
 
@@ -1126,6 +1324,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot                                                              |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot                                                              |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1
 
@@ -1159,6 +1363,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1                                                      |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1                                                      |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1                                                      |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2
 
@@ -1192,6 +1402,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2                                              |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2                                              |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2                                              |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3
 
@@ -1225,6 +1441,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3                                      |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3                                      |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4
 
@@ -1258,6 +1480,12 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4                              |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
 
 ## RootDirForResolution: //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5
 
@@ -1291,4 +1519,283 @@ Since this is invoked only when watching default typeRoot and is used to handle 
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
 | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5                      |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules            |
+
+## RootDirForResolution: //vda1cs4850/workspaces
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces                                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces                                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces                                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces                                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces                                                                              |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces                                                                              |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot                                                                 |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot/folder1
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1                                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1                                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1                                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1                                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1                                                         |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot/folder1/folder2
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2                                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2                                                 |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3                                         |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                 |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4                                 |
+
+## RootDirForResolution: //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5
+
+| Directory                                                                                            | getDirectoryToWatchFailedLookupLocationFromTypeRoot                                                  |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| //vda1cs4850/folderAtRoot/folder1/folder2/node_modules/@types                                        | //vda1cs4850/folderAtRoot/folder1/folder2/node_modules                                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules/@types                                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/node_modules                                       |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types                        | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                               |
+| //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types                | //vda1cs4850/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules                       |
+| //vda1cs4850/users/username/folderAtRoot/node_modules/@types                                         | //vda1cs4850/users/username/folderAtRoot/node_modules                                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/node_modules/@types                                 | //vda1cs4850/users/username/folderAtRoot/folder1/node_modules                                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules/@types                         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/node_modules                                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                 | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/node_modules                        |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types         | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                |
+| //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types | //vda1cs4850/users/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules        |
+| //vda1cs4850/user/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/user/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/user/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/user/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/usr/username/folderAtRoot/node_modules/@types                                           | //vda1cs4850/usr/username/folderAtRoot/node_modules                                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules/@types                                   | //vda1cs4850/usr/username/folderAtRoot/folder1/node_modules                                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules/@types                           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/node_modules                                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/node_modules                          |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types           | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                  |
+| //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types   | //vda1cs4850/usr/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules          |
+| //vda1cs4850/home/username/folderAtRoot/node_modules/@types                                          | //vda1cs4850/home/username/folderAtRoot/node_modules                                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/node_modules/@types                                  | //vda1cs4850/home/username/folderAtRoot/folder1/node_modules                                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules/@types                          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/node_modules                                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules/@types                  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/node_modules                         |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types          | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                 |
+| //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types  | //vda1cs4850/home/username/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules         |
+| //vda1cs4850/workspaces/folderAtRoot/node_modules/@types                                             | //vda1cs4850/workspaces/folderAtRoot/node_modules                                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules/@types                                     | //vda1cs4850/workspaces/folderAtRoot/folder1/node_modules                                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules/@types                             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/node_modules                                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules/@types                     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/node_modules                            |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules/@types             | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/node_modules                    |
+| //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5/node_modules/@types     | //vda1cs4850/workspaces/folderAtRoot/folder1/folder2/folder3/folder4/folder5                         |
 

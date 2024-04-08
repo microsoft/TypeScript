@@ -1,4 +1,3 @@
-const { TSESTree } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({
@@ -12,7 +11,6 @@ module.exports = createRule({
             internalCommentNotLastError: `@internal should only appear in final JSDoc comment for declaration.`,
             multipleJSDocError: `Declaration has multiple JSDoc comments.`,
             internalCommentOnParameterProperty: `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
-            misalignedJSDocComment: `This JSDoc comment is misaligned.`,
         },
         schema: [],
         type: "problem",
@@ -30,7 +28,7 @@ module.exports = createRule({
             return text.startsWith(jsdocStart);
         }
 
-        /** @type {(c: TSESTree.Comment, indexInComment: number) => TSESTree.SourceLocation} */
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
             const line = c.loc.start.line;
             return {
@@ -45,8 +43,8 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(c: TSESTree.Comment) => TSESTree.SourceLocation} */
-        const getJSDocStartLoc = (c) => {
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
+        const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,
                 end: {
@@ -56,8 +54,8 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(node: TSESTree.Node) => void} */
-        const checkDeclaration = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => void} */
+        const checkDeclaration = node => {
             const blockComments = sourceCode.getCommentsBefore(node).filter(c => c.type === "Block");
             if (blockComments.length === 0) {
                 return;
@@ -92,67 +90,7 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.Node) => void} */
-        const checkProgram = () => {
-            const comments = sourceCode.getAllComments();
-
-            for (const c of comments) {
-                if (c.type !== "Block") {
-                    continue;
-                }
-
-                const rawComment = sourceCode.getText(c);
-                if (!isJSDocText(rawComment)) {
-                    continue;
-                }
-
-                const expected = c.loc.start.column + 2;
-                const split = rawComment.split(/\r?\n/g);
-                for (let i = 1; i < split.length; i++) {
-                    const line = split[i];
-                    const match = /^ *\*/.exec(line);
-                    if (!match) {
-                        continue;
-                    }
-
-                    const actual = match[0].length;
-                    const diff = actual - expected;
-                    if (diff !== 0) {
-                        const line = c.loc.start.line + i;
-                        context.report({
-                            messageId: "misalignedJSDocComment",
-                            node: c,
-                            loc: {
-                                start: {
-                                    line,
-                                    column: 0,
-                                },
-                                end: {
-                                    line,
-                                    column: actual - 1,
-                                }
-                            },
-                            fix: (fixer) => {
-                                if (diff > 0) {
-                                    // Too many
-                                    const start = sourceCode.getIndexFromLoc({ line, column: expected - 1 });
-                                    return fixer.removeRange([start, start + diff]);
-                                }
-                                else {
-                                    // Too few
-                                    const start = sourceCode.getIndexFromLoc({ line, column: 0 });
-                                    return fixer.insertTextAfterRange([start, start], " ".repeat(-diff));
-                                }
-                            },
-                        });
-                        break;
-                    }
-                }
-            }
-        };
-
         return {
-            Program: checkProgram,
             ClassDeclaration: checkDeclaration,
             FunctionDeclaration: checkDeclaration,
             TSEnumDeclaration: checkDeclaration,

@@ -3,10 +3,15 @@
 === anonymousClassExpression1.ts ===
 function f() {
 >f : () => boolean
+>  : ^^^^^^^^^^^^^
 
     return typeof class {} === "function";
 >typeof class {} === "function" : boolean
+>                               : ^^^^^^^
 >typeof class {} : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >class {} : typeof (Anonymous class)
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 >"function" : "function"
+>           : ^^^^^^^^^^
 }

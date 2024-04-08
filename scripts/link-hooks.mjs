@@ -8,10 +8,11 @@ const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);
 
 const hooks = [
-    "post-checkout"
+    "post-checkout",
+    "pre-commit",
 ];
 
-hooks.forEach((hook) => {
+hooks.forEach(hook => {
     const hookInSourceControl = path.resolve(__dirname, "hooks", hook);
 
     if (fs.existsSync(hookInSourceControl)) {

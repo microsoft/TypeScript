@@ -3,4 +3,5 @@
 === /a.ts ===
 true;
 >true : true
+>     : ^^^^
 

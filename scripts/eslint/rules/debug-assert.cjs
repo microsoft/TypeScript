@@ -1,4 +1,4 @@
-const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({
@@ -17,23 +17,23 @@ module.exports = createRule({
     defaultOptions: [],
 
     create(context) {
-        /** @type {(node: TSESTree.Node) => boolean} */
-        const isArrowFunction = (node) => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
-        /** @type {(node: TSESTree.Node) => boolean} */
-        const isStringLiteral = (node) => (
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        const isArrowFunction = node => node.type === AST_NODE_TYPES.ArrowFunctionExpression;
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        const isStringLiteral = node => (
             (node.type === AST_NODE_TYPES.Literal && typeof node.value === "string") || node.type === AST_NODE_TYPES.TemplateLiteral
         );
 
-        /** @type {(node: TSESTree.MemberExpression) => boolean} */
-        const isDebugAssert = (node) => (
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.MemberExpression) => boolean} */
+        const isDebugAssert = node => (
             node.object.type === AST_NODE_TYPES.Identifier
-                && node.object.name === "Debug"
-                && node.property.type === AST_NODE_TYPES.Identifier
-                && node.property.name === "assert"
+            && node.object.name === "Debug"
+            && node.property.type === AST_NODE_TYPES.Identifier
+            && node.property.name === "assert"
         );
 
-        /** @type {(node: TSESTree.CallExpression) => void} */
-        const checkDebugAssert = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.CallExpression) => void} */
+        const checkDebugAssert = node => {
             const args = node.arguments;
             const argsLen = args.length;
             if (!(node.callee.type === AST_NODE_TYPES.MemberExpression && isDebugAssert(node.callee)) || argsLen < 2) {

@@ -1,5 +1,7 @@
-const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/** @typedef {import("@typescript-eslint/utils").TSESTree.FunctionDeclaration | import("@typescript-eslint/utils").TSESTree.FunctionExpression} FunctionDeclarationOrExpression */
 
 module.exports = createRule({
     name: "only-arrow-functions",
@@ -27,12 +29,11 @@ module.exports = createRule({
     }],
 
     create(context, [{ allowNamedFunctions, allowDeclarations }]) {
+        /** @type {(node: FunctionDeclarationOrExpression) => boolean} */
+        const isThisParameter = node => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => boolean} */
-        const isThisParameter = (node) => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
-
-        /** @type {(node: TSESTree.Node) => boolean} */
-        const isMethodType = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        const isMethodType = node => {
             const types = [
                 AST_NODE_TYPES.MethodDefinition,
                 AST_NODE_TYPES.Property,
@@ -58,8 +59,8 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => void} */
-        const exitFunction = (node) => {
+        /** @type {(node: FunctionDeclarationOrExpression) => void} */
+        const exitFunction = node => {
             const methodUsesThis = stack.pop();
 
             if (node.type === AST_NODE_TYPES.FunctionDeclaration && allowDeclarations) {

@@ -1,4 +1,3 @@
-
 /**
  * Returned by refactor functions when some error message needs to be surfaced to users.
  *
@@ -24,6 +23,6 @@ export function isRefactorErrorInfo(info: unknown): info is RefactorErrorInfo {
  * @internal
  */
 export function refactorKindBeginsWith(known: string, requested: string | undefined): boolean {
-    if(!requested) return true;
+    if (!requested) return true;
     return known.substr(0, requested.length) === requested;
 }

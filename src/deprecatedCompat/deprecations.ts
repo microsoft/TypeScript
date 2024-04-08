@@ -16,7 +16,6 @@ export interface DeprecationOptions {
     name?: string;
 }
 
-
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
 // the `@deprecated` JSDoc tag as well as the `deprecate` API.
@@ -145,9 +144,9 @@ export function buildOverload(name: string): OverloadBuilder {
             bind: binder => ({
                 finish: () => createOverload(name, overloads, binder),
                 deprecate: deprecations => ({
-                    finish: () => createOverload(name, overloads, binder, deprecations)
-                })
-            })
-        })
+                    finish: () => createOverload(name, overloads, binder, deprecations),
+                }),
+            }),
+        }),
     };
 }

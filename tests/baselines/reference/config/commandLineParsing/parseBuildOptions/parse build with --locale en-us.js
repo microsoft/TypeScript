@@ -1,7 +1,7 @@
 --locale en-us src
 buildOptions::
 {
- "locale": "en-us"
+  "locale": "en-us"
 }
 WatchOptions::
 

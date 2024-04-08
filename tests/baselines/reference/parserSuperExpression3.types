@@ -3,15 +3,22 @@
 === parserSuperExpression3.ts ===
 class C {
 >C : C
+>  : ^
 
   M() {
 >M : () => void
+>  : ^^^^^^^^^^
 
     this.super<T>(0);
 >this.super<T>(0) : any
+>                 : ^^^
 >this.super : any
+>           : ^^^
 >this : this
+>     : ^^^^
 >super : any
+>      : ^^^
 >0 : 0
+>  : ^
   }
 }

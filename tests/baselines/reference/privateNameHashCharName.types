@@ -5,16 +5,21 @@
 
 class C {
 >C : C
+>  : ^
 
     #
 ># : any
+>  : ^^^
 
     m() {
 >m : () => void
+>  : ^^^^^^^^^^
 
         this.#
 >this.# : any
+>       : ^^^
 >this : this
+>     : ^^^^
     }
 }
 

@@ -4,22 +4,30 @@
 declare interface A {
     c: number;
 >c : number
+>  : ^^^^^^
 
     <T>(): T;
 }
 
 type b = 'b type';
 >b : "b type"
+>  : ^^^^^^^^
 
 declare const a: A | undefined;
 >a : A
+>  : ^
 
 a?.<b>();
 >a?.<b>() : "b type"
+>         : ^^^^^^^^
 >a : A
+>  : ^
 
 a<b>?.();
 >a<b>?.() : "b type"
+>         : ^^^^^^^^
 >a<b> : { (): "b type"; c: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : A
+>  : ^
 

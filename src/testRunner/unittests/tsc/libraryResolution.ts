@@ -1,4 +1,7 @@
-import { getCommandLineArgsForLibResolution, getFsForLibResolution } from "../helpers/libraryResolution";
+import {
+    getCommandLineArgsForLibResolution,
+    getFsForLibResolution,
+} from "../helpers/libraryResolution";
 import { verifyTsc } from "../helpers/tsc";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {

@@ -10,7 +10,5 @@
 // @Filename: c.ts
 ////import { f } from "./a";
 
-verify.baselineCommands(
-    { type: "findAllReferences", markerOrRange: ['def', 'deg'] },
-    { type: "goToDefinition", markerOrRange: "ref" },
-);
+verify.baselineFindAllReferences('def', 'deg');
+verify.baselineGoToDefinition("ref");

@@ -739,7 +739,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ method() {} }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -754,7 +754,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isFalse(context.access.has(D));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("read public element of argument", () => {
                     const { context, C } = exec`
@@ -809,9 +809,11 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({
-                        get x() { return 2; }
+                        get x() {
+                            return 2;
+                        },
                     }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -826,7 +828,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isFalse(context.access.has(D));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("read public element of argument", () => {
                     const { context, C } = exec`
@@ -879,7 +881,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -953,7 +955,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -1036,7 +1038,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                     `;
                     assert.isTrue(context.access.has(C));
                     assert.isTrue(context.access.has({ x: 2 }));
-                    assert.isFalse(context.access.has({ }));
+                    assert.isFalse(context.access.has({}));
                 });
                 it("test private element presence via .has", () => {
                     const { context, C, D } = exec`
@@ -1136,7 +1138,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         @((t, c) => { context = c; }) class C {
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
             });
             describe("for: method", () => {
@@ -1186,7 +1188,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static method() {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1267,7 +1269,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static get x() { return 1; }
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1348,7 +1350,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static set x(v: number) {}
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1429,7 +1431,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -1510,7 +1512,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             static accessor x: number;
                         }
                     `;
-                    assert.throws(() => context.addInitializer(() => { }));
+                    assert.throws(() => context.addInitializer(() => {}));
                 });
                 describe("when: static", () => {
                     it("extra initializers run once", () => {
@@ -2179,14 +2181,6 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 "static method extra initializer evaluation 2b",
                 "static method extra initializer evaluation 1a",
                 "static method extra initializer evaluation 1b",
-                "static auto-accessor extra initializer evaluation 2a",
-                "static auto-accessor extra initializer evaluation 2b",
-                "static auto-accessor extra initializer evaluation 1a",
-                "static auto-accessor extra initializer evaluation 1b",
-                "static field extra initializer evaluation 2a",
-                "static field extra initializer evaluation 2b",
-                "static field extra initializer evaluation 1a",
-                "static field extra initializer evaluation 1b",
 
                 // next, static initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
                 // order and applied to the replacement class:
@@ -2194,9 +2188,18 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 "static field initializer evaluation",
                 "static field injected initializer evaluation 1",
                 "static field injected initializer evaluation 2",
+                "static field extra initializer evaluation 2a",
+                "static field extra initializer evaluation 2b",
+                "static field extra initializer evaluation 1a",
+                "static field extra initializer evaluation 1b",
+
                 "static auto-accessor initializer evaluation",
                 "static auto-accessor injected initializer evaluation 1",
                 "static auto-accessor injected initializer evaluation 2",
+                "static auto-accessor extra initializer evaluation 2a",
+                "static auto-accessor extra initializer evaluation 2b",
+                "static auto-accessor extra initializer evaluation 1a",
+                "static auto-accessor extra initializer evaluation 1b",
                 // NOTE: at this point, static private fields will be installed (TODO: on the replacement class)
 
                 // finally, class extra initializers are applied in the order they were added (i.e., methods before fields,
@@ -2226,30 +2229,30 @@ describe("unittests:: evaluation:: esDecorators", () => {
                 "instance method extra initializer evaluation 2b",
                 "instance method extra initializer evaluation 1a",
                 "instance method extra initializer evaluation 1b",
-                "instance auto-accessor extra initializer evaluation 2a",
-                "instance auto-accessor extra initializer evaluation 2b",
-                "instance auto-accessor extra initializer evaluation 1a",
-                "instance auto-accessor extra initializer evaluation 1b",
-                "instance field extra initializer evaluation 2a",
-                "instance field extra initializer evaluation 2b",
-                "instance field extra initializer evaluation 1a",
-                "instance field extra initializer evaluation 1b",
 
                 // next, instance initializers (i.e., fields, auto-accessors, and static blocks) are evaluated in document
                 // order:
                 "instance field initializer evaluation",
                 "instance field injected initializer evaluation 1",
                 "instance field injected initializer evaluation 2",
+                "instance field extra initializer evaluation 2a",
+                "instance field extra initializer evaluation 2b",
+                "instance field extra initializer evaluation 1a",
+                "instance field extra initializer evaluation 1b",
                 "instance auto-accessor initializer evaluation",
                 "instance auto-accessor injected initializer evaluation 1",
                 "instance auto-accessor injected initializer evaluation 2",
+                "instance auto-accessor extra initializer evaluation 2a",
+                "instance auto-accessor extra initializer evaluation 2b",
+                "instance auto-accessor extra initializer evaluation 1a",
+                "instance auto-accessor extra initializer evaluation 1b",
                 // NOTE: at this point, instance private fields will be installed.
 
                 // finally, statements in the constructor after the call to `super()` are evaluated:
                 "post-super constructor evaluation",
 
                 // and now evaluation has completed:
-                "done"
+                "done",
             ]);
         });
 

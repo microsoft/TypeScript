@@ -1,7 +1,8 @@
 {
     "recommendations": [
         "dbaeumer.vscode-eslint",
-        "rbuckton.tsserver-live-reload"
+        "rbuckton.tsserver-live-reload",
+        "dprint.dprint"
     ],
 
     "unwantedRecommendations": [

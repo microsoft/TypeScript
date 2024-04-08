@@ -1,0 +1,220 @@
+// === Inlay Hints ===
+call(1);
+     ^
+{
+  "text": "",
+  "position": 131,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 22,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+call(1, 2);
+     ^
+{
+  "text": "",
+  "position": 140,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 44,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+call(1, 2);
+        ^
+{
+  "text": "",
+  "position": 143,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 55,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+new call(1);
+         ^
+{
+  "text": "",
+  "position": 156,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "d",
+      "span": {
+        "start": 81,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(1)
+    ^
+{
+  "text": "",
+  "position": 326,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "w",
+      "span": {
+        "start": 181,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(1, 2)
+    ^
+{
+  "text": "",
+  "position": 333,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 219,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+foo(1, 2)
+       ^
+{
+  "text": "",
+  "position": 336,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 230,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+new Class(1)
+          ^
+{
+  "text": "",
+  "position": 475,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "a",
+      "span": {
+        "start": 369,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+new Class(1, 2)
+          ^
+{
+  "text": "",
+  "position": 488,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "b",
+      "span": {
+        "start": 397,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}
+
+new Class(1, 2)
+             ^
+{
+  "text": "",
+  "position": 491,
+  "kind": "Parameter",
+  "whitespaceAfter": true,
+  "displayParts": [
+    {
+      "text": "c",
+      "span": {
+        "start": 408,
+        "length": 1
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveOverloadCall.ts"
+    },
+    {
+      "text": ":"
+    }
+  ]
+}

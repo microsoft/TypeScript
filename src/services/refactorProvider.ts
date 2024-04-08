@@ -26,8 +26,8 @@ export function registerRefactor(name: string, refactor: Refactor) {
 export function getApplicableRefactors(context: RefactorContext, includeInteractiveActions?: boolean): ApplicableRefactorInfo[] {
     return arrayFrom(flatMapIterator(refactors.values(), refactor =>
         context.cancellationToken && context.cancellationToken.isCancellationRequested() ||
-        !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
-        refactor.getAvailableActions(context, includeInteractiveActions)));
+            !refactor.kinds?.some(kind => refactorKindBeginsWith(kind, context.kind)) ? undefined :
+            refactor.getAvailableActions(context, includeInteractiveActions)));
 }
 
 /** @internal */

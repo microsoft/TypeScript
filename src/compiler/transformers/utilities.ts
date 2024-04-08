@@ -16,6 +16,7 @@ import {
     CoreTransformationContext,
     createExternalHelpersImportDeclarationIfNeeded,
     Decorator,
+    every,
     ExportAssignment,
     ExportDeclaration,
     ExportSpecifier,
@@ -67,10 +68,12 @@ import {
     map,
     MethodDeclaration,
     ModifierFlags,
+    NamedExportBindings,
     NamedImportBindings,
     NamespaceExport,
     Node,
     NodeArray,
+    ParameterDeclaration,
     parameterIsThisKeyword,
     PrivateIdentifier,
     PrivateIdentifierAccessorDeclaration,
@@ -86,7 +89,7 @@ import {
     TransformationContext,
     unorderedRemoveItem,
     VariableDeclaration,
-    VariableStatement
+    VariableStatement,
 } from "../_namespaces/ts";
 
 /** @internal */
@@ -101,19 +104,22 @@ export interface ExternalModuleInfo {
     externalHelpersImportDeclaration: ImportDeclaration | undefined; // import of external helpers
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
-    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported
+    exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
+    exportedFunctions: FunctionDeclaration[] | undefined; // all of the top-level exported function declarations
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
 
-function containsDefaultReference(node: NamedImportBindings | undefined) {
+function containsDefaultReference(node: NamedImportBindings | NamedExportBindings | undefined) {
     if (!node) return false;
-    if (!isNamedImports(node)) return false;
+    if (!isNamedImports(node) && !isNamedExports(node)) return false;
     return some(node.elements, isNamedDefaultReference);
 }
 
-function isNamedDefaultReference(e: ImportSpecifier): boolean {
-    return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
+function isNamedDefaultReference(e: ImportSpecifier | ExportSpecifier): boolean {
+    return e.propertyName !== undefined ?
+        e.propertyName.escapedText === InternalSymbolName.Default :
+        e.name.escapedText === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -125,7 +131,7 @@ export function chainBundle(context: CoreTransformationContext, transformSourceF
     }
 
     function transformBundle(node: Bundle) {
-        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+        return context.factory.createBundle(map(node.sourceFiles, transformSourceFile));
     }
 }
 
@@ -169,6 +175,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
     let exportedNames: Identifier[] | undefined;
+    let exportedFunctions: FunctionDeclaration[] | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
     let hasExportStarsToExportValues = false;
@@ -212,6 +219,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         externalImports.push(node as ExportDeclaration);
                         if (isNamedExports((node as ExportDeclaration).exportClause!)) {
                             addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                            hasImportDefault ||= containsDefaultReference((node as ExportDeclaration).exportClause);
                         }
                         else {
                             const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;
@@ -248,6 +256,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
             case SyntaxKind.FunctionDeclaration:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
+                    exportedFunctions = append(exportedFunctions, node as FunctionDeclaration);
                     if (hasSyntacticModifier(node, ModifierFlags.Default)) {
                         // export default function() { }
                         if (!hasExportDefault) {
@@ -261,7 +270,6 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         if (!uniqueExports.get(idText(name))) {
                             multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
                             uniqueExports.set(idText(name), true);
-                            exportedNames = append(exportedNames, name);
                         }
                     }
                 }
@@ -295,7 +303,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         externalImports.unshift(externalHelpersImportDeclaration);
     }
 
-    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, externalHelpersImportDeclaration };
+    return { externalImports, exportSpecifiers, exportEquals, hasExportStarsToExportValues, exportedBindings, exportedNames, exportedFunctions, externalHelpersImportDeclaration };
 
     function addExportedNamesForExportDeclaration(node: ExportDeclaration) {
         for (const specifier of cast(node.exportClause, isNamedExports).elements) {
@@ -463,22 +471,36 @@ export function isCompoundAssignment(kind: BinaryOperator): kind is CompoundAssi
 /** @internal */
 export function getNonAssignmentOperatorForCompoundAssignment(kind: CompoundAssignmentOperator): LogicalOperatorOrHigher | SyntaxKind.QuestionQuestionToken {
     switch (kind) {
-        case SyntaxKind.PlusEqualsToken: return SyntaxKind.PlusToken;
-        case SyntaxKind.MinusEqualsToken: return SyntaxKind.MinusToken;
-        case SyntaxKind.AsteriskEqualsToken: return SyntaxKind.AsteriskToken;
-        case SyntaxKind.AsteriskAsteriskEqualsToken: return SyntaxKind.AsteriskAsteriskToken;
-        case SyntaxKind.SlashEqualsToken: return SyntaxKind.SlashToken;
-        case SyntaxKind.PercentEqualsToken: return SyntaxKind.PercentToken;
-        case SyntaxKind.LessThanLessThanEqualsToken: return SyntaxKind.LessThanLessThanToken;
-        case SyntaxKind.GreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanToken;
-        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken: return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
-        case SyntaxKind.AmpersandEqualsToken: return SyntaxKind.AmpersandToken;
-        case SyntaxKind.BarEqualsToken: return SyntaxKind.BarToken;
-        case SyntaxKind.CaretEqualsToken: return SyntaxKind.CaretToken;
-        case SyntaxKind.BarBarEqualsToken: return SyntaxKind.BarBarToken;
-        case SyntaxKind.AmpersandAmpersandEqualsToken: return SyntaxKind.AmpersandAmpersandToken;
-        case SyntaxKind.QuestionQuestionEqualsToken: return SyntaxKind.QuestionQuestionToken;
-
+        case SyntaxKind.PlusEqualsToken:
+            return SyntaxKind.PlusToken;
+        case SyntaxKind.MinusEqualsToken:
+            return SyntaxKind.MinusToken;
+        case SyntaxKind.AsteriskEqualsToken:
+            return SyntaxKind.AsteriskToken;
+        case SyntaxKind.AsteriskAsteriskEqualsToken:
+            return SyntaxKind.AsteriskAsteriskToken;
+        case SyntaxKind.SlashEqualsToken:
+            return SyntaxKind.SlashToken;
+        case SyntaxKind.PercentEqualsToken:
+            return SyntaxKind.PercentToken;
+        case SyntaxKind.LessThanLessThanEqualsToken:
+            return SyntaxKind.LessThanLessThanToken;
+        case SyntaxKind.GreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanToken;
+        case SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken:
+            return SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
+        case SyntaxKind.AmpersandEqualsToken:
+            return SyntaxKind.AmpersandToken;
+        case SyntaxKind.BarEqualsToken:
+            return SyntaxKind.BarToken;
+        case SyntaxKind.CaretEqualsToken:
+            return SyntaxKind.CaretToken;
+        case SyntaxKind.BarBarEqualsToken:
+            return SyntaxKind.BarBarToken;
+        case SyntaxKind.AmpersandAmpersandEqualsToken:
+            return SyntaxKind.AmpersandAmpersandToken;
+        case SyntaxKind.QuestionQuestionEqualsToken:
+            return SyntaxKind.QuestionQuestionToken;
     }
 }
 
@@ -642,7 +664,7 @@ export function getAllDecoratorsOfClass(node: ClassLikeDeclaration): AllDecorato
 
     return {
         decorators,
-        parameters
+        parameters,
     };
 }
 
@@ -686,8 +708,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
     }
 
     const { firstAccessor, secondAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(parent.members, accessor);
-    const firstAccessorWithDecorators =
-        hasDecorators(firstAccessor) ? firstAccessor :
+    const firstAccessorWithDecorators = hasDecorators(firstAccessor) ? firstAccessor :
         secondAccessor && hasDecorators(secondAccessor) ? secondAccessor :
         undefined;
 
@@ -705,7 +726,7 @@ function getAllDecoratorsOfAccessors(accessor: AccessorDeclaration, parent: Clas
         decorators,
         parameters,
         getDecorators: getAccessor && getDecorators(getAccessor),
-        setDecorators: setAccessor && getDecorators(setAccessor)
+        setDecorators: setAccessor && getDecorators(setAccessor),
     };
 }
 
@@ -737,7 +758,6 @@ function getAllDecoratorsOfProperty(property: PropertyDeclaration): AllDecorator
     const decorators = getDecorators(property);
     if (!some(decorators)) {
         return undefined;
-
     }
 
     return { decorators };
@@ -768,7 +788,7 @@ export interface LexicalEnvironment<in out TEnvData, TPrivateEnvData, TPrivateEn
 /** @internal */
 export function walkUpLexicalEnvironments<TEnvData, TPrivateEnvData, TPrivateEntry, U>(
     env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry> | undefined,
-    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U
+    cb: (env: LexicalEnvironment<TEnvData, TPrivateEnvData, TPrivateEntry>) => U,
 ): U | undefined {
     while (env) {
         const result = cb(env);
@@ -785,7 +805,7 @@ export function newPrivateEnvironment<TData, TEntry>(data: TData): PrivateEnviro
 /** @internal */
 export function getPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry> | undefined,
-    name: PrivateIdentifier
+    name: PrivateIdentifier,
 ) {
     return isGeneratedPrivateIdentifier(name) ?
         privateEnv?.generatedIdentifiers?.get(getNodeForGeneratedName(name)) :
@@ -796,7 +816,7 @@ export function getPrivateIdentifier<TData, TEntry>(
 export function setPrivateIdentifier<TData, TEntry>(
     privateEnv: PrivateEnvironment<TData, TEntry>,
     name: PrivateIdentifier,
-    entry: TEntry
+    entry: TEntry,
 ) {
     if (isGeneratedPrivateIdentifier(name)) {
         privateEnv.generatedIdentifiers ??= new Map();
@@ -818,4 +838,14 @@ export function accessPrivateIdentifier<
     name: PrivateIdentifier,
 ) {
     return walkUpLexicalEnvironments(env, env => getPrivateIdentifier(env.privateEnv, name));
+}
+
+/** @internal */
+export function isSimpleParameter(node: ParameterDeclaration) {
+    return !node.initializer && isIdentifier(node.name);
+}
+
+/** @internal */
+export function isSimpleParameterList(nodes: NodeArray<ParameterDeclaration>) {
+    return every(nodes, isSimpleParameter);
 }

@@ -11,9 +11,11 @@ declare var x, y, z, a, b, c;
 
 async function nestedLoops() {
 >nestedLoops : () => Promise<void>
+>            : ^^^^^^^^^^^^^^^^^^^
 
     A: while (x) {
 >A : any
+>  : ^^^
 >x : any
 
         await y;
@@ -25,6 +27,7 @@ async function nestedLoops() {
 
             continue A;
 >A : any
+>  : ^^^
         }
         while (a) {
 >a : any

@@ -3,7 +3,9 @@
 === unusedPrivateVariableInClass1.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 }

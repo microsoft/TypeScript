@@ -1,4 +1,3 @@
-import * as compiler from "../_namespaces/compiler";
 import * as documents from "../_namespaces/documents";
 import * as fakes from "../_namespaces/fakes";
 import * as Harness from "../_namespaces/Harness";
@@ -18,21 +17,6 @@ describe("unittests:: Public APIs", () => {
 
         it("should be acknowledged when they change", () => {
             Harness.Baseline.runBaseline(api, fileContent, { PrintDiff: true });
-        });
-
-        it("should compile", () => {
-            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-            fs.linkSync(`${vfs.builtFolder}/${fileName}`, `${vfs.srcFolder}/${fileName}`);
-            const sys = new fakes.System(fs);
-            const options: ts.CompilerOptions = {
-                ...ts.getDefaultCompilerOptions(),
-                strict: true,
-                exactOptionalPropertyTypes: true,
-                lib: ["lib.es2018.d.ts"],
-            };
-            const host = new fakes.CompilerHost(sys, options);
-            const result = compiler.compileFiles(host, [`${vfs.srcFolder}/${fileName}`], options);
-            assert(!result.diagnostics || !result.diagnostics.length, Harness.Compiler.minimalDiagnosticsToString(result.diagnostics, /*pretty*/ true));
         });
     }
 
@@ -103,12 +87,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -125,12 +110,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -149,12 +135,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -169,12 +156,13 @@ describe("unittests:: Public APIs:: getTypeAtLocation", () => {
         const host = new fakes.CompilerHost(vfs.createFromFileSystem(
             Harness.IO,
             /*ignoreCase*/ true,
-            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" }));
+            { documents: [new documents.TextDocument("/file.ts", content)], cwd: "/" },
+        ));
 
         const program = ts.createProgram({
             host,
             rootNames: ["/file.ts"],
-            options: { noLib: true }
+            options: { noLib: true },
         });
 
         const checker = program.getTypeChecker();
@@ -203,7 +191,7 @@ describe("unittests:: Public APIs:: validateLocaleAndSetLanguage", () => {
                     assert.isTrue(expectedToReadFile, `Locale : ${locale} ${expectedToReadFile ? "should" : "should not"} read ${fileName}.`);
                     // Throw error here so that actual change to localized diagnostics messages doesnt take place
                     throw new Error("cannot read file");
-                }
+                },
             }, errors);
         });
     }
@@ -241,5 +229,36 @@ describe("unittests:: Public APIs:: getChild* methods on EndOfFileToken with JSD
         assert.equal(endOfFileToken.getChildren().length, 1);
         assert.equal(endOfFileToken.getChildCount(), 1);
         assert.notEqual(endOfFileToken.getChildAt(0), /*expected*/ undefined);
+    });
+});
+
+describe("unittests:: Public APIs:: get syntactic and effective modifiers", () => {
+    it("caches and reports correct flags in TS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.ts", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+    it("caches and reports correct flags in JS file", () => {
+        // https://github.com/microsoft/TypeScript/issues/42189
+        const content = `
+class C {
+    /** @private */
+    prop = 1;
+}`;
+        const sourceFile = ts.createSourceFile("/file.js", content, ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+        const classNode = sourceFile.statements[0] as ts.ClassDeclaration;
+        const propNode = classNode.members[0] as ts.PropertyDeclaration;
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.Private, ts.getEffectiveModifierFlags(propNode));
+        assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
     });
 });

@@ -11,7 +11,7 @@ declare module "SubModule" {
 }
 
 //// [missingImportAfterModuleImport_1.ts]
-///<reference path='missingImportAfterModuleImport_0.ts'/>
+///<reference path='missingImportAfterModuleImport_0.ts' preserve="true" />
 import SubModule = require('SubModule');
 class MainModule {
     // public static SubModule: SubModule;
@@ -43,7 +43,7 @@ declare module "SubModule" {
     export = SubModule;
 }
 //// [missingImportAfterModuleImport_1.d.ts]
-/// <reference path="missingImportAfterModuleImport_0.d.ts" />
+/// <reference path="missingImportAfterModuleImport_0.d.ts" preserve="true" />
 import SubModule = require('SubModule');
 declare class MainModule {
     SubModule: SubModule;

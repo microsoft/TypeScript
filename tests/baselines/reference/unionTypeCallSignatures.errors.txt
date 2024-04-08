@@ -71,7 +71,7 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
 !!! error TS2769:   Overload 2 of 2, '(a: string): string | boolean', gave the following error.
 !!! error TS2769:     Argument of type 'boolean' is not assignable to parameter of type 'string'.
     unionOfDifferentReturnType1(); // error missing parameter
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:12:37: An argument for 'a' was not provided.
     
@@ -83,13 +83,13 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                    ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
     unionOfDifferentParameterTypes();// error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:18:40: An argument for 'a' was not provided.
     
     var unionOfDifferentNumberOfSignatures: { (a: number): number; } | { (a: number): Date; (a: string): boolean; };
     unionOfDifferentNumberOfSignatures(); // error - no call signatures
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:23:44: An argument for 'a' was not provided.
     unionOfDifferentNumberOfSignatures(10); // error - no call signatures
@@ -99,11 +99,11 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
     
     var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b: number): number; } ;
     unionWithDifferentParameterCount();// needs more args
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:28:69: An argument for 'a' was not provided.
     unionWithDifferentParameterCount("hello");// needs more args
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures.ts:28:80: An argument for 'b' was not provided.
     unionWithDifferentParameterCount("hello", 10);// OK
@@ -115,13 +115,13 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                     ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter1(); // error
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:33:37: An argument for 'a' was not provided.
     
     var unionWithOptionalParameter2: { (a: string, b?: number): string; } | { (a: string, b: number): number };
     strOrNum = unionWithOptionalParameter2('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures.ts:39:87: An argument for 'b' was not provided.
     strOrNum = unionWithOptionalParameter2('hello', 10); // error no call signature
@@ -129,7 +129,7 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                     ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter2(); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:39:76: An argument for 'a' was not provided.
     
@@ -140,7 +140,7 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                     ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithOptionalParameter3(); // needs more args
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:45:37: An argument for 'a' was not provided.
     
@@ -152,13 +152,13 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                 ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter1(); // error
-               ~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:51:33: An argument for 'a' was not provided.
     
     var unionWithRestParameter2: { (a: string, ...b: number[]): string; } | { (a: string, b: number): number };
     strOrNum = unionWithRestParameter2('hello'); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures.ts:58:87: An argument for 'b' was not provided.
     strOrNum = unionWithRestParameter2('hello', 10); // error no call signature
@@ -169,7 +169,7 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                 ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter2(); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:58:76: An argument for 'a' was not provided.
     
@@ -181,13 +181,13 @@ unionTypeCallSignatures.ts(73,12): error TS2554: Expected 2 arguments, but got 1
                                                 ~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     strOrNum = unionWithRestParameter3(); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2555: Expected at least 1 arguments, but got 0.
 !!! related TS6210 unionTypeCallSignatures.ts:65:33: An argument for 'a' was not provided.
     
     var unionWithRestParameter4: { (...a: string[]): string; } | { (a: string, b: string): number; };
     strOrNum = unionWithRestParameter4("hello"); // error supplied parameters do not match any call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 unionTypeCallSignatures.ts:72:76: An argument for 'b' was not provided.
     strOrNum = unionWithRestParameter4("hello", "world");

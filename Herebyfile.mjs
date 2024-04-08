@@ -1,38 +1,51 @@
 // @ts-check
 import { CancelToken } from "@esfx/canceltoken";
+import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
-import del from "del";
 import esbuild from "esbuild";
 import { EventEmitter } from "events";
 import fs from "fs";
-import _glob from "glob";
+import { glob } from "glob";
 import { task } from "hereby";
 import path from "path";
-import util from "util";
 
 import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
-import { buildProject, cleanProject, watchProject } from "./scripts/build/projects.mjs";
-import { localBaseline, refBaseline, runConsoleTests } from "./scripts/build/tests.mjs";
-import { Debouncer, Deferred, exec, getDiffTool, memoize, needsUpdate, readJson } from "./scripts/build/utils.mjs";
-
-const glob = util.promisify(_glob);
+import {
+    buildProject,
+    cleanProject,
+    watchProject,
+} from "./scripts/build/projects.mjs";
+import {
+    localBaseline,
+    refBaseline,
+    runConsoleTests,
+} from "./scripts/build/tests.mjs";
+import {
+    Debouncer,
+    Deferred,
+    exec,
+    getDiffTool,
+    memoize,
+    needsUpdate,
+    readJson,
+    rimraf,
+} from "./scripts/build/utils.mjs";
 
 /** @typedef {ReturnType<typeof task>} Task */
 void 0;
 
 const copyrightFilename = "./scripts/CopyrightNotice.txt";
-const copyright = memoize(async () => {
+const getCopyrightHeader = memoize(async () => {
     const contents = await fs.promises.readFile(copyrightFilename, "utf-8");
     return contents.replace(/\r\n/g, "\n");
 });
 
-
 export const buildScripts = task({
     name: "scripts",
     description: "Builds files in the 'scripts' folder.",
-    run: () => buildProject("scripts")
+    run: () => buildProject("scripts"),
 });
 
 const libs = memoize(() => {
@@ -48,14 +61,13 @@ const libs = memoize(() => {
     return libs;
 });
 
-
 export const generateLibs = task({
     name: "lib",
     description: "Builds the library targets",
     run: async () => {
         await fs.promises.mkdir("./built/local", { recursive: true });
         for (const lib of libs()) {
-            let output = await copyright();
+            let output = await getCopyrightHeader();
 
             for (const source of lib.sources) {
                 const contents = await fs.promises.readFile(source, "utf-8");
@@ -67,7 +79,6 @@ export const generateLibs = task({
     },
 });
 
-
 const diagnosticInformationMapTs = "src/compiler/diagnosticInformationMap.generated.ts";
 const diagnosticMessagesJson = "src/compiler/diagnosticMessages.json";
 const diagnosticMessagesGeneratedJson = "src/compiler/diagnosticMessages.generated.json";
@@ -77,16 +88,18 @@ export const generateDiagnostics = task({
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     run: async () => {
         await exec(process.execPath, ["scripts/processDiagnosticMessages.mjs", diagnosticMessagesJson]);
-    }
+    },
 });
 
 const cleanDiagnostics = task({
     name: "clean-diagnostics",
     description: "Generates a diagnostic file in TypeScript based on an input JSON file",
     hiddenFromTaskList: true,
-    run: () => del([diagnosticInformationMapTs, diagnosticMessagesGeneratedJson]),
+    run: async () => {
+        await rimraf(diagnosticInformationMapTs);
+        await rimraf(diagnosticMessagesGeneratedJson);
+    },
 });
-
 
 // Localize diagnostics
 /**
@@ -113,7 +126,7 @@ const localize = task({
         if (needsUpdate(diagnosticMessagesGeneratedJson, generatedLCGFile)) {
             await exec(process.execPath, ["scripts/generateLocalizedDiagnosticMessages.mjs", "src/loc/lcl", "built/local", diagnosticMessagesGeneratedJson], { ignoreExitCode: true });
         }
-    }
+    },
 });
 
 export const buildSrc = task({
@@ -137,20 +150,21 @@ export const cleanSrc = task({
     run: () => cleanProject("src"),
 });
 
+const dtsBundlerPath = "./scripts/dtsBundler.mjs";
+
 /**
  * @param {string} entrypoint
  * @param {string} output
  */
 async function runDtsBundler(entrypoint, output) {
     await exec(process.execPath, [
-        "./scripts/dtsBundler.mjs",
+        dtsBundlerPath,
         "--entrypoint",
         entrypoint,
         "--output",
         output,
     ]);
 }
-
 
 /**
  * @param {string} entrypoint
@@ -160,14 +174,18 @@ async function runDtsBundler(entrypoint, output) {
  * @typedef BundlerTaskOptions
  * @property {boolean} [exportIsTsObject]
  * @property {boolean} [treeShaking]
+ * @property {boolean} [usePublicAPI]
  * @property {() => void} [onWatchRebuild]
  */
 function createBundler(entrypoint, outfile, taskOptions = {}) {
     const getOptions = memoize(async () => {
+        const copyright = await getCopyrightHeader();
+        const banner = taskOptions.exportIsTsObject ? "var ts = {}; ((module) => {" : "";
+
         /** @type {esbuild.BuildOptions} */
         const options = {
             entryPoints: [entrypoint],
-            banner: { js: await copyright() },
+            banner: { js: copyright + banner },
             bundle: true,
             outfile,
             platform: "node",
@@ -181,13 +199,24 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // legalComments: "none", // If we add copyright headers to the source files, uncomment.
         };
 
+        if (taskOptions.usePublicAPI) {
+            options.external = ["./typescript.js"];
+            options.plugins = options.plugins || [];
+            options.plugins.push({
+                name: "remap-typescript-to-require",
+                setup(build) {
+                    build.onLoad({ filter: /src[\\/]typescript[\\/]typescript\.ts$/ }, () => {
+                        return { contents: `export * from "./typescript.js"` };
+                    });
+                },
+            });
+        }
+
         if (taskOptions.exportIsTsObject) {
-            // We use an IIFE so we can inject the footer, and so that "ts" is global if not loaded as a module.
-            options.format = "iife";
-            // Name the variable ts, matching our old big bundle and so we can use the code below.
-            options.globalName = "ts";
-            // If we are in a CJS context, export the ts namespace.
-            options.footer = { js: `\nif (typeof module !== "undefined" && module.exports) { module.exports = ts; }` };
+            // Monaco bundles us as ESM by wrapping our code with something that defines module.exports
+            // but then does not use it, instead using the `ts` variable. Ensure that if we think we're CJS
+            // that we still set `ts` to the module.exports object.
+            options.footer = { js: `})(typeof module !== "undefined" && module.exports ? module : { exports: ts });\nif (typeof module !== "undefined" && module.exports) { ts = module.exports; }` };
 
             // esbuild converts calls to "require" to "__require"; this function
             // calls the real require if it exists, or throws if it does not (rather than
@@ -195,23 +224,40 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
             // to be consumable by other bundlers, we need to convert these calls back to
             // require so our imports are visible again.
             //
-            // The leading spaces are to keep the offsets the same within the files to keep
-            // source maps working (though this only really matters for the line the require is on).
+            // To fix this, we redefine "require" to a name we're unlikely to use with the
+            // same length as "require", then replace it back to "require" after bundling,
+            // ensuring that source maps still work.
             //
             // See: https://github.com/evanw/esbuild/issues/1905
-            options.define = { require: "$$require" };
-            options.plugins = [
+            const require = "require";
+            const fakeName = "Q".repeat(require.length);
+            const fakeNameRegExp = new RegExp(fakeName, "g");
+            options.define = { [require]: fakeName };
+
+            // For historical reasons, TypeScript does not set __esModule. Hack esbuild's __toCommonJS to be a noop.
+            // We reference `__copyProps` to ensure the final bundle doesn't have any unreferenced code.
+            const toCommonJsRegExp = /var __toCommonJS .*/;
+            const toCommonJsRegExpReplacement = "var __toCommonJS = (mod) => (__copyProps, mod); // Modified helper to skip setting __esModule.";
+
+            options.plugins = options.plugins || [];
+            options.plugins.push(
                 {
-                    name: "fix-require",
-                    setup: (build) => {
+                    name: "post-process",
+                    setup: build => {
                         build.onEnd(async () => {
                             let contents = await fs.promises.readFile(outfile, "utf-8");
-                            contents = contents.replace(/\$\$require/g, "  require");
+                            contents = contents.replace(fakeNameRegExp, require);
+                            let matches = 0;
+                            contents = contents.replace(toCommonJsRegExp, () => {
+                                matches++;
+                                return toCommonJsRegExpReplacement;
+                            });
+                            assert(matches === 1, "Expected exactly one match for __toCommonJS");
                             await fs.promises.writeFile(outfile, contents);
                         });
                     },
-                }
-            ];
+                },
+            );
         }
 
         return options;
@@ -226,7 +272,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                 const onRebuild = taskOptions.onWatchRebuild;
                 options.plugins = (options.plugins?.slice(0) ?? []).concat([{
                     name: "watch",
-                    setup: (build) => {
+                    setup: build => {
                         let firstBuild = true;
                         build.onEnd(() => {
                             if (firstBuild) {
@@ -236,7 +282,7 @@ function createBundler(entrypoint, outfile, taskOptions = {}) {
                                 onRebuild();
                             }
                         });
-                    }
+                    },
                 }]);
             }
 
@@ -331,12 +377,11 @@ function entrypointBuildTask(options) {
                 return watchProject(options.project);
             }
             return bundler.watch();
-        }
+        },
     });
 
     return { build, bundle, shim, main, watch };
 }
-
 
 const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     name: "tsc",
@@ -349,7 +394,6 @@ const { main: tsc, watch: watchTsc } = entrypointBuildTask({
     mainDeps: [generateLibs],
 });
 export { tsc, watchTsc };
-
 
 const { main: services, build: buildServices, watch: watchServices } = entrypointBuildTask({
     name: "services",
@@ -369,12 +413,11 @@ export const dtsServices = task({
     description: "Bundles typescript.d.ts",
     dependencies: [buildServices],
     run: async () => {
-        if (needsUpdate("./built/local/typescript/tsconfig.tsbuildinfo", ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
+        if (needsUpdate(["./built/local/typescript/tsconfig.tsbuildinfo", dtsBundlerPath], ["./built/local/typescript.d.ts", "./built/local/typescript.internal.d.ts"])) {
             await runDtsBundler("./built/local/typescript/typescript.d.ts", "./built/local/typescript.d.ts");
         }
     },
 });
-
 
 const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     name: "tsserver",
@@ -384,10 +427,10 @@ const { main: tsserver, watch: watchTsserver } = entrypointBuildTask({
     srcEntrypoint: "./src/tsserver/server.ts",
     builtEntrypoint: "./built/local/tsserver/server.js",
     output: "./built/local/tsserver.js",
-    mainDeps: [generateLibs],
+    mainDeps: [generateLibs, services],
+    bundlerOptions: { usePublicAPI: true },
 });
 export { tsserver, watchTsserver };
-
 
 export const min = task({
     name: "min",
@@ -402,37 +445,57 @@ export const watchMin = task({
     dependencies: [watchTsc, watchTsserver],
 });
 
+// This is technically not enough to make tsserverlibrary loadable in the
+// browser, but it's unlikely that anyone has actually been doing that.
+const lsslJs = `
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = require("./typescript.js");
+}
+else {
+    throw new Error("tsserverlibrary requires CommonJS; use typescript.js instead");
+}
+`;
 
+const lsslDts = `
+import ts = require("./typescript.js");
+export = ts;
+`;
 
-const { main: lssl, build: buildLssl, watch: watchLssl } = entrypointBuildTask({
+const lsslDtsInternal = `
+import ts = require("./typescript.internal.js");
+export = ts;
+`;
+
+/**
+ * @param {string} contents
+ */
+async function fileContentsWithCopyright(contents) {
+    return await getCopyrightHeader() + contents.trim().replace(/\r\n/g, "\n") + "\n";
+}
+
+const lssl = task({
     name: "lssl",
     description: "Builds language service server library",
-    buildDeps: [generateDiagnostics],
-    project: "src/tsserverlibrary",
-    srcEntrypoint: "./src/tsserverlibrary/tsserverlibrary.ts",
-    builtEntrypoint: "./built/local/tsserverlibrary/tsserverlibrary.js",
-    output: "./built/local/tsserverlibrary.js",
-    mainDeps: [generateLibs],
-    bundlerOptions: { exportIsTsObject: true },
+    dependencies: [services],
+    run: async () => {
+        await fs.promises.writeFile("./built/local/tsserverlibrary.js", await fileContentsWithCopyright(lsslJs));
+    },
 });
-export { lssl, watchLssl };
 
 export const dtsLssl = task({
     name: "dts-lssl",
     description: "Bundles tsserverlibrary.d.ts",
-    dependencies: [buildLssl],
+    dependencies: [dtsServices],
     run: async () => {
-        if (needsUpdate("./built/local/tsserverlibrary/tsconfig.tsbuildinfo", ["./built/local/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.internal.d.ts"])) {
-            await runDtsBundler("./built/local/tsserverlibrary/tsserverlibrary.d.ts", "./built/local/tsserverlibrary.d.ts");
-        }
-    }
+        await fs.promises.writeFile("./built/local/tsserverlibrary.d.ts", await fileContentsWithCopyright(lsslDts));
+        await fs.promises.writeFile("./built/local/tsserverlibrary.internal.d.ts", await fileContentsWithCopyright(lsslDtsInternal));
+    },
 });
 
 export const dts = task({
     name: "dts",
     dependencies: [dtsServices, dtsLssl],
 });
-
 
 const testRunner = "./built/local/run.js";
 const watchTestsEmitter = new EventEmitter();
@@ -450,11 +513,10 @@ const { main: tests, watch: watchTests } = entrypointBuildTask({
         treeShaking: false,
         onWatchRebuild() {
             watchTestsEmitter.emit("rebuild");
-        }
+        },
     },
 });
 export { tests, watchTests };
-
 
 export const runEslintRulesTests = task({
     name: "run-eslint-rules-tests",
@@ -471,8 +533,13 @@ export const lint = task({
         const args = [
             "node_modules/eslint/bin/eslint",
             "--cache",
-            "--cache-location", `${folder}/.eslintcache`,
-            "--format", formatter,
+            "--cache-location",
+            `${folder}/.eslintcache`,
+            "--format",
+            formatter,
+            "--report-unused-disable-directives",
+            "--max-warnings",
+            "0",
         ];
 
         if (cmdLineOptions.fix) {
@@ -483,7 +550,19 @@ export const lint = task({
 
         console.log(`Linting: ${args.join(" ")}`);
         return exec(process.execPath, args);
-    }
+    },
+});
+
+export const format = task({
+    name: "format",
+    description: "Formats the codebase.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "fmt"]),
+});
+
+export const checkFormat = task({
+    name: "check-format",
+    description: "Checks that the codebase is formatted.",
+    run: () => exec(process.execPath, ["node_modules/dprint/bin.js", "check"], { ignoreStdout: true }),
 });
 
 const { main: cancellationToken, watch: watchCancellationToken } = entrypointBuildTask({
@@ -501,6 +580,8 @@ const { main: typingsInstaller, watch: watchTypingsInstaller } = entrypointBuild
     srcEntrypoint: "./src/typingsInstaller/nodeTypingsInstaller.ts",
     builtEntrypoint: "./built/local/typingsInstaller/nodeTypingsInstaller.js",
     output: "./built/local/typingsInstaller.js",
+    mainDeps: [services],
+    bundlerOptions: { usePublicAPI: true },
 });
 
 const { main: watchGuard, watch: watchWatchGuard } = entrypointBuildTask({
@@ -520,9 +601,8 @@ export const generateTypesMap = task({
         const contents = await fs.promises.readFile(source, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(target, contents);
-    }
+    },
 });
-
 
 // Drop a copy of diagnosticMessages.generated.json into the built/local folder. This allows
 // it to be synced to the Azure DevOps repo, so that it can get picked up by the build
@@ -535,9 +615,8 @@ const copyBuiltLocalDiagnosticMessages = task({
         const contents = await fs.promises.readFile(diagnosticMessagesGeneratedJson, "utf-8");
         JSON.parse(contents); // Validates that the JSON parses.
         await fs.promises.writeFile(builtLocalDiagnosticMessagesGeneratedJson, contents);
-    }
+    },
 });
-
 
 export const otherOutputs = task({
     name: "other-outputs",
@@ -563,7 +642,7 @@ export const watchLocal = task({
     name: "watch-local",
     description: "Watches the full compiler and services",
     hiddenFromTaskList: true,
-    dependencies: [localize, watchTsc, watchTsserver, watchServices, watchLssl, watchOtherOutputs, dts, watchSrc],
+    dependencies: [localize, watchTsc, watchTsserver, watchServices, lssl, watchOtherOutputs, dts, watchSrc],
 });
 
 const runtestsDeps = [tests, generateLibs].concat(cmdLineOptions.typecheck ? [dts] : []);
@@ -603,7 +682,7 @@ export const runTestsAndWatch = task({
         let watching = true;
         let running = true;
         let lastTestChangeTimeMs = Date.now();
-        let testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+        let testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         let testsChangedCancelSource = CancelToken.source();
 
         const testsChangedDebouncer = new Debouncer(1_000, endRunTests);
@@ -613,7 +692,7 @@ export const runTestsAndWatch = task({
             "tests/projects/**/*.*",
         ], {
             ignorePermissionErrors: true,
-            alwaysStat: true
+            alwaysStat: true,
         });
 
         process.on("SIGINT", endWatchMode);
@@ -686,7 +765,7 @@ export const runTestsAndWatch = task({
         function endRunTests() {
             lastTestChangeTimeMs = Date.now();
             testsChangedDeferred.resolve();
-            testsChangedDeferred = /** @type {Deferred<void>} */(new Deferred());
+            testsChangedDeferred = /** @type {Deferred<void>} */ (new Deferred());
         }
 
         function endWatchMode() {
@@ -763,7 +842,7 @@ function baselineAcceptTask(localBaseline, refBaseline) {
         const toDelete = await glob(`${localBaseline}/**/*.delete`, { nodir: true });
         for (const p of toDelete) {
             const out = localPathToRefPath(p).replace(/\.delete$/, "");
-            await fs.promises.rm(out);
+            await rimraf(out);
         }
     };
 }
@@ -784,9 +863,8 @@ export const updateSublime = task({
         for (const file of ["built/local/tsserver.js", "built/local/tsserver.js.map"]) {
             await fs.promises.copyFile(file, path.resolve("../TypeScript-Sublime-Plugin/tsserver/", path.basename(file)));
         }
-    }
+    },
 });
-
 
 export const produceLKG = task({
     name: "LKG",
@@ -816,7 +894,7 @@ export const produceLKG = task({
         }
 
         await exec(process.execPath, ["scripts/produceLKG.mjs"]);
-    }
+    },
 });
 
 export const lkg = task({
@@ -828,7 +906,7 @@ export const lkg = task({
 export const cleanBuilt = task({
     name: "clean-built",
     hiddenFromTaskList: true,
-    run: () => del("built"),
+    run: () => fs.promises.rm("built", { recursive: true, force: true }),
 });
 
 export const clean = task({

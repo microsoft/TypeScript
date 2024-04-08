@@ -4,7 +4,10 @@
 //// [/app/node_modules/linked/index.d.ts] symlink(/linked/index.d.ts)
 
 //// [/app/node_modules/linked/package.json]
-{"version": "0.0.0", "main": "./index"}
+{
+  "version": "0.0.0",
+  "main": "./index"
+}
 
 Resolving "linked" from /app/src/app.ts
 Resolution:: {
@@ -29,7 +32,6 @@ Resolution:: {
     "/app/node_modules/linked.ts",
     "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index",
     "/app/node_modules/linked/index.ts",
     "/app/node_modules/linked/index.tsx"
   ],
@@ -61,7 +63,6 @@ Resolution:: {
     "/app/node_modules/linked.ts",
     "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index",
     "/app/node_modules/linked/index.ts",
     "/app/node_modules/linked/index.tsx",
     "/app/lib/node_modules/linked/package.json",
