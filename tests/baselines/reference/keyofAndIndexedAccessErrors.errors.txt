@@ -34,6 +34,11 @@ keyofAndIndexedAccessErrors.ts(82,5): error TS2322: Type 'keyof T | keyof U' is 
               Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(83,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+    Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+      Type 'string' is not assignable to type 'keyof T & keyof U'.
+        Type 'keyof T' is not assignable to type 'keyof U'.
+          Type 'string | number | symbol' is not assignable to type 'keyof U'.
+            Type 'string' is not assignable to type 'keyof U'.
 keyofAndIndexedAccessErrors.ts(86,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
 keyofAndIndexedAccessErrors.ts(87,5): error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
@@ -216,6 +221,11 @@ keyofAndIndexedAccessErrors.ts(165,5): error TS2322: Type 'number' is not assign
         ~~
 !!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
 !!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
+!!! error TS2322:         Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322:           Type 'string | number | symbol' is not assignable to type 'keyof U'.
+!!! error TS2322:             Type 'string' is not assignable to type 'keyof U'.
     
         k2 = k1;
         k2 = k3;  // Error

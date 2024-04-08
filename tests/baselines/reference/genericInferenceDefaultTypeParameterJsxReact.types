@@ -2,8 +2,8 @@
 
 === Performance Stats ===
 Assignability cache: 4,000 / 4,000 (nearest 100)
-Type Count: 10,300 / 10,300 (nearest 100)
-Instantiation count: 221,500 / 221,500 (nearest 500)
+Type Count: 10,200 / 10,200 (nearest 100)
+Instantiation count: 206,500 / 206,500 (nearest 500)
 Symbol count: 88,000 / 88,000 (nearest 500)
 
 === genericInferenceDefaultTypeParameterJsxReact.tsx ===
