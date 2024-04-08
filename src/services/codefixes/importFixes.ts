@@ -211,6 +211,13 @@ registerCodeFix({
 });
 
 /**
+ * The node kinds that may be the declaration of an alias symbol imported/required from an external module.
+ * `ImportClause` is the declaration for a syntactic default import. `VariableDeclaration` is the declaration
+ * for a non-destructured `require` call.
+ */
+export type ImportOrRequireAliasDeclaration = ImportEqualsDeclaration | ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement;
+
+/**
  * Computes multiple import additions to a file and writes them to a ChangeTracker.
  *
  * @internal
@@ -218,11 +225,11 @@ registerCodeFix({
 export interface ImportAdder {
     hasFixes(): boolean;
     addImportFromDiagnostic: (diagnostic: DiagnosticWithLocation, context: CodeFixContextBase) => void;
-    addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, localName?: string) => void;
+    addImportFromExportedSymbol: (exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) => void;
     addImportForNonExistentExport: (exportName: string, exportingFileName: string, exportKind: ExportKind, exportedMeanings: SymbolFlags, isImportUsageValidAsTypeOnly: boolean) => void;
     addImportForUnresolvedIdentifier: (context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean) => void;
-    addVerbatimImport: (declaration: AnyImportOrRequireStatement | ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement) => void;
-    removeExistingImport: (declaration: ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement) => void;
+    addVerbatimImport: (declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) => void;
+    removeExistingImport: (declaration: ImportOrRequireAliasDeclaration) => void;
     writeFixes: (changeTracker: textChanges.ChangeTracker, oldFileQuotePreference?: QuotePreference) => void;
 }
 
@@ -243,15 +250,15 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
     const addToNamespace: FixUseNamespaceImport[] = [];
     const importType: FixAddJsdocTypeImport[] = [];
     const addToExisting = new Map<ImportClause | ObjectBindingPattern, AddToExistingState>();
-    const removeExisting = new Set<ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement>();
-    const verbatimImports = new Set<AnyImportOrRequireStatement | ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement>();
+    const removeExisting = new Set<ImportOrRequireAliasDeclaration>();
+    const verbatimImports = new Set<AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration>();
 
     type NewImportsKey = `${0 | 1}|${string}`;
     /** Use `getNewImportEntry` for access */
     const newImports = new Map<NewImportsKey, Mutable<ImportsCollection & { useRequire: boolean; }>>();
     return { addImportFromDiagnostic, addImportFromExportedSymbol, writeFixes, hasFixes, addImportForUnresolvedIdentifier, addImportForNonExistentExport, removeExistingImport, addVerbatimImport };
 
-    function addVerbatimImport(declaration: AnyImportOrRequireStatement | ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement) {
+    function addVerbatimImport(declaration: AnyImportOrRequireStatement | ImportOrRequireAliasDeclaration) {
         verbatimImports.add(declaration);
     }
 
@@ -267,15 +274,25 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         addImport(first(info));
     }
 
-    function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, localName?: string) {
+    function addImportFromExportedSymbol(exportedSymbol: Symbol, isValidTypeOnlyUseSite?: boolean, referenceImport?: ImportOrRequireAliasDeclaration) {
         const moduleSymbol = Debug.checkDefined(exportedSymbol.parent);
         const symbolName = getNameForExportedSymbol(exportedSymbol, getEmitScriptTarget(compilerOptions));
         const checker = program.getTypeChecker();
         const symbol = checker.getMergedSymbol(skipAlias(exportedSymbol, checker));
         const exportInfo = getAllExportInfoForSymbol(sourceFile, symbol, symbolName, moduleSymbol, /*preferCapitalized*/ false, program, host, preferences, cancellationToken);
         const useRequire = shouldUseRequire(sourceFile, program);
-        const fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
+        let fix = getImportFixForSymbol(sourceFile, Debug.checkDefined(exportInfo), program, /*position*/ undefined, !!isValidTypeOnlyUseSite, useRequire, host, preferences);
         if (fix) {
+            const localName = tryCast(referenceImport?.name, isIdentifier)?.text ?? symbolName;
+            if (
+                referenceImport
+                && isTypeOnlyImportDeclaration(referenceImport)
+                && (fix.kind === ImportFixKind.AddNew || fix.kind === ImportFixKind.AddToExisting)
+                && fix.addAsTypeOnly === AddAsTypeOnly.Allowed
+            ) {
+                // Copy the type-only status from the reference import
+                fix = { ...fix, addAsTypeOnly: AddAsTypeOnly.Required };
+            }
             addImport({ fix, symbolName: localName ?? symbolName, errorIdentifierText: undefined });
         }
     }
@@ -333,7 +350,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
         }
     }
 
-    function removeExistingImport(declaration: ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement) {
+    function removeExistingImport(declaration: ImportOrRequireAliasDeclaration) {
         if (declaration.kind === SyntaxKind.ImportClause) {
             Debug.assertIsDefined(declaration.name, "ImportClause should have a name if it's being removed");
         }
@@ -536,6 +553,9 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                     else {
                         changeTracker.delete(sourceFile, declaration);
                     }
+                }
+                else if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
+                    changeTracker.delete(sourceFile, declaration);
                 }
             }
         }
