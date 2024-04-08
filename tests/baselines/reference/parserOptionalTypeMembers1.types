@@ -23,6 +23,6 @@ interface PropertyDescriptor2 {
 
     set?(v: any): void;
 >set : (v: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >v : any
 }

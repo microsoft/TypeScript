@@ -4,13 +4,13 @@
 interface ITextWriter2 {
     Write(s:string):void;
 >Write : (s: string) => void
->      : ^^^^      ^^^^^    
+>      : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
     WriteLine(s:string):void;
 >WriteLine : (s: string) => void
->          : ^^^^      ^^^^^    
+>          : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 }
@@ -19,21 +19,21 @@ var x: ITextWriter2 = {
 >x : ITextWriter2
 >  : ^^^^^^^^^^^^
 >{    Write: function (s:string):void {},    WriteLine: function(s:string):void {}} : { Write: (s: string) => void; WriteLine: (s: string) => void; }
->                                                                                   : ^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^      ^^^^^    ^^^
+>                                                                                   : ^^^^^^^^^^ ^^      ^^^^^    ^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^
 
     Write: function (s:string):void {},
 >Write : (s: string) => void
->      : ^^^^      ^^^^^    
+>      : ^ ^^      ^^^^^    
 >function (s:string):void {} : (s: string) => void
->                            : ^^^^      ^^^^^    
+>                            :                    
 >s : string
 >  : ^^^^^^
 
     WriteLine: function(s:string):void {}
 >WriteLine : (s: string) => void
->          : ^^^^      ^^^^^    
+>          : ^ ^^      ^^^^^    
 >function(s:string):void {} : (s: string) => void
->                           : ^^^^      ^^^^^    
+>                           :                    
 >s : string
 >  : ^^^^^^
 }
@@ -48,7 +48,7 @@ var yyyyyyyy: ITextWriter2 = {
 >Moo : () => string
 >    : ^^^^^^^^^^^^
 >function() { return "cow"; } : () => string
->                             : ^^^^^^^^^^^^
+>                             :             
 >"cow" : "cow"
 >      : ^^^^^
 }

@@ -13,7 +13,7 @@ class c {
 >k : () => void
 >  : ^^^^^^^^^^
 >() => {            var s: string = this.n();        } : () => void
->                                                      : ^^^^^^^^^^
+>                                                      :           
 
             var s: string = this.n();
 >s : string

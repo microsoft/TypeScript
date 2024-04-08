@@ -4,9 +4,9 @@
 // This function's type is changed on declaration
 export const fun = (
 >fun : (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void
->    : ^^^^^^^^^                                                                                   ^^^^^^^^^
+>    : ^      ^^                                                                                   ^^^^^^^^^
 >(    subFun: <Collection, Field extends keyof Collection>()        => FlatArray<Collection[Field], 0>[]) => { } : (subFun: <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]) => void
->                                                                                                                : ^^^^^^^^^                                                                                   ^^^^^^^^^
+>                                                                                                                :                                                                                                      
 
     subFun: <Collection, Field extends keyof Collection>()
 >subFun : <Collection, Field extends keyof Collection>() => FlatArray<Collection[Field], 0>[]

@@ -8,18 +8,18 @@ function foo() {
 
     module.exports = exports = function (o) {
 >module.exports = exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : { (o: any): any; methods: () => void; }
->                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (o: any): any; methods: () => void; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (o: any): any; methods: () => void; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (o: any): any; methods: () => void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^
 >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
->                                                                                                                   : ^^^^^^^^^^^^^^^
+>                                                                                                                   : ^ ^^^^^^^^^^^^^
 >exports : any
 >function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
->                                                                                                         : ^^^^^^^^^^^^^^^
+>                                                                                                         : ^ ^^^^^^^^^^^^^
 >o : any
 
         return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
@@ -45,7 +45,7 @@ function foo() {
 >m : () => void
 >  : ^^^^^^^^^^
 >function () {        // I have no idea what to put here    } : () => void
->                                                             : ^^^^^^^^^^
+>                                                             :           
 
         // I have no idea what to put here
     }

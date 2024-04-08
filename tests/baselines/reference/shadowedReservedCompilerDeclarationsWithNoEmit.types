@@ -57,7 +57,7 @@ class C extends Base {
 /// shadowed arguments
 function f1(arguments, ...a) {
 >f1 : (arguments: any, ...a: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^         ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >arguments : any
 >          : ^^^
 >a : any[]

@@ -134,24 +134,37 @@ for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponen
 
   Intl.NumberFormat().formatToParts(123)[0].type = type;
 >Intl.NumberFormat().formatToParts(123)[0].type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
->Intl.NumberFormat().formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+>Intl.NumberFormat().formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
->formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --))
+>formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 >type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
 >type : Symbol(type, Decl(es2020IntlAPIs.ts, 20, 10))
 }
+Intl.NumberFormat().format(123n);
+>Intl.NumberFormat().format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+Intl.NumberFormat().formatToParts(123n);
+>Intl.NumberFormat().formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+>formatToParts : Symbol(Intl.NumberFormat.formatToParts, Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
 
 Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
 >Intl.DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
 >Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 2 more)
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
->calendar : Symbol(calendar, Decl(es2020IntlAPIs.ts, 24, 27))
->numberingSystem : Symbol(numberingSystem, Decl(es2020IntlAPIs.ts, 24, 48))
+>calendar : Symbol(calendar, Decl(es2020IntlAPIs.ts, 26, 27))
+>numberingSystem : Symbol(numberingSystem, Decl(es2020IntlAPIs.ts, 26, 48))
 
 for (const type of [ 'relatedYear', 'yearName' ] as const) {
->type : Symbol(type, Decl(es2020IntlAPIs.ts, 25, 10))
+>type : Symbol(type, Decl(es2020IntlAPIs.ts, 27, 10))
 >const : Symbol(const)
 
   Intl.DateTimeFormat().formatToParts()[0].type = type;
@@ -162,7 +175,7 @@ for (const type of [ 'relatedYear', 'yearName' ] as const) {
 >DateTimeFormat : Symbol(Intl.DateTimeFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --))
 >formatToParts : Symbol(Intl.DateTimeFormat.formatToParts, Decl(lib.es2017.intl.d.ts, --, --))
 >type : Symbol(Intl.DateTimeFormatPart.type, Decl(lib.es2017.intl.d.ts, --, --))
->type : Symbol(type, Decl(es2020IntlAPIs.ts, 25, 10))
+>type : Symbol(type, Decl(es2020IntlAPIs.ts, 27, 10))
 }
 
 Intl.Collator(locale);

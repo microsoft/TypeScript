@@ -7,7 +7,7 @@ type MyExtract<T, U> = T extends U ? T : never
 
 function foo<T>(a: T) {
 >foo : <T>(a: T) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >a : T
 >  : ^
 

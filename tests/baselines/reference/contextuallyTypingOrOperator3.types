@@ -3,7 +3,7 @@
 === contextuallyTypingOrOperator3.ts ===
 function foo<T, U extends T>(u: U) {
 >foo : <T, U extends T>(u: U) => void
->    : ^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >u : U
 >  : ^
 

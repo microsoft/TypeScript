@@ -11,6 +11,14 @@ new Intl.NumberFormat().formatRange(10n, 1000n);
 new Intl.NumberFormat().formatRangeToParts(10, 1000)[0];
 new Intl.NumberFormat().formatRangeToParts(10n, 1000n)[0];
 
+new Intl.NumberFormat().format('-12.3E-4');
+new Intl.NumberFormat().formatToParts('123E4')
+new Intl.NumberFormat().formatRange('123.4', '567.8');
+new Intl.NumberFormat().formatRangeToParts('123E-4', '567E8');
+new Intl.NumberFormat().format('Infinity');
+new Intl.NumberFormat().format('-Infinity');
+new Intl.NumberFormat().format('+Infinity');
+
 for (const key of [ 'calendar', 'collation', 'currency', 'numberingSystem', 'timeZone', 'unit' ] as const) {
   Intl.supportedValuesOf(key);
 }

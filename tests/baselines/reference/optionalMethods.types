@@ -21,7 +21,7 @@ interface Foo {
 
 function test1(x: Foo) {
 >test1 : (x: Foo) => void
->      : ^^^^   ^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^
 >x : Foo
 >  : ^^^
 
@@ -162,7 +162,7 @@ class Bar {
 
 function test2(x: Bar) {
 >test2 : (x: Bar) => void
->      : ^^^^   ^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^
 >x : Bar
 >  : ^^^
 

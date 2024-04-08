@@ -8,9 +8,9 @@ import WinJS = require('./moduleInTypePosition1_0');
 
 var x = (w1: WinJS) => { };
 >x : (w1: WinJS) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^  ^^^^^^^^^^^^^^^^
 >(w1: WinJS) => { } : (w1: WinJS) => void
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   :                    
 >w1 : WinJS
 >   : ^^^^^
 

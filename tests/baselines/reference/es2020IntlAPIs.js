@@ -24,6 +24,8 @@ const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resol
 for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] as const) {
   Intl.NumberFormat().formatToParts(123)[0].type = type;
 }
+Intl.NumberFormat().format(123n);
+Intl.NumberFormat().formatToParts(123n);
 
 Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
 for (const type of [ 'relatedYear', 'yearName' ] as const) {
@@ -102,6 +104,8 @@ const { signDisplay } = Intl.NumberFormat('en', { signDisplay: 'always' }).resol
 for (const type of ['compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown']) {
     Intl.NumberFormat().formatToParts(123)[0].type = type;
 }
+Intl.NumberFormat().format(123n);
+Intl.NumberFormat().formatToParts(123n);
 Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
 for (const type of ['relatedYear', 'yearName']) {
     Intl.DateTimeFormat().formatToParts()[0].type = type;

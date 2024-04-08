@@ -37,13 +37,13 @@
 
         exec(string: string): string[];
 >exec : (string: string) => string[]
->     : ^^^^^^^^^      ^^^^^        
+>     : ^      ^^      ^^^^^        
 >string : string
 >       : ^^^^^^
 
         test(string: string): boolean;
 >test : (string: string) => boolean
->     : ^^^^^^^^^      ^^^^^       
+>     : ^      ^^      ^^^^^       
 >string : string
 >       : ^^^^^^
 

@@ -61,7 +61,7 @@ class Q extends P {
 >zzz : () => any
 >    : ^^^^^^^^^
 >() => super : () => any
->            : ^^^^^^^^^
+>            :          
 >super : any
 >      : ^^^
 >super : P
@@ -78,7 +78,7 @@ class Q extends P {
 
     foo(zz = super) {
 >foo : (zz?: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^
 >zz : any
 >   : ^^^
 >super : any
@@ -111,7 +111,7 @@ class Q extends P {
 
     static bar(zz = super) {
 >bar : (zz?: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^
 >zz : any
 >   : ^^^
 >super : any

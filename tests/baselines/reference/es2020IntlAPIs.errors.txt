@@ -1,8 +1,8 @@
 es2020IntlAPIs.ts(4,1): error TS2348: Value of type 'LocaleConstructor' is not callable. Did you mean to include 'new'?
 es2020IntlAPIs.ts(5,1): error TS2554: Expected 1-2 arguments, but got 0.
 es2020IntlAPIs.ts(8,1): error TS2348: Value of type 'RelativeTimeFormatConstructor' is not callable. Did you mean to include 'new'?
-es2020IntlAPIs.ts(42,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
-es2020IntlAPIs.ts(43,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+es2020IntlAPIs.ts(44,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
+es2020IntlAPIs.ts(45,1): error TS2348: Value of type 'PluralRulesConstructor' is not callable. Did you mean to include 'new'?
 
 
 ==== es2020IntlAPIs.ts (5 errors) ====
@@ -36,6 +36,8 @@ es2020IntlAPIs.ts(43,1): error TS2348: Value of type 'PluralRulesConstructor' is
     for (const type of [ 'compact', 'exponentInteger', 'exponentMinusSign', 'exponentSeparator', 'unit', 'unknown' ] as const) {
       Intl.NumberFormat().formatToParts(123)[0].type = type;
     }
+    Intl.NumberFormat().format(123n);
+    Intl.NumberFormat().formatToParts(123n);
     
     Intl.DateTimeFormat('en', { calendar: 'gregory', numberingSystem: 'latn' });
     for (const type of [ 'relatedYear', 'yearName' ] as const) {

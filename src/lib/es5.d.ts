@@ -4488,9 +4488,9 @@ declare namespace Intl {
     interface NumberFormat {
         /**
          * Formats a number as a string, according to the selected locale and formatting options.
-         * @param number The value to be formatted.
+         * @param value The value to be formatted.
          */
-        format(value: number): string;
+        format(value?: number): string;
 
         /** Returns the locale and options computed during initialization of this `NumberFormat` instance. */
         resolvedOptions(): ResolvedNumberFormatOptions;

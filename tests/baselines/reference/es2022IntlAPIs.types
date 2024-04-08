@@ -115,7 +115,7 @@ const segments = new Intl.Segmenter().segment('foo');
 >new Intl.Segmenter().segment('foo') : Intl.Segments
 >                                    : ^^^^^^^^^^^^^
 >new Intl.Segmenter().segment : (input: string) => Intl.Segments
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.Segmenter() : Intl.Segmenter
 >                     : ^^^^^^^^^^^^^^
 >Intl.Segmenter : Intl.SegmenterConstructor
@@ -125,7 +125,7 @@ const segments = new Intl.Segmenter().segment('foo');
 >Segmenter : Intl.SegmenterConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >segment : (input: string) => Intl.Segments
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -133,21 +133,21 @@ segments.containing();
 >segments.containing() : Intl.SegmentData
 >                      : ^^^^^^^^^^^^^^^^
 >segments.containing : (codeUnitIndex?: number) => Intl.SegmentData
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >segments : Intl.Segments
 >         : ^^^^^^^^^^^^^
 >containing : (codeUnitIndex?: number) => Intl.SegmentData
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 segments.containing(0);
 >segments.containing(0) : Intl.SegmentData
 >                       : ^^^^^^^^^^^^^^^^
 >segments.containing : (codeUnitIndex?: number) => Intl.SegmentData
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >segments : Intl.Segments
 >         : ^^^^^^^^^^^^^
 >containing : (codeUnitIndex?: number) => Intl.SegmentData
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -163,7 +163,7 @@ Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
 >Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' }) : string[]
 >                                                                         : ^^^^^^^^
 >Intl.Segmenter.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.Segmenter : Intl.SegmenterConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
@@ -171,7 +171,7 @@ Intl.Segmenter.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
 >Segmenter : Intl.SegmenterConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 >{ localeMatcher: 'best fit' } : { localeMatcher: "best fit"; }

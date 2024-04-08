@@ -11,7 +11,7 @@ export interface I { }
 /** @param {I} a */
 function f(a) {}
 >f : (a: I) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >a : I
 >  : ^
 

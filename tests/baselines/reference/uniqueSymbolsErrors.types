@@ -18,13 +18,13 @@ declare var invalidVarType: unique symbol;
 // function arguments and return types
 declare function invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
->               : ^^^^^^             ^^^^^    
+>               : ^   ^^             ^^^^^    
 >arg : symbol
 >    : ^^^^^^
 
 declare function invalidRestArgType(...arg: (unique symbol)[]): void;
 >invalidRestArgType : (...arg: (unique symbol)[]) => void
->                   : ^^^^^^^^^                 ^^^^^    
+>                   : ^^^^   ^^                 ^^^^^    
 >arg : symbol[]
 >    : ^^^^^^^^
 
@@ -34,13 +34,13 @@ declare function invalidReturnType(): unique symbol;
 
 declare function invalidThisType(this: unique symbol): void;
 >invalidThisType : (this: unique symbol) => void
->                : ^^^^^^^             ^^^^^    
+>                : ^    ^^             ^^^^^    
 >this : symbol
 >     : ^^^^^^
 
 declare function invalidTypePredicate(n: any): n is unique symbol;
 >invalidTypePredicate : (n: any) => n is unique symbol
->                     : ^^^^   ^^^^^                  
+>                     : ^ ^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -71,13 +71,13 @@ class InvalidClass {
 
     invalidArgType(arg: unique symbol): void { return; }
 >invalidArgType : (arg: unique symbol) => void
->               : ^^^^^^             ^^^^^    
+>               : ^   ^^             ^^^^^    
 >arg : symbol
 >    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidRestArgType : (...args: (unique symbol)[]) => void
->                   : ^^^^^^^^^^                 ^^^^^    
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
 >     : ^^^^^^^^
 
@@ -87,13 +87,13 @@ class InvalidClass {
 
     invalidThisType(this: unique symbol): void { return; }
 >invalidThisType : (this: unique symbol) => void
->                : ^^^^^^^             ^^^^^    
+>                : ^    ^^             ^^^^^    
 >this : symbol
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol { return; }
 >invalidTypePredicate : (n: any) => n is unique symbol
->                     : ^^^^   ^^^^^                  
+>                     : ^ ^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -121,13 +121,13 @@ class InvalidClass {
 
     static invalidStaticArgType(arg: unique symbol): void { return; }
 >invalidStaticArgType : (arg: unique symbol) => void
->                     : ^^^^^^             ^^^^^    
+>                     : ^   ^^             ^^^^^    
 >arg : symbol
 >    : ^^^^^^
 
     static invalidStaticRestArgType(...args: (unique symbol)[]): void { return; }
 >invalidStaticRestArgType : (...args: (unique symbol)[]) => void
->                         : ^^^^^^^^^^                 ^^^^^    
+>                         : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
 >     : ^^^^^^^^
 
@@ -137,13 +137,13 @@ class InvalidClass {
 
     static invalidStaticThisType(this: unique symbol): void { return; }
 >invalidStaticThisType : (this: unique symbol) => void
->                      : ^^^^^^^             ^^^^^    
+>                      : ^    ^^             ^^^^^    
 >this : symbol
 >     : ^^^^^^
 
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
 >invalidStaticTypePredicate : (n: any) => n is unique symbol
->                           : ^^^^   ^^^^^                  
+>                           : ^ ^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -174,13 +174,13 @@ interface InvalidInterface {
 
     invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
->               : ^^^^^^             ^^^^^    
+>               : ^   ^^             ^^^^^    
 >arg : symbol
 >    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: (unique symbol)[]) => void
->                   : ^^^^^^^^^^                 ^^^^^    
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
 >     : ^^^^^^^^
 
@@ -190,13 +190,13 @@ interface InvalidInterface {
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: unique symbol) => any
->                : ^^^^^^^             ^^^^^^^^
+>                : ^    ^^             ^^^^^^^^
 >this : symbol
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
 >invalidTypePredicate : (n: any) => n is unique symbol
->                     : ^^^^   ^^^^^                  
+>                     : ^ ^^   ^^^^^                  
 >n : any
 >  : ^^^
 
@@ -220,13 +220,13 @@ type InvalidTypeLiteral = {
 
     invalidArgType(arg: unique symbol): void;
 >invalidArgType : (arg: unique symbol) => void
->               : ^^^^^^             ^^^^^    
+>               : ^   ^^             ^^^^^    
 >arg : symbol
 >    : ^^^^^^
 
     invalidRestArgType(...args: (unique symbol)[]): void;
 >invalidRestArgType : (...args: (unique symbol)[]) => void
->                   : ^^^^^^^^^^                 ^^^^^    
+>                   : ^^^^    ^^                 ^^^^^    
 >args : symbol[]
 >     : ^^^^^^^^
 
@@ -236,13 +236,13 @@ type InvalidTypeLiteral = {
 
     invalidThisType(this: unique symbol);
 >invalidThisType : (this: unique symbol) => any
->                : ^^^^^^^             ^^^^^^^^
+>                : ^    ^^             ^^^^^^^^
 >this : symbol
 >     : ^^^^^^
 
     invalidTypePredicate(n: any): n is unique symbol
 >invalidTypePredicate : (n: any) => n is unique symbol
->                     : ^^^^   ^^^^^                  
+>                     : ^ ^^   ^^^^^                  
 >n : any
 >  : ^^^
 

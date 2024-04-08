@@ -7,15 +7,15 @@ class class1 {
 
     public prop1 = {
 >prop1 : { doStuff: (callback: any) => () => any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: (callback) => () => {            var _this = 2;            return callback(_this);        }    } : { doStuff: (callback: any) => () => any; }
->                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                   : ^^^^^^^^^^^                            ^^^
 
         doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {            var _this = 2;            return callback(_this);        } : (callback: any) => () => any
->                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                            :                             
 >callback : any
 >() => {            var _this = 2;            return callback(_this);        } : () => any
 >                                                                              : ^^^^^^^^^
@@ -48,15 +48,15 @@ class class2 {
     }
     public prop1 = {
 >prop1 : { doStuff: (callback: any) => () => any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: (callback) => () => {            return callback(10);        }    } : { doStuff: (callback: any) => () => any; }
->                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                      : ^^^^^^^^^^^                            ^^^
 
         doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {            return callback(10);        } : (callback: any) => () => any
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                               :                             
 >callback : any
 >() => {            return callback(10);        } : () => any
 >                                                 : ^^^^^^^^^

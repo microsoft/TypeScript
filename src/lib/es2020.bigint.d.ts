@@ -632,6 +632,17 @@ interface DataView {
 
 declare namespace Intl {
     interface NumberFormat {
-        format(value: number | bigint): string;
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options.
+         * @param value The value to be formatted.
+         */
+        format(value?: number | bigint): string;
+
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param value The value to be formatted.
+         */
+        formatToParts(value?: number | bigint): NumberFormatPart[];
     }
 }

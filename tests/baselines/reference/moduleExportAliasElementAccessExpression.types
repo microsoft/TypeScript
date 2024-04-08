@@ -15,7 +15,7 @@ exports["D"] = D;
 >"D" : "D"
 >    : ^^^
 >D : () => void
->  : ^^^^^^^^^^
+>  :           
 
  // (the only package I could find that uses spaces in identifiers is webidl-conversions)
 exports["Does not work yet"] = D;
@@ -28,5 +28,5 @@ exports["Does not work yet"] = D;
 >"Does not work yet" : "Does not work yet"
 >                    : ^^^^^^^^^^^^^^^^^^^
 >D : () => void
->  : ^^^^^^^^^^
+>  :           
 

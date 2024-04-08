@@ -101,15 +101,15 @@ var ResultIsString5 = typeof { x: 1, y: (n: number) => { return n; } };
 >typeof { x: 1, y: (n: number) => { return n; } } : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: (n: number) => { return n; } } : { x: number; y: (n: number) => number; }
->                                          : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
 >  : ^
 >y : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(n: number) => { return n; } : (n: number) => number
->                             : ^^^^      ^^^^^^^^^^^
+>                             :                      
 >n : number
 >  : ^^^^^^
 >n : number

@@ -13,13 +13,13 @@ export declare class TPromise<V> {
 	
 	constructor(init:(complete: (value:V)=>void, error:(err:any)=>void, progress:ProgressCallback)=>void, oncancel?: any);
 >init : (complete: (value: V) => void, error: (err: any) => void, progress: ProgressCallback) => void
->     : ^^^^^^^^^^^                  ^^^^^^^^^                  ^^^^^^^^^^^^                ^^^^^    
+>     : ^        ^^                  ^^     ^^                  ^^        ^^                ^^^^^    
 >complete : (value: V) => void
->         : ^^^^^^^^ ^^^^^    
+>         : ^     ^^ ^^^^^    
 >value : V
 >      : ^
 >error : (err: any) => void
->      : ^^^^^^   ^^^^^    
+>      : ^   ^^   ^^^^^    
 >err : any
 >progress : ProgressCallback
 >         : ^^^^^^^^^^^^^^^^
@@ -28,13 +28,13 @@ export declare class TPromise<V> {
     // removing this method fixes the error squiggle.....
 	public then<U>(success?: (value:V)=>TPromise<U>, error?: (err:any)=>TPromise<U>, progress?:ProgressCallback): TPromise<U>;
 >then : <U>(success?: (value: V) => TPromise<U>, error?: (err: any) => TPromise<U>, progress?: ProgressCallback) => TPromise<U>
->     : ^ ^^^^^^^^^^^^                         ^^^^^^^^^^                         ^^^^^^^^^^^^^                ^^^^^           
+>     : ^ ^^       ^^^                         ^^     ^^^                         ^^        ^^^                ^^^^^           
 >success : (value: V) => TPromise<U>
->        : ^^^^^^^^ ^^^^^           
+>        : ^     ^^ ^^^^^           
 >value : V
 >      : ^
 >error : (err: any) => TPromise<U>
->      : ^^^^^^   ^^^^^           
+>      : ^   ^^   ^^^^^           
 >err : any
 >progress : ProgressCallback
 >         : ^^^^^^^^^^^^^^^^

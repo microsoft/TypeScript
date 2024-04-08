@@ -32,13 +32,28 @@ declare namespace Intl {
         source: "startRange" | "endRange" | "shared";
     }
 
+    type StringNumericLiteral = `${number}` | "Infinity" | "-Infinity" | "+Infinity";
+
     interface NumberFormat {
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options.
+         * @param value The value to be formatted.
+         */
+        format(value?: number | bigint | StringNumericLiteral): string;
+
+        /**
+         * Formats a number as a string, according to the selected locale and formatting options,
+         * and returns the result as a list of locale-specific string tokens.
+         * @param value The value to be formatted.
+         */
+        formatToParts(value?: number | bigint | StringNumericLiteral): NumberFormatPart[];
+
         /**
          * Formats a number range as a string, according to the selected locale and formatting options.
          * @param start The value at the start of the range.
          * @param end The value at the end of the range.
          */
-        formatRange(start: number | bigint, end: number | bigint): string;
+        formatRange(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): string;
 
         /**
          * Formats a number range as a string, according to the selected locale and formatting options,
@@ -46,7 +61,7 @@ declare namespace Intl {
          * @param start The value at the start of the range.
          * @param end The value at the end of the range.
          */
-        formatRangeToParts(start: number | bigint, end: number | bigint): NumberRangeFormatPart[];
+        formatRangeToParts(start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral): NumberRangeFormatPart[];
     }
 
     interface PluralRulesOptions {

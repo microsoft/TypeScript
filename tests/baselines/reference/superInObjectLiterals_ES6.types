@@ -5,7 +5,7 @@ var obj = {
 >obj : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    __proto__: {        method() {        }    },    method() {        super.method();    },    get prop() {        super.method();        return 10;    },    set prop(value) {        super.method();    },    p1: function () {        super.method();    },    p2: function f() {        super.method();    },    p3: () => {        super.method();    }} : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
->                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^          ^^^^^^          ^^^
 
     __proto__: {
 >__proto__ : { method(): void; }
@@ -73,7 +73,7 @@ var obj = {
 >p1 : () => void
 >   : ^^^^^^^^^^
 >function () {        super.method();    } : () => void
->                                          : ^^^^^^^^^^
+>                                          :           
 
         super.method();
 >super.method() : any
@@ -90,7 +90,7 @@ var obj = {
 >p2 : () => void
 >   : ^^^^^^^^^^
 >function f() {        super.method();    } : () => void
->                                           : ^^^^^^^^^^
+>                                           :           
 >f : () => void
 >  : ^^^^^^^^^^
 
@@ -109,7 +109,7 @@ var obj = {
 >p3 : () => void
 >   : ^^^^^^^^^^
 >() => {        super.method();    } : () => void
->                                    : ^^^^^^^^^^
+>                                    :           
 
         super.method();
 >super.method() : any
@@ -146,7 +146,7 @@ class B extends A {
 >obj : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            __proto__: {                method() {                }            },            method() {                super.method();            },            get prop() {                super.method();                return 10;            },            set prop(value) {                super.method();            },            p1: function () {                super.method();            },            p2: function f() {                super.method();            },            p3: () => {                super.method();            }        } : { __proto__: { method(): void; }; method(): void; prop: number; p1: () => void; p2: () => void; p3: () => void; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^          ^^^^^^          ^^^
 
             __proto__: {
 >__proto__ : { method(): void; }
@@ -214,7 +214,7 @@ class B extends A {
 >p1 : () => void
 >   : ^^^^^^^^^^
 >function () {                super.method();            } : () => void
->                                                          : ^^^^^^^^^^
+>                                                          :           
 
                 super.method();
 >super.method() : any
@@ -231,7 +231,7 @@ class B extends A {
 >p2 : () => void
 >   : ^^^^^^^^^^
 >function f() {                super.method();            } : () => void
->                                                           : ^^^^^^^^^^
+>                                                           :           
 >f : () => void
 >  : ^^^^^^^^^^
 
@@ -250,7 +250,7 @@ class B extends A {
 >p3 : () => void
 >   : ^^^^^^^^^^
 >() => {                super.method();            } : () => void
->                                                    : ^^^^^^^^^^
+>                                                    :           
 
                 super.method();
 >super.method() : void

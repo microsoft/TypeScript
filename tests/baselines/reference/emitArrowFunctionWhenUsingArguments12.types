@@ -7,7 +7,7 @@ class C {
 
     f(arguments) {
 >f : (arguments: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^         ^^^^^^^^^^^^^^
 >arguments : any
 >          : ^^^
 
@@ -15,7 +15,7 @@ class C {
 >a : () => IArguments
 >  : ^^^^^^^^^^^^^^^^
 >() => arguments : () => IArguments
->                : ^^^^^^^^^^^^^^^^
+>                :                 
 >arguments : IArguments
 >          : ^^^^^^^^^^
     }

@@ -28,7 +28,7 @@ class C extends Base {
 >obj : { [x: number]: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            [super.bar()]() { }        } : { [x: number]: () => void; }
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^          ^^^
 
             [super.bar()]() { }
 >[super.bar()] : () => void

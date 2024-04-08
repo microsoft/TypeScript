@@ -3,9 +3,9 @@
 === switchCaseNarrowsMatchingClausesEvenWhenNonMatchingClausesExist.ts ===
 export const narrowToLiterals = (str: string) => {
 >narrowToLiterals : (str: string) => "abc" | "defaultValue"
->                 : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(str: string) => {    switch (str) {      case 'abc': {        // inferred type as `abc`        return str;      }      default:        return 'defaultValue';    }  } : (str: string) => "abc" | "defaultValue"
->                                                                                                                                                                       : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                       :                                        
 >str : string
 >    : ^^^^^^
 
@@ -31,9 +31,9 @@ export const narrowToLiterals = (str: string) => {
   
   export const narrowToString = (str: string, someOtherStr: string) => {
 >narrowToString : (str: string, someOtherStr: string) => string
->               : ^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>               : ^   ^^      ^^            ^^      ^^^^^^^^^^^
 >(str: string, someOtherStr: string) => {    switch (str) {      case 'abc': {        // inferred type should be `abc`        return str;      }      case someOtherStr: {        // `string`        return str;      }      default:        return 'defaultValue';    }  } : (str: string, someOtherStr: string) => string
->                                                                                                                                                                                                                                                                           : ^^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                           :                                              
 >str : string
 >    : ^^^^^^
 >someOtherStr : string
@@ -70,9 +70,9 @@ export const narrowToLiterals = (str: string) => {
   
   export const narrowToStringOrNumber = (str: string | number, someNumber: number) => {
 >narrowToStringOrNumber : (str: string | number, someNumber: number) => number | "abc" | "defaultValue"
->                       : ^^^^^^               ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^               ^^          ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(str: string | number, someNumber: number) => {    switch (str) {      case 'abc': {        // inferred type should be `abc`        return str;      }      case someNumber: {        // inferred type should be `number`        return str;      }      default:        return 'defaultValue';    }  } : (str: string | number, someNumber: number) => number | "abc" | "defaultValue"
->                                                                                                                                                                                                                                                                                                        : ^^^^^^               ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                        :                                                                              
 >str : string | number
 >    : ^^^^^^^^^^^^^^^
 >someNumber : number

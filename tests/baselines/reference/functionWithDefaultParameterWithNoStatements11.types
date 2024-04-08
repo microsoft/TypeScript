@@ -7,7 +7,7 @@ var v: any[];
 
 function foo(a = v[0]) { }
 >foo : (a?: any) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^
 >a : any
 >v[0] : any
 >v : any[]
@@ -17,7 +17,7 @@ function foo(a = v[0]) { }
 
 function bar(a = v[0]) {
 >bar : (a?: any) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^
 >a : any
 >v[0] : any
 >v : any[]

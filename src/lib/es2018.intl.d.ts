@@ -74,9 +74,9 @@ declare namespace Intl {
         /**
          * Formats a number as a string, according to the selected locale and formatting options,
          * and returns the result as a list of locale-specific string tokens.
-         * @param number The value to be formatted.
+         * @param value The value to be formatted.
          */
-        formatToParts(number?: number | bigint): NumberFormatPart[];
+        formatToParts(value?: number): NumberFormatPart[];
     }
 
     type DateTimeFormatOptionsHourCycle = "h11" | "h12" | "h23" | "h24";

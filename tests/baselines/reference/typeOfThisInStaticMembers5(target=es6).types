@@ -9,7 +9,7 @@ class C {
 >create : () => C
 >       : ^^^^^^^
 >() => new this("yep") : () => C
->                      : ^^^^^^^
+>                      :        
 >new this("yep") : C
 >                : ^
 >this : typeof C
