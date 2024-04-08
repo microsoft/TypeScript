@@ -20746,7 +20746,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 reportedError = true;
                 if (!elaborated) {
                     // Issue error on the prop itself, since the prop couldn't elaborate the error
-                    const resultObj: { errors?: Diagnostic[] } = errorOutputContainer || {};
+                    const resultObj: { errors?: Diagnostic[]; } = errorOutputContainer || {};
                     if (exactOptionalPropertyTypes && isExactOptionalPropertyMismatch(specificSource, targetPropType)) {
                         const diag = createDiagnosticForNode(prop, Diagnostics.Type_0_is_not_assignable_to_type_1_with_exactOptionalPropertyTypes_Colon_true_Consider_adding_undefined_to_the_type_of_the_target, typeToString(specificSource), typeToString(targetPropType));
                         diagnostics.add(diag);
@@ -20859,7 +20859,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return reportedError;
     }
 
-    function *generateSpreadProperties(node: SpreadAssignment | JsxSpreadAttribute): ElaborationIterator {
+    function* generateSpreadProperties(node: SpreadAssignment | JsxSpreadAttribute): ElaborationIterator {
         for (const propOfSpread of getPropertiesOfType(getTypeOfExpression(node.expression))) {
             const type = getLiteralTypeFromProperty(propOfSpread, TypeFlags.StringOrNumberLiteralOrUnique);
             if (type.flags & TypeFlags.Never) {
@@ -20873,7 +20873,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
             if (isJsxSpreadAttribute(prop)) {
-                yield *generateSpreadProperties(prop);
+                yield* generateSpreadProperties(prop);
                 continue;
             }
             if (isHyphenatedJsxName(getTextOfJsxAttributeName(prop.name))) continue;
@@ -21063,7 +21063,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!length(node.properties)) return;
         for (const prop of node.properties) {
             if (isSpreadAssignment(prop)) {
-                yield *generateSpreadProperties(prop);
+                yield* generateSpreadProperties(prop);
                 continue;
             }
             const type = getLiteralTypeFromProperty(getSymbolOfDeclaration(prop), TypeFlags.StringOrNumberLiteralOrUnique);
