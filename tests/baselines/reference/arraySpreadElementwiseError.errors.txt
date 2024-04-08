@@ -1,8 +1,9 @@
 arraySpreadElementwiseError.ts(4,27): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
+arraySpreadElementwiseError.ts(9,45): error TS2322: Type '"d"' is not assignable to type 'Abc'.
 
 
-==== arraySpreadElementwiseError.ts (1 errors) ====
+==== arraySpreadElementwiseError.ts (2 errors) ====
     // https://github.com/microsoft/TypeScript/issues/55340
     
     declare const a: Array<number | string>;
@@ -10,4 +11,11 @@ arraySpreadElementwiseError.ts(4,27): error TS2322: Type 'string | number' is no
                               ~~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    
+    // https://github.com/microsoft/TypeScript/issues/58110
+    type Abc = "a" | "b" | "c";
+    const array1: Abc[] = ["a", "b"];
+    const array2: Abc[] = [...array1, "a", "b", "d"];
+                                                ~~~
+!!! error TS2322: Type '"d"' is not assignable to type 'Abc'.
     
