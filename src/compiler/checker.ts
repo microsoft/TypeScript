@@ -736,6 +736,7 @@ import {
     isThisInTypeQuery,
     isThisProperty,
     isThisTypeParameter,
+    isThisTypePredicate,
     isTransientSymbol,
     isTupleTypeNode,
     isTypeAlias,
@@ -21217,7 +21218,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (sourceTypePredicate) {
                     result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
                 }
-                else if (isIdentifierTypePredicate(targetTypePredicate)) {
+                else if (isIdentifierTypePredicate(targetTypePredicate) || isThisTypePredicate(targetTypePredicate)) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Signature_0_must_be_a_type_predicate, signatureToString(source));
                     }
