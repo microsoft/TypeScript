@@ -44,7 +44,7 @@ function* forEachASTNode(node: ts.Node) {
     }
 }
 
-function nodeFullySynthetic(node: ts.Node) {
+function nodeIsFullySynthetic(node: ts.Node) {
     return ts.nodeIsSynthesized(node) && !node.original;
 }
 
@@ -52,7 +52,7 @@ const createSyntheticNodeUnderliningPrinter = memoize((): { printer: ts.Printer;
     let underlining = false;
     const printer = createPrinter({ removeComments: true }, {
         onEmitNode: (hint, node, cb) => {
-            if (nodeFullySynthetic(node) !== underlining) {
+            if (nodeIsFullySynthetic(node) !== underlining) {
                 // either node is synthetic and underlining needs to be enabled, or node is not synthetic and
                 // underlining needs to be disabled
                 underlining = !underlining;
