@@ -40,6 +40,7 @@ jobs:
         run: |
           npx hereby LKG
           npx hereby clean
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack ./
           mv typescript-*.tgz typescript.tgz
       - name: Upload built tarfile
