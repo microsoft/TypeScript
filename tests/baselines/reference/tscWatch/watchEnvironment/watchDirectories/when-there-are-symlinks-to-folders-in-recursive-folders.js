@@ -64,6 +64,8 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/real
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 undefined Type roots
@@ -95,6 +97,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules: *new*
   {"inode":11}
+/home/user/projects/myproject/node_modules/a: *new*
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala: *new*
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -169,6 +173,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules:
   {"inode":11}
+/home/user/projects/myproject/node_modules/a:
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/node_modules:
@@ -191,11 +197,11 @@ FsWatches *deleted*::
 Timeout callback:: count: 2
 1: timerToUpdateChildWatches *deleted*
 2: timerToUpdateProgram *new*
-3: timerToUpdateChildWatches *new*
+4: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 2
 2: timerToUpdateProgram
-3: timerToUpdateChildWatches
+4: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 2
 Output::
@@ -245,19 +251,28 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/node_mod
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
-sysLog:: onTimerToUpdateChildWatches:: 2
+sysLog:: onTimerToUpdateChildWatches:: 3
 sysLog:: invokingWatchers:: Elapsed:: *ms:: 0
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject/src 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 0:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 1:: WatchInfo: /home/user/projects/myproject/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Project: /home/user/projects/myproject/tsconfig.json Detected file add/remove of non supported extension: /home/user/projects/myproject/src/file.js
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/src/file.js 0:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts 1:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 2:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts 2:: WatchInfo: /home/user/projects/myproject 1 undefined Wild card directory
 sysLog:: Elapsed:: *ms:: onTimerToUpdateChildWatches:: 0 undefined
 
 
@@ -282,6 +297,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules:
   {"inode":11}
+/home/user/projects/myproject/node_modules/a:
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/node_modules:
@@ -298,8 +315,8 @@ FsWatches::
   {"inode":10}
 
 Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions *new*
-5: timerToUpdateProgram *new*
+7: timerToInvalidateFailedLookupResolutions *new*
+9: timerToUpdateProgram *new*
 
 
 Program root files: [
@@ -329,15 +346,18 @@ Change:: timeouts if any
 Input::
 
 Before running Timeout callback:: count: 2
-4: timerToInvalidateFailedLookupResolutions
-5: timerToUpdateProgram
+7: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
 
-After running Timeout callback:: count: 0
+After running Timeout callback:: count: 1
 Output::
-Reloading new file names and options
-Synchronizing program
+Scheduling update
 
 
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *deleted*
+10: timerToUpdateProgram *new*
 
 
 exitCode:: ExitStatus.undefined
@@ -346,9 +366,75 @@ Change:: timeouts if any
 
 Input::
 
-Before running Timeout callback:: count: 0
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
+Output::
+Reloading new file names and options
+Synchronizing program
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
+CreatingProgramWith::
+  roots: ["/home/user/projects/myproject/src/file.ts"]
+  options: {"extendedDiagnostics":true,"traceResolution":true,"watch":true,"configFilePath":"/home/user/projects/myproject/tsconfig.json"}
+======== Resolving module 'a' from '/home/user/projects/myproject/src/file.ts'. ========
+Module resolution kind is not specified, using 'Node10'.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
+File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
+File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.ts' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.d.ts' does not exist.
+Directory '/home/user/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
+Directory '/home/user/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
+File '/home/user/projects/myproject/node_modules/a/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/node_modules/a.js' does not exist.
+File '/home/user/projects/myproject/node_modules/a.jsx' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.js' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.jsx' does not exist.
+Directory '/home/user/projects/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
+Directory '/home/node_modules' does not exist, skipping all lookups in it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+======== Module name 'a' was not resolved. ========
+[96msrc/file.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
+
+[7m1[0m import * as a from "a"
+[7m [0m [91m                   ~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/home/user/projects/myproject/src/file.ts"
+]
+Program options: {
+  "extendedDiagnostics": true,
+  "traceResolution": true,
+  "watch": true,
+  "configFilePath": "/home/user/projects/myproject/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/home/user/projects/myproject/src/file.ts
+
+Semantic diagnostics in builder refreshed for::
+
+No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined

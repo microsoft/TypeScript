@@ -67,6 +67,8 @@ FileWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/real
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"synchronousWatchDirectory":true} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/src 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myproject/node_modules/@types 1 {"synchronousWatchDirectory":true} Type roots
@@ -100,6 +102,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules: *new*
   {"inode":11}
+/home/user/projects/myproject/node_modules/a: *new*
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala: *new*
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/index.d.ts: *new*
@@ -160,6 +164,15 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/no
 DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/reala/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules/a 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+Scheduling invalidateFailedLookup, Cancelled earlier one
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject/node_modules 1 {"synchronousWatchDirectory":true} Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
+Scheduling update
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/user/projects/myproject/node_modules/a/index.d.ts :: WatchInfo: /home/user/projects/myproject 1 {"synchronousWatchDirectory":true} Wild card directory
 
 
 PolledWatches::
@@ -177,6 +190,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules:
   {"inode":11}
+/home/user/projects/myproject/node_modules/a:
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/node_modules:
@@ -197,12 +212,12 @@ FsWatches *deleted*::
   {"inode":13}
 
 Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions *new*
-3: timerToUpdateProgram *new*
+5: timerToInvalidateFailedLookupResolutions *new*
+6: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 2
-2: timerToInvalidateFailedLookupResolutions
-3: timerToUpdateProgram
+5: timerToInvalidateFailedLookupResolutions
+6: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -219,7 +234,7 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/user/projects/myproject/node_modules/a/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
@@ -276,6 +291,8 @@ FsWatches::
   {"inode":7}
 /home/user/projects/myproject/node_modules:
   {"inode":11}
+/home/user/projects/myproject/node_modules/a:
+  {"inode":12}
 /home/user/projects/myproject/node_modules/reala:
   {"inode":12}
 /home/user/projects/myproject/node_modules/reala/node_modules:

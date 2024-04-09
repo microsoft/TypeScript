@@ -61,9 +61,9 @@ describe("unittests:: canWatch::", () => {
             (paths, longestPathLength, baseline) => {
                 const recursive = "Recursive";
                 const maxLength = longestPathLength + ts.combinePaths(forPath, "dir/subdir/somefile.d.ts").length;
-                const maxLengths = [maxLength, maxLength, recursive.length] as const;
+                const maxLengths = [maxLength, maxLength, recursive.length, maxLength] as const;
                 baselineCanWatchForRoot(paths, baseline, (rootPathCompoments, root) => {
-                    pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive], maxLengths);
+                    pushHeader(baseline, ["Location", "getDirectoryToWatchFailedLookupLocation", recursive, "Location if not symlink"], maxLengths);
                     paths.forEach(path => {
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "somefile.d.ts"), root, rootPathCompoments, maxLengths);
                         baselineGetDirectoryToWatchFailedLookupLocation(combinePaths(path, forPath, "dir/somefile.d.ts"), root, rootPathCompoments, maxLengths);
@@ -79,7 +79,7 @@ describe("unittests:: canWatch::", () => {
                         rootPathCompoments,
                         ts.returnUndefined,
                     );
-                    pushRow(baseline, [path, result ? result.dir : "", result ? `${!result.nonRecursive}` : ""], maxLengths);
+                    pushRow(baseline, [path, result ? result.packageDir ?? result.dir : "", result ? `${!result.nonRecursive}` : "", result?.packageDir ? result.dir : ""], maxLengths);
                 }
             },
         );
