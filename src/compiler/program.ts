@@ -1858,7 +1858,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     // unconditionally set oldProgram to undefined to prevent it from being captured in closure
-    createProgramOptions.oldProgram = undefined;
     oldProgram = undefined;
     resolvedLibProcessing = undefined;
     resolvedModulesProcessing = undefined;
