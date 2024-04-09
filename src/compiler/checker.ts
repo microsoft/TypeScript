@@ -28036,7 +28036,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Identifier:
                 if (!isThisInTypeQuery(node)) {
                     const symbol = getResolvedSymbol(node as Identifier);
-                    return isConstantVariable(symbol) || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol);
+                    return isConstantVariable(symbol)
+                        || isParameterOrMutableLocalVariable(symbol) && !isSymbolAssigned(symbol)
+                        || !!symbol.valueDeclaration && isFunctionExpression(symbol.valueDeclaration);
                 }
                 break;
             case SyntaxKind.PropertyAccessExpression:
@@ -37747,7 +37749,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     expr.kind === SyntaxKind.CallExpression &&
                     (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
                     checkExpressionCached((expr as CallExpression).expression).symbol === getMergedSymbol(func.symbol) &&
-                    (!isFunctionExpressionOrArrowFunction(func.symbol.valueDeclaration!) || isVariableDeclaration(func.symbol.valueDeclaration.parent) && isConstantVariable(func.symbol.valueDeclaration.parent.symbol))
+                    (!isFunctionExpressionOrArrowFunction(func.symbol.valueDeclaration!) || isConstantReference((expr as CallExpression).expression))
                 ) {
                     hasReturnOfTypeNever = true;
                     return;
