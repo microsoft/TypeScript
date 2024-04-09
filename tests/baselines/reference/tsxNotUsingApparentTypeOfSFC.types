@@ -57,7 +57,7 @@ function test<P>(wrappedProps: P) {
 ><MySFC /> : JSX.Element
 >          : ^^^^^^^^^^^
 >MySFC : (props: P) => JSX.Element
->      : ^     ^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^ ^^^^^^^^^^^^^^^^
 
     let y = <MyComponent />;  // should error
 >y : JSX.Element
@@ -73,7 +73,7 @@ function test<P>(wrappedProps: P) {
 ><MySFC {...wrappedProps} /> : JSX.Element
 >                            : ^^^^^^^^^^^
 >MySFC : (props: P) => JSX.Element
->      : ^     ^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^ ^^^^^^^^^^^^^^^^
 >wrappedProps : P
 >             : ^
 

@@ -23,7 +23,7 @@ f2({ hello: 1 })
 >f2({ hello: 1 }) : void
 >                 : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ hello: 1 } : { hello: number; }
 >             : ^^^^^^^^^^^^^^^^^^
 >hello : number
@@ -35,7 +35,7 @@ f2({ value: '' })
 >f2({ value: '' }) : void
 >                  : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ value: '' } : { value: string; }
 >              : ^^^^^^^^^^^^^^^^^^
 >value : string
@@ -47,7 +47,7 @@ f2({ value: '', what: 1 })
 >f2({ value: '', what: 1 }) : void
 >                           : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ value: '', what: 1 } : { value: string; what: number; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
@@ -63,7 +63,7 @@ f2({ toString: (s) => s })
 >f2({ toString: (s) => s }) : void
 >                           : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ toString: (s) => s } : { toString: (s: any) => any; }
 >                       : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >toString : (s: any) => any
@@ -79,7 +79,7 @@ f2({ toString: (s: string) => s })
 >f2({ toString: (s: string) => s }) : void
 >                                   : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ toString: (s: string) => s } : { toString: (s: string) => string; }
 >                               : ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >toString : (s: string) => string
@@ -95,7 +95,7 @@ f2({ value: '', toString: (s) => s.uhhh })
 >f2({ value: '', toString: (s) => s.uhhh }) : void
 >                                           : ^^^^
 >f2 : (args: I2) => void
->   : ^    ^^^^^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >{ value: '', toString: (s) => s.uhhh } : { value: string; toString: (s: any) => any; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >value : string

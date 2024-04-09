@@ -58,7 +58,7 @@ function f<T extends Cat | Dog>(a: T) {
 >run(a) : void
 >       : ^^^^
 >run : (a: Cat | Dog) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^         ^^^^^^^^^
 >a : Cat | Dog
 >  : ^^^^^^^^^
 }

@@ -13,5 +13,5 @@ Symbol count: 29,000 / 29,000 (nearest 500)
 
 function eval() {
 >eval : { (x: string): any; (): void; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^
 }

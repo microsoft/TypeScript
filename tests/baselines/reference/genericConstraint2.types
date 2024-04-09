@@ -102,7 +102,7 @@ var c = compare<ComparableString>(a, b);
 >compare<ComparableString>(a, b) : number
 >                                : ^^^^^^
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : ComparableString
 >  : ^^^^^^^^^^^^^^^^
 >b : ComparableString

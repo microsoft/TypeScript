@@ -108,7 +108,7 @@ module Editor {
 >ListMakeEntry(data) : List<T>
 >                    : ^^^^^^^
 >ListMakeEntry : <U>(data: U) => List<U>
->              : ^^^^    ^^^^^^^^^^^^^^^
+>              : ^ ^^    ^^ ^^^^^^^^^^^^
 >data : T
 >     : ^
 
@@ -133,7 +133,7 @@ module Editor {
 >ListRemoveEntry(this.next) : List<T>
 >                           : ^^^^^^^
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->                : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^     ^^       ^^^^^^^^^^^^
 >this.next : List<T>
 >          : ^^^^^^^
 >this : this

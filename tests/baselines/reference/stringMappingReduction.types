@@ -90,8 +90,8 @@ export const virtualOn = <T extends string>(eventQrl: VirtualEvent<T>) => {
     _virtualOn(eventQrl);
 >_virtualOn(eventQrl) : void
 >                     : ^^^^
->_virtualOn : (eventQrl: (event: {}) => any) => void
->           : ^        ^^^     ^^^^^^^^^^^^^^^^^^^^^
+>_virtualOn : (eventQrl: VirtualEvent<Keys>) => void
+>           : ^        ^^                  ^^^^^^^^^
 >eventQrl : (event: EPlusFallback<Lowercase<T>>) => any
 >         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -18,7 +18,7 @@ var a = (p: string) => p.length;
 
 var a = (p: string) => { return p.length; }
 >a : (p: string) => number
->  : ^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(p: string) => { return p.length; } : (p: string) => number
 >                                    : ^ ^^      ^^^^^^^^^^^
 >p : string
@@ -271,13 +271,13 @@ var e = arrrr()(3)()(4);
 >arrrr()(3)()(4) : number
 >                : ^^^^^^
 >arrrr()(3)() : (n: number) => number
->             : ^ ^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >arrrr()(3) : () => (n: number) => number
->           : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^ ^^      ^^^^^^^^^^^
 >arrrr() : (m: number) => () => (n: number) => number
->        : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >arrrr : () => (m: number) => () => (n: number) => number
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -314,19 +314,19 @@ function someFn() {
 >arr(3)(4).toExponential() : string
 >                          : ^^^^^^
 >arr(3)(4).toExponential : (fractionDigits?: number) => string
->                        : ^              ^^^^^^^^^^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^^^^^^^
 >arr(3)(4) : number
 >          : ^^^^^^
 >arr(3) : (p: number) => number
->       : ^ ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >arr : (n: number) => (p: number) => number
->    : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
 >  : ^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 }
 
 // Arrow function used in function
@@ -352,15 +352,15 @@ function someOtherFn() {
 >arr(4).charAt(0) : string
 >                 : ^^^^^^
 >arr(4).charAt : (pos: number) => string
->              : ^   ^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^^^^^^^
 >arr(4) : string
 >       : ^^^^^^
 >arr : (n: number) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >4 : 4
 >  : ^
 >charAt : (pos: number) => string
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 }
@@ -423,7 +423,7 @@ var f = (n: string) => {
 >fn(4) : () => string
 >      : ^^^^^^^^^^^^
 >fn : (x: number) => () => string
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^
 >4 : 4
 >  : ^
 }
@@ -435,7 +435,7 @@ var g = f('')();
 >f('') : () => string
 >      : ^^^^^^^^^^^^
 >f : (n: string) => () => string
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -477,7 +477,7 @@ function someOuterFn() {
     }
     return arr;
 >arr : (n: string) => () => () => number
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 }
 var h = someOuterFn()('')()();
 >h : number
@@ -489,9 +489,9 @@ var h = someOuterFn()('')()();
 >someOuterFn()('') : () => () => number
 >                  : ^^^^^^^^^^^^^^^^^^
 >someOuterFn() : (n: string) => () => () => number
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >someOuterFn : () => (n: string) => () => () => number
->            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -499,11 +499,11 @@ h.toExponential();
 >h.toExponential() : string
 >                  : ^^^^^^
 >h.toExponential : (fractionDigits?: number) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >h : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {

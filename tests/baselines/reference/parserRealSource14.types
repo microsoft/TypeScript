@@ -196,7 +196,7 @@ module TypeScript {
 >this.asts.map((value) => { return value; }) : TypeScript.AST[]
 >                                            : ^^^^^^^^^^^^^^^^
 >this.asts.map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -204,7 +204,7 @@ module TypeScript {
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(value) => { return value; } : (value: TypeScript.AST) => TypeScript.AST
 >                             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : TypeScript.AST
@@ -524,11 +524,11 @@ module TypeScript {
 >AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
 >                                                                     : ^^^
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
->                       : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>                       : ^     ^^     ^^     ^^      ^^^^^^^^
 >AstPath : typeof AstPath
 >        : ^^^^^^^^^^^^^^
 >reverseIndexOf : (items: any[], index: number) => any
->               : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>               : ^     ^^     ^^     ^^      ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -573,11 +573,11 @@ module TypeScript {
 >AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
 >                                                               : ^^^
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
->                       : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>                       : ^     ^^     ^^     ^^      ^^^^^^^^
 >AstPath : typeof AstPath
 >        : ^^^^^^^^^^^^^^
 >reverseIndexOf : (items: any[], index: number) => any
->               : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>               : ^     ^^     ^^     ^^      ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1402,7 +1402,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1533,7 +1533,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1664,7 +1664,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1795,7 +1795,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -2144,7 +2144,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -7324,7 +7324,7 @@ module TypeScript {
 >lookInComments(cur.preComments) : void
 >                                : ^^^^
 >lookInComments : (comments: TypeScript.Comment[]) => void
->               : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^        ^^                    ^^^^^^^^^
 >cur.preComments : any
 >                : ^^^
 >cur : TypeScript.AST
@@ -7344,7 +7344,7 @@ module TypeScript {
 >lookInComments(cur.postComments) : void
 >                                 : ^^^^
 >lookInComments : (comments: TypeScript.Comment[]) => void
->               : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^        ^^                    ^^^^^^^^^
 >cur.postComments : any
 >                 : ^^^
 >cur : TypeScript.AST
@@ -7518,7 +7518,7 @@ module TypeScript {
 >max(bestOffset, cur.minChar) : number
 >                             : ^^^^^^
 >max : (a: number, b: number) => number
->    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >bestOffset : number
 >           : ^^^^^^
 >cur.minChar : any
@@ -7667,7 +7667,7 @@ module TypeScript {
 >callback(path, walker) : void
 >                       : ^^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^    ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker

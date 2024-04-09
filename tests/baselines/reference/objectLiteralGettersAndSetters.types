@@ -137,7 +137,7 @@ var callSig1 = { num(n: number) { return '' } };
 
 var callSig1: { num: (n: number) => string; };
 >callSig1 : { num(n: number): string; }
->         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^ ^^      ^^^^^^^^^^^^
 >num : (n: number) => string
 >    : ^ ^^      ^^^^^      
 >n : number
@@ -159,7 +159,7 @@ var callSig2 = { num: function (n: number) { return '' } };
 
 var callSig2: { num: (n: number) => string; };
 >callSig2 : { num: (n: number) => string; }
->         : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
 >    : ^ ^^      ^^^^^      
 >n : number
@@ -181,7 +181,7 @@ var callSig3 = { num: (n: number) => '' };
 
 var callSig3: { num: (n: number) => string; };
 >callSig3 : { num: (n: number) => string; }
->         : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
 >    : ^ ^^      ^^^^^      
 >n : number
@@ -327,7 +327,7 @@ var setParamType1 = {
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
 >                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string
@@ -353,7 +353,7 @@ var setParamType2 = {
 
     get n() { return (t) => {
 >n : (t: string) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >(t) => {            var p: string;            var p = t;        } : (t: string) => void
 >                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >t : string

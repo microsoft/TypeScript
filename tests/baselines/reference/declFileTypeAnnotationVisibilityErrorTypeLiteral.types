@@ -106,7 +106,7 @@ module m {
 
     export var y2 = y;
 >y2 : (a: private1) => m2.public1
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^        ^^^^^^^^^^^^^^^
 >y : (a: private1) => m2.public1
 >  :                            
 
@@ -121,7 +121,7 @@ module m {
 
     export var z2 = z;
 >z2 : new (a: private1) => m2.public1
->   : ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^ ^^        ^^^^^^^^^^^^^^^
 >z : new (a: private1) => m2.public1
 >  :                                
 }

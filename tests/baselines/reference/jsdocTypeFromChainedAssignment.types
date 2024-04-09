@@ -92,7 +92,7 @@ A.s = A.t = function g(m) {
 >A : typeof A
 >  : ^^^^^^^^
 >s : (m: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >A.t = function g(m) {    return m + this.x} : (m: number) => any
 >                                            :                   
 >A.t : (m: number) => any
@@ -100,7 +100,7 @@ A.s = A.t = function g(m) {
 >A : typeof A
 >  : ^^^^^^^^
 >t : (m: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >function g(m) {    return m + this.x} : (m: number) => any
 >                                      :                   
 >g : (m: number) => any
@@ -132,11 +132,11 @@ a.y('no') // error
 >a.y('no') : number
 >          : ^^^^^^
 >a.y : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
 >  : ^
 >y : (n: number) => number
->  : ^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'no' : "no"
 >     : ^^^^
 
@@ -144,11 +144,11 @@ a.z('not really') // error
 >a.z('not really') : number
 >                  : ^^^^^^
 >a.z : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
 >  : ^
 >z : (n: number) => number
->  : ^ ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'not really' : "not really"
 >             : ^^^^^^^^^^^^
 
@@ -156,11 +156,11 @@ A.s('still no') // error
 >A.s('still no') : any
 >                : ^^^
 >A.s : (m: number) => any
->    : ^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >s : (m: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >'still no' : "still no"
 >           : ^^^^^^^^^^
 
@@ -168,11 +168,11 @@ A.t('not here either') // error
 >A.t('not here either') : any
 >                       : ^^^
 >A.t : (m: number) => any
->    : ^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >t : (m: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >'not here either' : "not here either"
 >                  : ^^^^^^^^^^^^^^^^^
 

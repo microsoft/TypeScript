@@ -11,7 +11,7 @@ function foo(param: {():number; (i:number):number; }[]) { }; foo([function(){ret
 >foo([function(){return 1;}, function(){return "foo"}]) : void
 >                                                       : ^^^^
 >foo : (param: { (): number; (i: number): number; }[]) => void
->    : ^     ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                                      ^^^^^^^^^
 >[function(){return 1;}, function(){return "foo"}] : ((() => number) | (() => string))[]
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function(){return 1;} : () => number

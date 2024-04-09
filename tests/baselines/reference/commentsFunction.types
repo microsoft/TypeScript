@@ -36,7 +36,7 @@ fooWithParameters("a", 10);
 >fooWithParameters("a", 10) : void
 >                           : ^^^^
 >fooWithParameters : (a: string, b: number) => void
->                  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>                  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >10 : 10
@@ -97,7 +97,7 @@ lambdaFoo(10, 20);
 >lambdaFoo(10, 20) : number
 >                  : ^^^^^^
 >lambdaFoo : (a: number, b: number) => number
->          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -107,7 +107,7 @@ lambddaNoVarComment(10, 20);
 >lambddaNoVarComment(10, 20) : number
 >                            : ^^^^^^
 >lambddaNoVarComment : (a: number, b: number) => number
->                    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -142,7 +142,7 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 >lambdaFoo = (a, b) => a * b : (a: number, b: number) => number
 >                            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >lambdaFoo : (a: number, b: number) => number
->          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >(a, b) => a * b : (a: number, b: number) => number
 >                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number

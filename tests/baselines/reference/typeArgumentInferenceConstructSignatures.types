@@ -151,11 +151,11 @@ new someGenerics2a<string>((n) => n.substr(0));
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -214,11 +214,11 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >n.substr(t * t) : string
 >                : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >t * t : number
 >      : ^^^^^^
 >t : number

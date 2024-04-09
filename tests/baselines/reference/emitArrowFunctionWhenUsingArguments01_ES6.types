@@ -72,7 +72,7 @@ foo(() => {
 >foo(() => {    var arg = arguments[0];  // error}) : void
 >                                                   : ^^^^
 >foo : (inputFunc: () => void) => void
->    : ^         ^^^^^^^^^^^^^^^^^^^^^
+>    : ^         ^^          ^^^^^^^^^
 >() => {    var arg = arguments[0];  // error} : () => void
 >                                              : ^^^^^^^^^^
 

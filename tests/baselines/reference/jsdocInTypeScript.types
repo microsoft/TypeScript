@@ -55,7 +55,7 @@ f(1); f(true).length;
 >f(1) : number
 >     : ^^^^^^
 >f : (x: boolean) => number
->  : ^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^
 >1 : 1
 >  : ^
 >f(true).length : any
@@ -63,7 +63,7 @@ f(1); f(true).length;
 >f(true) : number
 >        : ^^^^^^
 >f : (x: boolean) => number
->  : ^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >length : any

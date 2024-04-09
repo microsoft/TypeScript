@@ -20,7 +20,7 @@ declare function extend(options: ComponentOptions<{}>): void;
 
 export var vextend = extend;
 >vextend : (options: ComponentOptions<{}>) => void
->        : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^       ^^                    ^^^^^^^^^
 >extend : (options: ComponentOptions<{}>) => void
 >       :                                        
 

@@ -15,7 +15,7 @@ declare namespace Q {
 
     export { _try as try };
 >_try : (method: Function, ...args: any[]) => any
->     : ^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>     : ^      ^^        ^^^^^    ^^     ^^^^^^^^
 >try : (method: Function, ...args: any[]) => any
 >    :                    ^^^                   
 }
@@ -23,11 +23,11 @@ declare namespace Q {
 Q.try(() => { });
 >Q.try(() => { }) : any
 >Q.try : (method: Function, ...args: any[]) => any
->      : ^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>      : ^      ^^        ^^^^^    ^^     ^^^^^^^^
 >Q : typeof Q
 >  : ^^^^^^^^
 >try : (method: Function, ...args: any[]) => any
->    : ^      ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>    : ^      ^^        ^^^^^    ^^     ^^^^^^^^
 >() => { } : () => void
 >          : ^^^^^^^^^^
 

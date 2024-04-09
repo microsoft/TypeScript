@@ -1253,7 +1253,7 @@ if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
 >isBigInt(zeroOrBigOne) : bigint
 >                       : ^^^^^^
 >isBigInt : (x: 0n | 1n) => bigint
->         : ^ ^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^^^^^^^
 >zeroOrBigOne : 1n
 >             : ^^
 
@@ -1261,7 +1261,7 @@ else isNumber(zeroOrBigOne);
 >isNumber(zeroOrBigOne) : number
 >                       : ^^^^^^
 >isNumber : (x: 0 | 1) => number
->         : ^ ^^^^^^^^^^^^^^^^^^
+>         : ^ ^^     ^^^^^^^^^^^
 >zeroOrBigOne : 0
 >             : ^
 
@@ -1281,8 +1281,8 @@ if (zeroOrBigOne) isOne(zeroOrBigOne);
 >             : ^^^^^^
 >isOne(zeroOrBigOne) : 1n | 1
 >                    : ^^^^^^
->isOne : (x: 1n | 1) => 1n | 1
->      : ^ ^^^^^^^^^^^^^^^^^^^
+>isOne : (x: 1 | 1n) => 1n | 1
+>      : ^ ^^      ^^^^^^^^^^^
 >zeroOrBigOne : 1n
 >             : ^^
 
@@ -1295,8 +1295,8 @@ if (bigZeroOrOne) isOne(bigZeroOrOne);
 >             : ^^^^^^
 >isOne(bigZeroOrOne) : 1n | 1
 >                    : ^^^^^^
->isOne : (x: 1n | 1) => 1n | 1
->      : ^ ^^^^^^^^^^^^^^^^^^^
+>isOne : (x: 1 | 1n) => 1n | 1
+>      : ^ ^^      ^^^^^^^^^^^
 >bigZeroOrOne : 1
 >             : ^
 

@@ -171,7 +171,7 @@ module TypeScript {
 >getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks) : TypeLink[]
 >                                                              : ^^^^^^^^^^
 >getBaseTypeLinks : (bases: ASTList, baseTypeLinks: TypeLink[]) => TypeLink[]
->                 : ^     ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^             ^^          ^^^^^^^^^^^^^^^
 >typeDecl.extendsList : any
 >                     : ^^^
 >typeDecl : TypeDeclaration
@@ -197,7 +197,7 @@ module TypeScript {
 >getBaseTypeLinks(typeDecl.implementsList, type.implementsTypeLinks) : TypeLink[]
 >                                                                    : ^^^^^^^^^^
 >getBaseTypeLinks : (bases: ASTList, baseTypeLinks: TypeLink[]) => TypeLink[]
->                 : ^     ^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^             ^^          ^^^^^^^^^^^^^^^
 >typeDecl.implementsList : any
 >                        : ^^^
 >typeDecl : TypeDeclaration
@@ -798,7 +798,7 @@ module TypeScript {
 >findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
 >                                                      : ^^^^^^
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^    ^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >scopeChain.previous : any
@@ -903,7 +903,7 @@ module TypeScript {
 >findTypeSymbolInScopeChain(name, context.topLevelScope) : Symbol
 >                                                        : ^^^^^^
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^    ^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 >context.topLevelScope : ScopeChain
@@ -961,7 +961,7 @@ module TypeScript {
 >filename : any
 >         : ^^^
 >findSym : (id: string) => any
->        : ^  ^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
                 }
                 else {
                     symbol = findSym(name);
@@ -972,7 +972,7 @@ module TypeScript {
 >findSym(name) : any
 >              : ^^^
 >findSym : (id: string) => any
->        : ^  ^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >name : any
 >     : ^^^
                 }
@@ -1001,7 +1001,7 @@ module TypeScript {
 >findSymbolFromAlias(dottedExpr.operand1, context) : Symbol
 >                                                  : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
 >dottedExpr.operand1 : any
 >                    : ^^^
 >dottedExpr : BinaryExpression
@@ -1033,7 +1033,7 @@ module TypeScript {
 >findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
 >                                                  : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
 >dottedExpr.operand2 : any
 >                    : ^^^
 >dottedExpr : BinaryExpression
@@ -1171,7 +1171,7 @@ module TypeScript {
 >findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : Symbol
 >                                                                                                        : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
 >importDecl.alias : any
 >                 : ^^^
 >importDecl : ImportDeclaration

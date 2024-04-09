@@ -198,11 +198,11 @@ var ResultIsNumber12 = ~STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^   ^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^^^^^^^
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

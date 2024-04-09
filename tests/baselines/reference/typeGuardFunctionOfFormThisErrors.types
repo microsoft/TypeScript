@@ -154,7 +154,7 @@ if (invalidGuard(c)) {
 >invalidGuard(c) : boolean
 >                : ^^^^^^^
 >invalidGuard : (c: any) => this is number
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 >c : number | number[]
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -170,21 +170,21 @@ else {
 
 let holder = {invalidGuard};
 >holder : { invalidGuard: (c: any) => this is number; }
->       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >{invalidGuard} : { invalidGuard: (c: any) => this is number; }
 >               : ^^^^^^^^^^^^^^^^                          ^^^
 >invalidGuard : (c: any) => this is number
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 
 if (holder.invalidGuard(c)) {
 >holder.invalidGuard(c) : boolean
 >                       : ^^^^^^^
 >holder.invalidGuard : (c: any) => this is number
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 >holder : { invalidGuard: (c: any) => this is number; }
->       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >invalidGuard : (c: any) => this is number
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 >c : number | number[]
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -194,7 +194,7 @@ if (holder.invalidGuard(c)) {
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; } & number
->       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     c;
@@ -203,7 +203,7 @@ else {
 
     holder;
 >holder : { invalidGuard: (c: any) => this is number; }
->       : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 }
 
 let detached = a.isFollower;

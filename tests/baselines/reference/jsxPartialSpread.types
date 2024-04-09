@@ -38,7 +38,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >SelectProps : Partial<{ value?: unknown; }> | undefined
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Select : (p: { value?: unknown; }) => JSX.Element
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^                    ^^^^^^^^^^^^^^^^
 
     return (
 >(        <Select value={'test'} {...SelectProps} />    ) : JSX.Element
@@ -48,7 +48,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 ><Select value={'test'} {...SelectProps} /> : JSX.Element
 >                                           : ^^^^^^^^^^^
 >Select : (p: { value?: unknown; }) => JSX.Element
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^                    ^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >'test' : "test"

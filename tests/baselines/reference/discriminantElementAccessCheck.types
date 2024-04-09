@@ -115,7 +115,7 @@ function SwitchWithString(val: U) {
 >assertNever(val) : never
 >                 : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >val : never
 >    : ^^^^^
     }
@@ -201,7 +201,7 @@ function SwitchWithTemplate(val: U) {
 >assertNever(val) : never
 >                 : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >val : never
 >    : ^^^^^
     }

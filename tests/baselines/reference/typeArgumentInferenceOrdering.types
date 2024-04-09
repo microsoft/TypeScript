@@ -38,7 +38,7 @@ var x = foo(new C()).x; // was Error that property x does not exist on type {}
 >foo(new C()) : I
 >             : ^
 >foo : <T>(f: { y: T; }) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^         ^^^^^^
 >new C() : C
 >        : ^
 >C : typeof C

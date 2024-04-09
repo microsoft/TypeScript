@@ -37,7 +37,7 @@ function bar<K extends "foo">(key: K) {
 >foo(mappedObject[key]) : { foo: { x: string; }; }[K]
 >                       :                         ^^^
 >foo : <T>(x: T) => T
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >mappedObject[key] : { foo: { x: string; }; }[K]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mappedObject : { foo: { x: string; }; }

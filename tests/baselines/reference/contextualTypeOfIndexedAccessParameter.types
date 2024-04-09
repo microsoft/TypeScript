@@ -29,7 +29,7 @@ f("a", {
 >f("a", {    cb: p => p,}) : void
 >                          : ^^^^
 >f : <K extends Keys>(key: K, options: OptionsForKey[K]) => void
->  : ^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^   ^^ ^^       ^^                ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >{    cb: p => p,} : { cb: (p: number) => number; }

@@ -3,7 +3,7 @@
 === functionOverloads23.ts ===
 function foo(bar:(b:string)=>void);
 >foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->    : ^^^   ^^                   ^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >bar : (b: string) => void
 >    : ^ ^^      ^^^^^    
 >b : string
@@ -11,7 +11,7 @@ function foo(bar:(b:string)=>void);
 
 function foo(bar:(a:number)=>void);
 >foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->    : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                   ^^^^^^^^^
+>    : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >bar : (a: number) => void
 >    : ^ ^^      ^^^^^    
 >a : number
@@ -19,7 +19,7 @@ function foo(bar:(a:number)=>void);
 
 function foo(bar:(a?)=>void) { return 0 }
 >foo : { (bar: (b: string) => void): any; (bar: (a: number) => void): any; }
->    : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >bar : (a?: any) => void
 >    : ^ ^^^^^^^^^^^    
 >a : any

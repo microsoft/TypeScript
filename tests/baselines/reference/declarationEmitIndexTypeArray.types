@@ -9,13 +9,13 @@ function doSomethingWithKeys<T>(...keys: (keyof T)[]) { }
 
 const utilityFunctions = {
 >utilityFunctions : { doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    ^^           ^^^^^^^^^^^^
 >{  doSomethingWithKeys} : { doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^    ^^^                          ^^^
 
   doSomethingWithKeys
 >doSomethingWithKeys : <T>(...keys: (keyof T)[]) => void
->                    : ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^    ^^           ^^^^^^^^^
 
 };
 

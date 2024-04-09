@@ -346,8 +346,8 @@ function f(x: KeysExtendedBy<M, number>) {
 f("a");  // Error, should allow only "b"
 >f("a") : "b"
 >       : ^^^
->f : (x: "b") => "b"
->  : ^ ^^^^^^^^^^^^^
+>f : (x: KeysExtendedBy<M, number>) => "b"
+>  : ^ ^^                         ^^^^^^^^
 >"a" : "a"
 >    : ^^^
 

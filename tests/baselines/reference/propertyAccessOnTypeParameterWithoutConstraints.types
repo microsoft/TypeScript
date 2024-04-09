@@ -72,7 +72,7 @@ var r2 = i.foo.toString();
 >i.foo.toString() : string
 >                 : ^^^^^^
 >i.foo.toString : (radix?: number) => string
->               : ^     ^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^^^^^^^
 >i.foo : number
 >      : ^^^^^^
 >i : I<number>
@@ -80,7 +80,7 @@ var r2 = i.foo.toString();
 >foo : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 var r2b = i.foo['toString']();
 >r2b : string
@@ -88,7 +88,7 @@ var r2b = i.foo['toString']();
 >i.foo['toString']() : string
 >                    : ^^^^^^
 >i.foo['toString'] : (radix?: number) => string
->                  : ^     ^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^^^^^^^
 >i.foo : number
 >      : ^^^^^^
 >i : I<number>
@@ -180,11 +180,11 @@ var r4 = b.foo(1);
 >b.foo(1) : string
 >         : ^^^^^^
 >b.foo : <T>(x: T) => string
->      : ^^^^ ^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^^^^^^^^^^
 >b : { foo: <T>(x: T) => string; }
->  : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >foo : <T>(x: T) => string
->    : ^^^^ ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^^^
 >1 : 1
 >  : ^
 

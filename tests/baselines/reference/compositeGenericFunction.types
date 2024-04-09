@@ -23,9 +23,9 @@ var z: number = h<number>(f);
 >h<number>(f) : number
 >             : ^^^^^^
 >h : <R>(func: (x: number) => R) => R
->  : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^    ^^                ^^^^^^
 >f : <T>(value: T) => T
->  : ^^^^     ^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^^
 
 var z: number = h(f);
 >z : number
@@ -33,7 +33,7 @@ var z: number = h(f);
 >h(f) : number
 >     : ^^^^^^
 >h : <R>(func: (x: number) => R) => R
->  : ^^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^    ^^                ^^^^^^
 >f : <T>(value: T) => T
->  : ^^^^     ^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^^
 

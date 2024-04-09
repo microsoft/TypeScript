@@ -11,7 +11,7 @@ function foo(x: string = '');
 
 function foo(x = '') { }
 >foo : (x?: string) => any
->    : ^ ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^
 >x : string
 >  : ^^^^^^
 >'' : ""

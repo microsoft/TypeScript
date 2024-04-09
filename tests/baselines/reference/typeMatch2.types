@@ -343,11 +343,11 @@ function f4() {
 
     mf=zf;
 >mf=zf : (n: number) => boolean
->      : ^ ^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^^
 >mf : (n: any) => boolean
 >   : ^ ^^^^^^^^^^^^^^^^^
 >zf : (n: number) => boolean
->   : ^ ^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^
 
     mf(_any);
 >mf(_any) : boolean
@@ -361,7 +361,7 @@ function f4() {
 >zf(_any) : boolean
 >         : ^^^^^^^
 >zf : (n: number) => boolean
->   : ^ ^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^
 >_any : any
 >     : ^^^
 }

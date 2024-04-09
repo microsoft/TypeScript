@@ -18,11 +18,11 @@ var ppk;
 
 Puppeteer.connect;
 >Puppeteer.connect : (name: string) => void
->                  : ^    ^^^^^^^^^^^^^^^^^
+>                  : ^    ^^      ^^^^^^^^^
 >Puppeteer : typeof Puppeteer
 >          : ^^^^^^^^^^^^^^^^
 >connect : (name: string) => void
->        : ^    ^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^^
 
 === puppet.d.ts ===
 export as namespace Puppeteer;

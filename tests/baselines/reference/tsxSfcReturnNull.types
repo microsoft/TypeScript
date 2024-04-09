@@ -29,7 +29,7 @@ const foo = <Foo />;
 ><Foo /> : JSX.Element
 >        : ^^^^^^^^^^^
 >Foo : (props: any) => any
->    : ^     ^^^^^^^^^^^^^
+>    : ^     ^^   ^^^^^^^^
 
 const G = <Greet />;
 >G : JSX.Element
@@ -37,5 +37,5 @@ const G = <Greet />;
 ><Greet /> : JSX.Element
 >          : ^^^^^^^^^^^
 >Greet : (x: { name?: string; }) => any
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^
 

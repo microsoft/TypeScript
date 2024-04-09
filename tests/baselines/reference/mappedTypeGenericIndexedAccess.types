@@ -121,7 +121,7 @@ type TypesMap = {
 >         : ^^^^^^^^
 
     [0]: { foo: 'bar'; };
->[0] : { foo: 'bar'; }
+>[0] : { foo: "bar"; }
 >    : ^^^^^^^     ^^^
 >0 : 0
 >  : ^
@@ -129,7 +129,7 @@ type TypesMap = {
 >    : ^^^^^
 
     [1]: { a: 'b'; };
->[1] : { a: 'b'; }
+>[1] : { a: "b"; }
 >    : ^^^^^   ^^^
 >1 : 1
 >  : ^
@@ -172,11 +172,11 @@ const typeHandlers: TypeHandlers = {
 >console.log(p.foo) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.foo : "bar"
 >      : ^^^^^
 >p : P<0>
@@ -196,11 +196,11 @@ const typeHandlers: TypeHandlers = {
 >console.log(p.a) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.a : "b"
 >    : ^^^
 >p : P<1>

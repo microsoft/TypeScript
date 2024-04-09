@@ -20,7 +20,7 @@ my.method = function(n) {
 >my : typeof my
 >   : ^^^^^^^^^
 >method : (n: number) => number
->       : ^ ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >function(n) {    return n + 1;} : (n: number) => number
 >                                :                      
 >n : number
@@ -187,7 +187,7 @@ my.predicate.sort = my.predicate.sort || function (first, second) {
 >predicate : typeof my.predicate
 >          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
->     : ^     ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort || function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
 >                                                                                            :                                          
 >my.predicate.sort : (first: number, second: number) => number
@@ -199,7 +199,7 @@ my.predicate.sort = my.predicate.sort || function (first, second) {
 >predicate : typeof my.predicate
 >          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
->     : ^     ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
 >                                                                       :                                          
 >first : number

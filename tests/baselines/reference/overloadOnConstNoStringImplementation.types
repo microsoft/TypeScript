@@ -2,28 +2,28 @@
 
 === overloadOnConstNoStringImplementation.ts ===
 function x2(a: number, cb: (x: 'hi') => number);
->x2 : { (a: number, cb: (x: 'hi') => number): any; (a: number, cb: (x: "bye") => number): any; }
->   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >a : number
 >  : ^^^^^^
->cb : (x: 'hi') => number
+>cb : (x: "hi") => number
 >   : ^ ^^    ^^^^^      
 >x : "hi"
 >  : ^^^^
 
 function x2(a: number, cb: (x: 'bye') => number);
->x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: 'bye') => number): any; }
->   : ^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
+>x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >a : number
 >  : ^^^^^^
->cb : (x: 'bye') => number
+>cb : (x: "bye") => number
 >   : ^ ^^     ^^^^^      
 >x : "bye"
 >  : ^^^^^
 
 function x2(a: number, cb: (x: any) => number) {
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
->   : ^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >cb : (x: any) => number
@@ -34,7 +34,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('hi') : number
 >         : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 
@@ -42,7 +42,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('bye') : number
 >          : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^
 >'bye' : "bye"
 >      : ^^^^^
 
@@ -56,7 +56,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb(hm) : number
 >       : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^
 >hm : string
 >   : ^^^^^^
 
@@ -64,7 +64,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb('uh') : number
 >         : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^
 >'uh' : "uh"
 >     : ^^^^
 
@@ -72,7 +72,7 @@ function x2(a: number, cb: (x: any) => number) {
 >cb(1) : number
 >      : ^^^^^^
 >cb : (x: any) => number
->   : ^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -91,7 +91,7 @@ var cb: (number) => number = (x: number) => 1;
 x2(1, cb); // error
 >x2(1, cb) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
->   : ^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >1 : 1
 >  : ^
 >cb : (number: any) => number
@@ -100,10 +100,10 @@ x2(1, cb); // error
 x2(1, (x: 'hi') => 1); // error
 >x2(1, (x: 'hi') => 1) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
->   : ^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >1 : 1
 >  : ^
->(x: 'hi') => 1 : (x: 'hi') => number
+>(x: 'hi') => 1 : (x: "hi") => number
 >               : ^ ^^    ^^^^^^^^^^^
 >x : "hi"
 >  : ^^^^
@@ -113,7 +113,7 @@ x2(1, (x: 'hi') => 1); // error
 x2(1, (x: string) => 1);
 >x2(1, (x: string) => 1) : any
 >x2 : { (a: number, cb: (x: "hi") => number): any; (a: number, cb: (x: "bye") => number): any; }
->   : ^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                   ^^^^^^^^^ ^^      ^^  ^^                    ^^^^^^^^^
 >1 : 1
 >  : ^
 >(x: string) => 1 : (x: string) => number

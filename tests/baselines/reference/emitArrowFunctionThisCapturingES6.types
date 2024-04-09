@@ -52,7 +52,7 @@ foo(() => {
 >foo(() => {    this.age = 100;    return true;}) : void
 >                                                 : ^^^^
 >foo : (func: () => boolean) => void
->    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^             ^^^^^^^^^
 >() => {    this.age = 100;    return true;} : () => true
 >                                            : ^^^^^^^^^^
 

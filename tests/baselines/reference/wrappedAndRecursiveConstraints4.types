@@ -29,7 +29,7 @@ class C<T extends { length: number }> {
         }
         return bar;
 >bar : <V extends U>(x: V) => V
->    : ^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^
     }
 }
 

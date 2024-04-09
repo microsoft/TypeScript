@@ -15,7 +15,7 @@ fn("a" in { "a": true });
 >fn("a" in { "a": true }) : boolean
 >                         : ^^^^^^^
 >fn : (val: boolean) => boolean
->   : ^   ^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^       ^^^^^^^^^^^^
 >"a" in { "a": true } : boolean
 >                     : ^^^^^^^
 >"a" : "a"

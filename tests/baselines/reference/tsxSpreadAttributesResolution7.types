@@ -100,5 +100,5 @@ let y2 = <TextComponent {...textPropsTrue} />
 >TextComponent : typeof TextComponent
 >              : ^^^^^^^^^^^^^^^^^^^^
 >textPropsTrue : { editable: true; onEdit: (newText: string) => void; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^
 

@@ -35,13 +35,13 @@ const foo = <Foo />;
 ><Foo /> : JSX.Element
 >        : ^^^^^^^^^^^
 >Foo : (props: any) => undefined
->    : ^     ^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^   ^^^^^^^^^^^^^^
 
 const G = <Greet />;
 >G : JSX.Element
 >  : ^^^^^^^^^^^
 ><Greet /> : JSX.Element
 >          : ^^^^^^^^^^^
->Greet : (x: { name?: string | undefined; }) => undefined
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Greet : (x: { name?: string; }) => undefined
+>      : ^ ^^                  ^^^^^^^^^^^^^^
 

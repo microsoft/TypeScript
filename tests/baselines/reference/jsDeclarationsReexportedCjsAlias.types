@@ -77,11 +77,11 @@ module.exports = {
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >{    bar,    SomeClass} : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
->                        : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     bar,
 >bar : (a: string) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 
     SomeClass
 >SomeClass : typeof SomeClass

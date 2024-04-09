@@ -147,7 +147,7 @@ interface I {
 
     foo(private x, public y);
 >foo : { (x: any, y: any): any; (x: number, y: string): any; }
->    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

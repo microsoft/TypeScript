@@ -191,11 +191,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('a') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 
@@ -309,11 +309,11 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj.hasOwnProperty('b') : boolean
 >                        : ^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'b' : "b"
 >    : ^^^
 
@@ -899,7 +899,7 @@ f11(ox1);  // string
 >f11(ox1) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox1 : { p: string; }
 >    : ^^^^^^^^^^^^^^
 
@@ -907,7 +907,7 @@ f11(ox2);  // string | undefined
 >f11(ox2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox2 : { p: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -915,7 +915,7 @@ f11(ox3);  // string
 >f11(ox3) : string
 >         : ^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox3 : { p?: string; }
 >    : ^^^^^^^^^^^^^^^
 
@@ -923,7 +923,7 @@ f11(ox4);  // string | undefined
 >f11(ox4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f11 : <T>(x: { p?: T; }) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox4 : { p?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -937,7 +937,7 @@ f12(tx1);  // string
 >f12(tx1) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^ ^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -945,7 +945,7 @@ f12(tx2);  // string | undefined
 >f12(tx2) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^ ^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -953,7 +953,7 @@ f12(tx3);  // string
 >f12(tx3) : string
 >         : ^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^ ^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -961,7 +961,7 @@ f12(tx4);  // string | undefined
 >f12(tx4) : string | undefined
 >         : ^^^^^^^^^^^^^^^^^^
 >f12 : <T>(x: [T?]) => T
->    : ^^^^ ^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -975,7 +975,7 @@ f13(ox1);  // { p: string }
 >f13(ox1) : { p: string; }
 >         : ^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox1 : { p: string; }
 >    : ^^^^^^^^^^^^^^
 
@@ -983,7 +983,7 @@ f13(ox2);  // { p: string | undefined }
 >f13(ox2) : { p: string | undefined; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox2 : { p: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -991,7 +991,7 @@ f13(ox3);  // { p: string }
 >f13(ox3) : { p: string; }
 >         : ^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox3 : { p?: string; }
 >    : ^^^^^^^^^^^^^^^
 
@@ -999,7 +999,7 @@ f13(ox4);  // { p: string | undefined }
 >f13(ox4) : { p: string | undefined; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >ox4 : { p?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1007,7 +1007,7 @@ f13(tx1);  // [string]
 >f13(tx1) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx1 : [string]
 >    : ^^^^^^^^
 
@@ -1015,7 +1015,7 @@ f13(tx2);  // [string | undefined]
 >f13(tx2) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx2 : [string | undefined]
 >    : ^^^^^^^^^^^^^^^^^^^^
 
@@ -1023,7 +1023,7 @@ f13(tx3);  // [string]
 >f13(tx3) : [string]
 >         : ^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx3 : [string?]
 >    : ^^^^^^^^^
 
@@ -1031,7 +1031,7 @@ f13(tx4);  // [string | undefined]
 >f13(tx4) : [string | undefined]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >f13 : <T>(x: Partial<T>) => T
->    : ^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >tx4 : [(string | undefined)?]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1086,7 +1086,7 @@ function aa(input: Bar): void {
 >expectNotUndefined(input.bar) : number
 >                              : ^^^^^^
 >expectNotUndefined : <T>(value: Undefinable<T>) => T
->                   : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^     ^^              ^^^^^^
 >input.bar : number | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 >input : Bar
@@ -1098,7 +1098,7 @@ function aa(input: Bar): void {
 >bb(notUndefinedVal) : void
 >                    : ^^^^
 >bb : (input: number) => void
->   : ^     ^^^^^^^^^^^^^^^^^
+>   : ^     ^^      ^^^^^^^^^
 >notUndefinedVal : number
 >                : ^^^^^^
 }

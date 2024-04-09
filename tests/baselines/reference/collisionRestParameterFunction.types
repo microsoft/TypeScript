@@ -68,7 +68,7 @@ function f3NoError() {
 
 function f4(_i: number, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >rest : any[]
@@ -76,7 +76,7 @@ function f4(_i: number, ...rest); // no codegen no error
 
 function f4(_i: string, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 >rest : any[]
@@ -84,7 +84,7 @@ function f4(_i: string, ...rest); // no codegen no error
 
 function f4(_i: any, ...rest) { // error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : any
 >rest : any[]
 >     : ^^^^^
@@ -92,25 +92,25 @@ function f4(_i: any, ...rest) { // error
 
 function f4NoError(_i: number); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^      ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 
 function f4NoError(_i: string); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 
 function f4NoError(_i: any) { // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : any
 }
 
 declare function f5(_i: number, ...rest); // no codegen no error
 >f5 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >rest : any[]
@@ -118,7 +118,7 @@ declare function f5(_i: number, ...rest); // no codegen no error
 
 declare function f5(_i: string, ...rest); // no codegen no error
 >f5 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 >rest : any[]
@@ -126,13 +126,13 @@ declare function f5(_i: string, ...rest); // no codegen no error
 
 declare function f6(_i: number); // no codegen no error
 >f6 : { (_i: number): any; (_i: string): any; }
->   : ^^^  ^^      ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 
 declare function f6(_i: string); // no codegen no error
 >f6 : { (_i: number): any; (_i: string): any; }
->   : ^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^
+>   : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 

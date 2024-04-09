@@ -222,7 +222,7 @@ function f10(shape: Shape) {
 >getProperty(shape, "name") : string
 >                           : ^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"name" : "name"
@@ -234,7 +234,7 @@ function f10(shape: Shape) {
 >getProperty(shape, "size") : string | number | boolean
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"size" : "size"
@@ -246,7 +246,7 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "name" : "size") : string | number | boolean
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
@@ -262,7 +262,7 @@ function f10(shape: Shape) {
 >setProperty(shape, "name", "rectangle") : void
 >                                        : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^     ^^^^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"name" : "name"
@@ -274,7 +274,7 @@ function f10(shape: Shape) {
 >setProperty(shape, "size", 10) : void
 >                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^     ^^^^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"size" : "size"
@@ -286,7 +286,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "name" : "size", 10) : void
 >                                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^     ^^^^^^^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
