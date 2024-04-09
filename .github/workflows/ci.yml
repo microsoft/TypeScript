@@ -154,6 +154,7 @@ jobs:
 
       - run: npx hereby lkg
       - run: |
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack
           mv typescript*.tgz typescript.tgz
           echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
