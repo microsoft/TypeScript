@@ -37746,7 +37746,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (
                     expr.kind === SyntaxKind.CallExpression &&
                     (expr as CallExpression).expression.kind === SyntaxKind.Identifier &&
-                    checkExpressionCached((expr as CallExpression).expression).symbol === getMergedSymbol(func.symbol)
+                    checkExpressionCached((expr as CallExpression).expression).symbol === getMergedSymbol(func.symbol) &&
+                    (!isFunctionExpressionOrArrowFunction(func.symbol.valueDeclaration!) || isVariableDeclaration(func.symbol.valueDeclaration.parent) && isConstantVariable(func.symbol.valueDeclaration.parent.symbol))
                 ) {
                     hasReturnOfTypeNever = true;
                     return;
