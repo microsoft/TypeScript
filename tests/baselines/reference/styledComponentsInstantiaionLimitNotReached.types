@@ -1,5 +1,15 @@
 //// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
 
+<<<<<<< HEAD
+=======
+=== Performance Stats ===
+Identity cache: 200 / 200 (nearest 100)
+Assignability cache: 13,300 / 13,500 (nearest 100)
+Type Count: 27,200 / 27,600 (nearest 100)
+Instantiation count: 374,500 / 375,500 (nearest 500)
+Symbol count: 92,000 / 92,000 (nearest 500)
+
+>>>>>>> 2b8eacd18f (Merge 2dbe580f38bc2daaa330cd1173613880316eb745 into 7a4cbfa7ea8c6b7a09a84d04bd7e45c815e8e0d1)
 === styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
 import * as React from "react";
