@@ -32,7 +32,7 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
-    type FutureSourceFile,
+    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,

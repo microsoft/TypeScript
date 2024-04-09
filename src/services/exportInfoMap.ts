@@ -13,7 +13,7 @@ import {
     firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
-    type FutureSourceFile,
+    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getDirectoryPath,
