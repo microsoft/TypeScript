@@ -736,6 +736,7 @@ import {
     isThisInTypeQuery,
     isThisProperty,
     isThisTypeParameter,
+    isThisTypePredicate,
     isTransientSymbol,
     isTupleTypeNode,
     isTypeAlias,
@@ -14858,16 +14859,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return type.resolvedApparentType || (type.resolvedApparentType = getResolvedApparentTypeOfMappedType(type));
     }
 
-    function getResolvedApparentTypeOfMappedType(type: MappedType) {
+    function getResolvedApparentTypeOfMappedType(type: MappedType): Type {
         const target = (type.target ?? type) as MappedType;
         const typeVariable = getHomomorphicTypeVariable(target);
         if (typeVariable && !target.declaration.nameType) {
-            const constraint = getConstraintTypeFromMappedType(type);
-            if (constraint.flags & TypeFlags.Index) {
-                const baseConstraint = getBaseConstraintOfType((constraint as IndexType).type);
-                if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleOrIntersection(t))) {
-                    return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
-                }
+            // We have a homomorphic mapped type or an instantiation of a homomorphic mapped type, i.e. a type
+            // of the form { [P in keyof T]: X }. Obtain the modifiers type (the T of the keyof T), and if it is
+            // another generic mapped type, recursively obtain its apparent type. Otherwise, obtain its base
+            // constraint. Then, if every constituent of the base constraint is an array or tuple type, apply
+            // this mapped type to the base constraint. It is safe to recurse when the modifiers type is a
+            // mapped type because we protect again circular constraints in getTypeFromMappedTypeNode.
+            const modifiersType = getModifiersTypeFromMappedType(type);
+            const baseConstraint = isGenericMappedType(modifiersType) ? getApparentTypeOfMappedType(modifiersType) : getBaseConstraintOfType(modifiersType);
+            if (baseConstraint && everyType(baseConstraint, t => isArrayOrTupleType(t) || isArrayOrTupleOrIntersection(t))) {
+                return instantiateType(target, prependTypeMapping(typeVariable, baseConstraint, type.mapper));
             }
         }
         return type;
@@ -21265,7 +21270,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (sourceTypePredicate) {
                     result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
                 }
-                else if (isIdentifierTypePredicate(targetTypePredicate)) {
+                else if (isIdentifierTypePredicate(targetTypePredicate) || isThisTypePredicate(targetTypePredicate)) {
                     if (reportErrors) {
                         errorReporter!(Diagnostics.Signature_0_must_be_a_type_predicate, signatureToString(source));
                     }
