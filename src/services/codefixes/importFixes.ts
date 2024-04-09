@@ -214,6 +214,7 @@ registerCodeFix({
  * The node kinds that may be the declaration of an alias symbol imported/required from an external module.
  * `ImportClause` is the declaration for a syntactic default import. `VariableDeclaration` is the declaration
  * for a non-destructured `require` call.
+ * @internal
  */
 export type ImportOrRequireAliasDeclaration = ImportEqualsDeclaration | ImportClause | ImportSpecifier | NamespaceImport | VariableDeclarationInitializedTo<RequireOrImportCall> | BindingElement;
 
