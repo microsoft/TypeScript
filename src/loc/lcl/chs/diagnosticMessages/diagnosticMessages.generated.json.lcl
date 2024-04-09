@@ -10369,7 +10369,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' cannot have an initializer because it is marked abstract.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[属性“{0}”不能具有初始化表杰式，因为它标记为摘要。]]></Val>
+            <Val><![CDATA[属性“{0}”不能具有初始化表达式，因为它标记为抽象。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -10378,7 +10378,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Property '{0}' comes from an index signature, so it must be accessed with ['{0}']5D;.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[属性“{0}”来自索引签名，因此必须使用[“{0}”]5D;访问它。]]></Val>
+            <Val><![CDATA[属性“{0}”来自索引签名，因此必须使用['{0}']5D;访问它。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
