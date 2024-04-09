@@ -1,14 +1,5 @@
 //// [tests/cases/conformance/jsx/tsxReactEmitSpreadAttribute.ts] ////
 
-<<<<<<< HEAD
-=======
-=== Performance Stats ===
-Assignability cache: 2,200 / 2,300 (nearest 100)
-Type Count: 6,900 / 7,000 (nearest 100)
-Instantiation count: 73,000 / 73,500 (nearest 500)
-Symbol count: 70,500 / 71,000 (nearest 500)
-
->>>>>>> 2b8eacd18f (Merge 2dbe580f38bc2daaa330cd1173613880316eb745 into 7a4cbfa7ea8c6b7a09a84d04bd7e45c815e8e0d1)
 === test.tsx ===
 /// <reference path="react16.d.ts" />
 
