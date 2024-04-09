@@ -2,9 +2,9 @@
 
 === Performance Stats ===
 Identity cache: 200 / 200 (nearest 100)
-Assignability cache: 13,300 / 13,500 (nearest 100)
-Type Count: 27,300 / 27,600 (nearest 100)
-Instantiation count: 374,500 / 375,500 (nearest 500)
+Assignability cache: 12,000 / 12,200 (nearest 100)
+Type Count: 25,800 / 26,500 (nearest 100)
+Instantiation count: 361,000 / 362,500 (nearest 500)
 Symbol count: 92,000 / 92,000 (nearest 500)
 
 === styledComponentsInstantiaionLimitNotReached.ts ===

@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Assignability cache: 300 / 300 (nearest 100)
-Type Count: 1,200 / 1,400 (nearest 100)
+Type Count: 1,300 / 1,400 (nearest 100)
 Instantiation count: 1,000 / 1,000 (nearest 500)
 Symbol count: 27,000 / 27,000 (nearest 500)
 
@@ -1219,14 +1219,14 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
 >     : ^ ^^ ^^  ^^             ^^  ^^             ^^^^^    
 >k1 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
->k2 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k2 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'a');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'a') : void
 >                                                       : ^^^^
->func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
->     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof (T & U)) => void
+>     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -1243,8 +1243,8 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'b');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'b') : void
 >                                                       : ^^^^
->func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
->     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof (T & U)) => void
+>     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -1261,8 +1261,8 @@ function f70(func: <T, U>(k1: keyof (T | U), k2: keyof (T & U)) => void) {
     func<{ a: any, b: any }, { a: any, c: any }>('a', 'c');
 >func<{ a: any, b: any }, { a: any, c: any }>('a', 'c') : void
 >                                                       : ^^^^
->func : <T, U>(k1: keyof T & keyof U, k2: keyof T | keyof U) => void
->     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func : <T, U>(k1: keyof T & keyof U, k2: keyof (T & U)) => void
+>     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -1430,8 +1430,8 @@ function f72(func: <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T &
 function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) {
 >f73 : (func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]) => void
 >    : ^    ^^                                                               ^^^^^^^^^
->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^          
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>     : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^          
 >x : T
 >  : ^
 >y : U
@@ -1444,8 +1444,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >  : ^^^^^^
 >func({ a: 1, b: "hello" }, { c: true }, 'a') : number
 >                                             : ^^^^^^
->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -1470,8 +1470,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >  : ^^^^^^
 >func({ a: 1, b: "hello" }, { c: true }, 'b') : string
 >                                             : ^^^^^^
->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -1496,8 +1496,8 @@ function f73(func: <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[
 >  : ^^^^^^^
 >func({ a: 1, b: "hello" }, { c: true }, 'c') : boolean
 >                                             : ^^^^^^^
->func : <T, U, K extends keyof T | keyof U>(x: T, y: U, k: K) => (T & U)[K]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
+>func : <T, U, K extends keyof (T & U)>(x: T, y: U, k: K) => (T & U)[K]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: "hello" } : { a: number; b: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -2545,8 +2545,8 @@ declare class Component1<Data, Computed> {
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     get<K extends keyof (Data & Computed)>(key: K): (Data & Computed)[K];
->get : <K extends keyof Data | keyof Computed>(key: K) => (Data & Computed)[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^                    
+>get : <K extends keyof (Data & Computed)>(key: K) => (Data & Computed)[K]
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^                    
 >key : K
 >    : ^
 }
@@ -2763,12 +2763,12 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
     handler.onChange('preset')
 >handler.onChange('preset') : void
 >                           : ^^^^
->handler.onChange : (name: keyof T | "preset") => void
->                 : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>handler.onChange : (name: keyof (T & { preset: number; })) => void
+>                 : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >handler : Handler<T & { preset: number; }>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->onChange : (name: keyof T | "preset") => void
->         : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>onChange : (name: keyof (T & { preset: number; })) => void
+>         : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'preset' : "preset"
 >         : ^^^^^^^^
 }

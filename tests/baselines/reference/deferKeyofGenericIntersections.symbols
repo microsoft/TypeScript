@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/deferKeyofGenericIntersections.ts] ////
+
+=== deferKeyofGenericIntersections.ts ===
+type Foo = { x: string } | undefined;
+>Foo : Symbol(Foo, Decl(deferKeyofGenericIntersections.ts, 0, 0))
+>x : Symbol(x, Decl(deferKeyofGenericIntersections.ts, 0, 12))
+
+type Bar = { y: string };
+>Bar : Symbol(Bar, Decl(deferKeyofGenericIntersections.ts, 0, 37))
+>y : Symbol(y, Decl(deferKeyofGenericIntersections.ts, 1, 12))
+
+type FooAndBar = Foo & Bar;
+>FooAndBar : Symbol(FooAndBar, Decl(deferKeyofGenericIntersections.ts, 1, 25))
+>Foo : Symbol(Foo, Decl(deferKeyofGenericIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(deferKeyofGenericIntersections.ts, 0, 37))
+
+type Keys<T, U> = keyof (T & U);
+>Keys : Symbol(Keys, Decl(deferKeyofGenericIntersections.ts, 3, 27))
+>T : Symbol(T, Decl(deferKeyofGenericIntersections.ts, 5, 10))
+>U : Symbol(U, Decl(deferKeyofGenericIntersections.ts, 5, 12))
+>T : Symbol(T, Decl(deferKeyofGenericIntersections.ts, 5, 10))
+>U : Symbol(U, Decl(deferKeyofGenericIntersections.ts, 5, 12))
+
+type K1 = keyof Foo;  // never
+>K1 : Symbol(K1, Decl(deferKeyofGenericIntersections.ts, 5, 32))
+>Foo : Symbol(Foo, Decl(deferKeyofGenericIntersections.ts, 0, 0))
+
+type K2 = keyof Bar;  // "y"
+>K2 : Symbol(K2, Decl(deferKeyofGenericIntersections.ts, 7, 20))
+>Bar : Symbol(Bar, Decl(deferKeyofGenericIntersections.ts, 0, 37))
+
+type K3 = Keys<Foo, Bar>;  // "x" | "y"
+>K3 : Symbol(K3, Decl(deferKeyofGenericIntersections.ts, 8, 20))
+>Keys : Symbol(Keys, Decl(deferKeyofGenericIntersections.ts, 3, 27))
+>Foo : Symbol(Foo, Decl(deferKeyofGenericIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(deferKeyofGenericIntersections.ts, 0, 37))
+
+type K4 = keyof (Foo & Bar);  // "x" | "y"
+>K4 : Symbol(K4, Decl(deferKeyofGenericIntersections.ts, 9, 25))
+>Foo : Symbol(Foo, Decl(deferKeyofGenericIntersections.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(deferKeyofGenericIntersections.ts, 0, 37))
+
+// Repro from #51331
+
+type GestureKey = "drag";
+>GestureKey : Symbol(GestureKey, Decl(deferKeyofGenericIntersections.ts, 10, 28))
+
+type DragState = { movement: [number, number]; };
+>DragState : Symbol(DragState, Decl(deferKeyofGenericIntersections.ts, 14, 25))
+>movement : Symbol(movement, Decl(deferKeyofGenericIntersections.ts, 15, 18))
+
+interface State {
+>State : Symbol(State, Decl(deferKeyofGenericIntersections.ts, 15, 49))
+
+    drag?: DragState;
+>drag : Symbol(State.drag, Decl(deferKeyofGenericIntersections.ts, 17, 17))
+>DragState : Symbol(DragState, Decl(deferKeyofGenericIntersections.ts, 14, 25))
+}
+
+type SharedGestureState = {
+>SharedGestureState : Symbol(SharedGestureState, Decl(deferKeyofGenericIntersections.ts, 19, 1))
+
+    dragging?: boolean;
+>dragging : Symbol(dragging, Decl(deferKeyofGenericIntersections.ts, 21, 27))
+
+};
+
+type FullGestureState<Key extends GestureKey> = SharedGestureState & NonNullable<State[Key]>;
+>FullGestureState : Symbol(FullGestureState, Decl(deferKeyofGenericIntersections.ts, 23, 2))
+>Key : Symbol(Key, Decl(deferKeyofGenericIntersections.ts, 25, 22))
+>GestureKey : Symbol(GestureKey, Decl(deferKeyofGenericIntersections.ts, 10, 28))
+>SharedGestureState : Symbol(SharedGestureState, Decl(deferKeyofGenericIntersections.ts, 19, 1))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>State : Symbol(State, Decl(deferKeyofGenericIntersections.ts, 15, 49))
+>Key : Symbol(Key, Decl(deferKeyofGenericIntersections.ts, 25, 22))
+
+type Handler<Key extends GestureKey> = (state: Omit<FullGestureState<Key>, "event">) => void;
+>Handler : Symbol(Handler, Decl(deferKeyofGenericIntersections.ts, 25, 93))
+>Key : Symbol(Key, Decl(deferKeyofGenericIntersections.ts, 27, 13))
+>GestureKey : Symbol(GestureKey, Decl(deferKeyofGenericIntersections.ts, 10, 28))
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 27, 40))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>FullGestureState : Symbol(FullGestureState, Decl(deferKeyofGenericIntersections.ts, 23, 2))
+>Key : Symbol(Key, Decl(deferKeyofGenericIntersections.ts, 27, 13))
+
+const f1 = (state: Omit<FullGestureState<"drag">, "event">) => {
+>f1 : Symbol(f1, Decl(deferKeyofGenericIntersections.ts, 29, 5))
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 29, 12))
+>Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
+>FullGestureState : Symbol(FullGestureState, Decl(deferKeyofGenericIntersections.ts, 23, 2))
+
+  state;
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 29, 12))
+
+  state.movement;
+>state.movement : Symbol(movement, Decl(deferKeyofGenericIntersections.ts, 15, 18))
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 29, 12))
+>movement : Symbol(movement, Decl(deferKeyofGenericIntersections.ts, 15, 18))
+
+};
+
+const f2: Handler<"drag"> = (state) => {
+>f2 : Symbol(f2, Decl(deferKeyofGenericIntersections.ts, 34, 5))
+>Handler : Symbol(Handler, Decl(deferKeyofGenericIntersections.ts, 25, 93))
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 34, 29))
+
+  state;
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 34, 29))
+
+  state.movement;
+>state.movement : Symbol(movement, Decl(deferKeyofGenericIntersections.ts, 15, 18))
+>state : Symbol(state, Decl(deferKeyofGenericIntersections.ts, 34, 29))
+>movement : Symbol(movement, Decl(deferKeyofGenericIntersections.ts, 15, 18))
+
+};
+

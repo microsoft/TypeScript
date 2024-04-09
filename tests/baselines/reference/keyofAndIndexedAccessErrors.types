@@ -312,8 +312,8 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >   : ^^^^^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -338,8 +338,8 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >      : ^^^
 >x : T | U
 >  : ^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 
     x[k4];  // Error
 >x[k4] : any
@@ -366,12 +366,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >   : ^^^^^^^^^^^^^^^^^
 
     y[k3];
->y[k3] : (T & U)[keyof T | keyof U]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y[k3] : (T & U)[keyof (T & U)]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
 >y : T & U
 >  : ^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 
     y[k4];
 >y[k4] : (T & U)[keyof T | keyof U]
@@ -390,12 +390,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >   : ^^^^^^^^^^^^^^^^^
 
     k1 = k3;  // Error
->k1 = k3 : keyof T | keyof U
->        : ^^^^^^^^^^^^^^^^^
+>k1 = k3 : keyof (T & U)
+>        : ^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 
     k1 = k4;  // Error
 >k1 = k4 : keyof T | keyof U
@@ -414,12 +414,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >   : ^^^^^^^^^^^^^^^^^
 
     k2 = k3;  // Error
->k2 = k3 : keyof T | keyof U
->        : ^^^^^^^^^^^^^^^^^
+>k2 = k3 : keyof (T & U)
+>        : ^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 
     k2 = k4;  // Error
 >k2 = k4 : keyof T | keyof U
@@ -432,24 +432,24 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
     k3 = k1;
 >k3 = k1 : keyof T & keyof U
 >        : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 >k1 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
 
     k3 = k2;
 >k3 = k2 : keyof T & keyof U
 >        : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 >k2 : keyof T & keyof U
 >   : ^^^^^^^^^^^^^^^^^
 
     k3 = k4;
 >k3 = k4 : keyof T | keyof U
 >        : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -470,12 +470,12 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 >   : ^^^^^^^^^^^^^^^^^
 
     k4 = k3;
->k4 = k3 : keyof T | keyof U
->        : ^^^^^^^^^^^^^^^^^
+>k4 = k3 : keyof (T & U)
+>        : ^^^^^^^^^^^^^
 >k4 : keyof T | keyof U
 >   : ^^^^^^^^^^^^^^^^^
->k3 : keyof T | keyof U
->   : ^^^^^^^^^^^^^^^^^
+>k3 : keyof (T & U)
+>   : ^^^^^^^^^^^^^
 }
 
 // Repro from #17166

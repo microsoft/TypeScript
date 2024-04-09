@@ -2,9 +2,9 @@
 
 === Performance Stats ===
 Assignability cache: 100 / 100 (nearest 100)
-Type Count: 2,800 / 2,900 (nearest 100)
-Instantiation count: 7,500 / 7,500 (nearest 500)
-Symbol count: 26,000 / 26,000 (nearest 500)
+Type Count: 4,700 / 4,800 (nearest 100)
+Instantiation count: 3,500 / 3,500 (nearest 500)
+Symbol count: 25,500 / 26,000 (nearest 500)
 
 === divideAndConquerIntersections.ts ===
 type QQ<T extends string[]> =
