@@ -31,7 +31,7 @@ declare namespace Intl {
         /** The hour cycle type associated with the locale. */
         hourCycle: DateTimeFormatOptionsHourCycle | undefined;
         /** The primary language subtag associated with the locale. */
-        language: string | undefined;
+        language: string;
         /** The number system used by the locale. */
         numberingSystem: string | undefined;
         /** The numeric sorting rule associated with the locale. */
