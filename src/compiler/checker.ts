@@ -1505,6 +1505,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var lastGetCombinedModifierFlagsNode: Declaration | undefined;
     var lastGetCombinedModifierFlagsResult = ModifierFlags.None;
 
+    var inFullCheckAfterPartial = true;
+
     // for public members that accept a Node or one of its subtypes, we must guard against
     // synthetic nodes created during transformations by calling `getParseTreeNode`.
     // for most of these, we perform the guard only on `checker` to avoid any possible
@@ -46853,6 +46855,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function checkSourceElementWorker(node: Node): void {
+        if (inFullCheckAfterPartial && getNodeCheckFlags(node) & NodeCheckFlags.PartiallyTypeChecked) {
+            return;
+        }
+
         if (canHaveJSDoc(node)) {
             forEach(node.jsDoc, ({ comment, tags }) => {
                 checkJSDocCommentWorker(comment);
@@ -47293,6 +47299,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             clear(potentialUnusedRenamedBindingElementsInTypes);
 
             if (links.flags & NodeCheckFlags.PartiallyTypeChecked) {
+                inFullCheckAfterPartial = true;
                 potentialThisCollisions = links.potentialThisCollisions!;
                 potentialNewTargetCollisions = links.potentialNewTargetCollisions!;
                 potentialWeakMapSetCollisions = links.potentialWeakMapSetCollisions!;
@@ -47348,6 +47355,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             links.flags |= NodeCheckFlags.TypeChecked;
+            inFullCheckAfterPartial = false;
         }
     }
 
@@ -47380,6 +47388,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             );
 
             links.flags |= NodeCheckFlags.PartiallyTypeChecked;
+            for (const node of nodes) {
+                const nodeLinks = getNodeLinks(node);
+                nodeLinks.flags |= NodeCheckFlags.PartiallyTypeChecked;
+            }
         }
     }
 
