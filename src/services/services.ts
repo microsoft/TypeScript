@@ -1801,7 +1801,7 @@ export function createLanguageService(
         };
         program = createProgram(options);
 
-        // unconditionally set oldProgram to undefined to prevent it from being captured in closure
+        // JSC memory leak ugly fix GH#58137
         options.oldProgram = undefined;
 
         // 'getOrCreateSourceFile' depends on caching but should be used past this point.
