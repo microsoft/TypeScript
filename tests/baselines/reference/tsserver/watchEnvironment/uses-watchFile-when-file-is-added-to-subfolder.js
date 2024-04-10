@@ -1,20 +1,20 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/username/project/src/index.ts]
+//// [/a/username/project/src/index.ts] Inode:: 5
 import {} from "./"
 
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/project/src/file1.ts] Inode:: 6
 
 
-//// [/a/username/project/tsconfig.json]
+//// [/a/username/project/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "synchronousWatchDirectory": true
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 9
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -41,6 +41,16 @@ Info seq  [hh:mm:ss:mss] Search path: /a/username/project/src
 Info seq  [hh:mm:ss:mss] For info: /a/username/project/src/index.ts :: Config file name: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/tsconfig.json 2000 undefined Project: /a/username/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/a/username/project/tsconfig.json",
+        "reason": "Creating possible configured project for /a/username/project/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /a/username/project/tsconfig.json : {
  "rootNames": [
   "/a/username/project/src/file1.ts",
@@ -64,7 +74,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -81,6 +91,67 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Imported via "./" from file 'src/index.ts'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/a/username/project/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "a0af5b27731f9d2151d1de4a531bb7e00d38f2466c0dcec1894287686cf1be28",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 19,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {},
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/a/username/project/src/index.ts",
+        "configFile": "/a/username/project/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/a/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -104,11 +175,30 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /a/username/project/tsconfig.json: *new*
-  {}
+  {"inode":7}
+
+Projects::
+/a/username/project/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Before request
 
@@ -153,15 +243,26 @@ Before running Timeout callback:: count: 3
 1: /a/username/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
 3: /a/username/project/tsconfig.jsonFailedLookupInvalidation
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/project/src/file2.ts] Inode:: 10
 
 
+
+Timeout callback:: count: 3
+1: /a/username/project/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+Projects::
+/a/username/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /a/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/src/file2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -182,7 +283,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 After running Timeout callback:: count: 1
-4: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/username/project:
@@ -194,13 +294,42 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":9}
 /a/username/project/src/file1.ts:
-  {}
+  {"inode":6}
 /a/username/project/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /a/username/project/tsconfig.json:
-  {}
+  {"inode":7}
+
+Timeout callback:: count: 1
+2: *ensureProjectForOpenFiles* *deleted*
+3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*
+4: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/a/username/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file1.ts
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/file2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/username/project/tsconfig.json
+/a/username/project/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/username/project/tsconfig.json *default*
 
 Before request
 

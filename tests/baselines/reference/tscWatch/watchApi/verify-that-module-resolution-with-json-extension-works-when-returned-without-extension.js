@@ -36,7 +36,7 @@ import settings from './settings.json';
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mindex.ts[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS1259: [0mModule '"/user/username/projects/myproject/settings"' can only be default-imported using the 'esModuleInterop' flag
 
@@ -48,9 +48,31 @@ Output::
     [7m [0m [96m~[0m
     This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
 
-[[90m12:00:26 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/settings.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/index.ts"
@@ -76,26 +98,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/settings.json (used version)
 /user/username/projects/myproject/index.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/settings.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-

@@ -63,7 +63,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w --traceResolution
 Output::
 >> Screen clear
-[[90m12:00:39 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/user/username/projects/myproject/package.json' does not exist.
 File '/user/username/projects/package.json' does not exist.
@@ -93,6 +93,7 @@ File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '
 File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
 Exiting conditional exports.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg/import.d.ts', result '/user/username/projects/myproject/node_modules/pkg/import.d.ts'.
@@ -151,34 +152,22 @@ File '/a/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:00:44 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-Program root files: [
-  "/user/username/projects/myproject/a.ts",
-  "/user/username/projects/myproject/index.ts"
-]
-Program options: {
-  "moduleResolution": 3,
-  "watch": true,
-  "traceResolution": true,
-  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/a.ts
-/user/username/projects/myproject/node_modules/pkg/import.d.ts
-/user/username/projects/myproject/index.ts
+//// [/user/username/projects/myproject/a.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = 10;
 
-No cached semantic diagnostics in the builder::
 
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/a.ts (used version)
-/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
-/user/username/projects/myproject/index.ts (used version)
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
@@ -218,20 +207,32 @@ FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
 
+Program root files: [
+  "/user/username/projects/myproject/a.ts",
+  "/user/username/projects/myproject/index.ts"
+]
+Program options: {
+  "moduleResolution": 3,
+  "watch": true,
+  "traceResolution": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/a.ts
+/user/username/projects/myproject/node_modules/pkg/import.d.ts
+/user/username/projects/myproject/index.ts
+
+No cached semantic diagnostics in the builder::
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/a.ts (used version)
+/user/username/projects/myproject/node_modules/pkg/import.d.ts (used version)
+/user/username/projects/myproject/index.ts (used version)
+
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-
-
 
 Change:: modify aFile by adding import
 
@@ -241,12 +242,16 @@ export const x = 10;
 import type { ImportInterface } from "pkg" assert { "resolution-mode": "import" }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:47 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
@@ -303,8 +308,12 @@ File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 
-[[90m12:00:54 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/a.js] file written with same contents
+//// [/user/username/projects/myproject/index.js] file written with same contents
 
 
 Program root files: [
@@ -331,6 +340,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/a.js] file written with same contents
-//// [/user/username/projects/myproject/index.js] file written with same contents

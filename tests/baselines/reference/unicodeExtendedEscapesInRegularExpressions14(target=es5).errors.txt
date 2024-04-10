@@ -1,6 +1,6 @@
 unicodeExtendedEscapesInRegularExpressions14.ts(2,13): error TS1125: Hexadecimal digit expected.
-unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1506: Unexpected '}'. Did you mean to escape it with backslash?
-unicodeExtendedEscapesInRegularExpressions14.ts(2,21): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+unicodeExtendedEscapesInRegularExpressions14.ts(2,21): error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
 
 
 ==== unicodeExtendedEscapesInRegularExpressions14.ts (3 errors) ====
@@ -9,7 +9,7 @@ unicodeExtendedEscapesInRegularExpressions14.ts(2,21): error TS1499: This regula
                 
 !!! error TS1125: Hexadecimal digit expected.
                      ~
-!!! error TS1506: Unexpected '}'. Did you mean to escape it with backslash?
+!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
                         ~
-!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+!!! error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
     

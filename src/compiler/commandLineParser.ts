@@ -15,6 +15,7 @@ import {
     CommandLineOptionOfListType,
     CompilerOptions,
     CompilerOptionsValue,
+    computedOptions,
     ConfigFileSpecs,
     containsPath,
     convertToRelativePath,
@@ -103,6 +104,7 @@ import {
     removeTrailingDirectorySeparator,
     returnTrue,
     ScriptTarget,
+    some,
     startsWith,
     StringLiteral,
     SyntaxKind,
@@ -142,6 +144,9 @@ export const inverseJsxOptionMap = new Map(mapIterator(jsxOptionMap.entries(), (
 //       order in the generated program (see `getDefaultLibPriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
     ["es5", "lib.es5.d.ts"],
@@ -160,9 +165,11 @@ const libEntries: [string, string][] = [
     // Host only
     ["dom", "lib.dom.d.ts"],
     ["dom.iterable", "lib.dom.iterable.d.ts"],
+    ["dom.asynciterable", "lib.dom.asynciterable.d.ts"],
     ["webworker", "lib.webworker.d.ts"],
     ["webworker.importscripts", "lib.webworker.importscripts.d.ts"],
     ["webworker.iterable", "lib.webworker.iterable.d.ts"],
+    ["webworker.asynciterable", "lib.webworker.asynciterable.d.ts"],
     ["scripthost", "lib.scripthost.d.ts"],
     // ES2015 Or ESNext By-feature options
     ["es2015.core", "lib.es2015.core.d.ts"],
@@ -175,6 +182,7 @@ const libEntries: [string, string][] = [
     ["es2015.symbol", "lib.es2015.symbol.d.ts"],
     ["es2015.symbol.wellknown", "lib.es2015.symbol.wellknown.d.ts"],
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
+    ["es2016.intl", "lib.es2016.intl.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],
@@ -212,17 +220,21 @@ const libEntries: [string, string][] = [
     ["es2022.regexp", "lib.es2022.regexp.d.ts"],
     ["es2023.array", "lib.es2023.array.d.ts"],
     ["es2023.collection", "lib.es2023.collection.d.ts"],
+    ["es2023.intl", "lib.es2023.intl.d.ts"],
     ["esnext.array", "lib.es2023.array.d.ts"],
-    ["esnext.collection", "lib.es2023.collection.d.ts"],
+    ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
     ["esnext.intl", "lib.esnext.intl.d.ts"],
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
     ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.es2021.promise.d.ts"],
+    ["esnext.promise", "lib.esnext.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
+    ["esnext.object", "lib.esnext.object.d.ts"],
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.regexp", "lib.esnext.regexp.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -528,6 +540,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
+    deprecatedKeys: new Set(["es3"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
@@ -552,6 +565,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         esnext: ModuleKind.ESNext,
         node16: ModuleKind.Node16,
         nodenext: ModuleKind.NodeNext,
+        preserve: ModuleKind.Preserve,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
@@ -781,7 +795,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsEmit: true,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
-        category: Diagnostics.Emit,
+        category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.Specify_emit_Slashchecking_behavior_for_imports_that_are_only_used_for_types,
         defaultValueDescription: ImportsNotUsedAsValues.Remove,
     },
@@ -805,6 +819,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         name: "verbatimModuleSyntax",
         type: "boolean",
+        affectsEmit: true,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
@@ -1511,7 +1528,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "boolean",
         affectsEmit: true,
         affectsBuildInfo: true,
-        category: Diagnostics.Emit,
+        category: Diagnostics.Backwards_Compatibility,
         description: Diagnostics.Preserve_unused_imported_values_in_the_JavaScript_output_that_would_otherwise_be_removed,
         defaultValueDescription: false,
     },
@@ -2473,9 +2490,10 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
         ),
         f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName),
     );
-    const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
+    const pathOptions = { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames };
+    const optionMap = serializeCompilerOptions(configParseResult.options, pathOptions);
     const watchOptionMap = configParseResult.watchOptions && serializeWatchOptions(configParseResult.watchOptions);
-    const config = {
+    const config: TSConfig & { watchOptions?: object; } = {
         compilerOptions: {
             ...optionMapToObject(optionMap),
             showConfig: undefined,
@@ -2498,6 +2516,19 @@ export function convertToTSConfig(configParseResult: ParsedCommandLine, configFi
         } : {}),
         compileOnSave: !!configParseResult.compileOnSave ? true : undefined,
     };
+
+    const providedKeys = new Set(optionMap.keys());
+    const impliedCompilerOptions: Record<string, CompilerOptionsValue> = {};
+    for (const option in computedOptions) {
+        if (!providedKeys.has(option) && some(computedOptions[option as keyof typeof computedOptions].dependencies, dep => providedKeys.has(dep))) {
+            const implied = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+            const defaultValue = computedOptions[option as keyof typeof computedOptions].computeValue({});
+            if (implied !== defaultValue) {
+                impliedCompilerOptions[option] = computedOptions[option as keyof typeof computedOptions].computeValue(configParseResult.options);
+            }
+        }
+    }
+    assign(config.compilerOptions, optionMapToObject(serializeCompilerOptions(impliedCompilerOptions, pathOptions)));
     return config;
 }
 
@@ -3769,7 +3800,7 @@ function specToDiagnostic(spec: CompilerOptionsValue, disallowTrailingRecursion?
 /**
  * Gets directories in a set of include patterns that should be watched for changes.
  */
-function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, path: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
+function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExcludeSpecs: exclude }: ConfigFileSpecs, basePath: string, useCaseSensitiveFileNames: boolean): MapLike<WatchDirectoryFlags> {
     // We watch a directory recursively if it contains a wildcard anywhere in a directory segment
     // of the pattern:
     //
@@ -3782,23 +3813,26 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     //
     //  /a/b/*      - Watch /a/b directly to catch any new file
     //  /a/b/a?z    - Watch /a/b directly to catch any new file matching a?z
-    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, path, "exclude");
+    const rawExcludeRegex = getRegularExpressionForWildcard(exclude, basePath, "exclude");
     const excludeRegex = rawExcludeRegex && new RegExp(rawExcludeRegex, useCaseSensitiveFileNames ? "" : "i");
     const wildcardDirectories: MapLike<WatchDirectoryFlags> = {};
+    const wildCardKeyToPath = new Map<CanonicalKey, string>();
     if (include !== undefined) {
-        const recursiveKeys: string[] = [];
+        const recursiveKeys: CanonicalKey[] = [];
         for (const file of include) {
-            const spec = normalizePath(combinePaths(path, file));
+            const spec = normalizePath(combinePaths(basePath, file));
             if (excludeRegex && excludeRegex.test(spec)) {
                 continue;
             }
 
             const match = getWildcardDirectoryFromSpec(spec, useCaseSensitiveFileNames);
             if (match) {
-                const { key, flags } = match;
-                const existingFlags = wildcardDirectories[key];
+                const { key, path, flags } = match;
+                const existingPath = wildCardKeyToPath.get(key);
+                const existingFlags = existingPath !== undefined ? wildcardDirectories[existingPath] : undefined;
                 if (existingFlags === undefined || existingFlags < flags) {
-                    wildcardDirectories[key] = flags;
+                    wildcardDirectories[existingPath !== undefined ? existingPath : path] = flags;
+                    if (existingPath === undefined) wildCardKeyToPath.set(key, path);
                     if (flags === WatchDirectoryFlags.Recursive) {
                         recursiveKeys.push(key);
                     }
@@ -3807,11 +3841,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
         }
 
         // Remove any subpaths under an existing recursively watched directory.
-        for (const key in wildcardDirectories) {
-            if (hasProperty(wildcardDirectories, key)) {
+        for (const path in wildcardDirectories) {
+            if (hasProperty(wildcardDirectories, path)) {
                 for (const recursiveKey of recursiveKeys) {
-                    if (key !== recursiveKey && containsPath(recursiveKey, key, path, !useCaseSensitiveFileNames)) {
-                        delete wildcardDirectories[key];
+                    const key = toCanonicalKey(path, useCaseSensitiveFileNames);
+                    if (key !== recursiveKey && containsPath(recursiveKey, key, basePath, !useCaseSensitiveFileNames)) {
+                        delete wildcardDirectories[path];
                     }
                 }
             }
@@ -3821,7 +3856,12 @@ function getWildcardDirectories({ validatedIncludeSpecs: include, validatedExclu
     return wildcardDirectories;
 }
 
-function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: string; flags: WatchDirectoryFlags; } | undefined {
+type CanonicalKey = string & { __canonicalKey: never; };
+function toCanonicalKey(path: string, useCaseSensitiveFileNames: boolean): CanonicalKey {
+    return (useCaseSensitiveFileNames ? path : toFileNameLowerCase(path)) as CanonicalKey;
+}
+
+function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: boolean): { key: CanonicalKey; path: string; flags: WatchDirectoryFlags; } | undefined {
     const match = wildcardDirectoryPattern.exec(spec);
     if (match) {
         // We check this with a few `indexOf` calls because 3 `indexOf`/`lastIndexOf` calls is
@@ -3832,15 +3872,18 @@ function getWildcardDirectoryFromSpec(spec: string, useCaseSensitiveFileNames: b
         const starWildcardIndex = spec.indexOf("*");
         const lastDirectorySeperatorIndex = spec.lastIndexOf(directorySeparator);
         return {
-            key: useCaseSensitiveFileNames ? match[0] : toFileNameLowerCase(match[0]),
+            key: toCanonicalKey(match[0], useCaseSensitiveFileNames),
+            path: match[0],
             flags: (questionWildcardIndex !== -1 && questionWildcardIndex < lastDirectorySeperatorIndex)
                     || (starWildcardIndex !== -1 && starWildcardIndex < lastDirectorySeperatorIndex)
                 ? WatchDirectoryFlags.Recursive : WatchDirectoryFlags.None,
         };
     }
     if (isImplicitGlob(spec.substring(spec.lastIndexOf(directorySeparator) + 1))) {
+        const path = removeTrailingDirectorySeparator(spec);
         return {
-            key: removeTrailingDirectorySeparator(useCaseSensitiveFileNames ? spec : toFileNameLowerCase(spec)),
+            key: toCanonicalKey(path, useCaseSensitiveFileNames),
+            path,
             flags: WatchDirectoryFlags.Recursive,
         };
     }

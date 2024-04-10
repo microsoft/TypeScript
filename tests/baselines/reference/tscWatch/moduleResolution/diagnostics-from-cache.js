@@ -49,7 +49,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w --traceResolution
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Found 'package.json' at '/user/username/projects/myproject/package.json'.
 ======== Resolving module '@this/package' from '/user/username/projects/myproject/index.ts'. ========
@@ -72,9 +72,56 @@ File '/package.json' does not exist.
 
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
-[[90m12:00:40 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/dist/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+var me = require("@this/package");
+me.thing();
+function thing() { }
+
+
+//// [/user/username/projects/myproject/types/index.d.ts]
+export declare function thing(): void;
+
+
+//// [/user/username/projects/myproject/dist/index2.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.thing = thing;
+function thing() { }
+
+
+//// [/user/username/projects/myproject/types/index2.d.ts]
+export declare function thing(): void;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.ts: *new*
+  {}
+/user/username/projects/myproject/index2.ts: *new*
+  {}
+/user/username/projects/myproject/package.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/index.ts",
@@ -102,56 +149,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/index.ts: *new*
-  {}
-/user/username/projects/myproject/index2.ts: *new*
-  {}
-/user/username/projects/myproject/package.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/dist/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thing = void 0;
-var me = require("@this/package");
-me.thing();
-function thing() { }
-exports.thing = thing;
-
-
-//// [/user/username/projects/myproject/types/index.d.ts]
-export declare function thing(): void;
-
-
-//// [/user/username/projects/myproject/dist/index2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.thing = void 0;
-function thing() { }
-exports.thing = thing;
-
-
-//// [/user/username/projects/myproject/types/index2.d.ts]
-export declare function thing(): void;
-
-
 
 Change:: Add import to index2
 
@@ -161,12 +159,16 @@ import * as me from "./index.js";export function thing(): void {}
 
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:43 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
@@ -190,8 +192,12 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
-[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
+
+
+//// [/user/username/projects/myproject/dist/index2.js] file written with same contents
+//// [/user/username/projects/myproject/types/index2.d.ts] file written with same contents
 
 
 Program root files: [
@@ -219,6 +225,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/index2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/dist/index2.js] file written with same contents
-//// [/user/username/projects/myproject/types/index2.d.ts] file written with same contents

@@ -3,7 +3,11 @@
 === parserMemberAccessAfterPostfixExpression1.ts ===
 a--.toString()
 >a-- : number
+>    : ^^^^^^
 >a : any
+>  : ^^^
 >toString() : any
+>           : ^^^
 >toString : any
+>         : ^^^
 

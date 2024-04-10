@@ -44,11 +44,41 @@ export function temp(): string;
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/src/main.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var bar_1 = require("bar");
+(0, bar_1.foo)();
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/src/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/node_modules: *new*
+  {}
+/user/username/projects/myproject/src: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/src/main.ts"
@@ -76,37 +106,7 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/bar/index.d.ts (used version)
 /user/username/projects/myproject/src/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/src/main.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-/user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/src: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/src/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bar_1 = require("bar");
-(0, bar_1.foo)();
-
-
 
 Change:: Change foo
 
@@ -115,9 +115,5 @@ Input::
 export function fooBar(): string;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
-Output::
 
 exitCode:: ExitStatus.undefined
-

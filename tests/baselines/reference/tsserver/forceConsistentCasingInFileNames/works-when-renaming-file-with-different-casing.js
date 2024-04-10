@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/myproject/Logger.ts]
 export class logger { }
@@ -71,7 +71,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/myproject/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -182,6 +182,25 @@ FsWatchesRecursive::
 /user/username/projects/myproject: *new*
   {}
 
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/Logger.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/another.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -202,6 +221,9 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+1: checkOne *new*
+
 Before running Timeout callback:: count: 1
 1: checkOne
 
@@ -217,6 +239,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+1: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 1: semanticCheck
 
@@ -231,7 +256,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-2: suggestionCheck
+
+Immedidate callback:: count: 1
+2: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 2: suggestionCheck
@@ -294,9 +321,9 @@ PolledWatches::
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/another.ts:
+/user/username/projects/myproject/Logger.ts: *new*
   {}
-/user/username/projects/myproject/logger.ts: *new*
+/user/username/projects/myproject/another.ts:
   {}
 /user/username/projects/myproject/tsconfig.json:
   {}
@@ -304,6 +331,28 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/Logger.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/another.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 
 Before request
 
@@ -322,7 +371,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/Logger.ts :: Config file name: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -358,12 +407,34 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/user/username/projects/myproject/logger.ts:
+/user/username/projects/myproject/Logger.ts:
   {}
 
 FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    noOpenRef: false *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/Logger.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/another.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
 
 Before request
 
@@ -415,6 +486,21 @@ FsWatchesRecursive::
 /user/username/projects/myproject:
   {}
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/Logger.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/another.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -450,6 +536,26 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json
+/user/username/projects/myproject/Logger.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+/user/username/projects/myproject/another.ts (Open) *changed*
+    version: SVC-2-1 *changed*
+    containingProjects: 1
+        /user/username/projects/myproject/tsconfig.json *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -471,11 +577,14 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Timeout callback:: count: 1
+2: checkOne *new*
+
 Before running Timeout callback:: count: 1
 2: checkOne
 
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json Version: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -495,6 +604,15 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+3: semanticCheck *new*
+
+Projects::
+/user/username/projects/myproject/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+
 Before running Immedidate callback:: count: 1
 3: semanticCheck
 
@@ -509,7 +627,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-4: suggestionCheck
+
+Immedidate callback:: count: 1
+4: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 4: suggestionCheck
@@ -526,6 +646,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Immedidate callback:: count: 0
 
+Timeout callback:: count: 1
+3: checkOne *new*
+
 Before running Timeout callback:: count: 1
 3: checkOne
 
@@ -541,6 +664,9 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+Immedidate callback:: count: 1
+5: semanticCheck *new*
+
 Before running Immedidate callback:: count: 1
 5: semanticCheck
 
@@ -555,7 +681,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Immedidate callback:: count: 1
-6: suggestionCheck
+
+Immedidate callback:: count: 1
+6: suggestionCheck *new*
 
 Before running Immedidate callback:: count: 1
 6: suggestionCheck

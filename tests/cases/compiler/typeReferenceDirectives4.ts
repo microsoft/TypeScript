@@ -15,7 +15,7 @@ declare let $: { x: number }
 
 // @filename: /app.ts
 /// <reference path="./ref.d.ts"/>
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 
 let x: $;
 let y = () => x

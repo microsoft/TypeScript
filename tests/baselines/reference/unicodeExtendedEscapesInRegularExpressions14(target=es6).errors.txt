@@ -1,5 +1,5 @@
 unicodeExtendedEscapesInRegularExpressions14.ts(2,13): error TS1125: Hexadecimal digit expected.
-unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1506: Unexpected '}'. Did you mean to escape it with backslash?
+unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 
 
 ==== unicodeExtendedEscapesInRegularExpressions14.ts (2 errors) ====
@@ -8,5 +8,5 @@ unicodeExtendedEscapesInRegularExpressions14.ts(2,18): error TS1506: Unexpected 
                 
 !!! error TS1125: Hexadecimal digit expected.
                      ~
-!!! error TS1506: Unexpected '}'. Did you mean to escape it with backslash?
+!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
     

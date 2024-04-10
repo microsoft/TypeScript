@@ -1,0 +1,161 @@
+//// [tests/cases/compiler/circularReferenceInReturnType2.ts] ////
+
+=== circularReferenceInReturnType2.ts ===
+type ObjectType<Source> = {
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 0, 16))
+
+  kind: "object";
+>kind : Symbol(kind, Decl(circularReferenceInReturnType2.ts, 0, 27))
+
+  __source: (source: Source) => void;
+>__source : Symbol(__source, Decl(circularReferenceInReturnType2.ts, 1, 17))
+>source : Symbol(source, Decl(circularReferenceInReturnType2.ts, 2, 13))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 0, 16))
+
+};
+
+type Field<Source, Key extends string> = {
+>Field : Symbol(Field, Decl(circularReferenceInReturnType2.ts, 3, 2))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 5, 11))
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 5, 18))
+
+  __key: (key: Key) => void;
+>__key : Symbol(__key, Decl(circularReferenceInReturnType2.ts, 5, 42))
+>key : Symbol(key, Decl(circularReferenceInReturnType2.ts, 6, 10))
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 5, 18))
+
+  __source: (source: Source) => void;
+>__source : Symbol(__source, Decl(circularReferenceInReturnType2.ts, 6, 28))
+>source : Symbol(source, Decl(circularReferenceInReturnType2.ts, 7, 13))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 5, 11))
+
+};
+
+declare const object: <Source>() => <
+>object : Symbol(object, Decl(circularReferenceInReturnType2.ts, 10, 13))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 10, 23))
+
+  Fields extends {
+>Fields : Symbol(Fields, Decl(circularReferenceInReturnType2.ts, 10, 37))
+
+    [Key in keyof Fields]: Field<Source, Key & string>;
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 12, 5))
+>Fields : Symbol(Fields, Decl(circularReferenceInReturnType2.ts, 10, 37))
+>Field : Symbol(Field, Decl(circularReferenceInReturnType2.ts, 3, 2))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 10, 23))
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 12, 5))
+  }
+>(config: {
+>config : Symbol(config, Decl(circularReferenceInReturnType2.ts, 14, 2))
+
+  name: string;
+>name : Symbol(name, Decl(circularReferenceInReturnType2.ts, 14, 11))
+
+  fields: Fields | (() => Fields);
+>fields : Symbol(fields, Decl(circularReferenceInReturnType2.ts, 15, 15))
+>Fields : Symbol(Fields, Decl(circularReferenceInReturnType2.ts, 10, 37))
+>Fields : Symbol(Fields, Decl(circularReferenceInReturnType2.ts, 10, 37))
+
+}) => ObjectType<Source>;
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 10, 23))
+
+type InferValueFromObjectType<Type extends ObjectType<any>> =
+>InferValueFromObjectType : Symbol(InferValueFromObjectType, Decl(circularReferenceInReturnType2.ts, 17, 25))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 19, 30))
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+
+  Type extends ObjectType<infer Source> ? Source : never;
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 19, 30))
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 20, 31))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 20, 31))
+
+type FieldResolver<Source, TType extends ObjectType<any>> = (
+>FieldResolver : Symbol(FieldResolver, Decl(circularReferenceInReturnType2.ts, 20, 57))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 22, 19))
+>TType : Symbol(TType, Decl(circularReferenceInReturnType2.ts, 22, 26))
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+
+  source: Source
+>source : Symbol(source, Decl(circularReferenceInReturnType2.ts, 22, 61))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 22, 19))
+
+) => InferValueFromObjectType<TType>;
+>InferValueFromObjectType : Symbol(InferValueFromObjectType, Decl(circularReferenceInReturnType2.ts, 17, 25))
+>TType : Symbol(TType, Decl(circularReferenceInReturnType2.ts, 22, 26))
+
+type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
+>FieldFuncArgs : Symbol(FieldFuncArgs, Decl(circularReferenceInReturnType2.ts, 24, 37))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 26, 19))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 26, 26))
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+
+  type: Type;
+>type : Symbol(type, Decl(circularReferenceInReturnType2.ts, 26, 60))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 26, 26))
+
+  resolve: FieldResolver<Source, Type>;
+>resolve : Symbol(resolve, Decl(circularReferenceInReturnType2.ts, 27, 13))
+>FieldResolver : Symbol(FieldResolver, Decl(circularReferenceInReturnType2.ts, 20, 57))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 26, 19))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 26, 26))
+
+};
+
+declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
+>field : Symbol(field, Decl(circularReferenceInReturnType2.ts, 31, 13))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 31, 22))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 31, 29))
+>ObjectType : Symbol(ObjectType, Decl(circularReferenceInReturnType2.ts, 0, 0))
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 31, 59))
+
+  field: FieldFuncArgs<Source, Type>
+>field : Symbol(field, Decl(circularReferenceInReturnType2.ts, 31, 80))
+>FieldFuncArgs : Symbol(FieldFuncArgs, Decl(circularReferenceInReturnType2.ts, 24, 37))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 31, 22))
+>Type : Symbol(Type, Decl(circularReferenceInReturnType2.ts, 31, 29))
+
+) => Field<Source, Key>;
+>Field : Symbol(Field, Decl(circularReferenceInReturnType2.ts, 3, 2))
+>Source : Symbol(Source, Decl(circularReferenceInReturnType2.ts, 31, 22))
+>Key : Symbol(Key, Decl(circularReferenceInReturnType2.ts, 31, 59))
+
+type Something = { foo: number };
+>Something : Symbol(Something, Decl(circularReferenceInReturnType2.ts, 33, 24))
+>foo : Symbol(foo, Decl(circularReferenceInReturnType2.ts, 35, 18))
+
+// inference fails here, but ideally should not
+const A = object<Something>()({
+>A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 38, 5))
+>object : Symbol(object, Decl(circularReferenceInReturnType2.ts, 10, 13))
+>Something : Symbol(Something, Decl(circularReferenceInReturnType2.ts, 33, 24))
+
+  name: "A",
+>name : Symbol(name, Decl(circularReferenceInReturnType2.ts, 38, 31))
+
+  fields: () => ({
+>fields : Symbol(fields, Decl(circularReferenceInReturnType2.ts, 39, 12))
+
+    a: field({
+>a : Symbol(a, Decl(circularReferenceInReturnType2.ts, 40, 18))
+>field : Symbol(field, Decl(circularReferenceInReturnType2.ts, 31, 13))
+
+      type: A,
+>type : Symbol(type, Decl(circularReferenceInReturnType2.ts, 41, 14))
+>A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 38, 5))
+
+      resolve() {
+>resolve : Symbol(resolve, Decl(circularReferenceInReturnType2.ts, 42, 14))
+
+        return {
+          foo: 100,
+>foo : Symbol(foo, Decl(circularReferenceInReturnType2.ts, 44, 16))
+
+        };
+      },
+    }),
+  }),
+});
+

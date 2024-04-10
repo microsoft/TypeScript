@@ -1,14 +1,8 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "../helpers/baseline";
-import {
-    compilerOptionsToConfigJson,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "../helpers/baseline";
+import { compilerOptionsToConfigJson } from "../helpers/contents";
 import {
     commonFile1,
     commonFile2,
@@ -364,7 +358,7 @@ export class A {
             const tsconfig: File = {
                 path: "/tsconfig.json",
                 content: jsonToReadableText({
-                    compilerOptions: { target: "es6", importsNotUsedAsValues: "error" },
+                    compilerOptions: { target: "es6", verbatimModuleSyntax: true },
                 }),
             };
             return createWatchedSystem([libFile, aTs, bTs, tsconfig]);
@@ -376,7 +370,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -387,7 +381,7 @@ export class A {
                     sys.modifyFile(
                         "/tsconfig.json",
                         jsonToReadableText({
-                            compilerOptions: { target: "es6", importsNotUsedAsValues: "error", experimentalDecorators: true, emitDecoratorMetadata: true },
+                            compilerOptions: { target: "es6", verbatimModuleSyntax: true, experimentalDecorators: true, emitDecoratorMetadata: true },
                         }),
                     ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
@@ -625,7 +619,7 @@ export class A {
             path: "/a/d/f3.ts",
             content: "export let y = 1;",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, file1, file2, file3]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file2.path, file3.path],
             system: sys,
@@ -640,11 +634,9 @@ export class A {
             getPrograms,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap,
         });
 
         const { cb: cb2, getPrograms: getPrograms2 } = commandLineCallbacks(sys);
-        const oldSnap2 = sys.snap();
         baseline.push("createing separate watcher");
         ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [file1.path],
@@ -658,10 +650,8 @@ export class A {
             getPrograms: getPrograms2,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap: oldSnap2,
         });
 
-        sys.logTimeoutQueueLength();
         baseline.push(`First program is not updated:: ${getPrograms() === ts.emptyArray}`);
         baseline.push(`Second program is not updated:: ${getPrograms2() === ts.emptyArray}`);
         Harness.Baseline.runBaseline(`tscWatch/${scenario}/two-watch-programs-are-not-affected-by-each-other.js`, baseline.join("\r\n"));
@@ -1205,7 +1195,7 @@ declare const eval: any`,
             path: "/a/compile",
             content: "let x = 1",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([f, libFile]));
         const watch = ts.createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [f.path],
             system: sys,
@@ -1219,7 +1209,6 @@ declare const eval: any`,
             commandLineArgs: ["--w", f.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
         });
@@ -1532,7 +1521,7 @@ class D extends C { prop = 1; }`,
 
     verifyTscWatch({
         scenario,
-        subScenario: "updates errors and emit when importsNotUsedAsValues changes",
+        subScenario: "updates errors and emit when verbatimModuleSyntax changes",
         commandLineArgs: ["-w"],
         sys: () => {
             const aFile: File = {
@@ -1552,18 +1541,25 @@ export function f(p: C) { return p; }`,
         },
         edits: [
             {
-                caption: 'Set to "remove"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "remove" } })),
+                caption: "Enable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: true },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
             {
-                caption: 'Set to "error"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "error" } })),
-                timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            },
-            {
-                caption: 'Set to "preserve"',
-                edit: sys => sys.writeFile(`/user/username/projects/myproject/tsconfig.json`, jsonToReadableText({ compilerOptions: { importsNotUsedAsValues: "preserve" } })),
+                caption: "Disable verbatimModuleSyntax",
+                edit: sys =>
+                    sys.writeFile(
+                        `/user/username/projects/myproject/tsconfig.json`,
+                        jsonToReadableText({
+                            compilerOptions: { verbatimModuleSyntax: false },
+                        }),
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
             },
         ],
@@ -2087,7 +2083,7 @@ import { x } from "../b";`,
             {
                 caption: "Add excluded file to project1",
                 edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                timeouts: sys => sys.logTimeoutQueueLength(),
+                timeouts: ts.noop,
             },
             {
                 caption: "Delete output of class3",

@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInRegularExpressions02.ts ===
 var x = /\u{00}/gu;
 >x : RegExp
+>  : ^^^^^^
 >/\u{00}/gu : RegExp
+>           : ^^^^^^
 

@@ -6,16 +6,22 @@ declare namespace JSX {
     interface IntrinsicElements {
         div: {
 >div : { static?: boolean; }
+>    : ^^^^^^^^^^^       ^^^
 
             static?: boolean;
 >static : boolean
+>       : ^^^^^^^
 
         };
     }
 }
 export default <div static={true} />;
 ><div static={true} /> : any
+>                      : ^^^
 >div : any
+>    : ^^^
 >static : boolean
+>       : ^^^^^^^
 >true : true
+>     : ^^^^
 

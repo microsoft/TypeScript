@@ -1,5 +1,5 @@
 currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "c:/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [e:/myproject/src/app.js]
 import React from 'react';
@@ -10,6 +10,7 @@ import {
 
 //// [e:/myproject/node_modules/@types/react/index.d.ts]
 import * as PropTypes from 'prop-types';
+export class Component {}
 
 
 //// [e:/myproject/node_modules/@types/prop-types/index.d.ts]
@@ -17,6 +18,8 @@ export type ReactComponentLike =
     | string
     | ((props: any, context?: any) => any)
     | (new (props: any, context?: any) => any);
+
+export const PropTypes = {};
 
 
 //// [c:/typescript/node_modules/@types/react-router-dom/index.d.ts]
@@ -30,6 +33,7 @@ export interface BrowserRouterProps {
 
 //// [c:/typescript/node_modules/@types/react/index.d.ts]
 import * as PropTypes from 'prop-types';
+export class Component {}
 
 
 //// [e:/myproject/package.json]
@@ -121,13 +125,13 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/src/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/myproject/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n"
-	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
-	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\n"
+	e:/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n\nexport const PropTypes = {};\n"
+	e:/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
+	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
 	c:/typescript/node_modules/@types/react-router-dom/index.d.ts Text-1 "import * as React from 'react';\nexport interface BrowserRouterProps {\n    basename?: string;\n    getUserConfirmation?: ((message: string, callback: (ok: boolean) => void) => void);\n    forceRefresh?: boolean;\n    keyLength?: number;\n}"
 	e:/myproject/src/app.js SVC-1-0 "import React from 'react';\nimport {\n  BrowserRouter as Router,\n} from \"react-router-dom\";\n"
 
@@ -183,6 +187,37 @@ e:/myproject/node_modules: *new*
 e:/myproject/node_modules/@types: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+c:/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/typescript/node_modules/@types/react-router-dom/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+c:/typescript/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+e:/myproject/node_modules/@types/prop-types/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+e:/myproject/node_modules/@types/react/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+e:/myproject/src/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 TI:: [hh:mm:ss:mss] Global cache location 'c:/typescript', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location 'c:/typescript'
 TI:: [hh:mm:ss:mss] Trying to find 'c:/typescript/package.json'...
@@ -197,7 +232,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/type
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with c:/typescript/node_modules/types-registry/index.json :: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*FailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with c:/typescript/node_modules/types-registry/index.json :: WatchInfo: c:/typescript/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [c:/typescript/package.json]
 { "private": true }
@@ -207,6 +242,9 @@ TI:: typing installer creation complete
   "entries": {}
 }
 
+
+Timeout callback:: count: 1
+2: /dev/null/inferredProject1*FailedLookupInvalidation *new*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -230,12 +268,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "e:/myproject/src",
-      "cachePath": "c:/typescript",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path 'c:/typescript', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/typescript'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -280,6 +314,31 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [],
       "unresolvedImports": [],
       "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
     }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/package.json 250 undefined WatchType: package.json file
@@ -332,6 +391,11 @@ e:/myproject/node_modules:
 e:/myproject/node_modules/@types:
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -353,8 +417,8 @@ Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
 Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
@@ -619,6 +683,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -649,6 +719,19 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Component",
+            "kind": "class",
+            "kindModifiers": "export,declare",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "e:/myproject/node_modules/@types/react/index",
+            "data": {
+              "exportName": "Component",
+              "exportMapKey": "9 * Component ",
+              "fileName": "e:/myproject/node_modules/@types/react/index.d.ts"
+            }
+          },
+          {
             "name": "BrowserRouter",
             "kind": "warning",
             "kindModifiers": "",
@@ -659,3 +742,6 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Timeout callback:: count: 0
+2: /dev/null/inferredProject1*FailedLookupInvalidation *deleted*

@@ -3,7 +3,9 @@
 === file0.ts ===
 export var v = 1;
 >v : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === file1.ts ===
 export interface Foo { x }
@@ -14,5 +16,7 @@ export * from "file0";
 export * from "file1";
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

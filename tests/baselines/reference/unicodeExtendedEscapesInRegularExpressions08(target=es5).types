@@ -6,5 +6,7 @@
 // (FFFF == 65535)
 var x = /\u{FFFF}/gu;
 >x : RegExp
+>  : ^^^^^^
 >/\u{FFFF}/gu : RegExp
+>             : ^^^^^^
 

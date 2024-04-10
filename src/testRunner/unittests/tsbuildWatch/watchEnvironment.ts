@@ -1,7 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
@@ -27,7 +25,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
         const allPkgFiles = pkgs(pkgFiles);
         const system = createWatchedSystem([libFile, typing, ...flatArray(allPkgFiles)], { currentDirectory: project });
         writePkgReferences(system);
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(system);
+        const { sys, baseline, cb, getPrograms } = createBaseline(system);
         const host = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, ["tsconfig.json"], { watch: true, verbose: true });
         solutionBuilder.build();
@@ -37,7 +35,6 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
             commandLineArgs: ["--b", "--w"],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -77,7 +74,7 @@ describe("unittests:: tsbuildWatch:: watchEnvironment:: tsbuild:: watchMode:: wi
                 {
                     caption: "modify typing file",
                     edit: sys => sys.writeFile(typing.path, `${typing.content}export const typing1 = 10;`),
-                    timeouts: sys => sys.logTimeoutQueueLength(),
+                    timeouts: ts.noop,
                 },
             ],
             watchOrSolution: solutionBuilder,

@@ -5,28 +5,39 @@
 
 class C {
 >C : C
+>  : ^
 
     private foo: string;
 >foo : string
+>    : ^^^^^^
 
     private static bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 class D extends C {
 >D : D
+>  : ^
 >C : C
+>  : ^
 
     baz: number;   
 >baz : number
+>    : ^^^^^^
 }
 
 module D {
 >D : typeof D
+>  : ^^^^^^^^
 
     export var y = D.bar; // error
 >y : string
+>  : ^^^^^^
 >D.bar : string
+>      : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >bar : string
+>    : ^^^^^^
 }

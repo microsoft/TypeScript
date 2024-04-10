@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
+    "Type '{0}' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -799,15 +799,15 @@
         "category": "Error",
         "code": 1249
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.": {
         "category": "Error",
         "code": 1250
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1251
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1252
     },
@@ -950,6 +950,22 @@
     "An import alias cannot resolve to a type or type-only declaration when 'verbatimModuleSyntax' is enabled.": {
         "category": "Error",
         "code": 1288
+    },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1289
+    },
+    "'{0}' resolves to a type-only declaration and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1290
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'import type' where '{0}' is imported.": {
+        "category": "Error",
+        "code": 1291
+    },
+    "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
+        "category": "Error",
+        "code": 1292
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1188,10 +1204,6 @@
         "category": "Message",
         "code": 1369
     },
-    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
-        "category": "Error",
-        "code": 1371
-    },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
         "code": 1375
@@ -1204,7 +1216,7 @@
         "category": "Message",
         "code": 1377
     },
-    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1378
     },
@@ -1408,7 +1420,7 @@
         "category": "Error",
         "code": 1431
     },
-    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'for await' loops are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 1432
     },
@@ -1455,14 +1467,6 @@
     "Module declaration names may only use ' or \" quoted strings.": {
         "category": "Error",
         "code": 1443
-    },
-    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1444
-    },
-    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1446
     },
     "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
@@ -1633,153 +1637,161 @@
         "category": "Error",
         "code": 1496
     },
-    "Unknown regular expression flag.": {
+    "Expression must be enclosed in parentheses to be used as a decorator.": {
         "category": "Error",
         "code": 1497
     },
-    "Duplicate regular expression flag.": {
+    "Invalid syntax in decorator.": {
         "category": "Error",
         "code": 1498
     },
-    "This regular expression flag is only available when targeting '{0}' or later.": {
+    "Unknown regular expression flag.": {
         "category": "Error",
         "code": 1499
     },
-    "The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.": {
+    "Duplicate regular expression flag.": {
         "category": "Error",
         "code": 1500
     },
-    "Named capturing groups are only available when targeting 'ES2018' or later.": {
+    "This regular expression flag is only available when targeting '{0}' or later.": {
         "category": "Error",
         "code": 1501
     },
-    "Subpattern flags must be present when there is a minus sign.": {
+    "The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.": {
         "category": "Error",
         "code": 1502
     },
-    "Incomplete quantifier. Digit expected.": {
+    "Named capturing groups are only available when targeting 'ES2018' or later.": {
         "category": "Error",
         "code": 1503
     },
-    "Numbers out of order in quantifier.": {
+    "Subpattern flags must be present when there is a minus sign.": {
         "category": "Error",
         "code": 1504
     },
-    "There is nothing available for repetition.": {
+    "Incomplete quantifier. Digit expected.": {
         "category": "Error",
         "code": 1505
     },
-    "Unexpected '{0}'. Did you mean to escape it with backslash?": {
+    "Numbers out of order in quantifier.": {
         "category": "Error",
         "code": 1506
     },
-    "This regular expression flag cannot be toggled within a subpattern.": {
+    "There is nothing available for repetition.": {
         "category": "Error",
         "code": 1507
     },
-    "'\\k' must be followed by a capturing group name enclosed in angle brackets.": {
+    "Unexpected '{0}'. Did you mean to escape it with backslash?": {
         "category": "Error",
         "code": 1508
     },
-    "'\\q' is only available inside character class.": {
+    "This regular expression flag cannot be toggled within a subpattern.": {
         "category": "Error",
         "code": 1509
     },
-    "'\\c' must be followed by an ASCII letter.": {
+    "'\\k' must be followed by a capturing group name enclosed in angle brackets.": {
         "category": "Error",
         "code": 1510
     },
-    "Undetermined character escape.": {
+    "'\\q' is only available inside character class.": {
         "category": "Error",
         "code": 1511
     },
-    "Expected a capturing group name.": {
+    "'\\c' must be followed by an ASCII letter.": {
         "category": "Error",
         "code": 1512
     },
-    "Named capturing groups with the same name must be mutually exclusive to each other.": {
+    "Undetermined character escape.": {
         "category": "Error",
         "code": 1513
     },
-    "A character class range must not be bounded by another character class.": {
+    "Expected a capturing group name.": {
         "category": "Error",
         "code": 1514
     },
-    "Range out of order in character class.": {
+    "Named capturing groups with the same name must be mutually exclusive to each other.": {
         "category": "Error",
         "code": 1515
     },
-    "Anything that would possibly match more than a single character is invalid inside a negated character class.": {
+    "A character class range must not be bounded by another character class.": {
         "category": "Error",
         "code": 1516
     },
-    "Operators must not be mixed within a character class. Wrap it in a nested class instead.": {
+    "Range out of order in character class.": {
         "category": "Error",
         "code": 1517
     },
-    "Expected a class set oprand.": {
+    "Anything that would possibly match more than a single character is invalid inside a negated character class.": {
         "category": "Error",
         "code": 1518
     },
-    "'\\q' must be followed by string alternatives enclosed in braces.": {
+    "Operators must not be mixed within a character class. Wrap it in a nested class instead.": {
         "category": "Error",
         "code": 1519
     },
-    "A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?": {
+    "Expected a class set oprand.": {
         "category": "Error",
         "code": 1520
     },
-    "Expected a Unicode property name.": {
+    "'\\q' must be followed by string alternatives enclosed in braces.": {
         "category": "Error",
         "code": 1521
     },
-    "Unknown Unicode property name.": {
+    "A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?": {
         "category": "Error",
         "code": 1522
     },
-    "Expected a Unicode property value.": {
+    "Expected a Unicode property name.": {
         "category": "Error",
         "code": 1523
     },
-    "Unknown Unicode property value.": {
+    "Unknown Unicode property name.": {
         "category": "Error",
         "code": 1524
     },
-    "Expected a Unicode property name or value.": {
+    "Expected a Unicode property value.": {
         "category": "Error",
         "code": 1525
     },
-    "Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.": {
+    "Unknown Unicode property value.": {
         "category": "Error",
         "code": 1526
     },
-    "Unknown Unicode property name or value.": {
+    "Expected a Unicode property name or value.": {
         "category": "Error",
         "code": 1527
     },
-    "Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+    "Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.": {
         "category": "Error",
         "code": 1528
     },
-    "'\\{0}' must be followed by a Unicode property value expression enclosed in braces.": {
+    "Unknown Unicode property name or value.": {
         "category": "Error",
         "code": 1529
     },
-    "There is no capturing group named '{0}' in this regular expression.": {
+    "Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
         "category": "Error",
         "code": 1530
     },
-    "A decimal escape must refer to an existent capturing group. There are only {0} capturing groups in this regular expression.": {
+    "'\\{0}' must be followed by a Unicode property value expression enclosed in braces.": {
         "category": "Error",
         "code": 1531
     },
-    "Decimal escapes are invalid when there are no capturing groups in a regular expression.": {
+    "There is no capturing group named '{0}' in this regular expression.": {
         "category": "Error",
         "code": 1532
     },
-    "'\\{0}' is not a valid character escape.": {
+    "A decimal escape must refer to an existent capturing group. There are only {0} capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1533
+    },
+    "Decimal escapes are invalid when there are no capturing groups in a regular expression.": {
+        "category": "Error",
+        "code": 1534
+    },
+    "'\\{0}' is not a valid character escape.": {
+        "category": "Error",
+        "code": 1535
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1971,10 +1983,6 @@
     "'this' cannot be referenced in current location.": {
         "category": "Error",
         "code": 2332
-    },
-    "'this' cannot be referenced in constructor arguments.": {
-        "category": "Error",
-        "code": 2333
     },
     "'this' cannot be referenced in a static property initializer.": {
         "category": "Error",
@@ -2552,7 +2560,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -2628,7 +2636,7 @@
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+    "Non-abstract class '{0}' does not implement inherited abstract member {1} from class '{2}'.": {
         "category": "Error",
         "code": 2515
     },
@@ -2652,7 +2660,7 @@
         "category": "Error",
         "code": 2520
     },
-    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -3070,6 +3078,10 @@
         "category": "Error",
         "code": 2649
     },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1} and {2} more.": {
+        "category": "Error",
+        "code": 2650
+    },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
@@ -3081,6 +3093,18 @@
     "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
         "category": "Error",
         "code": 2653
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2}.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2} and {3} more.": {
+        "category": "Error",
+        "code": 2655
+    },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1}.": {
+        "category": "Error",
+        "code": 2656
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",
@@ -3267,7 +3291,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -3295,7 +3319,7 @@
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -3727,7 +3751,7 @@
         "category": "Error",
         "code": 2820
     },
-    "Import assertions are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import assertions are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2821
     },
@@ -3735,7 +3759,7 @@
         "category": "Error",
         "code": 2822
     },
-    "Import attributes are only supported when the '--module' option is set to 'esnext' or 'nodenext'.": {
+    "Import attributes are only supported when the '--module' option is set to 'esnext', 'nodenext', or 'preserve'.": {
         "category": "Error",
         "code": 2823
     },
@@ -3815,7 +3839,7 @@
         "category": "Error",
         "code": 2853
     },
-    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', or 'nodenext', and the 'target' option is set to 'es2017' or higher.": {
+    "Top-level 'await using' statements are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.": {
         "category": "Error",
         "code": 2854
     },
@@ -3858,6 +3882,22 @@
     "A class cannot implement a primitive type like '{0}'. It can only implement other named object types.": {
         "category": "Error",
         "code": 2864
+    },
+    "Import '{0}' conflicts with local value, so must be declared with a type-only import when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 2865
+    },
+    "Import '{0}' conflicts with global value used in this file, so must be declared with a type-only import when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 2866
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun`.": {
+        "category": "Error",
+        "code": 2867
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for Bun? Try `npm i --save-dev @types/bun` and then add 'bun' to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2868
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4292,6 +4332,14 @@
         "category": "Error",
         "code": 4124
     },
+    "Each declaration of '{0}.{1}' differs in its value, where '{2}' was expected but '{3}' was given.": {
+        "category": "Error",
+        "code": 4125
+    },
+    "One value of '{0}.{1}' is the string '{2}', and the other is assumed to be an unknown numeric value.": {
+        "category": "Error",
+        "code": 4126
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -4336,10 +4384,6 @@
     "Option 'isolatedModules' can only be used when either option '--module' is provided or option 'target' is 'ES2015' or higher.": {
         "category": "Error",
         "code": 5047
-    },
-    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
-        "category": "Error",
-        "code": 5048
     },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
@@ -4417,7 +4461,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
+    "Option '--resolveJsonModule' cannot be specified when 'module' is set to 'none', 'system', or 'umd'.": {
         "category": "Error",
         "code": 5071
     },
@@ -4509,7 +4553,7 @@
         "category": "Error",
         "code": 5094
     },
-    "Option '{0}' can only be used when 'module' is set to 'es2015' or later.": {
+    "Option '{0}' can only be used when 'module' is set to 'preserve' or to 'es2015' or later.": {
         "category": "Error",
         "code": 5095
     },
@@ -4830,10 +4874,6 @@
     "Specify JSX code generation.": {
         "category": "Message",
         "code": 6080
-    },
-    "File '{0}' has an unsupported extension, so skipping it.": {
-        "category": "Message",
-        "code": 6081
     },
     "Only 'amd' and 'system' modules are supported alongside --{0}.": {
         "category": "Error",
@@ -5177,7 +5217,7 @@
         "category": "Message",
         "code": 6171
     },
-    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5'.": {
         "category": "Message",
         "code": 6179
     },
@@ -5555,6 +5595,26 @@
         "category": "Message",
         "code": 6278
     },
+    "Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.": {
+        "category": "Message",
+        "code": 6279
+    },
+    "There are types at '{0}', but this result could not be resolved under your current 'moduleResolution' setting. Consider updating to 'node16', 'nodenext', or 'bundler'.": {
+        "category": "Message",
+        "code": 6280
+    },
+    "'package.json' has a 'peerDependencies' field.": {
+        "category": "Message",
+        "code": 6281
+    },
+    "Found peerDependency '{0}' with '{1}' version.": {
+        "category": "Message",
+        "code": 6282
+    },
+    "Failed to find peerDependency '{0}'.": {
+        "category": "Message",
+        "code": 6283
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -5575,14 +5635,6 @@
     "File '{0}' is not listed within the file list of project '{1}'. Projects must list all files or use an 'include' pattern.": {
         "category": "Error",
         "code": 6307
-    },
-    "Cannot prepend project '{0}' because it does not have 'outFile' set": {
-        "category": "Error",
-        "code": 6308
-    },
-    "Output file '{0}' from project '{1}' does not exist": {
-        "category": "Error",
-        "code": 6309
     },
     "Referenced project '{0}' may not disable emit.": {
         "category": "Error",
@@ -5664,25 +5716,9 @@
         "category": "Message",
         "code": 6371
     },
-    "Project '{0}' is out of date because output of its dependency '{1}' has changed": {
-        "category": "Message",
-        "code": 6372
-    },
-    "Updating output of project '{0}'...": {
-        "category": "Message",
-        "code": 6373
-    },
     "A non-dry build would update timestamps for output of project '{0}'": {
         "category": "Message",
         "code": 6374
-    },
-    "A non-dry build would update output of project '{0}'": {
-        "category": "Message",
-        "code": 6375
-    },
-    "Cannot update output of project '{0}' because there was error reading file '{1}'": {
-        "category": "Message",
-        "code": 6376
     },
     "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}'": {
         "category": "Error",
@@ -7163,6 +7199,10 @@
         "category": "Message",
         "code": 90060
     },
+    "Update modifiers of '{0}'": {
+        "category": "Message",
+        "code": 90061
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -7892,6 +7932,38 @@
         "category": "Message",
         "code": 95187
     },
+    "Add missing parameter to '{0}'": {
+        "category": "Message",
+        "code": 95188
+    },
+    "Add missing parameters to '{0}'": {
+        "category": "Message",
+        "code": 95189
+    },
+    "Add all missing parameters": {
+        "category": "Message",
+        "code": 95190
+    },
+    "Add optional parameter to '{0}'": {
+        "category": "Message",
+        "code": 95191
+    },
+    "Add optional parameters to '{0}'": {
+        "category": "Message",
+        "code": 95192
+    },
+    "Add all optional parameters": {
+        "category": "Message",
+        "code": 95193
+    },
+    "Wrap in parentheses": {
+        "category": "Message",
+        "code": 95194
+    },
+    "Wrap all invalid decorator expressions in parentheses": {
+        "category": "Message",
+        "code": 95195
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -8053,10 +8125,6 @@
         "category": "Error",
         "code": 18051
     },
-    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
-        "category": "Error",
-        "code": 18052
-    },
     "Its type '{0}' is not a valid JSX element type.": {
         "category": "Error",
         "code": 18053
@@ -8064,5 +8132,13 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "'{0}' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18055
+    },
+    "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18056
     }
 }

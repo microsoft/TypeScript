@@ -2,9 +2,7 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     libContent,
     libPath,
@@ -13,9 +11,7 @@ import {
     getFsForSampleProjectReferences,
     getSysForSampleProjectReferences,
 } from "../helpers/sampleProjectReferences";
-import {
-    createSolutionBuilderHostForBaseline,
-} from "../helpers/solutionBuilder";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
 import {
     noChangeOnlyRuns,
     noChangeRun,
@@ -34,7 +30,7 @@ import {
 import {
     changeToHostTrackingWrittenFiles,
     libFile,
-    TestServerHost,
+    SerializeOutputOrder,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsbuild:: on 'sample1' project", () => {
@@ -282,7 +278,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             fs: () => projFs,
             commandLineArgs: ["--b", "tests", "--verbose"],
             modifyFs: fs => {
-                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es3" } }));
+                fs.writeFileSync("tests/tsconfig.base.json", jsonToReadableText({ compilerOptions: { target: "es5" } }));
                 replaceText(fs, "tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
             },
             edits: [{
@@ -317,7 +313,6 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
         it("building using getNextInvalidatedProject", () => {
             const baseline: string[] = [];
-            let oldSnap: ReturnType<TestServerHost["snap"]> | undefined;
             const system = changeToHostTrackingWrittenFiles(
                 fakes.patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
@@ -327,7 +322,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
             const host = createSolutionBuilderHostForBaseline(system);
             const builder = ts.createSolutionBuilder(host, ["tests"], {});
             baseline.push("Input::");
-            baselineState();
+            system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             verifyBuildNextResult(); // core
             verifyBuildNextResult(); // logic
             verifyBuildNextResult(); // tests
@@ -338,14 +333,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
                 const project = builder.getNextInvalidatedProject();
                 const result = project && project.done();
                 baseline.push(`Project Result:: ${jsonToReadableText({ project: project?.project, result })}`);
-                baselineState();
-            }
-
-            function baselineState() {
-                system.serializeOutput(baseline);
-                system.diff(baseline, oldSnap);
-                system.writtenFiles.clear();
-                oldSnap = system.snap();
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             }
         });
 
@@ -376,7 +364,6 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
     describe("project invalidation", () => {
         it("invalidates projects correctly", () => {
             const baseline: string[] = [];
-            let oldSnap: ReturnType<TestServerHost["snap"]> | undefined;
             const system = changeToHostTrackingWrittenFiles(
                 fakes.patchHostForBuildInfoReadWrite(
                     getSysForSampleProjectReferences(),
@@ -414,10 +401,7 @@ describe("unittests:: tsbuild:: on 'sample1' project", () => {
 
             function baselineState(heading: string) {
                 baseline.push(heading);
-                system.serializeOutput(baseline);
-                system.diff(baseline, oldSnap);
-                system.writtenFiles.clear();
-                oldSnap = system.snap();
+                system.serializeState(baseline, SerializeOutputOrder.BeforeDiff);
             }
         });
     });

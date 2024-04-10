@@ -1,4 +1,4 @@
-unicodeExtendedEscapesInRegularExpressions06.ts(3,22): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+unicodeExtendedEscapesInRegularExpressions06.ts(3,22): error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
 
 
 ==== unicodeExtendedEscapesInRegularExpressions06.ts (1 errors) ====
@@ -6,5 +6,5 @@ unicodeExtendedEscapesInRegularExpressions06.ts(3,22): error TS1499: This regula
     //  1. Assert: 0 ≤ cp ≤ 0x10FFFF.
     var x = /\u{10FFFF}/gu;
                          ~
-!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+!!! error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
     

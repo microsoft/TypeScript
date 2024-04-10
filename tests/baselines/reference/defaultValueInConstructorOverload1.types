@@ -3,13 +3,18 @@
 === defaultValueInConstructorOverload1.ts ===
 class C {
 >C : C
+>  : ^
 
     constructor(x = '');
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
 
     constructor(x = '') {
 >x : string
+>  : ^^^^^^
 >'' : ""
+>   : ^^
     }
 }

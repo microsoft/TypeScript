@@ -3,8 +3,11 @@
 === for-of57.ts ===
 var iter: Iterable<number>;
 >iter : Iterable<number>
+>     : ^^^^^^^^^^^^^^^^
 
 for (let num of iter) { }
 >num : number
+>    : ^^^^^^
 >iter : Iterable<number>
+>     : ^^^^^^^^^^^^^^^^
 

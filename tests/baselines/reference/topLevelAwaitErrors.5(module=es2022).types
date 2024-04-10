@@ -4,5 +4,6 @@
 // await in exported class name should fail
 export class await {
 >await : await
+>      : ^^^^^
 }
 

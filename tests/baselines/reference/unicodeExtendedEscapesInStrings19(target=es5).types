@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInStrings19.ts ===
 var x = "\u{}";
 >x : string
+>  : ^^^^^^
 >"\u{}" : "\\u{}"
+>       : ^^^^^^^
 

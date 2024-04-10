@@ -43,7 +43,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js -w --explainFiles --extendedDiagnostics
 Output::
-[[90m12:00:33 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /users/username/projects/project CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /users/username/projects/project/tsconfig.json 2000 undefined Config file
@@ -153,76 +153,11 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:00:47 AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 
-
-Program root files: [
-  "/users/username/projects/project/fileWithImports.ts",
-  "/users/username/projects/project/fileWithTypeRefs.ts"
-]
-Program options: {
-  "composite": true,
-  "traceResolution": true,
-  "outDir": "/users/username/projects/project/outDir",
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/node_modules/pkg0/index.d.ts (used version)
-/users/username/projects/project/filewithimports.ts (computed .d.ts during emit)
-/users/username/projects/project/node_modules/pkg2/index.d.ts (used version)
-/users/username/projects/project/filewithtyperefs.ts (computed .d.ts during emit)
-
-PolledWatches::
-/users/username/projects/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/users/username/projects/project/filewithimports.ts: *new*
-  {}
-/users/username/projects/project/filewithtyperefs.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project: *new*
-  {}
-/users/username/projects/project/node_modules: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/outDir/fileWithImports.js]
 "use strict";
@@ -245,7 +180,7 @@ export {};
 
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[3,5],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2],[4]],"referencedMap":[[3,1],[5,2]],"semanticDiagnosticsPerFile":[1,[3,[{"file":"../filewithimports.ts","start":66,"length":6,"messageText":"Cannot find module 'pkg1' or its corresponding type declarations.","category":1,"code":2307}]],[5,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,4],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -327,7 +262,6 @@ export {};
         "../node_modules/pkg2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       [
@@ -362,9 +296,74 @@ export {};
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1620
+  "size": 1596
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules: *new*
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/users/username/projects/project/fileWithImports.ts: *new*
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project: *new*
+  {}
+/users/username/projects/project/node_modules: *new*
+  {}
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/node_modules/pkg0/index.d.ts (used version)
+/users/username/projects/project/filewithimports.ts (computed .d.ts during emit)
+/users/username/projects/project/node_modules/pkg2/index.d.ts (used version)
+/users/username/projects/project/filewithtyperefs.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined
 
 Change:: write file not resolved by import
 
@@ -373,14 +372,6 @@ Input::
 export interface Import1 {}
 
 
-Before running Timeout callback:: count: 2
-3: timerToInvalidateFailedLookupResolutions
-4: timerToUpdateProgram
-After running Timeout callback:: count: 1
-5: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1 :: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -394,10 +385,34 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg1/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions *new*
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+3: timerToInvalidateFailedLookupResolutions
+4: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *deleted*
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
@@ -441,75 +456,13 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:01 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/users/username/projects/project/fileWithImports.ts",
-  "/users/username/projects/project/fileWithTypeRefs.ts"
-]
-Program options: {
-  "composite": true,
-  "traceResolution": true,
-  "outDir": "/users/username/projects/project/outDir",
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/pkg1/index.d.ts (used version)
-/users/username/projects/project/filewithimports.ts (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/filewithimports.ts:
-  {}
-/users/username/projects/project/filewithtyperefs.ts:
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg1/index.d.ts: *new*
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts:
-  {}
-/users/username/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/outDir/fileWithImports.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,6],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5]],"referencedMap":[[4,1],[6,2]],"semanticDiagnosticsPerFile":[1,4,[6,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -598,7 +551,6 @@ exitCode:: ExitStatus.undefined
         "../node_modules/pkg2/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../filewithimports.ts",
@@ -622,9 +574,72 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1534
+  "size": 1510
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/fileWithImports.ts:
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts:
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg1/index.d.ts: *new*
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts:
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/pkg1/index.d.ts (used version)
+/users/username/projects/project/filewithimports.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined
 
 Change:: write file not resolved by typeRef
 
@@ -633,14 +648,6 @@ Input::
 export interface Import3 {}
 
 
-Before running Timeout callback:: count: 2
-8: timerToInvalidateFailedLookupResolutions
-9: timerToUpdateProgram
-After running Timeout callback:: count: 1
-10: timerToUpdateProgram
-Before running Timeout callback:: count: 1
-10: timerToUpdateProgram
-After running Timeout callback:: count: 0
 Output::
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3 :: WatchInfo: /users/username/projects/project/node_modules 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup
@@ -654,10 +661,34 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project
 DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Scheduling update
 Elapsed:: *ms DirectoryWatcher:: Triggered with /users/username/projects/project/node_modules/pkg3/index.d.ts :: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
+
+
+Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions *new*
+9: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 2
+8: timerToInvalidateFailedLookupResolutions
+9: timerToUpdateProgram
+
+After running Timeout callback:: count: 1
+Output::
 Scheduling update
+
+
+
+Timeout callback:: count: 1
+9: timerToUpdateProgram *deleted*
+10: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+10: timerToUpdateProgram
+
+After running Timeout callback:: count: 0
+Output::
 Reloading new file names and options
 Synchronizing program
-[[90m12:01:10 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/users/username/projects/project/fileWithImports.ts","/users/username/projects/project/fileWithTypeRefs.ts"]
@@ -699,78 +730,13 @@ node_modules/pkg3/index.d.ts
   Type library referenced via 'pkg3' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90m12:01:17 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
-
-Program root files: [
-  "/users/username/projects/project/fileWithImports.ts",
-  "/users/username/projects/project/fileWithTypeRefs.ts"
-]
-Program options: {
-  "composite": true,
-  "traceResolution": true,
-  "outDir": "/users/username/projects/project/outDir",
-  "watch": true,
-  "explainFiles": true,
-  "extendedDiagnostics": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: SafeModules
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/node_modules/pkg0/index.d.ts
-/users/username/projects/project/node_modules/pkg1/index.d.ts
-/users/username/projects/project/fileWithImports.ts
-/users/username/projects/project/node_modules/pkg2/index.d.ts
-/users/username/projects/project/node_modules/pkg3/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/node_modules/pkg3/index.d.ts
-/users/username/projects/project/fileWithTypeRefs.ts
-
-Shape signatures in builder refreshed for::
-/users/username/projects/project/node_modules/pkg3/index.d.ts (used version)
-/users/username/projects/project/filewithtyperefs.ts (computed .d.ts)
-
-PolledWatches::
-/users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/users/username/projects/project/filewithimports.ts:
-  {}
-/users/username/projects/project/filewithtyperefs.ts:
-  {}
-/users/username/projects/project/node_modules/pkg0/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg1/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg2/index.d.ts:
-  {}
-/users/username/projects/project/node_modules/pkg3/index.d.ts: *new*
-  {}
-/users/username/projects/project/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects/project:
-  {}
-/users/username/projects/project/node_modules:
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/users/username/projects/project/outDir/fileWithTypeRefs.js] file written with same contents
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},"-8124648610-export interface Import3 {}",{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","../node_modules/pkg0/index.d.ts","../node_modules/pkg1/index.d.ts","../filewithimports.ts","../node_modules/pkg2/index.d.ts","../node_modules/pkg3/index.d.ts","../filewithtyperefs.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-8124756421-export interface Import0 {}","-8124720484-export interface Import1 {}",{"version":"-14287751515-import type { Import0 } from \"pkg0\";\nimport type { Import1 } from \"pkg1\";\n","signature":"-3531856636-export {};\n"},{"version":"-11273315461-interface Import2 {}","affectsGlobalScope":true},"-8124648610-export interface Import3 {}",{"version":"-12735305811-/// <reference types=\"pkg2\"/>\n/// <reference types=\"pkg3\"/>\ninterface LocalInterface extends Import2, Import3 {}\nexport {}\n","signature":"-3531856636-export {};\n"}],"root":[4,7],"options":{"composite":true,"outDir":"./"},"fileIdsList":[[2,3],[5,6]],"referencedMap":[[4,1],[7,2]],"semanticDiagnosticsPerFile":[1,4,[7,[{"file":"../filewithtyperefs.ts","start":102,"length":7,"messageText":"Cannot find name 'Import3'. Did you mean 'Import2'?","category":1,"code":2552}]],2,3,5,6],"latestChangedDtsFile":"./fileWithTypeRefs.d.ts"},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/outDir/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -866,7 +832,6 @@ exitCode:: ExitStatus.undefined
         "../node_modules/pkg3/index.d.ts"
       ]
     },
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "../filewithimports.ts",
@@ -891,6 +856,72 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./fileWithTypeRefs.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1614
+  "size": 1590
 }
 
+
+PolledWatches::
+/users/username/projects/node_modules:
+  {"pollingInterval":500}
+/users/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/users/username/projects/project/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/users/username/projects/project/fileWithImports.ts:
+  {}
+/users/username/projects/project/fileWithTypeRefs.ts:
+  {}
+/users/username/projects/project/node_modules/pkg0/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg1/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg2/index.d.ts:
+  {}
+/users/username/projects/project/node_modules/pkg3/index.d.ts: *new*
+  {}
+/users/username/projects/project/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/users/username/projects/project:
+  {}
+/users/username/projects/project/node_modules:
+  {}
+
+
+Program root files: [
+  "/users/username/projects/project/fileWithImports.ts",
+  "/users/username/projects/project/fileWithTypeRefs.ts"
+]
+Program options: {
+  "composite": true,
+  "traceResolution": true,
+  "outDir": "/users/username/projects/project/outDir",
+  "watch": true,
+  "explainFiles": true,
+  "extendedDiagnostics": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: SafeModules
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/node_modules/pkg0/index.d.ts
+/users/username/projects/project/node_modules/pkg1/index.d.ts
+/users/username/projects/project/fileWithImports.ts
+/users/username/projects/project/node_modules/pkg2/index.d.ts
+/users/username/projects/project/node_modules/pkg3/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Semantic diagnostics in builder refreshed for::
+/users/username/projects/project/node_modules/pkg3/index.d.ts
+/users/username/projects/project/fileWithTypeRefs.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/node_modules/pkg3/index.d.ts (used version)
+/users/username/projects/project/filewithtyperefs.ts (computed .d.ts)
+
+exitCode:: ExitStatus.undefined

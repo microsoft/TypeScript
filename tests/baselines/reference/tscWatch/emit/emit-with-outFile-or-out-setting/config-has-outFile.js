@@ -30,11 +30,31 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w -p /a/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/a/out.js]
+var x = 1;
+var y = 1;
+
+
+
+FsWatches::
+/a/a.ts: *new*
+  {}
+/a/b.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/a/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/a: *new*
+  {}
 
 Program root files: [
   "/a/a.ts",
@@ -57,27 +77,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-FsWatches::
-/a/a.ts: *new*
-  {}
-/a/b.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/a/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/a: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 1;
-var y = 1;
-
-
 
 Change:: Make change in the file
 
@@ -86,14 +86,25 @@ Input::
 let x = 11
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:22 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/out.js]
+var x = 11;
+var y = 1;
+
 
 
 
@@ -119,12 +130,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var x = 11;
-var y = 1;
-
-
 
 Change:: Make change in the file again
 
@@ -133,14 +138,25 @@ Input::
 let xy = 11
 
 
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+
+
+
+//// [/a/out.js]
+var xy = 11;
+var y = 1;
+
 
 
 
@@ -166,9 +182,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a/out.js]
-var xy = 11;
-var y = 1;
-
-

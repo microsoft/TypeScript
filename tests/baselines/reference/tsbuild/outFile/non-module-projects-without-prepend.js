@@ -84,7 +84,6 @@ class C {
 //// [/src/second/tsconfig.json]
 {
   "compilerOptions": {
-    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true, "module": "none",
     "removeComments": true,
@@ -106,7 +105,6 @@ c.doSomething();
 //// [/src/third/tsconfig.json]
 {
   "compilerOptions": {
-    "ignoreDeprecations": "5.0",
     "target": "es5",
     "composite": true, "module": "none",
     "removeComments": true,
@@ -122,12 +120,10 @@ c.doSomething();
   ],
   "references": [
     {
-      "path": "../first",
-      
+      "path": "../first"
     },
     {
-      "path": "../second",
-      
+      "path": "../second"
     }
   ]
 }
@@ -136,22 +132,22 @@ c.doSomething();
 
 Output::
 /lib/tsc --b /src/third --verbose
-[[90m12:00:26 AM[0m] Projects in this build: 
+[[90m12:00:24 AM[0m] Projects in this build: 
     * src/first/tsconfig.json
     * src/second/tsconfig.json
     * src/third/tsconfig.json
 
-[[90m12:00:27 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:25 AM[0m] Project 'src/first/tsconfig.json' is out of date because output file 'src/first/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:28 AM[0m] Building project '/src/first/tsconfig.json'...
+[[90m12:00:26 AM[0m] Building project '/src/first/tsconfig.json'...
 
-[[90m12:00:44 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:42 AM[0m] Project 'src/second/tsconfig.json' is out of date because output file 'src/second/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:45 AM[0m] Building project '/src/second/tsconfig.json'...
+[[90m12:00:43 AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90m12:00:57 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
+[[90m12:00:55 AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:00:58 AM[0m] Building project '/src/third/tsconfig.json'...
+[[90m12:00:56 AM[0m] Building project '/src/third/tsconfig.json'...
 
 exitCode:: ExitStatus.Success
 

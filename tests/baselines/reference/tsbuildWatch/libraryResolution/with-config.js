@@ -136,17 +136,17 @@ export const unrelated = 10;
 
 /home/src/lib/tsc.js -b -w project1 project2 project3 project4 --verbose --explainFiles --extendedDiagnostics
 Output::
-[[90m12:01:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:14 AM[0m] Projects in this build: 
+[[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/tsconfig.json
     * project2/tsconfig.json
     * project3/tsconfig.json
     * project4/tsconfig.json
 
-[[90m12:01:15 AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project1/tsconfig.json' is out of date because output file 'project1/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:16 AM[0m] Building project '/home/src/projects/project1/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project1/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-webworker' from '/home/src/projects/project1/__lib_node_modules_lookup_lib.webworker.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -281,9 +281,9 @@ project1/utils.d.ts
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
   Entry point for implicit type library 'sometype'
-[[90m12:01:34 AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:35 AM[0m] Building project '/home/src/projects/project2/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project2/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project2/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -309,9 +309,9 @@ project2/index.ts
   Matched by default include pattern '**/*'
 project2/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:45 AM[0m] Project 'project3/tsconfig.json' is out of date because output file 'project3/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project3/tsconfig.json' is out of date because output file 'project3/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:46 AM[0m] Building project '/home/src/projects/project3/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project3/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-es5' from '/home/src/projects/project3/__lib_node_modules_lookup_lib.es5.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -337,9 +337,9 @@ project3/index.ts
   Matched by default include pattern '**/*'
 project3/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:01:56 AM[0m] Project 'project4/tsconfig.json' is out of date because output file 'project4/tsconfig.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project4/tsconfig.json' is out of date because output file 'project4/tsconfig.tsbuildinfo' does not exist
 
-[[90m12:01:57 AM[0m] Building project '/home/src/projects/project4/tsconfig.json'...
+[[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project4/tsconfig.json'...
 
 ======== Resolving module '@typescript/lib-esnext' from '/home/src/projects/project4/__lib_node_modules_lookup_lib.esnext.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
@@ -393,7 +393,7 @@ project4/index.ts
   Matched by default include pattern '**/*'
 project4/utils.d.ts
   Matched by default include pattern '**/*'
-[[90m12:02:07 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Config file /home/src/projects/project1/tsconfig.json
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project1 1 undefined Wild card directory /home/src/projects/project1/tsconfig.json
@@ -426,6 +426,480 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project4/index.ts 250 undefi
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project4/utils.d.ts 250 undefined Source file /home/src/projects/project4/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@typescript/lib-esnext/package.json 2000 undefined package.json file /home/src/projects/project4/tsconfig.json
 
+
+//// [/home/src/projects/project1/file.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.file = void 0;
+exports.file = 10;
+
+
+//// [/home/src/projects/project1/file.d.ts]
+export declare const file = 10;
+
+
+//// [/home/src/projects/project1/file2.js]
+/// <reference lib="webworker"/>
+/// <reference lib="scripthost"/>
+/// <reference lib="es5"/>
+
+
+//// [/home/src/projects/project1/file2.d.ts]
+
+
+//// [/home/src/projects/project1/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = void 0;
+exports.x = "type1";
+
+
+//// [/home/src/projects/project1/index.d.ts]
+export declare const x = "type1";
+
+
+//// [/home/src/projects/project1/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","../../lib/lib.webworker.d.ts","../../lib/lib.scripthost.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"5381-"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1,4,3,5,6,7,8,10,9],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.es5.d.ts",
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.webworker.d.ts",
+      "../../lib/lib.scripthost.d.ts",
+      "./core.d.ts",
+      "./file.ts",
+      "./file2.ts",
+      "./index.ts",
+      "./utils.d.ts",
+      "./typeroot1/sometype/index.d.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.es5.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.dom.d.ts": {
+        "original": {
+          "version": "-8673759361-interface DOMInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-8673759361-interface DOMInterface { }",
+        "signature": "-8673759361-interface DOMInterface { }",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.webworker.d.ts": {
+        "original": {
+          "version": "-3990185033-interface WebWorkerInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-3990185033-interface WebWorkerInterface { }",
+        "signature": "-3990185033-interface WebWorkerInterface { }",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.scripthost.d.ts": {
+        "original": {
+          "version": "-5403980302-interface ScriptHostInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-5403980302-interface ScriptHostInterface { }",
+        "signature": "-5403980302-interface ScriptHostInterface { }",
+        "affectsGlobalScope": true
+      },
+      "./core.d.ts": {
+        "version": "-15683237936-export const core = 10;",
+        "signature": "-15683237936-export const core = 10;"
+      },
+      "./file.ts": {
+        "original": {
+          "version": "-16628394009-export const file = 10;",
+          "signature": "-9025507999-export declare const file = 10;\n"
+        },
+        "version": "-16628394009-export const file = 10;",
+        "signature": "-9025507999-export declare const file = 10;\n"
+      },
+      "./file2.ts": {
+        "original": {
+          "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
+          "signature": "5381-"
+        },
+        "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
+        "signature": "5381-"
+      },
+      "./index.ts": {
+        "original": {
+          "version": "-11532698187-export const x = \"type1\";",
+          "signature": "-5899226897-export declare const x = \"type1\";\n"
+        },
+        "version": "-11532698187-export const x = \"type1\";",
+        "signature": "-5899226897-export declare const x = \"type1\";\n"
+      },
+      "./utils.d.ts": {
+        "version": "-13729955264-export const y = 10;",
+        "signature": "-13729955264-export const y = 10;"
+      },
+      "./typeroot1/sometype/index.d.ts": {
+        "version": "-12476477079-export type TheNum = \"type1\";",
+        "signature": "-12476477079-export type TheNum = \"type1\";"
+      }
+    },
+    "root": [
+      [
+        [
+          5,
+          10
+        ],
+        [
+          "./core.d.ts",
+          "./file.ts",
+          "./file2.ts",
+          "./index.ts",
+          "./utils.d.ts",
+          "./typeroot1/sometype/index.d.ts"
+        ]
+      ]
+    ],
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.es5.d.ts",
+      "../../lib/lib.scripthost.d.ts",
+      "../../lib/lib.webworker.d.ts",
+      "./core.d.ts",
+      "./file.ts",
+      "./file2.ts",
+      "./index.ts",
+      "./typeroot1/sometype/index.d.ts",
+      "./utils.d.ts"
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1667
+}
+
+//// [/home/src/projects/project2/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.y = void 0;
+exports.y = 10;
+
+
+//// [/home/src/projects/project2/index.d.ts]
+export declare const y = 10;
+
+
+//// [/home/src/projects/project2/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.es5.d.ts",
+      "../../lib/lib.dom.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.es5.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.dom.d.ts": {
+        "original": {
+          "version": "-8673759361-interface DOMInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-8673759361-interface DOMInterface { }",
+        "signature": "-8673759361-interface DOMInterface { }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "original": {
+          "version": "-11999455899-export const y = 10",
+          "signature": "-7152472870-export declare const y = 10;\n"
+        },
+        "version": "-11999455899-export const y = 10",
+        "signature": "-7152472870-export declare const y = 10;\n"
+      },
+      "./utils.d.ts": {
+        "version": "-13729955264-export const y = 10;",
+        "signature": "-13729955264-export const y = 10;"
+      }
+    },
+    "root": [
+      [
+        3,
+        "./index.ts"
+      ],
+      [
+        4,
+        "./utils.d.ts"
+      ]
+    ],
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.es5.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 981
+}
+
+//// [/home/src/projects/project3/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.z = void 0;
+exports.z = 10;
+
+
+//// [/home/src/projects/project3/index.d.ts]
+export declare const z = 10;
+
+
+//// [/home/src/projects/project3/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.es5.d.ts",
+      "../../lib/lib.dom.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.es5.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.dom.d.ts": {
+        "original": {
+          "version": "-8673759361-interface DOMInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-8673759361-interface DOMInterface { }",
+        "signature": "-8673759361-interface DOMInterface { }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "original": {
+          "version": "-11960320506-export const z = 10",
+          "signature": "-7483702853-export declare const z = 10;\n"
+        },
+        "version": "-11960320506-export const z = 10",
+        "signature": "-7483702853-export declare const z = 10;\n"
+      },
+      "./utils.d.ts": {
+        "version": "-13729955264-export const y = 10;",
+        "signature": "-13729955264-export const y = 10;"
+      }
+    },
+    "root": [
+      [
+        3,
+        "./index.ts"
+      ],
+      [
+        4,
+        "./utils.d.ts"
+      ]
+    ],
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.es5.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 981
+}
+
+//// [/home/src/projects/project4/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.z = void 0;
+exports.z = 10;
+
+
+//// [/home/src/projects/project4/index.d.ts]
+export declare const z = 10;
+
+
+//// [/home/src/projects/project4/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../lib/lib.esnext.d.ts","../../lib/lib.dom.d.ts","../../lib/lib.webworker.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"referencedMap":[],"semanticDiagnosticsPerFile":[2,1,3,4,5],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../lib/lib.esnext.d.ts",
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.webworker.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "fileInfos": {
+      "../../lib/lib.esnext.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.dom.d.ts": {
+        "original": {
+          "version": "-8673759361-interface DOMInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-8673759361-interface DOMInterface { }",
+        "signature": "-8673759361-interface DOMInterface { }",
+        "affectsGlobalScope": true
+      },
+      "../../lib/lib.webworker.d.ts": {
+        "original": {
+          "version": "-3990185033-interface WebWorkerInterface { }",
+          "affectsGlobalScope": true
+        },
+        "version": "-3990185033-interface WebWorkerInterface { }",
+        "signature": "-3990185033-interface WebWorkerInterface { }",
+        "affectsGlobalScope": true
+      },
+      "./index.ts": {
+        "original": {
+          "version": "-11960320506-export const z = 10",
+          "signature": "-7483702853-export declare const z = 10;\n"
+        },
+        "version": "-11960320506-export const z = 10",
+        "signature": "-7483702853-export declare const z = 10;\n"
+      },
+      "./utils.d.ts": {
+        "version": "-13729955264-export const y = 10;",
+        "signature": "-13729955264-export const y = 10;"
+      }
+    },
+    "root": [
+      [
+        4,
+        "./index.ts"
+      ],
+      [
+        5,
+        "./utils.d.ts"
+      ]
+    ],
+    "options": {
+      "composite": true
+    },
+    "referencedMap": {},
+    "semanticDiagnosticsPerFile": [
+      "../../lib/lib.dom.d.ts",
+      "../../lib/lib.esnext.d.ts",
+      "../../lib/lib.webworker.d.ts",
+      "./index.ts",
+      "./utils.d.ts"
+    ],
+    "latestChangedDtsFile": "./index.d.ts"
+  },
+  "version": "FakeTSVersion",
+  "size": 1102
+}
+
+
+PolledWatches::
+/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-es5/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-esnext/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/projects/project1/typeroot1/sometype/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/home/src/projects/project1/core.d.ts: *new*
+  {}
+/home/src/projects/project1/file.ts: *new*
+  {}
+/home/src/projects/project1/file2.ts: *new*
+  {}
+/home/src/projects/project1/index.ts: *new*
+  {}
+/home/src/projects/project1/tsconfig.json: *new*
+  {}
+/home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
+  {}
+/home/src/projects/project1/utils.d.ts: *new*
+  {}
+/home/src/projects/project2/index.ts: *new*
+  {}
+/home/src/projects/project2/tsconfig.json: *new*
+  {}
+/home/src/projects/project2/utils.d.ts: *new*
+  {}
+/home/src/projects/project3/index.ts: *new*
+  {}
+/home/src/projects/project3/tsconfig.json: *new*
+  {}
+/home/src/projects/project3/utils.d.ts: *new*
+  {}
+/home/src/projects/project4/index.ts: *new*
+  {}
+/home/src/projects/project4/tsconfig.json: *new*
+  {}
+/home/src/projects/project4/utils.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project1: *new*
+  {}
+/home/src/projects/project2: *new*
+  {}
+/home/src/projects/project3: *new*
+  {}
+/home/src/projects/project4: *new*
+  {}
 
 Program root files: [
   "/home/src/projects/project1/core.d.ts",
@@ -596,485 +1070,4 @@ Shape signatures in builder refreshed for::
 /home/src/projects/project4/index.ts (computed .d.ts during emit)
 /home/src/projects/project4/utils.d.ts (used version)
 
-PolledWatches::
-/home/src/projects/node_modules/@typescript/lib-dom/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-es5/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-esnext/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-scripthost/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/node_modules/@typescript/lib-webworker/package.json: *new*
-  {"pollingInterval":2000}
-/home/src/projects/project1/typeroot1/sometype/package.json: *new*
-  {"pollingInterval":2000}
-
-FsWatches::
-/home/src/projects/project1/core.d.ts: *new*
-  {}
-/home/src/projects/project1/file.ts: *new*
-  {}
-/home/src/projects/project1/file2.ts: *new*
-  {}
-/home/src/projects/project1/index.ts: *new*
-  {}
-/home/src/projects/project1/tsconfig.json: *new*
-  {}
-/home/src/projects/project1/typeroot1/sometype/index.d.ts: *new*
-  {}
-/home/src/projects/project1/utils.d.ts: *new*
-  {}
-/home/src/projects/project2/index.ts: *new*
-  {}
-/home/src/projects/project2/tsconfig.json: *new*
-  {}
-/home/src/projects/project2/utils.d.ts: *new*
-  {}
-/home/src/projects/project3/index.ts: *new*
-  {}
-/home/src/projects/project3/tsconfig.json: *new*
-  {}
-/home/src/projects/project3/utils.d.ts: *new*
-  {}
-/home/src/projects/project4/index.ts: *new*
-  {}
-/home/src/projects/project4/tsconfig.json: *new*
-  {}
-/home/src/projects/project4/utils.d.ts: *new*
-  {}
-
-FsWatchesRecursive::
-/home/src/projects/project1: *new*
-  {}
-/home/src/projects/project2: *new*
-  {}
-/home/src/projects/project3: *new*
-  {}
-/home/src/projects/project4: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/home/src/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
-
-
-//// [/home/src/projects/project1/file.d.ts]
-export declare const file = 10;
-
-
-//// [/home/src/projects/project1/file2.js]
-/// <reference lib="webworker"/>
-/// <reference lib="scripthost"/>
-/// <reference lib="es5"/>
-
-
-//// [/home/src/projects/project1/file2.d.ts]
-/// <reference lib="webworker" />
-/// <reference lib="scripthost" />
-/// <reference lib="es5" />
-
-
-//// [/home/src/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
-
-
-//// [/home/src/projects/project1/index.d.ts]
-export declare const x = "type1";
-
-
-//// [/home/src/projects/project1/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","../../lib/lib.webworker.d.ts","../../lib/lib.scripthost.d.ts","./core.d.ts","./file.ts","./file2.ts","./index.ts","./utils.d.ts","./typeroot1/sometype/index.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-5403980302-interface ScriptHostInterface { }","affectsGlobalScope":true},"-15683237936-export const core = 10;",{"version":"-16628394009-export const file = 10;","signature":"-9025507999-export declare const file = 10;\n"},{"version":"-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n","signature":"-14493813102-/// <reference lib=\"webworker\" />\n/// <reference lib=\"scripthost\" />\n/// <reference lib=\"es5\" />\n"},{"version":"-11532698187-export const x = \"type1\";","signature":"-5899226897-export declare const x = \"type1\";\n"},"-13729955264-export const y = 10;","-12476477079-export type TheNum = \"type1\";"],"root":[[5,10]],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1,4,3,5,6,7,8,10,9],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project1/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../lib/lib.es5.d.ts",
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.webworker.d.ts",
-      "../../lib/lib.scripthost.d.ts",
-      "./core.d.ts",
-      "./file.ts",
-      "./file2.ts",
-      "./index.ts",
-      "./utils.d.ts",
-      "./typeroot1/sometype/index.d.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.es5.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.dom.d.ts": {
-        "original": {
-          "version": "-8673759361-interface DOMInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-8673759361-interface DOMInterface { }",
-        "signature": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.webworker.d.ts": {
-        "original": {
-          "version": "-3990185033-interface WebWorkerInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-3990185033-interface WebWorkerInterface { }",
-        "signature": "-3990185033-interface WebWorkerInterface { }",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.scripthost.d.ts": {
-        "original": {
-          "version": "-5403980302-interface ScriptHostInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-5403980302-interface ScriptHostInterface { }",
-        "signature": "-5403980302-interface ScriptHostInterface { }",
-        "affectsGlobalScope": true
-      },
-      "./core.d.ts": {
-        "version": "-15683237936-export const core = 10;",
-        "signature": "-15683237936-export const core = 10;"
-      },
-      "./file.ts": {
-        "original": {
-          "version": "-16628394009-export const file = 10;",
-          "signature": "-9025507999-export declare const file = 10;\n"
-        },
-        "version": "-16628394009-export const file = 10;",
-        "signature": "-9025507999-export declare const file = 10;\n"
-      },
-      "./file2.ts": {
-        "original": {
-          "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-          "signature": "-14493813102-/// <reference lib=\"webworker\" />\n/// <reference lib=\"scripthost\" />\n/// <reference lib=\"es5\" />\n"
-        },
-        "version": "-11916614574-/// <reference lib=\"webworker\"/>\n/// <reference lib=\"scripthost\"/>\n/// <reference lib=\"es5\"/>\n",
-        "signature": "-14493813102-/// <reference lib=\"webworker\" />\n/// <reference lib=\"scripthost\" />\n/// <reference lib=\"es5\" />\n"
-      },
-      "./index.ts": {
-        "original": {
-          "version": "-11532698187-export const x = \"type1\";",
-          "signature": "-5899226897-export declare const x = \"type1\";\n"
-        },
-        "version": "-11532698187-export const x = \"type1\";",
-        "signature": "-5899226897-export declare const x = \"type1\";\n"
-      },
-      "./utils.d.ts": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;"
-      },
-      "./typeroot1/sometype/index.d.ts": {
-        "version": "-12476477079-export type TheNum = \"type1\";",
-        "signature": "-12476477079-export type TheNum = \"type1\";"
-      }
-    },
-    "root": [
-      [
-        [
-          5,
-          10
-        ],
-        [
-          "./core.d.ts",
-          "./file.ts",
-          "./file2.ts",
-          "./index.ts",
-          "./utils.d.ts",
-          "./typeroot1/sometype/index.d.ts"
-        ]
-      ]
-    ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.es5.d.ts",
-      "../../lib/lib.scripthost.d.ts",
-      "../../lib/lib.webworker.d.ts",
-      "./core.d.ts",
-      "./file.ts",
-      "./file2.ts",
-      "./index.ts",
-      "./typeroot1/sometype/index.d.ts",
-      "./utils.d.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1805
-}
-
-//// [/home/src/projects/project2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
-
-
-//// [/home/src/projects/project2/index.d.ts]
-export declare const y = 10;
-
-
-//// [/home/src/projects/project2/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11999455899-export const y = 10","signature":"-7152472870-export declare const y = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../lib/lib.es5.d.ts",
-      "../../lib/lib.dom.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.es5.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.dom.d.ts": {
-        "original": {
-          "version": "-8673759361-interface DOMInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-8673759361-interface DOMInterface { }",
-        "signature": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true
-      },
-      "./index.ts": {
-        "original": {
-          "version": "-11999455899-export const y = 10",
-          "signature": "-7152472870-export declare const y = 10;\n"
-        },
-        "version": "-11999455899-export const y = 10",
-        "signature": "-7152472870-export declare const y = 10;\n"
-      },
-      "./utils.d.ts": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ],
-      [
-        4,
-        "./utils.d.ts"
-      ]
-    ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.es5.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1005
-}
-
-//// [/home/src/projects/project3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
-
-
-//// [/home/src/projects/project3/index.d.ts]
-export declare const z = 10;
-
-
-//// [/home/src/projects/project3/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.es5.d.ts","../../lib/lib.dom.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[3,4],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1,3,4],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../lib/lib.es5.d.ts",
-      "../../lib/lib.dom.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.es5.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.dom.d.ts": {
-        "original": {
-          "version": "-8673759361-interface DOMInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-8673759361-interface DOMInterface { }",
-        "signature": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true
-      },
-      "./index.ts": {
-        "original": {
-          "version": "-11960320506-export const z = 10",
-          "signature": "-7483702853-export declare const z = 10;\n"
-        },
-        "version": "-11960320506-export const z = 10",
-        "signature": "-7483702853-export declare const z = 10;\n"
-      },
-      "./utils.d.ts": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;"
-      }
-    },
-    "root": [
-      [
-        3,
-        "./index.ts"
-      ],
-      [
-        4,
-        "./utils.d.ts"
-      ]
-    ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.es5.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1005
-}
-
-//// [/home/src/projects/project4/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
-
-
-//// [/home/src/projects/project4/index.d.ts]
-export declare const z = 10;
-
-
-//// [/home/src/projects/project4/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../lib/lib.esnext.d.ts","../../lib/lib.dom.d.ts","../../lib/lib.webworker.d.ts","./index.ts","./utils.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-8673759361-interface DOMInterface { }","affectsGlobalScope":true},{"version":"-3990185033-interface WebWorkerInterface { }","affectsGlobalScope":true},{"version":"-11960320506-export const z = 10","signature":"-7483702853-export declare const z = 10;\n"},"-13729955264-export const y = 10;"],"root":[4,5],"options":{"composite":true},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[2,1,3,4,5],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
-
-//// [/home/src/projects/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
-{
-  "program": {
-    "fileNames": [
-      "../../lib/lib.esnext.d.ts",
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.webworker.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "fileInfos": {
-      "../../lib/lib.esnext.d.ts": {
-        "original": {
-          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
-        },
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.dom.d.ts": {
-        "original": {
-          "version": "-8673759361-interface DOMInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-8673759361-interface DOMInterface { }",
-        "signature": "-8673759361-interface DOMInterface { }",
-        "affectsGlobalScope": true
-      },
-      "../../lib/lib.webworker.d.ts": {
-        "original": {
-          "version": "-3990185033-interface WebWorkerInterface { }",
-          "affectsGlobalScope": true
-        },
-        "version": "-3990185033-interface WebWorkerInterface { }",
-        "signature": "-3990185033-interface WebWorkerInterface { }",
-        "affectsGlobalScope": true
-      },
-      "./index.ts": {
-        "original": {
-          "version": "-11960320506-export const z = 10",
-          "signature": "-7483702853-export declare const z = 10;\n"
-        },
-        "version": "-11960320506-export const z = 10",
-        "signature": "-7483702853-export declare const z = 10;\n"
-      },
-      "./utils.d.ts": {
-        "version": "-13729955264-export const y = 10;",
-        "signature": "-13729955264-export const y = 10;"
-      }
-    },
-    "root": [
-      [
-        4,
-        "./index.ts"
-      ],
-      [
-        5,
-        "./utils.d.ts"
-      ]
-    ],
-    "options": {
-      "composite": true
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {},
-    "semanticDiagnosticsPerFile": [
-      "../../lib/lib.dom.d.ts",
-      "../../lib/lib.esnext.d.ts",
-      "../../lib/lib.webworker.d.ts",
-      "./index.ts",
-      "./utils.d.ts"
-    ],
-    "latestChangedDtsFile": "./index.d.ts"
-  },
-  "version": "FakeTSVersion",
-  "size": 1126
-}
-

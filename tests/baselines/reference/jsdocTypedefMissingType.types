@@ -6,7 +6,9 @@
 
 const t = 0;
 >t : 0
+>  : ^
 >0 : 0
+>  : ^
 
 // OK: missing a type, but have property tags.
 /**
@@ -17,7 +19,11 @@ const t = 0;
 /** @type Person */
 const person = { name: "" };
 >person : Person
+>       : ^^^^^^
 >{ name: "" } : { name: string; }
+>             : ^^^^^^^^^^^^^^^^^
 >name : string
+>     : ^^^^^^
 >"" : ""
+>   : ^^
 

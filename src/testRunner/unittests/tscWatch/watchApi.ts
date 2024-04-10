@@ -1,17 +1,9 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
@@ -45,7 +37,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             path: `/user/username/projects/myproject/settings.json`,
             content: jsonToReadableText({ content: "Print this" }),
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
             [libFile, mainFile, config, settingsJson],
             { currentDirectory: "/user/username/projects/myproject" },
         ));
@@ -72,7 +64,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             commandLineArgs: ["--w", "--p", config.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
         });
@@ -81,7 +72,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
     describe("hasInvalidatedResolutions", () => {
         function verifyWatch(subScenario: string, implementHasInvalidatedResolution: boolean) {
             it(subScenario, () => {
-                const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem({
+                const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem({
                     [`/user/username/projects/myproject/tsconfig.json`]: jsonToReadableText({
                         compilerOptions: { traceResolution: true, extendedDiagnostics: true },
                         files: ["main.ts"],
@@ -105,7 +96,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
                     commandLineArgs: ["--w"],
                     sys,
                     baseline,
-                    oldSnap,
                     getPrograms,
                     edits: [
                         {
@@ -149,7 +139,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             path: `/user/username/projects/myproject/index.ts`,
             content: "let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(
             [libFile, mainFile, config],
             { currentDirectory: "/user/username/projects/myproject" },
         ));
@@ -172,7 +162,6 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch expose error count to wat
             commandLineArgs: ["--w", "--p", config.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             watchOrSolution: watch,
         });
@@ -189,7 +178,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
             path: `/user/username/projects/myproject/main.ts`,
             content: "const x = 10;",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([config, mainFile, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([config, mainFile, libFile]));
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config.path,
             system: sys,
@@ -204,13 +193,11 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost does not implement s
             commandLineArgs: ["--w", "--p", config.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [{
                 caption: "Write a file",
                 edit: sys => sys.writeFile(`/user/username/projects/myproject/bar.ts`, "const y =10;"),
-                timeouts: sys => {
-                    sys.logTimeoutQueueLength();
+                timeouts: () => {
                     watch.getProgram();
                 },
             }],
@@ -233,7 +220,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             path: `/user/username/projects/myproject/other.vue`,
             content: "",
         };
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(
+        const { sys, baseline, cb, getPrograms } = createBaseline(
             createWatchedSystem([config, mainFile, otherFile, libFile]),
         );
         const host = createWatchCompilerHostOfConfigFileForBaseline({
@@ -250,7 +237,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost can add extraFileExt
             commandLineArgs: ["--w", "--p", config.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [{
                 caption: "Write a file",
@@ -293,7 +279,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
     ) {
         const { cb, getPrograms } = commandLineCallbacks(sys);
         baseline.push(`tsc --w${optionsToExtend?.noEmit ? " --noEmit" : ""}`);
-        const oldSnap = sys.snap();
         const host = createWatchCompilerHostOfConfigFileForBaseline<T>({
             configFileName: config.path,
             optionsToExtend,
@@ -307,7 +292,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             getPrograms,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap,
         });
         watch.close();
     }
@@ -354,7 +338,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
     }
 
     it("verifies that noEmit is handled on createSemanticDiagnosticsBuilderProgram and typechecking happens only on affected files", () => {
-        const { sys, baseline, oldSnap, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
+        const { sys, baseline, cb, getPrograms, config, mainFile } = createSystem("{}", "export const x = 10;");
         const host = createWatchCompilerHostOfConfigFileForBaseline({
             configFileName: config.path,
             optionsToExtend: { noEmit: true },
@@ -369,7 +353,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             commandLineArgs: ["--w", "--p", config.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [{
                 caption: "Modify a file",
@@ -469,7 +452,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
         applyEdit(sys, baseline, sys => sys.writeFile(mainFile.path, "export const x = 10;"), "Fix error");
 
         const { cb, getPrograms } = commandLineCallbacks(sys);
-        const oldSnap = sys.snap();
         const reportDiagnostic = ts.createDiagnosticReporter(sys, /*pretty*/ true);
         const reportWatchStatus = ts.createWatchStatusReporter(sys, /*pretty*/ true);
         const host = ts.createWatchCompilerHostOfConfigFile({
@@ -498,7 +480,6 @@ describe("unittests:: tsc-watch:: watchAPI:: when watchHost uses createSemanticD
             getPrograms,
             oldPrograms: ts.emptyArray,
             sys,
-            oldSnap,
         });
         Harness.Baseline.runBaseline(`tscWatch/watchApi/semantic-builder-emitOnlyDts.js`, baseline.join("\r\n"));
     });
@@ -585,12 +566,12 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 {
                     caption: "Add excluded file to project1",
                     edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                    timeouts: sys => sys.logTimeoutQueueLength(),
+                    timeouts: ts.noop,
                 },
                 {
                     caption: "Add output of class3",
                     edit: sys => sys.writeFile(`/user/username/projects/myproject/projects/project1/class3.d.ts`, `declare class class3 {}`),
-                    timeouts: sys => sys.logTimeoutQueueLength(),
+                    timeouts: ts.noop,
                 },
             ],
             watchOrSolution: watch,
@@ -622,7 +603,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when getParsedCommandLine is implem
                 {
                     caption: "Add excluded file to project1",
                     edit: sys => sys.ensureFileOrFolder({ path: `/user/username/projects/myproject/projects/project1/temp/file.d.ts`, content: `declare class file {}` }),
-                    timeouts: sys => sys.logTimeoutQueueLength(),
+                    timeouts: ts.noop,
                 },
                 {
                     caption: "Delete output of class3",
@@ -684,7 +665,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                     {
                         caption: "Emit all files",
@@ -693,7 +674,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit();
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                     {
                         caption: "Emit with emitOnlyDts shouldnt emit anything",
@@ -702,7 +683,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ true);
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                     {
                         caption: "Emit full should not emit anything",
@@ -711,7 +692,7 @@ describe("unittests:: tsc-watch:: watchAPI:: when builder emit occurs with emitO
                             program.emit();
                             baseline.cb(program);
                         },
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                 ],
                 watchOrSolution: watch,

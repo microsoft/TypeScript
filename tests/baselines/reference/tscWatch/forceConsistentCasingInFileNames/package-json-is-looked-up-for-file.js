@@ -43,7 +43,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/Users/name/projects/lib-boilerplate/src/package.json' does not exist.
 Found 'package.json' at '/Users/name/projects/lib-boilerplate/package.json'.
@@ -56,6 +56,7 @@ File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist acc
 File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 Using 'exports' subpath '.' with target './src/index.ts'.
 File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
 File '/a/lib/package.json' does not exist.
@@ -70,9 +71,46 @@ src/index.ts
 test/basic.spec.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/Users/name/projects/lib-boilerplate/src/index.js]
+export function thing() { }
+
+
+//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
+export {};
+
+
+
+PolledWatches::
+/Users/name/projects/lib-boilerplate/node_modules/@types: *new*
+  {"pollingInterval":500}
+/Users/name/projects/lib-boilerplate/src/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/lib-boilerplate/test/package.json: *new*
+  {"pollingInterval":2000}
+/Users/name/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/Users/name/projects/lib-boilerplate/package.json: *new*
+  {}
+/Users/name/projects/lib-boilerplate/src/index.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
+  {}
+/Users/name/projects/lib-boilerplate/tsconfig.json: *new*
+  {}
+/a/lib/lib.es2021.full.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/Users/name/projects/lib-boilerplate: *new*
+  {}
+/Users/name/projects/lib-boilerplate/test: *new*
+  {}
 
 Program root files: [
   "/Users/name/projects/lib-boilerplate/src/index.ts",
@@ -103,41 +141,4 @@ Shape signatures in builder refreshed for::
 /users/name/projects/lib-boilerplate/src/index.ts (used version)
 /users/name/projects/lib-boilerplate/test/basic.spec.ts (used version)
 
-PolledWatches::
-/users/name/projects/lib-boilerplate/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/name/projects/lib-boilerplate/src/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/lib-boilerplate/test/package.json: *new*
-  {"pollingInterval":2000}
-/users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.es2021.full.d.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/package.json: *new*
-  {}
-/users/name/projects/lib-boilerplate/src/index.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/test/basic.spec.ts: *new*
-  {}
-/users/name/projects/lib-boilerplate/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/users/name/projects/lib-boilerplate: *new*
-  {}
-/users/name/projects/lib-boilerplate/test: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/Users/name/projects/lib-boilerplate/src/index.js]
-export function thing() { }
-
-
-//// [/Users/name/projects/lib-boilerplate/test/basic.spec.js]
-export {};
-
-

@@ -1,11 +1,7 @@
-import {
-    CancelError,
-} from "@esfx/canceltoken";
+import { CancelError } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
-import {
-    spawn,
-} from "child_process";
+import { spawn } from "child_process";
 import fs from "fs";
 import JSONC from "jsonc-parser";
 import which from "which";
@@ -28,7 +24,7 @@ export async function exec(cmd, args, options = {}) {
         const { ignoreExitCode, waitForExit = true, ignoreStdout } = options;
 
         if (!options.hidePrompt) console.log(`> ${chalk.green(cmd)} ${args.join(" ")}`);
-        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore" });
+        const proc = spawn(which.sync(cmd), args, { stdio: waitForExit ? ignoreStdout ? ["inherit", "ignore", "inherit"] : "inherit" : "ignore", detached: !waitForExit });
         if (waitForExit) {
             const onCanceled = () => {
                 proc.kill();
@@ -52,8 +48,7 @@ export async function exec(cmd, args, options = {}) {
         }
         else {
             proc.unref();
-            // wait a short period in order to allow the process to start successfully before Node exits.
-            setTimeout(() => resolve({ exitCode: undefined }), 100);
+            resolve({ exitCode: undefined });
         }
     }));
 }
