@@ -167,11 +167,11 @@ function f1(_this: number) {
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
->            : ^   ^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^
 >console : { log(msg: any): any; }
->        : ^^^^^^   ^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (msg: any) => any
->    : ^   ^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^
 >this.x : any
 >this : any
 >     : ^^^
@@ -240,19 +240,19 @@ class Foo3 {
 
     z(_this: string); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
->  : ^^^     ^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
 >      : ^^^^^^
 
     z(_this: number); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
->  : ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
 >      : ^^^^^^
 
     z(_this: any) { // Error 
 >z : { (_this: string): any; (_this: number): any; }
->  : ^^^     ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : any
 
         var lambda = () => {
@@ -272,7 +272,7 @@ class Foo3 {
 }
 declare var console: {
 >console : { log(msg: any): any; }
->        : ^^^^^^   ^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 
     log(msg: any);
 >log : (msg: any) => any
@@ -282,19 +282,19 @@ declare var console: {
 
 function f3(_this: number); // no code gen - no error
 >f3 : { (_this: number): any; (_this: string): any; }
->   : ^^^     ^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
 >      : ^^^^^^
 
 function f3(_this: string); // no code gen - no error
 >f3 : { (_this: number): any; (_this: string): any; }
->   : ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
 >      : ^^^^^^
 
 function f3(_this: any) {
 >f3 : { (_this: number): any; (_this: string): any; }
->   : ^^^     ^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : any
 
     x => { console.log(this.x); };
@@ -303,11 +303,11 @@ function f3(_this: any) {
 >x : any
 >console.log(this.x) : any
 >console.log : (msg: any) => any
->            : ^   ^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^
 >console : { log(msg: any): any; }
->        : ^^^^^^   ^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (msg: any) => any
->    : ^   ^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^
 >this.x : any
 >this : any
 >     : ^^^
@@ -329,26 +329,26 @@ declare class Foo4 {
 
     z(_this: string); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
->  : ^^^     ^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
 >      : ^^^^^^
 
     z(_this: number); // no code gen - no error
 >z : { (_this: string): any; (_this: number): any; }
->  : ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^
+>  : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
 >      : ^^^^^^
 }
 
 declare function f4(_this: number); // no code gen - no error
 >f4 : { (_this: number): any; (_this: string): any; }
->   : ^^^     ^^      ^^^^^^^^^     ^^^^^^^^^^^^^^^^^
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : number
 >      : ^^^^^^
 
 declare function f4(_this: string); // no code gen - no error
 >f4 : { (_this: number): any; (_this: string): any; }
->   : ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^
+>   : ^^^     ^^      ^^^^^^^^^     ^^      ^^^^^^^^^
 >_this : string
 >      : ^^^^^^
 

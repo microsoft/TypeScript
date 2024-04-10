@@ -11,7 +11,7 @@ function foo(bar:{a:number;});
 
 function foo(bar:{a:string;}) { return {a:""} }
 >foo : (bar: { a: number; }) => any
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^^^^^^^
 >bar : { a: string; }
 >    : ^^^^^      ^^^
 >a : string

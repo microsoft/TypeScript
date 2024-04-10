@@ -54,7 +54,7 @@ export const classMap = directive(ClassMapDirective);
 >directive(ClassMapDirective) : () => { directive: typeof ClassMapDirective; }
 >                             :                                               
 >directive : <C>(class_: C) => () => { directive: C; }
->          : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassMapDirective : typeof ClassMapDirective
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

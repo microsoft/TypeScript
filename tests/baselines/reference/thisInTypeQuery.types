@@ -60,7 +60,7 @@ class MyClass {
 >assert(params) : void
 >               : ^^^^
 >assert : (condition: unknown) => asserts condition
->       : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >params : { a: { key: string; }; } | null
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

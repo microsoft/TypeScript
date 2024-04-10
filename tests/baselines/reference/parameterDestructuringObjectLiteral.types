@@ -17,7 +17,7 @@ fn1({ headers: { foo: 1 } });
 >fn1({ headers: { foo: 1 } }) : void
 >                             : ^^^^
 >fn1 : (options: { headers?: {}; }) => void
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^                 ^^^^^^^^^
 >{ headers: { foo: 1 } } : { headers: { foo: number; }; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : { foo: number; }

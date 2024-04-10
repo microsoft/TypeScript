@@ -63,7 +63,7 @@ Point.zero = (): Point => Point(0, 0);
 >Point.zero : () => Point
 >           : ^^^^^^     
 >Point : { (x: number, y: number): Point; zero(): Point; }
->      : ^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zero : () => Point
 >     : ^^^^^^^^^^^
 >(): Point => Point(0, 0) : () => Point
@@ -71,7 +71,7 @@ Point.zero = (): Point => Point(0, 0);
 >Point(0, 0) : Point
 >            : ^^^^^
 >Point : { (x: number, y: number): Point; zero(): Point; }
->      : ^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >0 : 0

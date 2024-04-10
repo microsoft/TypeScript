@@ -27,11 +27,11 @@ class Bug {
 >that.foo(name) : void
 >               : ^^^^
 >that.foo : (name: string) => void
->         : ^    ^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^^^^^^^^
 >that : Bug
 >     : ^^^
 >foo : (name: string) => void
->    : ^    ^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
      }

@@ -3,11 +3,11 @@
 === logicalAssignment2.ts ===
 interface A {
     foo: {
->foo : { bar(): { baz: 0 | 1 | 42 | undefined | ''; }; baz: 0 | 1 | 42 | undefined | ''; }
+>foo : { bar(): { baz: 0 | 1 | 42 | undefined | ""; }; baz: 0 | 1 | 42 | undefined | ""; }
 >    : ^^^^^^^^^                                     ^^^^^^^                           ^^^
 
         bar(): {
->bar : () => { baz: 0 | 1 | 42 | undefined | ''; }
+>bar : () => { baz: 0 | 1 | 42 | undefined | ""; }
 >    : ^^^^^^                                     
 
             baz: 0 | 1 | 42 | undefined | ''

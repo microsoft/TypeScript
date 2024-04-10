@@ -27,7 +27,7 @@ const result = canYouInferThis(() => ({
 >canYouInferThis(() => ({    a: { BLAH: 33 },    b: x => { }})) : { BLAH: number; }
 >                                                               :                  
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
->                : ^^^^  ^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^  ^^            ^^^^^^
 >() => ({    a: { BLAH: 33 },    b: x => { }}) : () => { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    a: { BLAH: 33 },    b: x => { }}) : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
@@ -77,7 +77,7 @@ goofus((a: string) => ({ dog() { return a; } }));
 >goofus((a: string) => ({ dog() { return a; } })) : void
 >                                                 : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
 >                                         : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -95,7 +95,7 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 >goofus((a: string) => ({ dog: function() { return a; } })) : void
 >                                                           : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog: function() { return a; } }) : (a: string) => { dog: () => string; }
 >                                                   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string

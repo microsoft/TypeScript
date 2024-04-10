@@ -114,7 +114,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                    : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; }; }
@@ -166,7 +166,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                                                                                      : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func(): { a: true; }; }; }
@@ -234,7 +234,7 @@ const Component = <T extends Animations>({
 ><Component  animations={{    test: {      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    },  }}  style={(anim) => {    return "";  }}/> : JSX.Element
 >                                                                                                                                                                                                           : ^^^^^^^^^^^
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations={{
 >animations : { test: { kind: "a"; value: number; a: true; func: () => { a: true; }; }; }
@@ -334,7 +334,7 @@ function Foo<T>(props: Props<T>) {
 ><Foo  a={() => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
 >                                                       : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 
   a={() => 10}
 >a : () => number
@@ -353,12 +353,12 @@ function Foo<T>(props: Props<T>) {
 >    : ^^^^^^
 >arg.toString() : string
 >               : ^^^^^^
->arg.toString : (radix?: number | undefined) => string
->             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 />;
 
@@ -366,7 +366,7 @@ function Foo<T>(props: Props<T>) {
 ><Foo  a={(x) => 10}  b={(arg) => { arg.toString(); }}/> : JSX.Element
 >                                                        : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 
   a={(x) => 10}
 >a : (x: string) => number
@@ -387,12 +387,12 @@ function Foo<T>(props: Props<T>) {
 >    : ^^^^^^
 >arg.toString() : string
 >               : ^^^^^^
->arg.toString : (radix?: number | undefined) => string
->             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 />;
 
@@ -400,7 +400,7 @@ function Foo<T>(props: Props<T>) {
 ><Foo {...{  a: (x) => 10,  b: (arg) => { arg.toString(); },}} /> : JSX.Element
 >                                                                 : ^^^^^^^^^^^
 >Foo : <T>(props: Props<T>) => JSX.Element
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^        ^^^^^^^^^^^^^^^^
 >{  a: (x) => 10,  b: (arg) => { arg.toString(); },} : { a: (x: string) => number; b: (arg: number) => void; }
 >                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
 
@@ -423,12 +423,12 @@ function Foo<T>(props: Props<T>) {
 >    : ^^^^^^
 >arg.toString() : string
 >               : ^^^^^^
->arg.toString : (radix?: number | undefined) => string
->             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 }} />;
 

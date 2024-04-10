@@ -201,19 +201,19 @@ class Foo4 extends Foo {
     }
     y(_super: number); // no code gen - no error
 >y : { (_super: number): any; (_super: string): any; }
->  : ^^^      ^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>  : ^^^      ^^      ^^^^^^^^^      ^^      ^^^^^^^^^
 >_super : number
 >       : ^^^^^^
 
     y(_super: string); // no code gen - no error
 >y : { (_super: number): any; (_super: string): any; }
->  : ^^^      ^^^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
+>  : ^^^      ^^      ^^^^^^^^^      ^^      ^^^^^^^^^
 >_super : string
 >       : ^^^^^^
 
     y(_super: any) { // Error 
 >y : { (_super: number): any; (_super: string): any; }
->  : ^^^      ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>  : ^^^      ^^      ^^^^^^^^^      ^^      ^^^^^^^^^
 >_super : any
 
         var lambda = () => {

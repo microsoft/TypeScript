@@ -29,7 +29,7 @@ invoke(foo);
 >invoke(foo) : void
 >            : ^^^^
 >invoke : (f: () => void) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^          ^^^^^^^^^
 >foo : { default: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 

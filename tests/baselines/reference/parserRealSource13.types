@@ -904,7 +904,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(true, cur, callback) : boolean
 >                                       : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^^^^^^^^^^   ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^^^^^^        ^^                       ^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >cur : AST
@@ -931,7 +931,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(false, cur, callback) : boolean
 >                                        : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^^^^^^^^^^   ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^^^^^^        ^^                       ^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 >cur : AST

@@ -34,7 +34,7 @@ f = (x) => moduleA;
 >f = (x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
 >               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IHasVisualizationModel

@@ -73,7 +73,7 @@ switch (params.tag) {
 >getType(params) : Omit<{ foo: string; } & { tag: "a"; type: number; }, "foo">
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
->        : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >params : { foo: string; } & { tag: "a"; type: number; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : number
@@ -95,7 +95,7 @@ switch (params.tag) {
 >getType(params) : Omit<{ foo: string; } & { tag: "b"; type: string; }, "foo">
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getType : <P extends Params>(params: P) => Omit<P, "foo">
->        : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^
 >params : { foo: string; } & { tag: "b"; type: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : string

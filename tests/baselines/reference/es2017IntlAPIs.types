@@ -6,8 +6,8 @@ Intl.DateTimeFormat('en').formatToParts()[0];
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en').formatToParts() : Intl.DateTimeFormatPart[]
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->                                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>                                        : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en') : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -18,8 +18,8 @@ Intl.DateTimeFormat('en').formatToParts()[0];
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en' : "en"
 >     : ^^^^
->formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -28,8 +28,8 @@ Intl.DateTimeFormat('en').formatToParts(new Date())[0];
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en').formatToParts(new Date()) : Intl.DateTimeFormatPart[]
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->                                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>                                        : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en') : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -40,8 +40,8 @@ Intl.DateTimeFormat('en').formatToParts(new Date())[0];
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en' : "en"
 >     : ^^^^
->formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor
@@ -54,8 +54,8 @@ Intl.DateTimeFormat('en').formatToParts(Date.now())[0];
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en').formatToParts(Date.now()) : Intl.DateTimeFormatPart[]
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
->Intl.DateTimeFormat('en').formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->                                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl.DateTimeFormat('en').formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>                                        : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat('en') : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -66,8 +66,8 @@ Intl.DateTimeFormat('en').formatToParts(Date.now())[0];
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en' : "en"
 >     : ^^^^
->formatToParts : (date?: number | Date) => Intl.DateTimeFormatPart[]
->              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatToParts : (date?: Date | number) => Intl.DateTimeFormatPart[]
+>              : ^    ^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Date.now() : number
 >           : ^^^^^^
 >Date.now : () => number

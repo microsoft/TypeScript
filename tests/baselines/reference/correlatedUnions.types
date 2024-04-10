@@ -74,7 +74,7 @@ processRecord(r1);
 >processRecord(r1) : void
 >                  : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^              ^^^^^^^^^
 >r1 : { kind: "n"; v: number; f: (v: number) => void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
@@ -82,7 +82,7 @@ processRecord(r2);
 >processRecord(r2) : void
 >                  : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^              ^^^^^^^^^
 >r2 : UnionRecord<keyof RecordMap>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >processRecord({ kind: 'n', v: 42, f: v => v.toExponential() }) : void
 >                                                               : ^^^^
 >processRecord : <K extends keyof RecordMap>(rec: UnionRecord<K>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^              ^^^^^^^^^
 >{ kind: 'n', v: 42, f: v => v.toExponential() } : { kind: "n"; v: number; f: (v: number) => string; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >kind : "n"
@@ -109,12 +109,12 @@ processRecord({ kind: 'n', v: 42, f: v => v.toExponential() });
 >  : ^^^^^^
 >v.toExponential() : string
 >                  : ^^^^^^
->v.toExponential : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v.toExponential : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
->toExponential : (fractionDigits?: number | undefined) => string
->              : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^^^^^^^
 
 // --------
 
@@ -179,17 +179,17 @@ const renderFuncs: RenderFuncMap = {
 >renderFuncs : RenderFuncMap
 >            : ^^^^^^^^^^^^^
 >{    text: renderTextField,    select: renderSelectField,} : { text: (props: TextFieldData) => void; select: (props: SelectFieldData) => void; }
->                                                           : ^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                           : ^^^^^^^^^     ^^             ^^^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^
 
     text: renderTextField,
 >text : (props: TextFieldData) => void
->     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^             ^^^^^^^^^
 >renderTextField : (props: TextFieldData) => void
 >                :                               
 
     select: renderSelectField,
 >select : (props: SelectFieldData) => void
->       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^               ^^^^^^^^^
 >renderSelectField : (props: SelectFieldData) => void
 >                  :                                 
 
@@ -283,12 +283,12 @@ const handlers: HandlerMap = {
 >  : ^^^^^^
 >n.toFixed(2) : string
 >             : ^^^^^^
->n.toFixed : (fractionDigits?: number | undefined) => string
->          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -362,11 +362,11 @@ function process<K extends Keys>(data: DataEntry<K>[]) {
 >data.forEach(block => {        if (block.type in handlers) {            handlers[block.type](block.data)        }    }) : void
 >                                                                                                                        : ^^^^
 >data.forEach : (callbackfn: (value: DataEntry<K>, index: number, array: DataEntry<K>[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >data : DataEntry<K>[]
 >     : ^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: DataEntry<K>, index: number, array: DataEntry<K>[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >block => {        if (block.type in handlers) {            handlers[block.type](block.data)        }    } : (block: DataEntry<K>) => void
 >                                                                                                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 >block : DataEntry<K>
@@ -411,7 +411,7 @@ process(data);
 >process(data) : void
 >              : ^^^^
 >process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^
 >data : DataEntry<keyof TypeMap>[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -419,7 +419,7 @@ process([{ type: 'foo', data: 'abc' }]);
 >process([{ type: 'foo', data: 'abc' }]) : void
 >                                        : ^^^^
 >process : <K extends keyof TypeMap>(data: DataEntry<K>[]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^^^
 >[{ type: 'foo', data: 'abc' }] : { type: "foo"; data: string; }[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ type: 'foo', data: 'abc' } : { type: "foo"; data: string; }
@@ -510,7 +510,7 @@ call(xx);
 >call(xx) : void
 >         : ^^^^
 >call : <K extends keyof LetterMap>({ letter, caller }: LetterCaller<K>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^               ^^^^^^^^^
 >xx : { letter: A; caller: ACaller; } | { letter: B; caller: BCaller; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -551,12 +551,12 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
         document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once });
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
 >                                                                                        : ^^^^
->document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^        ^^^    ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>                          : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
 >document : Document
 >         : ^^^^^^^^
->addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions | undefined): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions | undefined): void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^        ^^^    ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
+>                 : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
 >event.name : K
 >           : ^
 >event : Ev<K>
@@ -564,7 +564,7 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 >name : K
 >     : ^
 >(ev) => event.callback(ev) : (this: Document, ev: DocumentEventMap[K]) => void
->                           : ^    ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^        ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ev : DocumentEventMap[K]
 >   : ^^^^^^^^^^^^^^^^^^^
 >event.callback(ev) : void
@@ -619,7 +619,7 @@ const clickEvent = createEventListener({
 >createEventListener({    name: "click",    callback: ev => console.log(ev),}) : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
 >                                                                              :                                        ^                                                                     
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^     ^^^^^^^^^^
 >{    name: "click",    callback: ev => console.log(ev),} : { name: "click"; callback: (ev: MouseEvent) => void; }
 >                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -639,11 +639,11 @@ const clickEvent = createEventListener({
 >console.log(ev) : void
 >                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >ev : MouseEvent
 >   : ^^^^^^^^^^
 
@@ -655,7 +655,7 @@ const scrollEvent = createEventListener({
 >createEventListener({    name: "scroll",    callback: ev => console.log(ev),}) : { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; }
 >                                                                               :                                         ^                                                                
 >createEventListener : <K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>) => Ev<K>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^     ^^^^^^^^^^
 >{    name: "scroll",    callback: ev => console.log(ev),} : { name: "scroll"; callback: (ev: Event) => void; }
 >                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
 
@@ -675,11 +675,11 @@ const scrollEvent = createEventListener({
 >console.log(ev) : void
 >                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >ev : Event
 >   : ^^^^^
 
@@ -689,7 +689,7 @@ processEvents([clickEvent, scrollEvent]);
 >processEvents([clickEvent, scrollEvent]) : void
 >                                         : ^^^^
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^^^^^
 >[clickEvent, scrollEvent] : ({ readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; } | { readonly name: "scroll"; readonly once?: boolean | undefined; readonly callback: (ev: Event) => void; })[]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
 >clickEvent : { readonly name: "click"; readonly once?: boolean | undefined; readonly callback: (ev: MouseEvent) => void; }
@@ -701,7 +701,7 @@ processEvents([
 >processEvents([    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },]) : void
 >                                                                                                                                 : ^^^^
 >processEvents : <K extends keyof DocumentEventMap>(events: Ev<K>[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^^^^^
 >[    { name: "click", callback: ev => console.log(ev) },    { name: "scroll", callback: ev => console.log(ev) },] : ({ name: "click"; callback: (ev: MouseEvent) => void; } | { name: "scroll"; callback: (ev: Event) => void; })[]
 >                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -721,11 +721,11 @@ processEvents([
 >console.log(ev) : void
 >                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >ev : MouseEvent
 >   : ^^^^^^^^^^
 
@@ -745,11 +745,11 @@ processEvents([
 >console.log(ev) : void
 >                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >ev : Event
 >   : ^^^^^
 
@@ -857,7 +857,7 @@ function ff1() {
 >apply('sum', 1, 2) : void
 >                   : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'sum' : "sum"
 >      : ^^^^^
 >1 : 1
@@ -871,7 +871,7 @@ function ff1() {
 >apply('concat', 'str1', 'str2', 'str3' ) : void
 >                                         : ^^^^
 >apply : <K extends keyof { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }>(funKey: K, ...args: { sum: [a: number, b: number]; concat: [a: string, b: string, c: string]; }[K]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'concat' : "concat"
 >         : ^^^^^^^^
 >'str1' : "str1"
@@ -1050,7 +1050,7 @@ const ref: MyObj = {
 };
 
 function func<K extends keyof MyObj>(k: K): MyObj[K]['name'] | undefined {
->func : <K extends keyof MyObj>(k: K) => MyObj[K]['name'] | undefined
+>func : <K extends keyof MyObj>(k: K) => MyObj[K]["name"] | undefined
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^                            
 >k : K
 >  : ^
@@ -1124,7 +1124,7 @@ function foo<T extends keyof Foo>(prop: T, f: Required<Foo>) {
 >bar(f[prop]) : void
 >             : ^^^^
 >bar : (t: string) => void
->    : ^ ^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >f[prop] : Required<Foo>[T]
 >        : ^^^^^^^^^^^^^^^^
 >f : Required<Foo>
@@ -1177,7 +1177,7 @@ const BAR_LOOKUP = makeCompleteLookupMapping(ALL_BARS, 'name');
 >makeCompleteLookupMapping(ALL_BARS, 'name') : { a: { readonly name: "a"; }; b: { readonly name: "b"; }; }
 >                                            :                                                            
 >makeCompleteLookupMapping : <T extends readonly any[], Attr extends keyof T[number]>(ops: T, attr: Attr) => { [Item in T[number] as Item[Attr]]: Item; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ALL_BARS : readonly [{ readonly name: "a"; }, { readonly name: "b"; }]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'name' : "name"

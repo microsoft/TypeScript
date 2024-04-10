@@ -29,7 +29,7 @@ function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
 >f1?.("hello") : T
 >              : ^
 >f1 : (value: string) => T
->   : ^     ^^^^^^^^^^^^^^
+>   : ^     ^^      ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -37,7 +37,7 @@ function test<T>(f1: Transform1<T>, f2: Transform2<T>) {
 >f2?.("hello") : T
 >              : ^
 >f2 : ((value: string) => T) | ((value: string) => T)
->   : ^^     ^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^
+>   : ^^     ^^      ^^^^^^^^^^^^     ^^      ^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 }

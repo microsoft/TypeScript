@@ -153,8 +153,8 @@ import React from "react";
  * @type {{defaultProps: {tabs: string}} & ((props?: {elem: string}) => JSX.Element)}
  */
 const TabbedShowLayout = () => {
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                 ^^^^^^^^^^^^^^^^^
 >() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: { tabs: string; }; }
 >                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
 
@@ -185,8 +185,8 @@ TabbedShowLayout.defaultProps = {
 >                                                            : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout.defaultProps : { tabs: string; }
 >                              : ^^^^^^^^^^^^^^^^^
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                 ^^^^^^^^^^^^^^^^^
 >defaultProps : { tabs: string; }
 >             : ^^^^^^^^^^^^^^^^^
 >{    tabs: "default value"} : { tabs: string; }
@@ -201,8 +201,8 @@ TabbedShowLayout.defaultProps = {
 };
 
 export default TabbedShowLayout;
->TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; } | undefined) => JSX.Element)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                 ^^^^^^^^^^^^^^^^^
 
 === jsDeclarationsReactComponents4.jsx ===
 import React from "react";
@@ -251,7 +251,7 @@ TabbedShowLayout.defaultProps = {
 >TabbedShowLayout.defaultProps : { tabs: string; }
 >                              : ^^^^^^^^^^^^^^^^^
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
->                 : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultProps : { tabs: string; }
 >             : ^^^^^^^^^^^^^^^^^
 >{    tabs: "default value"} : { tabs: string; }
@@ -267,7 +267,7 @@ TabbedShowLayout.defaultProps = {
 
 export default TabbedShowLayout;
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
->                 : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === jsDeclarationsReactComponents5.jsx ===
 import React from 'react';

@@ -435,7 +435,7 @@ namespace GH30170 {
 >    : ^^^^^^^^^^^^^
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
+>drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
 >              : ^            ^^                             ^^^^^^^^^
 >currentColor : "blue" | "yellow"
 >             : ^^^^^^^^^^^^^^^^^
@@ -444,7 +444,7 @@ namespace GH30170 {
 >draw({ color: currentColor }) : void
 >                              : ^^^^
 >draw : (val: Blue | Yellow) => void
->     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^             ^^^^^^^^^
 >{ color: currentColor } : { color: "blue" | "yellow"; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : "blue" | "yellow"
@@ -611,7 +611,7 @@ namespace GH15907 {
 >dispatchAction({ type : (active? 'disactivate' : 'activate') }) : void
 >                                                                : ^^^^
 >dispatchAction : (action: Action) => void
->               : ^      ^^^^^^^^^^^^^^^^^
+>               : ^      ^^      ^^^^^^^^^
 >{ type : (active? 'disactivate' : 'activate') } : { type: "activate" | "disactivate"; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "activate" | "disactivate"

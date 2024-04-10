@@ -183,11 +183,11 @@ var r4 = b.foo(new Date());
 >b.foo(new Date()) : number
 >                  : ^^^^^^
 >b.foo : <T extends Date>(x: T) => number
->      : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 >b : { foo: <T extends Date>(x: T) => number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
 >foo : <T extends Date>(x: T) => number
->    : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor

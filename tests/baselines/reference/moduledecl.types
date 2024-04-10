@@ -53,19 +53,19 @@ module m0 {
 
     function f2(s: string);
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
     function f2(n: number);
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     function f2(ns: any) {
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >ns : any
     }
 
@@ -148,19 +148,19 @@ module m1 {
 
     export function f2(s: string);
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
     export function f2(n: number);
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     export function f2(ns: any) {
 >f2 : { (s: string): any; (n: number): any; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^^^^^^^^ ^^      ^^^^^^^^^
 >ns : any
     }
 

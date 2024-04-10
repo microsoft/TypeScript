@@ -106,17 +106,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE} : SO_FAR & { name: TYPE; }
 >                                                                            : ^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {name: instance as TYPE}) : SO_FAR & { name: TYPE; }
 >                                                   : ^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -197,15 +197,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
 >                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
 >                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -239,15 +239,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
 >                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -347,17 +347,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) : BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 >                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE} : SO_FAR & { identifier: TYPE; }
 >                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {identifier: instance as TYPE}) : SO_FAR & Record<"record", unknown> & { identifier: TYPE; }
 >                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR & Record<"record", unknown>
@@ -434,17 +434,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) : BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
 >                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE} : SO_FAR & { record: TYPE; }
 >                                                                                : ^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {record: instance as TYPE}) : SO_FAR & { record: TYPE; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -529,15 +529,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -563,15 +563,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
 >                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^     ^^^^^^^^^^^^^^^                               
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -685,11 +685,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >Object.keys(soFar) : string[]
 >                   : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -732,11 +732,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) : any
 >                                                                                                                                                                                                                                                                    : ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^      ^^^^^^^       ^^^^^^^       ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 
     {},
 >{} : {}
@@ -746,7 +746,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildNameFieldConstructor(soFar) : { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildNameFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { name: TYPE; }>; }
->                          : ^        ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^                                                 ^^^
+>                          : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -754,7 +754,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildIdentifierFieldConstructor(soFar) : { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildIdentifierFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { identifier: TYPE; }>; }
->                                : ^        ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^                                                       ^^^
+>                                : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                       ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -762,7 +762,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildRecordFieldConstructor(soFar) : { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildRecordFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { record: TYPE; }>; }
->                            : ^        ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^                                                   ^^^
+>                            : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                   ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -770,7 +770,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildStoredAsConstructor(soFar) : { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildStoredAsConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->                         : ^        ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                         ^^^
+>                         : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                         ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -778,15 +778,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildMaxMsToWaitBeforePublishingFieldConstructor(soFar) : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR_1>
->                                                 : ^        ^^     ^^^^^^^^^^^^^^^                                                     
+>                                                 : ^        ^^     ^^        ^^^^^                                                     
 >soFar : SO_FAR
 >      : ^^^^^^
 
     buildType(soFar)
 >buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 >buildType : <SO_FAR_1>(soFar: SO_FAR_1) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR_1; fields: () => Set<keyof SO_FAR_1>; hasField: (fieldName: string | number | symbol) => boolean; }
->          : ^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -797,7 +797,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType({}) : BuildPubSubRecordType<{}>
 >                          : ^^^^^^^^^^^^^^^^^^^^^^  ^
 >buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
->                      : ^      ^^     ^^^^^^^^^^^^^                             
+>                      : ^      ^^     ^^      ^^^^^                             
 >{} : {}
 >   : ^^
 

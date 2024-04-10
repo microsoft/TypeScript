@@ -52,11 +52,11 @@ class Derived extends Base {
 >super.foo({ a: 1 }) : { a: number; }
 >                    :               
 >super.foo : (x: { a: number; }) => { a: number; }
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >foo : (x: { a: number; }) => { a: number; }
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >{ a: 1 } : { a: number; }
 >         : ^^^^^^^^^^^^^^
 >a : number
@@ -70,11 +70,11 @@ class Derived extends Base {
 >super.foo({ a: 1, b: 2 }) : { a: number; }
 >                          :               
 >super.foo : (x: { a: number; }) => { a: number; }
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >foo : (x: { a: number; }) => { a: number; }
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
@@ -92,11 +92,11 @@ class Derived extends Base {
 >this.foo({ a: 1, b: 2 }) : { a: number; b: number; }
 >                         :                          
 >this.foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >foo : (x: { a: number; b: number; }) => { a: number; b: number; }
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number

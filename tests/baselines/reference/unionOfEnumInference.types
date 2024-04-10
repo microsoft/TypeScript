@@ -41,7 +41,7 @@ function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 >foo(x) : void
 >       : ^^^^
 >foo : <T extends Enum>(x: Interface<T>) => void
->    : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^            ^^^^^^^^^
 >x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

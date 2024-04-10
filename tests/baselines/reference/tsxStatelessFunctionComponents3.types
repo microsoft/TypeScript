@@ -23,7 +23,7 @@ const foo = <Foo />;
 ><Foo /> : JSX.Element
 >        : ^^^^^^^^^^^
 >Foo : (props: any) => JSX.Element
->    : ^     ^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^   ^^^^^^^^^^^^^^^^
 
 
 // Should be OK

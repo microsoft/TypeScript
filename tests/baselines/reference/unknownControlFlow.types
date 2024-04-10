@@ -670,11 +670,11 @@ function possiblyNullOrUndefined<T>(x: T) {
 >possiblyUndefined(possiblyNull(x)) : T | null | undefined
 >                                   : ^^^^^^^^^^^^^^^^^^^^
 >possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
->                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >possiblyNull(x) : T | null
 >                : ^^^^^^^^
 >possiblyNull : <T_1>(x: T_1) => T_1 | null
->             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^ ^^   ^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 }
@@ -733,11 +733,11 @@ function ensureNotNullOrUndefined<T>(x: T) {
 >ensureNotUndefined(ensureNotNull(x)) : T & {}
 >                                     : ^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(x) : T & ({} | undefined)
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 }
@@ -756,7 +756,7 @@ function f40(a: string | undefined, b: number | null | undefined) {
 >ensureNotNullOrUndefined(a) : string
 >                            : ^^^^^^
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
->                         : ^^^^ ^^^^^^^^^^^^^^
+>                         : ^ ^^ ^^ ^^^^^^^^^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -766,7 +766,7 @@ function f40(a: string | undefined, b: number | null | undefined) {
 >ensureNotNullOrUndefined(b) : number
 >                            : ^^^^^^
 >ensureNotNullOrUndefined : <T>(x: T) => T & {}
->                         : ^^^^ ^^^^^^^^^^^^^^
+>                         : ^ ^^ ^^ ^^^^^^^^^^^
 >b : number | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -787,11 +787,11 @@ function f41<T>(a: T) {
 >ensureNotUndefined(ensureNotNull(a)) : T & {}
 >                                     : ^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(a) : T & ({} | undefined)
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -801,11 +801,11 @@ function f41<T>(a: T) {
 >ensureNotNull(ensureNotUndefined(a)) : T & {}
 >                                     : ^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined(a) : T & ({} | null)
 >                      : ^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -815,11 +815,11 @@ function f41<T>(a: T) {
 >ensureNotNull(ensureNotNull(a)) : (T & undefined) | (T & {})
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull(a) : T & ({} | undefined)
 >                 : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -829,11 +829,11 @@ function f41<T>(a: T) {
 >ensureNotUndefined(ensureNotUndefined(a)) : (T & {}) | (T & null)
 >                                          : ^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >ensureNotUndefined(a) : T & ({} | null)
 >                      : ^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -843,11 +843,11 @@ function f41<T>(a: T) {
 >ensureNotNullOrUndefined(ensureNotNullOrUndefined(a)) : T & {}
 >                                                      : ^^^^^^
 >ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
->                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^ ^^   ^^^^^^^^^^^^^
 >ensureNotNullOrUndefined(a) : T & {}
 >                            : ^^^^^^
 >ensureNotNullOrUndefined : <T_1>(x: T_1) => T_1 & {}
->                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^ ^^   ^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -857,11 +857,11 @@ function f41<T>(a: T) {
 >ensureNotNull(possiblyNullOrUndefined(a)) : (T & {}) | undefined
 >                                          : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined(a) : T | null | undefined
 >                           : ^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
->                        : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -871,11 +871,11 @@ function f41<T>(a: T) {
 >ensureNotUndefined(possiblyNullOrUndefined(a)) : (T & {}) | null
 >                                               : ^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined(a) : T | null | undefined
 >                           : ^^^^^^^^^^^^^^^^^^^^
 >possiblyNullOrUndefined : <T_1>(x: T_1) => T_1 | null | undefined
->                        : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -885,11 +885,11 @@ function f41<T>(a: T) {
 >ensureNotNull(possiblyUndefined(a)) : (T & {}) | undefined
 >                                    : ^^^^^^^^^^^^^^^^^^^^
 >ensureNotNull : <T_1>(x: T_1) => T_1 & ({} | undefined)
->              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >possiblyUndefined(a) : T | undefined
 >                     : ^^^^^^^^^^^^^
 >possiblyUndefined : <T_1>(x: T_1) => T_1 | undefined
->                  : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -899,11 +899,11 @@ function f41<T>(a: T) {
 >ensureNotUndefined(possiblyNull(a)) : (T & {}) | null
 >                                    : ^^^^^^^^^^^^^^^
 >ensureNotUndefined : <T_1>(x: T_1) => T_1 & ({} | null)
->                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >possiblyNull(a) : T | null
 >                : ^^^^^^^^
 >possiblyNull : <T_1>(x: T_1) => T_1 | null
->             : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^ ^^   ^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 }
@@ -960,21 +960,21 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Array.isArray(a) : boolean
 >                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >a : T & object
 >  : ^^^^^^^^^^
 >Array.isArray(b) : boolean
 >                 : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >b : T & object
 >  : ^^^^^^^^^^
 
@@ -990,11 +990,11 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys(a) : string[]
 >               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^
 >a : T & object
 >  : ^^^^^^^^^^
 >length : number
@@ -1004,11 +1004,11 @@ function deepEquals<T>(a: T, b: T): boolean {
 >Object.keys(b) : string[]
 >               : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^
 >b : T & object
 >  : ^^^^^^^^^^
 >length : number
@@ -1125,7 +1125,7 @@ ff1(null, 'foo');  // Error
 >ff1(null, 'foo') : void
 >                 : ^^^^
 >ff1 : <T>(t: T, k: keyof T) => void
->    : ^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^       ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -1133,7 +1133,7 @@ ff2(null, 'foo');  // Error
 >ff2(null, 'foo') : void
 >                 : ^^^^
 >ff2 : <T>(t: T & {}, k: keyof T) => void
->    : ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^      ^^ ^^       ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -1141,7 +1141,7 @@ ff3(null, 'foo');
 >ff3(null, 'foo') : void
 >                 : ^^^^
 >ff3 : <T>(t: T, k: keyof (T & {})) => void
->    : ^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -1149,7 +1149,7 @@ ff4(null, 'foo');  // Error
 >ff4(null, 'foo') : void
 >                 : ^^^^
 >ff4 : <T>(t: T & {}, k: keyof (T & {})) => void
->    : ^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^  ^^^^^^^^^^
+>    : ^ ^^ ^^      ^^ ^^              ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -1611,7 +1611,7 @@ function fx20(value: Either) {
 >assertNever(value) : never
 >                   : ^^^^^
 >assertNever : (v: never) => never
->            : ^ ^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >value : never
 >      : ^^^^^
     }

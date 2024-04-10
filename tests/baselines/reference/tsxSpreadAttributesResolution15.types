@@ -29,7 +29,7 @@ export default function Component(props: ComponentProps) {
 ><AnotherComponent {...props} property2 AnotherProperty1="hi"/> : JSX.Element
 >                                                               : ^^^^^^^^^^^
 >AnotherComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
->                 : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^             ^^                     ^^^^^^^^^^^^^^^^
 >props : ComponentProps
 >      : ^^^^^^^^^^^^^^
 >property2 : true

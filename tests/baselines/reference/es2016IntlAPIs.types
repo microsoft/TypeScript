@@ -5,11 +5,11 @@ Intl.getCanonicalLocales('EN-US');
 >Intl.getCanonicalLocales('EN-US') : string[]
 >                                  : ^^^^^^^^
 >Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^^                          ^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^       ^^^                          ^^^^^^^^^^^^^
 >'EN-US' : "EN-US"
 >        : ^^^^^^^
 
@@ -17,11 +17,11 @@ Intl.getCanonicalLocales([ 'EN-US', 'Fr' ]);
 >Intl.getCanonicalLocales([ 'EN-US', 'Fr' ]) : string[]
 >                                            : ^^^^^^^^
 >Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^^                          ^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^       ^^^                          ^^^^^^^^^^^^^
 >[ 'EN-US', 'Fr' ] : string[]
 >                  : ^^^^^^^^
 >'EN-US' : "EN-US"
@@ -33,11 +33,11 @@ Intl.getCanonicalLocales([ 'EN-US' ] as const);
 >Intl.getCanonicalLocales([ 'EN-US' ] as const) : string[]
 >                                               : ^^^^^^^^
 >Intl.getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^^                          ^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >getCanonicalLocales : (locales?: string | readonly string[]) => string[]
->                    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^       ^^^                          ^^^^^^^^^^^^^
 >[ 'EN-US' ] as const : readonly ["EN-US"]
 >                     : ^^^^^^^^^^^^^^^^^^
 >[ 'EN-US' ] : readonly ["EN-US"]

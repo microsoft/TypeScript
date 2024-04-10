@@ -84,7 +84,7 @@ C1.staticProp = function (x, y) {
 >C1 : typeof C1
 >   : ^^^^^^^^^
 >staticProp : (x: number, y: number) => number
->           : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function (x, y) {    return x + y;} : (x: number, y: number) => number
 >                                    :                                 
 >x : number
@@ -147,7 +147,7 @@ C2.prototype.method2 = function (x, y) {
 >prototype : C2
 >          : ^^
 >method2 : (x: number, y: number) => number
->        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function (x, y) {    return x + y;} : (x: number, y: number) => number
 >                                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
@@ -178,7 +178,7 @@ C2.staticProp = function (x, y) {
 >C2 : typeof C2
 >   : ^^^^^^^^^
 >staticProp : (x: number, y: number) => number
->           : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function (x, y) {    return x + y;} : (x: number, y: number) => number
 >                                    :                                 
 >x : number

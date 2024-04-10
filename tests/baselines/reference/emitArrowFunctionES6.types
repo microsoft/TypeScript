@@ -53,7 +53,7 @@ foo(() => true);
 >foo(() => true) : void
 >                : ^^^^
 >foo : (func: () => boolean) => void
->    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^             ^^^^^^^^^
 >() => true : () => true
 >           : ^^^^^^^^^^
 >true : true
@@ -63,7 +63,7 @@ foo(() => { return false; });
 >foo(() => { return false; }) : void
 >                             : ^^^^
 >foo : (func: () => boolean) => void
->    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^             ^^^^^^^^^
 >() => { return false; } : () => false
 >                        : ^^^^^^^^^^^
 >false : false

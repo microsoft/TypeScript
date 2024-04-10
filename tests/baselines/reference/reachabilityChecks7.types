@@ -74,7 +74,7 @@ let x1 = () => { use("Test"); }
 >use("Test") : void
 >            : ^^^^
 >use : (s: string) => void
->    : ^ ^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >"Test" : "Test"
 >       : ^^^^^^
 

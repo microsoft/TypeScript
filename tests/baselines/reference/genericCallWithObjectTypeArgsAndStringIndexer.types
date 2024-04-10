@@ -26,7 +26,7 @@ var r = foo(a);
 >foo(a) : { [x: string]: Date; }
 >       :                       
 >foo : <T>(x: T) => T
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >a : { [x: string]: Date; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -48,7 +48,7 @@ function other<T>(arg: T) {
 >foo(b) : { [x: string]: T; }
 >       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^ ^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 }
@@ -71,7 +71,7 @@ function other2<T extends Date>(arg: T) {
 >foo(b) : { [x: string]: T; }
 >       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^ ^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -104,7 +104,7 @@ function other3<T extends Date, U extends Date>(arg: T) {
 >foo(b) : { [x: string]: T; }
 >       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^ ^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 

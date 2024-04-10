@@ -73,7 +73,7 @@ module M {
 >subscribe : (callback: (newValue: A<T>) => void) => any
 >          : ^        ^^^        ^^^^^^^^^^^^^^^^^^^^^^^
 >f : (newValue: A<T>) => void
->  : ^        ^^^^^^^^^^^^^^^
+>  : ^        ^^    ^^^^^^^^^
 
             v.subscribe((newValue: A<T>) => { });
 >v.subscribe((newValue: A<T>) => { }) : any

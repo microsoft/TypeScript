@@ -20,8 +20,8 @@ declare function joinedPath(p: JoinedPath): void;
 joinedPath("foo/bar");
 >joinedPath("foo/bar") : void
 >                      : ^^^^
->joinedPath : (p: `${Path}/${Path}`) => void
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>joinedPath : (p: JoinedPath) => void
+>           : ^ ^^          ^^^^^^^^^
 >"foo/bar" : "foo/bar"
 >          : ^^^^^^^^^
 
@@ -32,8 +32,8 @@ declare const somePath: Path;
 joinedPath(`${somePath}/${somePath}`);
 >joinedPath(`${somePath}/${somePath}`) : void
 >                                      : ^^^^
->joinedPath : (p: `${Path}/${Path}`) => void
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>joinedPath : (p: JoinedPath) => void
+>           : ^ ^^          ^^^^^^^^^
 >`${somePath}/${somePath}` : `${Path}/${Path}`
 >                          : ^^^^^^^^^^^^^^^^^
 >somePath : Path
@@ -60,40 +60,40 @@ declare function withinAs(p: StartsWithA & EndsWithA): void;
 withinAs("");
 >withinAs("") : void
 >             : ^^^^
->withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withinAs : (p: StartsWithA & EndsWithA) => void
+>         : ^ ^^                       ^^^^^^^^^
 >"" : ""
 >   : ^^
 
 withinAs("a");
 >withinAs("a") : void
 >              : ^^^^
->withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withinAs : (p: StartsWithA & EndsWithA) => void
+>         : ^ ^^                       ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
 withinAs("ab");
 >withinAs("ab") : void
 >               : ^^^^
->withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withinAs : (p: StartsWithA & EndsWithA) => void
+>         : ^ ^^                       ^^^^^^^^^
 >"ab" : "ab"
 >     : ^^^^
 
 withinAs("aba");
 >withinAs("aba") : void
 >                : ^^^^
->withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withinAs : (p: StartsWithA & EndsWithA) => void
+>         : ^ ^^                       ^^^^^^^^^
 >"aba" : "aba"
 >      : ^^^^^
 
 withinAs("abavvvva");
 >withinAs("abavvvva") : void
 >                     : ^^^^
->withinAs : (p: `a${string}` & `${string}a`) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>withinAs : (p: StartsWithA & EndsWithA) => void
+>         : ^ ^^                       ^^^^^^^^^
 >"abavvvva" : "abavvvva"
 >           : ^^^^^^^^^^
 

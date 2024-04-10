@@ -28,7 +28,7 @@ o?.[a = 1];
 >o?.[a = 1] : any
 >           : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
->  : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a = 1 : 1
 >      : ^
 >a : number
@@ -39,12 +39,12 @@ o?.[a = 1];
 a.toString();
 >a.toString() : string
 >             : ^^^^^^
->a.toString : (radix?: number | undefined) => string
->           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 let b: number;
 >b : number
@@ -56,7 +56,7 @@ o?.x[b = 1];
 >o?.x : any
 >     : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
->  : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >b = 1 : 1
@@ -69,12 +69,12 @@ o?.x[b = 1];
 b.toString();
 >b.toString() : string
 >             : ^^^^^^
->b.toString : (radix?: number | undefined) => string
->           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 let c: number;
 >c : number
@@ -84,7 +84,7 @@ o?.(c = 1)
 >o?.(c = 1) : any
 >           : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
->  : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c = 1 : 1
 >      : ^
 >c : number
@@ -95,12 +95,12 @@ o?.(c = 1)
 c.toString();
 >c.toString() : string
 >             : ^^^^^^
->c.toString : (radix?: number | undefined) => string
->           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 let d: number;
 >d : number
@@ -112,7 +112,7 @@ o?.x(d = 1);
 >o?.x : any
 >     : ^^^
 >o : { (...args: any[]): any; [key: string]: any; [key: number]: any; } | undefined
->  : ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >d = 1 : 1
@@ -125,12 +125,12 @@ o?.x(d = 1);
 d.toString();
 >d.toString() : string
 >             : ^^^^^^
->d.toString : (radix?: number | undefined) => string
->           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >d : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 
 // type predicates
 declare const f: undefined | ((x: any) => x is number);
@@ -147,7 +147,7 @@ if (f?.(x)) {
 >f?.(x) : boolean | undefined
 >       : ^^^^^^^^^^^^^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -157,13 +157,13 @@ if (f?.(x)) {
 
     f; // (x: any) => x is number
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 
     f(x);
 >f(x) : boolean
 >     : ^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -174,13 +174,13 @@ else {
 
     f;
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f(x);
 >f(x) : boolean
 >     : ^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 }
@@ -190,13 +190,13 @@ x;
 
 f;
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f(x);
 >f(x) : boolean
 >     : ^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -212,11 +212,11 @@ if (o2?.f(x)) {
 >o2?.f(x) : boolean | undefined
 >         : ^^^^^^^^^^^^^^^^^^^
 >o2?.f : ((x: any) => x is number) | undefined
->      : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -226,29 +226,29 @@ if (o2?.f(x)) {
 
     o2.f; // (x: any) => x is number
 >o2.f : (x: any) => x is number
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; }
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 
     o2?.f;
 >o2?.f : (x: any) => x is number
->      : ^ ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; }
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 
     o2?.f(x);
 >o2?.f(x) : boolean
 >         : ^^^^^^^
 >o2?.f : (x: any) => x is number
->      : ^ ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; }
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -259,23 +259,23 @@ else {
 
     o2;
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     o2?.f;
 >o2?.f : ((x: any) => x is number) | undefined
->      : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     o2.f;
 >o2.f : (x: any) => x is number
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 }
 x;
 >x : string | number
@@ -283,23 +283,23 @@ x;
 
 o2;
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2?.f;
 >o2?.f : ((x: any) => x is number) | undefined
->      : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ((x: any) => x is number) | undefined
->  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 o2.f;
 >o2.f : (x: any) => x is number
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^^^^^^^^
 >o2 : { f(x: any): x is number; } | undefined
->   : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: any) => x is number
->  : ^ ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^   ^^^^^^^^^^^^^^^^
 
 declare const o3: { x: 1, y: string } | { x: 2, y: number } | undefined;
 >o3 : { x: 1; y: string; } | { x: 2; y: number; } | undefined
@@ -948,7 +948,7 @@ function f01(x: unknown) {
 >isString?.(x) : void
 >              : ^^^^
 >isString : (value: unknown) => asserts value is string
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -968,7 +968,7 @@ function f01(x: unknown) {
 >maybeIsString?.(x) : void | undefined
 >                   : ^^^^^^^^^^^^^^^^
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
->              : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -988,15 +988,15 @@ function f01(x: unknown) {
 >isDefined(maybeIsString) : void
 >                         : ^^^^
 >isDefined : <T>(value: T) => asserts value is NonNullable<T>
->          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >maybeIsString : ((value: unknown) => asserts value is string) | undefined
->              : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         maybeIsString?.(x);
 >maybeIsString?.(x) : void
 >                   : ^^^^
 >maybeIsString : (value: unknown) => asserts value is string
->              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -2754,7 +2754,7 @@ function f30(o: Thing | undefined) {
 >assert(o?.foo) : void
 >               : ^^^^
 >assert : (x: unknown) => asserts x
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^
 >o?.foo : string | number | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : Thing | undefined
@@ -2782,7 +2782,7 @@ function f30(o: Thing | undefined) {
 >assert(o?.foo === 42) : void
 >                      : ^^^^
 >assert : (x: unknown) => asserts x
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^
 >o?.foo === 42 : boolean
 >              : ^^^^^^^
 >o?.foo : string | number | undefined
@@ -2814,7 +2814,7 @@ function f30(o: Thing | undefined) {
 >assert(typeof o?.foo === "number") : void
 >                                   : ^^^^
 >assert : (x: unknown) => asserts x
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^
 >typeof o?.foo === "number" : boolean
 >                           : ^^^^^^^
 >typeof o?.foo : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -2848,7 +2848,7 @@ function f30(o: Thing | undefined) {
 >assertNonNull(o?.foo) : void
 >                      : ^^^^
 >assertNonNull : <T>(x: T) => asserts x is NonNullable<T>
->              : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o?.foo : string | number | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o : Thing | undefined
@@ -3182,11 +3182,11 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 >console.log(someOptionalObject) : void
 >                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >someOptionalObject : SomeObject | undefined
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -3194,11 +3194,11 @@ function someFunction(someOptionalObject: SomeObject | undefined): void {
 >console.log(someOptionalObject.someProperty) : void
 >                                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >someOptionalObject.someProperty : unknown
 >                                : ^^^^^^^
 >someOptionalObject : SomeObject | undefined
@@ -3238,7 +3238,7 @@ someFunction(someObject);
 >someFunction(someObject) : void
 >                         : ^^^^
 >someFunction : (someOptionalObject: SomeObject | undefined) => void
->             : ^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^                  ^^                      ^^^^^^^^^
 >someObject : SomeObject
 >           : ^^^^^^^^^^
 
@@ -3246,7 +3246,7 @@ someFunction(undefined);
 >someFunction(undefined) : void
 >                        : ^^^^
 >someFunction : (someOptionalObject: SomeObject | undefined) => void
->             : ^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^                  ^^                      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -3308,11 +3308,11 @@ while (arr[i]?.tag === "left") {
 >console.log("I should ALSO be reachable") : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"I should ALSO be reachable" : "I should ALSO be reachable"
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }

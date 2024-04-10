@@ -75,11 +75,11 @@ class BugExhibition3<T> {
 
         x = localGenericFunction;
 >x = localGenericFunction : <U>(u?: U) => void
->                         : ^^^^ ^^^^^^^^^^^^^
+>                         : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
 >  : ^^^^^^^^^^
 >localGenericFunction : <U>(u?: U) => void
->                     : ^^^^ ^^^^^^^^^^^^^
+>                     : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 
@@ -105,11 +105,11 @@ class C {
 
         x = funcExpr;
 >x = funcExpr : <U>(u?: U) => void
->             : ^^^^ ^^^^^^^^^^^^^
+>             : ^ ^^ ^^^ ^^^^^^^^^
 >x : () => void
 >  : ^^^^^^^^^^
 >funcExpr : <U>(u?: U) => void
->         : ^^^^ ^^^^^^^^^^^^^
+>         : ^ ^^ ^^^ ^^^^^^^^^
     }
 }
 

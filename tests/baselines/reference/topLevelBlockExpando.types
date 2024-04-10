@@ -21,11 +21,11 @@ interface Person {
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
@@ -95,11 +95,11 @@ const dice1 = () => Math.floor(Math.random() * 6);
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
@@ -138,11 +138,11 @@ dice1.last = 'Calrissian';
 >Math.floor(Math.random() * 6) : number
 >                              : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^ ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^ ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >Math.random() * 6 : number
 >                  : ^^^^^^
 >Math.random() : number
@@ -184,7 +184,7 @@ dice1.last = 'Calrissian';
 >doHumanThings(dice2) : void
 >                     : ^^^^
 >doHumanThings : (param: Human) => void
->              : ^     ^^^^^^^^^^^^^^^^
+>              : ^     ^^     ^^^^^^^^^
 >dice2 : { (): number; first: string; last: string; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

@@ -70,7 +70,7 @@ fun(...new FooIterator);
 >fun(...new FooIterator) : void
 >                        : ^^^^
 >fun : (...[a, b]: Bar[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^     ^^^^^^^^^
 >...new FooIterator : Foo
 >                   : ^^^
 >new FooIterator : FooIterator

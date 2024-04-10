@@ -15,9 +15,9 @@ module.exports = function loader(options) {}
 >module.exports : (options: Options) => void
 >               : ^       ^^       ^^^^^^^^^
 >module : { exports: (options: Options) => void; }
->       : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^
 >exports : (options: Options) => void
->        : ^       ^^^^^^^^^^^^^^^^^^
+>        : ^       ^^       ^^^^^^^^^
 >function loader(options) {} : (options: Options) => void
 >                            : ^       ^^       ^^^^^^^^^
 >loader : (options: Options) => void

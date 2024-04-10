@@ -49,7 +49,7 @@ function getUserName(obj: Obj) {
 >isUser(obj) : boolean
 >            : ^^^^^^^
 >isUser : (obj: Obj) => obj is Partial<User>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
 >    : ^^^
 

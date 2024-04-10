@@ -86,7 +86,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 ><MyComp2 class="" /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                                         ^^^^^^^^
 >class : string
 >      : ^^^^^^
 
@@ -102,7 +102,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 ><MyComp2 for="" /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                                         ^^^^^^^^
 >for : string
 >    : ^^^^^^
 

@@ -215,12 +215,12 @@ var r2 = d.b(y);
 >   : ^^^^
 >d.b(y) : void
 >       : ^^^^
->d.b : (a: { foo: string; bar: string; }) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.b : (a: typeof y) => void
+>    : ^ ^^        ^^^^^^^^^
 >d : Derived
 >  : ^^^^^^^
->b : (a: { foo: string; bar: string; }) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >y : { foo: string; bar: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -235,14 +235,14 @@ var r3 = d.c;
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3a = d.d;
->r3a : (a: { foo: string; bar: string; }) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->d.d : (a: { foo: string; bar: string; }) => void
->    :                                           
+>r3a : (a: typeof y) => void
+>    : ^ ^^        ^^^^^^^^^
+>d.d : (a: typeof y) => void
+>    :                      
 >d : Derived
 >  : ^^^^^^^
->d : (a: { foo: string; bar: string; }) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 
 d.c = y;
 >d.c = y : { foo: string; bar: string; }
@@ -271,12 +271,12 @@ var r5 = Derived.s(y);
 >   : ^^^^
 >Derived.s(y) : void
 >             : ^^^^
->Derived.s : (a: { foo: string; bar: string; }) => void
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Derived.s : (a: typeof y) => void
+>          : ^ ^^        ^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->s : (a: { foo: string; bar: string; }) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>s : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 >y : { foo: string; bar: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -291,14 +291,14 @@ var r6 = Derived.t;
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r6a = Derived.u;
->r6a : (a: { foo: string; bar: string; }) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Derived.u : (a: { foo: string; bar: string; }) => void
->          :                                           
+>r6a : (a: typeof y) => void
+>    : ^ ^^        ^^^^^^^^^
+>Derived.u : (a: typeof y) => void
+>          :                      
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
->u : (a: { foo: string; bar: string; }) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>u : (a: typeof y) => void
+>  : ^ ^^        ^^^^^^^^^
 
 Derived.t = y;
 >Derived.t = y : { foo: string; bar: string; }
