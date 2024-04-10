@@ -1,6 +1,7 @@
 import {
     __String,
     AccessorDeclaration,
+    addEmitFlags,
     addEmitHelper,
     addEmitHelpers,
     advancedAsyncSuperHelper,
@@ -14,7 +15,6 @@ import {
     CatchClause,
     chainBundle,
     ClassDeclaration,
-    concatenate,
     ConciseBody,
     ConstructorDeclaration,
     Debug,
@@ -41,6 +41,7 @@ import {
     getInitializedVariables,
     getNodeId,
     getOriginalNode,
+    Identifier,
     insertStatementsAfterStandardPrologue,
     isAwaitKeyword,
     isBlock,
@@ -57,6 +58,7 @@ import {
     isNodeWithPossibleHoistedDeclaration,
     isOmittedExpression,
     isPropertyAccessExpression,
+    isSimpleParameterList,
     isStatement,
     isSuperProperty,
     isVariableDeclarationList,
@@ -64,6 +66,7 @@ import {
     map,
     MethodDeclaration,
     Node,
+    NodeArray,
     NodeCheckFlags,
     NodeFactory,
     NodeFlags,
@@ -76,8 +79,8 @@ import {
     setOriginalNode,
     setSourceMapRange,
     setTextRange,
-    some,
     SourceFile,
+    startOnNewLine,
     Statement,
     SyntaxKind,
     TextRange,
@@ -145,6 +148,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     let capturedSuperProperties: Set<__String>;
     /** Whether the async function contains an element access on super (`super[x]`). */
     let hasSuperElementAccess: boolean;
+    let lexicalArgumentsBinding: Identifier | undefined;
     /** A set of node IDs for generated super accessors (variable statements). */
     const substitutedSuperAccessors: boolean[] = [];
 
@@ -203,9 +207,31 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         return visitEachChild(node, visitor, context);
     }
 
+    function argumentsVisitor(node: Node): VisitResult<Node> {
+        switch (node.kind) {
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+            case SyntaxKind.Constructor:
+                return node;
+            case SyntaxKind.Parameter:
+            case SyntaxKind.BindingElement:
+            case SyntaxKind.VariableDeclaration:
+                break;
+            case SyntaxKind.Identifier:
+                if (lexicalArgumentsBinding && resolver.isArgumentsLocalBinding(node as Identifier)) {
+                    return lexicalArgumentsBinding;
+                }
+                break;
+        }
+        return visitEachChild(node, argumentsVisitor, context);
+    }
+
     function visitor(node: Node): VisitResult<Node | undefined> {
         if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
-            return node;
+            return lexicalArgumentsBinding ? argumentsVisitor(node) : node;
         }
         switch (node.kind) {
             case SyntaxKind.AsyncKeyword:
@@ -382,12 +408,16 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
     }
 
     function visitConstructorDeclaration(node: ConstructorDeclaration) {
-        return factory.updateConstructorDeclaration(
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const updated = factory.updateConstructorDeclaration(
             node,
             visitNodes(node.modifiers, visitor, isModifier),
             visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     /**
@@ -399,23 +429,33 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * @param node The node to visit.
      */
     function visitMethodDeclaration(node: MethodDeclaration) {
-        return factory.updateMethodDeclaration(
+        let parameters: NodeArray<ParameterDeclaration>;
+        const functionFlags = getFunctionFlags(node);
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const updated = factory.updateMethodDeclaration(
             node,
             visitNodes(node.modifiers, visitor, isModifierLike),
             node.asteriskToken,
             node.name,
             /*questionToken*/ undefined,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionParameterList(node) :
+                visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
-                ? transformAsyncFunctionBody(node)
-                : transformMethodBody(node),
+            functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionBody(node, parameters) :
+                transformMethodBody(node),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     function visitGetAccessorDeclaration(node: GetAccessorDeclaration) {
-        return factory.updateGetAccessorDeclaration(
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const updated = factory.updateGetAccessorDeclaration(
             node,
             visitNodes(node.modifiers, visitor, isModifierLike),
             node.name,
@@ -423,16 +463,22 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             /*type*/ undefined,
             transformMethodBody(node),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     function visitSetAccessorDeclaration(node: SetAccessorDeclaration) {
-        return factory.updateSetAccessorDeclaration(
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const updated = factory.updateSetAccessorDeclaration(
             node,
             visitNodes(node.modifiers, visitor, isModifierLike),
             node.name,
             visitParameterList(node.parameters, visitor, context),
             transformMethodBody(node),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     /**
@@ -444,18 +490,26 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * @param node The node to visit.
      */
     function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement> {
-        return factory.updateFunctionDeclaration(
+        let parameters: NodeArray<ParameterDeclaration>;
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const functionFlags = getFunctionFlags(node);
+        const updated = factory.updateFunctionDeclaration(
             node,
             visitNodes(node.modifiers, visitor, isModifierLike),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionParameterList(node) :
+                visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
-                ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionBody(node, parameters) :
+                visitFunctionBody(node.body, visitor, context),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     /**
@@ -467,18 +521,26 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * @param node The node to visit.
      */
     function visitFunctionExpression(node: FunctionExpression): Expression {
-        return factory.updateFunctionExpression(
+        let parameters: NodeArray<ParameterDeclaration>;
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
+        lexicalArgumentsBinding = undefined;
+        const functionFlags = getFunctionFlags(node);
+        const updated = factory.updateFunctionExpression(
             node,
             visitNodes(node.modifiers, visitor, isModifier),
             node.asteriskToken,
             node.name,
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionParameterList(node) :
+                visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
-            getFunctionFlags(node) & FunctionFlags.Async
-                ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionBody(node, parameters) :
+                visitFunctionBody(node.body, visitor, context),
         );
+        lexicalArgumentsBinding = savedLexicalArgumentsBinding;
+        return updated;
     }
 
     /**
@@ -490,16 +552,20 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
      * @param node The node to visit.
      */
     function visitArrowFunction(node: ArrowFunction) {
+        let parameters: NodeArray<ParameterDeclaration>;
+        const functionFlags = getFunctionFlags(node);
         return factory.updateArrowFunction(
             node,
             visitNodes(node.modifiers, visitor, isModifier),
             /*typeParameters*/ undefined,
-            visitParameterList(node.parameters, visitor, context),
+            parameters = functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionParameterList(node) :
+                visitParameterList(node.parameters, visitor, context),
             /*type*/ undefined,
             node.equalsGreaterThanToken,
-            getFunctionFlags(node) & FunctionFlags.Async
-                ? transformAsyncFunctionBody(node)
-                : visitFunctionBody(node.body, visitor, context),
+            functionFlags & FunctionFlags.Async ?
+                transformAsyncFunctionBody(node, parameters) :
+                visitFunctionBody(node.body, visitor, context),
         );
     }
 
@@ -623,16 +689,91 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         return updated;
     }
 
-    function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression): FunctionBody;
-    function transformAsyncFunctionBody(node: ArrowFunction): ConciseBody;
-    function transformAsyncFunctionBody(node: FunctionLikeDeclaration): ConciseBody {
+    function createCaptureArgumentsStatement() {
+        Debug.assert(lexicalArgumentsBinding);
+        const variable = factory.createVariableDeclaration(lexicalArgumentsBinding, /*exclamationToken*/ undefined, /*type*/ undefined, factory.createIdentifier("arguments"));
+        const statement = factory.createVariableStatement(/*modifiers*/ undefined, [variable]);
+        startOnNewLine(statement);
+        addEmitFlags(statement, EmitFlags.CustomPrologue);
+        return statement;
+    }
+
+    function transformAsyncFunctionParameterList(node: FunctionLikeDeclaration) {
+        if (isSimpleParameterList(node.parameters)) {
+            return visitParameterList(node.parameters, visitor, context);
+        }
+
+        const newParameters: ParameterDeclaration[] = [];
+        for (const parameter of node.parameters) {
+            if (parameter.initializer || parameter.dotDotDotToken) {
+                // for an arrow function, capture the remaining arguments in a rest parameter.
+                // for any other function/method this isn't necessary as we can just use `arguments`.
+                if (node.kind === SyntaxKind.ArrowFunction) {
+                    const restParameter = factory.createParameterDeclaration(
+                        /*modifiers*/ undefined,
+                        factory.createToken(SyntaxKind.DotDotDotToken),
+                        factory.createUniqueName("args", GeneratedIdentifierFlags.ReservedInNestedScopes),
+                    );
+                    newParameters.push(restParameter);
+                }
+                break;
+            }
+            // for arrow functions we capture fixed parameters to forward to `__awaiter`. For all other functions
+            // we add fixed parameters to preserve the function's `length` property.
+            const newParameter = factory.createParameterDeclaration(
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                factory.getGeneratedNameForNode(parameter.name, GeneratedIdentifierFlags.ReservedInNestedScopes),
+            );
+            newParameters.push(newParameter);
+        }
+        const newParametersArray = factory.createNodeArray(newParameters);
+        setTextRange(newParametersArray, node.parameters);
+        return newParametersArray;
+    }
+
+    function transformAsyncFunctionBody(node: MethodDeclaration | AccessorDeclaration | FunctionDeclaration | FunctionExpression, outerParameters: NodeArray<ParameterDeclaration>): FunctionBody;
+    function transformAsyncFunctionBody(node: ArrowFunction, outerParameters: NodeArray<ParameterDeclaration>): ConciseBody;
+    function transformAsyncFunctionBody(node: FunctionLikeDeclaration, outerParameters: NodeArray<ParameterDeclaration>): ConciseBody {
+        const innerParameters = !isSimpleParameterList(node.parameters) ? visitParameterList(node.parameters, visitor, context) : undefined;
         resumeLexicalEnvironment();
 
         const original = getOriginalNode(node, isFunctionLike);
         const nodeType = original.type;
         const promiseConstructor = languageVersion < ScriptTarget.ES2015 ? getPromiseConstructor(nodeType) : undefined;
         const isArrowFunction = node.kind === SyntaxKind.ArrowFunction;
+        const savedLexicalArgumentsBinding = lexicalArgumentsBinding;
         const hasLexicalArguments = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.CaptureArguments) !== 0;
+        const captureLexicalArguments = hasLexicalArguments && !lexicalArgumentsBinding;
+        if (captureLexicalArguments) {
+            lexicalArgumentsBinding = factory.createUniqueName("arguments");
+        }
+
+        let argumentsExpression: Expression | undefined;
+        if (innerParameters) {
+            if (isArrowFunction) {
+                // `node` does not have a simple parameter list, so `outerParameters` refers to placeholders that are
+                // forwarded to `innerParameters`, matching how they are introduced in `transformAsyncFunctionParameterList`.
+                const parameterBindings: Expression[] = [];
+                Debug.assert(outerParameters.length <= node.parameters.length);
+                for (let i = 0; i < node.parameters.length; i++) {
+                    Debug.assert(i < outerParameters.length);
+                    const originalParameter = node.parameters[i];
+                    const outerParameter = outerParameters[i];
+                    Debug.assertNode(outerParameter.name, isIdentifier);
+                    if (originalParameter.initializer || originalParameter.dotDotDotToken) {
+                        Debug.assert(i === outerParameters.length - 1);
+                        parameterBindings.push(factory.createSpreadElement(outerParameter.name));
+                        break;
+                    }
+                    parameterBindings.push(outerParameter.name);
+                }
+                argumentsExpression = factory.createArrayLiteralExpression(parameterBindings);
+            }
+            else {
+                argumentsExpression = factory.createIdentifier("arguments");
+            }
+        }
 
         // An async function is emit as an outer function that calls an inner
         // generator function. To preserve lexical bindings, we pass the current
@@ -653,22 +794,25 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             hasSuperElementAccess = false;
         }
 
+        const hasLexicalThis = inHasLexicalThisContext();
+
+        let asyncBody = transformAsyncFunctionBodyWorker(node.body as Block);
+        asyncBody = factory.updateBlock(asyncBody, factory.mergeLexicalEnvironment(asyncBody.statements, endLexicalEnvironment()));
+
         let result: ConciseBody;
         if (!isArrowFunction) {
             const statements: Statement[] = [];
-            const statementOffset = factory.copyPrologue((node.body as Block).statements, statements, /*ensureUseStrict*/ false, visitor);
             statements.push(
                 factory.createReturnStatement(
                     emitHelpers().createAwaiterHelper(
-                        inHasLexicalThisContext(),
-                        hasLexicalArguments,
+                        hasLexicalThis,
+                        argumentsExpression,
                         promiseConstructor,
-                        transformAsyncFunctionBodyWorker(node.body as Block, statementOffset),
+                        innerParameters,
+                        asyncBody,
                     ),
                 ),
             );
-
-            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
             // This step isn't needed if we eventually transform this to ES5.
@@ -681,6 +825,10 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
                     substitutedSuperAccessors[getNodeId(variableStatement)] = true;
                     insertStatementsAfterStandardPrologue(statements, [variableStatement]);
                 }
+            }
+
+            if (captureLexicalArguments) {
+                insertStatementsAfterStandardPrologue(statements, [createCaptureArgumentsStatement()]);
             }
 
             const block = factory.createBlock(statements, /*multiLine*/ true);
@@ -699,20 +847,17 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
             result = block;
         }
         else {
-            const expression = emitHelpers().createAwaiterHelper(
-                inHasLexicalThisContext(),
-                hasLexicalArguments,
+            result = emitHelpers().createAwaiterHelper(
+                hasLexicalThis,
+                argumentsExpression,
                 promiseConstructor,
-                transformAsyncFunctionBodyWorker(node.body),
+                innerParameters,
+                asyncBody,
             );
 
-            const declarations = endLexicalEnvironment();
-            if (some(declarations)) {
-                const block = factory.converters.convertToFunctionBlock(expression);
-                result = factory.updateBlock(block, setTextRange(factory.createNodeArray(concatenate(declarations, block.statements)), block.statements));
-            }
-            else {
-                result = expression;
+            if (captureLexicalArguments) {
+                const block = factory.converters.convertToFunctionBlock(result);
+                result = factory.updateBlock(block, factory.mergeLexicalEnvironment(block.statements, [createCaptureArgumentsStatement()]));
             }
         }
 
@@ -720,6 +865,7 @@ export function transformES2017(context: TransformationContext): (x: SourceFile 
         if (!isArrowFunction) {
             capturedSuperProperties = savedCapturedSuperProperties;
             hasSuperElementAccess = savedHasSuperElementAccess;
+            lexicalArgumentsBinding = savedLexicalArgumentsBinding;
         }
         return result;
     }

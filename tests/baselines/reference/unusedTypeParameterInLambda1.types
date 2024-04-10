@@ -3,12 +3,15 @@
 === unusedTypeParameterInLambda1.ts ===
 class A {
 >A : A
+>  : ^
 
     public f1() {
 >f1 : () => <T>() => void
+>   : ^^^^^^^^^^^^^^^^^^^
 
         return <T>() => {
 ><T>() => {        } : <T>() => void
+>                    : ^^^^^^^^^^^^^
 
         }
     }

@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/conflictingTypeParameterSymbolTransfer.ts] ////
+
+=== conflictingTypeParameterSymbolTransfer.ts ===
+// @strict
+
+// Via #56620
+class Base<U> { }
+>Base : Base<U>
+>     : ^^^^^^^
+
+export class C2<T> extends Base<unknown> {
+>C2 : C2<T>
+>   : ^^^^^
+>Base : Base<unknown>
+>     : ^^^^^^^^^^^^^
+
+    T: number;
+>T : number
+>  : ^^^^^^
+
+    constructor(T: number) {
+>T : number
+>  : ^^^^^^
+
+        super();
+>super() : void
+>        : ^^^^
+>super : typeof Base
+>      : ^^^^^^^^^^^
+
+        // Should not error
+        this.T = T;
+>this.T = T : number
+>           : ^^^^^^
+>this.T : number
+>       : ^^^^^^
+>this : this
+>     : ^^^^
+>T : number
+>  : ^^^^^^
+>T : number
+>  : ^^^^^^
+
+        // Should error
+        let a: U = null;
+>a : U
+>  : ^
+    }
+}
+
+// via #56689
+class Leg { }
+>Leg : Leg
+>    : ^^^
+
+class Foo<t> extends Leg {
+>Foo : Foo<t>
+>    : ^^^^^^
+>Leg : Leg
+>    : ^^^
+
+    t = {} as t
+>t : t
+>  : ^
+>{} as t : t
+>        : ^
+>{} : {}
+>   : ^^
+
+    // should allow this access since t was declared as a property on Foo
+    foo = this.t
+>foo : t
+>    : ^
+>this.t : t
+>       : ^
+>this : this
+>     : ^^^^
+>t : t
+>  : ^
+}
+
+// via #56661
+class BaseClass { }
+>BaseClass : BaseClass
+>          : ^^^^^^^^^
+
+class Item<data> extends BaseClass {
+>Item : Item<data>
+>     : ^^^^^^^^^^
+>BaseClass : BaseClass
+>          : ^^^^^^^^^
+
+    data: data;
+>data : data
+>     : ^^^^
+
+    getData() {
+>getData : () => data
+>        : ^^^^^^^^^^
+
+        // should OK
+        return this.data;
+>this.data : data
+>          : ^^^^
+>this : this
+>     : ^^^^
+>data : data
+>     : ^^^^
+    }
+}

@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/packages/babel-loader/tsconfig.json]
 
@@ -77,6 +77,16 @@ Info seq  [hh:mm:ss:mss] Search path: /packages/babel-loader/src
 Info seq  [hh:mm:ss:mss] For info: /packages/babel-loader/src/index.ts :: Config file name: /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/babel-loader/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/babel-loader/tsconfig.json 2000 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/packages/babel-loader/tsconfig.json",
+        "reason": "Creating possible configured project for /packages/babel-loader/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /packages/babel-loader/tsconfig.json : {
  "rootNames": [
   "/packages/babel-loader/src/index.ts"
@@ -123,7 +133,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /pa
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/core/src/loading-indicator.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/babel-loader/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
@@ -139,6 +149,131 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by include pattern 'src' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/packages/babel-loader/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "b5c9ceadb72d6d15d60a31707ef7d6e2798bddc428873ecb3036d48757a18392",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 3,
+            "tsSize": 232,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "target": "es2018",
+            "module": "commonjs",
+            "strict": true,
+            "esModuleInterop": true,
+            "composite": true,
+            "rootDir": "",
+            "outDir": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/packages/babel-loader/src/index.ts",
+        "configFile": "/packages/babel-loader/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /packages/babel-loader
 Info seq  [hh:mm:ss:mss] For info: /packages/babel-loader/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
@@ -175,6 +310,25 @@ FsWatchesRecursive::
 /packages/core/src: *new*
   {}
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json
+/packages/core/src/loading-indicator.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -195,9 +349,19 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/core/src/ind
 Info seq  [hh:mm:ss:mss] Search path: /packages/core/src
 Info seq  [hh:mm:ss:mss] For info: /packages/core/src/index.ts :: Config file name: /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/core/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/packages/core/tsconfig.json",
+        "reason": "Creating possible configured project for /packages/core/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2018.full.d.ts 500 undefined Project: /packages/core/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/core/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/core/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/packages/core/src/loading-indicator.ts Text-1 "\nexport interface Bar {\n    prop: number;\n}\nconst bar: Bar = {\n    prop: 1\n}\n"
@@ -211,6 +375,131 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Matched by include pattern './src' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/packages/core/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "ec773ccbd2b6bb7f39f525c229566d00ea24dcfc9cd257b987c2c6551fd8d4c1",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 179,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "target": "es2018",
+            "module": "commonjs",
+            "strict": true,
+            "esModuleInterop": true,
+            "composite": true,
+            "rootDir": "",
+            "outDir": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/packages/core/src/index.ts",
+        "configFile": "/packages/core/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.es2018.full.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2018'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'CallableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'NewableFunction'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Search path: /packages/core
 Info seq  [hh:mm:ss:mss] For info: /packages/core/tsconfig.json :: No config files found.
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
@@ -255,6 +544,31 @@ FsWatchesRecursive::
 /packages/core/src:
   {}
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/packages/core/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *default* *new*
+/packages/core/src/loading-indicator.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *new*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -290,6 +604,31 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/packages/core/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open)
+    version: Text-1
+    containingProjects: 2
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json *default*
+/packages/core/src/loading-indicator.ts
+    version: Text-1
+    containingProjects: 2
+        /packages/babel-loader/tsconfig.json
+        /packages/core/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -305,7 +644,7 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/core/src/index.ts position 92 in project /packages/core/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/babel-loader/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json Version: 2 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/babel-loader/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/babel-loader/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/packages/babel-loader/src/index.ts SVC-1-1 "\nimport type { Foo } from// comment \"../../core/src/index.js\";\n"
@@ -414,3 +753,30 @@ FsWatchesRecursive::
   {}
 /packages/core/src:
   {}
+
+Projects::
+/packages/babel-loader/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+/packages/core/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /packages/core/dist/loading-indicator.d.ts: identitySourceMapConsumer *new*
+
+ScriptInfos::
+/packages/babel-loader/src/index.ts (Open)
+    version: SVC-1-1
+    containingProjects: 1
+        /packages/babel-loader/tsconfig.json *default*
+/packages/core/src/index.ts (Open) *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /packages/core/tsconfig.json *default*
+        /packages/babel-loader/tsconfig.json *deleted*
+/packages/core/src/loading-indicator.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /packages/core/tsconfig.json
+        /packages/babel-loader/tsconfig.json *deleted*

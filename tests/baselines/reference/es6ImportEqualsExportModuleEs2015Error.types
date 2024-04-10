@@ -3,16 +3,20 @@
 === a.ts ===
 class a { }
 >a : a
+>  : ^
 
 export = a;
 >a : a
+>  : ^
 
 === main.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 a;
 >a : typeof a
+>  : ^^^^^^^^
 
 
 

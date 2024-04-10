@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,13 +13,13 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/a/b/commonFile1.ts]
+//// [/a/b/commonFile1.ts] Inode:: 5
 let x = 1
 
-//// [/a/b/commonFile2.ts]
+//// [/a/b/commonFile2.ts] Inode:: 6
 let y = 1
 
-//// [/a/b/tsconfig.json]
+//// [/a/b/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "watchDirectory": "UseFsEvents"
@@ -30,11 +30,32 @@ let y = 1
 /a/lib/tsc.js -w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/a/b/commonFile1.js] Inode:: 8
+var x = 1;
+
+
+//// [/a/b/commonFile2.js] Inode:: 9
+var y = 1;
+
+
+
+FsWatches::
+/a/b: *new*
+  {"inode":4}
+/a/b/commonFile1.ts: *new*
+  {"inode":5}
+/a/b/commonFile2.ts: *new*
+  {"inode":6}
+/a/b/tsconfig.json: *new*
+  {"inode":7}
+/a/lib/lib.d.ts: *new*
+  {"inode":3}
 
 Program root files: [
   "/a/b/commonFile1.ts",
@@ -61,25 +82,4 @@ Shape signatures in builder refreshed for::
 /a/b/commonfile1.ts (used version)
 /a/b/commonfile2.ts (used version)
 
-FsWatches::
-/a/b: *new*
-  {}
-/a/b/commonfile1.ts: *new*
-  {}
-/a/b/commonfile2.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a/b/commonFile1.js]
-var x = 1;
-
-
-//// [/a/b/commonFile2.js]
-var y = 1;
-
-

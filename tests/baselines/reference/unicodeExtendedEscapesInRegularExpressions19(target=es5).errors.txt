@@ -1,5 +1,5 @@
 unicodeExtendedEscapesInRegularExpressions19.ts(1,13): error TS1125: Hexadecimal digit expected.
-unicodeExtendedEscapesInRegularExpressions19.ts(1,16): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+unicodeExtendedEscapesInRegularExpressions19.ts(1,16): error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
 
 
 ==== unicodeExtendedEscapesInRegularExpressions19.ts (2 errors) ====
@@ -7,5 +7,5 @@ unicodeExtendedEscapesInRegularExpressions19.ts(1,16): error TS1499: This regula
                 
 !!! error TS1125: Hexadecimal digit expected.
                    ~
-!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+!!! error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
     

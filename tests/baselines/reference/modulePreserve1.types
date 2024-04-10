@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/modulePreserve1.ts] ////
+
+=== /main.ts ===
+import { A } from "./a";
+>A : typeof A
+>  : ^^^^^^^^
+
+import B = require("./b");
+>B : typeof B
+>  : ^^^^^^^^
+
+export { A, B };
+>A : typeof A
+>  : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+
+=== /a.ts ===
+export class A {}
+>A : A
+>  : ^
+
+=== /b.ts ===
+export = class B {}
+>class B {} : typeof B
+>           : ^^^^^^^^
+>B : typeof B
+>  : ^^^^^^^^
+

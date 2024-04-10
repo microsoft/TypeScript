@@ -3,13 +3,17 @@
 === unusedParameterProperty2.ts ===
 class A {
 >A : A
+>  : ^
 
     constructor(private used) {
 >used : any
+>     : ^^^
 
         let foge = used;
 >foge : any
+>     : ^^^
 >used : any
+>     : ^^^
     }
 }
 

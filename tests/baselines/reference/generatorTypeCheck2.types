@@ -3,4 +3,5 @@
 === generatorTypeCheck2.ts ===
 function* g1(): Iterable<string> { }
 >g1 : () => Iterable<string>
+>   : ^^^^^^                
 

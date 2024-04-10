@@ -39,32 +39,6 @@ Found 1 error in file2.ts[90m:1[0m
 
 
 
-Program root files: [
-  "/users/username/projects/project/file1.ts",
-  "/users/username/projects/project/file2.ts"
-]
-Program options: {
-  "incremental": true,
-  "configFilePath": "/users/username/projects/project/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/users/username/projects/project/file1.ts
-/users/username/projects/project/file2.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/users/username/projects/project/file1.ts (used version)
-/users/username/projects/project/file2.ts (used version)
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
 //// [/users/username/projects/project/file1.js]
 var x = 10;
 
@@ -74,7 +48,7 @@ var y = 20;
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","affectsGlobalScope":true},{"version":"2414573776-const y: string = 20;","affectsGlobalScope":true}],"root":[2,3],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./file2.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"5029505981-const x = 10;","affectsGlobalScope":true},{"version":"2414573776-const y: string = 20;","affectsGlobalScope":true}],"root":[2,3],"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./file2.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -124,7 +98,6 @@ var y = 20;
       ]
     ],
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",
@@ -144,26 +117,8 @@ var y = 20;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 890
+  "size": 866
 }
-
-
-Change::
-
-Input::
-//// [/users/username/projects/project/file1.ts]
-const z = 10;
-
-
-Output::
-[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
-
-[7m1[0m const y: string = 20;
-[7m [0m [91m      ~[0m
-
-
-Found 1 error in file2.ts[90m:1[0m
-
 
 
 Program root files: [
@@ -186,10 +141,29 @@ Semantic diagnostics in builder refreshed for::
 /users/username/projects/project/file2.ts
 
 Shape signatures in builder refreshed for::
-/users/username/projects/project/file1.ts (computed .d.ts)
-/users/username/projects/project/file2.ts (computed .d.ts)
+/a/lib/lib.d.ts (used version)
+/users/username/projects/project/file1.ts (used version)
+/users/username/projects/project/file2.ts (used version)
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+
+Change::
+
+Input::
+//// [/users/username/projects/project/file1.ts]
+const z = 10;
+
+
+Output::
+[96mfile2.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'number' is not assignable to type 'string'.
+
+[7m1[0m const y: string = 20;
+[7m [0m [91m      ~[0m
+
+
+Found 1 error in file2.ts[90m:1[0m
+
+
 
 //// [/users/username/projects/project/file1.js]
 var z = 10;
@@ -197,7 +171,7 @@ var z = 10;
 
 //// [/users/username/projects/project/file2.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true},{"version":"2414573776-const y: string = 20;","signature":"509180395-declare const y: string;\n","affectsGlobalScope":true}],"root":[2,3],"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./file2.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"3317474623-const z = 10;","signature":"-368931399-declare const z = 10;\n","affectsGlobalScope":true},{"version":"2414573776-const y: string = 20;","signature":"509180395-declare const y: string;\n","affectsGlobalScope":true}],"root":[2,3],"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,[3,[{"file":"./file2.ts","start":6,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -249,7 +223,6 @@ var z = 10;
       ]
     ],
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
       "./file1.ts",
@@ -269,6 +242,31 @@ var z = 10;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 990
+  "size": 966
 }
 
+
+Program root files: [
+  "/users/username/projects/project/file1.ts",
+  "/users/username/projects/project/file2.ts"
+]
+Program options: {
+  "incremental": true,
+  "configFilePath": "/users/username/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/users/username/projects/project/file1.ts
+/users/username/projects/project/file2.ts
+
+Shape signatures in builder refreshed for::
+/users/username/projects/project/file1.ts (computed .d.ts)
+/users/username/projects/project/file2.ts (computed .d.ts)
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

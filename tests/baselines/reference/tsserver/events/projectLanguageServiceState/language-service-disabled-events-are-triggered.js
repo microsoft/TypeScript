@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/a/app.js]
 let x = 1;
@@ -62,7 +62,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/largefile.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /a/jsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.js SVC-1-0 "let x = 1;"
@@ -220,6 +220,21 @@ FsWatches::
 /a/largefile.js: *new*
   {}
 
+Projects::
+/a/jsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/jsconfig.json *default*
+/a/largefile.js *new*
+    version: Text-1
+    containingProjects: 1
+        /a/jsconfig.json
+
 Language service enabled: false
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/jsconfig.json 1:: WatchInfo: /a/jsconfig.json 2000 undefined Project: /a/jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /a/jsconfig.json
@@ -235,6 +250,16 @@ Before running Timeout callback:: count: 2
   ]
 }
 
+
+Timeout callback:: count: 2
+1: /a/jsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /a/jsconfig.json
 Info seq  [hh:mm:ss:mss] Reloading configured project /a/jsconfig.json
@@ -274,7 +299,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.js SVC-1-0 "let x = 1;"
@@ -299,6 +324,22 @@ FsWatches::
 FsWatchesRecursive::
 /a: *new*
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
+ScriptInfos::
+/a/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/jsconfig.json *default*
+/a/largefile.js *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /a/jsconfig.json *deleted*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -328,7 +369,7 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Project: /a/jsconfig.json Detected file add/remove of non supported extension: /a/data/node_modules/types-registry/index.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /a/data/node_modules/types-registry/index.json :: WatchInfo: /a 1 undefined Config: /a/jsconfig.json WatchType: Wild card directory
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/data/package.json]
 { "private": true }
@@ -355,6 +396,17 @@ FsWatchesRecursive::
 /a:
   {}
 
+Timeout callback:: count: 2
+2: *ensureProjectForOpenFiles* *deleted*
+7: /a/jsconfig.json *new*
+8: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
 TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/a/jsconfig.json",
@@ -376,12 +428,8 @@ TI:: [hh:mm:ss:mss] Got install request
         "exclude": []
       },
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -426,6 +474,31 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typings": [],
       "kind": "action::set"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/a/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "configFilePath": "/a/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -437,7 +510,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/jsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/jsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -497,8 +570,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 2
-7: /a/jsconfig.json
-8: *ensureProjectForOpenFiles*
 
 PolledWatches::
 /a/bower_components: *new*
@@ -519,5 +590,11 @@ FsWatches::
 FsWatchesRecursive::
 /a:
   {}
+
+Projects::
+/a/jsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
 
 Language service enabled: true

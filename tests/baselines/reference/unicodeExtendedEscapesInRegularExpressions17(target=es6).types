@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInRegularExpressions17.ts ===
 var x = /\u{r}\u{n}\u{t}/gu;
 >x : RegExp
+>  : ^^^^^^
 >/\u{r}\u{n}\u{t}/gu : RegExp
+>                    : ^^^^^^
 

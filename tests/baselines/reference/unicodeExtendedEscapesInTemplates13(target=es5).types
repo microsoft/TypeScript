@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInTemplates13.ts ===
 var x = `\u{DDDDD}`;
 >x : string
+>  : ^^^^^^
 >`\u{DDDDD}` : "󝷝"
+>            : ^^^^
 

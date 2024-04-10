@@ -6,8 +6,10 @@ import {
     Debug,
     FileWatcher,
     FileWatcherCallback,
+    GetCanonicalFileName,
     MultiMap,
     PollingInterval,
+    System,
 } from "./_namespaces/ts";
 
 export interface TestFileWatcher {
@@ -20,31 +22,34 @@ export interface TestFsWatcher<DirCallback> {
     inode: number | undefined;
 }
 
-export interface WatchUtils<PollingWatcherData, FsWatcherData, Path extends string = string> {
-    pollingWatches: MultiMap<Path, PollingWatcherData>;
-    fsWatches: MultiMap<Path, FsWatcherData>;
-    fsWatchesRecursive: MultiMap<Path, FsWatcherData>;
-    pollingWatch(path: Path, data: PollingWatcherData): FileWatcher;
-    fsWatch(path: Path, recursive: boolean, data: FsWatcherData): FileWatcher;
+export interface Watches<Data> {
+    add(path: string, data: Data): void;
+    remove(path: string, data: Data): void;
+    forEach(path: string, cb: (data: Data, path: string) => void): void;
+    serialize(baseline: string[]): void;
+}
+
+export interface WatchUtils<PollingWatcherData, FsWatcherData> {
+    pollingWatches: Watches<PollingWatcherData>;
+    fsWatches: Watches<FsWatcherData>;
+    fsWatchesRecursive: Watches<FsWatcherData>;
+    pollingWatch(path: string, data: PollingWatcherData): FileWatcher;
+    fsWatch(path: string, recursive: boolean, data: FsWatcherData): FileWatcher;
     serializeWatches(baseline?: string[]): string[];
     getHasWatchChanges(): boolean;
     setHasWatchChanges(): void;
 }
 
-export function createWatchUtils<PollingWatcherData, FsWatcherData, Path extends string = string>(
+export function createWatchUtils<PollingWatcherData, FsWatcherData>(
     pollingWatchesName: string,
     fsWatchesName: string,
-): WatchUtils<PollingWatcherData, FsWatcherData, Path> {
-    const pollingWatches = createMultiMap<Path, PollingWatcherData>();
-    const fsWatches = createMultiMap<Path, FsWatcherData>();
-    const fsWatchesRecursive = createMultiMap<Path, FsWatcherData>();
-
+    getCanonicalFileName: GetCanonicalFileName,
+    system: Required<Pick<System, "realpath">>,
+): WatchUtils<PollingWatcherData, FsWatcherData> {
+    const pollingWatches = initializeWatches<PollingWatcherData>(pollingWatchesName);
+    const fsWatches = initializeWatches<FsWatcherData>(fsWatchesName);
+    const fsWatchesRecursive = initializeWatches<FsWatcherData>(`${fsWatchesName}Recursive`);
     let hasWatchChanges = false;
-
-    let serializedPollingWatches: Map<string, PollingWatcherData[]> | undefined;
-    let serializedFsWatches: Map<string, FsWatcherData[]> | undefined;
-    let serializedFsWatchesRecursive: Map<string, FsWatcherData[]> | undefined;
-
     return {
         pollingWatches,
         fsWatches,
@@ -56,21 +61,106 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData, Path extends
         setHasWatchChanges: () => hasWatchChanges = true,
     };
 
-    function createWatcher<T>(map: MultiMap<Path, T>, path: Path, callback: T): FileWatcher {
+    function initializeWatches<Data>(name: string): Watches<Data> {
+        const actuals = createMultiMap<string, Data>();
+        let serialized: Map<string, Data[]> | undefined;
+        let canonicalPathsToStrings: Map<string, Set<string>> | undefined;
+        let realToLinked: MultiMap<string, string> | undefined;
+        let pathToReal: Map<string, string> | undefined;
+        return {
+            add,
+            remove,
+            forEach,
+            serialize,
+        };
+
+        function add(path: string, data: Data) {
+            actuals.add(path, data);
+            if (actuals.get(path)!.length !== 1) return;
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath !== path) {
+                (canonicalPathsToStrings ??= new Map()).set(
+                    canonicalPath,
+                    (canonicalPathsToStrings?.get(canonicalPath) ?? new Set()).add(path),
+                );
+            }
+            const real = system.realpath(path);
+            (pathToReal ??= new Map()).set(path, real);
+            if (real === path) return;
+            const canonicalReal = getCanonicalFileName(real);
+            if (getCanonicalFileName(path) !== canonicalReal) {
+                (realToLinked ??= createMultiMap()).add(canonicalReal, path);
+            }
+        }
+
+        function remove(path: string, data: Data) {
+            actuals.remove(path, data);
+            if (actuals.has(path)) return;
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath !== path) {
+                const existing = canonicalPathsToStrings!.get(canonicalPath);
+                if (existing!.size === 1) canonicalPathsToStrings!.delete(canonicalPath);
+                else existing!.delete(path);
+            }
+            const real = pathToReal?.get(path)!;
+            pathToReal!.delete(path);
+            if (real === path) return;
+            const canonicalReal = getCanonicalFileName(real);
+            if (getCanonicalFileName(path) !== canonicalReal) {
+                realToLinked!.remove(canonicalReal, path);
+            }
+        }
+
+        function getAllData(path: string) {
+            let allData: Map<string, Data[]> | undefined;
+            addData(path);
+            const canonicalPath = getCanonicalFileName(path);
+            if (canonicalPath !== path) addData(canonicalPath);
+            canonicalPathsToStrings?.get(canonicalPath)?.forEach(canonicalSamePath => {
+                if (canonicalSamePath !== path && canonicalSamePath !== canonicalPath) {
+                    addData(canonicalSamePath);
+                }
+            });
+            return allData;
+            function addData(path: string) {
+                const data = actuals.get(path);
+                if (data) (allData ??= new Map()).set(path, data);
+            }
+        }
+
+        function forEach(path: string, cb: (data: Data, path: string) => void) {
+            const real = system.realpath(path);
+            const canonicalPath = getCanonicalFileName(path);
+            const canonicalReal = getCanonicalFileName(real);
+            let allData = canonicalPath === canonicalReal ? getAllData(path) : getAllData(real);
+            realToLinked?.get(canonicalReal)?.forEach(linked => {
+                if (allData?.has(linked)) return;
+                const data = actuals.get(linked);
+                if (data) (allData ??= new Map()).set(linked, data);
+            });
+            allData?.forEach((data, path) => data.forEach(d => cb(d, path)));
+        }
+
+        function serialize(baseline: string[]) {
+            serialized = serializeMultiMap(baseline, name, actuals, serialized);
+        }
+    }
+
+    function createWatcher<T>(watches: Watches<T>, path: string, callback: T): FileWatcher {
         hasWatchChanges = true;
-        map.add(path, callback);
+        watches.add(path, callback);
         let closed = false;
         return {
             close: () => {
                 Debug.assert(!closed);
-                map.remove(path, callback);
+                watches.remove(path, callback);
                 hasWatchChanges = true;
                 closed = true;
             },
         };
     }
 
-    function pollingWatch(path: Path, data: PollingWatcherData) {
+    function pollingWatch(path: string, data: PollingWatcherData) {
         return createWatcher(
             pollingWatches,
             path,
@@ -78,7 +168,7 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData, Path extends
         );
     }
 
-    function fsWatch(path: Path, recursive: boolean, data: FsWatcherData) {
+    function fsWatch(path: string, recursive: boolean, data: FsWatcherData) {
         return createWatcher(
             recursive ? fsWatchesRecursive : fsWatches,
             path,
@@ -88,9 +178,9 @@ export function createWatchUtils<PollingWatcherData, FsWatcherData, Path extends
 
     function serializeWatches(baseline: string[] = []) {
         if (!hasWatchChanges) return baseline;
-        serializedPollingWatches = serializeMultiMap(baseline, pollingWatchesName, pollingWatches, serializedPollingWatches);
-        serializedFsWatches = serializeMultiMap(baseline, fsWatchesName, fsWatches, serializedFsWatches);
-        serializedFsWatchesRecursive = serializeMultiMap(baseline, `${fsWatchesName}Recursive`, fsWatchesRecursive, serializedFsWatchesRecursive);
+        pollingWatches.serialize(baseline);
+        fsWatches.serialize(baseline);
+        fsWatchesRecursive.serialize(baseline);
         hasWatchChanges = false;
         return baseline;
     }

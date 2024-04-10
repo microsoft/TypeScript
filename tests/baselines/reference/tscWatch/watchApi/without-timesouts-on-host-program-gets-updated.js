@@ -23,11 +23,34 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/main.js]
+var x = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -48,30 +71,7 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/main.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js]
-var x = 10;
-
-
 
 Change:: Write a file
 
@@ -80,12 +80,36 @@ Input::
 const y =10;
 
 
-Timeout callback:: count: 0
-Immedidate callback:: count: 0
 Output::
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/main.js] file written with same contents
+//// [/user/username/projects/myproject/bar.js]
+var y = 10;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/bar.ts: *new*
+  {}
+/user/username/projects/myproject/main.ts:
+  {}
+/user/username/projects/myproject/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject:
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/bar.ts",
@@ -109,30 +133,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/bar.ts (computed .d.ts)
 /user/username/projects/myproject/main.ts (computed .d.ts)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/bar.ts: *new*
-  {}
-/user/username/projects/myproject/main.ts:
-  {}
-/user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject:
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/main.js] file written with same contents
-//// [/user/username/projects/myproject/bar.js]
-var y = 10;
-
-

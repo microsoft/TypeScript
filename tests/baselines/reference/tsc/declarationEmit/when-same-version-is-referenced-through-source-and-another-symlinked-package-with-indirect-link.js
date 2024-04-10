@@ -118,12 +118,11 @@ File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.d.ts'
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/commonjs/index.js' that references '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js'.
-File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' does not exist.
-Loading module as file / folder, candidate module location '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js', target file types: TypeScript, Declaration.
 File name '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.tsx' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/dist/commonjs/index.d.ts', result '/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts'.
 ======== Module name 'plugin-two' was successfully resolved to '/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts' with Package ID 'plugin-two/dist/commonjs/index.d.ts@0.1.3'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
@@ -141,6 +140,7 @@ File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.d
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.tsx' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-two/dist/commonjs/index.d.ts'. ========
@@ -160,6 +160,7 @@ File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa.d
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.ts' does not exist.
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.tsx' does not exist.
 File '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 ../../../../a/lib/lib.d.ts
@@ -173,6 +174,25 @@ plugin-one/node_modules/typescript-fsa/index.d.ts
   File redirects to file 'plugin-two/node_modules/typescript-fsa/index.d.ts'
 plugin-one/index.ts
   Matched by default include pattern '**/*'
+
+
+//// [/user/username/projects/myproject/plugin-one/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.actions = void 0;
+var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
+var action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
+var featureOne = action("feature-one");
+exports.actions = { featureOne: featureOne };
+
+
+//// [/user/username/projects/myproject/plugin-one/index.d.ts]
+export declare const actions: {
+    featureOne: import("typescript-fsa").ActionCreator<{
+        route: string;
+    }>;
+};
+
 
 
 Program root files: [
@@ -195,22 +215,3 @@ Program files::
 /user/username/projects/myproject/plugin-one/index.ts
 
 exitCode:: ExitStatus.Success
-
-//// [/user/username/projects/myproject/plugin-one/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
-var action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
-var featureOne = action("feature-one");
-exports.actions = { featureOne: featureOne };
-
-
-//// [/user/username/projects/myproject/plugin-one/index.d.ts]
-export declare const actions: {
-    featureOne: import("typescript-fsa").ActionCreator<{
-        route: string;
-    }>;
-};
-
-

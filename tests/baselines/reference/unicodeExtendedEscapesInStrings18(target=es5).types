@@ -3,5 +3,7 @@
 === unicodeExtendedEscapesInStrings18.ts ===
 var x = "\u{65}\u{65}";
 >x : string
+>  : ^^^^^^
 >"\u{65}\u{65}" : "ee"
+>               : ^^^^
 

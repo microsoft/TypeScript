@@ -1,18 +1,11 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    CommandLineProgram,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { CommandLineProgram } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
-    SystemSnap,
     verifyTscWatch,
     watchBaseline,
 } from "../helpers/tscWatch";
@@ -52,21 +45,21 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
         { subScenario, files, optionsToExtend, modifyFs }: VerifyIncrementalWatchEmitInput,
         incremental: boolean,
     ) {
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem(files(), { currentDirectory: project }));
         if (incremental) sys.exit = exitCode => sys.exitCode = exitCode;
         const argsToPass = [incremental ? "-i" : "-w", ...(optionsToExtend || ts.emptyArray)];
         baseline.push(`${sys.getExecutingFilePath()} ${argsToPass.join(" ")}`);
         let oldPrograms: readonly CommandLineProgram[] = ts.emptyArray;
-        build(oldSnap);
+        build();
 
         if (modifyFs) {
-            const oldSnap = applyEdit(sys, baseline, modifyFs);
-            build(oldSnap);
+            applyEdit(sys, baseline, modifyFs);
+            build();
         }
 
         Harness.Baseline.runBaseline(`${ts.isBuild(argsToPass) ? "tsbuild/watchMode" : "tscWatch"}/incremental/${subScenario.split(" ").join("-")}-${incremental ? "incremental" : "watch"}.js`, baseline.join("\r\n"));
 
-        function build(oldSnap: SystemSnap) {
+        function build() {
             const closer = ts.executeCommandLine(
                 sys,
                 cb,
@@ -77,7 +70,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 getPrograms,
                 oldPrograms,
                 sys,
-                oldSnap,
             });
             if (closer) closer.close();
         }
@@ -208,7 +200,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 });
 
                 assert.equal(ts.arrayFrom(state.referencedMap!.keys()).length, 0);
-                assert.equal(ts.arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                 assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                 assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as ts.Path), ts.emptyArray);

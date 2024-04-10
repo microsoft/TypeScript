@@ -53,7 +53,7 @@ export const App = () => <div propA={true}></div>;
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:31 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts' differs from already included file name '/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts' only in casing.
   The file is in the program because:
@@ -72,9 +72,41 @@ node_modules/react/Jsx-Runtime/index.d.ts
   Imported via "react/jsx-runtime" from file 'index.tsx' with packageId 'react/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
   Part of 'files' list in tsconfig.json
-[[90m12:00:34 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/user/username/projects/myproject/index.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.App = void 0;
+var jsx_runtime_1 = require("react/jsx-runtime");
+var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
+exports.App = App;
+
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/index.tsx: *new*
+  {}
+/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts: *new*
+  {}
+/user/username/projects/myproject/node_modules/react/package.json: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject/node_modules: *new*
+  {}
 
 Program root files: [
   "/user/username/projects/myproject/node_modules/react/Jsx-Runtime/index.d.ts",
@@ -102,36 +134,4 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts (used version)
 /user/username/projects/myproject/index.tsx (used version)
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/index.tsx: *new*
-  {}
-/user/username/projects/myproject/node_modules/react/jsx-runtime/index.d.ts: *new*
-  {}
-/user/username/projects/myproject/node_modules/react/package.json: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
-var jsx_runtime_1 = require("react/jsx-runtime");
-var App = function () { return (0, jsx_runtime_1.jsx)("div", { propA: true }); };
-exports.App = App;
-
-

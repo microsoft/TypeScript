@@ -1,4 +1,4 @@
-unicodeExtendedEscapesInRegularExpressions10.ts(5,20): error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+unicodeExtendedEscapesInRegularExpressions10.ts(5,20): error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
 
 
 ==== unicodeExtendedEscapesInRegularExpressions10.ts (1 errors) ====
@@ -8,5 +8,5 @@ unicodeExtendedEscapesInRegularExpressions10.ts(5,20): error TS1499: This regula
     // this is a useful edge-case test.
     var x = /\u{D800}/gu;
                        ~
-!!! error TS1499: This regular expression flag is only available when targeting 'ES2015' or later.
+!!! error TS1501: This regular expression flag is only available when targeting 'ES2015' or later.
     

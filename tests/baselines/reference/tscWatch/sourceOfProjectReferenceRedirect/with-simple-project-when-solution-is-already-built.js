@@ -142,17 +142,16 @@ declare const console: { log(msg: any): void; };
 //// [/user/username/projects/demo/lib/core/utilities.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.lastElementOf = exports.makeRandomName = void 0;
+exports.makeRandomName = makeRandomName;
+exports.lastElementOf = lastElementOf;
 function makeRandomName() {
     return "Bob!?! ";
 }
-exports.makeRandomName = makeRandomName;
 function lastElementOf(arr) {
     if (arr.length === 0)
         return undefined;
     return arr[arr.length - 1];
 }
-exports.lastElementOf = lastElementOf;
 
 
 //// [/user/username/projects/demo/lib/core/utilities.d.ts]
@@ -161,7 +160,7 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
 
 
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"}],"root":[2],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./utilities.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"}],"root":[2],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./utilities.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -209,7 +208,6 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
       "target": 1
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../core/utilities.ts"
@@ -217,7 +215,7 @@ export declare function lastElementOf<T>(arr: T[]): T | undefined;
     "latestChangedDtsFile": "./utilities.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1348
+  "size": 1324
 }
 
 //// [/user/username/projects/demo/lib/animals/animal.js]
@@ -250,7 +248,7 @@ export { createDog, Dog };
 //// [/user/username/projects/demo/lib/animals/dog.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createDog = void 0;
+exports.createDog = createDog;
 var utilities_1 = require("../core/utilities");
 function createDog() {
     return ({
@@ -261,7 +259,6 @@ function createDog() {
         name: (0, utilities_1.makeRandomName)()
     });
 }
-exports.createDog = createDog;
 
 
 //// [/user/username/projects/demo/lib/animals/dog.d.ts]
@@ -274,7 +271,7 @@ export declare function createDog(): Dog;
 
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n",{"version":"-7220553464-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",{"version":"-18870194049-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5],[3]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,3],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n",{"version":"-7220553464-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",{"version":"-18870194049-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5]],"referencedMap":[[5,1],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -294,9 +291,6 @@ export declare function createDog(): Dog;
       [
         "../../animals/animal.ts",
         "../../animals/dog.ts"
-      ],
-      [
-        "../../animals/index.ts"
       ]
     ],
     "fileInfos": {
@@ -371,15 +365,6 @@ export declare function createDog(): Dog;
         "../../animals/dog.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../animals/animal.ts",
@@ -390,93 +375,22 @@ export declare function createDog(): Dog;
     "latestChangedDtsFile": "./dog.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2260
+  "size": 2221
 }
 
 
 /a/lib/tsc.js --w --p /user/username/projects/demo/animals/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:01:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:01:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-
-Program root files: [
-  "/user/username/projects/demo/animals/animal.ts",
-  "/user/username/projects/demo/animals/dog.ts",
-  "/user/username/projects/demo/animals/index.ts"
-]
-Program options: {
-  "declaration": true,
-  "target": 1,
-  "module": 1,
-  "strict": true,
-  "noUnusedLocals": true,
-  "noUnusedParameters": true,
-  "noImplicitReturns": true,
-  "noFallthroughCasesInSwitch": true,
-  "composite": true,
-  "outDir": "/user/username/projects/demo/lib/animals",
-  "rootDir": "/user/username/projects/demo/animals",
-  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/demo/animals/animal.ts
-/user/username/projects/demo/animals/index.ts
-/user/username/projects/demo/core/utilities.ts
-/user/username/projects/demo/animals/dog.ts
-
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/demo/core/utilities.ts
-/user/username/projects/demo/animals/dog.ts
-
-Shape signatures in builder refreshed for::
-/user/username/projects/demo/core/utilities.ts (computed .d.ts)
-/user/username/projects/demo/animals/dog.ts (computed .d.ts)
-
-PolledWatches::
-/user/username/projects/demo/animals/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/demo/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/demo/animals: *new*
-  {}
-/user/username/projects/demo/animals/animal.ts: *new*
-  {}
-/user/username/projects/demo/animals/dog.ts: *new*
-  {}
-/user/username/projects/demo/animals/index.ts: *new*
-  {}
-/user/username/projects/demo/animals/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/core/tsconfig.json: *new*
-  {}
-/user/username/projects/demo/core/utilities.ts: *new*
-  {}
-/user/username/projects/demo/tsconfig-base.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/demo/animals: *new*
-  {}
-/user/username/projects/demo/core: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/demo/lib/animals/dog.js] file written with same contents
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../../core/utilities.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n",{"version":"-7220553464-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"},{"version":"-18870194049-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5],[3]],"referencedMap":[[5,1],[3,2]],"exportedModulesMap":[[5,3],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../a/lib/lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../../core/utilities.ts","../../animals/dog.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-9289341318-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n",{"version":"-7220553464-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","signature":"1096904574-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n"},{"version":"-6723567162-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}\n","signature":"-11345568166-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n"},{"version":"-18870194049-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}\n","signature":"6032048049-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n"}],"root":[2,3,5],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"fileIdsList":[[3,4],[2,5]],"referencedMap":[[5,1],[3,2]],"semanticDiagnosticsPerFile":[1,2,5,3,4],"latestChangedDtsFile":"./dog.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -496,9 +410,6 @@ exitCode:: ExitStatus.undefined
       [
         "../../animals/animal.ts",
         "../../animals/dog.ts"
-      ],
-      [
-        "../../animals/index.ts"
       ]
     ],
     "fileInfos": {
@@ -577,15 +488,6 @@ exitCode:: ExitStatus.undefined
         "../../animals/dog.ts"
       ]
     },
-    "exportedModulesMap": {
-      "../../animals/dog.ts": [
-        "../../animals/index.ts"
-      ],
-      "../../animals/index.ts": [
-        "../../animals/animal.ts",
-        "../../animals/dog.ts"
-      ]
-    },
     "semanticDiagnosticsPerFile": [
       "../../../../../../a/lib/lib.d.ts",
       "../../animals/animal.ts",
@@ -596,6 +498,79 @@ exitCode:: ExitStatus.undefined
     "latestChangedDtsFile": "./dog.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 2508
+  "size": 2469
 }
 
+
+PolledWatches::
+/user/username/projects/demo/animals/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/demo/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/animals/animal.ts: *new*
+  {}
+/user/username/projects/demo/animals/dog.ts: *new*
+  {}
+/user/username/projects/demo/animals/index.ts: *new*
+  {}
+/user/username/projects/demo/animals/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/tsconfig.json: *new*
+  {}
+/user/username/projects/demo/core/utilities.ts: *new*
+  {}
+/user/username/projects/demo/tsconfig-base.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/demo/animals: *new*
+  {}
+/user/username/projects/demo/core: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/demo/animals/animal.ts",
+  "/user/username/projects/demo/animals/dog.ts",
+  "/user/username/projects/demo/animals/index.ts"
+]
+Program options: {
+  "declaration": true,
+  "target": 1,
+  "module": 1,
+  "strict": true,
+  "noUnusedLocals": true,
+  "noUnusedParameters": true,
+  "noImplicitReturns": true,
+  "noFallthroughCasesInSwitch": true,
+  "composite": true,
+  "outDir": "/user/username/projects/demo/lib/animals",
+  "rootDir": "/user/username/projects/demo/animals",
+  "configFilePath": "/user/username/projects/demo/animals/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/demo/animals/animal.ts
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/core/utilities.ts
+/user/username/projects/demo/animals/dog.ts
+
+Semantic diagnostics in builder refreshed for::
+/user/username/projects/demo/animals/index.ts
+/user/username/projects/demo/core/utilities.ts
+/user/username/projects/demo/animals/dog.ts
+
+Shape signatures in builder refreshed for::
+/user/username/projects/demo/core/utilities.ts (computed .d.ts)
+/user/username/projects/demo/animals/dog.ts (computed .d.ts)
+/user/username/projects/demo/animals/index.ts (computed .d.ts during emit)
+
+exitCode:: ExitStatus.undefined

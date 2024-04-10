@@ -1,10 +1,6 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import {
     createHasErrorMessageLogger,
     nullLogger,
@@ -70,7 +66,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),

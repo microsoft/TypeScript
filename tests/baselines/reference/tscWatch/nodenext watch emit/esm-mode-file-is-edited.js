@@ -45,11 +45,31 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w --p /project/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/dist/index.js]
+import * as Thing from "thing";
+Thing.fn();
+
+
+
+FsWatches::
+/a/lib/lib.es2020.full.d.ts: *new*
+  {}
+/project/src/deps.d.ts: *new*
+  {}
+/project/src/index.ts: *new*
+  {}
+/project/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/project: *new*
+  {}
 
 Program root files: [
   "/project/src/deps.d.ts",
@@ -81,27 +101,7 @@ Shape signatures in builder refreshed for::
 /project/src/deps.d.ts (used version)
 /project/src/index.ts (used version)
 
-FsWatches::
-/a/lib/lib.es2020.full.d.ts: *new*
-  {}
-/project/src/deps.d.ts: *new*
-  {}
-/project/src/index.ts: *new*
-  {}
-/project/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/project: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js]
-import * as Thing from "thing";
-Thing.fn();
-
-
 
 Change:: Modify typescript file
 
@@ -111,15 +111,22 @@ import * as Thing from "thing";
 Thing.fn();
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:30 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
+
+
+//// [/dist/index.js] file written with same contents
 
 
 Program root files: [
@@ -149,5 +156,3 @@ Shape signatures in builder refreshed for::
 /project/src/index.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/dist/index.js] file written with same contents

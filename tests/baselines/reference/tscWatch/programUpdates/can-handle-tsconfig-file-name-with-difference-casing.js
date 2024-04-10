@@ -27,11 +27,24 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p /A/B/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:15 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:18 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/A/B/app.js]
+var x = 1;
+
+
+
+FsWatches::
+/A/B/app.ts: *new*
+  {}
+/A/B/tsconfig.json: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
 
 Program root files: [
   "/A/B/app.ts"
@@ -54,17 +67,4 @@ Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /a/b/app.ts (used version)
 
-FsWatches::
-/a/b/app.ts: *new*
-  {}
-/a/b/tsconfig.json: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/A/B/app.js]
-var x = 1;
-
-

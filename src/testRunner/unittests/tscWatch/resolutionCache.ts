@@ -1,11 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { libContent } from "../helpers/contents";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,
@@ -31,7 +27,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `foo()`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -48,7 +44,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -117,7 +112,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -146,7 +141,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [{
                 caption: "write imported file",
@@ -175,7 +169,7 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             content: `export const y = 1;export const x = 10;`,
         };
 
-        const { sys, baseline, oldSnap, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
+        const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([root, imported, libFile]));
         const host = createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline({
             rootFiles: [root.path],
             system: sys,
@@ -202,7 +196,6 @@ describe("unittests:: tsc-watch:: resolutionCache:: tsc-watch module resolution 
             commandLineArgs: ["--w", root.path],
             sys,
             baseline,
-            oldSnap,
             getPrograms,
             edits: [
                 {
@@ -411,7 +404,7 @@ declare module "fs" {
                                 path: `/user/username/projects/myproject/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
                                 content: jsonToReadableText({ something: 10 }),
                             }),
-                        timeouts: sys => sys.logTimeoutQueueLength(),
+                        timeouts: ts.noop,
                     },
                 ],
             });
@@ -467,8 +460,7 @@ declare namespace myapp {
             {
                 caption: "No change, just check program",
                 edit: ts.noop,
-                timeouts: (sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
-                    sys.logTimeoutQueueLength();
+                timeouts: (_sys, [[oldProgram, oldBuilderProgram]], watchorSolution) => {
                     const newProgram = (watchorSolution as ts.WatchOfConfigFile<ts.EmitAndSemanticDiagnosticsBuilderProgram>).getProgram();
                     assert.strictEqual(newProgram, oldBuilderProgram, "No change so builder program should be same");
                     assert.strictEqual(newProgram.getProgram(), oldProgram, "No change so program should be same");

@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-Creating project service
+Before request
 //// [/a/app.js]
 
 
@@ -21,11 +21,20 @@ Creating project service
 }
 
 
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "/a/app.js"
+      },
+      "seq": 1,
+      "type": "request"
+    }
 Info seq  [hh:mm:ss:mss] Search path: /a
 Info seq  [hh:mm:ss:mss] For info: /a/app.js :: No config files found.
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/app.js SVC-1-0 ""
@@ -41,6 +50,17 @@ PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 TI:: [hh:mm:ss:mss] Global cache location '/a/cache/', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/cache/'
 TI:: [hh:mm:ss:mss] Trying to find '/a/cache/package.json'...
@@ -49,7 +69,7 @@ TI:: [hh:mm:ss:mss] Npm config file: /a/cache/package.json
 TI:: [hh:mm:ss:mss] Npm config file: '/a/cache/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
-TI:: [hh:mm:ss:mss] TI:: Updated types-registry npm package
+TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
 //// [/a/cache/package.json]
 { "private": true }
@@ -93,12 +113,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/cache/",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/cache/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/cache/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/a/package.json' dependencies: ["commander"]
@@ -139,9 +155,18 @@ TI:: [hh:mm:ss:mss] Sending response:
       "typingsInstallerVersion": "FakeVersion",
       "projectName": "/dev/null/inferredProject1*"
     }
-TI:: [hh:mm:ss:mss] #1 with arguments'[
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "beginInstallTypes",
+      "body": {
+        "eventId": 1
+      }
+    }
+TI:: [hh:mm:ss:mss] #1 with cwd: /a/cache/ arguments: [
   "@types/commander@tsFakeMajor.Minor"
-]'.
+]
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -150,10 +175,11 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
-TI:: [hh:mm:ss:mss] #1 with arguments'[
-  "@types/commander@tsFakeMajor.Minor"
-]':: true
-TI:: Before installWorker
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
 
 PolledWatches::
 /a/bower_components: *new*
@@ -167,7 +193,24 @@ FsWatches::
 /a/package.json: *new*
   {}
 
-TI:: After installWorker
+PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor"
+] *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
+Before running PendingInstalls callback:: count: 1
+1: #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor"
+]
+
+TI:: Installation #1 with arguments:: [
+  "@types/commander@tsFakeMajor.Minor"
+] complete with success::true
 //// [/a/cache/node_modules/@types/commander/index.d.ts]
 export let x: number
 
@@ -198,6 +241,33 @@ TI:: [hh:mm:ss:mss] Sending response:
     }
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [
+          "/a/cache/node_modules/@types/commander/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "kind": "event::endInstallTypes",
@@ -209,13 +279,38 @@ TI:: [hh:mm:ss:mss] Sending response:
       "installSuccess": true,
       "typingsInstallerVersion": "FakeVersion"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "endInstallTypes",
+      "body": {
+        "eventId": 1,
+        "packages": [
+          "@types/commander@tsFakeMajor.Minor"
+        ],
+        "success": true
+      }
+    }
+After running PendingInstalls callback:: count: 0
+
+Timeout callback:: count: 2
+1: /dev/null/inferredProject1* *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/app.js SVC-1-0 ""
@@ -250,12 +345,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/cache/",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/cache/', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/cache/'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Typing names in '/a/package.json' dependencies: ["commander"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -298,6 +389,33 @@ TI:: [hh:mm:ss:mss] Sending response:
       "unresolvedImports": [],
       "kind": "action::set"
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/dev/null/inferredProject1*",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "target": 1,
+          "jsx": 1,
+          "allowNonTsExtensions": true,
+          "allowJs": true,
+          "noEmitForJsFiles": true,
+          "maxNodeModuleJsDepth": 2
+        },
+        "typings": [
+          "/a/cache/node_modules/@types/commander/index.d.ts"
+        ],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 TI:: [hh:mm:ss:mss] No new typings were requested as a result of typings discovery
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
@@ -316,4 +434,32 @@ Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /a/app.js ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] got projects updated in background /a/app.js
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectsUpdatedInBackground",
+      "body": {
+        "openFiles": [
+          "/a/app.js"
+        ]
+      }
+    }
 After running Timeout callback:: count: 0
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+
+ScriptInfos::
+/a/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/cache/node_modules/@types/commander/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*

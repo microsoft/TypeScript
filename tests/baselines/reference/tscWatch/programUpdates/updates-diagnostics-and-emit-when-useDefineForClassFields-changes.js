@@ -28,16 +28,41 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:16 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/a.js]
+class C {
+    get prop() { return 1; }
+}
+class D extends C {
+    constructor() {
+        super(...arguments);
+        this.prop = 1;
+    }
+}
+
+
+
+FsWatches::
+/a.ts: *new*
+  {}
+/a/lib/lib.d.ts: *new*
+  {}
+/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/: *new*
+  {}
 
 Program root files: [
   "/a.ts",
@@ -61,32 +86,7 @@ Shape signatures in builder refreshed for::
 /a.ts (used version)
 /a/lib/lib.d.ts (used version)
 
-FsWatches::
-/a.ts: *new*
-  {}
-/a/lib/lib.d.ts: *new*
-  {}
-/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/: *new*
-  {}
-
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-class C {
-    get prop() { return 1; }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        this.prop = 1;
-    }
-}
-
-
 
 Change:: Enable useDefineForClassFields
 
@@ -100,19 +100,42 @@ Input::
 }
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS2610: [0m'prop' is defined as an accessor in class 'C', but is overridden here in 'D' as an instance property.
 
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/a.js]
+class C {
+    get prop() { return 1; }
+}
+class D extends C {
+    constructor() {
+        super(...arguments);
+        Object.defineProperty(this, "prop", {
+            enumerable: true,
+            configurable: true,
+            writable: true,
+            value: 1
+        });
+    }
+}
+
 
 
 
@@ -138,21 +161,3 @@ Semantic diagnostics in builder refreshed for::
 No shapes updated in the builder::
 
 exitCode:: ExitStatus.undefined
-
-//// [/a.js]
-class C {
-    get prop() { return 1; }
-}
-class D extends C {
-    constructor() {
-        super(...arguments);
-        Object.defineProperty(this, "prop", {
-            enumerable: true,
-            configurable: true,
-            writable: true,
-            value: 1
-        });
-    }
-}
-
-
