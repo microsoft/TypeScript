@@ -3,7 +3,7 @@
 === selfReferencesInFunctionParameters.ts ===
 function foo(x: number = x) {
 >foo : (x?: number) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : number
@@ -12,7 +12,7 @@ function foo(x: number = x) {
 
 function bar(x0 = "", x: number = x) {
 >bar : (x0?: string, x?: number) => void
->    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^  ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >x0 : string
 >   : ^^^^^^
 >"" : ""
@@ -40,7 +40,7 @@ class C {
      
     bar(a = "", b: string = b.toString()) {
 >bar : (a?: string, b?: string) => void
->    : ^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >"" : ""

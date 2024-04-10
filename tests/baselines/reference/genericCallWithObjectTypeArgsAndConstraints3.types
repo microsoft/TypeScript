@@ -34,7 +34,7 @@ class Derived2 extends Base {
 
 function f<T extends Base>(a: { x: T; y: T }) {
 >f : <T extends Base>(a: { x: T; y: T; }) => T
->  : ^ ^^^^^^^^^^^^^^^^^^               ^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^
 >a : { x: T; y: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >x : T
@@ -57,7 +57,7 @@ var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is
 >f({ x: new Derived(), y: new Derived2() }) : Derived
 >                                           : ^^^^^^^
 >f : <T extends Base>(a: { x: T; y: T; }) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
@@ -75,7 +75,7 @@ var r1 = f({ x: new Derived(), y: new Derived2() }); // error because neither is
 
 function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
 >f2 : <T extends Base, U extends { x: T; y: T; }>(a: U) => T
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^ ^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >y : T
@@ -98,7 +98,7 @@ var r2 = f2({ x: new Derived(), y: new Derived2() }); // ok
 >f2({ x: new Derived(), y: new Derived2() }) : Base
 >                                            : ^^^^
 >f2 : <T extends Base, U extends { x: T; y: T; }>(a: U) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
@@ -120,7 +120,7 @@ var r3 = f2({ x: new Derived(), y: new Derived2() }); // ok
 >f2({ x: new Derived(), y: new Derived2() }) : Base
 >                                            : ^^^^
 >f2 : <T extends Base, U extends { x: T; y: T; }>(a: U) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
@@ -139,9 +139,9 @@ var r3 = f2({ x: new Derived(), y: new Derived2() }); // ok
 
 function f3<T extends Base>(y: (a: T) => T, x: T) {
 >f3 : <T extends Base>(y: (a: T) => T, x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^           ^^^^^ ^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^^
 >y : (a: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : T
 >  : ^
 >x : T
@@ -151,7 +151,7 @@ function f3<T extends Base>(y: (a: T) => T, x: T) {
 >y(null) : T
 >        : ^
 >y : (a: T) => T
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 }
 
 // all ok - second argument is processed before x is fixed
@@ -161,9 +161,9 @@ var r4 = f3(x => x, new Base());
 >f3(x => x, new Base()) : Base
 >                       : ^^^^
 >f3 : <T extends Base>(y: (a: T) => T, x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^^
 >x => x : (x: Base) => Base
->       : ^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^
 >x : Base
 >  : ^^^^
 >x : Base
@@ -179,9 +179,9 @@ var r5 = f3(x => x, new Derived());
 >f3(x => x, new Derived()) : Derived
 >                          : ^^^^^^^
 >f3 : <T extends Base>(y: (a: T) => T, x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^^
 >x => x : (x: Derived) => Derived
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >x : Derived
 >  : ^^^^^^^
 >x : Derived
@@ -197,9 +197,9 @@ var r6 = f3(x => x, null);
 >f3(x => x, null) : any
 >                 : ^^^
 >f3 : <T extends Base>(y: (a: T) => T, x: T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^ ^^^^^^
 >x => x : (x: any) => any
->       : ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any

@@ -95,7 +95,7 @@ export module M.P {
 >a : () => void
 >  : ^^^^^^^^^^
 >M.a : () => void
->    : ^^^^^^^^^^
+>    :           
 >M : typeof M
 >  : ^^^^^^^^
 >a : () => void
@@ -125,7 +125,7 @@ export module M.P {
 >g : () => void
 >  : ^^^^^^^^^^
 >M.c.g : () => void
->      : ^^^^^^^^^^
+>      :           
 >M.c : typeof M.N
 >    : ^^^^^^^^^^
 >M : typeof M

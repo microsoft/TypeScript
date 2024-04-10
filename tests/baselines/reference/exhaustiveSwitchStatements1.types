@@ -3,7 +3,7 @@
 === exhaustiveSwitchStatements1.ts ===
 function f1(x: 1 | 2): string {
 >f1 : (x: 1 | 2) => string
->   : ^^^^     ^^^^^      
+>   : ^ ^^     ^^^^^      
 >x : 1 | 2
 >  : ^^^^^
 
@@ -44,7 +44,7 @@ function f1(x: 1 | 2): string {
 
 function f2(x: 1 | 2) {
 >f2 : (x: 1 | 2) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : 1 | 2
 >  : ^^^^^
 
@@ -83,7 +83,7 @@ function f2(x: 1 | 2) {
 
 function f3(x: 1 | 2) {
 >f3 : (x: 1 | 2) => 10 | 20
->   : ^^^^     ^^^^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^^^^
 >x : 1 | 2
 >  : ^^^^^
 
@@ -126,7 +126,7 @@ enum E { A, B }
 
 function f(e: E): number {
 >f : (e: E) => number
->  : ^^^^ ^^^^^      
+>  : ^ ^^ ^^^^^      
 >e : E
 >  : ^
 
@@ -158,7 +158,7 @@ function f(e: E): number {
 
 function g(e: E): number {
 >g : (e: E) => number
->  : ^^^^ ^^^^^      
+>  : ^ ^^ ^^^^^      
 >e : E
 >  : ^
 
@@ -235,7 +235,7 @@ type Shape = Square | Rectangle | Circle | Triangle;
 
 function area(s: Shape): number {
 >area : (s: Shape) => number
->     : ^^^^     ^^^^^      
+>     : ^ ^^     ^^^^^      
 >s : Shape
 >  : ^^^^^
 
@@ -341,11 +341,11 @@ function area(s: Shape): number {
 >Math.sqrt(3) : number
 >             : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -370,7 +370,7 @@ function area(s: Shape): number {
 
 function areaWrapped(s: Shape): number {
 >areaWrapped : (s: Shape) => number
->            : ^^^^     ^^^^^      
+>            : ^ ^^     ^^^^^      
 >s : Shape
 >  : ^^^^^
 
@@ -472,11 +472,11 @@ function areaWrapped(s: Shape): number {
 >Math.sqrt(3) : number
 >             : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -517,7 +517,7 @@ enum MyEnum {
 
 function thisGivesError(e: MyEnum): string {
 >thisGivesError : (e: MyEnum) => string
->               : ^^^^      ^^^^^      
+>               : ^ ^^      ^^^^^      
 >e : MyEnum
 >  : ^^^^^^
 
@@ -564,7 +564,7 @@ function thisGivesError(e: MyEnum): string {
 
 function good1(e: MyEnum): string {
 >good1 : (e: MyEnum) => string
->      : ^^^^      ^^^^^      
+>      : ^ ^^      ^^^^^      
 >e : MyEnum
 >  : ^^^^^^
 
@@ -619,7 +619,7 @@ function good1(e: MyEnum): string {
 
 function good2(e: MyEnum): string {
 >good2 : (e: MyEnum) => string
->      : ^^^^      ^^^^^      
+>      : ^ ^^      ^^^^^      
 >e : MyEnum
 >  : ^^^^^^
 
@@ -666,9 +666,9 @@ enum Level {
 
 const doSomethingWithLevel = (level: Level) => {
 >doSomethingWithLevel : (level: Level) => Level
->                     : ^^^^^^^^     ^^^^^^^^^^
+>                     : ^     ^^     ^^^^^^^^^^
 >(level: Level) => {  let next: Level;  switch (level) {    case Level.One:      next = Level.Two;      break;    case Level.Two:      next = Level.One;      break;  }  return next;} : (level: Level) => Level
->                                                                                                                                                                                      : ^^^^^^^^     ^^^^^^^^^^
+>                                                                                                                                                                                      :                        
 >level : Level
 >      : ^^^^^
 
@@ -757,7 +757,7 @@ type Shape2 = Square2 | Circle2;
 
 function withDefault(s1: Shape2, s2: Shape2): string {
 >withDefault : (s1: Shape2, s2: Shape2) => string
->            : ^^^^^      ^^^^^^      ^^^^^      
+>            : ^  ^^      ^^  ^^      ^^^^^      
 >s1 : Shape2
 >   : ^^^^^^
 >s2 : Shape2
@@ -817,7 +817,7 @@ function withDefault(s1: Shape2, s2: Shape2): string {
 
 function withoutDefault(s1: Shape2, s2: Shape2): string {
 >withoutDefault : (s1: Shape2, s2: Shape2) => string
->               : ^^^^^      ^^^^^^      ^^^^^      
+>               : ^  ^^      ^^  ^^      ^^^^^      
 >s1 : Shape2
 >   : ^^^^^^
 >s2 : Shape2
@@ -874,7 +874,7 @@ function withoutDefault(s1: Shape2, s2: Shape2): string {
 
 function test4(value: 1 | 2) {
 >test4 : (value: 1 | 2) => string
->      : ^^^^^^^^     ^^^^^^^^^^^
+>      : ^     ^^     ^^^^^^^^^^^
 >value : 1 | 2
 >      : ^^^^^
 
@@ -1035,7 +1035,7 @@ type K = keyof O | 'c';
 
 function ff(o: O, k: K) {
 >ff : (o: O, k: K) => number
->   : ^^^^ ^^^^^ ^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^^^^^^^^^^
 >o : O
 >  : ^
 >k : K
@@ -1085,7 +1085,7 @@ type A = { kind: "abc" } | { kind: "def" };
 
 function f35431(a: A) {
 >f35431 : (a: A) => void
->       : ^^^^ ^^^^^^^^^
+>       : ^ ^^ ^^^^^^^^^
 >a : A
 >  : ^
 

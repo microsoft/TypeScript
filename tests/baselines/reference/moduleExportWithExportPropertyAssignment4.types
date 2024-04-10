@@ -8,7 +8,7 @@ var mod1 = require('./mod1')
 >require('./mod1') : typeof mod1
 >                  : ^^^^^^^^^^^
 >require : (name: string) => any
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^
 >'./mod1' : "./mod1"
 >         : ^^^^^^^^
 
@@ -16,7 +16,7 @@ mod1.justExport.toFixed()
 >mod1.justExport.toFixed() : string
 >                          : ^^^^^^
 >mod1.justExport.toFixed : (fractionDigits?: number) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^^^^^^^
 >mod1.justExport : number
 >                : ^^^^^^
 >mod1 : typeof mod1
@@ -24,7 +24,7 @@ mod1.justExport.toFixed()
 >justExport : number
 >           : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 mod1.bothBefore.toFixed() // error
 >mod1.bothBefore.toFixed() : any
@@ -75,7 +75,7 @@ declare var module: { exports: any };
 
 declare function require(name: string): any;
 >require : (name: string) => any
->        : ^^^^^^^      ^^^^^   
+>        : ^    ^^      ^^^^^   
 >name : string
 >     : ^^^^^^
 

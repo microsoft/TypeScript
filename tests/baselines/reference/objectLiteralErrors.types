@@ -319,7 +319,7 @@ var f5 = { a: {}, get a() { return {}; } };
 >f5 : { readonly a: {}; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >{ a: {}, get a() { return {}; } } : { readonly a: {}; }
->                                  : ^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^  ^^^
 >a : {}
 >  : ^^
 >{} : {}
@@ -518,9 +518,9 @@ var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
 // Get and set accessor with mismatched type annotations (only g2 is an error after #43662 implemented)
 var g1 = { get a(): number { return 4; }, set a(n: string) { } };
 >g1 : { get a(): number; set a(n: string); }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >{ get a(): number { return 4; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
->                                                        : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>                                                        : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >a : number
 >  : ^^^^^^
 >4 : 4
@@ -546,9 +546,9 @@ var g2 = { get a() { return 4; }, set a(n: string) { } };
 
 var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
 >g3 : { get a(): number; set a(n: string); }
->   : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>   : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >{ get a(): number { return undefined; }, set a(n: string) { } } : { get a(): number; set a(n: string); }
->                                                                : ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^
+>                                                                : ^^^^^^^^^^^      ^^^^^^^^ ^^      ^^^^
 >a : number
 >  : ^^^^^^
 >undefined : undefined

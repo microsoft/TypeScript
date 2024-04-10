@@ -10,7 +10,7 @@ interface I {
 
     member: {
 >member : new (s: string) => { new (n: number): { new (): boolean; }; }
->       : ^^^^^^^^      ^^^^^                                          
+>       : ^^^^^ ^^      ^^^^^                                          
 
         new (s: string): {
 >s : string
@@ -39,9 +39,9 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >new new f `abc${ 0 }def`.member("hello")(42) : new () => boolean
 >                                             : ^^^^^^^^^^^^^^^^^
 >new f `abc${ 0 }def`.member("hello") : new (n: number) => new () => boolean
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >f `abc${ 0 }def`.member : new (s: string) => new (n: number) => new () => boolean
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >f `abc${ 0 }def` : I
 >                 : ^
 >f : I
@@ -51,7 +51,7 @@ var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >0 : 0
 >  : ^
 >member : new (s: string) => new (n: number) => new () => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^ ^^      ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42

@@ -33,10 +33,10 @@ class C {
     // getX has privileged access to #x
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => number
->                          : ^^^^^^ ^^^^^^^^^^^
+>                          : ^   ^^ ^^^^^^^^^^^
 >getX : any
 >(obj: C) => obj.#x : (obj: C) => number
->                   : ^^^^^^ ^^^^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : C
 >    : ^
 >obj.#x : number

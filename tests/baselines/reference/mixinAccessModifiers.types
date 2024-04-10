@@ -103,7 +103,7 @@ class Public2 {
 
 function f1(x: Private & Private2) {
 >f1 : (x: Private & Private2) => void
->   : ^^^^                  ^^^^^^^^^
+>   : ^ ^^                  ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -118,7 +118,7 @@ function f1(x: Private & Private2) {
 
 function f2(x: Private & Protected) {
 >f2 : (x: Private & Protected) => void
->   : ^^^^                   ^^^^^^^^^
+>   : ^ ^^                   ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -133,7 +133,7 @@ function f2(x: Private & Protected) {
 
 function f3(x: Private & Public) {
 >f3 : (x: Private & Public) => void
->   : ^^^^                ^^^^^^^^^
+>   : ^ ^^                ^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -148,7 +148,7 @@ function f3(x: Private & Public) {
 
 function f4(x: Protected & Protected2) {
 >f4 : (x: Protected & Protected2) => void
->   : ^^^^                      ^^^^^^^^^
+>   : ^ ^^                      ^^^^^^^^^
 >x : Protected & Protected2
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -163,7 +163,7 @@ function f4(x: Protected & Protected2) {
 
 function f5(x: Protected & Public) {
 >f5 : (x: Protected & Public) => void
->   : ^^^^                  ^^^^^^^^^
+>   : ^ ^^                  ^^^^^^^^^
 >x : Protected & Public
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -178,7 +178,7 @@ function f5(x: Protected & Public) {
 
 function f6(x: Public & Public2) {
 >f6 : (x: Public & Public2) => void
->   : ^^^^                ^^^^^^^^^
+>   : ^ ^^                ^^^^^^^^^
 >x : Public & Public2
 >  : ^^^^^^^^^^^^^^^^
 
@@ -193,7 +193,7 @@ function f6(x: Public & Public2) {
 
 declare function Mix<T, U>(c1: T, c2: U): T & U;
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^ ^^ ^^^^^^ ^^^^^^ ^^^^^     
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^     
 >c1 : T
 >   : ^
 >c2 : U
@@ -207,7 +207,7 @@ class C1 extends Mix(Private, Private2) {}
 >Mix(Private, Private2) : typeof Private & typeof Private2
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Private2 : typeof Private2
@@ -219,7 +219,7 @@ class C2 extends Mix(Private, Protected) {}
 >Mix(Private, Protected) : typeof Private & typeof Protected
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Protected : typeof Protected
@@ -231,7 +231,7 @@ class C3 extends Mix(Private, Public) {}
 >Mix(Private, Public) : typeof Private & typeof Public
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Private : typeof Private
 >        : ^^^^^^^^^^^^^^
 >Public : typeof Public
@@ -243,7 +243,7 @@ class C4 extends Mix(Protected, Protected2) {
 >Mix(Protected, Protected2) : Protected & Protected2
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Protected : typeof Protected
 >          : ^^^^^^^^^^^^^^^^
 >Protected2 : typeof Protected2
@@ -251,7 +251,7 @@ class C4 extends Mix(Protected, Protected2) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -319,7 +319,7 @@ class C5 extends Mix(Protected, Public) {
 >Mix(Protected, Public) : Protected & Public
 >                       : ^^^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Protected : typeof Protected
 >          : ^^^^^^^^^^^^^^^^
 >Public : typeof Public
@@ -327,7 +327,7 @@ class C5 extends Mix(Protected, Public) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -395,7 +395,7 @@ class C6 extends Mix(Public, Public2) {
 >Mix(Public, Public2) : Public & Public2
 >                     : ^^^^^^^^^^^^^^^^
 >Mix : <T, U>(c1: T, c2: U) => T & U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^  ^^ ^^  ^^ ^^^^^^^^^^
 >Public : typeof Public
 >       : ^^^^^^^^^^^^^
 >Public2 : typeof Public2
@@ -403,7 +403,7 @@ class C6 extends Mix(Public, Public2) {
 
 	f(c4: C4, c5: C5, c6: C6) {
 >f : (c4: C4, c5: C5, c6: C6) => void
->  : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
+>  : ^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >c4 : C4
 >   : ^^
 >c5 : C5
@@ -493,7 +493,7 @@ class ProtectedGeneric2<T> {
 
 function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 >f7 : (x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) => void
->   : ^^^^                                           ^^^^^^^^^
+>   : ^ ^^                                           ^^^^^^^^^
 >x : ProtectedGeneric<{}>
 >  : ^^^^^^^^^^^^^^^^^^^^
 
@@ -520,7 +520,7 @@ function f7(x: ProtectedGeneric<{}> & ProtectedGeneric<{}>) {
 
 function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}>) {
 >f8 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric2<{ a: void; b: void; }>) => void
->   : ^^^^                                                                         ^^^^^^^^^
+>   : ^ ^^                                                                         ^^^^^^^^^
 >x : never
 >  : ^^^^^
 >a : void
@@ -553,7 +553,7 @@ function f8(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric2<{a:void;b:void;}
 
 function f9(x: ProtectedGeneric<{a: void;}> & ProtectedGeneric<{a:void;b:void;}>) {
 >f9 : (x: ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>) => void
->   : ^^^^                                                                        ^^^^^^^^^
+>   : ^ ^^                                                                        ^^^^^^^^^
 >x : ProtectedGeneric<{ a: void; }> & ProtectedGeneric<{ a: void; b: void; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^
 >a : void

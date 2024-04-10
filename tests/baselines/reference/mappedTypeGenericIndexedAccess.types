@@ -56,7 +56,7 @@ class Test {
 
     addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
 >addEntry : <T extends keyof Types>(name: T, entry: Types[T]) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^        ^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^     ^^        ^^^^^^^^^
 >name : T
 >     : ^
 >entry : Types[T]
@@ -96,7 +96,7 @@ class Test {
 >this.entries[name]?.push(entry) : number
 >                                : ^^^^^^
 >this.entries[name]?.push : (...items: Types[T][]) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >this.entries[name] : Types[T][]
 >                   : ^^^^^^^^^^
 >this.entries : { first?: { a1: true; }[] | undefined; second?: { a2: true; }[] | undefined; third?: { a3: true; }[] | undefined; }
@@ -108,7 +108,7 @@ class Test {
 >name : T
 >     : ^
 >push : (...items: Types[T][]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
 >entry : Types[T]
 >      : ^^^^^^^^
     }
@@ -121,7 +121,7 @@ type TypesMap = {
 >         : ^^^^^^^^
 
     [0]: { foo: 'bar'; };
->[0] : { foo: 'bar'; }
+>[0] : { foo: "bar"; }
 >    : ^^^^^^^     ^^^
 >0 : 0
 >  : ^
@@ -129,7 +129,7 @@ type TypesMap = {
 >    : ^^^^^
 
     [1]: { a: 'b'; };
->[1] : { a: 'b'; }
+>[1] : { a: "b"; }
 >    : ^^^^^   ^^^
 >1 : 1
 >  : ^
@@ -158,25 +158,25 @@ const typeHandlers: TypeHandlers = {
 >typeHandlers : TypeHandlers
 >             : ^^^^^^^^^^^^
 >{    [0]: (p) => console.log(p.foo),    [1]: (p) => console.log(p.a),} : { 0: (p: P<0>) => void; 1: (p: P<1>) => void; }
->                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     [0]: (p) => console.log(p.foo),
 >[0] : (p: P<0>) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >(p) => console.log(p.foo) : (p: P<0>) => void
->                          : ^^^^^^^^^^^^^^^^^
+>                          :                  
 >p : P<0>
 >  : ^^^^
 >console.log(p.foo) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.foo : "bar"
 >      : ^^^^^
 >p : P<0>
@@ -186,21 +186,21 @@ const typeHandlers: TypeHandlers = {
 
     [1]: (p) => console.log(p.a),
 >[1] : (p: P<1>) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >(p) => console.log(p.a) : (p: P<1>) => void
->                        : ^^^^^^^^^^^^^^^^^
+>                        :                  
 >p : P<1>
 >  : ^^^^
 >console.log(p.a) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.a : "b"
 >    : ^^^
 >p : P<1>
@@ -212,9 +212,9 @@ const typeHandlers: TypeHandlers = {
 
 const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>                                                                 :                                                        
 >p : P<T>
 >  : ^^^^
 
@@ -222,7 +222,7 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >typeHandlers[p.t]?.(p) : void | undefined
 >                       : ^^^^^^^^^^^^^^^^
 >typeHandlers[p.t] : ((p: P<T>) => void) | undefined
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >typeHandlers : TypeHandlers
 >             : ^^^^^^^^^^^^
 >p.t : T

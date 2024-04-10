@@ -15,7 +15,7 @@ const TestComponent: StatelessComponent<TestProps> = (props) => {
 >TestComponent : StatelessComponent<TestProps>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(props) => {  return null;} : (props: TestProps & { children?: number; }) => any
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : TestProps & { children?: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -72,7 +72,7 @@ const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (p
 >x : number
 >  : ^^^^^^
 >(props) => {  return null;} : (props: (TestProps | { props2: { x: number; }; }) & { children?: number; }) => any
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : (TestProps | { props2: { x: number; }; }) & { children?: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

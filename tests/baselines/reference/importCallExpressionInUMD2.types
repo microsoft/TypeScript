@@ -16,7 +16,7 @@ export class B {
 // We use Promise<any> for now as there is no way to specify shape of module object
 function foo(x: Promise<any>) {
 >foo : (x: Promise<any>) => void
->    : ^^^^            ^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >x : Promise<any>
 >  : ^^^^^^^^^^^^
 
@@ -24,13 +24,13 @@ function foo(x: Promise<any>) {
 >x.then(value => {        let b = new value.B();        b.print();    }) : Promise<void>
 >                                                                        : ^^^^^^^^^^^^^
 >x.then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Promise<any>
 >  : ^^^^^^^^^^^^
 >then : <TResult1 = any, TResult2 = never>(onfulfilled?: (value: any) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value => {        let b = new value.B();        b.print();    } : (value: any) => void
->                                                                : ^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^     ^^^^^^^^^^^^^^
 >value : any
 
         let b = new value.B();
@@ -57,7 +57,7 @@ foo(import("./0"));
 >foo(import("./0")) : void
 >                   : ^^^^
 >foo : (x: Promise<any>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >import("./0") : Promise<typeof import("0")>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./0" : "./0"

@@ -3,7 +3,7 @@
 === reachabilityChecks6.ts ===
 function f0(x) {
 >f0 : (x: any) => void
->   : ^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -14,7 +14,7 @@ function f0(x) {
 
 function f1(x) {
 >f1 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -30,7 +30,7 @@ function f1(x) {
 
 function f2(x) {
 >f2 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -51,7 +51,7 @@ function f2(x) {
 
 function f3(x) {
 >f3 : (x: any) => void
->   : ^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -69,7 +69,7 @@ function f3(x) {
 
 function f3_1 (x) {
 >f3_1 : (x: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -86,7 +86,7 @@ function f3_1 (x) {
 
 function f4(x) {
 >f4 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -108,7 +108,7 @@ function f4(x) {
 
 function f5(x) {
 >f5 : (x: any) => 1 | 2
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -134,7 +134,7 @@ function f5(x) {
 
 function f6(x) {
 >f6 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -164,7 +164,7 @@ function f6(x) {
 
 function f7(x) {
 >f7 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -197,7 +197,7 @@ function f7(x) {
 
 function f8(x) {
 >f8 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -230,7 +230,7 @@ function f8(x) {
 
 function f9(x) {
 >f9 : (x: any) => number
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -256,7 +256,7 @@ function f9(x) {
 
 function f10(x) {
 >f10 : (x: any) => number
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -284,7 +284,7 @@ function f10(x) {
 
 function f11(x) {
 >f11 : (x: any) => number
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

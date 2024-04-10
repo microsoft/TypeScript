@@ -45,7 +45,7 @@ module TypeScriptAllInOne {
 
         static Main(...args: string[]) {
 >Main : (...args: string[]) => void
->     : ^^^^^^^^^^        ^^^^^^^^^
+>     : ^^^^    ^^        ^^^^^^^^^
 >args : string[]
 >     : ^^^^^^^^
 
@@ -115,7 +115,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >if : (retValue: any) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^        ^^^^^^^^^^^^^
 >retValue : any
 >         : ^^^
 >!= 0 : boolean
@@ -385,9 +385,9 @@ module TypeScriptAllInOne {
 
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
->                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^            ^^^
 >"var" : number
 >      : ^^^^^^
 >number = 42 : 42
@@ -397,9 +397,9 @@ module TypeScriptAllInOne {
 >42 : 42
 >   : ^^
 >equals : (x: any) => boolean
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^
 >function (x) { return x["var"] === 42; } : (x: any) => boolean
->                                         : ^^^^^^^^^^^^^^^^^^^
+>                                         :                    
 >x : any
 >  : ^^^
 >x["var"] === 42 : boolean
@@ -415,7 +415,7 @@ module TypeScriptAllInOne {
 >instanceof : () => string
 >           : ^^^^^^^^^^^^
 >() => 'objLit{42}' : () => string
->                   : ^^^^^^^^^^^^
+>                   :             
 >'objLit{42}' : "objLit{42}"
 >             : ^^^^^^^^^^^^
 
@@ -455,19 +455,19 @@ module TypeScriptAllInOne {
 >float.toString() : string
 >                 : ^^^^^^
 >float.toString : (radix?: number) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^^^^^^^
 >float : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >float2.toString() : string
 >                  : ^^^^^^
 >float2.toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >float2 : number
 >       : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >reg.toString() : string
 >               : ^^^^^^
 >reg.toString : () => string
@@ -477,7 +477,7 @@ module TypeScriptAllInOne {
 >toString : () => string
 >         : ^^^^^^^^^^^^
 >objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >weekday : Weekdays.Monday
 >        : ^^^^^^^^^^^^^^^
 
@@ -688,7 +688,7 @@ module TypeScriptAllInOne {
         /// <returns></returns>
         STATEMENTS(i: number): number {
 >STATEMENTS : (i: number) => number
->           : ^^^^      ^^^^^      
+>           : ^ ^^      ^^^^^      
 >i : number
 >  : ^^^^^^
 
@@ -1301,7 +1301,7 @@ module TypeScriptAllInOne {
 >d : () => void
 >  : ^^^^^^^^^^
 >() => {  yield  0; } : () => void
->                     : ^^^^^^^^^^
+>                     :           
 >yield  0 : any
 >         : ^^^
 >0 : 0
@@ -1329,7 +1329,7 @@ module TypeScriptAllInOne {
 >myEvent : () => number
 >        : ^^^^^^^^^^^^
 >() => { return 1; } : () => number
->                    : ^^^^^^^^^^^^
+>                    :             
 >1 : 1
 >  : ^
 
@@ -1545,7 +1545,7 @@ TypeScriptAllInOne.Program.Main();
 >TypeScriptAllInOne.Program.Main() : void
 >                                  : ^^^^
 >TypeScriptAllInOne.Program.Main : (...args: string[]) => void
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^    ^^        ^^^^^^^^^
 >TypeScriptAllInOne.Program : typeof TypeScriptAllInOne.Program
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScriptAllInOne : typeof TypeScriptAllInOne
@@ -1553,5 +1553,5 @@ TypeScriptAllInOne.Program.Main();
 >Program : typeof TypeScriptAllInOne.Program
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Main : (...args: string[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^        ^^^^^^^^^
 

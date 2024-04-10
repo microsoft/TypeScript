@@ -24,12 +24,12 @@ let magnitude = Math2d.getLength(v);
 >          : ^^^^^^
 >Math2d.getLength(v) : number
 >                    : ^^^^^^
->Math2d.getLength : (p: Math2d.Vector) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math2d.getLength : (p: Vector) => number
+>                 : ^ ^^      ^^^^^^^^^^^
 >Math2d : typeof Math2d
 >       : ^^^^^^^^^^^^^
->getLength : (p: Math2d.Vector) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getLength : (p: Vector) => number
+>          : ^ ^^      ^^^^^^^^^^^
 >v : Math2d.Vector
 >  : ^^^^^^^^^^^^^
 
@@ -41,11 +41,11 @@ let p: Math2d.Point = v.translate(5, 5);
 >v.translate(5, 5) : Math2d.Vector
 >                  : ^^^^^^^^^^^^^
 >v.translate : (dx: number, dy: number) => Math2d.Vector
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^
 >v : Math2d.Vector
 >  : ^^^^^^^^^^^^^
 >translate : (dx: number, dy: number) => Math2d.Vector
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 >5 : 5
@@ -118,7 +118,7 @@ declare namespace M2D {
 
 		translate(dx: number, dy: number): Vector;
 >translate : (dx: number, dy: number) => Vector
->          : ^^^^^      ^^^^^^      ^^^^^      
+>          : ^  ^^      ^^  ^^      ^^^^^      
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -127,7 +127,7 @@ declare namespace M2D {
 
 	function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
->          : ^^^^      ^^^^^      
+>          : ^ ^^      ^^^^^      
 >p : Vector
 >  : ^^^^^^
 

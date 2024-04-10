@@ -35,11 +35,11 @@ class C {
 >console.log(this.#a) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >this.#a : number
 >        : ^^^^^^
 >this : this
@@ -59,11 +59,11 @@ class C {
 >console.log(this.#b) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >this.#b : any
 >        : ^^^
 >this : this
@@ -87,11 +87,11 @@ class C {
 >console.log(this.#m) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >this.#m : string
 >        : ^^^^^^
 >this : typeof C
@@ -101,11 +101,11 @@ class C {
 >console.log(this.#x = "test") : void
 >                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >this.#x = "test" : "test"
 >                 : ^^^^^^
 >this.#x : any
@@ -119,7 +119,7 @@ class C {
 >#something : () => number
 >           : ^^^^^^^^^^^^
 >() => 1234 : () => number
->           : ^^^^^^^^^^^^
+>           :             
 >1234 : 1234
 >     : ^^^^
 }

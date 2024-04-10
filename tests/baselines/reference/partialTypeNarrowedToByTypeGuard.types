@@ -30,7 +30,7 @@ type PartialUser = Partial<User>;
 
 function isUser(obj: Obj): obj is PartialUser {
 >isUser : (obj: Obj) => obj is PartialUser
->       : ^^^^^^   ^^^^^                  
+>       : ^   ^^   ^^^^^                  
 >obj : Obj
 >    : ^^^
 
@@ -41,7 +41,7 @@ function isUser(obj: Obj): obj is PartialUser {
 
 function getUserName(obj: Obj) {
 >getUserName : (obj: Obj) => string | undefined
->            : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
 >    : ^^^
 
@@ -49,7 +49,7 @@ function getUserName(obj: Obj) {
 >isUser(obj) : boolean
 >            : ^^^^^^^
 >isUser : (obj: Obj) => obj is Partial<User>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
 >    : ^^^
 

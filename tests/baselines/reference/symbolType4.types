@@ -7,11 +7,11 @@ var s = Symbol.for("postfix");
 >Symbol.for("postfix") : symbol
 >                      : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"postfix" : "postfix"
 >          : ^^^^^^^^^
 

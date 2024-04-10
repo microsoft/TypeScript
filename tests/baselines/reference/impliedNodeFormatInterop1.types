@@ -8,7 +8,7 @@ declare module "highlight.js" {
   export interface HighlightAPI {
     highlight(code: string): string;
 >highlight : (code: string) => string
->          : ^^^^^^^      ^^^^^      
+>          : ^    ^^      ^^^^^      
 >code : string
 >     : ^^^^^^
   }
@@ -39,11 +39,11 @@ hljs.highlight("code");
 >hljs.highlight("code") : string
 >                       : ^^^^^^
 >hljs.highlight : (code: string) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^      ^^^^^^^^^^^
 >hljs : import("highlight.js").HighlightAPI
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >highlight : (code: string) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^      ^^^^^^^^^^^
 >"code" : "code"
 >       : ^^^^^^
 

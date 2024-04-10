@@ -10,11 +10,11 @@ class Main {
 >this.register("a", "b", "c") : void
 >                             : ^^^^
 >this.register : (...names: string[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^
 >this : this
 >     : ^^^^
 >register : (...names: string[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^        ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >"b" : "b"
@@ -25,7 +25,7 @@ class Main {
 
     private register(...names: string[]): void {
 >register : (...names: string[]) => void
->         : ^^^^^^^^^^^        ^^^^^    
+>         : ^^^^     ^^        ^^^^^    
 >names : string[]
 >      : ^^^^^^^^
 
@@ -39,11 +39,11 @@ class Main {
 >this.bar({                [name + ".a"]: () => { this.foo(name); },            }) : void
 >                                                                                  : ^^^^
 >this.bar : (a: any) => void
->         : ^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >{                [name + ".a"]: () => { this.foo(name); },            } : { [x: string]: () => void; }
 >                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -57,15 +57,15 @@ class Main {
 >".a" : ".a"
 >     : ^^^^
 >() => { this.foo(name); } : () => void
->                          : ^^^^^^^^^^
+>                          :           
 >this.foo(name) : void
 >               : ^^^^
 >this.foo : (name: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >foo : (name: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -75,12 +75,12 @@ class Main {
 
     private bar(a: any): void { }
 >bar : (a: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >a : any
 
     private foo(name: string): void { }
 >foo : (name: string) => void
->    : ^^^^^^^      ^^^^^    
+>    : ^    ^^      ^^^^^    
 >name : string
 >     : ^^^^^^
 

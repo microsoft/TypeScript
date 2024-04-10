@@ -107,9 +107,7 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
-import {
-    isContextWithStartAndEndNode,
-} from "./_namespaces/ts.FindAllReferences";
+import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {

@@ -3,11 +3,11 @@
 === genericFunctions2.ts ===
 declare function map <T, U > (items: T[], f: (x: T) => U): U[];
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->    : ^ ^^ ^^^^^^^^^   ^^^^^           ^^^^^   
+>    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^   
 >items : T[]
 >      : ^^^
 >f : (x: T) => U
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -21,11 +21,11 @@ var lengths = map(myItems, x => x.length);
 >map(myItems, x => x.length) : number[]
 >                            : ^^^^^^^^
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^^^^
 >myItems : string[]
 >        : ^^^^^^^^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number

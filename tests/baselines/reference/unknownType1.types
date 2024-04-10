@@ -147,7 +147,7 @@ type T41 = keyof unknown;  // never
 
 function f10(x: unknown) {
 >f10 : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -230,7 +230,7 @@ function f10(x: unknown) {
 
 function f11(x: unknown) {
 >f11 : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -267,13 +267,13 @@ function f11(x: unknown) {
 
 declare function isFunction(x: unknown): x is Function;
 >isFunction : (x: unknown) => x is Function
->           : ^^^^       ^^^^^             
+>           : ^ ^^       ^^^^^             
 >x : unknown
 >  : ^^^^^^^
 
 function f20(x: unknown) {
 >f20 : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -317,7 +317,7 @@ function f20(x: unknown) {
 >isFunction(x) : boolean
 >              : ^^^^^^^
 >isFunction : (x: unknown) => x is Function
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^       ^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -345,7 +345,7 @@ type T52 = T50<unknown>;  // {}
 
 function f21<T>(pAny: any, pNever: never, pT: T) {
 >f21 : <T>(pAny: any, pNever: never, pT: T) => void
->    : ^ ^^^^^^^^   ^^^^^^^^^^     ^^^^^^ ^^^^^^^^^
+>    : ^ ^^    ^^   ^^      ^^     ^^  ^^ ^^^^^^^^^
 >pAny : any
 >     : ^^^
 >pNever : never
@@ -434,7 +434,7 @@ function f21<T>(pAny: any, pNever: never, pT: T) {
 
 function f22(x: unknown) {
 >f22 : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -485,7 +485,7 @@ function f22(x: unknown) {
 
 function f23<T extends unknown>(x: T) {
 >f23 : <T extends unknown>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -500,7 +500,7 @@ function f23<T extends unknown>(x: T) {
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : (x: { [x: string]: unknown; }) => void
->    : ^^^^                         ^^^^^^^^^
+>    : ^ ^^                         ^^^^^^^^^
 >x : { [x: string]: unknown; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -570,7 +570,7 @@ function f25() {
 
 function f26(x: {}, y: unknown, z: any) {
 >f26 : (x: {}, y: unknown, z: any) => void
->    : ^^^^  ^^^^^       ^^^^^   ^^^^^^^^^
+>    : ^ ^^  ^^ ^^       ^^ ^^   ^^^^^^^^^
 >x : {}
 >  : ^^
 >y : unknown
@@ -644,7 +644,7 @@ function f27(): unknown {
 
 function f28(x: unknown) {
 >f28 : (x: unknown) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -678,7 +678,7 @@ class C1 {
 
 function f30<T, U extends unknown>(t: T, u: U) {
 >f30 : <T, U extends unknown>(t: T, u: U) => void
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -721,7 +721,7 @@ type Test2 = IsDefinitelyDefined<unknown>;  // false
 
 function oops<T extends unknown>(arg: T): {} {
 >oops : <T extends unknown>(arg: T) => {}
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^  
+>     : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^  
 >arg : T
 >    : ^
 

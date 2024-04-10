@@ -21,7 +21,7 @@ class A {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function() { return x; } : () => number
->                         : ^^^^^^^^^^^^
+>                         :             
 >x : number
 >  : ^^^^^^
 
@@ -29,11 +29,11 @@ class A {
 >this.bar(f()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >f() : number
 >    : ^^^^^^
 >f : () => number
@@ -42,7 +42,7 @@ class A {
     }
     bar(a: number) {
 >bar : (a: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
     }
@@ -63,7 +63,7 @@ class A {
 >a : () => number
 >  : ^^^^^^^^^^^^
 >function() {  return x; } : () => number
->                          : ^^^^^^^^^^^^
+>                          :             
 >x : number
 >  : ^^^^^^
 
@@ -79,7 +79,7 @@ class A {
 >b : () => number
 >  : ^^^^^^^^^^^^
 >function() { return y; } : () => number
->                         : ^^^^^^^^^^^^
+>                         :             
 >y : number
 >  : ^^^^^^
 
@@ -87,11 +87,11 @@ class A {
 >this.bar(b()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >b() : number
 >    : ^^^^^^
 >b : () => number
@@ -101,11 +101,11 @@ class A {
 >this.bar(a()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a() : number
 >    : ^^^^^^
 >a : () => number
@@ -128,7 +128,7 @@ class A {
 >a : () => number
 >  : ^^^^^^^^^^^^
 >function() {  return x; } : () => number
->                          : ^^^^^^^^^^^^
+>                          :             
 >x : number
 >  : ^^^^^^
 
@@ -136,11 +136,11 @@ class A {
 >this.bar(a()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a() : number
 >    : ^^^^^^
 >a : () => number
@@ -158,7 +158,7 @@ class A {
 >b : () => number
 >  : ^^^^^^^^^^^^
 >function() { return y; } : () => number
->                         : ^^^^^^^^^^^^
+>                         :             
 >y : number
 >  : ^^^^^^
 
@@ -166,11 +166,11 @@ class A {
 >this.bar(b()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >b() : number
 >    : ^^^^^^
 >b : () => number
@@ -194,7 +194,7 @@ class B {
 
             () => {
 >() => {                for (let x of [0]) {                    let f = () => x;                    this.bar(f());                }            } : () => void
->                                                                                                                                                : ^^^^^^^^^^
+>                                                                                                                                                :           
 
                 for (let x of [0]) {
 >x : number
@@ -208,7 +208,7 @@ class B {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => x : () => number
->        : ^^^^^^^^^^^^
+>        :             
 >x : number
 >  : ^^^^^^
 
@@ -216,11 +216,11 @@ class B {
 >this.bar(f()) : void
 >              : ^^^^
 >this.bar : (a: number) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (a: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >f() : number
 >    : ^^^^^^
 >f : () => number
@@ -230,7 +230,7 @@ class B {
     }
     bar(a: number) {
 >bar : (a: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
     }

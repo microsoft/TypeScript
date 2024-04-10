@@ -15,11 +15,11 @@ mod.f('no')
 >mod.f('no') : number
 >            : ^^^^^^
 >mod.f : (n: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 >f : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'no' : "no"
 >     : ^^^^
 
@@ -27,11 +27,11 @@ mod.g('also no')
 >mod.g('also no') : number
 >                 : ^^^^^^
 >mod.g : (n: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 >g : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'also no' : "also no"
 >          : ^^^^^^^^^
 
@@ -39,11 +39,11 @@ mod.h(0)
 >mod.h(0) : string
 >         : ^^^^^^
 >mod.h : (mom: string) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^      ^^^^^^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 >h : (mom: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -51,11 +51,11 @@ mod.i(1)
 >mod.i(1) : string
 >         : ^^^^^^
 >mod.i : (mom: string) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^      ^^^^^^^^^^^
 >mod : typeof mod
 >    : ^^^^^^^^^^
 >i : (mom: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -63,25 +63,25 @@ mod.i(1)
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
 >exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
->                                                          : ^^^^      ^^^^^^^^^^^
+>                                                          : ^ ^^      ^^^^^^^^^^^
 >exports.f : (n: number) => number
->          : ^^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >exports : typeof import("mod")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >exports.g = function fg(n) {    return n + 1} : (n: number) => number
->                                              : ^^^^      ^^^^^^^^^^^
+>                                              :                      
 >exports.g : (n: number) => number
->          : ^^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >exports : typeof import("mod")
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >function fg(n) {    return n + 1} : (n: number) => number
->                                  : ^^^^      ^^^^^^^^^^^
+>                                  :                      
 >fg : (n: number) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -96,9 +96,9 @@ exports.f = exports.g = function fg(n) {
 /** @param {string} mom */
 module.exports.h = module.exports.i = function hi(mom) {
 >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
->                                                                                   : ^^^^^^      ^^^^^^^^^^^
+>                                                                                   : ^   ^^      ^^^^^^^^^^^
 >module.exports.h : (mom: string) => string
->                 : ^^^^^^      ^^^^^^^^^^^
+>                 : ^   ^^      ^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -106,11 +106,11 @@ module.exports.h = module.exports.i = function hi(mom) {
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >h : (mom: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^      ^^^^^^^^^^^
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
->                                                                : ^^^^^^      ^^^^^^^^^^^
+>                                                                :                        
 >module.exports.i : (mom: string) => string
->                 : ^^^^^^      ^^^^^^^^^^^
+>                 : ^   ^^      ^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -118,11 +118,11 @@ module.exports.h = module.exports.i = function hi(mom) {
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >i : (mom: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^      ^^^^^^^^^^^
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
->                                             : ^^^^^^      ^^^^^^^^^^^
+>                                             :                        
 >hi : (mom: string) => string
->   : ^^^^^^      ^^^^^^^^^^^
+>   : ^   ^^      ^^^^^^^^^^^
 >mom : string
 >    : ^^^^^^
 

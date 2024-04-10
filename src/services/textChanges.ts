@@ -655,7 +655,7 @@ export class ChangeTracker {
         this.insertNodesAt(sourceFile, pos, insert, options);
     }
 
-    private insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
+    public insertStatementsInNewFile(fileName: string, statements: readonly (Statement | SyntaxKind.NewLineTrivia)[], oldFile?: SourceFile): void {
         if (!this.newFileChanges) {
             this.newFileChanges = createMultiMap<string, NewFileInsertion>();
         }

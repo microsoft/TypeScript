@@ -14,13 +14,13 @@ interface Breed {
 
 declare function isNil(value: unknown): value is undefined | null;
 >isNil : (value: unknown) => value is undefined | null
->      : ^^^^^^^^       ^^^^^                         
+>      : ^     ^^       ^^^^^                         
 >value : unknown
 >      : ^^^^^^^
 
 function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
 >getBreedSizeWithoutFunction : (animal: Animal) => string | undefined
->                            : ^^^^^^^^^      ^^^^^                  
+>                            : ^      ^^      ^^^^^                  
 >animal : Animal
 >       : ^^^^^^
 
@@ -59,7 +59,7 @@ function getBreedSizeWithoutFunction(animal: Animal): string | undefined {
 
 function getBreedSizeWithFunction(animal: Animal): string | undefined {
 >getBreedSizeWithFunction : (animal: Animal) => string | undefined
->                         : ^^^^^^^^^      ^^^^^                  
+>                         : ^      ^^      ^^^^^                  
 >animal : Animal
 >       : ^^^^^^
 
@@ -69,7 +69,7 @@ function getBreedSizeWithFunction(animal: Animal): string | undefined {
 >isNil(animal?.breed?.size) : boolean
 >                           : ^^^^^^^
 >isNil : (value: unknown) => value is null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >animal?.breed?.size : string | undefined
 >                    : ^^^^^^^^^^^^^^^^^^
 >animal?.breed : Breed | undefined

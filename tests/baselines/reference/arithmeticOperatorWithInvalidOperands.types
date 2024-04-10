@@ -329,7 +329,7 @@ var r1e5 = e * e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r1e6 = e * f;
 >r1e6 : number
@@ -858,7 +858,7 @@ var r2e5 = e / e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r2e6 = e / f;
 >r2e6 : number
@@ -1387,7 +1387,7 @@ var r3e5 = e % e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r3e6 = e % f;
 >r3e6 : number
@@ -1916,7 +1916,7 @@ var r4e5 = e - e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r4e6 = e - f;
 >r4e6 : number
@@ -2445,7 +2445,7 @@ var r5e5 = e << e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r5e6 = e << f;
 >r5e6 : number
@@ -2974,7 +2974,7 @@ var r6e5 = e >> e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r6e6 = e >> f;
 >r6e6 : number
@@ -3503,7 +3503,7 @@ var r7e5 = e >>> e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r7e6 = e >>> f;
 >r7e6 : number
@@ -4032,7 +4032,7 @@ var r8e5 = e & e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r8e6 = e & f;
 >r8e6 : number
@@ -4561,7 +4561,7 @@ var r9e5 = e ^ e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r9e6 = e ^ f;
 >r9e6 : number
@@ -5090,7 +5090,7 @@ var r10e5 = e | e;
 >e : { a: number; }
 >  : ^^^^^^^^^^^^^^
 >e : { a: number; }
->  : ^^^^^^^^^^^^^^
+>  :               
 
 var r10e6 = e | f;
 >r10e6 : number

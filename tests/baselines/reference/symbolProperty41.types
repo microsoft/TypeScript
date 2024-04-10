@@ -7,7 +7,7 @@ class C {
 
     [Symbol.iterator](x: string): { x: string };
 >[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->                  : ^^^^^^      ^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^ ^^      ^^^              ^^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -21,7 +21,7 @@ class C {
 
     [Symbol.iterator](x: "hello"): { x: string; hello: string };
 >[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                             ^^^
+>                  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^                             ^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -37,7 +37,7 @@ class C {
 
     [Symbol.iterator](x: any) {
 >[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -64,7 +64,7 @@ c[Symbol.iterator]("");
 >c[Symbol.iterator]("") : { x: string; }
 >                       : ^^^^^^^^^^^^^^
 >c[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
 >  : ^
 >Symbol.iterator : unique symbol
@@ -80,7 +80,7 @@ c[Symbol.iterator]("hello");
 >c[Symbol.iterator]("hello") : { x: string; hello: string; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c[Symbol.iterator] : { (x: string): { x: string; }; (x: "hello"): { x: string; hello: string; }; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : C
 >  : ^
 >Symbol.iterator : unique symbol

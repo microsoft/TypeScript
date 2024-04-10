@@ -3,7 +3,7 @@
 === arrayLiteralInNonVarArgParameter.ts ===
 function panic(val: string[], ...opt: string[]) { }
 >panic : (val: string[], ...opt: string[]) => void
->      : ^^^^^^        ^^^^^^^^^^        ^^^^^^^^^
+>      : ^   ^^        ^^^^^   ^^        ^^^^^^^^^
 >val : string[]
 >    : ^^^^^^^^
 >opt : string[]
@@ -13,7 +13,7 @@ panic([], 'one', 'two');
 >panic([], 'one', 'two') : void
 >                        : ^^^^
 >panic : (val: string[], ...opt: string[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^        ^^^^^   ^^        ^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >'one' : "one"

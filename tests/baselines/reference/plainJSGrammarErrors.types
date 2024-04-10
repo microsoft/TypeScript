@@ -56,11 +56,11 @@ class C {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x : number
 >  : ^^^^^^
         }
@@ -196,7 +196,7 @@ export static var staticExport = 1
 
 function staticParam(static x = 1) { return x }
 >staticParam : (x?: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -206,7 +206,7 @@ function staticParam(static x = 1) { return x }
 
 async export function oorder(x = 1) { return x }
 >oorder : (x?: number) => Promise<number>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -216,7 +216,7 @@ async export function oorder(x = 1) { return x }
 
 function cantExportParam(export x = 1) { return x }
 >cantExportParam : (x?: number) => number
->                : ^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -226,7 +226,7 @@ function cantExportParam(export x = 1) { return x }
 
 function cantAsyncParam(async x = 1) { return x }
 >cantAsyncParam : (x?: number) => number
->               : ^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -298,7 +298,7 @@ const noStaticLiteralMethods = {
 // rest parameters
 function restMustBeLast(...x, y) {
 >restMustBeLast : (...x: any[], y: any) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^ ^^^^^^^^^ ^^^^^^^^^^^^^^
 >x : any[]
 >  : ^^^^^
 >y : any
@@ -306,7 +306,7 @@ function restMustBeLast(...x, y) {
 }
 function restCantHaveInitialiser(...x = [1,2,3]) {
 >restCantHaveInitialiser : (...x?: number[]) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : number[]
 >  : ^^^^^^^^
 >[1,2,3] : number[]
@@ -320,7 +320,7 @@ function restCantHaveInitialiser(...x = [1,2,3]) {
 }
 function restCantHaveTrailingComma (...x,) {
 >restCantHaveTrailingComma : (...x: any[]) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^ ^^^^^^^^^^^^^^^^
 >x : any[]
 >  : ^^^^^
 }
@@ -432,9 +432,9 @@ var x = 2 ?? 3 || 4
 
 const arr = x
 >arr : (x: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >x  => x + 1 : (x: any) => any
->            : ^^^^^^^^^^^^^^^
+>            :                
 >x : any
 >  : ^^^
 
@@ -478,11 +478,11 @@ const o = {
 >console.log('oh no') : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'oh no' : "oh no"
 >        : ^^^^^^^
 >2 : 2
@@ -611,11 +611,11 @@ for (async of l) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -637,11 +637,11 @@ for (const cantHaveInit = 1 of [1,2,3]) {
 >console.log(cantHaveInit) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >cantHaveInit : number
 >             : ^^^^^^
 }
@@ -663,11 +663,11 @@ for (const cantHaveInit = 1 in [1,2,3]) {
 >console.log(cantHaveInit) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >cantHaveInit : string
 >             : ^^^^^^
 }
@@ -689,11 +689,11 @@ for (let y, x of [1,2,3]) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -715,11 +715,11 @@ for (let y, x in [1,2,3]) {
 >console.log(x) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 }
@@ -741,11 +741,11 @@ switch (b) {
 >console.log('no') : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'no' : "no"
 >     : ^^^^
 
@@ -754,11 +754,11 @@ switch (b) {
 >console.log('yes') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'yes' : "yes"
 >      : ^^^^^
 
@@ -767,11 +767,11 @@ switch (b) {
 >console.log('wat') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'wat' : "wat"
 >      : ^^^^^
 }
@@ -794,11 +794,11 @@ catch (e) {
 >console.log(e) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >e : 1
 >  : ^
 }
@@ -873,7 +873,7 @@ function crossFunctionBoundary() {
 }
 function continueIterationOnly(x) {
 >continueIterationOnly : (x: any) => void
->                      : ^^^^^^^^^^^^^^^^
+>                      : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -894,7 +894,7 @@ function continueIterationOnly(x) {
 }
 function jumpToLabelOnly(x) {
 >jumpToLabelOnly : (x: any) => void
->                : ^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

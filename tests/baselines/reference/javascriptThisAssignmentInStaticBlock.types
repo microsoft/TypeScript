@@ -16,7 +16,7 @@ class Thing {
 >doSomething : () => void
 >            : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
     }
 }
 
@@ -40,37 +40,37 @@ class ElementsArray extends Array {
     static {
         const superisArray = super.isArray;
 >superisArray : (arg: any) => arg is any[]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^   ^^^^^^^^^^^^^^^^^
 >super.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              :                           
 >super : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 
         const customIsArray = (arg)=> superisArray(arg);
 >customIsArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >(arg)=> superisArray(arg) : (arg: any) => arg is any[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                           
 >arg : any
 >superisArray(arg) : boolean
 >                  : ^^^^^^^
 >superisArray : (arg: any) => arg is any[]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^   ^^^^^^^^^^^^^^^^^
 >arg : any
 
         this.isArray = customIsArray;
 >this.isArray = customIsArray : (arg: any) => arg is any[]
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >this.isArray : (arg: any) => arg is any[]
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof ElementsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >customIsArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              :                           
     }
 }
 
@@ -78,11 +78,11 @@ ElementsArray.isArray(new ElementsArray());
 >ElementsArray.isArray(new ElementsArray()) : boolean
 >                                           : ^^^^^^^
 >ElementsArray.isArray : (arg: any) => arg is any[]
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >ElementsArray : typeof ElementsArray
 >              : ^^^^^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >new ElementsArray() : ElementsArray
 >                    : ^^^^^^^^^^^^^
 >ElementsArray : typeof ElementsArray

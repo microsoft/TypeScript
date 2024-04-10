@@ -85,7 +85,7 @@ foo = {id: 1234, print:()=>{}}	   // Ok
 >print : () => void
 >      : ^^^^^^^^^^
 >()=>{} : () => void
->       : ^^^^^^^^^^
+>       :           
 
 var s = foo.name || "default";
 >s : string
@@ -169,7 +169,7 @@ var test5: i1 = { M: function () { } };
 >M : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
->                : ^^^^^^^^^^
+>                :           
 
 var test6: i3 = { M: 5 };
 >test6 : i3
@@ -189,7 +189,7 @@ var test7: i2 = { M: function () { } };
 >M : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
->                : ^^^^^^^^^^
+>                :           
 
 test7 = {};
 >test7 = {} : {}

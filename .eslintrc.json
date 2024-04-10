@@ -18,8 +18,7 @@
     "plugins": [
         "@typescript-eslint",
         "no-null",
-        "eslint-plugin-local",
-        "simple-import-sort"
+        "eslint-plugin-local"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -110,7 +109,7 @@
             }
         ],
         "@typescript-eslint/no-unused-vars": [
-            "error",
+            "warn",
             {
                 // Ignore: (solely underscores | starting with exactly one underscore)
                 "argsIgnorePattern": "^(_+$|_[^_])",
@@ -136,11 +135,7 @@
         "local/jsdoc-format": "error",
 
         // eslint-plugin-no-null
-        "no-null/no-null": "error",
-
-        // eslint-plugin-simple-import-sort
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "no-null/no-null": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -166,14 +161,6 @@
                     { "name": "module" },
                     { "name": "exports" }
                 ]
-            }
-        },
-        {
-            // These files contain imports in a specific order that are generally unsafe to modify.
-            "files": ["**/_namespaces/**"],
-            "rules": {
-                "simple-import-sort/imports": "off",
-                "simple-import-sort/exports": "off"
             }
         }
     ]

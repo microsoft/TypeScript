@@ -8,7 +8,7 @@ interface FormikConfig<Values> {
 
     validate?: (props: Values) => void;
 >validate : ((props: Values) => void) | undefined
->         : ^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>         : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >props : Values
 >      : ^^^^^^
 
@@ -19,7 +19,7 @@ interface FormikConfig<Values> {
 
 declare function Func<Values = object, ExtraProps = {}>(
 >Func : <Values = object, ExtraProps = {}>(x: (string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)) => void
->     : ^      ^^^^^^^^^^^          ^^^^^^^^^^                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^    
+>     : ^      ^^^^^^^^^^^          ^^^^^^^ ^^                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^    
 
     x: (string extends "validate" | "initialValues" | keyof ExtraProps
 >x : string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>
@@ -33,10 +33,10 @@ declare function Func<Values = object, ExtraProps = {}>(
 Func({
 >Func({    initialValues: {        foo: ""    },    validate: props => {        props.foo;    }}) : void
 >                                                                                                 : ^^^^
->Func : <Values = object, ExtraProps = {}>(x: string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Func : <Values = object, ExtraProps = {}>(x: (string extends "validate" | "initialValues" | keyof ExtraProps ? Readonly<FormikConfig<Values> & ExtraProps> : Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validate" | "initialValues" | Exclude<keyof ExtraProps, "validateOnChange">> & Partial<Pick<Readonly<FormikConfig<Values> & ExtraProps>, "validateOnChange" | Extract<keyof ExtraProps, "validateOnChange">>>)) => void
+>     : ^      ^^^^^^^^^^^          ^^^^^^^ ^^                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^^^^^
 >{    initialValues: {        foo: ""    },    validate: props => {        props.foo;    }} : { initialValues: { foo: string; }; validate: (props: { foo: string; }) => void; }
->                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     initialValues: {
 >initialValues : { foo: string; }
@@ -53,9 +53,9 @@ Func({
     },
     validate: props => {
 >validate : (props: { foo: string; }) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props => {        props.foo;    } : (props: { foo: string; }) => void
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  :                                  
 >props : { foo: string; }
 >      : ^^^^^^^^^^^^^^^^
 

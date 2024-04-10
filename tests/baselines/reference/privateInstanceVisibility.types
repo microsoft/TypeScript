@@ -69,7 +69,7 @@ class C {
 
     clone(other: C) {
 >clone : (other: C) => void
->      : ^^^^^^^^ ^^^^^^^^^
+>      : ^     ^^ ^^^^^^^^^
 >other : C
 >      : ^
 

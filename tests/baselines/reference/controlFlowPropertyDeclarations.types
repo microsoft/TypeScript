@@ -75,7 +75,7 @@ for (var propname in HTMLDOMPropertyConfig.Properties) {
  */
 function repeatString(string, times) {
 >repeatString : (string: any, times: any) => any
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^^^^^^     ^^^^^^^^^^^^^
 >string : any
 >times : any
 
@@ -150,7 +150,7 @@ function repeatString(string, times) {
  */
 function endsWith(haystack, needle) {
 >endsWith : (haystack: any, needle: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^        ^^^^^^^      ^^^^^^^^^^^^^^^^^
 >haystack : any
 >needle : any
 
@@ -183,7 +183,7 @@ function endsWith(haystack, needle) {
  */
 function trimEnd(haystack, needle) {
 >trimEnd : (haystack: any, needle: any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^        ^^^^^^^      ^^^^^^^^^^^^^
 >haystack : any
 >needle : any
 
@@ -192,7 +192,7 @@ function trimEnd(haystack, needle) {
 >endsWith(haystack, needle) : boolean
 >                           : ^^^^^^^
 >endsWith : (haystack: any, needle: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^        ^^^^^^^      ^^^^^^^^^^^^^^^^^
 >haystack : any
 >needle : any
 
@@ -222,7 +222,7 @@ function trimEnd(haystack, needle) {
  */
 function hyphenToCamelCase(string) {
 >hyphenToCamelCase : (string: any) => any
->                  : ^^^^^^^^^^^^^^^^^^^^
+>                  : ^      ^^^^^^^^^^^^^
 >string : any
 
   return string.replace(/-(.)/g, function(match, chr) {
@@ -235,7 +235,7 @@ function hyphenToCamelCase(string) {
 >/-(.)/g : RegExp
 >        : ^^^^^^
 >function(match, chr) {    return chr.toUpperCase();  } : (match: any, chr: any) => any
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^     ^^^^^^^   ^^^^^^^^^^^^^
 >match : any
 >chr : any
 
@@ -255,7 +255,7 @@ function hyphenToCamelCase(string) {
  */
 function isEmpty(string) {
 >isEmpty : (string: any) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^^^^^^^^^^^^^^^^
 >string : any
 
    return !/[^\s]/.test(string);
@@ -264,11 +264,11 @@ function isEmpty(string) {
 >/[^\s]/.test(string) : boolean
 >                     : ^^^^^^^
 >/[^\s]/.test : (string: string) => boolean
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^      ^^^^^^^^^^^^
 >/[^\s]/ : RegExp
 >        : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >string : any
 }
 
@@ -281,18 +281,18 @@ function isEmpty(string) {
  */
 function isConvertiblePixelValue(value) {
 >isConvertiblePixelValue : (value: any) => boolean
->                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^     ^^^^^^^^^^^^^^^^^
 >value : any
 
   return /^\d+px$/.test(value);
 >/^\d+px$/.test(value) : boolean
 >                      : ^^^^^^^
 >/^\d+px$/.test : (string: string) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^      ^^      ^^^^^^^^^^^^
 >/^\d+px$/ : RegExp
 >          : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >value : any
 }
 
@@ -320,9 +320,9 @@ export class HTMLtoJSX {
    */
   _visitText = (node) => {
 >_visitText : (node: any) => void
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^    ^^^^^^^^^^^^^^
 >(node) => {    var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();    if (parentTag === 'textarea' || parentTag === 'style') {      // Ignore text content of textareas and styles, as it will have already been moved      // to a "defaultValue" attribute and "dangerouslySetInnerHTML" attribute respectively.      return;    }    var text = ''    if (this._inPreTag) {      // If this text is contained within a <pre>, we need to ensure the JSX      // whitespace coalescing rules don't eat the whitespace. This means      // wrapping newlines and sequences of two or more spaces in variables.      text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        });    } else {      // If there's a newline in the text, adjust the indent level      if (text.indexOf('\n') > -1) {      }    }    this.output += text;  } : (node: any) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             :                    
 >node : any
 
     var parentTag = node.parentNode && node.parentNode.tagName.toLowerCase();
@@ -392,17 +392,17 @@ export class HTMLtoJSX {
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >                                                                                                                                                                 : ^^^^^^
 >text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >text        .replace(/\r/g, '') : string
 >                                : ^^^^^^
 >text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 
         .replace(/\r/g, '')
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >/\r/g : RegExp
 >      : ^^^^^^
 >'' : ""
@@ -410,11 +410,11 @@ export class HTMLtoJSX {
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >/( {2,}|\n|\t|\{|\})/g : RegExp
 >                       : ^^^^^^
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                        : ^          ^^^^^^^^^^^^^^^^^^^
 >whitespace : string
 >           : ^^^^^^
 
@@ -427,12 +427,12 @@ export class HTMLtoJSX {
 >    : ^^^
 >JSON.stringify(whitespace) : string
 >                           : ^^^^^^
->JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>JSON.stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>               : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
 >JSON : JSON
 >     : ^^^^
->stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>stringify : { (value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (number | string)[] | null, space?: string | number): string; }
+>          : ^^^     ^^   ^^        ^^^                                           ^^     ^^^               ^^^^^^^^^^^^     ^^   ^^        ^^^                          ^^     ^^^               ^^^^^^^^^^^^
 >whitespace : string
 >           : ^^^^^^
 >'}' : "}"
@@ -447,11 +447,11 @@ export class HTMLtoJSX {
 >text.indexOf('\n') : number
 >                   : ^^^^^^
 >text.indexOf : (searchString: string, position?: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 >indexOf : (searchString: string, position?: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^            ^^      ^^        ^^^      ^^^^^^^^^^^
 >'\n' : "\n"
 >     : ^^^^
 >-1 : -1
@@ -494,7 +494,7 @@ export class StyleParser {
 >toJSXString : () => void
 >            : ^^^^^^^^^^
 >() => {    for (var key in this.styles) {      if (!this.styles.hasOwnProperty(key)) {      }    }  } : () => void
->                                                                                                      : ^^^^^^^^^^
+>                                                                                                      :           
 
     for (var key in this.styles) {
 >key : string
@@ -512,7 +512,7 @@ export class StyleParser {
 >this.styles.hasOwnProperty(key) : boolean
 >                                : ^^^^^^^
 >this.styles.hasOwnProperty : (v: PropertyKey) => boolean
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^           ^^^^^^^^^^^^
 >this.styles : {}
 >            : ^^
 >this : this
@@ -520,7 +520,7 @@ export class StyleParser {
 >styles : {}
 >       : ^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
       }

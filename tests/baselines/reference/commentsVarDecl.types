@@ -77,9 +77,9 @@ var yy =
 /** comment2 */
 var z = /** lambda comment */ (x: number, y: number) => x + y;
 >z : (x: number, y: number) => number
->  : ^^^^      ^^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >(x: number, y: number) => x + y : (x: number, y: number) => number
->                                : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                                :                                 
 >x : number
 >  : ^^^^^^
 >y : number
@@ -93,27 +93,27 @@ var z = /** lambda comment */ (x: number, y: number) => x + y;
 
 var z2: /** type comment*/ (x: number) => string;
 >z2 : (x: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
 var x2 = z2;
 >x2 : (x: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >z2 : (x: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   :                      
 
 var n4: (x: number) => string;
 >n4 : (x: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
 n4 = z2;
 >n4 = z2 : (x: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >n4 : (x: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >z2 : (x: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 

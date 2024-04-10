@@ -1,6 +1,4 @@
-import {
-    getModuleSpecifierPreferences,
-} from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers";
 import {
     addToSeen,
     altDirectorySeparator,

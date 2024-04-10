@@ -19,13 +19,13 @@ module Test {
 
         public publicFunction(x);  // this should be an error
 >publicFunction : (x: any) => any
->               : ^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
         private privateFunction(privateParam);  // this should not be an error
 >privateFunction : (privateParam: any) => any
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^            ^^^^^^^^^^^^^
 >privateParam : any
 >             : ^^^
 

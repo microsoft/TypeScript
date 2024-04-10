@@ -7,7 +7,7 @@ interface A { x: number }
 
 declare function isA(a: unknown): a is A;
 >isA : (a: unknown) => a is A
->    : ^^^^       ^^^^^      
+>    : ^ ^^       ^^^^^      
 >a : unknown
 >  : ^^^^^^^
 
@@ -20,7 +20,7 @@ type FunctionsObj<T> = {
 
 function g<
 >g : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>, x: A) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                ^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^  ^^                ^^ ^^ ^^^^^^^^^
 
     T extends FunctionsObj<T>,
     M extends keyof T
@@ -43,7 +43,7 @@ function g<
 
 function g2<
 >g2 : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^  ^^                ^^^^^^^^^
 
     T extends FunctionsObj<T>,
     M extends keyof T
@@ -55,7 +55,7 @@ function g2<
 >isA(a2) : boolean
 >        : ^^^^^^^
 >isA : (a: unknown) => a is A
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^^^
 >a2 : ReturnType<T[M]>
 >   : ^^^^^^^^^^^^^^^^
 

@@ -26,15 +26,15 @@ function Wagon(numberOxen) {
 /** @param {Wagon[]=} wagons */
 Wagon.circle = function (wagons) {
 >Wagon.circle = function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                                             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                             : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon.circle : (wagons?: Wagon[] | undefined) => number
->             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon : typeof Wagon
 >      : ^^^^^^^^^^^^
->circle : (wagons?: Wagon[]) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>circle : (wagons?: Wagon[] | undefined) => number
+>       : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                              : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                              :        ^                                
 >wagons : Wagon[]
 >       : ^^^^^^^
 
@@ -55,7 +55,7 @@ Wagon.circle = function (wagons) {
 /** @param {*[]=} supplies - *[]= is my favourite type */
 Wagon.prototype.load = function (supplies) {
 >Wagon.prototype.load = function (supplies) {} : (supplies?: any[] | undefined) => void
->                                              : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >Wagon.prototype.load : any
 >                     : ^^^
 >Wagon.prototype : any
@@ -67,14 +67,14 @@ Wagon.prototype.load = function (supplies) {
 >load : any
 >     : ^^^
 >function (supplies) {} : (supplies?: any[] | undefined) => void
->                       : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >supplies : any[]
 >         : ^^^^^
 }
 /** @param {*[]=} supplies - Yep, still a great type */
 Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >Wagon.prototype.weight = supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
->                                                                     : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                     : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >Wagon.prototype.weight : any
 >                       : ^^^
 >Wagon.prototype : any
@@ -86,7 +86,7 @@ Wagon.prototype.weight = supplies => supplies ? supplies.length : -1
 >weight : any
 >       : ^^^
 >supplies => supplies ? supplies.length : -1 : (supplies?: any[] | undefined) => number
->                                            : ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >supplies : any[]
 >         : ^^^^^
 >supplies ? supplies.length : -1 : number
@@ -131,12 +131,12 @@ Wagon.prototype.speed = function () {
 >           : ^^^^^^
 >this.weight() : number
 >              : ^^^^^^
->this.weight : (supplies?: any[]) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.weight : (supplies?: any[] | undefined) => number
+>            : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->weight : (supplies?: any[]) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weight : (supplies?: any[] | undefined) => number
+>       : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 }
 // ok
 class Sql extends Wagon {
@@ -171,7 +171,7 @@ class Sql extends Wagon {
      */
     load(files, format) {
 >load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
->     : ^^^^^^^^             ^^^^^^^^^^                              ^^^^^^^^^
+>     : ^     ^^             ^^      ^^                              ^^^^^^^^^
 >files : string[]
 >      : ^^^^^^^^
 >format : "csv" | "json" | "xmlolololol"
@@ -209,12 +209,12 @@ class Sql extends Wagon {
 >                   : ^^^^^^^
 >super.weight() : number
 >               : ^^^^^^
->super.weight : (supplies?: any[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>super.weight : (supplies?: any[] | undefined) => number
+>             : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >super : Wagon
 >      : ^^^^^
->weight : (supplies?: any[]) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weight : (supplies?: any[] | undefined) => number
+>       : ^        ^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -252,7 +252,7 @@ class Drakkhen extends Dragon {
 >Drakkhen : Drakkhen
 >         : ^^^^^^^^
 >Dragon : (numberEaten: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^           ^^      ^^^^^^^^^
 
 }
 
@@ -262,7 +262,7 @@ class Drakkhen extends Dragon {
  */
 function Dragon(numberEaten: number) {
 >Dragon : (numberEaten: number) => void
->       : ^^^^^^^^^^^^^^      ^^^^^^^^^
+>       : ^           ^^      ^^^^^^^^^
 >numberEaten : number
 >            : ^^^^^^
 
@@ -283,7 +283,7 @@ class Firedrake extends Dragon {
 >Firedrake : Firedrake
 >          : ^^^^^^^^^
 >Dragon : (numberEaten: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^           ^^      ^^^^^^^^^
 
     constructor() {
         super();
@@ -318,7 +318,7 @@ class Conestoga extends Wagon {
     // should error since others is not optional
     static circle(others: (typeof Wagon)[]) {
 >circle : (others: (typeof Wagon)[]) => number
->       : ^^^^^^^^^                ^^^^^^^^^^^
+>       : ^      ^^                ^^^^^^^^^^^
 >others : (typeof Wagon)[]
 >       : ^^^^^^^^^^^^^^^^
 >Wagon : typeof Wagon

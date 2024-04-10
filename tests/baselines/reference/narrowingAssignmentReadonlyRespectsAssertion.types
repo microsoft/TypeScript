@@ -112,7 +112,7 @@ function subDataFunc(): TestCase<string | number>[] {
 
 function dataFunc<T>(subFunc: () => T[]): MultiCaseFixture<T> {
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->         : ^ ^^^^^^^^^^^         ^^^^^                   
+>         : ^ ^^       ^^         ^^^^^                   
 >subFunc : () => T[]
 >        : ^^^^^^   
 
@@ -137,7 +137,7 @@ function testFunc() {
 >dataFunc<TestCase<string | number>>(subDataFunc) : MultiCaseFixture<TestCase<string | number>>
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dataFunc : <T>(subFunc: () => T[]) => MultiCaseFixture<T>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^         ^^^^^^^^^^^^^^^^^^^^^^^^
 >subDataFunc : () => TestCase<string | number>[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -145,7 +145,7 @@ function testFunc() {
 >fixture.cases.forEach(({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  }) : void
 >                                                                                                                                                                                                                                                                                                         : ^^^^
 >fixture.cases.forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >fixture.cases : TestCase<string | number>[]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fixture : MultiCaseFixture<TestCase<string | number>>
@@ -153,9 +153,9 @@ function testFunc() {
 >cases : TestCase<string | number>[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: TestCase<string | number>, index: number, array: TestCase<string | number>[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >({ val1, val2 }) => {      if (Array.isArray(val1)) {          // This should retain val1 as being an array          const reversedVal1 = val1.slice().reverse();          console.log(reversedVal1);      } else {          console.log(val1);      }      console.log(val2);  } : ({ val1, val2 }: TestCase<string | number>) => void
->                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                  : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val1 : string | number | readonly (string | number)[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val2 : readonly (string | number)[]
@@ -165,11 +165,11 @@ function testFunc() {
 >Array.isArray(val1) : boolean
 >                    : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >val1 : string | number | readonly (string | number)[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -184,11 +184,11 @@ function testFunc() {
 >val1.slice() : any[]
 >             : ^^^^^
 >val1.slice : (start?: number, end?: number) => any[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >val1 : any[]
 >     : ^^^^^
 >slice : (start?: number, end?: number) => any[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^
 >reverse : () => any[]
 >        : ^^^^^^^^^^^
 
@@ -196,11 +196,11 @@ function testFunc() {
 >console.log(reversedVal1) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >reversedVal1 : any[]
 >             : ^^^^^
 
@@ -209,11 +209,11 @@ function testFunc() {
 >console.log(val1) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >val1 : string | number | readonly (string | number)[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       }
@@ -221,11 +221,11 @@ function testFunc() {
 >console.log(val2) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >val2 : readonly (string | number)[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

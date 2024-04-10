@@ -3,11 +3,11 @@
 === classMemberInitializerWithLamdaScoping5.ts ===
 declare var console: {
 >console : { log(message?: any, ...optionalParams: any[]): void; }
->        : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^     ^^^    ^^^
+>        : ^^^^^^       ^^^   ^^^^^              ^^     ^^^    ^^^
 
     log(message?: any, ...optionalParams: any[]): void;
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^     ^^^^^    
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >message : any
 >optionalParams : any[]
 >               : ^^^^^
@@ -24,9 +24,9 @@ class Greeter {
 
     messageHandler = (message: string) => {
 >messageHandler : (message: string) => void
->               : ^^^^^^^^^^      ^^^^^^^^^
+>               : ^       ^^      ^^^^^^^^^
 >(message: string) => {        console.log(message); // This shouldnt be error    } : (message: string) => void
->                                                                                   : ^^^^^^^^^^      ^^^^^^^^^
+>                                                                                   :                          
 >message : string
 >        : ^^^^^^
 
@@ -34,11 +34,11 @@ class Greeter {
 >console.log(message) : void
 >                     : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
 >console : { log(message?: any, ...optionalParams: any[]): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^       ^^^   ^^^^^              ^^     ^^^^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
 >message : string
 >        : ^^^^^^
     }

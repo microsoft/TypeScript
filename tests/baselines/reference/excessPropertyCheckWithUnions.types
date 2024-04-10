@@ -609,7 +609,7 @@ declare const prop2: string | undefined;
 
 function F1(_arg: { props: Properties }) { }
 >F1 : (_arg: { props: Properties; }) => void
->   : ^^^^^^^                      ^^^^^^^^^
+>   : ^    ^^                      ^^^^^^^^^
 >_arg : { props: Properties; }
 >     : ^^^^^^^^^          ^^^
 >props : Properties
@@ -619,7 +619,7 @@ F1({
 >F1({    props: {        prop1,        prop2,    },}) : void
 >                                                     : ^^^^
 >F1 : (_arg: { props: Properties; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^    ^^                      ^^^^^^^^^
 >{    props: {        prop1,        prop2,    },} : { props: { prop1: string; prop2: string | undefined; }; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -642,7 +642,7 @@ F1({
 
 function F2(_props: Properties) { }
 >F2 : (_props: Properties) => void
->   : ^^^^^^^^^          ^^^^^^^^^
+>   : ^      ^^          ^^^^^^^^^
 >_props : Properties
 >       : ^^^^^^^^^^
 
@@ -650,7 +650,7 @@ F2({
 >F2({    prop1,    prop2,}) : void
 >                           : ^^^^
 >F2 : (_props: Properties) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^      ^^          ^^^^^^^^^
 >{    prop1,    prop2,} : { prop1: string; prop2: string | undefined; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

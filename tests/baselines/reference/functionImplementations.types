@@ -53,7 +53,7 @@ var a: any = function f() {
 >x : () => any
 >  : ^^^^^^^^^
 >f : () => any
->  : ^^^^^^^^^
+>  :          
 
     return x;
 >x : () => any
@@ -198,7 +198,7 @@ var n = function <T>(x: T) {
 >function <T>(x: T) {    return x;} (4) : 4
 >                                       : ^
 >function <T>(x: T) {    return x;} : <T>(x: T) => T
->                                   : ^ ^^^^^ ^^^^^^
+>                                   : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -217,7 +217,7 @@ var n = function <T extends {}>(x: T) {
 >function <T extends {}>(x: T) {    return x;} (4) : 4
 >                                                  : ^
 >function <T extends {}>(x: T) {    return x;} : <T extends {}>(x: T) => T
->                                              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^
+>                                              : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -352,7 +352,7 @@ function thisFunc() {
 // Function signature with optional parameter, no type annotation and initializer has initializer's type
 function opt1(n = 4) {
 >opt1 : (n?: number) => void
->     : ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >4 : 4
@@ -372,7 +372,7 @@ function opt1(n = 4) {
 // Function signature with optional parameter, no type annotation and initializer has initializer's widened type
 function opt2(n = { x: null, y: undefined }) {
 >opt2 : (n?: { x: any; y: any; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : { x: any; y: any; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >{ x: null, y: undefined } : { x: null; y: undefined; }
@@ -388,7 +388,7 @@ function opt2(n = { x: null, y: undefined }) {
 >m : { x: any; y: any; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >n : { x: any; y: any; }
->  : ^^^^^^^^^^^^^^^^^^^
+>  :                    
 
     var m: { x: any; y: any };
 >m : { x: any; y: any; }
@@ -402,7 +402,7 @@ function opt2(n = { x: null, y: undefined }) {
 // Function signature with initializer referencing other parameter to the left
 function opt3(n: number, m = n) {
 >opt3 : (n: number, m?: number) => void
->     : ^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >m : number
@@ -451,11 +451,11 @@ class AnotherClass { private x }
 // ignoring return statements with no expressions.
 var f7: (x: number) => string | number = x => { // should be (x: number) => number | string
 >f7 : (x: number) => string | number
->   : ^^^^      ^^^^^               
+>   : ^ ^^      ^^^^^               
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => number | string    if (x < 0) { return x; }    return x.toString();} : (x: number) => string | number
->                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -473,19 +473,19 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 }
 var f8: (x: number) => any = x => { // should be (x: number) => Base
 >f8 : (x: number) => any
->   : ^^^^      ^^^^^   
+>   : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => Base    return new Base();    return new Derived2();} : (x: number) => Base
->                                                                                         : ^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -503,11 +503,11 @@ var f8: (x: number) => any = x => { // should be (x: number) => Base
 }
 var f9: (x: number) => any = x => { // should be (x: number) => Base
 >f9 : (x: number) => any
->   : ^^^^      ^^^^^   
+>   : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => Base    return new Base();    return new Derived();    return new Derived2();} : (x: number) => Base
->                                                                                                                  : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                  : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -531,11 +531,11 @@ var f9: (x: number) => any = x => { // should be (x: number) => Base
 }
 var f10: (x: number) => any = x => { // should be (x: number) => Derived | Derived1
 >f10 : (x: number) => any
->    : ^^^^      ^^^^^   
+>    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => Derived | Derived1    return new Derived();    return new Derived2();} : (x: number) => Derived | Derived2
->                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -553,11 +553,11 @@ var f10: (x: number) => any = x => { // should be (x: number) => Derived | Deriv
 }
 var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
 >f11 : (x: number) => any
->    : ^^^^      ^^^^^   
+>    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => Base | AnotherClass    return new Base();    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -575,11 +575,11 @@ var f11: (x: number) => any = x => { // should be (x: number) => Base | AnotherC
 }
 var f12: (x: number) => any = x => { // should be (x: number) => Base | AnotherClass
 >f12 : (x: number) => any
->    : ^^^^      ^^^^^   
+>    : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 >x => { // should be (x: number) => Base | AnotherClass    return new Base();    return; // should be ignored    return new AnotherClass();} : (x: number) => Base | AnotherClass
->                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 

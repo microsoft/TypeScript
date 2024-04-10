@@ -3233,7 +3233,6 @@ declare namespace ts {
             private addFilesToNonInferredProject;
             private updateNonInferredProjectFiles;
             private updateRootAndOptionsOfNonInferredProject;
-            private sendConfigFileDiagEvent;
             private getOrCreateInferredProjectForProjectRootPathIfEnabled;
             private getOrCreateSingleInferredProjectIfEnabled;
             private getOrCreateSingleInferredWithoutProjectRoot;
@@ -4134,7 +4133,7 @@ declare namespace ts {
     type KeywordTypeSyntaxKind = SyntaxKind.AnyKeyword | SyntaxKind.BigIntKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.IntrinsicKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.StringKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VoidKeyword;
     type TokenSyntaxKind = SyntaxKind.Unknown | SyntaxKind.EndOfFileToken | TriviaSyntaxKind | LiteralSyntaxKind | PseudoLiteralSyntaxKind | PunctuationSyntaxKind | SyntaxKind.Identifier | KeywordSyntaxKind;
     type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
-    type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
+    type JSDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.GreaterThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.OpenParenToken | SyntaxKind.CloseParenToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.BacktickToken | SyntaxKind.HashToken | SyntaxKind.Unknown | KeywordSyntaxKind;
     enum NodeFlags {
         None = 0,
         Let = 1,
@@ -5792,61 +5791,6 @@ declare namespace ts {
         readonly importClause?: ImportClause;
         readonly moduleSpecifier: Expression;
         readonly attributes?: ImportAttributes;
-    }
-    enum FlowFlags {
-        Unreachable = 1,
-        Start = 2,
-        BranchLabel = 4,
-        LoopLabel = 8,
-        Assignment = 16,
-        TrueCondition = 32,
-        FalseCondition = 64,
-        SwitchClause = 128,
-        ArrayMutation = 256,
-        Call = 512,
-        ReduceLabel = 1024,
-        Referenced = 2048,
-        Shared = 4096,
-        Label = 12,
-        Condition = 96,
-    }
-    type FlowNode = FlowStart | FlowLabel | FlowAssignment | FlowCondition | FlowSwitchClause | FlowArrayMutation | FlowCall | FlowReduceLabel;
-    interface FlowNodeBase {
-        flags: FlowFlags;
-        id?: number;
-    }
-    interface FlowStart extends FlowNodeBase {
-        node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
-    }
-    interface FlowLabel extends FlowNodeBase {
-        antecedents: FlowNode[] | undefined;
-    }
-    interface FlowAssignment extends FlowNodeBase {
-        node: Expression | VariableDeclaration | BindingElement;
-        antecedent: FlowNode;
-    }
-    interface FlowCall extends FlowNodeBase {
-        node: CallExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowCondition extends FlowNodeBase {
-        node: Expression;
-        antecedent: FlowNode;
-    }
-    interface FlowSwitchClause extends FlowNodeBase {
-        switchStatement: SwitchStatement;
-        clauseStart: number;
-        clauseEnd: number;
-        antecedent: FlowNode;
-    }
-    interface FlowArrayMutation extends FlowNodeBase {
-        node: CallExpression | BinaryExpression;
-        antecedent: FlowNode;
-    }
-    interface FlowReduceLabel extends FlowNodeBase {
-        target: FlowLabel;
-        antecedents: FlowNode[];
-        antecedent: FlowNode;
     }
     type FlowType = Type | IncompleteType;
     interface IncompleteType {
@@ -8088,7 +8032,6 @@ declare namespace ts {
     }
     interface SyntaxList extends Node {
         kind: SyntaxKind.SyntaxList;
-        _children: Node[];
     }
     enum ListFormat {
         None = 0,

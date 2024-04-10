@@ -11,11 +11,11 @@ interface IData {
 
 declare function test<TDependencies>(
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^             ^^^^^^^^^^                                         ^^^^^^^^             ^^^^^   
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^   
 
   getter: (deps: TDependencies, data: IData) => any,
 >getter : (deps: TDependencies, data: IData) => any
->       : ^^^^^^^             ^^^^^^^^     ^^^^^   
+>       : ^    ^^             ^^    ^^     ^^^^^   
 >deps : TDependencies
 >     : ^^^^^^^^^^^^^
 >data : IData
@@ -43,11 +43,11 @@ const DEPS = {
 test(
 >test(  (deps, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }),  DEPS) : any
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^^^^
 
   (deps, data) => ({
 >(deps, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: { foo: number; }, data: IData) => { fn1: () => number; fn2: boolean; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deps : { foo: number; }
 >     : ^^^^^^^^^^^^^^^^
 >data : IData
@@ -61,7 +61,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >function() { return deps.foo } : () => number
->                               : ^^^^^^^^^^^^
+>                               :             
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }
@@ -89,11 +89,11 @@ test(
 test(
 >test(  (deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }),  DEPS) : any
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^^^^
 
   (deps: typeof DEPS, data) => ({
 >(deps: typeof DEPS, data) => ({    fn1: function() { return deps.foo },    fn2: data.bar  }) : (deps: typeof DEPS, data: IData) => { fn1: () => number; fn2: boolean; }
->                                                                                             : ^^^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                             : ^    ^^           ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deps : { foo: number; }
 >     : ^^^^^^^^^^^^^^^^
 >DEPS : { foo: number; }
@@ -109,7 +109,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >function() { return deps.foo } : () => number
->                               : ^^^^^^^^^^^^
+>                               :             
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }
@@ -137,11 +137,11 @@ test(
 test(
 >test(  (deps, data) => ({    fn1: () => deps.foo,    fn2: data.bar  }),  DEPS) : any
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^^^^
 
   (deps, data) => ({
 >(deps, data) => ({    fn1: () => deps.foo,    fn2: data.bar  }) : (deps: { foo: number; }, data: IData) => { fn1: () => number; fn2: boolean; }
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deps : { foo: number; }
 >     : ^^^^^^^^^^^^^^^^
 >data : IData
@@ -155,7 +155,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >() => deps.foo : () => number
->               : ^^^^^^^^^^^^
+>               :             
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }
@@ -183,11 +183,11 @@ test(
 test(
 >test(  (deps, data) => {    return {      fn1() { return deps.foo },      fn2: data.bar    }  },  DEPS) : any
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^^^^
 
   (deps, data) => {
 >(deps, data) => {    return {      fn1() { return deps.foo },      fn2: data.bar    }  } : (deps: { foo: number; }, data: IData) => { fn1(): number; fn2: boolean; }
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deps : { foo: number; }
 >     : ^^^^^^^^^^^^^^^^
 >data : IData
@@ -227,11 +227,11 @@ test(
 test(
 >test(  (deps) => ({    fn1() { return deps.foo },    fn2: 1  }),  DEPS) : any
 >test : <TDependencies>(getter: (deps: TDependencies, data: IData) => any, deps: TDependencies) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^             ^^      ^^                                         ^^    ^^             ^^^^^^^^
 
   (deps) => ({
 >(deps) => ({    fn1() { return deps.foo },    fn2: 1  }) : (deps: { foo: number; }) => { fn1(): number; fn2: number; }
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                         : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deps : { foo: number; }
 >     : ^^^^^^^^^^^^^^^^
 >({    fn1() { return deps.foo },    fn2: 1  }) : { fn1(): number; fn2: number; }

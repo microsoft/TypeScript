@@ -32,9 +32,11 @@ import {
     flatten,
     forEach,
     forEachAncestorDirectory,
+    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getConditions,
+    getDefaultResolutionModeForFileWorker,
     getDirectoryPath,
     getEmitModuleResolutionKind,
     getModuleNameStringLiteralAt,
@@ -64,6 +66,7 @@ import {
     isDeclarationFileName,
     isExternalModuleAugmentation,
     isExternalModuleNameRelative,
+    isFullSourceFile,
     isMissingPackageJsonInfo,
     isModuleBlock,
     isModuleDeclaration,
@@ -141,7 +144,7 @@ export function getModuleSpecifierPreferences(
     { importModuleSpecifierPreference, importModuleSpecifierEnding }: UserPreferences,
     host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">,
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
     oldImportSpecifier?: string,
 ): ModuleSpecifierPreferences {
     const filePreferredEnding = getPreferredEnding();
@@ -154,7 +157,7 @@ export function getModuleSpecifierPreferences(
             importModuleSpecifierPreference === "project-relative" ? RelativePreference.ExternalNonRelative :
             RelativePreference.Shortest,
         getAllowedEndingsInPreferredOrder: syntaxImpliedNodeFormat => {
-            const impliedNodeFormat = host.getDefaultResolutionModeForFile(importingSourceFile);
+            const impliedNodeFormat = getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions);
             const preferredEnding = syntaxImpliedNodeFormat !== impliedNodeFormat ? getPreferredEnding(syntaxImpliedNodeFormat) : filePreferredEnding;
             const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
             if ((syntaxImpliedNodeFormat ?? impliedNodeFormat) === ModuleKind.ESNext && ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext) {
@@ -197,9 +200,9 @@ export function getModuleSpecifierPreferences(
         }
         return getModuleSpecifierEndingPreference(
             importModuleSpecifierEnding,
-            resolutionMode ?? host.getDefaultResolutionModeForFile(importingSourceFile),
+            resolutionMode ?? getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions),
             compilerOptions,
-            importingSourceFile,
+            isFullSourceFile(importingSourceFile) ? importingSourceFile : undefined,
         );
     }
 }
@@ -232,7 +235,7 @@ export function updateModuleSpecifier(
 /** @internal */
 export function getModuleSpecifier(
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     importingSourceFileName: string,
     toFileName: string,
     host: ModuleSpecifierResolutionHost,
@@ -244,7 +247,7 @@ export function getModuleSpecifier(
 /** @internal */
 export function getNodeModulesPackageName(
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     nodeModulesFileName: string,
     host: ModuleSpecifierResolutionHost,
     preferences: UserPreferences,
@@ -257,7 +260,7 @@ export function getNodeModulesPackageName(
 
 function getModuleSpecifierWorker(
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     importingSourceFileName: string,
     toFileName: string,
     host: ModuleSpecifierResolutionHost,
@@ -268,13 +271,13 @@ function getModuleSpecifierWorker(
     const info = getInfo(importingSourceFileName, host);
     const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
     return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
-        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || host.getDefaultResolutionModeForFile(importingSourceFile), preferences);
+        getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions), preferences);
 }
 
 /** @internal */
 export function tryGetModuleSpecifiersFromCache(
     moduleSymbol: Symbol,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -290,7 +293,7 @@ export function tryGetModuleSpecifiersFromCache(
 
 function tryGetModuleSpecifiersFromCacheWorker(
     moduleSymbol: Symbol,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -336,7 +339,7 @@ export function getModuleSpecifiersWithCacheInfo(
     moduleSymbol: Symbol,
     checker: TypeChecker,
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -372,10 +375,30 @@ export function getModuleSpecifiersWithCacheInfo(
     return { moduleSpecifiers: result, computedWithoutCache };
 }
 
+/** @internal */
+export function getLocalModuleSpecifierBetweenFileNames(
+    importingFile: Pick<SourceFile, "fileName" | "impliedNodeFormat">,
+    targetFileName: string,
+    compilerOptions: CompilerOptions,
+    host: ModuleSpecifierResolutionHost,
+    options: ModuleSpecifierOptions = {},
+): string {
+    const info = getInfo(importingFile.fileName, host);
+    const importMode = options.overrideImportMode ?? importingFile.impliedNodeFormat;
+    return getLocalModuleSpecifier(
+        targetFileName,
+        info,
+        compilerOptions,
+        host,
+        importMode,
+        getModuleSpecifierPreferences({}, host, compilerOptions, importingFile),
+    );
+}
+
 function computeModuleSpecifiers(
     modulePaths: readonly ModulePath[],
     compilerOptions: CompilerOptions,
-    importingSourceFile: SourceFile,
+    importingSourceFile: SourceFile | FutureSourceFile,
     host: ModuleSpecifierResolutionHost,
     userPreferences: UserPreferences,
     options: ModuleSpecifierOptions = {},
@@ -383,7 +406,7 @@ function computeModuleSpecifiers(
 ): readonly string[] {
     const info = getInfo(importingSourceFile.fileName, host);
     const preferences = getModuleSpecifierPreferences(userPreferences, host, compilerOptions, importingSourceFile);
-    const existingSpecifier = forEach(modulePaths, modulePath =>
+    const existingSpecifier = isFullSourceFile(importingSourceFile) && forEach(modulePaths, modulePath =>
         forEach(
             host.getFileIncludeReasons().get(toPath(modulePath.path, host.getCurrentDirectory(), info.getCanonicalFileName)),
             reason => {
@@ -1020,7 +1043,7 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
     return processEnding(shortest, allowedEndings, compilerOptions);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, canonicalSourceDirectory }: Info, importingSourceFile: SourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
+function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, canonicalSourceDirectory }: Info, importingSourceFile: SourceFile | FutureSourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }
@@ -1091,7 +1114,7 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (isPackageJsonInfo(cachedPackageJson) || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent: Record<string, any> | undefined = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile!(packageJsonPath)!);
-            const importMode = overrideMode || host.getDefaultResolutionModeForFile(importingSourceFile);
+            const importMode = overrideMode || getDefaultResolutionModeForFile(importingSourceFile, host, options);
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
                 // name in the package.json content via url/filepath dependency specifiers. We need to
@@ -1285,4 +1308,8 @@ function getRelativePathIfInSameVolume(path: string, directoryPath: string, getC
 
 function isPathRelativeToParent(path: string): boolean {
     return startsWith(path, "..");
+}
+
+function getDefaultResolutionModeForFile(file: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, host: Pick<ModuleSpecifierResolutionHost, "getDefaultResolutionModeForFile">, compilerOptions: CompilerOptions) {
+    return isFullSourceFile(file) ? host.getDefaultResolutionModeForFile(file) : getDefaultResolutionModeForFileWorker(file, compilerOptions);
 }

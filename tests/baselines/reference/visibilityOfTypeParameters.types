@@ -7,7 +7,7 @@ export class MyClass {
 
     protected myMethod<T>(val: T): T {
 >myMethod : <T>(val: T) => T
->         : ^ ^^^^^^^ ^^^^^ 
+>         : ^ ^^   ^^ ^^^^^ 
 >val : T
 >    : ^
 

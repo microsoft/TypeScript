@@ -5,7 +5,7 @@
 
 function foo<T, U extends T>(t: T, u: U) {
 >foo : <T, U extends T>(t: T, u: U) => void
->    : ^ ^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -30,7 +30,7 @@ function foo<T, U extends T>(t: T, u: U) {
 
 function foo2<T extends U, U>(t: T, u: U) {
 >foo2 : <T extends U, U>(t: T, u: U) => void
->     : ^ ^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -55,7 +55,7 @@ function foo2<T extends U, U>(t: T, u: U) {
 
 function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
 >foo3 : <T extends U, U extends V, V>(t: T, u: U, v: V) => void
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -114,7 +114,7 @@ function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
 
 function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
 >foo4 : <T extends U, U extends V, V extends Date>(t: T, u: U, v: V) => void
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -232,7 +232,7 @@ function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
 // same as foo4 with different type parameter ordering
 function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
 >foo5 : <V extends Date, U extends V, T extends U>(t: T, u: U, v: V) => void
->     : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -349,7 +349,7 @@ function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
 
 function foo6<T extends U, U, V>(t: T, u: U, v: V) {
 >foo6 : <T extends U, U, V>(t: T, u: U, v: V) => void
->     : ^ ^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

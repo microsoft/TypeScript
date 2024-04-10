@@ -23,25 +23,25 @@ declare const val: ReturnVal;
 
 function run(options: { something?(b?: string): void }) {
 >run : (options: { something?(b?: string): void; }) => void
->    : ^^^^^^^^^^                                 ^^^^^^^^^
+>    : ^       ^^                                 ^^^^^^^^^
 >options : { something?(b?: string): void; }
->        : ^^^^^^^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^^^^^^^^ ^^^      ^^^    ^^^
 >something : ((b?: string) => void) | undefined
->          : ^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>          : ^^ ^^^      ^^^^^    ^^^^^^^^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
     const something = options.something ?? val.something;
->something : (b?: string | undefined) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options.something ?? val.something : (b?: string | undefined) => void
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options.something : ((b?: string | undefined) => void) | undefined
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options : { something?(b?: string | undefined): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->something : ((b?: string | undefined) => void) | undefined
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>something : (b?: string) => void
+>          : ^ ^^^      ^^^^^^^^^
+>options.something ?? val.something : (b?: string) => void
+>                                   :   ^                 
+>options.something : ((b?: string) => void) | undefined
+>                  : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
+>options : { something?(b?: string): void; }
+>        : ^^^^^^^^^^^^^ ^^^      ^^^^^^^^^^
+>something : ((b?: string) => void) | undefined
+>          : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >val.something : () => void
 >              : ^^^^^^^^^^
 >val : ReturnVal
@@ -52,8 +52,8 @@ function run(options: { something?(b?: string): void }) {
     something('');
 >something('') : void
 >              : ^^^^
->something : (b?: string | undefined) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>something : (b?: string) => void
+>          : ^ ^^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 }

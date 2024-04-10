@@ -37,7 +37,7 @@
 
         public log(s: string): void {
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
         }

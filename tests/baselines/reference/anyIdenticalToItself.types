@@ -3,19 +3,19 @@
 === anyIdenticalToItself.ts ===
 function foo(x: any);
 >foo : { (x: any): any; (x: any): any; }
->    : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 >  : ^^^
 
 function foo(x: any);
 >foo : { (x: any): any; (x: any): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 >  : ^^^
 
 function foo(x: any, y: number) { }
 >foo : { (x: any): any; (x: any): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^   ^^^^^^^^^ ^^   ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : number

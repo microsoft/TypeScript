@@ -16,7 +16,7 @@ var g = function (prop) {
 >g : { prop: string; }
 >  : ^^^^^^^^^^^^^^^^^
 >function (prop) {} : (prop: any) => void
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   : ^    ^^^^^^^^^^^^^^
 >prop : any
 >     : ^^^
 }
@@ -24,7 +24,7 @@ var g = function (prop) {
 /** @type {(a: number) => number} */
 function add1(a, b) { return a + b; }
 >add1 : (a: number) => number
->     : ^^^^      ^^^^^      
+>     : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : any
@@ -39,7 +39,7 @@ function add1(a, b) { return a + b; }
 /** @type {(a: number, b: number) => number} */
 function add2(a, b) { return a + b; }
 >add2 : (a: number, b: number) => number
->     : ^^^^      ^^^^^      ^^^^^      
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : number
@@ -55,7 +55,7 @@ function add2(a, b) { return a + b; }
 /** @type {(a: number, b: number, c: number) => number} */
 function add3(a, b) { return a + b; }
 >add3 : (a: number, b: number, c: number) => number
->     : ^^^^      ^^^^^      ^^^^^      ^^^^^      
+>     : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : number
@@ -82,7 +82,7 @@ const variableWithMoreParameters = function (more) {}; // error
 >variableWithMoreParameters : () => void
 >                           : ^^^^^^^^^^
 >function (more) {} : (more: any) => void
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   : ^    ^^^^^^^^^^^^^^
 >more : any
 >     : ^^^
 
@@ -91,7 +91,7 @@ const arrowWithMoreParameters = (more) => {}; // error
 >arrowWithMoreParameters : () => void
 >                        : ^^^^^^^^^^
 >(more) => {} : (more: any) => void
->             : ^^^^^^^^^^^^^^^^^^^
+>             : ^    ^^^^^^^^^^^^^^
 >more : any
 >     : ^^^
 
@@ -104,7 +104,7 @@ const arrowWithMoreParameters = (more) => {}; // error
   /** @type {() => void} */
   methodWithMoreParameters(more) {}, // error
 >methodWithMoreParameters : (more: any) => void
->                         : ^^^^^^^^^^^^^^^    
+>                         : ^    ^^^^^^^^^^    
 >more : any
 >     : ^^^
 

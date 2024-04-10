@@ -11,7 +11,7 @@ class C<T> {
 
   good<U extends T>(y: U) {
 >good : <U extends T>(y: U) => void
->     : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >y : U
 >  : ^
 
@@ -30,7 +30,7 @@ class C<T> {
 
   bad<U extends T | string>(y: U) {
 >bad : <U extends string | T>(y: U) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >y : U
 >  : ^
 

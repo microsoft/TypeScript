@@ -132,9 +132,9 @@ for (var p: typeof p; ;) { }
 
 for (var fn = function (s: string) { return 42; }; ;) { }
 >fn : (s: string) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >function (s: string) { return 42; } : (s: string) => number
->                                    : ^^^^      ^^^^^^^^^^^
+>                                    :                      
 >s : string
 >  : ^^^^^^
 >42 : 42
@@ -142,9 +142,9 @@ for (var fn = function (s: string) { return 42; }; ;) { }
 
 for (var fn = (s: string) => 3; ;) { }
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => 3 : (s: string) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -152,29 +152,29 @@ for (var fn = (s: string) => 3; ;) { }
 
 for (var fn: (s: string) => number; ;) { }
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 for (var fn: { (s: string): number }; ;) { }
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 for (var fn = <(s: string) => number> null; ;) { }
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 ><(s: string) => number> null : (s: string) => number
->                             : ^^^^      ^^^^^      
+>                             : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
 for (var fn: typeof fn; ;) { }
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
 for (var a: string[]; ;) { }
 >a : string[]

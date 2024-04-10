@@ -11,7 +11,7 @@ declare var p: Promise<boolean>;
 
 declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->   : ^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^^^    
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
 >     : ^^^^^^^
 >arg1 : boolean
@@ -21,9 +21,9 @@ declare function fn(arg0: boolean, arg1: boolean, arg2: boolean): void;
 
 declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 >o : { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }
->  : ^^^^^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^    ^^^
+>  : ^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^    ^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->   : ^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^^^    
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
 >     : ^^^^^^^
 >arg1 : boolean
@@ -33,7 +33,7 @@ declare var o: { fn(arg0: boolean, arg1: boolean, arg2: boolean): void; };
 
 declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >pfn : Promise<(arg0: boolean, arg1: boolean, arg2: boolean) => void>
->    : ^^^^^^^^^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^^^    ^
+>    : ^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^^^    ^
 >arg0 : boolean
 >     : ^^^^^^^
 >arg1 : boolean
@@ -43,9 +43,9 @@ declare var pfn: Promise<{ (arg0: boolean, arg1: boolean, arg2: boolean): void; 
 
 declare var po: Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>;
 >po : Promise<{ fn(arg0: boolean, arg1: boolean, arg2: boolean): void; }>
->   : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^    ^^^^
+>   : ^^^^^^^^^^^^^    ^^       ^^    ^^       ^^    ^^       ^^^    ^^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->   : ^^^^^^^       ^^^^^^^^       ^^^^^^^^       ^^^^^    
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^    
 >arg0 : boolean
 >     : ^^^^^^^
 >arg1 : boolean
@@ -77,7 +77,7 @@ async function func(): Promise<void> {
 >fn(a, a, a) : void
 >            : ^^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >a : boolean

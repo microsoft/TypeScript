@@ -40,11 +40,11 @@ class D extends C {
 >console.log("ruh-roh...") : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"ruh-roh..." : "ruh-roh..."
 >             : ^^^^^^^^^^^^
 
@@ -58,11 +58,11 @@ class D extends C {
 >console.log("d'oh!") : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"d'oh!" : "d'oh!"
 >        : ^^^^^^^
     }

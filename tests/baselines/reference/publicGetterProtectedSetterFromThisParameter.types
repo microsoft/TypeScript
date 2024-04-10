@@ -60,7 +60,7 @@ class B {
 
   foo(this: A, a: A, b: B) {
 >foo : (this: A, a: A, b: B) => void
->    : ^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^    ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >this : A
 >     : ^
 >a : A
@@ -145,7 +145,7 @@ class B {
 
 function bar(this: A, a: A, b: B) {
 >bar : (this: A, a: A, b: B) => void
->    : ^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^    ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >this : A
 >     : ^
 >a : A

@@ -105,16 +105,16 @@ type DefaultsDeep<T, U extends T> = {
 interface _Array<T> {
   find<S extends T>(predicate: (value: T) => boolean): void;
 >find : <S extends T>(predicate: (value: T) => boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^    
+>     : ^^^^^^^^^^^^^^         ^^                     ^^^^^    
 >predicate : (value: T) => boolean
->          : ^^^^^^^^ ^^^^^       
+>          : ^     ^^ ^^^^^       
 >value : T
 >      : ^
 }
 
 const z: _Array<DefaultsDeep<{}, {}>> = [];
 >z : _Array<DefaultsDeep<{}, {}>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 >[] : never[]
 >   : ^^^^^^^
 
@@ -122,15 +122,15 @@ z.find((_) => true);
 >z.find((_) => true) : void
 >                    : ^^^^
 >z.find : <S extends DefaultsDeep<{}, {}>>(predicate: (value: DefaultsDeep<{}, {}>) => boolean) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
 >z : _Array<DefaultsDeep<{}, {}>>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^  ^^
 >find : <S extends DefaultsDeep<{}, {}>>(predicate: (value: DefaultsDeep<{}, {}>) => boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^^         ^^^     ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
 >(_) => true : (_: DefaultsDeep<{}, {}>) => true
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^
 >_ : DefaultsDeep<{}, {}>
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^  ^
 >true : true
 >     : ^^^^
 

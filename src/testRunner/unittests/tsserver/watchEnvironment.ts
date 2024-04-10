@@ -3,9 +3,7 @@ import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     commonFile1,
     commonFile2,

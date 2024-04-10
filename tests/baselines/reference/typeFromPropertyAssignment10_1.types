@@ -46,7 +46,7 @@ Outer.app.SomeView = (function () {
 >SomeView : () => void
 >         : ^^^^^^^^^^
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
->                                                                                                 : ^^^^^^^^^^
+>                                                                                                 :           
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;}) : () => () => void
 >                                                                                               : ^^^^^^^^^^^^^^^^
 >function () {    var SomeView = function() {        var me = this;    }    return SomeView;} : () => () => void
@@ -56,7 +56,7 @@ Outer.app.SomeView = (function () {
 >SomeView : () => void
 >         : ^^^^^^^^^^
 >function() {        var me = this;    } : () => void
->                                        : ^^^^^^^^^^
+>                                        :           
 
         var me = this;
 >me : any
@@ -125,9 +125,9 @@ example.y;
 /** @param {number} k */
 Outer.app.statische = function (k) {
 >Outer.app.statische = function (k) {    return k ** k;} : (k: number) => number
->                                                        : ^^^^      ^^^^^^^^^^^
+>                                                        : ^ ^^      ^^^^^^^^^^^
 >Outer.app.statische : (k: number) => number
->                    : ^^^^      ^^^^^^^^^^^
+>                    : ^ ^^      ^^^^^^^^^^^
 >Outer.app : typeof Outer.app
 >          : ^^^^^^^^^^^^^^^^
 >Outer : typeof Outer
@@ -135,9 +135,9 @@ Outer.app.statische = function (k) {
 >app : typeof Outer.app
 >    : ^^^^^^^^^^^^^^^^
 >statische : (k: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >function (k) {    return k ** k;} : (k: number) => number
->                                  : ^^^^      ^^^^^^^^^^^
+>                                  :                      
 >k : number
 >  : ^^^^^^
 
@@ -269,7 +269,7 @@ Outer.app.statische(101); // Infinity, duh
 >Outer.app.statische(101) : number
 >                         : ^^^^^^
 >Outer.app.statische : (k: number) => number
->                    : ^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^      ^^^^^^^^^^^
 >Outer.app : typeof Outer.app
 >          : ^^^^^^^^^^^^^^^^
 >Outer : typeof Outer
@@ -277,7 +277,7 @@ Outer.app.statische(101); // Infinity, duh
 >app : typeof Outer.app
 >    : ^^^^^^^^^^^^^^^^
 >statische : (k: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >101 : 101
 >    : ^^^
 

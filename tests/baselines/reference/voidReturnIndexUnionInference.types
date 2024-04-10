@@ -4,11 +4,11 @@
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^  ^^ ^^^^^^^^                                    ^^^^^^^^  ^^^^^             
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^             
 
     func: ((arg1: A1) => R) | null | undefined,
 >func : ((arg1: A1) => R) | null | undefined
->     : ^^^^^^^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
+>     : ^^    ^^  ^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >arg1 : A1
 >     : ^^
 
@@ -19,13 +19,13 @@ export function safeInvoke<A1, R>(
 ): R | undefined {
     if (func) {
 >func : ((arg1: A1) => R) | null | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         return func(arg1);
 >func(arg1) : R
 >           : ^
 >func : (arg1: A1) => R
->     : ^^^^^^^^^^^^^^^
+>     : ^    ^^  ^^^^^^
 >arg1 : A1
 >     : ^^
 
@@ -39,20 +39,20 @@ export function safeInvoke<A1, R>(
 interface Props {
     onFoo?(value: string): boolean;
 >onFoo : ((value: string) => boolean) | undefined
->      : ^^^^^^^^^      ^^^^^       ^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
     onBar?(value: string): void;
 >onBar : ((value: string) => void) | undefined
->      : ^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 }
 
 function bad<P extends Props>(props: Readonly<P>) {
 >bad : <P extends Props>(props: Readonly<P>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^     ^^           ^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 
@@ -60,13 +60,13 @@ function bad<P extends Props>(props: Readonly<P>) {
 >safeInvoke(props.onFoo, "blah") : boolean | undefined
 >                                : ^^^^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^^^^^^^^^^^^^^
 >props.onFoo : ((value: string) => boolean) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 >onFoo : ((value: string) => boolean) | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"blah" : "blah"
 >       : ^^^^^^
 
@@ -76,13 +76,13 @@ function bad<P extends Props>(props: Readonly<P>) {
 >safeInvoke(props.onBar, "blah") : void | undefined
 >                                : ^^^^^^^^^^^^^^^^
 >safeInvoke : <A1, R>(func: ((arg1: A1) => R) | null | undefined, arg1: A1) => R | undefined
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^  ^^ ^^    ^^                                    ^^    ^^  ^^^^^^^^^^^^^^^^^^
 >props.onBar : ((value: string) => void) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 >onBar : ((value: string) => void) | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >"blah" : "blah"
 >       : ^^^^^^
 }

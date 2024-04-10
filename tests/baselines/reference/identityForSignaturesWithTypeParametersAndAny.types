@@ -3,7 +3,7 @@
 === identityForSignaturesWithTypeParametersAndAny.ts ===
 var f: <T, U>(x: T, y: U) => T;
 >f : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -11,7 +11,7 @@ var f: <T, U>(x: T, y: U) => T;
 
 var f: <T, U>(x: any, y: any) => any;
 >f : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -19,7 +19,7 @@ var f: <T, U>(x: any, y: any) => any;
 
 var g: <T, U>(x: T, y: U) => T;
 >g : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -27,7 +27,7 @@ var g: <T, U>(x: T, y: U) => T;
 
 var g: <T>(x: any, y: any) => any;
 >g : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -35,7 +35,7 @@ var g: <T>(x: any, y: any) => any;
 
 var h: <T, U>(x: T, y: U) => T;
 >h : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -43,7 +43,7 @@ var h: <T, U>(x: T, y: U) => T;
 
 var h: (x: any, y: any) => any;
 >h : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -51,7 +51,7 @@ var h: (x: any, y: any) => any;
 
 var i: <T, U>(x: T, y: U) => T;
 >i : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -59,7 +59,7 @@ var i: <T, U>(x: T, y: U) => T;
 
 var i: <T, U>(x: any, y: string) => any;
 >i : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : any
 >  : ^^^
 >y : string
@@ -67,7 +67,7 @@ var i: <T, U>(x: any, y: string) => any;
 
 var j: <T, U>(x: T, y: U) => T;
 >j : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -75,7 +75,7 @@ var j: <T, U>(x: T, y: U) => T;
 
 var j: <T, U>(x: any, y: any) => string;
 >j : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : any
 >  : ^^^
 >y : any

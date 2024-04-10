@@ -16,7 +16,7 @@ import { a } from "./a";
 
 export function fn({ [a]: value }: any): string {
 >fn : ({ [a]: value }: any) => string
->   : ^^^^^^^^^^^^^^^^^   ^^^^^      
+>   : ^              ^^   ^^^^^      
 >a : unique symbol
 >  : ^^^^^^^^^^^^^
 >value : any

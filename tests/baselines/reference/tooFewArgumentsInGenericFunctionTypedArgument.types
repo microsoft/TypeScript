@@ -8,7 +8,7 @@ interface Collection<T, U> {
 
     add(x: T, y: U): void;
 >add : (x: T, y: U) => void
->    : ^^^^ ^^^^^ ^^^^^    
+>    : ^ ^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 >y : U
@@ -16,7 +16,7 @@ interface Collection<T, U> {
 
     remove(x: T, y: U): boolean;
 >remove : (x: T, y: U) => boolean
->       : ^^^^ ^^^^^ ^^^^^       
+>       : ^ ^^ ^^ ^^ ^^^^^       
 >x : T
 >  : ^
 >y : U
@@ -25,11 +25,11 @@ interface Collection<T, U> {
 interface Combinators {
     map<T, U, V>(c: Collection<T,U>, f: (x: T, y: U) => V): Collection<T, V>;
 >map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->    : ^^^ ^^ ^^ ^^^^^                ^^^^^                 ^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^                ^^^   ^^   ^^ ^^                    ^^ ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c : Collection<T, U>
 >  : ^^^^^^^^^^^^^^^^
 >f : (x: T, y: U) => V
->  : ^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -37,11 +37,11 @@ interface Combinators {
 
     map<T, U>(c: Collection<T,U>, f: (x: T, y: U) => any): Collection<any, any>;
 >map : { <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^                ^^^^^                   ^^^                    ^^^
+>    : ^^^   ^^   ^^ ^^ ^^                    ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                ^^ ^^                   ^^^                    ^^^
 >c : Collection<T, U>
 >  : ^^^^^^^^^^^^^^^^
 >f : (x: T, y: U) => any
->  : ^^^^ ^^^^^ ^^^^^   
+>  : ^ ^^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
 >y : U
@@ -61,41 +61,41 @@ var r1a = _.map(c2, (x) => { return x.toFixed() });
 >_.map(c2, (x) => { return x.toFixed() }) : Collection<number, string>
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^                    ^^ ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : Combinators
 >  : ^^^^^^^^^^^
 >map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^                    ^^ ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c2 : Collection<number, string>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => { return x.toFixed() } : (x: number) => string
->                              : ^^^^^^^^^^^^^^^^^^^^^
+>                              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : (x: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >(x: number) => { return x.toFixed() } : (x: number) => string
->                                      : ^^^^      ^^^^^^^^^^^
+>                                      :                      
 >x : number
 >  : ^^^^^^
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 var r1b = _.map(c2, rf1); 
 >r1b : Collection<number, string>
@@ -103,14 +103,14 @@ var r1b = _.map(c2, rf1);
 >_.map(c2, rf1) : Collection<number, string>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^                    ^^ ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : Combinators
 >  : ^^^^^^^^^^^
 >map : { <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; <T_1, U_1>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => any): Collection<any, any>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^                    ^^ ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >c2 : Collection<number, string>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rf1 : (x: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 
 

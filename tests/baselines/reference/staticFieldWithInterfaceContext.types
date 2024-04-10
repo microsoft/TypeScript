@@ -82,7 +82,7 @@ c[ex] = { a: "a" };
 
 function f(c: I = class { static x = { a: "a" } }) { }
 >f : (c?: I) => void
->  : ^^^^^ ^^^^^^^^^
+>  : ^ ^^^ ^^^^^^^^^
 >c : I
 >  : ^
 >class { static x = { a: "a" } } : typeof (Anonymous class)

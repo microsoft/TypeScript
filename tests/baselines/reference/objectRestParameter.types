@@ -3,7 +3,7 @@
 === objectRestParameter.ts ===
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 >cloneAgain : ({ a, ...clone }: { a: number; b: string; }) => void
->           : ^^^^^^^^^^^^^^^^^^                         ^^^^^    
+>           : ^               ^^                         ^^^^^    
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
@@ -16,9 +16,9 @@ function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 
 declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
->         : ^^^^              ^^^      ^^^                          ^^^^^^^^
+>         : ^ ^^              ^^^      ^^^                          ^^^^^^^^
 >f : (a: { x: { z: any; ka: any; }; y: string; }) => void
->  : ^^^^          ^^^      ^^^                 ^^^^^    
+>  : ^ ^^          ^^^      ^^^                 ^^^^^    
 >a : { x: { z: any; ka: any; }; y: string; }
 >  : ^^^^^     ^^^      ^^^   ^^^^^      ^^^
 >x : { z: any; ka: any; }
@@ -31,9 +31,9 @@ declare function suddenly(f: (a: { x: { z, ka }, y: string }) => void);
 suddenly(({ x: a, ...rest }) => rest.y);
 >suddenly(({ x: a, ...rest }) => rest.y) : any
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^              ^^^      ^^^                          ^^^^^^^^
 >({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >a : { z: any; ka: any; }
@@ -50,9 +50,9 @@ suddenly(({ x: a, ...rest }) => rest.y);
 suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
 >suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka) : any
 >suddenly : (f: (a: { x: { z: any; ka: any; }; y: string; }) => void) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^              ^^^      ^^^                          ^^^^^^^^
 >({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka : ({ x: { z, ...nested }, ...rest }?: { x: { z: any; ka: any; }; y: string; }) => string
->                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                 : ^                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >z : any
@@ -101,7 +101,7 @@ class C {
 
     m({ a, ...clone }: { a: number, b: string}): void {
 >m : ({ a, ...clone }: { a: number; b: string; }) => void
->  : ^^^^^^^^^^^^^^^^^^                         ^^^^^    
+>  : ^               ^^                         ^^^^^    
 >a : number
 >  : ^^^^^^
 >clone : { b: string; }
@@ -130,7 +130,7 @@ class C {
 }
 function foobar({ bar={}, ...opts }: any = {}) {
 >foobar : ({ bar, ...opts }?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
+>       : ^                ^^^   ^^^^^^^^^
 >bar : any
 >    : ^^^
 >{} : {}
@@ -144,13 +144,13 @@ foobar();
 >foobar() : void
 >         : ^^^^
 >foobar : ({ bar, ...opts }?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^                ^^^   ^^^^^^^^^
 
 foobar({ baz: 'hello' });
 >foobar({ baz: 'hello' }) : void
 >                         : ^^^^
 >foobar : ({ bar, ...opts }?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^                ^^^   ^^^^^^^^^
 >{ baz: 'hello' } : { baz: string; }
 >                 : ^^^^^^^^^^^^^^^^
 >baz : string
@@ -162,7 +162,7 @@ foobar({ bar: { greeting: 'hello' } });
 >foobar({ bar: { greeting: 'hello' } }) : void
 >                                       : ^^^^
 >foobar : ({ bar, ...opts }?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^                ^^^   ^^^^^^^^^
 >{ bar: { greeting: 'hello' } } : { bar: { greeting: string; }; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar : { greeting: string; }

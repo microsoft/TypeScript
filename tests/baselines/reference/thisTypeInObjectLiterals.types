@@ -5,7 +5,7 @@ let o = {
 >o : { d: string; m(): number; f: () => number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m(): number; f: () => number; }
->                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
 
     d: "bar",
 >d : string
@@ -34,7 +34,7 @@ let o = {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function() {        return this.d.length;    } : () => number
->                                               : ^^^^^^^^^^^^
+>                                               :             
 
         return this.d.length;
 >this.d.length : number
@@ -52,9 +52,9 @@ let o = {
 
 let mutuallyRecursive = {
 >mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >{    a: 100,    start() {        return this.passthrough(this.a);    },    passthrough(n: number) {        return this.sub1(n);    },    sub1(n: number): number {        if (n > 0) {            return this.passthrough(n - 1);        }        return n;    }} : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 
     a: 100,
 >a : number
@@ -70,22 +70,22 @@ let mutuallyRecursive = {
 >this.passthrough(this.a) : number
 >                         : ^^^^^^
 >this.passthrough : (n: number) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >passthrough : (n: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
     },
     passthrough(n: number) {
 >passthrough : (n: number) => number
->            : ^^^^      ^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -93,18 +93,18 @@ let mutuallyRecursive = {
 >this.sub1(n) : number
 >             : ^^^^^^
 >this.sub1 : (n: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >sub1 : (n: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     },
     sub1(n: number): number {
 >sub1 : (n: number) => number
->     : ^^^^      ^^^^^      
+>     : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
@@ -120,11 +120,11 @@ let mutuallyRecursive = {
 >this.passthrough(n - 1) : number
 >                        : ^^^^^^
 >this.passthrough : (n: number) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >this : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >passthrough : (n: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >n - 1 : number
 >      : ^^^^^^
 >n : number
@@ -145,7 +145,7 @@ var i: number = mutuallyRecursive.start();
 >mutuallyRecursive.start : () => number
 >                        : ^^^^^^^^^^^^
 >mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >start : () => number
 >      : ^^^^^^^^^^^^
 
@@ -160,13 +160,13 @@ interface I {
 
     passthrough(n: number): number;
 >passthrough : (n: number) => number
->            : ^^^^      ^^^^^      
+>            : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
     sub1(n: number): number;
 >sub1 : (n: number) => number
->     : ^^^^      ^^^^^      
+>     : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 }
@@ -174,5 +174,5 @@ var impl: I = mutuallyRecursive;
 >impl : I
 >     : ^
 >mutuallyRecursive : { a: number; start(): number; passthrough(n: number): number; sub1(n: number): number; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 

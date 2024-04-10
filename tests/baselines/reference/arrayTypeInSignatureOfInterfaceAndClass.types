@@ -11,16 +11,16 @@ declare module WinJS {
 
         then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
 >then : <U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void) => Promise<U>
->     : ^ ^^^^^^^^^^^^                        ^^^^^^^^^^                          ^^^^^^^^^^^^^                       ^^^^^          
+>     : ^ ^^       ^^^                        ^^     ^^^                          ^^        ^^^                       ^^^^^          
 >success : (value: T) => Promise<U>
->        : ^^^^^^^^ ^^^^^          
+>        : ^     ^^ ^^^^^          
 >value : T
 >      : ^
 >error : (error: any) => Promise<U>
->      : ^^^^^^^^   ^^^^^          
+>      : ^     ^^   ^^^^^          
 >error : any
 >progress : (progress: any) => void
->         : ^^^^^^^^^^^   ^^^^^    
+>         : ^        ^^   ^^^^^    
 >progress : any
     }
 }
@@ -63,7 +63,7 @@ declare module Data {
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
->              : ^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^^                             
+>              : ^       ^^        ^^       ^^^   ^^^^^                             
 >indices : number[]
 >        : ^^^^^^^^
 >options : any
@@ -77,7 +77,7 @@ declare module Data {
         //removeIndices: WinJS.Promise<IListItem<T>[]>;
         public removeIndices(indices: number[], options?: any): WinJS.Promise<IListItem<T>[]>;
 >removeIndices : (indices: number[], options?: any) => WinJS.Promise<IListItem<T>[]>
->              : ^^^^^^^^^^        ^^^^^^^^^^^^   ^^^^^                             
+>              : ^       ^^        ^^       ^^^   ^^^^^                             
 >indices : number[]
 >        : ^^^^^^^^
 >options : any

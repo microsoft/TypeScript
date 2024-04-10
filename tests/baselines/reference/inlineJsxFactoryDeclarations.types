@@ -29,7 +29,7 @@ export { dom as default };
 >dom : () => void
 >    : ^^^^^^^^^^
 >default : () => void
->        : ^^^^^^^^^^
+>        :           
 
 === otherreacty.tsx ===
 /** @jsx React.createElement */
@@ -50,7 +50,7 @@ import { dom as h } from "./renderer"
 >dom : () => void
 >    : ^^^^^^^^^^
 >h : () => void
->  : ^^^^^^^^^^
+>  :           
 
 export const prerendered = <h></h>;
 >prerendered : error

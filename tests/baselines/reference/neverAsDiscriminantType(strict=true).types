@@ -15,7 +15,7 @@ type Foo1 = { kind: 'a', a: number } | { kind: 'b' } | { kind: never };
 
 function f1(foo: Foo1) {
 >f1 : (foo: Foo1) => void
->   : ^^^^^^    ^^^^^^^^^
+>   : ^   ^^    ^^^^^^^^^
 >foo : Foo1
 >    : ^^^^
 
@@ -55,7 +55,7 @@ type Foo2 = { kind?: 'a', a: number } | { kind?: 'b' } | { kind?: never };
 
 function f2(foo: Foo2) {
 >f2 : (foo: Foo2) => void
->   : ^^^^^^    ^^^^^^^^^
+>   : ^   ^^    ^^^^^^^^^
 >foo : Foo2
 >    : ^^^^
 
@@ -225,7 +225,7 @@ export interface GatewayEvents {
 
 function assertMessage(event: { a: 1 }) { }
 >assertMessage : (event: { a: 1; }) => void
->              : ^^^^^^^^         ^^^^^^^^^
+>              : ^     ^^         ^^^^^^^^^
 >event : { a: 1; }
 >      : ^^^^^ ^^^
 >a : 1
@@ -233,7 +233,7 @@ function assertMessage(event: { a: 1 }) { }
 
 export async function adaptSession(input: GatewayPayload) {
 >adaptSession : (input: GatewayPayload) => Promise<void>
->             : ^^^^^^^^              ^^^^^^^^^^^^^^^^^^
+>             : ^     ^^              ^^^^^^^^^^^^^^^^^^
 >input : GatewayPayload
 >      : ^^^^^^^^^^^^^^
 
@@ -253,13 +253,13 @@ export async function adaptSession(input: GatewayPayload) {
 >assertMessage(input.d) : void
 >                       : ^^^^
 >assertMessage : (event: { a: 1; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^         ^^^^^^^^^
 >input.d : { a: 1; }
 >        : ^^^^^^^^^
 >input : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { a: 1; }
->  : ^^^^^^^^^
+>  :          
     }
 }
 

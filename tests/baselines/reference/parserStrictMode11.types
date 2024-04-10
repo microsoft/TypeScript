@@ -7,11 +7,11 @@
 
 var v = function f(eval) {
 >v : (eval: any) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^^^^^^^^
 >function f(eval) {} : (eval: any) => void
->                    : ^^^^^^^^^^^^^^^^^^^
+>                    :                    
 >f : (eval: any) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^^^^^^^^
 >eval : any
 >     : ^^^
 

@@ -3,7 +3,7 @@
 === callWithSpread2.ts ===
 declare function all(a?: number, b?: number): void;
 >all : (a?: number, b?: number) => void
->    : ^^^^^      ^^^^^^      ^^^^^    
+>    : ^ ^^^      ^^ ^^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : number
@@ -11,7 +11,7 @@ declare function all(a?: number, b?: number): void;
 
 declare function weird(a?: number | string, b?: number | string): void;
 >weird : (a?: number | string, b?: number | string) => void
->      : ^^^^^               ^^^^^^               ^^^^^    
+>      : ^ ^^^               ^^ ^^^               ^^^^^    
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 >b : string | number
@@ -19,7 +19,7 @@ declare function weird(a?: number | string, b?: number | string): void;
 
 declare function prefix(s: string, a?: number, b?: number): void;
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^      ^^^^^^      ^^^^^^      ^^^^^    
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 >a : number
@@ -29,7 +29,7 @@ declare function prefix(s: string, a?: number, b?: number): void;
 
 declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
 >rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
->     : ^^^^      ^^^^^^      ^^^^^^      ^^^^^^^^^^^        ^^^^^    
+>     : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    ^^        ^^^^^    
 >s : string
 >  : ^^^^^^
 >a : number
@@ -41,7 +41,7 @@ declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): vo
 
 declare function normal(s: string): void;
 >normal : (s: string) => void
->       : ^^^^      ^^^^^    
+>       : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -51,7 +51,7 @@ declare function thunk(): string;
 
 declare function prefix2(s: string, n: number, a?: number, b?: number): void;
 >prefix2 : (s: string, n: number, a?: number, b?: number) => void
->        : ^^^^      ^^^^^      ^^^^^^      ^^^^^^      ^^^^^    
+>        : ^ ^^      ^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 >n : number
@@ -78,7 +78,7 @@ all(...ns)
 >all(...ns) : void
 >           : ^^^^
 >all : (a?: number, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...ns : number
 >      : ^^^^^^
 >ns : number[]
@@ -87,8 +87,8 @@ all(...ns)
 weird(...ns)
 >weird(...ns) : void
 >             : ^^^^
->weird : (a?: string | number, b?: string | number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weird : (a?: number | string, b?: number | string) => void
+>      : ^ ^^^               ^^ ^^^               ^^^^^^^^^
 >...ns : number
 >      : ^^^^^^
 >ns : number[]
@@ -97,8 +97,8 @@ weird(...ns)
 weird(...mixed)
 >weird(...mixed) : void
 >                : ^^^^
->weird : (a?: string | number, b?: string | number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weird : (a?: number | string, b?: number | string) => void
+>      : ^ ^^^               ^^ ^^^               ^^^^^^^^^
 >...mixed : string | number
 >         : ^^^^^^^^^^^^^^^
 >mixed : (string | number)[]
@@ -107,8 +107,8 @@ weird(...mixed)
 weird(...tuple)
 >weird(...tuple) : void
 >                : ^^^^
->weird : (a?: string | number, b?: string | number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weird : (a?: number | string, b?: number | string) => void
+>      : ^ ^^^               ^^ ^^^               ^^^^^^^^^
 >...tuple : string | number
 >         : ^^^^^^^^^^^^^^^
 >tuple : [number, string]
@@ -118,7 +118,7 @@ prefix("a", ...ns)
 >prefix("a", ...ns) : void
 >                   : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >...ns : number
@@ -130,7 +130,7 @@ rest("d", ...ns)
 >rest("d", ...ns) : void
 >                 : ^^^^
 >rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    ^^        ^^^^^^^^^
 >"d" : "d"
 >    : ^^^
 >...ns : number
@@ -144,7 +144,7 @@ normal("g", ...ns)
 >normal("g", ...ns) : void
 >                   : ^^^^
 >normal : (s: string) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >"g" : "g"
 >    : ^^^
 >...ns : number
@@ -167,7 +167,7 @@ all(...mixed)
 >all(...mixed) : void
 >              : ^^^^
 >all : (a?: number, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...mixed : string | number
 >         : ^^^^^^^^^^^^^^^
 >mixed : (string | number)[]
@@ -177,7 +177,7 @@ all(...tuple)
 >all(...tuple) : void
 >              : ^^^^
 >all : (a?: number, b?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...tuple : string | number
 >         : ^^^^^^^^^^^^^^^
 >tuple : [number, string]
@@ -187,7 +187,7 @@ prefix("b", ...mixed)
 >prefix("b", ...mixed) : void
 >                      : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >"b" : "b"
 >    : ^^^
 >...mixed : string | number
@@ -199,7 +199,7 @@ prefix("c", ...tuple)
 >prefix("c", ...tuple) : void
 >                      : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >"c" : "c"
 >    : ^^^
 >...tuple : string | number
@@ -211,7 +211,7 @@ rest("e", ...mixed)
 >rest("e", ...mixed) : void
 >                    : ^^^^
 >rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    ^^        ^^^^^^^^^
 >"e" : "e"
 >    : ^^^
 >...mixed : string | number
@@ -223,7 +223,7 @@ rest("f", ...tuple)
 >rest("f", ...tuple) : void
 >                    : ^^^^
 >rest : (s: string, a?: number, b?: number, ...rest: number[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^    ^^        ^^^^^^^^^
 >"f" : "f"
 >    : ^^^
 >...tuple : string | number
@@ -235,7 +235,7 @@ prefix(...ns) // required parameters are required
 >prefix(...ns) : void
 >              : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...ns : number
 >      : ^^^^^^
 >ns : number[]
@@ -245,7 +245,7 @@ prefix(...mixed)
 >prefix(...mixed) : void
 >                 : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...mixed : string | number
 >         : ^^^^^^^^^^^^^^^
 >mixed : (string | number)[]
@@ -255,7 +255,7 @@ prefix(...tuple)
 >prefix(...tuple) : void
 >                 : ^^^^
 >prefix : (s: string, a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >...tuple : string | number
 >         : ^^^^^^^^^^^^^^^
 >tuple : [number, string]
@@ -265,7 +265,7 @@ prefix2("g", ...ns);
 >prefix2("g", ...ns) : void
 >                    : ^^^^
 >prefix2 : (s: string, n: number, a?: number, b?: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >"g" : "g"
 >    : ^^^
 >...ns : number

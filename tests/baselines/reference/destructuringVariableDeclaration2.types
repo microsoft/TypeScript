@@ -71,7 +71,7 @@ var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
 >b2 : { t1: boolean; t2: string; } | { t1: false; t2: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >temp : { t1: boolean; t2: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     :                             
 >[3, false, { t1: false, t2: 5}] : [number, false, { t1: false; t2: number; }]
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3

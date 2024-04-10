@@ -20,7 +20,7 @@ function foo() {
 >y : () => any
 >  : ^^^^^^^^^
 >() => super : () => any
->            : ^^^^^^^^^
+>            :          
 >super : any
 >      : ^^^
 >super : any
@@ -32,7 +32,7 @@ function foo() {
 >z : () => () => () => any
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super : () => () => () => any
->                        : ^^^^^^^^^^^^^^^^^^^^^
+>                        :                      
 >() => () => super : () => () => any
 >                  : ^^^^^^^^^^^^^^^
 >() => super : () => any
@@ -107,7 +107,7 @@ class RegisteredUser extends User {
 >x : () => any
 >  : ^^^^^^^^^
 >() => super.sayHello() : () => any
->                       : ^^^^^^^^^
+>                       :          
 >super.sayHello() : any
 >                 : ^^^
 >super.sayHello : any
@@ -159,7 +159,7 @@ class RegisteredUser extends User {
 >x : () => any
 >  : ^^^^^^^^^
 >() => super.sayHello() : () => any
->                       : ^^^^^^^^^
+>                       :          
 >super.sayHello() : any
 >                 : ^^^
 >super.sayHello : any
@@ -206,7 +206,7 @@ class RegisteredUser extends User {
 >x : () => any
 >  : ^^^^^^^^^
 >() => super : () => any
->            : ^^^^^^^^^
+>            :          
 >super : any
 >      : ^^^
 >super : typeof User
@@ -218,7 +218,7 @@ class RegisteredUser extends User {
 >y : () => () => () => any
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super : () => () => () => any
->                        : ^^^^^^^^^^^^^^^^^^^^^
+>                        :                      
 >() => () => super : () => () => any
 >                  : ^^^^^^^^^^^^^^^
 >() => super : () => any

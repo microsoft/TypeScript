@@ -11,7 +11,7 @@ export type BooleanLogicExpression = ['and', ...Expression[]] | ['not', Expressi
 
 export function evaluate(expression: Expression): boolean {
 >evaluate : (expression: Expression) => boolean
->         : ^^^^^^^^^^^^^          ^^^^^       
+>         : ^          ^^          ^^^^^       
 >expression : Expression
 >           : ^^^^^^^^^^
 
@@ -19,11 +19,11 @@ export function evaluate(expression: Expression): boolean {
 >Array.isArray(expression) : boolean
 >                          : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >expression : Expression
 >           : ^^^^^^^^^^
 
@@ -47,19 +47,19 @@ export function evaluate(expression: Expression): boolean {
 >operands.every((child) => evaluate(child)) : boolean
 >                                           : ^^^^^^^
 >operands.every : { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; } | { <S_1 extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S_1, thisArg?: any): this is S_1[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
 >operands : Expression[] | [Expression]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >every : { <S extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; } | { <S_1 extends Expression>(predicate: (value: Expression, index: number, array: Expression[]) => value is S_1, thisArg?: any): this is S_1[]; (predicate: (value: Expression, index: number, array: Expression[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
 >(child) => evaluate(child) : (child: Expression) => boolean
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >child : Expression
 >      : ^^^^^^^^^^
 >evaluate(child) : boolean
 >                : ^^^^^^^
 >evaluate : (expression: Expression) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^          ^^          ^^^^^^^^^^^^
 >child : Expression
 >      : ^^^^^^^^^^
       }
@@ -73,7 +73,7 @@ export function evaluate(expression: Expression): boolean {
 >evaluate(operands[0]) : boolean
 >                      : ^^^^^^^
 >evaluate : (expression: Expression) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^          ^^          ^^^^^^^^^^^^
 >operands[0] : Expression
 >            : ^^^^^^^^^^
 >operands : Expression[] | [Expression]

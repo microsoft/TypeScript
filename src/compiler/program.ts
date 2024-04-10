@@ -2688,6 +2688,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             shouldTransformImportCall,
             getEmitModuleFormatOfFile,
             getDefaultResolutionModeForFile,
+            getModeForResolutionAtIndex,
             readFile: f => host.readFile(f),
             fileExists: f => {
                 // Use local caches
@@ -5048,7 +5049,8 @@ export function getImpliedNodeFormatForEmitWorker(sourceFile: Pick<SourceFile, "
     }
     return undefined;
 }
-function getDefaultResolutionModeForFileWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
+/** @internal Prefer `program.getDefaultResolutionModeForFile` when possible. */
+export function getDefaultResolutionModeForFileWorker(sourceFile: Pick<SourceFile, "fileName" | "impliedNodeFormat" | "packageJsonScope">, options: CompilerOptions): ResolutionMode {
     return importSyntaxAffectsModuleResolution(options) ? getImpliedNodeFormatForEmitWorker(sourceFile, options) : undefined;
 }
 

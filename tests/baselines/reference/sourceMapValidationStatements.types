@@ -411,7 +411,7 @@ function f() {
 >eval("y") : any
 >          : ^^^
 >eval : (x: string) => any
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^
 >"y" : "y"
 >    : ^^^
 
@@ -421,7 +421,7 @@ var b = function () {
 >b : () => void
 >  : ^^^^^^^^^^
 >function () {    var x = 10;    x = x + 1;} : () => void
->                                            : ^^^^^^^^^^
+>                                            :           
 
     var x = 10;
 >x : number

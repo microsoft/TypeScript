@@ -76,19 +76,19 @@ class a {
 
     private foo(n: number): string;
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     private foo(s: string): string;
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
     private foo(ns: any) {
 >foo : { (n: number): string; (s: string): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >ns : any
 >   : ^^^
 

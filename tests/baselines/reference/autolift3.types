@@ -34,13 +34,13 @@ class B {
 
             var CScriptIO = (function() {
 >CScriptIO : { readFile: (path: string) => string; }
->          : ^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>          : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })() : { readFile: (path: string) => string; }
->                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>                                                                                                                                                                                                                                   :                                        
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            }) : () => { readFile: (path: string) => string; }
->                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            } : () => { readFile: (path: string) => string; }
->                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 
                 var fso = 0
 >fso : number
@@ -50,13 +50,13 @@ class B {
 
                 return {
 >{                    readFile: function(path: string): string {                        return fso.toString();                    }                } : { readFile: (path: string) => string; }
->                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^
+>                                                                                                                                                    : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 
                     readFile: function(path: string): string {
 >readFile : (path: string) => string
->         : ^^^^^^^      ^^^^^      
+>         : ^    ^^      ^^^^^      
 >function(path: string): string {                        return fso.toString();                    } : (path: string) => string
->                                                                                                    : ^^^^^^^      ^^^^^      
+>                                                                                                    :                         
 >path : string
 >     : ^^^^^^
 
@@ -64,11 +64,11 @@ class B {
 >fso.toString() : string
 >               : ^^^^^^
 >fso.toString : (radix?: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >fso : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
                     }
                 }
             })();

@@ -33,7 +33,7 @@ const a3 = f<number>.g;  // <U>() => U
 >a3 : <U>() => U
 >   : ^^^^^^^^^^
 >f<number>.g : <U>() => U
->            : ^^^^^^^^^^
+>            :           
 >f<number> : { (): number; g<U>(): U; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : { <T>(): T; g<U>(): U; }
@@ -89,7 +89,7 @@ const a7 = (f<number>)['g'];
 >a7 : <U>() => U
 >   : ^^^^^^^^^^
 >(f<number>)['g'] : <U>() => U
->                 : ^^^^^^^^^^
+>                 :           
 >(f<number>) : { (): number; g<U>(): U; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f<number> : { (): number; g<U>(): U; }
@@ -171,23 +171,23 @@ const b4 = f<number>?.<number>();  // Error, expected no type arguments
 
 declare let g: (<T>(x: T) => T) | undefined;
 >g : (<T>(x: T) => T) | undefined
->  : ^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^^
+>  : ^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 >x : T
 >  : ^
 
 const c1 = g<string> || ((x: string) => x);
 >c1 : (x: string) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> || ((x: string) => x) : (x: string) => string
->                                : ^^^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
->                   : ^^^^      ^^^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : string
@@ -195,17 +195,17 @@ const c1 = g<string> || ((x: string) => x);
 
 const c2 = g<string> ?? ((x: string) => x);
 >c2 : (x: string) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> ?? ((x: string) => x) : (x: string) => string
->                                : ^^^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
->                   : ^^^^      ^^^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : string
@@ -213,17 +213,17 @@ const c2 = g<string> ?? ((x: string) => x);
 
 const c3 = g<string> && ((x: string) => x);
 >c3 : ((x: string) => string) | undefined
->   : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >g<string> && ((x: string) => x) : ((x: string) => string) | undefined
->                                : ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^                     ^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^
 >((x: string) => x) : (x: string) => string
->                   : ^^^^      ^^^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x : (x: string) => string
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : string

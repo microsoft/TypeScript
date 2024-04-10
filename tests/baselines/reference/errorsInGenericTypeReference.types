@@ -47,7 +47,7 @@ var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
 >tc2 : testClass2<{ x: V; }>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >new testClass2<{ x: V }>() : testClass2<{ x: V; }>
->                           : ^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^^^^         ^
 >testClass2 : typeof testClass2
 >           : ^^^^^^^^^^^^^^^^^
 >x : V
@@ -98,7 +98,7 @@ function testFunction1(): Foo<{ x: V }> { return null; } // error: could not fin
 // in paramter types
 function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
 >testFunction2 : (p: Foo<{ x: V; }>) => void
->              : ^^^^              ^^^^^^^^^
+>              : ^ ^^              ^^^^^^^^^
 >p : Foo<{ x: V; }>
 >  : ^^^^^^^^^^^^^^
 >x : V
@@ -180,7 +180,7 @@ interface testInterface2 {
 
     method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
 >method : (a: Foo<{ x: V; }>) => Foo<{ x: V; }>
->       : ^^^^              ^^^^^              
+>       : ^ ^^              ^^^^^              
 >a : Foo<{ x: V; }>
 >  : ^^^^^^^^^^^^^^
 >x : V

@@ -52,7 +52,7 @@ class YaddaBase {
 >b : () => void
 >  : ^^^^^^^^^^
 >() => {        this.foo = 10    } : () => void
->                                  : ^^^^^^^^^^
+>                                  :           
 
         this.foo = 10
 >this.foo = 10 : 10

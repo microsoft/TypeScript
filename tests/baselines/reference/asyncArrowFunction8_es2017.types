@@ -5,13 +5,13 @@ var foo = async (): Promise<void> => {
 >foo : () => Promise<void>
 >    : ^^^^^^             
 >async (): Promise<void> => {  var v = { [await]: foo }} : () => Promise<void>
->                                                        : ^^^^^^             
+>                                                        :                    
 
   var v = { [await]: foo }
 >v : { [x: number]: () => Promise<void>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ [await]: foo } : { [x: number]: () => Promise<void>; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^                   ^^^
 >[await] : () => Promise<void>
 >        : ^^^^^^^^^^^^^^^^^^^
 >await : any
@@ -19,5 +19,5 @@ var foo = async (): Promise<void> => {
 > : any
 > : ^^^
 >foo : () => Promise<void>
->    : ^^^^^^^^^^^^^^^^^^^
+>    :                    
 }

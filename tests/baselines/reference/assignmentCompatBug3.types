@@ -3,7 +3,7 @@
 === assignmentCompatBug3.ts ===
 function makePoint(x: number, y: number) {
 >makePoint : (x: number, y: number) => { readonly x: number; readonly y: number; dist: () => number; }
->          : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -31,17 +31,17 @@ function makePoint(x: number, y: number) {
 >dist : () => number
 >     : ^^^^^^^^^^^^
 >function () {			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit		} : () => number
->                                                                                                         : ^^^^^^^^^^^^
+>                                                                                                         :             
 
 			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit
 >Math.sqrt(x*x+y*y) : number
 >                   : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >x*x+y*y : number
 >        : ^^^^^^
 >x*x : number
@@ -76,7 +76,7 @@ class C {
 
 function foo(test: string) { }
 >foo : (test: string) => void
->    : ^^^^^^^      ^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >test : string
 >     : ^^^^^^
 
@@ -90,14 +90,14 @@ foo(x);
 >foo(x) : void
 >       : ^^^^
 >foo : (test: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >x : any
 
 foo(x + y);
 >foo(x + y) : void
 >           : ^^^^
 >foo : (test: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^
 >x + y : any
 >x : any
 >y : any

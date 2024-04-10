@@ -17,7 +17,7 @@ import * as foo from "./foo";
 
 function invoke(f: () => void) { f(); }
 >invoke : (f: () => void) => void
->       : ^^^^          ^^^^^^^^^
+>       : ^ ^^          ^^^^^^^^^
 >f : () => void
 >  : ^^^^^^    
 >f() : void
@@ -29,7 +29,7 @@ invoke(foo);
 >invoke(foo) : void
 >            : ^^^^
 >invoke : (f: () => void) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^          ^^^^^^^^^
 >foo : { default: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 

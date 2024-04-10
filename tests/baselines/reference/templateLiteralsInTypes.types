@@ -3,9 +3,9 @@
 === templateLiteralsInTypes.ts ===
 const f = (hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n`;
 >f : (hdr: string, val: number) => `${string}:\t${number}\r\n`
->  : ^^^^^^      ^^^^^^^      ^^^^^                           
+>  : ^   ^^      ^^   ^^      ^^^^^                           
 >(hdr: string, val: number) => `${hdr}:\t${val}\r\n` as `${string}:\t${number}\r\n` : (hdr: string, val: number) => `${string}:\t${number}\r\n`
->                                                                                   : ^^^^^^      ^^^^^^^      ^^^^^                           
+>                                                                                   :                                                          
 >hdr : string
 >    : ^^^^^^
 >val : number
@@ -25,7 +25,7 @@ f("x").foo;
 >f("x") : `${string}:\t${number}\r\n`
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (hdr: string, val: number) => `${string}:\t${number}\r\n`
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                           
+>  : ^   ^^      ^^   ^^      ^^^^^                           
 >"x" : "x"
 >    : ^^^
 >foo : any

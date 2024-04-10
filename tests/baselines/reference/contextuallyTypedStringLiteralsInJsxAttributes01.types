@@ -16,9 +16,9 @@ namespace JSX {
 
 const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->             : ^^^^^^^^                         ^^^^^^^^^^^^^^^^
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >(props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span> : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->                                                              : ^^^^^^^^                         ^^^^^^^^^^^^^^^^
+>                                                              :                                                  
 >props : { foo: "A" | "B" | "C"; }
 >      : ^^^^^^^               ^^^
 >foo : "A" | "B" | "C"
@@ -40,7 +40,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 ><FooComponent foo={"A"} /> : JSX.Element
 >                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "A"
 >    : ^^^
 >"A" : "A"
@@ -50,7 +50,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 ><FooComponent foo="A"   /> : JSX.Element
 >                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "A"
 >    : ^^^
 
@@ -58,7 +58,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 ><FooComponent foo={"f"} /> : JSX.Element
 >                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "f"
 >    : ^^^
 >"f" : "f"
@@ -68,7 +68,7 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 ><FooComponent foo="f"   /> : JSX.Element
 >                           : ^^^^^^^^^^^
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^                         ^^^^^^^^^^^^^^^^
 >foo : "f"
 >    : ^^^
 

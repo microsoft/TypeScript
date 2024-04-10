@@ -22,11 +22,11 @@ const uniqueSymbol0 = Symbol.for("");
 >Symbol.for("") : unique symbol
 >               : ^^^^^^^^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -36,11 +36,11 @@ const uniqueSymbol1 = Symbol.for("");
 >Symbol.for("") : unique symbol
 >               : ^^^^^^^^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -81,11 +81,11 @@ const Op: OpTypes = {
 >Symbol.for("equal") : symbol
 >                    : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"equal" : "equal"
 >        : ^^^^^^^
 

@@ -3,15 +3,15 @@
 === ambiguousGenericAssertion1.ts ===
 function f<T>(x: T): T { return null; }
 >f : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 var r = <T>(x: T) => x;
 >r : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 ><T>(x: T) => x : <T>(x: T) => T
->               : ^ ^^^^^ ^^^^^^
+>               :               
 >x : T
 >  : ^
 >x : T
@@ -19,13 +19,13 @@ var r = <T>(x: T) => x;
 
 var r2 = < <T>(x: T) => T>f; // valid
 >r2 : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 >< <T>(x: T) => T>f : <T>(x: T) => T
->                   : ^ ^^^^^ ^^^^^ 
+>                   :               
 >x : T
 >  : ^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 
 var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operation
 >r3 : boolean
@@ -49,5 +49,5 @@ var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operatio
 >T : any
 >  : ^^^
 >f : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 

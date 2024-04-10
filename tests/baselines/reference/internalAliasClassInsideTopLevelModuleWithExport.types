@@ -11,7 +11,7 @@ export module x {
 
         foo(a: number) {
 >foo : (a: number) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -44,11 +44,11 @@ var cReturnVal = cProp.foo(10);
 >cProp.foo(10) : number
 >              : ^^^^^^
 >cProp.foo : (a: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >cProp : xc
 >      : ^^
 >foo : (a: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 

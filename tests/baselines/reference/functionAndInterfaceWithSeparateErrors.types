@@ -3,13 +3,13 @@
 === functionAndInterfaceWithSeparateErrors.ts ===
 function Foo(s: string);
 >Foo : (s: string) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 function Foo(n: number) { }
 >Foo : (s: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >n : number
 >  : ^^^^^^
 

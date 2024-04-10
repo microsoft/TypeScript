@@ -8,7 +8,7 @@ const C = require("./semver")
 >require("./semver") : typeof C
 >                    : ^^^^^^^^
 >require : (name: string) => any
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^
 >"./semver" : "./semver"
 >           : ^^^^^^^^^^
 
@@ -16,11 +16,11 @@ var two = C.f(1)
 >two : any
 >C.f(1) : any
 >C.f : (n: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >f : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -35,7 +35,7 @@ var c = new C
 === node.d.ts ===
 declare function require(name: string): any;
 >require : (name: string) => any
->        : ^^^^^^^      ^^^^^   
+>        : ^    ^^      ^^^^^   
 >name : string
 >     : ^^^^^^
 
@@ -67,15 +67,15 @@ exports = module.exports = C
 
 exports.f = n => n + 1
 >exports.f = n => n + 1 : (n: any) => any
->                       : ^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^^^^
 >exports.f : (n: any) => any
->          : ^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^
 >exports : typeof C
 >        : ^^^^^^^^
 >f : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
->           : ^^^^^^^^^^^^^^^
+>           :                
 >n : any
 >n + 1 : any
 >n : any

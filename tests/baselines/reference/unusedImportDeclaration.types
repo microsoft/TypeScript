@@ -20,7 +20,7 @@ var thingy: B = {
 };
 declare function foo(a: string): void;
 >foo : (a: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >a : string
 >  : ^^^^^^
 
@@ -28,7 +28,7 @@ foo("IN " + thingy.me + "!");
 >foo("IN " + thingy.me + "!") : void
 >                             : ^^^^
 >foo : (a: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >"IN " + thingy.me + "!" : string
 >                        : ^^^^^^
 >"IN " + thingy.me : string

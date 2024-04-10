@@ -3,12 +3,12 @@
 === controlFlowCommaExpressionAssertionWithinTernary.ts ===
 declare function assert(value: any): asserts value;
 >assert : (value: any) => asserts value
->       : ^^^^^^^^   ^^^^^             
+>       : ^     ^^   ^^^^^             
 >value : any
 
 function foo2(param: number | null | undefined): number | null {
 >foo2 : (param: number | null | undefined) => number | null
->     : ^^^^^^^^                         ^^^^^             
+>     : ^     ^^                         ^^^^^             
 >param : number | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ function foo2(param: number | null | undefined): number | null {
 >assert(param !== undefined) : void
 >                            : ^^^^
 >assert : (value: any) => asserts value
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^   ^^^^^^^^^^^^^^^^^^
 >param !== undefined : boolean
 >                    : ^^^^^^^
 >param : number | null

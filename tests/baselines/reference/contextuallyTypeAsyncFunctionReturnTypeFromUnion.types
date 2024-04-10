@@ -9,14 +9,14 @@ declare class StateMachine<T> {
 
   onDone: (a: T) => void;
 >onDone : (a: T) => void
->       : ^^^^ ^^^^^    
+>       : ^ ^^ ^^^^^    
 >a : T
 >  : ^
 }
 
 declare function createMachine<T>(implementations: {
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->              : ^ ^^^^^^^^^^^^^^^^^^^                                                                 ^^^^^    
+>              : ^ ^^               ^^                                                                 ^^^^^    
 >implementations : { services: Record<string, () => Promise<T> | StateMachine<T>>; }
 >                : ^^^^^^^^^^^^                                                  ^^^
 
@@ -30,31 +30,31 @@ createMachine<{ count: number }>({
 >createMachine<{ count: number }>({  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },}) : void
 >                                                                                                                                                                        : ^^^^
 >createMachine : <T>(implementations: { services: Record<string, () => Promise<T> | StateMachine<T>>; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^               ^^                                                                 ^^^^^^^^^
 >count : number
 >      : ^^^^^^
 >{  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },} : { services: { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }; }
->                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^
 
   services: {
 >services : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^
 >{    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  } : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                       : ^^^^^^^^                                 ^^^^^^^^^^^^^^^^^^^                  ^^^^
 
     test: async () => Promise.reject("some err"),
 >test : () => Promise<{ count: number; }>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => Promise.reject("some err") : () => Promise<{ count: number; }>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       :                                  
 >Promise.reject("some err") : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >"some err" : "some err"
 >           : ^^^^^^^^^^
 
@@ -66,11 +66,11 @@ createMachine<{ count: number }>({
 >Promise.reject("some err") : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >"some err" : "some err"
 >           : ^^^^^^^^^^
 
@@ -92,11 +92,11 @@ function fn1(): () => Promise<{ count: number }> | StateMachine<{ count: number 
 >Promise.reject('some err') : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >reject : <T = never>(reason?: any) => Promise<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^
 >'some err' : "some err"
 >           : ^^^^^^^^^^
 }
@@ -120,15 +120,15 @@ const cb1: LoadCallback = async () => load().then(m => m);
 >load().then(m => m) : Promise<boolean>
 >                    : ^^^^^^^^^^^^^^^^
 >load().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >load() : Promise<boolean>
 >       : ^^^^^^^^^^^^^^^^
 >load : () => Promise<boolean>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m => m : (m: boolean) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >m : boolean
 >  : ^^^^^^^
 >m : boolean
@@ -152,15 +152,15 @@ const cb3: LoadCallback = () => load().then(m => m);
 >load().then(m => m) : Promise<boolean>
 >                    : ^^^^^^^^^^^^^^^^
 >load().then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >load() : Promise<boolean>
 >       : ^^^^^^^^^^^^^^^^
 >load : () => Promise<boolean>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = boolean, TResult2 = never>(onfulfilled?: ((value: boolean) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m => m : (m: boolean) => boolean
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >m : boolean
 >  : ^^^^^^^
 >m : boolean

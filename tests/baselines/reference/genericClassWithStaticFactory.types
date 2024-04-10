@@ -45,7 +45,7 @@ module Editor {
 
         public add(data: T): List<T> {
 >add : (data: T) => List<T>
->    : ^^^^^^^ ^^^^^       
+>    : ^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -55,7 +55,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -63,7 +63,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >data : T
 >     : ^
             
@@ -246,7 +246,7 @@ module Editor {
 
         public pushEntry(entry: List<T>): void {
 >pushEntry : (entry: List<T>) => void
->          : ^^^^^^^^       ^^^^^    
+>          : ^     ^^       ^^^^^    
 >entry : List<T>
 >      : ^^^^^^^
 
@@ -321,7 +321,7 @@ module Editor {
 
         public push(data: T): void {
 >push : (data: T) => void
->     : ^^^^^^^ ^^^^^    
+>     : ^    ^^ ^^^^^    
 >data : T
 >     : ^
 
@@ -331,7 +331,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -339,7 +339,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >data : T
 >     : ^
 
@@ -426,7 +426,7 @@ module Editor {
 
         public popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
->         : ^^^^^^^       ^^^^^       
+>         : ^    ^^       ^^^^^       
 >head : List<T>
 >     : ^^^^^^^
 
@@ -449,7 +449,7 @@ module Editor {
 >this.listFactory.RemoveEntry(this.next) : List<T>
 >                                        : ^^^^^^^
 >this.listFactory.RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^   ^^     ^^         ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -457,7 +457,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >RemoveEntry : <T_1>(entry: List<T_1>) => List<T_1>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^     ^^         ^^^^^^^^^^^^^^
 >this.next : List<T>
 >          : ^^^^^^^
 >this : this
@@ -469,7 +469,7 @@ module Editor {
 
         public insertEntry(entry: List<T>): List<T> {
 >insertEntry : (entry: List<T>) => List<T>
->            : ^^^^^^^^       ^^^^^       
+>            : ^     ^^       ^^^^^       
 >entry : List<T>
 >      : ^^^^^^^
 
@@ -548,7 +548,7 @@ module Editor {
 
         public insertAfter(data: T): List<T> {
 >insertAfter : (data: T) => List<T>
->            : ^^^^^^^ ^^^^^       
+>            : ^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -558,7 +558,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -566,7 +566,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >data : T
 >     : ^
 
@@ -633,7 +633,7 @@ module Editor {
 
         public insertEntryBefore(entry: List<T>): List<T> {
 >insertEntryBefore : (entry: List<T>) => List<T>
->                  : ^^^^^^^^       ^^^^^       
+>                  : ^     ^^       ^^^^^       
 >entry : List<T>
 >      : ^^^^^^^
 
@@ -700,7 +700,7 @@ module Editor {
 
         public insertBefore(data: T): List<T> {
 >insertBefore : (data: T) => List<T>
->             : ^^^^^^^ ^^^^^       
+>             : ^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -710,7 +710,7 @@ module Editor {
 >this.listFactory.MakeEntry(data) : List<T>
 >                                 : ^^^^^^^
 >this.listFactory.MakeEntry : <T_1>(data: T_1) => List<T_1>
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >this.listFactory : ListFactory<T>
 >                 : ^^^^^^^^^^^^^^
 >this : this
@@ -718,7 +718,7 @@ module Editor {
 >listFactory : ListFactory<T>
 >            : ^^^^^^^^^^^^^^
 >MakeEntry : <T_1>(data: T_1) => List<T_1>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^    ^^   ^^^^^^^^^^^^^^
 >data : T
 >     : ^
 
@@ -726,11 +726,11 @@ module Editor {
 >this.insertEntryBefore(entry) : List<T>
 >                              : ^^^^^^^
 >this.insertEntryBefore : (entry: List<T>) => List<T>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^       ^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >insertEntryBefore : (entry: List<T>) => List<T>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^       ^^^^^^^^^^^^
 >entry : List<T>
 >      : ^^^^^^^
         }
@@ -785,7 +785,7 @@ module Editor {
 
         public MakeEntry<T>(data: T): List<T> {
 >MakeEntry : <T>(data: T) => List<T>
->          : ^ ^^^^^^^^ ^^^^^       
+>          : ^ ^^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -832,7 +832,7 @@ module Editor {
 
         public RemoveEntry<T>(entry: List<T>): List<T> {
 >RemoveEntry : <T>(entry: List<T>) => List<T>
->            : ^ ^^^^^^^^^       ^^^^^       
+>            : ^ ^^     ^^       ^^^^^       
 >entry : List<T>
 >      : ^^^^^^^
 

@@ -13,7 +13,7 @@ class C {
 
 	public callback(cb:()=>void) {cb();}
 >callback : (cb: () => void) => void
->         : ^^^^^          ^^^^^^^^^
+>         : ^  ^^          ^^^^^^^^^
 >cb : () => void
 >   : ^^^^^^    
 >cb() : void
@@ -29,11 +29,11 @@ class C {
 >this.callback(()=>{this.p1+1}) : void
 >                               : ^^^^
 >this.callback : (cb: () => void) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^  ^^          ^^^^^^^^^
 >this : this
 >     : ^^^^
 >callback : (cb: () => void) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^  ^^          ^^^^^^^^^
 >()=>{this.p1+1} : () => void
 >                : ^^^^^^^^^^
 >this.p1+1 : number

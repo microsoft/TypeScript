@@ -13,11 +13,11 @@ includes = "abcde".includes("cd");
 >"abcde".includes("cd") : boolean
 >                       : ^^^^^^^
 >"abcde".includes : (searchString: string, position?: number) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >includes : (searchString: string, position?: number) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >"cd" : "cd"
 >     : ^^^^
 
@@ -29,11 +29,11 @@ includes = "abcde".includes("cd", 2);
 >"abcde".includes("cd", 2) : boolean
 >                          : ^^^^^^^
 >"abcde".includes : (searchString: string, position?: number) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >"abcde" : "abcde"
 >        : ^^^^^^^
 >includes : (searchString: string, position?: number) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^      ^^        ^^^      ^^^^^^^^^^^^
 >"cd" : "cd"
 >     : ^^^^
 >2 : 2

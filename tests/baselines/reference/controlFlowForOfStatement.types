@@ -35,11 +35,11 @@ function a() {
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
     }
     x; // string | boolean
 >x : string | true

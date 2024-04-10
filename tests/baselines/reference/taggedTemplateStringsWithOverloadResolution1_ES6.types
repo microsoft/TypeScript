@@ -3,13 +3,13 @@
 === taggedTemplateStringsWithOverloadResolution1_ES6.ts ===
 function foo(strs: TemplateStringsArray): number;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^                    ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 
 function foo(strs: TemplateStringsArray, x: number): string;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -17,7 +17,7 @@ function foo(strs: TemplateStringsArray, x: number): string;
 
 function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^      ^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -27,7 +27,7 @@ function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
 
 function foo(strs: TemplateStringsArray, x: number, y: string): {};
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^      ^^^^^      ^^^  ^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -37,7 +37,7 @@ function foo(strs: TemplateStringsArray, x: number, y: string): {};
 
 function foo(...stuff: any[]): any {
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >stuff : any[]
 >      : ^^^^^
 
@@ -52,7 +52,7 @@ var a = foo([]);             // number
 >foo([]) : never
 >        : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -62,7 +62,7 @@ var b = foo([], 1);          // string
 >foo([], 1) : never
 >           : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >1 : 1
@@ -74,7 +74,7 @@ var c = foo([], 1, 2);       // boolean
 >foo([], 1, 2) : never
 >              : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >1 : 1
@@ -88,7 +88,7 @@ var d = foo([], 1, true);    // boolean (with error)
 >foo([], 1, true) : never
 >                 : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >1 : 1
@@ -102,7 +102,7 @@ var e = foo([], 1, "2");     // {}
 >foo([], 1, "2") : never
 >                : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >1 : 1
@@ -116,7 +116,7 @@ var f = foo([], 1, 2, 3);    // any (with error)
 >foo([], 1, 2, 3) : never
 >                 : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >1 : 1
@@ -132,7 +132,7 @@ var u = foo ``;              // number
 >foo `` : number
 >       : ^^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`` : ""
 >   : ^^
 
@@ -142,7 +142,7 @@ var v = foo `${1}`;          // string
 >foo `${1}` : string
 >           : ^^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}` : string
 >       : ^^^^^^
 >1 : 1
@@ -154,7 +154,7 @@ var w = foo `${1}${2}`;      // boolean
 >foo `${1}${2}` : boolean
 >               : ^^^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}${2}` : string
 >           : ^^^^^^
 >1 : 1
@@ -168,7 +168,7 @@ var x = foo `${1}${true}`;   // boolean (with error)
 >foo `${1}${true}` : never
 >                  : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}${true}` : string
 >              : ^^^^^^
 >1 : 1
@@ -180,9 +180,9 @@ var y = foo `${1}${"2"}`;    // {}
 >y : {}
 >  : ^^
 >foo `${1}${"2"}` : {}
->                 : ^^
+>                 :   
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}${"2"}` : string
 >             : ^^^^^^
 >1 : 1
@@ -196,7 +196,7 @@ var z = foo `${1}${2}${3}`;  // any (with error)
 >foo `${1}${2}${3}` : never
 >                   : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}${2}${3}` : string
 >               : ^^^^^^
 >1 : 1

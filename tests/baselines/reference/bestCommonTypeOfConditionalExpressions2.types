@@ -64,7 +64,7 @@ var r9 = true ? derived : derived2;
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => T | U
->    : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -83,7 +83,7 @@ function foo<T, U>(t: T, u: U) {
 
 function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
 >foo2 : <T extends U, U>(t: T, u: U) => U
->     : ^ ^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -102,7 +102,7 @@ function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type pa
 
 function foo3<T extends U, U extends V, V>(t: T, u: U) {
 >foo3 : <T extends U, U extends V, V>(t: T, u: U) => U
->     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^
 >t : T
 >  : ^
 >u : U

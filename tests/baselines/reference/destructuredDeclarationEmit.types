@@ -32,7 +32,7 @@ const foo = { bar: 'hello', bat: 'world', bam: { bork: { bar: 'a', baz: 'b' } } 
 >    : ^^^
 
 const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]];
->arr : [0, 1, 2, ["a", "b", "c", [{ def: 'def'; }, { sec: 'sec'; }]]]
+>arr : [0, 1, 2, ["a", "b", "c", [{ def: "def"; }, { sec: "sec"; }]]]
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^     ^^^^^^
 >def : "def"
 >    : ^^^^^
@@ -148,7 +148,7 @@ const getFoo = () => ({
 >getFoo : () => { foo: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    foo: 'foo'}) : () => { foo: string; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^
+>                         :                       
 >({    foo: 'foo'}) : { foo: string; }
 >                   : ^^^^^^^^^^^^^^^^
 >{    foo: 'foo'} : { foo: string; }

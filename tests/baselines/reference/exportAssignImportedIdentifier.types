@@ -32,7 +32,7 @@ var x = foo1.x;
 >x : () => boolean
 >  : ^^^^^^^^^^^^^
 >foo1.x : () => boolean
->       : ^^^^^^^^^^^^^
+>       :              
 >foo1 : typeof foo1
 >     : ^^^^^^^^^^^
 >x : () => boolean

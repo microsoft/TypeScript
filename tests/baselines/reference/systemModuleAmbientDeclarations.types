@@ -31,7 +31,7 @@ export var foo = Foo;
 >foo : () => void
 >    : ^^^^^^^^^^
 >Foo : () => void
->    : ^^^^^^^^^^
+>    :           
 
 export var c = C;
 >c : typeof C

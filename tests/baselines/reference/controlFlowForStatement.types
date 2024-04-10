@@ -97,11 +97,11 @@ function c() {
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 >x = 5 : 5
 >      : ^
 >x : string | number | boolean

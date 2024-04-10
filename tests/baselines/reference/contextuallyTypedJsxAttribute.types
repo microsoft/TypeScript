@@ -6,7 +6,7 @@ interface Elements {
 >foo : { callback?: (value: number) => void; }
 >    : ^^^^^^^^^^^^^                       ^^^
 >callback : (value: number) => void
->         : ^^^^^^^^      ^^^^^    
+>         : ^     ^^      ^^^^^    
 >value : number
 >      : ^^^^^^
 
@@ -14,7 +14,7 @@ interface Elements {
 >bar : { callback?: (value: string) => void; }
 >    : ^^^^^^^^^^^^^                       ^^^
 >callback : (value: string) => void
->         : ^^^^^^^^      ^^^^^    
+>         : ^     ^^      ^^^^^    
 >value : string
 >      : ^^^^^^
 }
@@ -27,14 +27,14 @@ type Props<C extends keyof Elements> = { as?: C } & Elements[C];
 
 declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^        ^^^^^    
 >props : Props<C>
 >      : ^^^^^^^^
 
 <Test
 ><Test  as="bar"  callback={(value) => {}}/> : error
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^        ^^^^^^^^^
 
   as="bar"
 >as : "bar"
@@ -42,9 +42,9 @@ declare function Test<C extends keyof Elements>(props: Props<C>): null;
 
   callback={(value) => {}}
 >callback : (value: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -54,9 +54,9 @@ Test({
 >Test({  as: "bar",  callback: (value) => {},}) : null
 >                                               : ^^^^
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^        ^^^^^^^^^
 >{  as: "bar",  callback: (value) => {},} : { as: "bar"; callback: (value: string) => void; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
 
   as: "bar",
 >as : "bar"
@@ -66,9 +66,9 @@ Test({
 
   callback: (value) => {},
 >callback : (value: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              :                        
 >value : string
 >      : ^^^^^^
 
@@ -77,7 +77,7 @@ Test({
 <Test<'bar'>
 ><Test<'bar'>  as="bar"  callback={(value) => {}}/> : error
 >Test : <C extends keyof Elements>(props: Props<C>) => null
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^        ^^^^^^^^^
 
   as="bar"
 >as : "bar"
@@ -85,9 +85,9 @@ Test({
 
   callback={(value) => {}}
 >callback : (value: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 

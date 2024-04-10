@@ -131,22 +131,22 @@ type T73<T extends "a" | "b", U extends T | "c"> = U & string;
 
 declare function isA(x: any): x is "a";
 >isA : (x: any) => x is "a"
->    : ^^^^   ^^^^^        
+>    : ^ ^^   ^^^^^        
 >x : any
 
 declare function isB(x: any): x is "b";
 >isB : (x: any) => x is "b"
->    : ^^^^   ^^^^^        
+>    : ^ ^^   ^^^^^        
 >x : any
 
 declare function isC(x: any): x is "c";
 >isC : (x: any) => x is "c"
->    : ^^^^   ^^^^^        
+>    : ^ ^^   ^^^^^        
 >x : any
 
 function foo<K extends "a" | "b">(x: K) {
 >foo : <K extends "a" | "b">(x: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : K
 >  : ^
 
@@ -154,7 +154,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -166,7 +166,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -178,7 +178,7 @@ function foo<K extends "a" | "b">(x: K) {
 >isC(x) : boolean
 >       : ^^^^^^^
 >isC : (x: any) => x is "c"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -192,13 +192,13 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "b"
 >  : ^^^
 
@@ -216,13 +216,13 @@ function foo<K extends "a" | "b">(x: K) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is "a"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "a" | "b"
 >  : ^^^^^^^^^
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is "b"
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^^
 >x : "b"
 >  : ^^^
 
@@ -286,13 +286,13 @@ const optionHandlers: OptionHandlers = {
 >optionHandlers : OptionHandlers
 >               : ^^^^^^^^^^^^^^
 >{  "one": option => option.s,  "two": option => option.x + "," + option.y,} : { one: (option: OptionOne & { kind: "one"; }) => string; two: (option: OptionTwo & { kind: "two"; }) => string; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                            : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   "one": option => option.s,
 >"one" : (option: OptionOne & { kind: "one"; }) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option => option.s : (option: OptionOne & { kind: "one"; }) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   :                                                 
 >option : OptionOne & { kind: "one"; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option.s : string
@@ -304,9 +304,9 @@ const optionHandlers: OptionHandlers = {
 
   "two": option => option.x + "," + option.y,
 >"two" : (option: OptionTwo & { kind: "two"; }) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option => option.x + "," + option.y : (option: OptionTwo & { kind: "two"; }) => string
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    :                                                 
 >option : OptionTwo & { kind: "two"; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option.x + "," + option.y : string
@@ -332,7 +332,7 @@ const optionHandlers: OptionHandlers = {
 
 function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {
 >handleOption : <K extends "one" | "two">(option: Options & { kind: K; }) => string
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^      
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^      ^^                      ^^^^^      
 >option : Options & { kind: K; }
 >       : ^^^^^^^^^^^^^^^^^^ ^^^
 >kind : K

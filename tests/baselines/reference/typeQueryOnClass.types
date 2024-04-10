@@ -18,24 +18,24 @@ class C<T> {
 
     static foo(x: number);
 >foo : { (x: number): any; (x: {}): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     static foo(x: {});
 >foo : { (x: number): any; (x: {}): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : {}
 >  : ^^
 
     static foo(x) { }
 >foo : { (x: number): any; (x: {}): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^  ^^^^^^^^^
 >x : any
 
     static bar(x) { }
 >bar : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >x : any
 
     static sa = 1;
@@ -48,7 +48,7 @@ class C<T> {
 >sb : () => number
 >   : ^^^^^^^^^^^^
 >() => 1 : () => number
->        : ^^^^^^^^^^^^
+>        :             
 >1 : 1
 >  : ^
 
@@ -78,7 +78,7 @@ class C<T> {
 
     baz(x): string { return ''; }
 >baz : (x: any) => string
->    : ^^^^^^^^^^^^      
+>    : ^ ^^^^^^^^^^      
 >x : any
 >'' : ""
 >   : ^^
@@ -93,7 +93,7 @@ class C<T> {
 >ib : () => number
 >   : ^^^^^^^^^^^^
 >() => this.ia : () => number
->              : ^^^^^^^^^^^^
+>              :             
 >this.ia : number
 >        : ^^^^^^
 >this : this
