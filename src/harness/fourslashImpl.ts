@@ -1817,17 +1817,19 @@ export class TestState {
     public getRegionSemanticDiagnostics(
         ranges: ts.TextRange[],
         expectedDiagnostics: readonly FourSlashInterface.Diagnostic[] | undefined,
-        expectedRanges: ts.TextRange[] | undefined) {
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
         const diagnosticsResult = this.languageService.getRegionSemanticDiagnostics(this.activeFile.fileName, ranges);
         if (diagnosticsResult && expectedDiagnostics) {
             this.testDiagnostics(expectedDiagnostics, diagnosticsResult.diagnostics, "error");
         }
         else if (diagnosticsResult !== expectedDiagnostics) {
             if (expectedDiagnostics) this.raiseError("Expected diagnostics to be defined.");
-            else assert.deepEqual(
-                diagnosticsResult!.diagnostics,
-                expectedDiagnostics,
-                "Expected diagnostics to be undefined.");
+            else {assert.deepEqual(
+                    diagnosticsResult!.diagnostics,
+                    expectedDiagnostics,
+                    "Expected diagnostics to be undefined.",
+                );}
         }
 
         if (expectedRanges && diagnosticsResult) {

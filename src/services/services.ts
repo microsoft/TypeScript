@@ -5,6 +5,7 @@ import {
     AssignmentDeclarationKind,
     BaseType,
     BinaryExpression,
+    BlockLike,
     BreakpointResolver,
     CallHierarchy,
     CallHierarchyIncomingCall,
@@ -17,6 +18,7 @@ import {
     Classifications,
     ClassifiedSpan,
     ClassifiedSpan2020,
+    ClassLikeDeclaration,
     CodeActionCommand,
     codefix,
     CodeFixAction,
@@ -145,6 +147,7 @@ import {
     isArray,
     isBindingPattern,
     isBlockLike,
+    isClassLike,
     isComputedPropertyName,
     isConstTypeReference,
     IScriptSnapshot,
@@ -329,9 +332,6 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-    ClassLikeDeclaration,
-    BlockLike,
-    isClassLike,
 } from "./_namespaces/ts";
 import * as NavigateTo from "./_namespaces/ts.NavigateTo";
 import * as NavigationBar from "./_namespaces/ts.NavigationBar";
@@ -2073,7 +2073,7 @@ export function createLanguageService(
             return undefined;
         }
 
-        return nodes;   
+        return nodes;
     }
 
     // The algorithm is the following:
@@ -2130,10 +2130,12 @@ export function createLanguageService(
 
     function chooseOverlappingClassLike(span: TextSpan, node: ClassLikeDeclaration, result: Node[]): boolean {
         const overlaps = (n: Node) => textRangeIntersectsWithTextSpan(n, span);
-        if (node.modifiers?.some(overlaps)
+        if (
+            node.modifiers?.some(overlaps)
             || node.name && overlaps(node.name)
             || node.typeParameters?.some(overlaps)
-            || node.heritageClauses?.some(overlaps)) {
+            || node.heritageClauses?.some(overlaps)
+        ) {
             addSourceElement(node, result);
             return true;
         }
@@ -2145,7 +2147,6 @@ export function createLanguageService(
         }
         result.push(...childResult);
         return false;
-
     }
 
     function getSuggestionDiagnostics(fileName: string): DiagnosticWithLocation[] {

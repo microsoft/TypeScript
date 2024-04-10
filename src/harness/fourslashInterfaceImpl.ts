@@ -50,18 +50,17 @@ export class Test {
     }
 
     public getSemanticDiagnostics(): Diagnostic[] {
-        return this.state.getSemanticDiagnostics().map<Diagnostic>(tsDiag =>
-            ({
-                message: ts.flattenDiagnosticMessageText(tsDiag.messageText, "\n"),
-                range: tsDiag.start ? {
-                    fileName: this.state.activeFile.fileName,
-                    pos: tsDiag.start,
-                    end: tsDiag.start + tsDiag.length!,
-                } : undefined,
-                code: tsDiag.code,
-                reportsUnnecessary: tsDiag.reportsUnnecessary ? true : undefined,
-                reportsDeprecated: !!tsDiag.reportsDeprecated ? true : undefined,
-            }));
+        return this.state.getSemanticDiagnostics().map<Diagnostic>(tsDiag => ({
+            message: ts.flattenDiagnosticMessageText(tsDiag.messageText, "\n"),
+            range: tsDiag.start ? {
+                fileName: this.state.activeFile.fileName,
+                pos: tsDiag.start,
+                end: tsDiag.start + tsDiag.length!,
+            } : undefined,
+            code: tsDiag.code,
+            reportsUnnecessary: tsDiag.reportsUnnecessary ? true : undefined,
+            reportsDeprecated: !!tsDiag.reportsDeprecated ? true : undefined,
+        }));
     }
 }
 
@@ -607,7 +606,8 @@ export class Verify extends VerifyNegatable {
     public getRegionSemanticDiagnostics(
         ranges: ts.TextRange[],
         expectedDiagnostics: readonly Diagnostic[],
-        expectedRanges: ts.TextRange[] | undefined) {
+        expectedRanges: ts.TextRange[] | undefined,
+    ) {
         this.state.getRegionSemanticDiagnostics(ranges, expectedDiagnostics, expectedRanges);
     }
 
