@@ -1,7 +1,5 @@
 import assert from "assert";
-import {
-    execFileSync,
-} from "child_process";
+import { execFileSync } from "child_process";
 import {
     readFileSync,
     writeFileSync,

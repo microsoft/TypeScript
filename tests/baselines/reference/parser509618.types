@@ -3,6 +3,7 @@
 === parser509618.ts ===
 declare module ambiModule {
 >ambiModule : typeof ambiModule
+>           : ^^^^^^^^^^^^^^^^^
 
    interface i1 { };
 }

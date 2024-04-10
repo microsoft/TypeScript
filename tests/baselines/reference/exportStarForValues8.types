@@ -11,7 +11,9 @@ export interface A { x }
 export * from "file1"
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === file3.ts ===
 export interface B { x }
@@ -20,7 +22,9 @@ export interface B { x }
 export * from "file1"
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === file4.ts ===
 export interface C { x }
@@ -30,11 +34,15 @@ export * from "file2"
 export * from "file3"
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === file5.ts ===
 export * from "file4"
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

@@ -90,6 +90,7 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
+    FutureSourceFile,
     getAssignmentDeclarationKind,
     getCombinedNodeFlagsAlwaysIncludeJSDoc,
     getDirectoryPath,
@@ -97,6 +98,7 @@ import {
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
     getImpliedNodeFormatForFile,
+    getImpliedNodeFormatForFileWorker,
     getIndentString,
     getJSDocEnumTag,
     getLastChild,
@@ -106,6 +108,7 @@ import {
     getModuleInstanceState,
     getNameOfDeclaration,
     getNodeId,
+    getOriginalNode,
     getPackageNameFromTypesPackageName,
     getPathComponents,
     getRootDeclaration,
@@ -168,6 +171,7 @@ import {
     isFileLevelUniqueName,
     isForInStatement,
     isForOfStatement,
+    isFullSourceFile,
     isFunctionBlock,
     isFunctionDeclaration,
     isFunctionExpression,
@@ -188,6 +192,7 @@ import {
     isInternalModuleImportEqualsDeclaration,
     isJSDoc,
     isJSDocCommentContainingNode,
+    isJSDocImportTag,
     isJSDocLink,
     isJSDocLinkCode,
     isJSDocLinkLike,
@@ -258,6 +263,7 @@ import {
     isWhiteSpaceSingleLine,
     isYieldExpression,
     IterationStatement,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkDisplayPart,
@@ -279,6 +285,7 @@ import {
     ModuleDeclaration,
     ModuleInstanceState,
     ModuleKind,
+    ModuleResolutionHost,
     ModuleResolutionKind,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
@@ -327,7 +334,6 @@ import {
     skipOuterExpressions,
     skipParentheses,
     some,
-    SortKind,
     SourceFile,
     SourceFileLike,
     SourceMapper,
@@ -1245,7 +1251,7 @@ function getAdjustedLocationForDeclaration(node: Node, forRename: boolean) {
     }
 }
 
-function getAdjustedLocationForImportDeclaration(node: ImportDeclaration, forRename: boolean) {
+function getAdjustedLocationForImportDeclaration(node: ImportDeclaration | JSDocImportTag, forRename: boolean) {
     if (node.importClause) {
         if (node.importClause.name && node.importClause.namedBindings) {
             // do not adjust if we have both a name and named bindings
@@ -2323,8 +2329,13 @@ export function createTextSpanFromNode(node: Node, sourceFile?: SourceFile, endN
 
 /** @internal */
 export function createTextSpanFromStringLiteralLikeContent(node: StringLiteralLike) {
-    if (node.isUnterminated) return undefined;
-    return createTextSpanFromBounds(node.getStart() + 1, node.getEnd() - 1);
+    let replacementEnd = node.getEnd() - 1;
+    if (node.isUnterminated) {
+        // we return no replacement range only if unterminated string is empty
+        if (node.getStart() === replacementEnd) return undefined;
+        replacementEnd = node.getEnd();
+    }
+    return createTextSpanFromBounds(node.getStart() + 1, replacementEnd);
 }
 
 /** @internal */
@@ -2527,13 +2538,13 @@ export function quotePreferenceFromString(str: StringLiteral, sourceFile: Source
 }
 
 /** @internal */
-export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
+export function getQuotePreference(sourceFile: SourceFile | FutureSourceFile, preferences: UserPreferences): QuotePreference {
     if (preferences.quotePreference && preferences.quotePreference !== "auto") {
         return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
     }
     else {
         // ignore synthetic import added when importHelpers: true
-        const firstModuleSpecifier = sourceFile.imports &&
+        const firstModuleSpecifier = isFullSourceFile(sourceFile) && sourceFile.imports &&
             find(sourceFile.imports, n => isStringLiteral(n) && !nodeIsSynthesized(n.parent)) as StringLiteral;
         return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
     }
@@ -2574,6 +2585,7 @@ export function isModuleSpecifierLike(node: Node): node is StringLiteralLike {
     return isStringLiteralLike(node) && (
         isExternalModuleReference(node.parent) ||
         isImportDeclaration(node.parent) ||
+        isJSDocImportTag(node.parent) ||
         isRequireCall(node.parent, /*requireStringLiteralLikeArgument*/ false) && node.parent.arguments[0] === node ||
         isImportCall(node.parent) && node.parent.arguments[0] === node
     );
@@ -2620,18 +2632,28 @@ export function findModifier(node: Node, kind: Modifier["kind"]): Modifier | und
 }
 
 /** @internal */
-export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
+export function insertImports(changes: textChanges.ChangeTracker, sourceFile: SourceFile | FutureSourceFile, imports: AnyImportOrRequireStatement | readonly AnyImportOrRequireStatement[], blankLineBetween: boolean, preferences: UserPreferences): void {
     const decl = isArray(imports) ? imports[0] : imports;
     const importKindPredicate: (node: Node) => node is AnyImportOrRequireStatement = decl.kind === SyntaxKind.VariableStatement ? isRequireVariableStatement : isAnyImportSyntax;
     const existingImportStatements = filter(sourceFile.statements, importKindPredicate);
-    let sortKind = isArray(imports) ? OrganizeImports.detectImportDeclarationSorting(imports, preferences) : SortKind.Both;
-    const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+    const { comparer, isSorted } = OrganizeImports.getOrganizeImportsStringComparerWithDetection(existingImportStatements, preferences);
     const sortedNewImports = isArray(imports) ? stableSort(imports, (a, b) => OrganizeImports.compareImportsOrRequireStatements(a, b, comparer)) : [imports];
-    if (!existingImportStatements.length) {
-        changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+    if (!existingImportStatements?.length) {
+        if (isFullSourceFile(sourceFile)) {
+            changes.insertNodesAtTopOfFile(sourceFile, sortedNewImports, blankLineBetween);
+        }
+        else {
+            for (const newImport of sortedNewImports) {
+                // Insert one at a time to send correct original source file for accurate text reuse
+                // when some imports are cloned from existing ones in other files.
+                changes.insertStatementsInNewFile(sourceFile.fileName, [newImport], getOriginalNode(newImport)?.getSourceFile());
+            }
+        }
+        return;
     }
-    else if (existingImportStatements && (sortKind = OrganizeImports.detectImportDeclarationSorting(existingImportStatements, preferences))) {
-        const comparer = OrganizeImports.getOrganizeImportsComparer(preferences, sortKind === SortKind.CaseInsensitive);
+
+    Debug.assert(isFullSourceFile(sourceFile));
+    if (existingImportStatements && isSorted) {
         for (const newImport of sortedNewImports) {
             const insertionIndex = OrganizeImports.getImportDeclarationInsertionIndex(existingImportStatements, newImport, comparer);
             if (insertionIndex === 0) {
@@ -3756,7 +3778,7 @@ export interface PackageJsonImportFilter {
 }
 
 /** @internal */
-export function createPackageJsonImportFilter(fromFile: SourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
+export function createPackageJsonImportFilter(fromFile: SourceFile | FutureSourceFile, preferences: UserPreferences, host: LanguageServiceHost): PackageJsonImportFilter {
     const packageJsons = (
         (host.getPackageJsonsVisibleToFile && host.getPackageJsonsVisibleToFile(fromFile.fileName)) || getPackageJsonsVisibleToFile(fromFile.fileName, host)
     ).filter(p => p.parseable);
@@ -3855,7 +3877,7 @@ export function createPackageJsonImportFilter(fromFile: SourceFile, preferences:
         // from Node core modules or not. We can start by seeing if the user is actually using
         // any node core modules, as opposed to simply having @types/node accidentally as a
         // dependency of a dependency.
-        if (isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
+        if (isFullSourceFile(fromFile) && isSourceFileJS(fromFile) && JsTyping.nodeCoreModules.has(moduleSpecifier)) {
             if (usesNodeCoreModules === undefined) {
                 usesNodeCoreModules = consumesNodeCoreModules(fromFile);
             }
@@ -4116,7 +4138,7 @@ export function isDeprecatedDeclaration(decl: Declaration) {
 }
 
 /** @internal */
-export function shouldUseUriStyleNodeCoreModules(file: SourceFile, program: Program): boolean {
+export function shouldUseUriStyleNodeCoreModules(file: SourceFile | FutureSourceFile, program: Program): boolean {
     const decisionFromFile = firstDefined(file.imports, node => {
         if (JsTyping.nodeCoreModules.has(node.text)) {
             return startsWith(node.text, "node:");
@@ -4287,4 +4309,24 @@ export function isBlockLike(node: Node): node is BlockLike {
         default:
             return false;
     }
+}
+
+/** @internal */
+export function createFutureSourceFile(fileName: string, syntaxModuleIndicator: ModuleKind.ESNext | ModuleKind.CommonJS | undefined, program: Program, moduleResolutionHost: ModuleResolutionHost): FutureSourceFile {
+    const result = getImpliedNodeFormatForFileWorker(fileName, program.getPackageJsonInfoCache?.(), moduleResolutionHost, program.getCompilerOptions());
+    let impliedNodeFormat, packageJsonScope;
+    if (typeof result === "object") {
+        impliedNodeFormat = result.impliedNodeFormat;
+        packageJsonScope = result.packageJsonScope;
+    }
+    return {
+        path: toPath(fileName, program.getCurrentDirectory(), program.getCanonicalFileName),
+        fileName,
+        externalModuleIndicator: syntaxModuleIndicator === ModuleKind.ESNext ? true : undefined,
+        commonJsModuleIndicator: syntaxModuleIndicator === ModuleKind.CommonJS ? true : undefined,
+        impliedNodeFormat,
+        packageJsonScope,
+        statements: emptyArray,
+        imports: emptyArray,
+    };
 }

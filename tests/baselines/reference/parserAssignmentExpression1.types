@@ -3,8 +3,13 @@
 === parserAssignmentExpression1.ts ===
 (foo()) = bar;
 >(foo()) = bar : any
+>              : ^^^
 >(foo()) : any
+>        : ^^^
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 >bar : any
+>    : ^^^
 

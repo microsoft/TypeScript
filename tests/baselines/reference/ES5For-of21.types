@@ -4,8 +4,10 @@
 for (let v of []) {
 >v : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
     for (let _i of []) { }
 >_i : any
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }

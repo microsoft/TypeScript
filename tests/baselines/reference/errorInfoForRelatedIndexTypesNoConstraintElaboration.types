@@ -11,20 +11,30 @@ Symbol count: 105,500 / 105,500 (nearest 500)
 
 class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {
 >I : I<T1, T2>
+>  : ^^^^^^^^^
 >JSX : any
+>    : ^^^
 >JSX : any
+>    : ^^^
 
     M() {
 >M : () => void
+>  : ^^^^^^^^^^
 
         let c1: JSX.IntrinsicElements[T1] = {};
 >c1 : JSX.IntrinsicElements[T1]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 >{} : {}
+>   : ^^
 
         const c2: JSX.IntrinsicElements[T2] = c1;
 >c2 : JSX.IntrinsicElements[T2]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
+>    : ^^^
 >c1 : JSX.IntrinsicElements[T1]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

@@ -1,11 +1,12 @@
 computedEnumMemberSyntacticallyString.ts(4,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 computedEnumMemberSyntacticallyString.ts(5,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 computedEnumMemberSyntacticallyString.ts(6,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
-computedEnumMemberSyntacticallyString.ts(7,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 computedEnumMemberSyntacticallyString.ts(8,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+computedEnumMemberSyntacticallyString.ts(9,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+computedEnumMemberSyntacticallyString.ts(12,9): error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
 
 
-==== computedEnumMemberSyntacticallyString.ts (5 errors) ====
+==== computedEnumMemberSyntacticallyString.ts (6 errors) ====
     const BAR = 2..toFixed(0);
     
     enum Foo {
@@ -18,11 +19,18 @@ computedEnumMemberSyntacticallyString.ts(8,9): error TS18033: Type 'string' is n
         C = (`${BAR}`),
             ~~~~~~~~~~
 !!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
-        D = (`${BAR}}`) as string,
-            ~~~~~~~~~~~~~~~~~~~~~
+    
+        F = BAR,
+            ~~~
 !!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
-        E = `${BAR}`!,
-            ~~~~~~~~~
+        G = 2 + BAR,
+            ~~~~~~~
 !!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+    
+        H = A,
+        I = H + BAR,
+            ~~~~~~~
+!!! error TS18033: Type 'string' is not assignable to type 'number' as required for computed enum member values.
+        J = H
     }
     

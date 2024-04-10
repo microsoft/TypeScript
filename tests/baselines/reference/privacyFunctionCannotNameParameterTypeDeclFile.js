@@ -422,7 +422,6 @@ export declare namespace SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.d.ts]
-/// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
@@ -430,7 +429,6 @@ export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widge
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts]
-/// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
 export declare class publicClassWithWithPrivateParmeterTypes {
     private param1;
     param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1;
@@ -467,3 +465,124 @@ export declare class publicClassWithPrivateModuleParameterTypes2 {
 }
 export declare function publicFunctionWithPrivateModuleParameterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
 export declare function publicFunctionWithPrivateModuleParameterTypes1(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+
+
+//// [DtsFileErrors]
+
+
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(12,20): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(13,48): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(15,35): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(17,32): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(17,74): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(17,116): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(20,80): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(30,20): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(31,48): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(32,35): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(33,32): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(33,98): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(33,164): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts(36,87): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+
+
+==== privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts (14 errors) ====
+    export declare class publicClassWithWithPrivateParmeterTypes {
+        private param1;
+        param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1;
+        static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+        private static myPrivateStaticMethod;
+        myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+        private myPrivateMethod;
+        constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1);
+    }
+    export declare class publicClassWithWithPrivateParmeterTypes1 {
+        private param1;
+        param2: import("GlobalWidgets").Widget3;
+                       ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        static myPublicStaticMethod(param?: import("GlobalWidgets").Widget3): void;
+                                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private static myPrivateStaticMethod;
+        myPublicMethod(param?: import("GlobalWidgets").Widget3): void;
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private myPrivateMethod;
+        constructor(param?: import("GlobalWidgets").Widget3, param1?: import("GlobalWidgets").Widget3, param2?: import("GlobalWidgets").Widget3);
+                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+                                                                             ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+                                                                                                                       ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    }
+    export declare function publicFunctionWithPrivateParmeterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+    export declare function publicFunctionWithPrivateParmeterTypes1(param?: import("GlobalWidgets").Widget3): void;
+                                                                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    export declare class publicClassWithPrivateModuleParameterTypes {
+        private param1;
+        param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+        static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+        myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+        constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2);
+    }
+    export declare class publicClassWithPrivateModuleParameterTypes2 {
+        private param1;
+        param2: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                       ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        static myPublicStaticMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+                                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        myPublicMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+                                      ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        constructor(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param1?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param2?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4);
+                                   ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+                                                                                                     ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+                                                                                                                                                                       ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    }
+    export declare function publicFunctionWithPrivateModuleParameterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+    export declare function publicFunctionWithPrivateModuleParameterTypes1(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+                                                                                          ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    
+==== privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts (0 errors) ====
+    declare module "GlobalWidgets" {
+        class Widget3 {
+            name: string;
+        }
+        function createWidget3(): Widget3;
+        namespace SpecializedGlobalWidget {
+            class Widget4 {
+                name: string;
+            }
+            function createWidget4(): Widget4;
+        }
+    }
+    
+==== privacyFunctionCannotNameParameterTypeDeclFile_Widgets.d.ts (0 errors) ====
+    export declare class Widget1 {
+        name: string;
+    }
+    export declare function createWidget1(): Widget1;
+    export declare namespace SpecializedWidget {
+        class Widget2 {
+            name: string;
+        }
+        function createWidget2(): Widget2;
+    }
+    
+==== privacyFunctionCannotNameParameterTypeDeclFile_exporter.d.ts (0 errors) ====
+    import Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
+    import Widgets1 = require("GlobalWidgets");
+    export declare function createExportedWidget1(): Widgets.Widget1;
+    export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
+    export declare function createExportedWidget3(): Widgets1.Widget3;
+    export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+    

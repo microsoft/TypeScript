@@ -3,7 +3,9 @@
 === parserSymbolIndexer2.ts ===
 class C {
 >C : C
+>  : ^
 
     [s: symbol]: string;
 >s : symbol
+>  : ^^^^^^
 }

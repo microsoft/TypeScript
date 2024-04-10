@@ -3,17 +3,25 @@
 === index.ts ===
 class Task {}
 >Task : Task
+>     : ^^^^
 
 function task(): Task { return new Task(); }
 >task : () => Task
+>     : ^^^^^^    
 >new Task() : Task
+>           : ^^^^
 >Task : typeof Task
+>     : ^^^^^^^^^^^
 
 export const build = task();
 >build : Task
+>      : ^^^^
 >task() : Task
+>       : ^^^^
 >task : () => Task
+>     : ^^^^^^^^^^
 
 export default build;
 >build : Task
+>      : ^^^^
 
