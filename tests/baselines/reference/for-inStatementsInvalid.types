@@ -137,9 +137,9 @@ for (var x in (<T>(x: T) => x)) { }
 >x : string
 >  : ^^^^^^
 >(<T>(x: T) => x) : <T>(x: T) => T
->                 : ^ ^^^^^ ^^^^^^
+>                 : ^ ^^ ^^ ^^^^^^
 ><T>(x: T) => x : <T>(x: T) => T
->               : ^ ^^^^^ ^^^^^^
+>               : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -149,7 +149,7 @@ for (var x in function (x: string, y: number) { return x + y }) { }
 >x : string
 >  : ^^^^^^
 >function (x: string, y: number) { return x + y } : (x: string, y: number) => string
->                                                 : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                                                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : number

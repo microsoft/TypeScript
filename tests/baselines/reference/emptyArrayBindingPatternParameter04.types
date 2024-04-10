@@ -3,7 +3,7 @@
 === emptyArrayBindingPatternParameter04.ts ===
 function f([] = [1,2,3,4]) {
 >f : ([]?: number[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^  ^^^^^^^^^^^^^^^^^^^^
 >[1,2,3,4] : number[]
 >          : ^^^^^^^^
 >1 : 1

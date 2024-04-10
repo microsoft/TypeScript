@@ -117,15 +117,15 @@ var ResultIsNumber7 = ++{ x: "", y: (s: string) => { return s; } };
 >++{ x: "", y: (s: string) => { return s; } } : number
 >                                             : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->                                           : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 >y : (s: string) => string
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             : ^^^^      ^^^^^^^^^^^
+>                             :                      
 >s : string
 >  : ^^^^^^
 >s : string
@@ -161,15 +161,15 @@ var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }++;
 >{ x: "", y: (s: string) => { return s; } }++ : number
 >                                             : ^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->                                           : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 >y : (s: string) => string
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             : ^^^^      ^^^^^^^^^^^
+>                             :                      
 >s : string
 >  : ^^^^^^
 >s : string

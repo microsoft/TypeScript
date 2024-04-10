@@ -13,11 +13,11 @@ var a = x.toExponential();
 >x.toExponential() : string
 >                  : ^^^^^^
 >x.toExponential : (fractionDigits?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 var b = x.hasOwnProperty('toFixed');
 >b : boolean
@@ -25,11 +25,11 @@ var b = x.hasOwnProperty('toFixed');
 >x.hasOwnProperty('toFixed') : boolean
 >                            : ^^^^^^^
 >x.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'toFixed' : "toFixed"
 >          : ^^^^^^^^^
 
@@ -39,7 +39,7 @@ var c = x['toExponential']();
 >x['toExponential']() : string
 >                     : ^^^^^^
 >x['toExponential'] : (fractionDigits?: number) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >'toExponential' : "toExponential"
@@ -51,7 +51,7 @@ var d = x['hasOwnProperty']('toFixed');
 >x['hasOwnProperty']('toFixed') : boolean
 >                               : ^^^^^^^
 >x['hasOwnProperty'] : (v: PropertyKey) => boolean
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^           ^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >'hasOwnProperty' : "hasOwnProperty"

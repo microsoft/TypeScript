@@ -8,7 +8,7 @@ interface F {
 }
 export function doRemove(dds: F | F[]) {
 >doRemove : (dds: F | F[]) => F[]
->         : ^^^^^^       ^^^^^^^^
+>         : ^   ^^       ^^^^^^^^
 >dds : F | F[]
 >    : ^^^^^^^
 
@@ -18,11 +18,11 @@ export function doRemove(dds: F | F[]) {
 >Array.isArray(dds) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >dds : F | F[]
 >    : ^^^^^^^
 

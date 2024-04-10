@@ -4,18 +4,18 @@
 export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 >then : <U, W>(callback: (x: T) => IPromise<U, W>) => IPromise<U, W>
->     : ^ ^^ ^^^^^^^^^^^^                        ^^^^^              
+>     : ^ ^^ ^^        ^^                        ^^^^^              
 >callback : (x: T) => IPromise<U, W>
->         : ^^^^ ^^^^^              
+>         : ^ ^^ ^^^^^              
 >x : T
 >  : ^
 }
 export interface Promise<T, V> {
     then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
 >then : <U, W>(callback: (x: T) => Promise<T, U>) => Promise<T, W>
->     : ^ ^^ ^^^^^^^^^^^^                       ^^^^^             
+>     : ^ ^^ ^^        ^^                       ^^^^^             
 >callback : (x: T) => Promise<T, U>
->         : ^^^^ ^^^^^             
+>         : ^ ^^ ^^^^^             
 >x : T
 >  : ^
 }

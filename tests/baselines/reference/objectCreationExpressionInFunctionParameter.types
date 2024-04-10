@@ -12,7 +12,7 @@ class A {
 }
 function foo(x = new A(123)) { //should error, 123 is not string
 >foo : (x?: A) => void
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >x : A
 >  : ^
 >new A(123) : A

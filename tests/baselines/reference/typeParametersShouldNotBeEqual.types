@@ -3,7 +3,7 @@
 === typeParametersShouldNotBeEqual.ts ===
 function ff<T, U>(x: T, y: U) {
 >ff : <T, U>(x: T, y: U) => void
->   : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

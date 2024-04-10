@@ -7,7 +7,7 @@ import React = require('react');
 
 declare function Component<T>(props: T) : JSX.Element;
 >Component : <T>(props: T) => JSX.Element
->          : ^ ^^^^^^^^^ ^^^^^           
+>          : ^ ^^     ^^ ^^^^^           
 >props : T
 >      : ^
 >JSX : any
@@ -15,9 +15,9 @@ declare function Component<T>(props: T) : JSX.Element;
 
 const decorator = function <U>(props: U) {
 >decorator : <U>(props: U) => JSX.Element
->          : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^
 >function <U>(props: U) {    return <Component {...props} />;} : <U>(props: U) => JSX.Element
->                                                              : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>                                                              :                             
 >props : U
 >      : ^
 
@@ -25,16 +25,16 @@ const decorator = function <U>(props: U) {
 ><Component {...props} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Component : <T>(props: T) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^
 >props : U
 >      : ^
 }
 
 const decorator1 = function <U extends {x: string}>(props: U) {
 >decorator1 : <U extends { x: string; }>(props: U) => JSX.Element
->           : ^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^      ^^^^^     ^^ ^^^^^^^^^^^^^^^^
 >function <U extends {x: string}>(props: U) {    return <Component {...props} />;} : <U extends { x: string; }>(props: U) => JSX.Element
->                                                                                  : ^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>                                                                                  :                                                    
 >x : string
 >  : ^^^^^^
 >props : U
@@ -44,7 +44,7 @@ const decorator1 = function <U extends {x: string}>(props: U) {
 ><Component {...props} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Component : <T>(props: T) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^
 >props : U
 >      : ^
 }

@@ -11,7 +11,7 @@
 
     function foo(p: string[]): string[] {
 >foo : (p: string[]) => string[]
->    : ^^^^        ^^^^^        
+>    : ^ ^^        ^^^^^        
 >p : string[]
 >  : ^^^^^^^^
 
@@ -22,7 +22,7 @@
 
     function bar(p: string[]): string[] {
 >bar : (p: string[]) => string[]
->    : ^^^^        ^^^^^        
+>    : ^ ^^        ^^^^^        
 >p : string[]
 >  : ^^^^^^^^
 
@@ -47,7 +47,7 @@
 >foo(a1!) : string[]
 >         : ^^^^^^^^
 >foo : (p: string[]) => string[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^^^^^
 >a1! : string[]
 >    : ^^^^^^^^
 >a1 : string[]
@@ -63,7 +63,7 @@
 >bar(a2) : string[]
 >        : ^^^^^^^^
 >bar : (p: string[]) => string[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^        ^^^^^^^^^^^^^
 >a2 : string[]
 >   : ^^^^^^^^
     }

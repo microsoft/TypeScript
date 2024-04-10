@@ -10,9 +10,9 @@ type Foo<T extends any[]> = {
 
 function test<T extends any[]>(fn: (...args: Foo<T>) => void) {
 >test : <T extends any[]>(fn: (...args: Foo<T>) => void) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^  ^^                         ^^^^^^^^^
 >fn : (...args: Foo<T>) => void
->   : ^^^^^^^^^^      ^^^^^    
+>   : ^^^^    ^^      ^^^^^    
 >args : Foo<T>
 >     : ^^^^^^
 
@@ -27,7 +27,7 @@ function test<T extends any[]>(fn: (...args: Foo<T>) => void) {
 >fn(...arr) : void
 >           : ^^^^
 >fn : (...args: Foo<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^      ^^^^^^^^^
 >...arr : any
 >arr : Foo<T>
 >    : ^^^^^^

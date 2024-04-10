@@ -74,7 +74,7 @@ async function f32(): Promise<number> {
 
 declare function f(a: () => undefined): void;
 >f : (a: () => undefined) => void
->  : ^^^^               ^^^^^    
+>  : ^ ^^               ^^^^^    
 >a : () => undefined
 >  : ^^^^^^         
 
@@ -82,7 +82,7 @@ f(() => { });
 >f(() => { }) : void
 >             : ^^^^
 >f : (a: () => undefined) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^
 >() => { } : () => undefined
 >          : ^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ f((): undefined => { });
 >f((): undefined => { }) : void
 >                        : ^^^^
 >f : (a: () => undefined) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^
 >(): undefined => { } : () => undefined
 >                     : ^^^^^^         
 
@@ -104,7 +104,7 @@ const g2 = (): undefined => { };
 >g2 : () => undefined
 >   : ^^^^^^         
 >(): undefined => { } : () => undefined
->                     : ^^^^^^         
+>                     :                
 
 function h1() {
 >h1 : () => void
@@ -115,7 +115,7 @@ f(h1);  // Error
 >f(h1) : void
 >      : ^^^^
 >f : (a: () => undefined) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^
 >h1 : () => void
 >   : ^^^^^^^^^^
 
@@ -128,7 +128,7 @@ f(h2);
 >f(h2) : void
 >      : ^^^^
 >f : (a: () => undefined) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^
 >h2 : () => undefined
 >   : ^^^^^^^^^^^^^^^
 

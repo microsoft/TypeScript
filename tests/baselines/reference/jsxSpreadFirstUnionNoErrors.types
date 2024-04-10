@@ -21,9 +21,9 @@ type InfoProps =
 
 const Info = (props: InfoProps) =>
 >Info : (props: InfoProps) => JSX.Element
->     : ^^^^^^^^         ^^^^^^^^^^^^^^^^
+>     : ^     ^^         ^^^^^^^^^^^^^^^^
 >(props: InfoProps) =>props.status === "hidden"  ? <noscript />  : <div>{props.content}</div> : (props: InfoProps) => JSX.Element
->                                                                                             : ^^^^^^^^         ^^^^^^^^^^^^^^^^
+>                                                                                             :                                  
 >props : InfoProps
 >      : ^^^^^^^^^
 
@@ -67,7 +67,7 @@ const a = <Info status="hidden" />;
 ><Info status="hidden" /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Info : (props: InfoProps) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^         ^^^^^^^^^^^^^^^^
 >status : "hidden"
 >       : ^^^^^^^^
 
@@ -77,7 +77,7 @@ const b = <Info status="visible" content="hello world" />;
 ><Info status="visible" content="hello world" /> : JSX.Element
 >                                                : ^^^^^^^^^^^
 >Info : (props: InfoProps) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^         ^^^^^^^^^^^^^^^^
 >status : "visible"
 >       : ^^^^^^^^^
 >content : string
@@ -93,7 +93,7 @@ const c = <Info {...infoProps} />;
 ><Info {...infoProps} /> : JSX.Element
 >                        : ^^^^^^^^^^^
 >Info : (props: InfoProps) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^         ^^^^^^^^^^^^^^^^
 >infoProps : InfoProps
 >          : ^^^^^^^^^
 

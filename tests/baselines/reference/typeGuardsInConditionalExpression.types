@@ -10,7 +10,7 @@
 
 function foo(x: number | string) {
 >foo : (x: number | string) => number
->    : ^^^^               ^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -42,7 +42,7 @@ function foo(x: number | string) {
 }
 function foo2(x: number | string) {
 >foo2 : (x: number | string) => string | number
->     : ^^^^               ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -80,7 +80,7 @@ function foo2(x: number | string) {
 }
 function foo3(x: number | string) {
 >foo3 : (x: number | string) => number
->     : ^^^^               ^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -118,7 +118,7 @@ function foo3(x: number | string) {
 }
 function foo4(x: number | string) {
 >foo4 : (x: number | string) => string | number
->     : ^^^^               ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ function foo4(x: number | string) {
 }
 function foo5(x: number | string) {
 >foo5 : (x: number | string) => string
->     : ^^^^               ^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -194,7 +194,7 @@ function foo5(x: number | string) {
 }
 function foo6(x: number | string) {
 >foo6 : (x: number | string) => string | number
->     : ^^^^               ^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -245,7 +245,7 @@ function foo6(x: number | string) {
 }
 function foo7(x: number | string | boolean) {
 >foo7 : (x: number | string | boolean) => boolean
->     : ^^^^                         ^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -295,7 +295,7 @@ function foo7(x: number | string | boolean) {
 }
 function foo8(x: number | string | boolean) {
 >foo8 : (x: number | string | boolean) => boolean
->     : ^^^^                         ^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -365,7 +365,7 @@ function foo8(x: number | string | boolean) {
 }
 function foo9(x: number | string) {
 >foo9 : (x: number | string) => boolean
->     : ^^^^               ^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -422,7 +422,7 @@ function foo9(x: number | string) {
 }
 function foo10(x: number | string | boolean) {
 >foo10 : (x: number | string | boolean) => string
->      : ^^^^                         ^^^^^^^^^^^
+>      : ^ ^^                         ^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -477,15 +477,15 @@ function foo10(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 }
 function foo11(x: number | string | boolean) {
 >foo11 : (x: number | string | boolean) => string | number
->      : ^^^^                         ^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -554,7 +554,7 @@ function foo11(x: number | string | boolean) {
 }
 function foo12(x: number | string | boolean) {
 >foo12 : (x: number | string | boolean) => number
->      : ^^^^                         ^^^^^^^^^^^
+>      : ^ ^^                         ^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -593,11 +593,11 @@ function foo12(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 

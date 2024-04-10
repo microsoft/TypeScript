@@ -39,7 +39,7 @@ interface IFoo {
 
 function nFoo(x: IFoo) {}
 >nFoo : (x: IFoo) => void
->     : ^^^^    ^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^
 >x : IFoo
 >  : ^^^^
 
@@ -48,7 +48,7 @@ nFoo(q); // for comparison
 >nFoo(q) : void
 >        : ^^^^
 >nFoo : (x: IFoo) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^
 >q : { foob: string; }
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -56,7 +56,7 @@ nFoo(B);
 >nFoo(B) : void
 >        : ^^^^
 >nFoo : (x: IFoo) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^ ^^    ^^^^^^^^^
 >B : { foob: string; }
 >  : ^^^^^^^^^^^^^^^^^
 

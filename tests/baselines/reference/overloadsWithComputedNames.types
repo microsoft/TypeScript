@@ -8,7 +8,7 @@ class Person {
 
     ["B"](a: number): string;
 >["B"] : (a: number) => string
->      : ^^^^      ^^^^^      
+>      : ^ ^^      ^^^^^      
 >"B" : "B"
 >    : ^^^
 >a : number
@@ -16,7 +16,7 @@ class Person {
 
     ["A"](a: string|number): number | string {
 >["A"] : (a: string | number) => number | string
->      : ^^^^               ^^^^^               
+>      : ^ ^^               ^^^^^               
 >"A" : "A"
 >    : ^^^
 >a : string | number
@@ -39,11 +39,11 @@ p.A(0)
 >p.A(0) : string | number
 >       : ^^^^^^^^^^^^^^^
 >p.A : (a: string | number) => string | number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >p : Person
 >  : ^^^^^^
 >A : (a: string | number) => string | number
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -51,11 +51,11 @@ p.B(0)
 >p.B(0) : string
 >       : ^^^^^^
 >p.B : (a: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >p : Person
 >  : ^^^^^^
 >B : (a: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

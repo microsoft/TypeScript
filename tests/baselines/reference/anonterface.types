@@ -11,9 +11,9 @@ module M {
 
         m(fn:{ (n:number):string; },n2:number):string {
 >m : (fn: { (n: number): string; }, n2: number) => string
->  : ^^^^^                        ^^^^^^      ^^^^^      
+>  : ^  ^^                        ^^  ^^      ^^^^^      
 >fn : (n: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >n2 : number
@@ -23,7 +23,7 @@ module M {
 >fn(n2) : string
 >       : ^^^^^^
 >fn : (n: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >n2 : number
 >   : ^^^^^^
         }
@@ -45,14 +45,14 @@ var c=new M.C();
 c.m(function(n) { return "hello: "+n; },18);
 >c.m(function(n) { return "hello: "+n; },18) : string
 >                                            : ^^^^^^
->c.m : (fn: (n: number) => string, n2: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c.m : (fn: { (n: number): string; }, n2: number) => string
+>    : ^  ^^                        ^^  ^^      ^^^^^^^^^^^
 >c : M.C
 >  : ^^^
->m : (fn: (n: number) => string, n2: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m : (fn: { (n: number): string; }, n2: number) => string
+>  : ^  ^^                        ^^  ^^      ^^^^^^^^^^^
 >function(n) { return "hello: "+n; } : (n: number) => string
->                                    : ^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >"hello: "+n : string

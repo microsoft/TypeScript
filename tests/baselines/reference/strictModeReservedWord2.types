@@ -9,7 +9,7 @@ interface public { }
 interface implements {
     foo(package, protected);
 >foo : (package: any, protected: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^         ^^^^^^^^^^^^^
 >package : any
 >        : ^^^
 >protected : any

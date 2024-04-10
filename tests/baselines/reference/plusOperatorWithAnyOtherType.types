@@ -27,19 +27,19 @@ var obj: () => {}
 
 var obj1 = { x: (s: string) => { }, y: (s1) => { }};
 >obj1 : { x: (s: string) => void; y: (s1: any) => void; }
->     : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^      ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >{ x: (s: string) => { }, y: (s1) => { }} : { x: (s: string) => void; y: (s1: any) => void; }
->                                         : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^                   ^^^^^                 ^^^
 >x : (s: string) => void
->  : ^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >(s: string) => { } : (s: string) => void
->                   : ^^^^      ^^^^^^^^^
+>                   :                    
 >s : string
 >  : ^^^^^^
 >y : (s1: any) => void
->  : ^^^^^^^^^^^^^^^^^
+>  : ^  ^^^^^^^^^^^^^^
 >(s1) => { } : (s1: any) => void
->            : ^^^^^^^^^^^^^^^^^
+>            :                  
 >s1 : any
 >   : ^^^
 
@@ -139,7 +139,7 @@ var ResultIsNumber6 = +obj1;
 >+obj1 : number
 >      : ^^^^^^
 >obj1 : { x: (s: string) => void; y: (s1: any) => void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^      ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 
 // any type literal
 var ResultIsNumber7 = +undefined;
@@ -175,11 +175,11 @@ var ResultIsNumber10 = +obj1.x;
 >+obj1.x : number
 >        : ^^^^^^
 >obj1.x : (s: string) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >obj1 : { x: (s: string) => void; y: (s1: any) => void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^      ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >x : (s: string) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 
 var ResultIsNumber11 = +obj1.y;
 >ResultIsNumber11 : number
@@ -187,11 +187,11 @@ var ResultIsNumber11 = +obj1.y;
 >+obj1.y : number
 >        : ^^^^^^
 >obj1.y : (s1: any) => void
->       : ^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^^^^^
 >obj1 : { x: (s: string) => void; y: (s1: any) => void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^ ^^      ^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >y : (s1: any) => void
->  : ^^^^^^^^^^^^^^^^^
+>  : ^  ^^^^^^^^^^^^^^
 
 var ResultIsNumber12 = +objA.a;
 >ResultIsNumber12 : number

@@ -83,7 +83,7 @@ declare namespace lambdaTester {
 
         event(event: HandlerEvent<T>): this;
 >event : (event: HandlerEvent<T>) => this
->      : ^^^^^^^^               ^^^^^    
+>      : ^     ^^               ^^^^^    
 >event : HandlerEvent<T>
 >      : ^^^^^^^^^^^^^^^
     }

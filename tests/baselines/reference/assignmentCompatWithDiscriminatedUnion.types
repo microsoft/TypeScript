@@ -430,13 +430,13 @@ namespace GH30170 {
     }
     function draw(val: Blue | Yellow) { }
 >draw : (val: Blue | Yellow) => void
->     : ^^^^^^             ^^^^^^^^^
+>     : ^   ^^             ^^^^^^^^^
 >val : Blue | Yellow
 >    : ^^^^^^^^^^^^^
 
     function drawWithColor(currentColor: 'blue' | 'yellow' | undefined) {
->drawWithColor : (currentColor: 'blue' | 'yellow' | undefined) => void
->              : ^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>drawWithColor : (currentColor: "blue" | "yellow" | undefined) => void
+>              : ^            ^^                             ^^^^^^^^^
 >currentColor : "blue" | "yellow"
 >             : ^^^^^^^^^^^^^^^^^
 
@@ -444,7 +444,7 @@ namespace GH30170 {
 >draw({ color: currentColor }) : void
 >                              : ^^^^
 >draw : (val: Blue | Yellow) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^             ^^^^^^^^^
 >{ color: currentColor } : { color: "blue" | "yellow"; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >color : "blue" | "yellow"
@@ -562,7 +562,7 @@ namespace GH18421 {
 
     function makeNewThing(thingType: ThingType): Thing {
 >makeNewThing : (thingType: ThingType) => Thing
->             : ^^^^^^^^^^^^         ^^^^^     
+>             : ^         ^^         ^^^^^     
 >thingType : ThingType
 >          : ^^^^^^^^^
 
@@ -595,7 +595,7 @@ namespace GH15907 {
 
     function dispatchAction(action: Action): void {
 >dispatchAction : (action: Action) => void
->               : ^^^^^^^^^      ^^^^^    
+>               : ^      ^^      ^^^^^    
 >action : Action
 >       : ^^^^^^
 
@@ -611,7 +611,7 @@ namespace GH15907 {
 >dispatchAction({ type : (active? 'disactivate' : 'activate') }) : void
 >                                                                : ^^^^
 >dispatchAction : (action: Action) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^      ^^      ^^^^^^^^^
 >{ type : (active? 'disactivate' : 'activate') } : { type: "activate" | "disactivate"; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "activate" | "disactivate"
@@ -649,7 +649,7 @@ namespace GH20889 {
 
     function foo(obj1: AU) {
 >foo : (obj1: AU) => void
->    : ^^^^^^^  ^^^^^^^^^
+>    : ^    ^^  ^^^^^^^^^
 >obj1 : AU
 >     : ^^
 

@@ -16,7 +16,7 @@ type Boxified<T> = {
 
 function boxify<T>(obj: T): Boxified<T> {
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^^^^^^ ^^^^^           
+>       : ^ ^^   ^^ ^^^^^           
 >obj : T
 >    : ^
 
@@ -94,7 +94,7 @@ type C = { c: string };
 
 function f1(x: A | B | C | undefined) {
 >f1 : (x: A | B | C | undefined) => Boxified<A | B | C | undefined>
->   : ^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : A | B | C | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -102,7 +102,7 @@ function f1(x: A | B | C | undefined) {
 >boxify(x) : Boxified<A | B | C | undefined>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >x : A | B | C | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^
 }

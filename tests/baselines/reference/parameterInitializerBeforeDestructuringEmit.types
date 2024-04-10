@@ -11,7 +11,7 @@ interface Foo {
 
 function foobar({ bar = {}, ...opts }: Foo = {}) {
 >foobar : ({ bar, ...opts }?: Foo) => void
->       : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
+>       : ^                ^^^   ^^^^^^^^^
 >bar : any
 >    : ^^^
 >{} : {}

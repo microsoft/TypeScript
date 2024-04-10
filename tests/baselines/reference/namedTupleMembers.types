@@ -150,7 +150,7 @@ export const func = null as any as Func<SegmentAnnotated>;
 
 export function useState<T>(initial: T): [value: T, setter: (T) => void] {
 >useState : <T>(initial: T) => [value: T, setter: (T: any) => void]
->         : ^ ^^^^^^^^^^^ ^^^^^                       ^^^          
+>         : ^ ^^       ^^ ^^^^^                       ^^^          
 >initial : T
 >        : ^
 >T : any
@@ -166,7 +166,7 @@ export type Iter = Func<[step: number, iterations: number]>;
 
 export function readSegment([length, count]: [number, number]) {}
 >readSegment : ([length, count]: [number, number]) => void
->            : ^^^^^^^^^^^^^^^^^^                ^^^^^^^^^
+>            : ^               ^^                ^^^^^^^^^
 >length : number
 >       : ^^^^^^
 >count : number
@@ -180,7 +180,7 @@ export const val = null as any as Parameters<typeof readSegment>[0];
 >                                                 : ^^^^^^^^^^^^^^^^
 >null as any : any
 >readSegment : ([length, count]: [number, number]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^               ^^                ^^^^^^^^^
 
 export type RecursiveTupleA = [initial: string, next: RecursiveTupleA];
 >RecursiveTupleA : RecursiveTupleA
@@ -248,13 +248,13 @@ y = x;
 
 declare function f<T extends any[]>(...x: T): T;
 >f : <T extends any[]>(...x: T) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g(elem: object, index: number): object;
 >g : (elem: object, index: number) => object
->  : ^^^^^^^      ^^^^^^^^^      ^^^^^      
+>  : ^    ^^      ^^     ^^      ^^^^^      
 >elem : object
 >     : ^^^^^^
 >index : number
@@ -262,7 +262,7 @@ declare function g(elem: object, index: number): object;
 
 declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^ ^^^^^^^^^^^^^^^^^^^     ^^^^^   ^^^^^ ^^^^^             
+>                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^   ^^ ^^ ^^^^^             
 >args : any[]
 >     : ^^^^^
 >x : T
@@ -274,13 +274,13 @@ export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tup
 >f(getArgsForInjection(g)) : [[elem: object, index: number]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends any[]>(...x: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >getArgsForInjection(g) : [elem: object, index: number]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
 >g : (elem: object, index: number) => object
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 
 export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments list re-spread
 >argumentsOfG : [elem: object, index: number]
@@ -288,13 +288,13 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 >f(...getArgsForInjection(g)) : [elem: object, index: number]
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends any[]>(...x: T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >...getArgsForInjection(g) : number | object
 >                          : ^^^^^^^^^^^^^^^
 >getArgsForInjection(g) : [elem: object, index: number]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
 >g : (elem: object, index: number) => object
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 

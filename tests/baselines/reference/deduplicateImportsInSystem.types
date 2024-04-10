@@ -29,11 +29,11 @@ console.log(A + B + C + D + E + F)
 >console.log(A + B + C + D + E + F) : void
 >                                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >A + B + C + D + E + F : any
 >                      : ^^^
 >A + B + C + D + E : any

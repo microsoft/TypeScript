@@ -49,7 +49,7 @@ else {
 
 function f1<T>(x: T) {
 >f1 : <T>(x: T) => void
->   : ^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -74,7 +74,7 @@ function f1<T>(x: T) {
 
 function f2<T extends object>(x: T) {
 >f2 : <T extends object>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -176,9 +176,9 @@ else {
 // Repro from #50567
 const foo = (value: unknown): string => {
 >foo : (value: unknown) => string
->    : ^^^^^^^^       ^^^^^      
+>    : ^     ^^       ^^^^^      
 >(value: unknown): string => {  if (!value) {      return 'foo';  }  if (value === 'xyz') {      return value; // Type '{}' is not assignable to type 'string'.  }  return '';} : (value: unknown) => string
->                                                                                                                                                                               : ^^^^^^^^       ^^^^^      
+>                                                                                                                                                                               :                           
 >value : unknown
 >      : ^^^^^^^
 

@@ -44,12 +44,12 @@ function f1() {
 >                      : ^^^^^^^
 >a.toFixed(0) : string
 >             : ^^^^^^
->a.toFixed : (fractionDigits?: number | undefined) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 >"123" : "123"
@@ -753,7 +753,7 @@ const main = () => {
 >main : () => void
 >     : ^^^^^^^^^^
 >() => {    let hoge: string | undefined = undefined;    try {        hoge = 'hoge!';        return;    }    catch {        return;    }    finally {        if (hoge) {            hoge.length;        }        return;    }} : () => void
->                                                                                                                                                                                                                              : ^^^^^^^^^^
+>                                                                                                                                                                                                                              :           
 
     let hoge: string | undefined = undefined;
 >hoge : string | undefined
@@ -843,7 +843,7 @@ type State = { tag: "one" } | { tag: "two" } | { tag: "three" };
 
 function notallowed(arg: number) {
 >notallowed : (arg: number) => void
->           : ^^^^^^      ^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 
@@ -925,11 +925,11 @@ function notallowed(arg: number) {
 >console.log(state.tag) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >state.tag : "three"
 >          : ^^^^^^^
 >state : { tag: "three"; }

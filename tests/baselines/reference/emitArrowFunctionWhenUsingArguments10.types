@@ -15,7 +15,7 @@ function f() {
 >a : () => () => IArguments
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => arguments : () => () => IArguments
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>                      :                       
 >() => arguments : () => IArguments
 >                : ^^^^^^^^^^^^^^^^
 >arguments : IArguments

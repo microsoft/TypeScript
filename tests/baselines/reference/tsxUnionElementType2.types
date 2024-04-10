@@ -7,7 +7,7 @@ import React = require('react');
 
 function SFC1(prop: { x: number }) {
 >SFC1 : (prop: { x: number; }) => JSX.Element
->     : ^^^^^^^              ^^^^^^^^^^^^^^^^
+>     : ^    ^^              ^^^^^^^^^^^^^^^^
 >prop : { x: number; }
 >     : ^^^^^      ^^^
 >x : number
@@ -25,7 +25,7 @@ function SFC1(prop: { x: number }) {
 
 function SFC2(prop: { x: boolean }) {
 >SFC2 : (prop: { x: boolean; }) => JSX.Element
->     : ^^^^^^^               ^^^^^^^^^^^^^^^^
+>     : ^    ^^               ^^^^^^^^^^^^^^^^
 >prop : { x: boolean; }
 >     : ^^^^^       ^^^
 >x : boolean
@@ -42,19 +42,19 @@ function SFC2(prop: { x: boolean }) {
 
 var SFCComp = SFC1 || SFC2;
 >SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^^^^^^^^^
 >SFC1 || SFC2 : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^                                     ^^^^^                                      ^
 >SFC1 : (prop: { x: number; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^              ^^^^^^^^^^^^^^^^
 >SFC2 : (prop: { x: boolean; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^               ^^^^^^^^^^^^^^^^
 
 <SFCComp x={"hi"}/>
 ><SFCComp x={"hi"}/> : JSX.Element
 >                    : ^^^^^^^^^^^
 >SFCComp : ((prop: { x: number; }) => JSX.Element) | ((prop: { x: boolean; }) => JSX.Element)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^    ^^              ^^^^^^^^^^^^^^^^^^^^^^    ^^               ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"hi" : "hi"

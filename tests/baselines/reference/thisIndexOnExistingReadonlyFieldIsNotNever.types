@@ -18,7 +18,7 @@ declare class Component<P, S = {}> {
 interface CoachMarkAnchorProps<C> {
     anchorRef?: (anchor: C) => void;
 >anchorRef : ((anchor: C) => void) | undefined
->          : ^^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
+>          : ^^      ^^ ^^^^^    ^^^^^^^^^^^^^
 >anchor : C
 >       : ^
 }
@@ -32,7 +32,7 @@ class CoachMarkAnchorDecorator {
 
     decorateComponent<P>(anchor: P) {
 >decorateComponent : <P>(anchor: P) => typeof CoachMarkAnchor
->                  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >anchor : P
 >       : ^
 
@@ -46,9 +46,9 @@ class CoachMarkAnchorDecorator {
 
             private _onAnchorRef = (anchor: AnchorType<P>) => {
 >_onAnchorRef : (anchor: AnchorType<P>) => void
->             : ^^^^^^^^^             ^^^^^^^^^
+>             : ^      ^^             ^^^^^^^^^
 >(anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            } : (anchor: AnchorType<P>) => void
->                                                                                                                                                                                        : ^^^^^^^^^             ^^^^^^^^^
+>                                                                                                                                                                                        :                                
 >anchor : AnchorType<P>
 >       : ^^^^^^^^^^^^^
 
@@ -74,7 +74,7 @@ class CoachMarkAnchorDecorator {
 >anchorRef(anchor) : void
 >                  : ^^^^
 >anchorRef : (anchor: AnchorType<P>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >anchor : AnchorType<P>
 >       : ^^^^^^^^^^^^^
                 }

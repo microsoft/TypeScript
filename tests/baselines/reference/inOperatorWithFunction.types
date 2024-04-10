@@ -3,9 +3,9 @@
 === inOperatorWithFunction.ts ===
 var fn = function (val: boolean) { return val; }
 >fn : (val: boolean) => boolean
->   : ^^^^^^       ^^^^^^^^^^^^
+>   : ^   ^^       ^^^^^^^^^^^^
 >function (val: boolean) { return val; } : (val: boolean) => boolean
->                                        : ^^^^^^       ^^^^^^^^^^^^
+>                                        :                          
 >val : boolean
 >    : ^^^^^^^
 >val : boolean
@@ -15,7 +15,7 @@ fn("a" in { "a": true });
 >fn("a" in { "a": true }) : boolean
 >                         : ^^^^^^^
 >fn : (val: boolean) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^       ^^^^^^^^^^^^
 >"a" in { "a": true } : boolean
 >                     : ^^^^^^^
 >"a" : "a"

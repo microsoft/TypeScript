@@ -93,14 +93,14 @@ var b4 = (!b4) && b4; // expected boolean here. actually 'any'
 // (x:string) => any
 var f = (x: string) => f(x);
 >f : (x: string) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >(x: string) => f(x) : (x: string) => any
->                    : ^^^^      ^^^^^^^^
+>                    :                   
 >x : string
 >  : ^^^^^^
 >f(x) : any
 >f : (x: string) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >x : string
 >  : ^^^^^^
 

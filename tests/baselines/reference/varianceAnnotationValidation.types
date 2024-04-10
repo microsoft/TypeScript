@@ -12,7 +12,7 @@ interface Controller<out T> {
 
 	run: (animal: T) => void;
 >run : (animal: T) => void
->    : ^^^^^^^^^ ^^^^^    
+>    : ^      ^^ ^^^^^    
 >animal : T
 >       : ^
 }

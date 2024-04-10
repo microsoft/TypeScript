@@ -5,7 +5,7 @@
 
 function testNonNullInference(numbers: number[]) {
 >testNonNullInference : (numbers: number[]) => number
->                     : ^^^^^^^^^^        ^^^^^^^^^^^
+>                     : ^       ^^        ^^^^^^^^^^^
 >numbers : number[]
 >        : ^^^^^^^^
 
@@ -52,7 +52,7 @@ function testNonNullInference(numbers: number[]) {
 
 function testNonNullInferenceWithArrays(numbers: number[]) {
 >testNonNullInferenceWithArrays : (numbers: number[]) => number[]
->                               : ^^^^^^^^^^        ^^^^^^^^^^^^^
+>                               : ^       ^^        ^^^^^^^^^^^^^
 >numbers : number[]
 >        : ^^^^^^^^
 
@@ -90,11 +90,11 @@ function testNonNullInferenceWithArrays(numbers: number[]) {
 >arr.push(n) : number
 >            : ^^^^^^
 >arr.push : (...items: any[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^^^
 >arr : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 

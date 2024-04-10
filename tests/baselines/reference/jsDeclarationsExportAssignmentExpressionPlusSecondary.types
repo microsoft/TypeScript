@@ -28,7 +28,7 @@ module.exports = {
 >module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^                         ^^^
 >{    thing: "ok",    also: "ok",    desc: {        item: "ok"    }} : { thing: string; also: string; desc: { item: string; }; }
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,9 +67,9 @@ module.exports.Strings = Strings;
 >module : { exports: { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { thing: string; also: string; desc: { item: string; }; Strings: { a: string; b: string; }; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^                         ^^^
 >Strings : { a: string; b: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Strings : { a: string; b: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        :                          
 

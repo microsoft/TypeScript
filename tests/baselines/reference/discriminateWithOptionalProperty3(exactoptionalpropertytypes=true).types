@@ -54,7 +54,7 @@ type CoercedVariableValues =
 
 declare function getVariableValues(inputs: {
 >getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
->                  : ^^^^^^^^^                                         ^^^^^                     
+>                  : ^      ^^                                         ^^^^^                     
 >inputs : { readonly [variable: string]: unknown; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -66,7 +66,7 @@ declare function getVariableValues(inputs: {
 
 export function buildExecutionContext(
 >buildExecutionContext : (args: ExecutionArgs) => ReadonlyArray<GraphQLError> | ExecutionContext
->                      : ^^^^^^^             ^^^^^                                              
+>                      : ^    ^^             ^^^^^                                              
 
   args: ExecutionArgs,
 >args : ExecutionArgs
@@ -87,7 +87,7 @@ export function buildExecutionContext(
 >getVariableValues(rawVariableValues ?? {}) : CoercedVariableValues
 >                                           : ^^^^^^^^^^^^^^^^^^^^^
 >getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^      ^^                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rawVariableValues ?? {} : { readonly [variable: string]: unknown; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rawVariableValues : Maybe<{ readonly [variable: string]: unknown; }>
@@ -120,7 +120,7 @@ export function buildExecutionContext(
 >variableValues : { [variable: string]: unknown; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coercedVariableValues.coerced : { [variable: string]: unknown; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              :                                 
 >coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coerced : { [variable: string]: unknown; }

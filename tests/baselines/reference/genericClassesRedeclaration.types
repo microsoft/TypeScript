@@ -21,7 +21,7 @@ declare module TypeScript {
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->    : ^^^^^^^^      ^^^^^^^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -29,7 +29,7 @@ declare module TypeScript {
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->            : ^^^^^^^^      ^^^^^^^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^   ^^      ^^    ^^ ^^^       ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -37,9 +37,9 @@ declare module TypeScript {
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
->    : ^^^^^^^                                           ^^^^^^^^^^^   ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^  ^^                                           ^^       ^^   ^^^    ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -51,9 +51,9 @@ declare module TypeScript {
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->      : ^^^^^^^                                           ^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -65,9 +65,9 @@ declare module TypeScript {
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->     : ^^^^^^^                                           ^^^^^^^^^^^   ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^  ^^                                           ^^       ^^   ^^^       ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -83,7 +83,7 @@ declare module TypeScript {
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
->       : ^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^   ^^      ^^^ ^^^   ^^      ^^^^^^^
 >key : string
 >    : ^^^^^^
     }
@@ -105,7 +105,7 @@ declare module TypeScript {
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
->    : ^^^^^^      ^^^^^^^^ ^^^^^       
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -113,7 +113,7 @@ declare module TypeScript {
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
->            : ^^^^^^      ^^^^^^^^ ^^^^^       
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -121,9 +121,9 @@ declare module TypeScript {
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
->    : ^^^^^                                           ^^^^^^^^^^^   ^^^^^    
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -135,9 +135,9 @@ declare module TypeScript {
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->      : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -149,9 +149,9 @@ declare module TypeScript {
 
         public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->     : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>     : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -167,13 +167,13 @@ declare module TypeScript {
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
->       : ^^^^^^      ^^^^^ 
+>       : ^   ^^      ^^^^^ 
 >key : string
 >    : ^^^^^^
 
         public remove(key: string): void;
 >remove : (key: string) => void
->       : ^^^^^^      ^^^^^    
+>       : ^   ^^      ^^^^^    
 >key : string
 >    : ^^^^^^
     }
@@ -189,7 +189,7 @@ declare module TypeScript {
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
->    : ^^^^^^      ^^^^^^^^ ^^^^^       
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -197,7 +197,7 @@ declare module TypeScript {
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
->            : ^^^^^^      ^^^^^^^^ ^^^^^       
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -205,9 +205,9 @@ declare module TypeScript {
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
->    : ^^^^^                                           ^^^^^^^^^^^   ^^^^^    
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -219,9 +219,9 @@ declare module TypeScript {
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->      : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -233,9 +233,9 @@ declare module TypeScript {
 
         public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: any, context: any) => void, context: any) => boolean
->     : ^^^^^                                             ^^^^^^^^^^^   ^^^^^       
+>     : ^  ^^                                             ^^       ^^   ^^^^^       
 >fn : (k: string, value: any, context: any) => void
->   : ^^^^      ^^^^^^^^^   ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^   ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : any
@@ -247,7 +247,7 @@ declare module TypeScript {
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
->       : ^^^^^^      ^^^^^ 
+>       : ^   ^^      ^^^^^ 
 >key : string
 >    : ^^^^^^
     }
@@ -273,7 +273,7 @@ declare module TypeScript {
 
         add(key: string, data: T): boolean;
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^       ^^^
+>    : ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -281,7 +281,7 @@ declare module TypeScript {
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^       ^^^
+>            : ^^^   ^^      ^^    ^^ ^^^^^^^^^^^^^   ^^      ^^    ^^ ^^^       ^^^
 >key : string
 >    : ^^^^^^
 >data : T
@@ -289,9 +289,9 @@ declare module TypeScript {
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^   ^^^    ^^^
+>    : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^  ^^                                           ^^       ^^   ^^^    ^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -303,9 +303,9 @@ declare module TypeScript {
 
         every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^   ^^^       ^^^
+>      : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -317,9 +317,9 @@ declare module TypeScript {
 
         some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : { (fn: (k: string, value: T, context: any) => void, context: any): boolean; (fn: (k: string, value: T, context: any) => void, context: any): boolean; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                           ^^^^^^^^^^^   ^^^       ^^^
+>     : ^^^  ^^                                           ^^       ^^   ^^^^^^^^^^^^^  ^^                                           ^^       ^^   ^^^       ^^^
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -335,7 +335,7 @@ declare module TypeScript {
 
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^
+>       : ^^^   ^^      ^^^^^^^   ^^      ^^^ ^^^
 >key : string
 >    : ^^^^^^
     }
@@ -357,7 +357,7 @@ declare module TypeScript {
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
->    : ^^^^^^      ^^^^^^^^ ^^^^^       
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -365,7 +365,7 @@ declare module TypeScript {
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
->            : ^^^^^^      ^^^^^^^^ ^^^^^       
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -373,9 +373,9 @@ declare module TypeScript {
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
->    : ^^^^^                                           ^^^^^^^^^^^   ^^^^^    
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -387,9 +387,9 @@ declare module TypeScript {
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->      : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -401,9 +401,9 @@ declare module TypeScript {
 
         public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->     : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>     : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -419,13 +419,13 @@ declare module TypeScript {
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
->       : ^^^^^^      ^^^^^ 
+>       : ^   ^^      ^^^^^ 
 >key : string
 >    : ^^^^^^
 
         public remove(key: string): void;
 >remove : (key: string) => void
->       : ^^^^^^      ^^^^^    
+>       : ^   ^^      ^^^^^    
 >key : string
 >    : ^^^^^^
     }
@@ -441,7 +441,7 @@ declare module TypeScript {
 
         public add(key: string, data: T): boolean;
 >add : (key: string, data: T) => boolean
->    : ^^^^^^      ^^^^^^^^ ^^^^^       
+>    : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -449,7 +449,7 @@ declare module TypeScript {
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
->            : ^^^^^^      ^^^^^^^^ ^^^^^       
+>            : ^   ^^      ^^    ^^ ^^^^^       
 >key : string
 >    : ^^^^^^
 >data : T
@@ -457,9 +457,9 @@ declare module TypeScript {
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
->    : ^^^^^                                           ^^^^^^^^^^^   ^^^^^    
+>    : ^  ^^                                           ^^       ^^   ^^^^^    
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -471,9 +471,9 @@ declare module TypeScript {
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
 >every : (fn: (k: string, value: T, context: any) => void, context: any) => boolean
->      : ^^^^^                                           ^^^^^^^^^^^   ^^^^^       
+>      : ^  ^^                                           ^^       ^^   ^^^^^       
 >fn : (k: string, value: T, context: any) => void
->   : ^^^^      ^^^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^ ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : T
@@ -485,9 +485,9 @@ declare module TypeScript {
 
         public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
 >some : (fn: (k: string, value: any, context: any) => void, context: any) => boolean
->     : ^^^^^                                             ^^^^^^^^^^^   ^^^^^       
+>     : ^  ^^                                             ^^       ^^   ^^^^^       
 >fn : (k: string, value: any, context: any) => void
->   : ^^^^      ^^^^^^^^^   ^^^^^^^^^^^   ^^^^^    
+>   : ^ ^^      ^^     ^^   ^^       ^^   ^^^^^    
 >k : string
 >  : ^^^^^^
 >value : any
@@ -499,7 +499,7 @@ declare module TypeScript {
 
         public lookup(key: string): T;
 >lookup : (key: string) => T
->       : ^^^^^^      ^^^^^ 
+>       : ^   ^^      ^^^^^ 
 >key : string
 >    : ^^^^^^
     }

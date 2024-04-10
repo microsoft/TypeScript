@@ -73,6 +73,7 @@ import {
     forEach,
     formatting,
     FunctionLikeDeclaration,
+    FutureSymbolExportInfo,
     getAllSuperTypeNodes,
     getAncestor,
     getCombinedLocalAndExportSymbolFlags,
@@ -389,9 +390,7 @@ import {
     VariableDeclaration,
     walkUpParenthesizedExpressions,
 } from "./_namespaces/ts";
-import {
-    StringCompletions,
-} from "./_namespaces/ts.Completions";
+import { StringCompletions } from "./_namespaces/ts.Completions";
 
 // Exported only for tests
 /** @internal */
@@ -611,7 +610,7 @@ interface ModuleSpecifierResolutionContext {
 }
 
 type ModuleSpecifierResolutionResult = "skipped" | "failed" | {
-    exportInfo?: SymbolExportInfo;
+    exportInfo?: SymbolExportInfo | FutureSymbolExportInfo;
     moduleSpecifier: string;
 };
 
@@ -2706,7 +2705,8 @@ export function getCompletionEntriesFromSymbols(
     }
 
     function symbolAppearsToBeTypeOnly(symbol: Symbol): boolean {
-        return !(symbol.flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(symbol.flags & SymbolFlags.Type));
+        const flags = getCombinedLocalAndExportSymbolFlags(skipAlias(symbol, typeChecker));
+        return !(flags & SymbolFlags.Value) && (!isInJSFile(symbol.declarations?.[0]) || !!(flags & SymbolFlags.Type));
     }
 }
 
@@ -3160,8 +3160,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
         default:
             const argInfo = SignatureHelp.getArgumentInfoForCompletions(previousToken, position, sourceFile, checker);
             return argInfo ?
-                // At `,`, treat this as the next argument after the comma.
-                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex + (previousToken.kind === SyntaxKind.CommaToken ? 1 : 0)) :
+                checker.getContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex) :
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                 // completion at `x ===/**/` should be for the right side
                 checker.getTypeAtLocation(parent.left) :
@@ -4081,20 +4080,20 @@ function getCompletionData(
                         // it should be identical regardless of which one is used. During the subsequent
                         // `CompletionEntryDetails` request, we'll get all the ExportInfos again and pick
                         // the best one based on the module specifier it produces.
-                        let exportInfo = info[0], moduleSpecifier;
+                        let exportInfo: SymbolExportInfo | FutureSymbolExportInfo = info[0], moduleSpecifier;
                         if (result !== "skipped") {
                             ({ exportInfo = info[0], moduleSpecifier } = result);
                         }
 
                         const isDefaultExport = exportInfo.exportKind === ExportKind.Default;
-                        const symbol = isDefaultExport && getLocalSymbolForExportDefault(exportInfo.symbol) || exportInfo.symbol;
+                        const symbol = isDefaultExport && getLocalSymbolForExportDefault(Debug.checkDefined(exportInfo.symbol)) || Debug.checkDefined(exportInfo.symbol);
 
                         pushAutoImportSymbol(symbol, {
                             kind: moduleSpecifier ? SymbolOriginInfoKind.ResolvedExport : SymbolOriginInfoKind.Export,
                             moduleSpecifier,
                             symbolName,
                             exportMapKey,
-                            exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : exportInfo.symbol.name,
+                            exportName: exportInfo.exportKind === ExportKind.ExportEquals ? InternalSymbolName.ExportEquals : Debug.checkDefined(exportInfo.symbol).name,
                             fileName: exportInfo.moduleFileName,
                             isDefaultExport,
                             moduleSymbol: exportInfo.moduleSymbol,

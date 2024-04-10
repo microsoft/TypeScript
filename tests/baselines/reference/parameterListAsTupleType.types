@@ -3,7 +3,7 @@
 === parameterListAsTupleType.ts ===
 function foo(a: number, b: string) {
 >foo : (a: number, b: string) => boolean
->    : ^^^^      ^^^^^      ^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : string
@@ -17,13 +17,13 @@ type Foops = Parameters<typeof foo>;
 >Foops : [a: number, b: string]
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : (a: number, b: string) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^^
 
 const x = (a: number) => 5;
 >x : (a: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(a: number) => 5 : (a: number) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 :                      
 >a : number
 >  : ^^^^^^
 >5 : 5
@@ -33,7 +33,7 @@ type Xps = Parameters<typeof x>;
 >Xps : [a: number]
 >    : ^^^^^^^^^^^
 >x : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 
 const a: Xps = ['should-not-work']; // works, but shouldn't
 >a : [a: number]

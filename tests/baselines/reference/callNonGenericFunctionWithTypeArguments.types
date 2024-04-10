@@ -6,7 +6,7 @@
 
 function f(x: number) { return null; }
 >f : (x: number) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -16,15 +16,15 @@ var r = f<string>(1);
 >f<string>(1) : any
 >             : ^^^
 >f : (x: number) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
 var f2 = (x: number) => { return null; }
 >f2 : (x: number) => any
->   : ^^^^      ^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >(x: number) => { return null; } : (x: number) => any
->                                : ^^^^      ^^^^^^^^
+>                                :                   
 >x : number
 >  : ^^^^^^
 
@@ -34,13 +34,13 @@ var r2 = f2<string>(1);
 >f2<string>(1) : any
 >              : ^^^
 >f2 : (x: number) => any
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
 var f3: { (x: number): any; }
 >f3 : (x: number) => any
->   : ^^^^      ^^^^^   
+>   : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 
@@ -50,7 +50,7 @@ var r3 = f3<string>(1);
 >f3<string>(1) : any
 >              : ^^^
 >f3 : (x: number) => any
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -60,7 +60,7 @@ class C {
 
     f(x: number) {
 >f : (x: number) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -73,7 +73,7 @@ var r4 = (new C()).f<string>(1);
 >(new C()).f<string>(1) : any
 >                       : ^^^
 >(new C()).f : (x: number) => any
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^
 >(new C()) : C
 >          : ^
 >new C() : C
@@ -81,14 +81,14 @@ var r4 = (new C()).f<string>(1);
 >C : typeof C
 >  : ^^^^^^^^
 >f : (x: number) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
 interface I {
     f(x: number): any;
 >f : (x: number) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >x : number
 >  : ^^^^^^
 }
@@ -102,11 +102,11 @@ var r5 = i.f<string>(1);
 >i.f<string>(1) : any
 >               : ^^^
 >i.f : (x: number) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >i : I
 >  : ^
 >f : (x: number) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -116,7 +116,7 @@ class C2 {
 
     f(x: number) {
 >f : (x: number) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -129,7 +129,7 @@ var r6 = (new C2()).f<string>(1);
 >(new C2()).f<string>(1) : any
 >                        : ^^^
 >(new C2()).f : (x: number) => any
->             : ^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^
 >(new C2()) : C2
 >           : ^^
 >new C2() : C2
@@ -137,14 +137,14 @@ var r6 = (new C2()).f<string>(1);
 >C2 : typeof C2
 >   : ^^^^^^^^^
 >f : (x: number) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 
 interface I2 {
     f(x: number);
 >f : (x: number) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 }
@@ -158,11 +158,11 @@ var r7 = i2.f<string>(1);
 >i2.f<string>(1) : any
 >                : ^^^
 >i2.f : (x: number) => any
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^
 >i2 : I2
 >   : ^^
 >f : (x: number) => any
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 

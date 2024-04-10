@@ -105,7 +105,7 @@ class C {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {            this.a = 1;  // Error            this.b = 1;  // Error            this.c = 1;  // Error        } : () => void
->                                                                                                                    : ^^^^^^^^^^
+>                                                                                                                    :           
 
             this.a = 1;  // Error
 >this.a = 1 : 1

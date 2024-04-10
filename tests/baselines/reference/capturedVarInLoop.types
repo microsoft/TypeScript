@@ -33,20 +33,20 @@ for (var i = 0; i < 10; i++) {
 
     let lambda1 = (y) => { };
 >lambda1 : (y: any) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^
 >(y) => { } : (y: any) => void
->           : ^^^^^^^^^^^^^^^^
+>           :                 
 >y : any
 
     let lambda2 = () => lambda1(len);
 >lambda2 : () => void
 >        : ^^^^^^^^^^
 >() => lambda1(len) : () => void
->                   : ^^^^^^^^^^
+>                   :           
 >lambda1(len) : void
 >             : ^^^^
 >lambda1 : (y: any) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^
 >len : number
 >    : ^^^^^^
 }

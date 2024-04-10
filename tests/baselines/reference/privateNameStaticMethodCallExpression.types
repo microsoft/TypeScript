@@ -21,7 +21,7 @@ class AA {
 
     static #method2(a, ...b) {};
 >#method2 : (a: any, ...b: any[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
 >b : any[]
 >  : ^^^^^
@@ -48,7 +48,7 @@ class AA {
 >func : () => void
 >     : ^^^^^^^^^^
 >AA.#method : () => void
->           : ^^^^^^^^^^
+>           :           
 >AA : typeof AA
 >   : ^^^^^^^^^
 
@@ -79,7 +79,7 @@ class AA {
 >AA.#method2(0, ...arr, 3) : void
 >                          : ^^^^
 >AA.#method2 : (a: any, ...b: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA : typeof AA
 >   : ^^^^^^^^^
 >0 : 0
@@ -95,7 +95,7 @@ class AA {
 >b : any
 >new AA.#method2(0, ...arr, 3) : any
 >AA.#method2 : (a: any, ...b: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA : typeof AA
 >   : ^^^^^^^^^
 >0 : 0
@@ -113,7 +113,7 @@ class AA {
 >AA.#method2`head${1}middle${2}tail` : void
 >                                    : ^^^^
 >AA.#method2 : (a: any, ...b: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA : typeof AA
 >   : ^^^^^^^^^
 >`head${1}middle${2}tail` : string
@@ -127,7 +127,7 @@ class AA {
 >AA.getClass().#method2`test${1}and${2}` : void
 >                                        : ^^^^
 >AA.getClass().#method2 : (a: any, ...b: any[]) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA.getClass() : typeof AA
 >              : ^^^^^^^^^
 >AA.getClass : () => typeof AA
@@ -147,7 +147,7 @@ class AA {
 >AA.getClass().#method2(0, ...arr, 3) : void
 >                                     : ^^^^
 >AA.getClass().#method2 : (a: any, ...b: any[]) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA.getClass() : typeof AA
 >              : ^^^^^^^^^
 >AA.getClass : () => typeof AA
@@ -169,9 +169,9 @@ class AA {
 >b2 : any
 >new (AA.getClass().#method2)(0, ...arr, 3) : any
 >(AA.getClass().#method2) : (a: any, ...b: any[]) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA.getClass().#method2 : (a: any, ...b: any[]) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA.getClass() : typeof AA
 >              : ^^^^^^^^^
 >AA.getClass : () => typeof AA
@@ -195,7 +195,7 @@ class AA {
 >AA.getClass().#method2`head${1}middle${2}tail` : void
 >                                               : ^^^^
 >AA.getClass().#method2 : (a: any, ...b: any[]) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >AA.getClass() : typeof AA
 >              : ^^^^^^^^^
 >AA.getClass : () => typeof AA

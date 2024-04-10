@@ -24,7 +24,7 @@ x1 += value;
 
 function fn1(x2: number) {
 >fn1 : (x2: number) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^
 >x2 : number
 >   : ^^^^^^
 
@@ -111,7 +111,7 @@ x3['a'] += value;
 
 function fn2(x4: number) {
 >fn2 : (x4: number) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^
 >x4 : number
 >   : ^^^^^^
 

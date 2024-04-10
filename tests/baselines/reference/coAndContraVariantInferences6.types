@@ -51,7 +51,7 @@ type JSXElementConstructor<P> =
 
 declare function createElementIsolated<P extends {}>(
 >createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^                                                 ^^^^^^^^^^        ^^^^^    
+>                      : ^ ^^^^^^^^^^^^^    ^^                                                 ^^     ^^^        ^^^^^    
 
   type: FunctionComponent<P> | ComponentClass<P> | string,
 >type : string | FunctionComponent<P> | ComponentClass<P>
@@ -70,8 +70,8 @@ declare let WrapperIsolated: JSXElementConstructor<ExactProps>;
 createElementIsolated(WrapperIsolated, { value: "C" });
 >createElementIsolated(WrapperIsolated, { value: "C" }) : void
 >                                                       : ^^^^
->createElementIsolated : <P extends {}>(type: string | FunctionComponent<P> | ComponentClass<P>, props?: P | null | undefined) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>createElementIsolated : <P extends {}>(type: FunctionComponent<P> | ComponentClass<P> | string, props?: P | null) => void
+>                      : ^ ^^^^^^^^^^^^^    ^^                                                 ^^     ^^^        ^^^^^^^^^
 >WrapperIsolated : JSXElementConstructor<ExactProps>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ value: "C" } : { value: "C"; }
@@ -93,15 +93,15 @@ declare const stat: any;
 >[].push.apply(props, stat.properties) : number
 >                                      : ^^^^^^
 >[].push.apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T_1, A extends any[], R_1>(this: (this: T_1, ...args: A) => R_1, thisArg: T_1, args: A): R_1; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^^^^^   ^^ ^^^^^^^^^^^^^^^^   ^^    ^^                              ^^       ^^   ^^    ^^ ^^^^^^^^^
 >[].push : (...items: never[]) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^     ^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: never[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T_1, A extends any[], R_1>(this: (this: T_1, ...args: A) => R_1, thisArg: T_1, args: A): R_1; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^    ^^              ^^       ^^ ^^^^^^^   ^^ ^^^^^^^^^^^^^^^^   ^^    ^^                              ^^       ^^   ^^    ^^ ^^^^^^^^^
 >props : any[]
 >      : ^^^^^
 >stat.properties : any

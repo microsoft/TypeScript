@@ -13,7 +13,7 @@ const b = () => new.target;
 >b : () => any
 >  : ^^^^^^^^^
 >() => new.target : () => any
->                 : ^^^^^^^^^
+>                 :          
 >new.target : any
 >           : ^^^
 >target : any
@@ -65,7 +65,7 @@ class C {
 >f : () => any
 >  : ^^^^^^^^^
 >() => new.target : () => any
->                 : ^^^^^^^^^
+>                 :          
 >new.target : any
 >           : ^^^
 >target : any
@@ -113,7 +113,7 @@ class C {
 >j : () => any
 >  : ^^^^^^^^^
 >() => new.target : () => any
->                 : ^^^^^^^^^
+>                 :          
 >new.target : any
 >           : ^^^
 >target : any

@@ -15,7 +15,7 @@
  */
 function callIt(func, arg) {
 >callIt : (func: Type1, arg: string) => boolean
->       : ^^^^^^^     ^^^^^^^      ^^^^^       
+>       : ^    ^^     ^^   ^^      ^^^^^       
 >func : Type1
 >     : ^^^^^
 >arg : string
@@ -46,7 +46,7 @@ function callIt(func, arg) {
  */
 function check(obj) {
 >check : (obj: Type2) => string | number
->      : ^^^^^^     ^^^^^               
+>      : ^   ^^     ^^^^^               
 >obj : Type2
 >    : ^^^^^
 
@@ -91,7 +91,7 @@ function check(obj) {
  */
 function use1(func, bool, str, num) {
 >use1 : (func: StringOrNumber1, bool: boolean, str: string, num: number) => string | number
->     : ^^^^^^^               ^^^^^^^^       ^^^^^^^      ^^^^^^^      ^^^^^               
+>     : ^    ^^               ^^    ^^       ^^   ^^      ^^   ^^      ^^^^^               
 >func : StringOrNumber1
 >     : ^^^^^^^^^^^^^^^
 >bool : boolean
@@ -133,7 +133,7 @@ function use1(func, bool, str, num) {
  */
 function use2(func, bool, str, num) {
 >use2 : (func: StringOrNumber2, bool: boolean, str: string, num: number) => string | number
->     : ^^^^^^^               ^^^^^^^^       ^^^^^^^      ^^^^^^^      ^^^^^               
+>     : ^    ^^               ^^    ^^       ^^   ^^      ^^   ^^      ^^^^^               
 >func : StringOrNumber2
 >     : ^^^^^^^^^^^^^^^
 >bool : boolean
@@ -175,7 +175,7 @@ function use2(func, bool, str, num) {
  */
 function check5(obj) {
 >check5 : (obj: Type5) => string | number
->       : ^^^^^^     ^^^^^               
+>       : ^   ^^     ^^^^^               
 >obj : Type5
 >    : ^^^^^
 
@@ -219,7 +219,7 @@ function check5(obj) {
  */
 function check6(obj) {
 >check6 : (obj: Type6) => any
->       : ^^^^^^     ^^^^^^^^
+>       : ^   ^^     ^^^^^^^^
 >obj : Type6
 >    : ^^^^^
 

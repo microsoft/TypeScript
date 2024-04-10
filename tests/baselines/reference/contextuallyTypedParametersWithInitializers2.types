@@ -3,7 +3,7 @@
 === contextuallyTypedParametersWithInitializers2.ts ===
 declare function test1<
 >test1 : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: never[]) => unknown>>(context: TContext, methods: TMethods) => void
->      : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^       ^^^^^       ^^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^    
+>      : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^        ^^^^^    ^^       ^^^^^       ^^^       ^^        ^^       ^^        ^^^^^    
 
   TContext,
   TMethods extends Record<string, (ctx: TContext, ...args: never[]) => unknown>,
@@ -22,7 +22,7 @@ test1(
 >test1(  {    count: 0,  },  {    checkLimit: (ctx, max = 500) => {},    hasAccess: (ctx, user: { name: string }) => {},  },) : void
 >                                                                                                                             : ^^^^
 >test1 : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: never[]) => unknown>>(context: TContext, methods: TMethods) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^        ^^^^^    ^^       ^^^^^^^^^^^^^^^       ^^        ^^       ^^        ^^^^^^^^^
   {
 >{    count: 0,  } : { count: number; }
 >                  : ^^^^^^^^^^^^^^^^^^
@@ -36,13 +36,13 @@ test1(
   },
   {
 >{    checkLimit: (ctx, max = 500) => {},    hasAccess: (ctx, user: { name: string }) => {},  } : { checkLimit: (ctx: { count: number; }, max?: number) => void; hasAccess: (ctx: { count: number; }, user: { name: string; }) => void; }
->                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^^
+>                                                                                               : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^^^^
 
     checkLimit: (ctx, max = 500) => {},
 >checkLimit : (ctx: { count: number; }, max?: number) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >(ctx, max = 500) => {} : (ctx: { count: number; }, max?: number) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       :                              ^                 
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >max : number
@@ -52,9 +52,9 @@ test1(
 
     hasAccess: (ctx, user: { name: string }) => {},
 >hasAccess : (ctx: { count: number; }, user: { name: string; }) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
+>          : ^   ^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^
 >(ctx, user: { name: string }) => {} : (ctx: { count: number; }, user: { name: string; }) => void
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^
+>                                    :                                                           
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >user : { name: string; }
@@ -71,11 +71,11 @@ declare const num: number;
 
 const test2: (arg: 1 | 2) => void = (arg = num) => {};
 >test2 : (arg: 1 | 2) => void
->      : ^^^^^^     ^^^^^    
+>      : ^   ^^     ^^^^^    
 >arg : 1 | 2
 >    : ^^^^^
 >(arg = num) => {} : (arg?: number) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >num : number
@@ -83,11 +83,11 @@ const test2: (arg: 1 | 2) => void = (arg = num) => {};
 
 const test3: (arg: number) => void = (arg = 1) => {};
 >test3 : (arg: number) => void
->      : ^^^^^^      ^^^^^    
+>      : ^   ^^      ^^^^^    
 >arg : number
 >    : ^^^^^^
 >(arg = 1) => {} : (arg?: number) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >1 : 1

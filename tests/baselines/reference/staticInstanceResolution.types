@@ -14,7 +14,7 @@ class Comment {
 
     static getDocCommentText(comments: Comment[])
 >getDocCommentText : (comments: Comment[]) => void
->                  : ^^^^^^^^^^^         ^^^^^^^^^
+>                  : ^        ^^         ^^^^^^^^^
 >comments : Comment[]
 >         : ^^^^^^^^^
     {

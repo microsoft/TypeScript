@@ -3,7 +3,7 @@
 === narrowingPastLastAssignment.ts ===
 function action(f: Function) {}
 >action : (f: Function) => void
->       : ^^^^        ^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >f : Function
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ function action(f: Function) {}
 
 function f1(x: string | number) {
 >f1 : (x: string | number) => void
->   : ^^^^               ^^^^^^^^^
+>   : ^ ^^               ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ function f1(x: string | number) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -45,7 +45,7 @@ function f1(x: string | number) {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -74,7 +74,7 @@ function f2() {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => { x /* number */ } : () => void
->                         : ^^^^^^^^^^
+>                         :           
 >x : number
 >  : ^^^^^^
 
@@ -82,7 +82,7 @@ function f2() {
 >f : () => void
 >  : ^^^^^^^^^^
 >function() { x /* number */ } : () => void
->                              : ^^^^^^^^^^
+>                              :           
 >x : number
 >  : ^^^^^^
 
@@ -134,7 +134,7 @@ function f2() {
 
 function f3(x: string | number) {
 >f3 : (x: string | number) => void
->   : ^^^^               ^^^^^^^^^
+>   : ^ ^^               ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -142,7 +142,7 @@ function f3(x: string | number) {
 >action(() => { x = "abc" }) : void
 >                            : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x = "abc" } : () => void
 >                    : ^^^^^^^^^^
 >x = "abc" : "abc"
@@ -164,7 +164,7 @@ function f3(x: string | number) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -175,7 +175,7 @@ function f3(x: string | number) {
 
 function f4(cond: () => boolean) {
 >f4 : (cond: () => boolean) => void
->   : ^^^^^^^             ^^^^^^^^^
+>   : ^    ^^             ^^^^^^^^^
 >cond : () => boolean
 >     : ^^^^^^       
 
@@ -203,7 +203,7 @@ function f4(cond: () => boolean) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -221,7 +221,7 @@ function f4(cond: () => boolean) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -231,7 +231,7 @@ function f4(cond: () => boolean) {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -240,7 +240,7 @@ function f4(cond: () => boolean) {
 
 function f5(x: string | number, cond: () => boolean) {
 >f5 : (x: string | number, cond: () => boolean) => void
->   : ^^^^               ^^^^^^^^             ^^^^^^^^^
+>   : ^ ^^               ^^    ^^             ^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >cond : () => boolean
@@ -264,7 +264,7 @@ function f5(x: string | number, cond: () => boolean) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -283,7 +283,7 @@ function f5(x: string | number, cond: () => boolean) {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -293,7 +293,7 @@ function f5(x: string | number, cond: () => boolean) {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -302,7 +302,7 @@ function f5(x: string | number, cond: () => boolean) {
 
 function f5a(cond: boolean) {
 >f5a : (cond: boolean) => void
->    : ^^^^^^^       ^^^^^^^^^
+>    : ^    ^^       ^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
 
@@ -326,7 +326,7 @@ function f5a(cond: boolean) {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -349,7 +349,7 @@ function f5a(cond: boolean) {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -397,7 +397,7 @@ function f5b() {
 >action(() => { x /* 1 | 2 */ }) : void
 >                                : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* 1 | 2 */ } : () => void
 >                        : ^^^^^^^^^^
 >x : 1 | 2
@@ -428,7 +428,7 @@ function f6() {
 >action(() => { x }) : void
 >                    : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x } : () => void
 >            : ^^^^^^^^^^
 >x : any
@@ -446,7 +446,7 @@ function f6() {
 >action(() => { x /* number */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* number */ } : () => void
 >                         : ^^^^^^^^^^
 >x : number
@@ -477,7 +477,7 @@ function f7() {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => { e /* Error */ } : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >e : Error
 >  : ^^^^^
         }
@@ -502,7 +502,7 @@ action(() => { g /* string | number */ });
 >action(() => { g /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { g /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >g : string | number
@@ -530,7 +530,7 @@ namespace Foo {
 >action(() => { x /* string | number */ }) : void
 >                                          : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { x /* string | number */ } : () => void
 >                                  : ^^^^^^^^^^
 >x : string | number
@@ -552,7 +552,7 @@ namespace Foo {
 >action(() => { y /* string */ }) : void
 >                                 : ^^^^
 >action : (f: Function) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^        ^^^^^^^^^
 >() => { y /* string */ } : () => void
 >                         : ^^^^^^^^^^
 >y : string
@@ -563,7 +563,7 @@ namespace Foo {
 
 function f10() {
 >f10 : () => (k: number) => boolean
->    : ^^^^^^^^^^      ^^^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^^^^^^^^
 
     let i: number | undefined;
 >i : number | undefined
@@ -579,7 +579,7 @@ function f10() {
 
     return (k: number) => k === i + 1;
 >(k: number) => k === i + 1 : (k: number) => boolean
->                           : ^^^^      ^^^^^^^^^^^^
+>                           : ^ ^^      ^^^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 >k === i + 1 : boolean
@@ -596,7 +596,7 @@ function f10() {
 
 function makeAdder(n?: number) {
 >makeAdder : (n?: number) => (m: number) => number
->          : ^^^^^      ^^^^^^^^^      ^^^^^^^^^^^
+>          : ^ ^^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >n : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -610,7 +610,7 @@ function makeAdder(n?: number) {
 
     return (m: number) => n + m;
 >(m: number) => n + m : (m: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     : ^ ^^      ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >n + m : number
@@ -680,11 +680,11 @@ function f12() {
 >fooMap.get("a") : number[] | undefined
 >                : ^^^^^^^^^^^^^^^^^^^^
 >fooMap.get : (key: string) => number[] | undefined
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fooMap : Map<string, number[]>
 >       : ^^^^^^^^^^^^^^^^^^^^^
 >get : (key: string) => number[] | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
@@ -706,23 +706,23 @@ function f12() {
 >values.forEach(v => foo.push(v)) : void
 >                                 : ^^^^
 >values.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >values : number[]
 >       : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >v => foo.push(v) : (v: number) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >foo.push(v) : number
 >            : ^^^^^^
 >foo.push : (...items: number[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >foo : number[]
 >    : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 }

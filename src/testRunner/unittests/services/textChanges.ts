@@ -1,8 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    notImplementedHost,
-} from "./extract/helpers";
+import { notImplementedHost } from "./extract/helpers";
 
 // Some tests have trailing whitespace
 

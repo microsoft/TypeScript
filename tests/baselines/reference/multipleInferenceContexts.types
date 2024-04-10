@@ -21,14 +21,14 @@ interface ComponentOptionsProperties<Data> {
 interface Instance<Data> {
     get<K extends keyof Data>(name: K): unknown;
 >get : <K extends keyof Data>(name: K) => unknown
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^       
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^       
 >name : K
 >     : ^
 }
 
 declare var Moon: {
 >Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
->     : ^    ^^^^^^^^^^^^                        ^^^^^              
+>     : ^    ^^       ^^^                        ^^^^^              
 
     <Data>(options?: ConstructorOptions<Data>): Instance<Data>;
 >options : ConstructorOptions<Data> | undefined
@@ -40,9 +40,9 @@ const r2 = Moon({
 >r2 : Instance<{ msg: string; }>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Moon({    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },}) : Instance<{ msg: string; }>
->                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->Moon : <Data>(options?: ConstructorOptions<Data> | undefined) => Instance<Data>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                         : ^^^^^^^^^                ^
+>Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
+>     : ^    ^^       ^^^                        ^^^^^^^^^^^^^^^^^^^
 >{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render(): unknown; }
 >                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -62,9 +62,9 @@ const r2 = Moon({
 
         const h = (x: unknown) => x;
 >h : (x: unknown) => unknown
->  : ^^^^       ^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^
 >(x: unknown) => x : (x: unknown) => unknown
->                  : ^^^^       ^^^^^^^^^^^^
+>                  :                        
 >x : unknown
 >  : ^^^^^^^
 >x : unknown
@@ -74,15 +74,15 @@ const r2 = Moon({
 >h(this.get("msg")) : unknown
 >                   : ^^^^^^^
 >h : (x: unknown) => unknown
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^
 >this.get("msg") : unknown
 >                : ^^^^^^^
 >this.get : <K extends "msg">(name: K) => unknown
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 >this : Instance<{ msg: string; }>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <K extends "msg">(name: K) => unknown
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 >"msg" : "msg"
 >      : ^^^^^
 

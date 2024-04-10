@@ -8,7 +8,7 @@ declare module "fs" {
   export interface WriteFileOptions {}
   export function writeFile(path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void): void;
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
->          : ^^^^^^^      ^^^^^^^^   ^^^^^^^^^^^                ^^^^^^^^^^^^                    ^^^^^    
+>          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^    
 >path : string
 >     : ^^^^^^
 >data : any
@@ -16,7 +16,7 @@ declare module "fs" {
 >options : WriteFileOptions
 >        : ^^^^^^^^^^^^^^^^
 >callback : (err: Error) => void
->         : ^^^^^^     ^^^^^    
+>         : ^   ^^     ^^^^^    
 >err : Error
 >    : ^^^^^
 }
@@ -24,7 +24,7 @@ declare module "fs" {
 === /index.js ===
 import { writeFile, WriteFileOptions, WriteFileOptions as OtherName } from "fs";
 >writeFile : (path: string, data: any, options: WriteFileOptions, callback: (err: Error) => void) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^      ^^    ^^   ^^       ^^                ^^        ^^                    ^^^^^^^^^
 >WriteFileOptions : any
 >                 : ^^^
 >WriteFileOptions : any

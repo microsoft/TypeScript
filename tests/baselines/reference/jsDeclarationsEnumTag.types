@@ -56,15 +56,15 @@ export const Second = {
 /** @enum {function(number): number} */
 export const Fs = {
 >Fs : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >{    ADD1: n => n + 1,    ID: n => n,    SUB1: n => n - 1} : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
->                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                           : ^^^^^^^^               ^^^^^^               ^^^^^^^^                  ^^^
 
     ADD1: n => n + 1,
 >ADD1 : (n: any) => any
->     : ^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
->           : ^^^^^^^^^^^^^^^
+>           :                
 >n : any
 >n + 1 : any
 >n : any
@@ -73,17 +73,17 @@ export const Fs = {
 
     ID: n => n,
 >ID : (n: any) => any
->   : ^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^
 >n => n : (n: any) => any
->       : ^^^^^^^^^^^^^^^
+>       :                
 >n : any
 >n : any
 
     SUB1: n => n - 1
 >SUB1 : (n: any) => number
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^
 >n => n - 1 : (n: any) => number
->           : ^^^^^^^^^^^^^^^^^^
+>           :                   
 >n : any
 >n - 1 : number
 >      : ^^^^^^
@@ -99,7 +99,7 @@ export const Fs = {
  */
 export function consume(t,s,f) {
 >consume : (t: Target, s: Second, f: Fs) => void
->        : ^^^^      ^^^^^      ^^^^^  ^^^^^^^^^
+>        : ^ ^^      ^^ ^^      ^^ ^^  ^^^^^^^^^
 >t : string
 >  : ^^^^^^
 >s : number
@@ -124,7 +124,7 @@ export function consume(t,s,f) {
     /** @type {(n: number) => number} */
     var fun = f
 >fun : (n: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >f : Fs
 >  : ^^
 
@@ -150,7 +150,7 @@ export function consume(t,s,f) {
 /** @param {string} s */
 export function ff(s) {
 >ff : (s: string) => any
->   : ^^^^      ^^^^^^^^
+>   : ^ ^^      ^^^^^^^^
 >s : string
 >  : ^^^^^^
 

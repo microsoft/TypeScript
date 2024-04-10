@@ -5,7 +5,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -31,15 +31,15 @@ var r = foo(a);
 >r : { [x: string]: Object; [x: number]: Date; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(a) : { [x: string]: Object; [x: number]: Date; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       :                                            
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >a : { [x: string]: Object; [x: number]: Date; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function other<T extends Date>(arg: T) {
 >other : <T extends Date>(arg: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -60,9 +60,9 @@ function other<T extends Date>(arg: T) {
 >r2 : { [x: string]: Object; [x: number]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: Object; [x: number]: T; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       :                                         
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: Object; [x: number]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

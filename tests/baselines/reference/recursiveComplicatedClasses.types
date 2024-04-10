@@ -12,7 +12,7 @@ class Signature {
 
 function aEnclosesB(a: Symbol) {
 >aEnclosesB : (a: Symbol) => boolean
->           : ^^^^      ^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^^
 >a : Symbol
 >  : ^^^^^^
 
@@ -41,7 +41,7 @@ class Symbol {
 >aEnclosesB(b) : boolean
 >              : ^^^^^^^
 >aEnclosesB : (a: Symbol) => boolean
->           : ^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^^
 >b : TypeSymbol
 >  : ^^^^^^^^^^
     }

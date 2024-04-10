@@ -8,13 +8,13 @@ interface MyPropertyDescriptor {
 
     set? (v: any): void;
 >set : (v: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >v : any
 }
 
 declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescriptor): any;
 >defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
->                 : ^^^^   ^^^^^      ^^^^^^^^^^^^^^                    ^^^^^   
+>                 : ^ ^^   ^^ ^^      ^^          ^^                    ^^^^^   
 >o : any
 >p : string
 >  : ^^^^^^
@@ -24,7 +24,7 @@ declare function defineMyProperty(o: any, p: string, attributes: MyPropertyDescr
 defineMyProperty({}, "name", { get: function () { return 5; } });
 >defineMyProperty({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty : (o: any, p: string, attributes: MyPropertyDescriptor) => any
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^   ^^ ^^      ^^          ^^                    ^^^^^^^^
 >{} : {}
 >   : ^^
 >"name" : "name"
@@ -34,7 +34,7 @@ defineMyProperty({}, "name", { get: function () { return 5; } });
 >get : () => number
 >    : ^^^^^^^^^^^^
 >function () { return 5; } : () => number
->                          : ^^^^^^^^^^^^
+>                          :             
 >5 : 5
 >  : ^
 
@@ -45,13 +45,13 @@ interface MyPropertyDescriptor2 {
 
     set?: (v: any) => void;
 >set : (v: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >v : any
 }
 
 declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDescriptor2): any;
 >defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
->                  : ^^^^   ^^^^^      ^^^^^^^^^^^^^^                     ^^^^^   
+>                  : ^ ^^   ^^ ^^      ^^          ^^                     ^^^^^   
 >o : any
 >p : string
 >  : ^^^^^^
@@ -61,7 +61,7 @@ declare function defineMyProperty2(o: any, p: string, attributes: MyPropertyDesc
 defineMyProperty2({}, "name", { get: function () { return 5; } });
 >defineMyProperty2({}, "name", { get: function () { return 5; } }) : any
 >defineMyProperty2 : (o: any, p: string, attributes: MyPropertyDescriptor2) => any
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^   ^^ ^^      ^^          ^^                     ^^^^^^^^
 >{} : {}
 >   : ^^
 >"name" : "name"
@@ -71,7 +71,7 @@ defineMyProperty2({}, "name", { get: function () { return 5; } });
 >get : () => number
 >    : ^^^^^^^^^^^^
 >function () { return 5; } : () => number
->                          : ^^^^^^^^^^^^
+>                          :             
 >5 : 5
 >  : ^
 

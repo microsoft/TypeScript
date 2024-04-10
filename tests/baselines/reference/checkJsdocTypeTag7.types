@@ -12,7 +12,7 @@ class C {
     /** @type {Foo} */
     foo(a, b) {}
 >foo : (a: string, b: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -21,6 +21,6 @@ class C {
     /** @type {(optional?) => void} */
     methodWithOptionalParameters() {}
 >methodWithOptionalParameters : (optional?: any) => void
->                             : ^^^^^^^^^^^^^^^^^^^^    
+>                             : ^        ^^^^^^^^^^^    
 }
 

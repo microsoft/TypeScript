@@ -9,7 +9,7 @@ class T {
 >field : () => void
 >      : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 }
 class T2 extends T {
 >T2 : T2

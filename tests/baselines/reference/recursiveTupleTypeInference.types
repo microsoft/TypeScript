@@ -42,7 +42,7 @@ const gK: { [key in keyof K]: A } = { b: ["number", "null"] };
 
 function foo<T>(g: G<T>): T {
 >foo : <T>(g: G<T>) => T
->    : ^ ^^^^^    ^^^^^ 
+>    : ^ ^^ ^^    ^^^^^ 
 >g : G<T>
 >  : ^^^^
 
@@ -57,7 +57,7 @@ foo(gK);
 >foo(gK) : { b: unknown; }
 >        : ^^^^^^^^^^^^^^^
 >foo : <T>(g: G<T>) => T
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^    ^^^^^^
 >gK : { b: A; }
 >   : ^^^^^^^^^
 

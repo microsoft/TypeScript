@@ -4,9 +4,9 @@
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = (p: string) => p.length;
 >a : (p: string) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(p: string) => p.length : (p: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        :                      
 >p : string
 >  : ^^^^^^
 >p.length : number
@@ -18,9 +18,9 @@ var a = (p: string) => p.length;
 
 var a = (p: string) => { return p.length; }
 >a : (p: string) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(p: string) => { return p.length; } : (p: string) => number
->                                    : ^^^^      ^^^^^^^^^^^
+>                                    : ^ ^^      ^^^^^^^^^^^
 >p : string
 >  : ^^^^^^
 >p.length : number
@@ -33,18 +33,18 @@ var a = (p: string) => { return p.length; }
 // Identifier => Block is equivalent to(Identifier) => Block
 var b = j => { return 0; }
 >b : (j: any) => number
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >j => { return 0; } : (j: any) => number
->                   : ^^^^^^^^^^^^^^^^^^
+>                   :                   
 >j : any
 >0 : 0
 >  : ^
 
 var b = (j) => { return 0; }
 >b : (j: any) => number
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >(j) => { return 0; } : (j: any) => number
->                     : ^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^
 >j : any
 >0 : 0
 >  : ^
@@ -56,9 +56,9 @@ var c: number;
 
 var d = n => c = n;
 >d : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >n => c = n : (n: any) => any
->           : ^^^^^^^^^^^^^^^
+>           :                
 >n : any
 >c = n : any
 >c : number
@@ -67,9 +67,9 @@ var d = n => c = n;
 
 var d = (n) => c = n;
 >d : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >(n) => c = n : (n: any) => any
->             : ^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^
 >n : any
 >c = n : any
 >c : number
@@ -78,31 +78,31 @@ var d = (n) => c = n;
 
 var d: (n: any) => any;
 >d : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >n : any
 
 // Binding patterns in arrow functions
 var p1 = ([a]) => { };
 >p1 : ([a]: [any]) => void
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^^^^^^^^^^^^^^^
 >([a]) => { } : ([a]: [any]) => void
->             : ^^^^^^^^^^^^^^^^^^^^
+>             :                     
 >a : any
 >  : ^^^
 
 var p2 = ([...a]) => { };
 >p2 : ([...a]: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^      ^^^^^^^^^^^^^^^^
 >([...a]) => { } : ([...a]: any[]) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^
+>                :                        
 >a : any[]
 >  : ^^^^^
 
 var p3 = ([, a]) => { };
 >p3 : ([, a]: [any, any]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^
 >([, a]) => { } : ([, a]: [any, any]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                            
 > : undefined
 > : ^^^^^^^^^
 >a : any
@@ -110,9 +110,9 @@ var p3 = ([, a]) => { };
 
 var p4 = ([, ...a]) => { };
 >p4 : ([, ...a]: [any?, ...any[]]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :                                     
 > : undefined
 > : ^^^^^^^^^
 >a : any[]
@@ -120,9 +120,9 @@ var p4 = ([, ...a]) => { };
 
 var p5 = ([a = 1]) => { };
 >p5 : ([a]: [number?]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^^^^^^^^^^^^^^^^^^^
 >([a = 1]) => { } : ([a]: [number?]) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 :                         
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -130,17 +130,17 @@ var p5 = ([a = 1]) => { };
 
 var p6 = ({ a }) => { };
 >p6 : ({ a }: { a: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^
 >({ a }) => { } : ({ a }: { a: any; }) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                             
 >a : any
 >  : ^^^
 
 var p7 = ({ a: { b } }) => { };
 >p7 : ({ a: { b } }: { a: { b: any; }; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      :                                            
 >a : any
 >  : ^^^
 >b : any
@@ -148,9 +148,9 @@ var p7 = ({ a: { b } }) => { };
 
 var p8 = ({ a = 1 }) => { };
 >p8 : ({ a }: { a?: number; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   :            ^                    
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -158,9 +158,9 @@ var p8 = ({ a = 1 }) => { };
 
 var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     :                   ^     ^                       
 >a : any
 >  : ^^^
 >b : number
@@ -176,9 +176,9 @@ var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 
 var p10 = ([{ value, done }]) => { };
 >p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           :                                                          
 >value : any
 >      : ^^^
 >done : any
@@ -192,9 +192,9 @@ class MyClass {
 
     m = (n) => n + 1;
 >m : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >(n) => n + 1 : (n: any) => any
->             : ^^^^^^^^^^^^^^^
+>             :                
 >n : any
 >n + 1 : any
 >n : any
@@ -203,9 +203,9 @@ class MyClass {
 
     p = (n) => n && this;
 >p : (n: any) => this
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >(n) => n && this : (n: any) => this
->                 : ^^^^^^^^^^^^^^^^
+>                 :                 
 >n : any
 >n && this : this
 >          : ^^^^
@@ -219,9 +219,9 @@ class MyClass {
 
         var m = (n) => n + 1;
 >m : (n: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >(n) => n + 1 : (n: any) => any
->             : ^^^^^^^^^^^^^^^
+>             :                
 >n : any
 >n + 1 : any
 >n : any
@@ -230,9 +230,9 @@ class MyClass {
 
         var p = (n) => n && this;
 >p : (n: any) => this
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >(n) => n && this : (n: any) => this
->                 : ^^^^^^^^^^^^^^^^
+>                 :                 
 >n : any
 >n && this : this
 >          : ^^^^
@@ -245,17 +245,17 @@ class MyClass {
 // Arrow function used in arrow function
 var arrrr = () => (m: number) => () => (n: number) => m + n;
 >arrrr : () => (m: number) => () => (n: number) => number
->      : ^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >() => (m: number) => () => (n: number) => m + n : () => (m: number) => () => (n: number) => number
->                                                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                                                :                                                 
 >(m: number) => () => (n: number) => m + n : (m: number) => () => (n: number) => number
->                                          : ^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>                                          : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >() => (n: number) => m + n : () => (n: number) => number
->                           : ^^^^^^^^^^      ^^^^^^^^^^^
+>                           : ^^^^^^^ ^^      ^^^^^^^^^^^
 >(n: number) => m + n : (n: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >m + n : number
@@ -271,13 +271,13 @@ var e = arrrr()(3)()(4);
 >arrrr()(3)()(4) : number
 >                : ^^^^^^
 >arrrr()(3)() : (n: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >arrrr()(3) : () => (n: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^ ^^      ^^^^^^^^^^^
 >arrrr() : (m: number) => () => (n: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >arrrr : () => (m: number) => () => (n: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -294,13 +294,13 @@ function someFn() {
 
     var arr = (n: number) => (p: number) => p * n;
 >arr : (n: number) => (p: number) => number
->    : ^^^^      ^^^^^^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >(n: number) => (p: number) => p * n : (n: number) => (p: number) => number
->                                    : ^^^^      ^^^^^^^^^      ^^^^^^^^^^^
+>                                    :                                     
 >n : number
 >  : ^^^^^^
 >(p: number) => p * n : (p: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     : ^ ^^      ^^^^^^^^^^^
 >p : number
 >  : ^^^^^^
 >p * n : number
@@ -314,19 +314,19 @@ function someFn() {
 >arr(3)(4).toExponential() : string
 >                          : ^^^^^^
 >arr(3)(4).toExponential : (fractionDigits?: number) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^^^^^^^
 >arr(3)(4) : number
 >          : ^^^^^^
 >arr(3) : (p: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >arr : (n: number) => (p: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
 >  : ^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 }
 
 // Arrow function used in function
@@ -336,9 +336,9 @@ function someOtherFn() {
 
     var arr = (n: number) => '' + n;
 >arr : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' + n : (n: number) => string
->                      : ^^^^      ^^^^^^^^^^^
+>                      :                      
 >n : number
 >  : ^^^^^^
 >'' + n : string
@@ -352,15 +352,15 @@ function someOtherFn() {
 >arr(4).charAt(0) : string
 >                 : ^^^^^^
 >arr(4).charAt : (pos: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^^^^^^^
 >arr(4) : string
 >       : ^^^^^^
 >arr : (n: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >4 : 4
 >  : ^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 }
@@ -378,7 +378,7 @@ function outerFn() {
 >arrowFn : () => void
 >        : ^^^^^^^^^^
 >() => { } : () => void
->          : ^^^^^^^^^^
+>          :           
 
         var p = arrowFn();
 >p : void
@@ -397,15 +397,15 @@ function outerFn() {
 // Arrow function used in nested function in arrow function
 var f = (n: string) => {
 >f : (n: string) => () => string
->  : ^^^^      ^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^^^^^^
 >(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : (n: string) => () => string
->                                                                                               : ^^^^      ^^^^^^^^^^^^^^^^^
+>                                                                                               :                            
 >n : string
 >  : ^^^^^^
 
     function fn(x: number) {
 >fn : (x: number) => () => string
->   : ^^^^      ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -423,7 +423,7 @@ var f = (n: string) => {
 >fn(4) : () => string
 >      : ^^^^^^^^^^^^
 >fn : (x: number) => () => string
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^
 >4 : 4
 >  : ^
 }
@@ -435,7 +435,7 @@ var g = f('')();
 >f('') : () => string
 >      : ^^^^^^^^^^^^
 >f : (n: string) => () => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -447,13 +447,13 @@ var g: string;
 // Arrow function used in nested function in arrow function in nested function
 function someOuterFn() {
 >someOuterFn : () => (n: string) => () => () => number
->            : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 
     var arr = (n: string) => {
 >arr : (n: string) => () => () => number
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : (n: string) => () => () => number
->                                                                                                                    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                    :                                  
 >n : string
 >  : ^^^^^^
 
@@ -477,7 +477,7 @@ function someOuterFn() {
     }
     return arr;
 >arr : (n: string) => () => () => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 }
 var h = someOuterFn()('')()();
 >h : number
@@ -489,9 +489,9 @@ var h = someOuterFn()('')()();
 >someOuterFn()('') : () => () => number
 >                  : ^^^^^^^^^^^^^^^^^^
 >someOuterFn() : (n: string) => () => () => number
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >someOuterFn : () => (n: string) => () => () => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -499,11 +499,11 @@ h.toExponential();
 >h.toExponential() : string
 >                  : ^^^^^^
 >h.toExponential : (fractionDigits?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >h : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 // Arrow function used in try/catch/finally in function
 function tryCatchFn() {
@@ -515,7 +515,7 @@ function tryCatchFn() {
 >x : () => any
 >  : ^^^^^^^^^
 >() => this : () => any
->           : ^^^^^^^^^
+>           :          
 >this : any
 
     } catch (e) {
@@ -525,7 +525,7 @@ function tryCatchFn() {
 >t : () => any
 >  : ^^^^^^^^^
 >() => e + this : () => any
->               : ^^^^^^^^^
+>               :          
 >e + this : any
 >e : any
 >this : any
@@ -535,7 +535,7 @@ function tryCatchFn() {
 >m : () => string
 >  : ^^^^^^^^^^^^
 >() => this + '' : () => string
->                : ^^^^^^^^^^^^
+>                :             
 >this + '' : string
 >          : ^^^^^^
 >this : any

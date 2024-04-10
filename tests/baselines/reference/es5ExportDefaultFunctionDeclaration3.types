@@ -7,7 +7,7 @@ var before: typeof func = func();
 >func : () => typeof func
 >     : ^^^^^^^^^^^^^^^^^
 >func() : () => typeof func
->       : ^^^^^^^^^^^^^^^^^
+>       :                  
 >func : () => typeof func
 >     : ^^^^^^^^^^^^^^^^^
 
@@ -28,7 +28,7 @@ var after: typeof func = func();
 >func : () => typeof func
 >     : ^^^^^^^^^^^^^^^^^
 >func() : () => typeof func
->       : ^^^^^^^^^^^^^^^^^
+>       :                  
 >func : () => typeof func
 >     : ^^^^^^^^^^^^^^^^^
 

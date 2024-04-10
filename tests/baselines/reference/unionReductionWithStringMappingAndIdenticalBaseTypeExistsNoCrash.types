@@ -169,21 +169,21 @@ import React from 'react'
 
 declare function upperFirst<T extends string>(str: T): Capitalize<T>
 >upperFirst : <T extends string>(str: T) => Capitalize<T>
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^             
+>           : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^             
 >str : T
 >    : ^
 
 const displayEnum = (value: string) => upperFirst(value.toLowerCase())
 >displayEnum : (value: string) => Capitalize<string>
->            : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >(value: string) => upperFirst(value.toLowerCase()) : (value: string) => Capitalize<string>
->                                                   : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   :                                      
 >value : string
 >      : ^^^^^^
 >upperFirst(value.toLowerCase()) : Capitalize<string>
 >                                : ^^^^^^^^^^^^^^^^^^
 >upperFirst : <T extends string>(str: T) => Capitalize<T>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^^^^
 >value.toLowerCase() : string
 >                    : ^^^^^^
 >value.toLowerCase : () => string
@@ -213,7 +213,7 @@ function Comp() {
 >displayEnum("VALUE") : Capitalize<string>
 >                     : ^^^^^^^^^^^^^^^^^^
 >displayEnum : (value: string) => Capitalize<string>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >"VALUE" : "VALUE"
 >        : ^^^^^^^
 

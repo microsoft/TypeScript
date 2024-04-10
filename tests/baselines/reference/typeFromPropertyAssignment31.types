@@ -25,15 +25,15 @@ ExpandoMerge.p1 = 111
 
 ExpandoMerge.m = function(n: number) {
 >ExpandoMerge.m = function(n: number) {    return n + 1;} : (n: number) => number
->                                                         : ^^^^      ^^^^^^^^^^^
+>                                                         : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge.m : (n: number) => number
->               : ^^^^      ^^^^^^^^^^^
+>               : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
 >             : ^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        : ^^^^      ^^^^^^^^^^^
+>                                        :                      
 >n : number
 >  : ^^^^^^
 
@@ -253,11 +253,11 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 >ExpandoMerge.m(12) : number
 >                   : ^^^^^^
 >ExpandoMerge.m : (n: number) => number
->               : ^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^      ^^^^^^^^^^^
 >ExpandoMerge : typeof ExpandoMerge
 >             : ^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >12 : 12
 >   : ^^
 >ExpandoMerge(1001) : number

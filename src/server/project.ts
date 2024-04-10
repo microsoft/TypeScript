@@ -2708,6 +2708,12 @@ export class ConfiguredProject extends Project {
     private compilerHost?: CompilerHost;
 
     /** @internal */
+    hasConfigFileDiagnostics?: boolean;
+
+    /** @internal */
+    skipConfigDiagEvent?: true;
+
+    /** @internal */
     constructor(
         configFileName: NormalizedPath,
         readonly canonicalConfigFilePath: NormalizedPath,
@@ -2790,6 +2796,9 @@ export class ConfiguredProject extends Project {
         this.compilerHost = undefined;
         this.projectService.sendProjectLoadingFinishEvent(this);
         this.projectService.sendProjectTelemetry(this);
+        if (!this.skipConfigDiagEvent && !result) { // If new program, send event if diagnostics presence has changed
+            this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined);
+        }
         return result;
     }
 

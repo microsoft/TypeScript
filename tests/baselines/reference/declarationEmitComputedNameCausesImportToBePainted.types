@@ -40,9 +40,9 @@ export const context: Context = {
 
 export const withContext = ({ [Key]: value }: Context) => value;
 >withContext : ({ [Key]: value }: Context) => string
->            : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
+>            : ^                ^^       ^^^^^^^^^^^
 >({ [Key]: value }: Context) => value : ({ [Key]: value }: Context) => string
->                                     : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^
+>                                     :                                      
 >Key : unique symbol
 >    : ^^^^^^^^^^^^^
 >value : string

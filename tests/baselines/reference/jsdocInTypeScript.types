@@ -40,7 +40,7 @@ declare const myType: MyType; // should error, no such type
  */
 function f(x: boolean) { return x * 2; } // Should error
 >f : (x: boolean) => number
->  : ^^^^       ^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 >x * 2 : number
@@ -55,7 +55,7 @@ f(1); f(true).length;
 >f(1) : number
 >     : ^^^^^^
 >f : (x: boolean) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^
 >1 : 1
 >  : ^
 >f(true).length : any
@@ -63,7 +63,7 @@ f(1); f(true).length;
 >f(true) : number
 >        : ^^^^^^
 >f : (x: boolean) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >length : any
@@ -96,7 +96,7 @@ interface I<T extends number = 0> {}
 /** @template T */
 function tem<T extends number>(t: T): I<T> { return {}; }
 >tem : <T extends number>(t: T) => I<T>
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^    
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^    
 >t : T
 >  : ^
 >{} : {}
@@ -119,13 +119,13 @@ import M = N; // Error: @typedef does not create namespaces in TypeScript code.
  */
 const obj = { foo: (a, b) => a + b };
 >obj : { foo: (a: any, b: any) => any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^
 >{ foo: (a, b) => a + b } : { foo: (a: any, b: any) => any; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^                       ^^^
 >foo : (a: any, b: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >(a, b) => a + b : (a: any, b: any) => any
->                : ^^^^^^^^^^^^^^^^^^^^^^^
+>                :                        
 >a : any
 >  : ^^^
 >b : any

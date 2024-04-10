@@ -176,11 +176,11 @@ BOOLEAN == undefined, "";
 >NUMBER.toString() : string
 >                  : ^^^^^^
 >NUMBER.toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >NUMBER : number
 >       : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 OBJECT = new Object, STRING + "string";
 >OBJECT = new Object, STRING + "string" : string
@@ -271,11 +271,11 @@ var resultIsString10 = (["a", "b"], NUMBER.toString());
 >NUMBER.toString() : string
 >                  : ^^^^^^
 >NUMBER.toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >NUMBER : number
 >       : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 var resultIsString11 = (new Object, STRING + "string");
 >resultIsString11 : string

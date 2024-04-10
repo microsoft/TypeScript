@@ -31,13 +31,13 @@ var x11: { new (); };        // error at "new"
 
 var x2: (y2) => number;      // error at "y2"
 >x2 : (y2: any) => number
->   : ^^^^^^^^^^^^^      
+>   : ^  ^^^^^^^^^^      
 >y2 : any
 >   : ^^^
 
 var x3: (x3: string, y3) => void ; // error at "y3"
 >x3 : (x3: string, y3: any) => void
->   : ^^^^^      ^^^^^^^^^^^^^^    
+>   : ^  ^^      ^^  ^^^^^^^^^^    
 >x3 : string
 >   : ^^^^^^
 >y3 : any

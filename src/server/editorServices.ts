@@ -840,10 +840,19 @@ export function projectContainsInfoDirectly(project: Project, info: ScriptInfo) 
         !project.isSourceOfProjectReferenceRedirect(info.path);
 }
 
-/** @internal */
+/**
+ * returns true if project updated with new program
+ * @internal
+ */
 export function updateProjectIfDirty(project: Project) {
     project.invalidateResolutionsOfFailedLookupLocations();
-    return project.dirty && project.updateGraph();
+    return project.dirty && !project.updateGraph();
+}
+
+function updateConfiguredProjectWithoutConfigDiagIfDirty(project: ConfiguredProject) {
+    project.skipConfigDiagEvent = true;
+    updateProjectIfDirty(project);
+    project.skipConfigDiagEvent = undefined;
 }
 
 function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
@@ -997,7 +1006,7 @@ function createWatchFactoryHostUsingWatchEvents(service: ProjectService, canUseW
         cb: (callback: T, eventPath: string) => void,
     ) {
         hostWatcherMap.idToCallbacks.get(id)?.forEach(callback => {
-            eventPaths.forEach(eventPath => cb(callback, eventPath));
+            eventPaths.forEach(eventPath => cb(callback, normalizeSlashes(eventPath)));
         });
     }
 }
@@ -2508,6 +2517,7 @@ export class ProjectService {
     /** @internal */
     private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath, reason: string) {
         const project = this.createAndLoadConfiguredProject(configFileName, reason);
+        project.skipConfigDiagEvent = true;
         project.updateGraph();
         return project;
     }
@@ -2836,6 +2846,7 @@ export class ProjectService {
 
         // Load project from the disk
         this.loadConfiguredProject(project, reason);
+        project.skipConfigDiagEvent = true;
         project.updateGraph();
 
         this.sendConfigFileDiagEvent(project, configFileName);
@@ -2849,17 +2860,22 @@ export class ProjectService {
         project.markAsDirty();
     }
 
-    private sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath) {
+    /** @internal */
+    sendConfigFileDiagEvent(project: ConfiguredProject, triggerFile: NormalizedPath | undefined) {
         if (!this.eventHandler || this.suppressDiagnosticEvents) {
             return;
         }
         const diagnostics = project.getLanguageService().getCompilerOptionsDiagnostics();
         diagnostics.push(...project.getAllProjectErrors());
 
+        if (!triggerFile && !!diagnostics.length === !!project.hasConfigFileDiagnostics) return;
+
+        project.hasConfigFileDiagnostics = !!diagnostics.length;
+
         this.eventHandler(
             {
                 eventName: ConfigFileDiagEvent,
-                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile },
+                data: { configFileName: project.getConfigFilePath(), diagnostics, triggerFile: triggerFile ?? project.getConfigFilePath() },
             } satisfies ConfigFileDiagEvent,
         );
     }
@@ -3782,7 +3798,7 @@ export class ProjectService {
                 }
                 else {
                     // Ensure project is ready to check if it contains opened script info
-                    updateProjectIfDirty(project);
+                    updateConfiguredProjectWithoutConfigDiagIfDirty(project);
                 }
 
                 projectForConfigFileDiag = project.containsScriptInfo(info) ? project : undefined;
@@ -3795,7 +3811,7 @@ export class ProjectService {
                         project,
                         info.path,
                         child => {
-                            updateProjectIfDirty(child);
+                            updateConfiguredProjectWithoutConfigDiagIfDirty(child);
                             // Retain these projects
                             if (!isArray(retainProjects)) {
                                 retainProjects = [project as ConfiguredProject, child];
@@ -4682,7 +4698,6 @@ export class ProjectService {
                 (fileName, eventKind) => {
                     switch (eventKind) {
                         case FileWatcherEventKind.Created:
-                            return Debug.fail();
                         case FileWatcherEventKind.Changed:
                             this.packageJsonCache.addOrUpdate(fileName, path);
                             this.onPackageJsonChange(result);

@@ -9,7 +9,7 @@ export var config: {}
 /** @param {import('./ex')} a */
 function demo(a) {
 >demo : (a: typeof import("ex")) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^              ^^^^ ^^^^^^^^^
 >a : typeof import("ex")
 >  : ^^^^^^^^^^^^^^^^^^^
 

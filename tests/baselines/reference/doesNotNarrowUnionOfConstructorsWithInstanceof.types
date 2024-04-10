@@ -49,7 +49,7 @@ class B {
 
 function getTypedArray(flag: boolean) {
 >getTypedArray : (flag: boolean) => A | B
->              : ^^^^^^^       ^^^^^^^^^^
+>              : ^    ^^       ^^^^^^^^^^
 >flag : boolean
 >     : ^^^^^^^
 
@@ -69,7 +69,7 @@ function getTypedArray(flag: boolean) {
 }
 function getTypedArrayConstructor(flag: boolean) {
 >getTypedArrayConstructor : (flag: boolean) => typeof A | typeof B
->                         : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >flag : boolean
 >     : ^^^^^^^
 
@@ -89,7 +89,7 @@ const a = getTypedArray(true);              // A | B
 >getTypedArray(true) : A | B
 >                    : ^^^^^
 >getTypedArray : (flag: boolean) => A | B
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^       ^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -99,7 +99,7 @@ const b = getTypedArrayConstructor(false);  // A constructor | B constructor
 >getTypedArrayConstructor(false) : typeof A | typeof B
 >                                : ^^^^^^^^^^^^^^^^^^^
 >getTypedArrayConstructor : (flag: boolean) => typeof A | typeof B
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 
@@ -119,11 +119,11 @@ if (!(a instanceof b)) {
 >console.log(a.length) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >a.length : 1 | 2
 >         : ^^^^^
 >a : A | B

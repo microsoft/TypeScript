@@ -7,11 +7,11 @@ var s = Symbol.for("add");
 >Symbol.for("add") : symbol
 >                  : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"add" : "add"
 >      : ^^^^^
 

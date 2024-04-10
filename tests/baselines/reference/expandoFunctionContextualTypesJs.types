@@ -42,7 +42,7 @@ const MyComponent2 = () => null;
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => null : { (): any; defaultProps: MyComponentProps; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           :                                             
 
 /**
  * @type {MyComponentProps}
@@ -81,7 +81,7 @@ const check = MyComponent2;
  */
 function expectLiteral(p) {}
 >expectLiteral : (p: { props: MyComponentProps; }) => void
->              : ^^^^                            ^^^^^^^^^
+>              : ^ ^^                            ^^^^^^^^^
 >p : { props: MyComponentProps; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -112,7 +112,7 @@ function foo() {
 >expectLiteral(this) : void
 >                    : ^^^^
 >expectLiteral : (p: { props: MyComponentProps; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^                            ^^^^^^^^^
 >this : this
 >     : ^^^^
 }
@@ -143,7 +143,7 @@ expectLiteral({ props: module.exports });
 >expectLiteral({ props: module.exports }) : void
 >                                         : ^^^^
 >expectLiteral : (p: { props: MyComponentProps; }) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^                            ^^^^^^^^^
 >{ props: module.exports } : { props: MyComponentProps; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : MyComponentProps

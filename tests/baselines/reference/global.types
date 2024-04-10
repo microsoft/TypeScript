@@ -7,7 +7,7 @@ module M {
 
     export function f(y:number) {
 >f : (y: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 
@@ -31,11 +31,11 @@ M.f(3);
 >M.f(3) : number
 >       : ^^^^^^
 >M.f : (y: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >M : typeof M
 >  : ^^^^^^^^
 >f : (y: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 

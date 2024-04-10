@@ -11,11 +11,11 @@ function* g(): IterableIterator<(x: string) => number> {
 >yield * {        *[Symbol.iterator]() {            yield x => x.length;        }    } : void
 >                                                                                      : ^^^^
 >{        *[Symbol.iterator]() {            yield x => x.length;        }    } : { [Symbol.iterator](): Generator<(x: string) => number, void, undefined>; }
->                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         *[Symbol.iterator]() {
 >[Symbol.iterator] : () => Generator<(x: string) => number, void, undefined>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.iterator : unique symbol
 >                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -27,7 +27,7 @@ function* g(): IterableIterator<(x: string) => number> {
 >yield x => x.length : undefined
 >                    : ^^^^^^^^^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number

@@ -18,9 +18,9 @@ function foo() {
 
     var seriesExtent = (series) => null;
 >seriesExtent : (series: any) => any
->             : ^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^^^^^^^^^^^^
 >(series) => null : (series: any) => any
->                 : ^^^^^^^^^^^^^^^^^^^^
+>                 :                     
 >series : any
 
     var series2: number[];
@@ -31,13 +31,13 @@ function foo() {
 >series2.map(seriesExtent) : any[]
 >                          : ^^^^^
 >series2.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >series2 : number[]
 >        : ^^^^^^^^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >seriesExtent : (series: any) => any
->             : ^^^^^^^^^^^^^^^^^^^^
+>             : ^      ^^^^^^^^^^^^^
 
     return null;
 }
@@ -49,7 +49,7 @@ var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 >series.data.map(function (d: string) { return d; }) : string[]
 >                                                    : ^^^^^^^^
 >series.data.map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >series.data : string[]
 >            : ^^^^^^^^
 >series : Series
@@ -57,9 +57,9 @@ var keyExtent2: any[] = series.data.map(function (d: string) { return d; });
 >data : string[]
 >     : ^^^^^^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >function (d: string) { return d; } : (d: string) => string
->                                   : ^^^^      ^^^^^^^^^^^
+>                                   : ^ ^^      ^^^^^^^^^^^
 >d : string
 >  : ^^^^^^
 >d : string

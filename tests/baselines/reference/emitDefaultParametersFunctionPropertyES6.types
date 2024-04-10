@@ -3,13 +3,13 @@
 === emitDefaultParametersFunctionPropertyES6.ts ===
 var obj2 = {
 >obj2 : { func1(y?: number, ...rest: any[]): void; func2(x?: string): void; func3(x: string, z: number, y?: string): void; func4(x: string, z: number, y?: string, ...rest: any[]): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >{    func1(y = 10, ...rest) { },    func2(x = "hello") { },    func3(x: string, z: number, y = "hello") { },    func4(x: string, z: number, y = "hello", ...rest) { },} : { func1(y?: number, ...rest: any[]): void; func2(x?: string): void; func3(x: string, z: number, y?: string): void; func4(x: string, z: number, y?: string, ...rest: any[]): void; }
->                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                        : ^^^^^^^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 
     func1(y = 10, ...rest) { },
 >func1 : (y?: number, ...rest: any[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >10 : 10
@@ -19,7 +19,7 @@ var obj2 = {
 
     func2(x = "hello") { },
 >func2 : (x?: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"hello" : "hello"
@@ -27,7 +27,7 @@ var obj2 = {
 
     func3(x: string, z: number, y = "hello") { },
 >func3 : (x: string, z: number, y?: string) => void
->      : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >z : number
@@ -39,7 +39,7 @@ var obj2 = {
 
     func4(x: string, z: number, y = "hello", ...rest) { },
 >func4 : (x: string, z: number, y?: string, ...rest: any[]) => void
->      : ^^^^      ^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >z : number

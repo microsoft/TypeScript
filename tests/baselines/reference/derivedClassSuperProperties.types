@@ -15,7 +15,7 @@ class Base {
 
     receivesAnything(param?) { }
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 >param : any
 >      : ^^^
 }
@@ -37,11 +37,11 @@ class Derived1 extends Base {
 >super.receivesAnything() : void
 >                         : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 
         super();
 >super() : void
@@ -68,11 +68,11 @@ class Derived2 extends Base {
 >super.receivesAnything(this) : void
 >                             : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -101,11 +101,11 @@ class Derived3 extends Base {
 >super.receivesAnything() : void
 >                         : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 
         super(this);
 >super(this) : void
@@ -134,11 +134,11 @@ class Derived4 extends Base {
 >super.receivesAnything(this) : void
 >                             : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -175,11 +175,11 @@ class Derived5 extends Base {
 >super.receivesAnything() : void
 >                         : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
     }
 }
 
@@ -208,11 +208,11 @@ class Derived6 extends Base {
 >super.receivesAnything() : void
 >                         : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
     }
 }
 
@@ -239,11 +239,11 @@ class Derived7 extends Base {
 >super.receivesAnything(this) : void
 >                             : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
     }
@@ -274,11 +274,11 @@ class Derived8 extends Base {
 >super.receivesAnything(this) : void
 >                             : ^^^^
 >super.receivesAnything : (param?: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^
 >super : Base
 >      : ^^^^
 >receivesAnything : (param?: any) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
     }
@@ -330,9 +330,9 @@ class DerivedWithArrowFunctionParameter extends Base {
     constructor() {
         const lambda = (param = this) => {};
 >lambda : (param?: this) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^
 >(param = this) => {} : (param?: this) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                     :       ^               
 >param : this
 >      : ^^^^
 >this : this
@@ -501,7 +501,7 @@ class DerivedWithFunctionDeclarationAndThisParam extends Base {
     constructor() {
         function declaration(param = this) {
 >declaration : (param?: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^
 >param : any
 >      : ^^^
 >this : any
@@ -785,11 +785,11 @@ class DerivedWithClassExpression extends Base {
 >console.log(class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        }) : void
 >                                                                                                                                                                                                                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        } : typeof (Anonymous class)
 >                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -852,11 +852,11 @@ class DerivedWithClassExpressionExtendingMember extends Base {
 >console.log(class extends this.memberClass { }) : void
 >                                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >class extends this.memberClass { } : typeof (Anonymous class)
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.memberClass : (Anonymous class)
@@ -891,11 +891,11 @@ class DerivedWithDerivedClassExpression extends Base {
 >console.log(class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        }) : void
 >                                                                                                                                                                                                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >class extends Base {            constructor() {                super();            }            public foo() {                return this;            }            public bar = () => this;        } : typeof (Anonymous class)
 >                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Base
@@ -920,7 +920,7 @@ class DerivedWithDerivedClassExpression extends Base {
 >bar : () => this
 >    : ^^^^^^^^^^
 >() => this : () => this
->           : ^^^^^^^^^^
+>           :           
 >this : this
 >     : ^^^^
 
@@ -950,11 +950,11 @@ class DerivedWithNewDerivedClassExpression extends Base {
 >console.log(new class extends Base {            constructor() {                super();            }        }()) : void
 >                                                                                                                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >new class extends Base {            constructor() {                super();            }        }() : (Anonymous class)
 >                                                                                                    : ^^^^^^^^^^^^^^^^^
 >class extends Base {            constructor() {                super();            }        } : typeof (Anonymous class)

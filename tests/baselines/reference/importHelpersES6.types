@@ -33,7 +33,7 @@ declare var dec: any;
 
     g(u) { return #x in u; }
 >g : (u: any) => u is A
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >u : any
 >#x in u : boolean
 >        : ^^^^^^^
@@ -62,7 +62,7 @@ const y = { ...o };
 === tslib.d.ts ===
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
->          : ^^^^        ^^^^^        ^^^^^    
+>          : ^ ^^        ^^ ^^        ^^^^^    
 >d : Function
 >  : ^^^^^^^^
 >b : Function
@@ -70,7 +70,7 @@ export declare function __extends(d: Function, b: Function): void;
 
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 >__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
->           : ^^^^^^^^^^^^^          ^^^^^^^^^^   ^^^^^^^^               ^^^^^^^^^   ^^^^^   
+>           : ^          ^^          ^^      ^^   ^^   ^^^               ^^    ^^^   ^^^^^   
 >decorators : Function[]
 >           : ^^^^^^^^^^
 >target : any
@@ -80,7 +80,7 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 
 export declare function __param(paramIndex: number, decorator: Function): Function;
 >__param : (paramIndex: number, decorator: Function) => Function
->        : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^        ^^^^^        
+>        : ^          ^^      ^^         ^^        ^^^^^        
 >paramIndex : number
 >           : ^^^^^^
 >decorator : Function
@@ -88,13 +88,13 @@ export declare function __param(paramIndex: number, decorator: Function): Functi
 
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 >__metadata : (metadataKey: any, metadataValue: any) => Function
->           : ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^        
+>           : ^           ^^   ^^             ^^   ^^^^^        
 >metadataKey : any
 >metadataValue : any
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
->          : ^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^        ^^^^^^^^^^^^^        ^^^^^   
+>          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
 >_arguments : any
 >P : Function
@@ -104,7 +104,7 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): any;
 >__classPrivateFieldGet : (a: any, b: any, c: any, d: any) => any
->                       : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^   
+>                       : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^   
 >a : any
 >b : any
 >c : any
@@ -112,7 +112,7 @@ export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): 
 
 export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
 >__classPrivateFieldSet : (a: any, b: any, c: any, d: any, e: any) => any
->                       : ^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^   ^^^^^   
+>                       : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^   
 >a : any
 >b : any
 >c : any
@@ -121,7 +121,7 @@ export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e
 
 export declare function __classPrivateFieldIn(a: any, b: any): boolean;
 >__classPrivateFieldIn : (a: any, b: any) => boolean
->                      : ^^^^   ^^^^^   ^^^^^       
+>                      : ^ ^^   ^^ ^^   ^^^^^       
 >a : any
 >b : any
 

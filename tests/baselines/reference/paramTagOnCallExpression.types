@@ -3,7 +3,7 @@
 === decls.d.ts ===
 declare function factory(type: string): {};
 >factory : (type: string) => {}
->        : ^^^^^^^      ^^^^^  
+>        : ^    ^^      ^^^^^  
 >type : string
 >     : ^^^^^^
 
@@ -20,9 +20,9 @@ exports.inherits = factory('inherits')
 >inherits : {}
 >         : ^^
 >factory('inherits') : {}
->                    : ^^
+>                    :   
 >factory : (type: string) => {}
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^
 >'inherits' : "inherits"
 >           : ^^^^^^^^^^
 

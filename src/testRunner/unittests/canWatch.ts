@@ -1,6 +1,4 @@
-import {
-    Baseline,
-} from "../_namespaces/Harness";
+import { Baseline } from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 describe("unittests:: canWatch::", () => {
     baselineCanWatch(

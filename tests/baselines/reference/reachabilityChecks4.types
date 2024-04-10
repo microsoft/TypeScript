@@ -3,7 +3,7 @@
 === reachabilityChecks4.ts ===
 function foo(x, y) {
 >foo : (x: any, y: any) => 1 | 2 | 3
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -57,7 +57,7 @@ declare function fail(): never;
 
 function f1(x: 0 | 1 | 2) {
 >f1 : (x: 0 | 1 | 2) => void
->   : ^^^^         ^^^^^^^^^
+>   : ^ ^^         ^^^^^^^^^
 >x : 0 | 1 | 2
 >  : ^^^^^^^^^
 
@@ -115,7 +115,7 @@ interface Transition {
 
 function f2(transition: Transition): any {
 >f2 : (transition: Transition) => any
->   : ^^^^^^^^^^^^^          ^^^^^   
+>   : ^          ^^          ^^^^^   
 >transition : Transition
 >           : ^^^^^^^^^^
 

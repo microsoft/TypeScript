@@ -24,7 +24,7 @@ class C {
 
     funcOfC(f1, f2, f3: number) { }     // error at "f1,f2"
 >funcOfC : (f1: any, f2: any, f3: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^  ^^      ^^^^^^^^^
 >f1 : any
 >   : ^^^
 >f2 : any

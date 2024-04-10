@@ -31,7 +31,7 @@ module Test {
     interface IMode {
         onEnter(line:string, state:IState, offset:number):IAction;
 >onEnter : (line: string, state: IState, offset: number) => IAction
->        : ^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^       
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -41,7 +41,7 @@ module Test {
 
         tokenize(line:string, state:IState, includeStates:boolean):ILineTokens;
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->         : ^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^^^           
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -55,7 +55,7 @@ module Test {
 
         public onEnter(line:string, state:IState, offset:number):IAction {
 >onEnter : (line: string, state: IState, offset: number) => IAction
->        : ^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^      ^^^^^       
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^       
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -69,11 +69,11 @@ module Test {
 >this.tokenize(line, state, true) : ILineTokens
 >                                 : ^^^^^^^^^^^
 >this.tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^^^^^^^^^^^^
 >line : string
 >     : ^^^^^^
 >state : IState
@@ -107,11 +107,11 @@ module Test {
 >this.onEnter(line, tokens, offset) : IAction
 >                                   : ^^^^^^^
 >this.onEnter : (line: string, state: IState, offset: number) => IAction
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >onEnter : (line: string, state: IState, offset: number) => IAction
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^     ^^      ^^      ^^      ^^^^^^^^^^^^
 >line : string
 >     : ^^^^^^
 >tokens : IStateToken[]
@@ -122,7 +122,7 @@ module Test {
         }
         public tokenize(line:string, state:IState, includeStates:boolean):ILineTokens {
 >tokenize : (line: string, state: IState, includeStates: boolean) => ILineTokens
->         : ^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^       ^^^^^           
+>         : ^    ^^      ^^     ^^      ^^             ^^       ^^^^^           
 >line : string
 >     : ^^^^^^
 >state : IState

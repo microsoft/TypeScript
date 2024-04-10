@@ -91,15 +91,15 @@ var ResultIsNumber5 = ++{ x: true, y: (n: boolean) => { return n; } };
 >++{ x: true, y: (n: boolean) => { return n; } } : number
 >                                                : ^^^^^^
 >{ x: true, y: (n: boolean) => { return n; } } : { x: boolean; y: (n: boolean) => boolean; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 >true : true
 >     : ^^^^
 >y : (n: boolean) => boolean
->  : ^^^^       ^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              : ^^^^       ^^^^^^^^^^^^
+>                              :                        
 >n : boolean
 >  : ^^^^^^^
 >n : boolean
@@ -135,15 +135,15 @@ var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }++;
 >{ x: true, y: (n: boolean) => { return n; } }++ : number
 >                                                : ^^^^^^
 >{ x: true, y: (n: boolean) => { return n; } } : { x: boolean; y: (n: boolean) => boolean; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 >true : true
 >     : ^^^^
 >y : (n: boolean) => boolean
->  : ^^^^       ^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              : ^^^^       ^^^^^^^^^^^^
+>                              :                        
 >n : boolean
 >  : ^^^^^^^
 >n : boolean

@@ -3,7 +3,7 @@
 === selfReference.ts ===
 declare function asFunction<T>(value: T): () => T;
 >asFunction : <T>(value: T) => () => T
->           : ^ ^^^^^^^^^ ^^^^^       
+>           : ^ ^^     ^^ ^^^^^       
 >value : T
 >      : ^
 
@@ -11,7 +11,7 @@ asFunction(() => { return 1; });
 >asFunction(() => { return 1; }) : () => () => 1
 >                                : ^^^^^^^^^^^^^
 >asFunction : <T>(value: T) => () => T
->           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^     ^^ ^^^^^^^^^^^^
 >() => { return 1; } : () => 1
 >                    : ^^^^^^^
 >1 : 1

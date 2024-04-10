@@ -47,7 +47,7 @@ const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} /
 >React : any
 >      : ^^^
 >props => <Button {...props} /> : (props: CustomButtonProps & { children?: React.ReactNode; }) => JSX.Element
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : CustomButtonProps & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><Button {...props} /> : JSX.Element

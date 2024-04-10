@@ -105,13 +105,13 @@ interface I1<T> {
 
     foo12: (x) => number; //error
 >foo12 : (x: any) => number
->      : ^^^^^^^^^^^^      
+>      : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 
     foo13: <T>(x: T) => T; // error
 >foo13 : <T_1>(x: T_1) => T_1
->      : ^   ^^^^^^^^^^^^^^^^
+>      : ^   ^^ ^^   ^^^^^   
 >x : T
 >  : ^
 
@@ -192,13 +192,13 @@ interface I2<T> {
 
     foo12: (x) => number; //error
 >foo12 : (x: any) => number
->      : ^^^^^^^^^^^^      
+>      : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 
     foo13: <T>(x: T) => T; // error
 >foo13 : <T_1>(x: T_1) => T_1
->      : ^   ^^^^^^^^^^^^^^^^
+>      : ^   ^^ ^^   ^^^^^   
 >x : T
 >  : ^
 

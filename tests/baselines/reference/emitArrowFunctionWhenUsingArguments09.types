@@ -3,7 +3,7 @@
 === emitArrowFunctionWhenUsingArguments09.ts ===
 function f(_arguments) {
 >f : (_arguments: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^          ^^^^^^^^^^^^^^
 >_arguments : any
 >           : ^^^
 
@@ -11,7 +11,7 @@ function f(_arguments) {
 >a : () => () => IArguments
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => arguments : () => () => IArguments
->                      : ^^^^^^^^^^^^^^^^^^^^^^
+>                      :                       
 >() => arguments : () => IArguments
 >                : ^^^^^^^^^^^^^^^^
 >arguments : IArguments

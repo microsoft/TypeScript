@@ -45,7 +45,7 @@ class MyTestClass {
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
 >memberFunc : (t?: this) => void
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^
 >t : this
 >  : ^^^^
 >this : this
@@ -123,7 +123,7 @@ class MyTestClass {
 >someFunc : () => void
 >         : ^^^^^^^^^^
 >() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t: MyTestClass;    } : () => void
->                                                                                                                                               : ^^^^^^^^^^
+>                                                                                                                                               :           
 
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
@@ -141,7 +141,7 @@ class MyTestClass {
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
 >staticFn : (t?: typeof MyTestClass) => void
->         : ^^^^^                  ^^^^^^^^^
+>         : ^ ^^^                  ^^^^^^^^^
 >t : typeof MyTestClass
 >  : ^^^^^^^^^^^^^^^^^^
 >this : typeof MyTestClass
@@ -311,7 +311,7 @@ class MyGenericTestClass<T, U> {
     //type of 'this' in member function param list is the class instance type
     memberFunc(t = this) {
 >memberFunc : (t?: this) => void
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^
 >t : this
 >  : ^^^^
 >this : this
@@ -389,7 +389,7 @@ class MyGenericTestClass<T, U> {
 >someFunc : () => void
 >         : ^^^^^^^^^^
 >() => {        //type of 'this' in member variable initializer is the class instance type        var t = this;        var t: MyGenericTestClass<T, U>;    } : () => void
->                                                                                                                                                            : ^^^^^^^^^^
+>                                                                                                                                                            :           
 
         //type of 'this' in member variable initializer is the class instance type
         var t = this;
@@ -407,7 +407,7 @@ class MyGenericTestClass<T, U> {
     //type of 'this' in static function param list is constructor function type
     static staticFn(t = this) {
 >staticFn : (t?: typeof MyGenericTestClass) => void
->         : ^^^^^                         ^^^^^^^^^
+>         : ^ ^^^                         ^^^^^^^^^
 >t : typeof MyGenericTestClass
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof MyGenericTestClass
@@ -536,7 +536,7 @@ class MyGenericTestClass<T, U> {
 //type of 'this' in a function declaration param list is Any
 function fn(s = this) {
 >fn : (s?: any) => void
->   : ^^^^^   ^^^^^^^^^
+>   : ^ ^^^   ^^^^^^^^^
 >s : any
 >  : ^^^
 >this : any
@@ -585,9 +585,9 @@ function fn(s = this) {
 //type of 'this' in a function expression param list list is Any
 var q1 = function (s = this) {
 >q1 : (s?: any) => void
->   : ^^^^^   ^^^^^^^^^
+>   : ^ ^^^   ^^^^^^^^^
 >function (s = this) {    var s: any;    s.spaaaaaaace = 4;    //type of 'this' in a function expression body is Any    var t: any;    var t = this;    this.spaaaaace = 4;} : (s?: any) => void
->                                                                                                                                                                            : ^^^^^   ^^^^^^^^^
+>                                                                                                                                                                            :   ^              
 >s : any
 >  : ^^^
 >this : any
@@ -636,9 +636,9 @@ var q1 = function (s = this) {
 //type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
 >q2 : (s?: typeof globalThis) => void
->   : ^^^^^                 ^^^^^^^^^
+>   : ^ ^^^                 ^^^^^^^^^
 >(s = this) => {    var s: typeof globalThis;    s.spaaaaaaace = 4;    //type of 'this' in a fat arrow expression body is typeof globalThis    var t: typeof globalThis;    var t = this;    this.spaaaaace = 4;} : (s?: typeof globalThis) => void
->                                                                                                                                                                                                                 : ^^^^^                 ^^^^^^^^^
+>                                                                                                                                                                                                                 :   ^                            
 >s : typeof globalThis
 >  : ^^^^^^^^^^^^^^^^^
 >this : typeof globalThis

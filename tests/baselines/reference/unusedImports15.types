@@ -28,7 +28,7 @@ declare namespace React {
 
     function createClass<P, S>(spec);
 >createClass : <P, S>(spec: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^    ^^^^^^^^^^^^^
 >spec : any
 }
 declare global {

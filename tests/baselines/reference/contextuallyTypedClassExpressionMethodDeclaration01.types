@@ -16,13 +16,13 @@ interface B  {
 interface Foo {
     method1(arg: A): void;
 >method1 : (arg: A) => void
->        : ^^^^^^ ^^^^^    
+>        : ^   ^^ ^^^^^    
 >arg : A
 >    : ^
 
     method2(arg: B): void;
 >method2 : (arg: B) => void
->        : ^^^^^^ ^^^^^    
+>        : ^   ^^ ^^^^^    
 >arg : B
 >    : ^
 }
@@ -37,7 +37,7 @@ function getFoo1(): Foo {
 
         static method1(arg) {
 >method1 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 
@@ -55,7 +55,7 @@ function getFoo1(): Foo {
         }
         static method2(arg) {
 >method2 : (arg: any) => void
->        : ^^^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 
@@ -84,9 +84,9 @@ function getFoo2(): Foo {
 
         static method1 = (arg) => {
 >method1 : (arg: A) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.numProp = 10;        } : (arg: A) => void
->                                                 : ^^^^^^^^^^^^^^^^
+>                                                 :                 
 >arg : A
 >    : ^
 
@@ -104,9 +104,9 @@ function getFoo2(): Foo {
         }
         static method2 = (arg) => {
 >method2 : (arg: B) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.strProp = "hello";        } : (arg: B) => void
->                                                      : ^^^^^^^^^^^^^^^^
+>                                                      :                 
 >arg : B
 >    : ^
 
@@ -135,9 +135,9 @@ function getFoo3(): Foo {
 
         static method1 = function (arg) {
 >method1 : (arg: A) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.numProp = 10;        } : (arg: A) => void
->                                                       : ^^^^^^^^^^^^^^^^
+>                                                       :                 
 >arg : A
 >    : ^
 
@@ -155,9 +155,9 @@ function getFoo3(): Foo {
         }
         static method2 = function (arg) {
 >method2 : (arg: B) => void
->        : ^^^^^^^^^^^^^^^^
+>        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.strProp = "hello";        } : (arg: B) => void
->                                                            : ^^^^^^^^^^^^^^^^
+>                                                            :                 
 >arg : B
 >    : ^
 

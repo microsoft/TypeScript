@@ -4,7 +4,7 @@
 interface I1<T> {
     commonMethodType(a: string): string;
 >commonMethodType : (a: string) => string
->                 : ^^^^      ^^^^^      
+>                 : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -14,13 +14,13 @@ interface I1<T> {
 
     commonMethodDifferentParameterType(a: string): string;
 >commonMethodDifferentParameterType : (a: string) => string
->                                   : ^^^^      ^^^^^      
+>                                   : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
     commonMethodDifferentReturnType(a: string): string;
 >commonMethodDifferentReturnType : (a: string) => string
->                                : ^^^^      ^^^^^      
+>                                : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -30,19 +30,19 @@ interface I1<T> {
 
     commonMethodWithTypeParameter(a: T): T;
 >commonMethodWithTypeParameter : (a: T) => T
->                              : ^^^^ ^^^^^ 
+>                              : ^ ^^ ^^^^^ 
 >a : T
 >  : ^
 
     commonMethodWithOwnTypeParameter<U>(a: U): U;
 >commonMethodWithOwnTypeParameter : <U>(a: U) => U
->                                 : ^ ^^^^^ ^^^^^ 
+>                                 : ^ ^^ ^^ ^^^^^ 
 >a : U
 >  : ^
 
     methodOnlyInI1(a: string): string;
 >methodOnlyInI1 : (a: string) => string
->               : ^^^^      ^^^^^      
+>               : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -54,7 +54,7 @@ interface I1<T> {
 interface I2<T> {
     commonMethodType(a: string): string;
 >commonMethodType : (a: string) => string
->                 : ^^^^      ^^^^^      
+>                 : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -64,13 +64,13 @@ interface I2<T> {
 
     commonMethodDifferentParameterType(a: number): number;
 >commonMethodDifferentParameterType : (a: number) => number
->                                   : ^^^^      ^^^^^      
+>                                   : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 
     commonMethodDifferentReturnType(a: string): number;
 >commonMethodDifferentReturnType : (a: string) => number
->                                : ^^^^      ^^^^^      
+>                                : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -80,19 +80,19 @@ interface I2<T> {
 
     commonMethodWithTypeParameter(a: T): T;
 >commonMethodWithTypeParameter : (a: T) => T
->                              : ^^^^ ^^^^^ 
+>                              : ^ ^^ ^^^^^ 
 >a : T
 >  : ^
 
     commonMethodWithOwnTypeParameter<U>(a: U): U;
 >commonMethodWithOwnTypeParameter : <U>(a: U) => U
->                                 : ^ ^^^^^ ^^^^^ 
+>                                 : ^ ^^ ^^ ^^^^^ 
 >a : U
 >  : ^
 
     methodOnlyInI2(a: string): string;
 >methodOnlyInI2 : (a: string) => string
->               : ^^^^      ^^^^^      
+>               : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
@@ -140,11 +140,11 @@ str = x.commonMethodType(str); // (a: string) => string so result should be stri
 >x.commonMethodType(str) : string
 >                        : ^^^^^^
 >x.commonMethodType : ((a: string) => string) | ((a: string) => string)
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodType : ((a: string) => string) | ((a: string) => string)
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -168,31 +168,31 @@ strOrNum = x.commonMethodDifferentReturnType(str); // string | union
 >x.commonMethodDifferentReturnType(str) : string | number
 >                                       : ^^^^^^^^^^^^^^^
 >x.commonMethodDifferentReturnType : ((a: string) => string) | ((a: string) => number)
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodDifferentReturnType : ((a: string) => string) | ((a: string) => number)
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
 x.commonMethodDifferentParameterType; // No error - property exists
 >x.commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 x.commonMethodDifferentParameterType(strOrNum); // error - no call signatures because the type of this property is ((a: string) => string) | (a: number) => number
 >x.commonMethodDifferentParameterType(strOrNum) : string | number
 >                                               : ^^^^^^^^^^^^^^^
 >x.commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodDifferentParameterType : ((a: string) => string) | ((a: number) => number)
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 
@@ -205,11 +205,11 @@ num = x.commonMethodWithTypeParameter(num);
 >x.commonMethodWithTypeParameter(num) : number
 >                                     : ^^^^^^
 >x.commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodWithTypeParameter : ((a: number) => number) | ((a: number) => number)
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 
@@ -221,11 +221,11 @@ num = x.commonMethodWithOwnTypeParameter(num);
 >x.commonMethodWithOwnTypeParameter(num) : number
 >                                        : ^^^^^^
 >x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >num : number
 >    : ^^^^^^
 
@@ -237,11 +237,11 @@ str = x.commonMethodWithOwnTypeParameter(str);
 >x.commonMethodWithOwnTypeParameter(str) : string
 >                                        : ^^^^^^
 >x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -253,11 +253,11 @@ strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum);
 >x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
 >                                             : ^^^^^^^^^^^^^^^
 >x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 

@@ -3,7 +3,7 @@
 === /node_modules/@types/node/index.d.ts ===
 declare var require: (...args: any[]) => any;
 >require : (...args: any[]) => any
->        : ^^^^^^^^^^     ^^^^^   
+>        : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 
@@ -14,7 +14,7 @@ declare module "fs" {
 
     export function readFileSync(path: string, encoding?: string): string;
 >readFileSync : (path: string, encoding?: string) => string
->             : ^^^^^^^      ^^^^^^^^^^^^^      ^^^^^      
+>             : ^    ^^      ^^        ^^^      ^^^^^      
 >path : string
 >     : ^^^^^^
 >encoding : string
@@ -55,7 +55,7 @@ const _ = require("./a");
 >require("./a") : typeof _
 >               : ^^^^^^^^
 >require : (...args: any[]) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^     ^^^^^^^^
 >"./a" : "./a"
 >      : ^^^^^
 

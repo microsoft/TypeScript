@@ -9,7 +9,7 @@ type S = { d: "s"; cb: (x: string) => void };
 >d : "s"
 >  : ^^^
 >cb : (x: string) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -19,13 +19,13 @@ type N = { d: "n"; cb: (x: number) => void };
 >d : "n"
 >  : ^^^
 >cb : (x: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 
 declare function foo(foo: S | N): void;
 >foo : (foo: S | N) => void
->    : ^^^^^^     ^^^^^    
+>    : ^   ^^     ^^^^^    
 >foo : S | N
 >    : ^^^^^
 
@@ -33,9 +33,9 @@ foo({
 >foo({  d: `${"s"}`,  cb: (x) => {    x; // string  },}) : void
 >                                                        : ^^^^
 >foo : (foo: S | N) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^     ^^^^^^^^^
 >{  d: `${"s"}`,  cb: (x) => {    x; // string  },} : { d: "s"; cb: (x: string) => void; }
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
   d: `${"s"}`,
 >d : "s"
@@ -47,9 +47,9 @@ foo({
 
   cb: (x) => {
 >cb : (x: string) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^
 >(x) => {    x; // string  } : (x: string) => void
->                            : ^^^^^^^^^^^^^^^^^^^
+>                            :                    
 >x : string
 >  : ^^^^^^
 

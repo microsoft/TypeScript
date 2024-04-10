@@ -19,7 +19,7 @@ interface FullRule {
 
     normalize?: (match: {x: string}) => void;
 >normalize : ((match: { x: string; }) => void) | undefined
->          : ^^^^^^^^^              ^^^^^    ^^^^^^^^^^^^^
+>          : ^^     ^^              ^^^^^    ^^^^^^^^^^^^^
 >match : { x: string; }
 >      : ^^^^^      ^^^
 >x : string
@@ -36,19 +36,19 @@ const obj: {field: Rule} = {
 >field : Rule
 >      : ^^^^
 >{    field: {        validate: (_t, _p, _s) => false,        normalize: match => match.x,    }} : { field: { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }; }
->                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^
 
     field: {
 >field : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^
 >{        validate: (_t, _p, _s) => false,        normalize: match => match.x,    } : { validate: (_t: string, _p: number, _s: Rule) => false; normalize: (match: any) => any; }
->                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                   : ^^^^^^^^^^^^                                           ^^^^^^^^^^^^^                   ^^^
 
         validate: (_t, _p, _s) => false,
 >validate : (_t: string, _p: number, _s: Rule) => false
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 >(_t, _p, _s) => false : (_t: string, _p: number, _s: Rule) => false
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      :                                            
 >_t : string
 >   : ^^^^^^
 >_p : number
@@ -60,9 +60,9 @@ const obj: {field: Rule} = {
 
         normalize: match => match.x,
 >normalize : (match: any) => any
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^
 >match => match.x : (match: any) => any
->                 : ^^^^^^^^^^^^^^^^^^^
+>                 :                    
 >match : any
 >      : ^^^
 >match.x : any

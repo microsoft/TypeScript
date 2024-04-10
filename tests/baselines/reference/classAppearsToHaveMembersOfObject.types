@@ -29,11 +29,11 @@ var r2 = c.hasOwnProperty('');
 >c.hasOwnProperty('') : boolean
 >                     : ^^^^^^^
 >c.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >c : C
 >  : ^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 

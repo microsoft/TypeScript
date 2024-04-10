@@ -3,9 +3,9 @@
 === parenthesizedArrowExpressionASI.ts ===
 const x = (a: any[]) => (
 >x : (a: any[]) => number
->  : ^^^^     ^^^^^^^^^^^
+>  : ^ ^^     ^^^^^^^^^^^
 >(a: any[]) => (    // comment    undefined as number) : (a: any[]) => number
->                                                      : ^^^^     ^^^^^^^^^^^
+>                                                      :                     
 >a : any[]
 >  : ^^^^^
 >(    // comment    undefined as number) : number

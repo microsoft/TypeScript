@@ -5,7 +5,7 @@ export const a = async () => (await import("inner")).x();
 >a : () => Promise<import("node_modules/inner/private").Thing>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => (await import("inner")).x() : () => Promise<import("node_modules/inner/private").Thing>
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        :                                                                
 >(await import("inner")).x() : import("node_modules/inner/private").Thing
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(await import("inner")).x : () => import("node_modules/inner/private").Thing

@@ -8,9 +8,9 @@ class A {
 
     b = async (...args: any[]) => {
 >b : (...args: any[]) => Promise<void>
->  : ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>  : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
 >async (...args: any[]) => {        await Promise.resolve();        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case    } : (...args: any[]) => Promise<void>
->                                                                                                                                                                 : ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                 :  ^^^                             
 >args : any[]
 >     : ^^^^^
 
@@ -20,23 +20,23 @@ class A {
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const obj = { ["a"]: () => this }; // computed property name after `await` triggers case
 >obj : { a: () => this; }
 >    : ^^^^^^^^^^^^^^^^^^
 >{ ["a"]: () => this } : { a: () => this; }
->                      : ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^          ^^^
 >["a"] : () => this
 >      : ^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >() => this : () => this
->           : ^^^^^^^^^^
+>           :           
 >this : this
 >     : ^^^^
 

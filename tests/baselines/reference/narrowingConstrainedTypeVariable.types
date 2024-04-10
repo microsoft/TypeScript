@@ -9,7 +9,7 @@ class C { }
 
 function f1<T extends C>(v: T | string): void {
 >f1 : <T extends C>(v: T | string) => void
->   : ^ ^^^^^^^^^^^^^^^          ^^^^^    
+>   : ^ ^^^^^^^^^^^^ ^^          ^^^^^    
 >v : string | T
 >  : ^^^^^^^^^^
 
@@ -42,7 +42,7 @@ class D { }
 
 function f2<T extends C, U extends D>(v: T | U) {
 >f2 : <T extends C, U extends D>(v: T | U) => void
->   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^     ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^     ^^^^^^^^^
 >v : T | U
 >  : ^^^^^
 
@@ -77,7 +77,7 @@ class E { x: string | undefined }
 
 function f3<T extends E>(v: T | { x: string }) {
 >f3 : <T extends E>(v: T | { x: string; }) => void
->   : ^ ^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^ ^^                  ^^^^^^^^^
 >v : T | { x: string; }
 >  : ^^^^^^^^^      ^^^
 >x : string

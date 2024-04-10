@@ -3,7 +3,7 @@
 === typeGuardOfFormTypeOfFunction.ts ===
 function f1(x: any) {
 >f1 : (x: any) => void
->   : ^^^^   ^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^
 >x : any
 
     if (typeof x === "function") {
@@ -22,7 +22,7 @@ function f1(x: any) {
 
 function f2(x: unknown) {
 >f2 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -44,7 +44,7 @@ function f2(x: unknown) {
 
 function f3(x: {}) {
 >f3 : (x: {}) => void
->   : ^^^^  ^^^^^^^^^
+>   : ^ ^^  ^^^^^^^^^
 >x : {}
 >  : ^^
 
@@ -66,7 +66,7 @@ function f3(x: {}) {
 
 function f4<T>(x: T) {
 >f4 : <T>(x: T) => void
->   : ^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -88,7 +88,7 @@ function f4<T>(x: T) {
 
 function f5(x: { s: string }) {
 >f5 : (x: { s: string; }) => void
->   : ^^^^              ^^^^^^^^^
+>   : ^ ^^              ^^^^^^^^^
 >x : { s: string; }
 >  : ^^^^^      ^^^
 >s : string
@@ -112,7 +112,7 @@ function f5(x: { s: string }) {
 
 function f6(x: () => string) {
 >f6 : (x: () => string) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : () => string
 >  : ^^^^^^      
 
@@ -134,7 +134,7 @@ function f6(x: () => string) {
 
 function f10(x: string | (() => string)) {
 >f10 : (x: string | (() => string)) => void
->    : ^^^^                       ^^^^^^^^^
+>    : ^ ^^                       ^^^^^^^^^
 >x : string | (() => string)
 >  : ^^^^^^^^^^^^^^^^      ^
 
@@ -161,7 +161,7 @@ function f10(x: string | (() => string)) {
 
 function f11(x: { s: string } | (() => string)) {
 >f11 : (x: { s: string; } | (() => string)) => void
->    : ^^^^                               ^^^^^^^^^
+>    : ^ ^^                               ^^^^^^^^^
 >x : { s: string; } | (() => string)
 >  : ^^^^^      ^^^^^^^^^^^^^      ^
 >s : string
@@ -190,7 +190,7 @@ function f11(x: { s: string } | (() => string)) {
 
 function f12(x: { s: string } | { n: number }) {
 >f12 : (x: { s: string; } | { n: number; }) => void
->    : ^^^^                               ^^^^^^^^^
+>    : ^ ^^                               ^^^^^^^^^
 >x : { s: string; } | { n: number; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >s : string
@@ -223,7 +223,7 @@ function f12(x: { s: string } | { n: number }) {
 
 function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 >f100 : <T, K extends keyof T>(obj: T, keys: K[]) => void
->     : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^   ^^^^^    
+>     : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^   ^^^^^    
 >obj : T
 >    : ^
 >keys : K[]
@@ -258,11 +258,11 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
             item.call(obj);
 >item.call(obj) : any
 >item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >item : T[K] & Function
 >     : ^^^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >obj : T
 >    : ^
     }
@@ -272,7 +272,7 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 
 function configureStore<S extends object>(reducer: (() => void) | Record<keyof S, () => void>) {
 >configureStore : <S extends object>(reducer: (() => void) | Record<keyof S, () => void>) => void
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^                                          ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^       ^^                                          ^^^^^^^^^
 >reducer : Record<keyof S, () => void> | (() => void)
 >        : ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^    ^
 
@@ -302,7 +302,7 @@ function configureStore<S extends object>(reducer: (() => void) | Record<keyof S
 
 function f101(x: string | Record<string, any>) {
 >f101 : (x: string | Record<string, any>) => any
->     : ^^^^                            ^^^^^^^^
+>     : ^ ^^                            ^^^^^^^^
 >x : string | Record<string, any>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

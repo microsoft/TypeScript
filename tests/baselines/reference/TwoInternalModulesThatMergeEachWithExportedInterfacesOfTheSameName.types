@@ -83,7 +83,7 @@ module X {
 // ensure merges as expected
 var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
 >l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
->  : ^^^^^^^^^^       ^^^^^       ^^^^^^^^^^^^^^^       ^^^^^^^       ^^^
+>  : ^^^^^^^ ^^       ^^ ^^       ^^^^^^^^^^^^^^^       ^^^^^^^       ^^^
 >start : A.Point
 >      : ^^^^^^^
 >A : any
@@ -103,7 +103,7 @@ var l: { start: A.Point; end: A.Point; new (s: A.Point, e: A.Point); }
 
 var l: X.Y.Z.Line;
 >l : { new (s: A.Point, e: A.Point): any; start: A.Point; end: A.Point; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^ ^^       ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >X : any
 >  : ^^^
 >Y : any

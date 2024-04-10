@@ -3,7 +3,7 @@
 === genericCallSpecializedToTypeArg.ts ===
 function dupe<T>(x: T): T {
 >dupe : <T>(x: T) => T
->     : ^ ^^^^^ ^^^^^ 
+>     : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -13,7 +13,7 @@ function dupe<T>(x: T): T {
 }
 function dupeAndGetDist<U>(x: U): U {
 >dupeAndGetDist : <U>(x: U) => U
->               : ^ ^^^^^ ^^^^^ 
+>               : ^ ^^ ^^ ^^^^^ 
 >x : U
 >  : ^
 
@@ -23,7 +23,7 @@ function dupeAndGetDist<U>(x: U): U {
 >dupe(x) : U
 >        : ^
 >dupe : <T>(x: T) => T
->     : ^^^^^^^^^^^^^^
+>     : ^ ^^ ^^ ^^^^^^
 >x : U
 >  : ^
 

@@ -9,7 +9,7 @@ type Mapped1<K extends string> = { [P in K]: { a: P } };
 
 function f1<K extends string>(obj: Mapped1<K>, key: K) {
 >f1 : <K extends string>(obj: Mapped1<K>, key: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^          ^^   ^^ ^^^^^^^^^
 >obj : Mapped1<K>
 >    : ^^^^^^^^^^
 >key : K
@@ -36,7 +36,7 @@ type Mapped2<K extends string> = { [P in K as `get${P}`]: { a: P } };
 
 function f2<K extends string>(obj: Mapped2<K>, key: `get${K}`) {
 >f2 : <K extends string>(obj: Mapped2<K>, key: `get${K}`) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^         ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^          ^^   ^^         ^^^^^^^^^
 >obj : Mapped2<K>
 >    : ^^^^^^^^^^
 >key : `get${K}`
@@ -63,7 +63,7 @@ type Mapped3<K extends string> = { [P in K as Uppercase<P>]: { a: P } };
 
 function f3<K extends string>(obj: Mapped3<K>, key: Uppercase<K>) {
 >f3 : <K extends string>(obj: Mapped3<K>, key: Uppercase<K>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^            ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^          ^^   ^^            ^^^^^^^^^
 >obj : Mapped3<K>
 >    : ^^^^^^^^^^
 >key : Uppercase<K>
@@ -91,7 +91,7 @@ type Mapped4<K extends `_${string}`> = {
 
 function f4<K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) {
 >f4 : <K extends `_${string}`>(obj: Mapped4<K>, key: keyof Mapped4<K>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^          ^^   ^^                ^^^^^^^^^
 >obj : Mapped4<K>
 >    : ^^^^^^^^^^
 >key : K
@@ -117,7 +117,7 @@ type Mapped5<K extends string> = {
 
 function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
 >f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^          ^^   ^^                ^^^^^^^^^
 >obj : Mapped5<K>
 >    : ^^^^^^^^^^
 >key : K extends `_${string}` ? K : never
@@ -145,7 +145,7 @@ type Mapped6<K extends string> = {
 
 function f6<K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) {
 >f6 : <K extends string>(obj: Mapped6<K>, key: keyof Mapped6<K>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^          ^^   ^^                ^^^^^^^^^
 >obj : Mapped6<K>
 >    : ^^^^^^^^^^
 >key : keyof Mapped6<K>
@@ -173,9 +173,9 @@ type Foo<T extends string> = {
 
 const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type 'Foo<T>[`get${T}`]' is not assignable to type 'T'
 >get : <T extends string>(t: T, foo: Foo<T>) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^      ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^   ^^      ^^^^^ 
 ><T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`] : <T extends string>(t: T, foo: Foo<T>) => T
->                                                           : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^      ^^^^^ 
+>                                                           :                                           
 >t : T
 >  : ^
 >foo : Foo<T>
@@ -210,7 +210,7 @@ type NumericBoundsOf<T> = {
 
 function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >validate : <T extends object>(obj: T, bounds: NumericBoundsOf<T>) => boolean
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^                  ^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^      ^^                  ^^^^^^^^^^^^
 >obj : T
 >    : ^
 >bounds : NumericBoundsOf<T>
@@ -224,11 +224,11 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >Object.entries(obj) : [string, any][]
 >                    : ^^^^^^^^^^^^^^^
 >Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^   ^^ ^^                                      ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^   ^^ ^^                                      ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -294,7 +294,7 @@ type ObjectWithUnderscoredKeys<K extends string> = {
 
 function genericTest<K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) {
 >genericTest : <K extends string>(objectWithUnderscoredKeys: ObjectWithUnderscoredKeys<K>, key: K) => void
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                            ^^^^^^^ ^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^                         ^^                            ^^   ^^ ^^^^^^^^^
 >objectWithUnderscoredKeys : ObjectWithUnderscoredKeys<K>
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

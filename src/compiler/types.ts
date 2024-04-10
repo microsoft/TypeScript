@@ -764,6 +764,8 @@ export type JSDocSyntaxKind =
     | SyntaxKind.GreaterThanToken
     | SyntaxKind.OpenBracketToken
     | SyntaxKind.CloseBracketToken
+    | SyntaxKind.OpenParenToken
+    | SyntaxKind.CloseParenToken
     | SyntaxKind.EqualsToken
     | SyntaxKind.CommaToken
     | SyntaxKind.DotToken
@@ -4070,6 +4072,7 @@ export interface JSDocImportTag extends JSDocTag {
 
 // NOTE: Ensure this is up-to-date with src/debug/debug.ts
 // dprint-ignore
+/** @internal */
 export const enum FlowFlags {
     Unreachable    = 1 << 0,  // Unreachable code
     Start          = 1 << 1,  // Start of flow graph
@@ -4089,7 +4092,9 @@ export const enum FlowFlags {
     Condition = TrueCondition | FalseCondition,
 }
 
+/** @internal */
 export type FlowNode =
+    | FlowUnreachable
     | FlowStart
     | FlowLabel
     | FlowAssignment
@@ -4099,30 +4104,45 @@ export type FlowNode =
     | FlowCall
     | FlowReduceLabel;
 
+/** @internal */
 export interface FlowNodeBase {
     flags: FlowFlags;
-    id?: number; // Node id used by flow type cache in checker
+    id: number; // Node id used by flow type cache in checker
+    node: unknown; // Node or other data
+    antecedent: FlowNode | FlowNode[] | undefined;
+}
+
+/** @internal */
+export interface FlowUnreachable extends FlowNodeBase {
+    node: undefined;
+    antecedent: undefined;
 }
 
 // FlowStart represents the start of a control flow. For a function expression or arrow
 // function, the node property references the function (which in turn has a flowNode
 // property for the containing control flow).
+/** @internal */
 export interface FlowStart extends FlowNodeBase {
-    node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+    node: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | undefined;
+    antecedent: undefined;
 }
 
 // FlowLabel represents a junction with multiple possible preceding control flows.
+/** @internal */
 export interface FlowLabel extends FlowNodeBase {
-    antecedents: FlowNode[] | undefined;
+    node: undefined;
+    antecedent: FlowNode[] | undefined;
 }
 
 // FlowAssignment represents a node that assigns a value to a narrowable reference,
 // i.e. an identifier or a dotted name that starts with an identifier or 'this'.
+/** @internal */
 export interface FlowAssignment extends FlowNodeBase {
     node: Expression | VariableDeclaration | BindingElement;
     antecedent: FlowNode;
 }
 
+/** @internal */
 export interface FlowCall extends FlowNodeBase {
     node: CallExpression;
     antecedent: FlowNode;
@@ -4130,30 +4150,44 @@ export interface FlowCall extends FlowNodeBase {
 
 // FlowCondition represents a condition that is known to be true or false at the
 // node's location in the control flow.
+/** @internal */
 export interface FlowCondition extends FlowNodeBase {
     node: Expression;
     antecedent: FlowNode;
 }
 
 // dprint-ignore
+/** @internal */
 export interface FlowSwitchClause extends FlowNodeBase {
-    switchStatement: SwitchStatement;
-    clauseStart: number;   // Start index of case/default clause range
-    clauseEnd: number;     // End index of case/default clause range
+    node: FlowSwitchClauseData;
     antecedent: FlowNode;
+}
+
+/** @internal */
+export interface FlowSwitchClauseData {
+    switchStatement: SwitchStatement;
+    clauseStart: number; // Start index of case/default clause range
+    clauseEnd: number; // End index of case/default clause range
 }
 
 // FlowArrayMutation represents a node potentially mutates an array, i.e. an
 // operation of the form 'x.push(value)', 'x.unshift(value)' or 'x[n] = value'.
+/** @internal */
 export interface FlowArrayMutation extends FlowNodeBase {
     node: CallExpression | BinaryExpression;
     antecedent: FlowNode;
 }
 
+/** @internal */
 export interface FlowReduceLabel extends FlowNodeBase {
+    node: FlowReduceLabelData;
+    antecedent: FlowNode;
+}
+
+/** @internal */
+export interface FlowReduceLabelData {
     target: FlowLabel;
     antecedents: FlowNode[];
-    antecedent: FlowNode;
 }
 
 export type FlowType = Type | IncompleteType;
@@ -4181,6 +4215,18 @@ export interface SourceFileLike {
     lineMap?: readonly number[];
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
+}
+
+/** @internal */
+export interface FutureSourceFile {
+    readonly path: Path;
+    readonly fileName: string;
+    readonly impliedNodeFormat?: ResolutionMode;
+    readonly packageJsonScope?: PackageJsonInfo;
+    readonly externalModuleIndicator?: true | undefined;
+    readonly commonJsModuleIndicator?: true | undefined;
+    readonly statements: readonly never[];
+    readonly imports: readonly never[];
 }
 
 /** @internal */
@@ -5000,6 +5046,7 @@ export interface TypeChecker {
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
     getMergedSymbol(symbol: Symbol): Symbol;
+    /** @internal */ symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
@@ -5618,7 +5665,7 @@ export interface EmitResolver {
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -5626,6 +5673,7 @@ export interface EmitResolver {
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
+    getEnumMemberValue(node: EnumMember): EvaluatorResult | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
@@ -5635,9 +5683,8 @@ export interface EmitResolver {
     isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean;
     getJsxFactoryEntity(location?: Node): EntityName | undefined;
     getJsxFragmentFactoryEntity(location?: Node): EntityName | undefined;
-    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
-    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker, bundled?: boolean): Statement[] | undefined;
+    getDeclarationStatementsForSourceFile(node: SourceFile, flags: NodeBuilderFlags, tracker: SymbolTracker): Statement[] | undefined;
     isImportRequiredByAugmentation(decl: ImportDeclaration): boolean;
 }
 
@@ -5958,6 +6005,13 @@ export const enum NodeCheckFlags {
     InCheckIdentifier                        = 1 << 22,
 }
 
+/** @internal */
+export interface EvaluatorResult<T extends string | number | undefined = string | number | undefined> {
+    value: T;
+    isSyntacticallyString: boolean;
+    resolvedOtherFiles: boolean;
+}
+
 // dprint-ignore
 /** @internal */
 export interface NodeLinks {
@@ -5968,7 +6022,7 @@ export interface NodeLinks {
     resolvedSymbol?: Symbol;            // Cached name resolution result
     resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
     effectsSignature?: Signature;       // Signature with possible control flow effects
-    enumMemberValue?: string | number;  // Constant value of enum member
+    enumMemberValue?: EvaluatorResult;  // Constant value of enum member
     isVisible?: boolean;                // Is this node visible
     containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
     hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
@@ -7677,6 +7731,7 @@ export interface PackageId {
     subModuleName: string;
     /** Version of the package, e.g. "1.2.3" */
     version: string;
+    /** @internal*/ peerDependencies?: string;
 }
 
 export const enum Extension {
@@ -9655,7 +9710,6 @@ export interface DiagnosticCollection {
 // SyntaxKind.SyntaxList
 export interface SyntaxList extends Node {
     kind: SyntaxKind.SyntaxList;
-    _children: Node[];
 }
 
 // dprint-ignore
@@ -10075,6 +10129,6 @@ export interface Queue<T> {
 
 /** @internal */
 export interface EvaluationResolver {
-    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
-    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
 }

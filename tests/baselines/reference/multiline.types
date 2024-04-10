@@ -19,11 +19,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 
@@ -33,11 +33,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 
@@ -47,11 +47,11 @@ texts.push("100");
 >texts.push("100") : number
 >                  : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >"100" : "100"
 >      : ^^^^^
 
@@ -62,7 +62,7 @@ import * as React from "react";
 
 export function MyComponent(props: { foo: string }) {
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^                ^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >props : { foo: string; }
 >      : ^^^^^^^      ^^^
 >foo : string
@@ -93,7 +93,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -104,7 +104,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -116,7 +116,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -128,7 +128,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -140,7 +140,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -151,7 +151,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -163,7 +163,7 @@ let x = (
 ><MyComponent foo={"hooray"} /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >"hooray" : "hooray"

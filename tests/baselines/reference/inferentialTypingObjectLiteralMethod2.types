@@ -10,7 +10,7 @@ interface Int<T, U> {
 }
 declare function foo<T, U>(x: T, y: Int<T, U>, z: Int<U, T>): T;
 >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
->    : ^ ^^ ^^^^^ ^^^^^         ^^^^^         ^^^^^ 
+>    : ^ ^^ ^^ ^^ ^^ ^^         ^^ ^^         ^^^^^ 
 >x : T
 >  : ^
 >y : Int<T, U>
@@ -22,13 +22,13 @@ foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }
 >foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }) : string
 >                                                                                  : ^^^^^^
 >foo : <T, U>(x: T, y: Int<T, U>, z: Int<U, T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^         ^^ ^^         ^^^^^^
 >"" : ""
 >   : ^^
 >{ method(p1) { return p1.length } } : { method(p1: string): number; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 >method : (p1: string) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^^^^^^^^^^
 >p1 : string
 >   : ^^^^^^
 >p1.length : number
@@ -38,9 +38,9 @@ foo("", { method(p1) { return p1.length } }, { method(p2) { return undefined } }
 >length : number
 >       : ^^^^^^
 >{ method(p2) { return undefined } } : { method(p2: number): any; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >method : (p2: number) => any
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^^^^^^^
 >p2 : number
 >   : ^^^^^^
 >undefined : undefined

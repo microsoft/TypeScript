@@ -10,8 +10,8 @@ declare let a: { a: string };
 >  : ^^^^^^
 
 declare let b: { a?: string };
->b : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

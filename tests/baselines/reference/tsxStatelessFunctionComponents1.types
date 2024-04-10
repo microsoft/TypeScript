@@ -16,7 +16,7 @@ function EmptyPropSFC() {
 
 function Greet(x: {name: string}) {
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^^^^                 ^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >x : { name: string; }
 >  : ^^^^^^^^      ^^^
 >name : string
@@ -34,7 +34,7 @@ function Greet(x: {name: string}) {
 }
 function Meet({name = 'world'}) {
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >'world' : "world"
@@ -52,7 +52,7 @@ function Meet({name = 'world'}) {
 }
 function MeetAndGreet(k: {"prop-name": string}) {
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->             : ^^^^                        ^^^^^^^^^^^^^^^^
+>             : ^ ^^                        ^^^^^^^^^^^^^^^^
 >k : { "prop-name": string; }
 >  : ^^^^^^^^^^^^^^^      ^^^
 >"prop-name" : string
@@ -74,7 +74,7 @@ let a = <Greet name='world' />;
 ><Greet name='world' /> : JSX.Element
 >                       : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -84,7 +84,7 @@ let a1 = <Greet name='world' extra-prop />;
 ><Greet name='world' extra-prop /> : JSX.Element
 >                                  : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >extra-prop : true
@@ -97,7 +97,7 @@ let b = <Greet naaame='world' />;
 ><Greet naaame='world' /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Greet : (x: { name: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                 ^^^^^^^^^^^^^^^^
 >naaame : string
 >       : ^^^^^^
 
@@ -108,7 +108,7 @@ let c = <Meet />;
 ><Meet /> : JSX.Element
 >         : ^^^^^^^^^^^
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let c1 = <Meet extra-prop/>;
 >c1 : JSX.Element
@@ -116,7 +116,7 @@ let c1 = <Meet extra-prop/>;
 ><Meet extra-prop/> : JSX.Element
 >                   : ^^^^^^^^^^^
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >extra-prop : true
 >           : ^^^^
 
@@ -127,7 +127,7 @@ let d = <Meet name='me' />;
 ><Meet name='me' /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -138,7 +138,7 @@ let e = <Meet name={42} />;
 ><Meet name={42} /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : number
 >     : ^^^^^^
 >42 : 42
@@ -151,7 +151,7 @@ let f = <Meet naaaaaaame='no' />;
 ><Meet naaaaaaame='no' /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Meet : ({ name }: { name?: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >naaaaaaame : string
 >           : ^^^^^^
 
@@ -162,7 +162,7 @@ let g = <MeetAndGreet prop-name="Bob" />;
 ><MeetAndGreet prop-name="Bob" /> : JSX.Element
 >                                 : ^^^^^^^^^^^
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                        ^^^^^^^^^^^^^^^^
 >prop-name : string
 >          : ^^^^^^
 
@@ -173,7 +173,7 @@ let h = <MeetAndGreet extra-prop-name="World" />;
 ><MeetAndGreet extra-prop-name="World" /> : JSX.Element
 >                                         : ^^^^^^^^^^^
 >MeetAndGreet : (k: { "prop-name": string; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                        ^^^^^^^^^^^^^^^^
 >extra-prop-name : string
 >                : ^^^^^^
 
@@ -196,9 +196,9 @@ let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
 >EmptyPropSFC : () => JSX.Element
 >             : ^^^^^^^^^^^^^^^^^
 >ref : (x: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >x => x.greeting.substr(10) : (x: any) => any
->                           : ^^^^^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x.greeting.substr(10) : any

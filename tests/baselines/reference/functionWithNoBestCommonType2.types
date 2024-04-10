@@ -5,7 +5,7 @@ var v = function () {
 >v : () => true | void
 >  : ^^^^^^^^^^^^^^^^^
 >function () {   return true;   return bar();} : () => true | void
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              :                  
 
    return true;
 >true : true

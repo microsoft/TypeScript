@@ -64,7 +64,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -75,7 +75,7 @@ class B extends A {
 >b : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -91,7 +91,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
         // call with property access
         super.x();
@@ -120,7 +120,7 @@ class B extends A {
 >a : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -131,7 +131,7 @@ class B extends A {
 >b : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"
@@ -174,7 +174,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super.x : () => void
->        : ^^^^^^^^^^
+>        :           
 >super : A
 >      : ^
 >x : () => void
@@ -195,7 +195,7 @@ class B extends A {
 >f : () => void
 >  : ^^^^^^^^^^
 >super["x"] : () => void
->           : ^^^^^^^^^^
+>           :           
 >super : A
 >      : ^
 >"x" : "x"

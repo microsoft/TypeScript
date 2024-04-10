@@ -9,7 +9,7 @@ type MyMap<T> = {[P in keyof T]: T[keyof T]};
 
 function foo<U>(arg: U): MyMap<U> {
 >foo : <U>(arg: U) => MyMap<U>
->    : ^ ^^^^^^^ ^^^^^        
+>    : ^ ^^   ^^ ^^^^^        
 >arg : U
 >    : ^
 

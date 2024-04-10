@@ -60,11 +60,11 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a };
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ z: a => a } : { z: (a: number) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number
@@ -74,11 +74,11 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a 
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: a => a } : { foo: (a: number) => number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo : (a: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number
@@ -98,31 +98,31 @@ var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a.to
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ z: a => a.toString() } : { z: (a: number) => string; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a.toString() : (a: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  :                      
 >a : number
 >  : ^^^^^^
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 var x2: IWithStringIndexSignature1 | IWithStringIndexSignature2 = { z: a => a }; // a should be number
 >x2 : IWithStringIndexSignature1 | IWithStringIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ z: a => a } : { z: (a: number) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >z : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number
@@ -136,11 +136,11 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 1: a => a } : { 1: (a: number) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number
@@ -150,11 +150,11 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 0: a => a } : { 0: (a: number) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >0 : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number
@@ -174,31 +174,31 @@ var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a.to
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 1: a => a.toString() } : { 1: (a: number) => string; }
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a.toString() : (a: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  :                      
 >a : number
 >  : ^^^^^^
 >a.toString() : string
 >             : ^^^^^^
 >a.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 var x4: IWithNumberIndexSignature1 | IWithNumberIndexSignature2 = { 1: a => a }; // a should be number
 >x4 : IWithNumberIndexSignature1 | IWithNumberIndexSignature2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ 1: a => a } : { 1: (a: number) => number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >1 : (a: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >a : number
 >  : ^^^^^^
 >a : number

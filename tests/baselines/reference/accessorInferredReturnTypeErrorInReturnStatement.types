@@ -15,7 +15,7 @@ export var basePrototype = {
 >_this : { readonly primaryPath: any; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : { readonly primaryPath: any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     :                               
 
     return _this.collection.schema.primaryPath;
 >_this.collection.schema.primaryPath : any

@@ -39,8 +39,8 @@ const good = <Elem someKey="ok" />;
 >        : ^^^^^^
 
 declare const Elem2: ComponentType<{ opt?: number }>;
->Elem2 : React.ComponentType<{ opt?: number | undefined; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Elem2 : React.ComponentType<{ opt?: number; }>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >opt : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
