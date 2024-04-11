@@ -777,3 +777,53 @@ if (foobarPred(foobar)) {
 >foo : Symbol(foo, Decl(inferTypePredicates.ts, 271, 18))
 }
 
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+>assertReturnTrue : Symbol(assertReturnTrue, Decl(inferTypePredicates.ts, 277, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 280, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 280, 26))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+  return true;
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+>isStringForWhichWeHaveACaseHandler : Symbol(isStringForWhichWeHaveACaseHandler, Decl(inferTypePredicates.ts, 285, 1))
+>anyString : Symbol(anyString, Decl(inferTypePredicates.ts, 287, 44))
+
+  switch (anyString) {
+>anyString : Symbol(anyString, Decl(inferTypePredicates.ts, 287, 44))
+
+    case 'a':
+    case 'b':
+    case 'c':
+      return true
+    default:
+      return false
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+>ifElseIfPredicate : Symbol(ifElseIfPredicate, Decl(inferTypePredicates.ts, 296, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+  if (x instanceof Date) {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 27))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    return true;
+  } else if (typeof x === 'string') {
+>x : Symbol(x, Decl(inferTypePredicates.ts, 298, 27))
+
+    return true;
+  }
+  return false;
+}
+

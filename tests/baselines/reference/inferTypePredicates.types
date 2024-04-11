@@ -1059,8 +1059,8 @@ function areBothNums(x: string|number, y: string|number) {
 
 // Could potentially infer a type guard here but it would require more bookkeeping.
 function doubleReturn(x: string|number) {
->doubleReturn : (x: string | number) => boolean
->             : ^ ^^               ^^^^^^^^^^^^
+>doubleReturn : (x: string | number) => x is string
+>             : ^ ^^               ^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -1647,5 +1647,101 @@ if (foobarPred(foobar)) {
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
+}
+
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+>assertReturnTrue : (x: string | number | Date) => x is string | number
+>                 : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+  return true;
+>true : true
+>     : ^^^^
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+>isStringForWhichWeHaveACaseHandler : (anyString: string) => anyString is "a" | "b" | "c"
+>                                   : ^         ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>anyString : string
+>          : ^^^^^^
+
+  switch (anyString) {
+>anyString : string
+>          : ^^^^^^
+
+    case 'a':
+>'a' : "a"
+>    : ^^^
+
+    case 'b':
+>'b' : "b"
+>    : ^^^
+
+    case 'c':
+>'c' : "c"
+>    : ^^^
+
+      return true
+>true : true
+>     : ^^^^
+
+    default:
+      return false
+>false : false
+>      : ^^^^^
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+>ifElseIfPredicate : (x: Date | string | number) => x is string | Date
+>                  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+
+  } else if (typeof x === 'string') {
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+  return false;
+>false : false
+>      : ^^^^^
 }
 

@@ -302,8 +302,8 @@ declare const cond: boolean;
 >     : ^^^^^^^
 
 function removeNothing(y = cond ? true : undefined) {
->removeNothing : (y?: boolean | undefined) => boolean
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>removeNothing : (y?: boolean | undefined) => y is true | undefined
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 >cond ? true : undefined : true | undefined

@@ -279,3 +279,31 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 if (foobarPred(foobar)) {
   foobar.foo;
 }
+
+// Returning true can result in a predicate if the function throws earlier.
+function assertReturnTrue(x: string | number | Date) {
+  if (x instanceof Date) {
+    throw new Error();
+  }
+  return true;
+}
+
+function isStringForWhichWeHaveACaseHandler(anyString: string) {
+  switch (anyString) {
+    case 'a':
+    case 'b':
+    case 'c':
+      return true
+    default:
+      return false
+  }
+}
+
+function ifElseIfPredicate(x: Date | string | number) {
+  if (x instanceof Date) {
+    return true;
+  } else if (typeof x === 'string') {
+    return true;
+  }
+  return false;
+}

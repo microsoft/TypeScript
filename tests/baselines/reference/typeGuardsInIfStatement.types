@@ -320,8 +320,8 @@ function foo8(x: number | string | boolean) {
     }
 }
 function foo9(x: number | string) {
->foo9 : (x: number | string) => boolean
->     : ^ ^^               ^^^^^^^^^^^^
+>foo9 : (x: number | string) => x is 10 | "hello"
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
