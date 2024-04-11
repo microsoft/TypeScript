@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
 import {
+    protocol,
+} from "../../_namespaces/ts.server";
+import {
     baselineTsserverLogs,
     createLoggerWithInMemoryLogs,
     createSession,
@@ -47,6 +50,8 @@ const exportEqualsMappedType: File = {
 };
 
 describe("unittests:: tsserver:: exportMapCache", () => {
+    const files = [aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType];
+    const setup = createSetup(files, [aTs, bTs], { file: bTs.path, line: 1, offset: 3 });
     it("caches auto-imports in the same file", () => {
         const { exportMapCache, session } = setup();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -226,29 +231,119 @@ describe("unittests:: tsserver:: exportMapCache", () => {
     });
 });
 
-function setup() {
-    const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
-    openFilesForSession([aTs, bTs], session);
-    const projectService = session.getProjectService();
-    const project = projectService.configuredProjects.get(tsconfig.path)!;
-    triggerCompletions();
-    const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-    return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
+describe("unittests:: tsserver:: exportMapCache:: project references", () => {
+    const libTsconfig: File = {
+        path: "/packages/lib/tsconfig.json",
+        content: `{
+            "compilerOptions": {
+                "composite": true,
+                "module": "commonjs"
+            }
+        }`,
+    };
 
-    function triggerCompletions() {
-        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
-            file: bTs.path,
-            line: 1,
-            offset: 3,
-        };
-        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
-            command: ts.server.protocol.CommandTypes.CompletionInfo,
+    const libIndex: File = {
+        path: "/packages/lib/index.ts",
+        content: `export const foo = 0;`,
+    };
+
+    const appTsconfig: File = {
+        path: "/packages/app/tsconfig.json",
+        content: `{
+            "compilerOptions": {
+                "composite": true,
+                "module": "commonjs",
+                "paths": {
+                    "lib": ["../lib/index.ts"]
+                }
+            },
+            "references": [
+                { "path": "../lib" }
+            ]
+        }`,
+    };
+
+    const appIndex: File = {
+        path: "/packages/app/index.ts",
+        content: `foo`,
+    };
+
+    const files = [libTsconfig, libIndex, appTsconfig, appIndex];
+    const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
+
+    it("does not invalidate the cache when referenced project changes inconsequentially", () => {
+        const { session, project, exportMapCache } = setup();
+        assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
+        session.executeCommandSeq<protocol.UpdateOpenRequest>({
+            command: protocol.CommandTypes.UpdateOpen,
             arguments: {
-                ...requestLocation,
-                includeExternalModuleExports: true,
-                prefix: "foo",
+                changedFiles: [{
+                    fileName: libIndex.path,
+                    textChanges: [{
+                        newText: "\nfoo.toFixed()",
+                        start: { line: 1, offset: 3 },
+                        end: { line: 1, offset: 3 },
+                    }],
+                }],
             },
         });
-    }
+
+        // If lib/index.ts were part of the same project, we would recognize that
+        // this change does not modify the shape of the progrm exports and the cache
+        // would not be cleared. But because this file is part of the AutoImportProvider,
+        // the cache clears unconditionally during its updateGraph. This might be ok,
+        // but this failing test shows the behavior I originally expected when prototyping
+        // my version of this feature - that the cache could be reused across trivial changes.
+        project.getPackageJsonAutoImportProvider();
+        assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
+        assert.ok(!exportMapCache.isEmpty());
+    });
+
+    it("invalidates the cache when referenced project changes signatures", () => {
+        const { session, project, exportMapCache, triggerCompletions } = setup();
+        session.executeCommandSeq<protocol.UpdateOpenRequest>({
+            command: protocol.CommandTypes.UpdateOpen,
+            arguments: {
+                changedFiles: [{
+                    fileName: libIndex.path,
+                    textChanges: [{
+                        newText: "export const food = 0;",
+                        start: { line: 1, offset: 1 },
+                        end: { line: 1, offset: 3 },
+                    }],
+                }],
+            },
+        });
+
+        project.getPackageJsonAutoImportProvider();
+        assert.ok(exportMapCache.isEmpty());
+
+        const newCompletions = triggerCompletions();
+        assert.ok(newCompletions.entries.some(e => e.name === "food"));
+        assert.ok(!newCompletions.entries.some(e => e.name === "foo"));
+    });
+});
+
+function createSetup(files: readonly File[], openFiles: readonly File[], completionRequestLocation: protocol.FileLocationRequestArgs) {
+    return () => {
+        const host = createServerHost(files);
+        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        openFilesForSession(openFiles, session);
+        const projectService = session.getProjectService();
+        const project = projectService.configuredProjects.values().next().value;
+        triggerCompletions();
+        const checker = project.getLanguageService().getProgram()!.getTypeChecker();
+        return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
+
+        function triggerCompletions() {
+            return session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
+                arguments: {
+                    ...completionRequestLocation,
+                    includeExternalModuleExports: true,
+                    prefix: "foo",
+                },
+            }).response as ts.server.protocol.CompletionInfo;
+        }
+    };
 }
