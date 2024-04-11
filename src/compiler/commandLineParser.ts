@@ -1709,7 +1709,7 @@ let optionsNameMapCache: OptionsNameMap;
 
 /** @internal */
 export function getOptionsNameMap(): OptionsNameMap {
-    return optionsNameMapCache ||= createOptionNameMap([...optionDeclarations]);
+    return optionsNameMapCache ||= createOptionNameMap(optionDeclarations);
 }
 
 const compilerOptionsAlternateMode: AlternateModeDiagnostics = {
