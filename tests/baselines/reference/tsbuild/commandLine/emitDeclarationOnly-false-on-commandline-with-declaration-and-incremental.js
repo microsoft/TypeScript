@@ -428,6 +428,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: change
@@ -439,17 +441,17 @@ export const a = 10;const aLocal = 10;const aa = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:00:39 AM[0m] Projects in this build: 
+[[90m12:00:42 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:40 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
+[[90m12:00:43 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/a.ts'
 
-[[90m12:00:41 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:00:44 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:46 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:00:49 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:47 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:00:50 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -618,6 +620,8 @@ No shapes updated in the builder::
   "size": 1291
 }
 
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: emit js files
@@ -626,17 +630,17 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90m12:00:48 AM[0m] Projects in this build: 
+[[90m12:00:54 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:00:49 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
+[[90m12:00:55 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because buildinfo file 'src/project1/src/tsconfig.tsbuildinfo' indicates there is change in compilerOptions
 
-[[90m12:00:50 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:00:56 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:00:58 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:01:04 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:00:59 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:01:05 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -950,15 +954,15 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose
-[[90m12:01:03 AM[0m] Projects in this build: 
+[[90m12:01:09 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:04 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+[[90m12:01:10 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
 
-[[90m12:01:05 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:01:11 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:06 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:01:12 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -998,6 +1002,113 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/project2/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-3497920574-export declare const a = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-3829150557-export declare const b = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":true},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./e.ts",
+      "../../project1/src/a.d.ts",
+      "./f.ts",
+      "../../project1/src/b.d.ts",
+      "./g.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../project1/src/a.d.ts"
+      ],
+      [
+        "../../project1/src/b.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "signature": false
+        },
+        "version": "-13789510868-export const e = 10;"
+      },
+      "../../project1/src/a.d.ts": {
+        "original": {
+          "version": "-3497920574-export declare const a = 10;\n",
+          "signature": false
+        },
+        "version": "-3497920574-export declare const a = 10;\n"
+      },
+      "./f.ts": {
+        "original": {
+          "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+          "signature": false
+        },
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+      },
+      "../../project1/src/b.d.ts": {
+        "original": {
+          "version": "-3829150557-export declare const b = 10;\n",
+          "signature": false
+        },
+        "version": "-3829150557-export declare const b = 10;\n"
+      },
+      "./g.ts": {
+        "original": {
+          "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+          "signature": false
+        },
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "changeFileSet": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1260
+}
+
 
 
 Change:: no change run with js emit
@@ -1006,15 +1117,15 @@ Input::
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90m12:01:07 AM[0m] Projects in this build: 
+[[90m12:01:16 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:08 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
+[[90m12:01:17 AM[0m] Project 'src/project1/src/tsconfig.json' is up to date because newest input 'src/project1/src/a.ts' is older than output 'src/project1/src/tsconfig.tsbuildinfo'
 
-[[90m12:01:09 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:01:18 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:10 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:01:19 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -1054,6 +1165,113 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/src/project2/src/tsconfig.tsbuildinfo]
+{"program":{"fileNames":["../../../lib/lib.d.ts","./e.ts","../../project1/src/a.d.ts","./f.ts","../../project1/src/b.d.ts","./g.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","signature":false,"affectsGlobalScope":true},{"version":"-13789510868-export const e = 10;","signature":false},{"version":"-3497920574-export declare const a = 10;\n","signature":false},{"version":"-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;","signature":false},{"version":"-3829150557-export declare const b = 10;\n","signature":false},{"version":"-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;","signature":false}],"root":[2,4,6],"options":{"declaration":true,"emitDeclarationOnly":false},"fileIdsList":[[3],[5]],"referencedMap":[[4,1],[6,2]],"changeFileSet":[1,3,5,2,4,6]},"version":"FakeTSVersion"}
+
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "program": {
+    "fileNames": [
+      "../../../lib/lib.d.ts",
+      "./e.ts",
+      "../../project1/src/a.d.ts",
+      "./f.ts",
+      "../../project1/src/b.d.ts",
+      "./g.ts"
+    ],
+    "fileNamesList": [
+      [
+        "../../project1/src/a.d.ts"
+      ],
+      [
+        "../../project1/src/b.d.ts"
+      ]
+    ],
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "original": {
+          "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+          "signature": false,
+          "affectsGlobalScope": true
+        },
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true
+      },
+      "./e.ts": {
+        "original": {
+          "version": "-13789510868-export const e = 10;",
+          "signature": false
+        },
+        "version": "-13789510868-export const e = 10;"
+      },
+      "../../project1/src/a.d.ts": {
+        "original": {
+          "version": "-3497920574-export declare const a = 10;\n",
+          "signature": false
+        },
+        "version": "-3497920574-export declare const a = 10;\n"
+      },
+      "./f.ts": {
+        "original": {
+          "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+          "signature": false
+        },
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;"
+      },
+      "../../project1/src/b.d.ts": {
+        "original": {
+          "version": "-3829150557-export declare const b = 10;\n",
+          "signature": false
+        },
+        "version": "-3829150557-export declare const b = 10;\n"
+      },
+      "./g.ts": {
+        "original": {
+          "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+          "signature": false
+        },
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": false
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "changeFileSet": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ]
+  },
+  "version": "FakeTSVersion",
+  "size": 1261
+}
+
 
 
 Change:: js emit with change
@@ -1065,17 +1283,17 @@ export const b = 10;const bLocal = 10;const blocal = 10;
 
 Output::
 /lib/tsc --b /src/project2/src --verbose --emitDeclarationOnly false
-[[90m12:01:12 AM[0m] Projects in this build: 
+[[90m12:01:24 AM[0m] Projects in this build: 
     * src/project1/src/tsconfig.json
     * src/project2/src/tsconfig.json
 
-[[90m12:01:13 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
+[[90m12:01:25 AM[0m] Project 'src/project1/src/tsconfig.json' is out of date because output 'src/project1/src/tsconfig.tsbuildinfo' is older than input 'src/project1/src/b.ts'
 
-[[90m12:01:14 AM[0m] Building project '/src/project1/src/tsconfig.json'...
+[[90m12:01:26 AM[0m] Building project '/src/project1/src/tsconfig.json'...
 
-[[90m12:01:20 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
+[[90m12:01:32 AM[0m] Project 'src/project2/src/tsconfig.json' is out of date because buildinfo file 'src/project2/src/tsconfig.tsbuildinfo' indicates that some of the changes were not emitted
 
-[[90m12:01:21 AM[0m] Building project '/src/project2/src/tsconfig.json'...
+[[90m12:01:33 AM[0m] Building project '/src/project2/src/tsconfig.json'...
 
 [96msrc/project2/src/tsconfig.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/src/project1/src' must have setting "composite": true.
 
@@ -1253,3 +1471,5 @@ var blocal = 10;
   "size": 1309
 }
 
+//// [/src/project2/src/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

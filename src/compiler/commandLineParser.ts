@@ -768,6 +768,20 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Disable_emitting_comments,
     },
     {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "noCheck"];
+        },
+    },
+    {
         name: "noEmit",
         type: "boolean",
         showInSimplifiedHelpView: true,
@@ -1578,24 +1592,6 @@ export const optionDeclarations: CommandLineOption[] = [
     ...commandOptionsWithoutBuild,
 ];
 
-// These aren't available via CLI or config (yet), but we still want to handle them correctly
-// They'll be included in the result of `getOptionsNameMap()`, so they serialize and deserialize correctly,
-// but not in any of the category-specific lists or help menus.
-/** @internal */
-export const privateOptionDeclarations: CommandLineOption[] = [
-    {
-        name: "noCheck",
-        type: "boolean",
-        showInSimplifiedHelpView: true,
-        category: Diagnostics.Emit,
-        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
-        transpileOptionValue: undefined,
-        defaultValueDescription: false,
-        affectsSemanticDiagnostics: true,
-        affectsBuildInfo: true,
-    },
-];
-
 /** @internal */
 export const semanticDiagnosticsOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
 
@@ -1713,7 +1709,7 @@ let optionsNameMapCache: OptionsNameMap;
 
 /** @internal */
 export function getOptionsNameMap(): OptionsNameMap {
-    return optionsNameMapCache ||= createOptionNameMap([...optionDeclarations, ...privateOptionDeclarations]);
+    return optionsNameMapCache ||= createOptionNameMap([...optionDeclarations]);
 }
 
 const compilerOptionsAlternateMode: AlternateModeDiagnostics = {

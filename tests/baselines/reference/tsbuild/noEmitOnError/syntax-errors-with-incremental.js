@@ -199,6 +199,8 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo] file written with same contents
+//// [/user/username/projects/noEmitOnError/dev-build/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: Fix error
