@@ -997,7 +997,13 @@ export namespace Compiler {
                 }
                 else if (original.text !== doc.text) {
                     jsCode += `\r\n\r\n!!!! File ${Utils.removeTestPathPrefixes(doc.file)} differs from original emit in noCheck emit\r\n`;
-                    jsCode += fileOutput(doc, harnessSettings);
+                    const Diff = require("diff");
+                    const expected = original.text;
+                    const actual = doc.text;
+                    const patch = Diff.createTwoFilesPatch("Expected", "Actual", expected, actual, "The full check baseline", "with noCheck set");
+                    const fileName = harnessSettings.fullEmitPaths ? Utils.removeTestPathPrefixes(doc.file) : ts.getBaseFileName(doc.file);
+                    jsCode += "//// [" + fileName + "]\r\n";
+                    jsCode += patch;
                 }
             });
         }

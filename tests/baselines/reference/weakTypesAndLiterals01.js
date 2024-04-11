@@ -71,17 +71,16 @@ declare const i: (arg: WeakTypes) => WeakTypes;
 
 !!!! File weakTypesAndLiterals01.d.ts differs from original emit in noCheck emit
 //// [weakTypesAndLiterals01.d.ts]
-type WeakTypes = {
-    optional?: true;
-} | {
-    toLowerCase?(): string;
-} | {
-    toUpperCase?(): string;
-    otherOptionalProp?: number;
-};
-type LiteralsOrWeakTypes = "A" | "B" | WeakTypes;
-declare let aOrB: "A" | "B";
-declare const f: (arg: LiteralsOrWeakTypes) => "A" | "B" | WeakTypes;
-declare const g: (arg: WeakTypes) => WeakTypes;
-declare const h: (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes;
-declare const i: (arg: WeakTypes) => WeakTypes;
+===================================================================
+--- Expected	The current baseline
++++ Actual	The new version
+@@ -7,8 +7,8 @@
+     otherOptionalProp?: number;
+ };
+ type LiteralsOrWeakTypes = "A" | "B" | WeakTypes;
+ declare let aOrB: "A" | "B";
+-declare const f: (arg: LiteralsOrWeakTypes) => WeakTypes | "A" | "B";
++declare const f: (arg: LiteralsOrWeakTypes) => "A" | "B" | WeakTypes;
+ declare const g: (arg: WeakTypes) => WeakTypes;
+ declare const h: (arg: LiteralsOrWeakTypes) => LiteralsOrWeakTypes;
+ declare const i: (arg: WeakTypes) => WeakTypes;
