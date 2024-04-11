@@ -67,8 +67,8 @@ declare function f3(x: 'a' | 'b'): {
 !!!! File deferredLookupTypeResolution.d.ts differs from original emit in noCheck emit
 //// [deferredLookupTypeResolution.d.ts]
 ===================================================================
---- Expected	The current baseline
-+++ Actual	The new version
+--- Expected	The full check baseline
++++ Actual	with noCheck set
 @@ -15,8 +15,8 @@
      [P in A | B]: any;
  };

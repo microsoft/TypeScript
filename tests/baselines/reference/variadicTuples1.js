@@ -838,8 +838,8 @@ type AnyArr = [...any];
 !!!! File variadicTuples1.d.ts differs from original emit in noCheck emit
 //// [variadicTuples1.d.ts]
 ===================================================================
---- Expected	The current baseline
-+++ Actual	The new version
+--- Expected	The full check baseline
++++ Actual	with noCheck set
 @@ -17,9 +17,9 @@
  declare const tc2: [string, number];
  declare const tc3: [number, number, number, ...string[]];

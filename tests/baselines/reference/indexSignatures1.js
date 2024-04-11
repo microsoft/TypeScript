@@ -685,8 +685,8 @@ type K2 = keyof Rec2;
 !!!! File indexSignatures1.d.ts differs from original emit in noCheck emit
 //// [indexSignatures1.d.ts]
 ===================================================================
---- Expected	The current baseline
-+++ Actual	The new version
+--- Expected	The full check baseline
++++ Actual	with noCheck set
 @@ -118,9 +118,9 @@
      [x: symbol]: 4 | 5;
      [sym]: 4;

@@ -72,8 +72,8 @@ declare const i: (arg: WeakTypes) => WeakTypes;
 !!!! File weakTypesAndLiterals01.d.ts differs from original emit in noCheck emit
 //// [weakTypesAndLiterals01.d.ts]
 ===================================================================
---- Expected	The current baseline
-+++ Actual	The new version
+--- Expected	The full check baseline
++++ Actual	with noCheck set
 @@ -7,8 +7,8 @@
      otherOptionalProp?: number;
  };
