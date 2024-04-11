@@ -2761,7 +2761,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     // falls through
                     default:
-                        scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape();
+                        // The scanEscapeSequence call in scanCharacterEscape must return non-empty strings
+                        // since there must not be line breaks in a regex literal
+                        Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape());
                         break;
                 }
             }
