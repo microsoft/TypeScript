@@ -9,26 +9,10 @@ import {
 } from "../helpers/tsc";
 import { loadProjectFromFiles } from "../helpers/vfs";
 
-describe("unittests:: tsbuild:: noCheck", () => {
-    let validate: CommandLineOption["extraValidation"];
-    before(() => {
-        for (const opt of optionDeclarations) {
-            if (opt.name === "noCheck") {
-                validate = opt.extraValidation;
-                opt.extraValidation = () => undefined;
-            }
-        }
-    });
-    after(() => {
-        for (const opt of optionDeclarations) {
-            if (opt.name === "noCheck") {
-                opt.extraValidation = validate;
-            }
-        }
-    });
+function verifyNoCheckFlag(variant: string) {
     function verifyNoCheckWorker(subScenario: string, declAText: string, commandLineArgs: readonly string[]) {
         verifyTsc({
-            scenario: "noCheck",
+            scenario: variant,
             subScenario,
             fs: () =>
                 loadProjectFromFiles({
@@ -73,4 +57,30 @@ ${declAText}`;
 
     verifyNoCheck("syntax errors", `const a = "hello`);
     verifyNoCheck("semantic errors", `const a: number = "hello"`);
+}
+
+describe("unittests:: tsbuild:: noCheck", () => {
+    // Enable the `noCheck` option on the CLI for testing purposes, to ensure it works with incremental/build
+    let validate: CommandLineOption["extraValidation"];
+    before(() => {
+        for (const opt of optionDeclarations) {
+            if (opt.name === "noCheck") {
+                validate = opt.extraValidation;
+                opt.extraValidation = () => undefined;
+            }
+        }
+    });
+    after(() => {
+        for (const opt of optionDeclarations) {
+            if (opt.name === "noCheck") {
+                opt.extraValidation = validate;
+            }
+        }
+    });
+
+    verifyNoCheckFlag("noCheck");
+});
+
+describe("unittests:: tsbuild:: noCheck:: errors", () => {
+    verifyNoCheckFlag("noCheck-errors");
 });
