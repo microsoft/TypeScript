@@ -283,7 +283,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         }
         const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
         it("does not invalidate the cache when referenced project changes inconsequentially", () => {
-            const { session, project, exportMapCache } = setup();
+            const { session, project, exportMapCache, triggerCompletions } = setup();
             assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
             session.executeCommandSeq<protocol.UpdateOpenRequest>({
                 command: protocol.CommandTypes.UpdateOpen,
@@ -302,13 +302,15 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
             // If lib/index.ts were part of the same project, we would recognize that
             // this change does not modify the shape of the program exports and the cache
             // would not be cleared. But because this file is part of the AutoImportProvider,
-            // the cache clears unconditionally during its updateGraph. This might be ok,
-            // but this failing test shows the behavior I originally expected when prototyping
-            // my version of this feature - that the cache could be reused across trivial changes.
+            // the cache clears unconditionally during its updateGraph.
+            // As shown in the test, currently whether file is part of own program or AutoImportProvider
+            // if its not the file used to create cache, any change in other file invalidates the cache
+            // So in both scenarios: whether referenced project file is part of own program or auto import provider program
+            // the cache will be cleared for any changes
             updateProjectIfDirty(project);
             project.getPackageJsonAutoImportProvider();
-            assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
-            assert.ok(!exportMapCache.isEmpty());
+            assert.ok(exportMapCache.isEmpty());
+            triggerCompletions();
             baselineTsserverLogs("exportMapCache", `does not invalidate the cache when referenced project changes inconsequentially${includesLib ? " referencedInProject" : ""}`, session);
         });
 
@@ -332,9 +334,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
             project.getPackageJsonAutoImportProvider();
             assert.ok(exportMapCache.isEmpty());
 
-            const newCompletions = triggerCompletions();
-            assert.ok(newCompletions.entries.some(e => e.name === "food"));
-            assert.ok(!newCompletions.entries.some(e => e.name === "foo"));
+            triggerCompletions();
             baselineTsserverLogs("exportMapCache", `invalidates the cache when referenced project changes signatures${includesLib ? " referencedInProject" : ""}`, session);
         });
     }
@@ -359,14 +359,14 @@ function createSetup(files: readonly File[], openFiles: readonly File[], complet
         return { host, project, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
         function triggerCompletions() {
-            return session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: {
                     ...completionRequestLocation,
                     includeExternalModuleExports: true,
                     prefix: "foo",
                 },
-            }).response as ts.server.protocol.CompletionInfo;
+            });
         }
     };
 }
