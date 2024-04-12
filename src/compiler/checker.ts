@@ -37874,7 +37874,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // We know it's all boolean returns. For each parameter, get the union of the true types.
         // Then feed that union back through to make sure that a false return value corresponds to never.
-        return forEach(func.parameters, (param, i) => {
+        const predicate = forEach(func.parameters, (param, i) => {
             const initType = getTypeOfSymbol(param.symbol);
             if (!initType || initType.flags & TypeFlags.Boolean || !isIdentifier(param.name) || isSymbolAssigned(param.symbol) || isRestParameter(param)) {
                 // Refining "x: boolean" to "x is true" or "x is false" isn't useful.
@@ -37932,6 +37932,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return createTypePredicate(TypePredicateKind.Identifier, unescapeLeadingUnderscores(param.name.escapedText), i, paramTrueType);
             }
         });
+        if (predicate && returns.length > 1) {
+            error(func.name ?? func, Diagnostics.Function_with_multiple_returns_is_implicitly_a_type_predicate);
+        }
+        return predicate;
     }
 
     /**

@@ -1645,6 +1645,10 @@
         "category": "Error",
         "code": 1498
     },
+    "Function with multiple returns is implicitly a type predicate.": {
+        "category": "Error",
+        "code": 1499
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
