@@ -92,6 +92,7 @@ import {
     NodeFlags,
     NodeModulePathParts,
     normalizePath,
+    Path,
     pathContainsNodeModules,
     pathIsBareSpecifier,
     pathIsRelative,
@@ -102,6 +103,7 @@ import {
     removeTrailingDirectorySeparator,
     replaceFirstStar,
     ResolutionMode,
+    resolveModuleName,
     resolvePath,
     ScriptKind,
     shouldAllowImportingTsExtension,
@@ -1026,6 +1028,46 @@ function tryGetModuleNameFromPackageJsonImports(moduleFileName: string, sourceDi
     })?.moduleFileToTry;
 }
 
+function tryGetModuleNameFromPackageJsonDependencies(moduleFileName: Path, { sourceDirectory, getCanonicalFileName }: Info, options: CompilerOptions, host: ModuleSpecifierResolutionHost, importMode: ResolutionMode) {
+    if (!host.readFile) {
+        return undefined;
+    }
+    const cache = host.getModuleResolutionCache?.();
+    if (!cache) {
+        return undefined;
+    }
+
+    const ancestorDirectoryWithPackageJson = getNearestAncestorDirectoryWithPackageJson(host, sourceDirectory);
+    if (!ancestorDirectoryWithPackageJson) {
+        return undefined;
+    }
+    const packageJsonPath = combinePaths(ancestorDirectoryWithPackageJson, "package.json");
+    const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
+    if (isMissingPackageJsonInfo(cachedPackageJson) || !host.fileExists(packageJsonPath)) {
+        return undefined;
+    }
+    const packageJsonContent = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile(packageJsonPath)!);
+    const dependencies = packageJsonContent?.dependencies;
+    if (!dependencies) {
+        return undefined;
+    }
+
+    const candidates = getOwnKeys(dependencies);
+    for (const name of candidates) {
+        const resolved = resolveModuleName(name, combinePaths(sourceDirectory, "dummy.ts"), options, host as (typeof host & { readFile: NonNullable<(typeof host)["readFile"]> }), cache, /*redirectedReference*/ undefined, importMode);
+        if (resolved && resolved.resolvedModule && resolved.resolvedModule) {
+            const resolvedPath = toPath(resolved.resolvedModule.resolvedFileName, sourceDirectory, getCanonicalFileName);
+            if (resolvedPath === moduleFileName) {
+                return name;
+            }
+            if (host.realpath && host.realpath(resolvedPath) === host.realpath(moduleFileName)) {
+                return name;
+            }
+        }
+    }
+    return undefined;
+}
+
 function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileName: string, sourceDirectory: string, getCanonicalFileName: (file: string) => string, allowedEndings: readonly ModuleSpecifierEnding[], compilerOptions: CompilerOptions): string | undefined {
     const normalizedTargetPaths = getPathsRelativeToRootDirs(moduleFileName, rootDirs, getCanonicalFileName);
     if (normalizedTargetPaths === undefined) {
@@ -1043,10 +1085,18 @@ function tryGetModuleNameFromRootDirs(rootDirs: readonly string[], moduleFileNam
     return processEnding(shortest, allowedEndings, compilerOptions);
 }
 
-function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCanonicalFileName, canonicalSourceDirectory }: Info, importingSourceFile: SourceFile | FutureSourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
+function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, info: Info, importingSourceFile: SourceFile | FutureSourceFile, host: ModuleSpecifierResolutionHost, options: CompilerOptions, userPreferences: UserPreferences, packageNameOnly?: boolean, overrideMode?: ResolutionMode): string | undefined {
     if (!host.fileExists || !host.readFile) {
         return undefined;
     }
+    const { getCanonicalFileName, canonicalSourceDirectory } = info;
+
+    const importMode = overrideMode || getDefaultResolutionModeForFile(importingSourceFile, host, options);
+    const fromDeps = tryGetModuleNameFromPackageJsonDependencies(toPath(path, canonicalSourceDirectory, getCanonicalFileName), info, options, host, importMode);
+    if (fromDeps) {
+        return fromDeps;
+    }
+
     const parts: NodeModulePathParts = getNodeModulePathParts(path)!;
     if (!parts) {
         return undefined;
@@ -1114,7 +1164,6 @@ function tryGetModuleNameAsNodeModule({ path, isRedirect }: ModulePath, { getCan
         const cachedPackageJson = host.getPackageJsonInfoCache?.()?.getPackageJsonInfo(packageJsonPath);
         if (isPackageJsonInfo(cachedPackageJson) || cachedPackageJson === undefined && host.fileExists(packageJsonPath)) {
             const packageJsonContent: Record<string, any> | undefined = cachedPackageJson?.contents.packageJsonContent || tryParseJson(host.readFile!(packageJsonPath)!);
-            const importMode = overrideMode || getDefaultResolutionModeForFile(importingSourceFile, host, options);
             if (getResolvePackageJsonExports(options)) {
                 // The package name that we found in node_modules could be different from the package
                 // name in the package.json content via url/filepath dependency specifiers. We need to

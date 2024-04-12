@@ -9702,6 +9702,8 @@ export interface ModuleSpecifierResolutionHost {
     getCommonSourceDirectory(): string;
     getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+
+    getModuleResolutionCache?(): ModuleResolutionCache | undefined;
 }
 
 /** @internal */
