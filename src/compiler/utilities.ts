@@ -1761,7 +1761,7 @@ function canUseOriginalText(node: LiteralLikeNode, flags: GetLiteralTextFlags): 
 
 /** @internal */
 export function getTextOfConstantValue(value: string | number) {
-    return isString(value) ? '"' + escapeNonAsciiString(value) + '"' : "" + value;
+    return isString(value) ? `"${escapeString(value)}"` : "" + value;
 }
 
 // Make an identifier from an external module name by extracting the string after the last "/" and replacing
