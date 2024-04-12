@@ -112,7 +112,6 @@ import {
     createEvaluator,
     createFileDiagnostic,
     createFlowNode,
-    createGetCanonicalFileName,
     createGetSymbolWalker,
     createModeAwareCacheKey,
     createModuleNotFoundChain,
@@ -347,7 +346,6 @@ import {
     getPropertyNameFromType,
     getResolutionDiagnostic,
     getResolutionModeOverride,
-    getResolvedExternalModuleName,
     getResolveJsonModule,
     getRestParameterElementType,
     getRootDeclaration,
@@ -7668,14 +7666,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
                 }
             }
-            if (!context.enclosingDeclaration || !context.tracker.moduleResolverHost) {
+            if (!context.enclosingFile || !context.tracker.moduleResolverHost) {
                 // If there's no context declaration, we can't lookup a non-ambient specifier, so we just use the symbol name
                 if (ambientModuleSymbolRegex.test(symbol.escapedName as string)) {
                     return (symbol.escapedName as string).substring(1, (symbol.escapedName as string).length - 1);
                 }
                 return getSourceFileOfNode(getNonAugmentationDeclaration(symbol)!).fileName; // A resolver may not be provided for baselines and errors - in those cases we use the fileName in full
             }
-            const contextFile = getSourceFileOfNode(getOriginalNode(context.enclosingDeclaration));
+            const contextFile = context.enclosingFile;
             const resolutionMode = overrideImportMode || contextFile?.impliedNodeFormat;
             const cacheKey = createModeAwareCacheKey(contextFile.path, resolutionMode);
             const links = getSymbolLinks(symbol);
@@ -8479,22 +8477,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 function rewriteModuleSpecifier(parent: ImportTypeNode, lit: StringLiteral) {
-                    if (context.bundled) {
-                        if (context.tracker && context.tracker.moduleResolverHost) {
-                            const targetFile = getExternalModuleFileFromDeclaration(parent);
-                            if (targetFile) {
-                                const getCanonicalFileName = createGetCanonicalFileName(!!host.useCaseSensitiveFileNames);
-                                const resolverHost = {
-                                    getCanonicalFileName,
-                                    getCurrentDirectory: () => context.tracker.moduleResolverHost!.getCurrentDirectory(),
-                                    getCommonSourceDirectory: () => context.tracker.moduleResolverHost!.getCommonSourceDirectory(),
-                                };
-                                const newName = getResolvedExternalModuleName(resolverHost, targetFile);
-                                return factory.createStringLiteral(newName);
+                    if (context.bundled || context.enclosingFile !== getSourceFileOfNode(lit)) {
+                        const targetFile = getExternalModuleFileFromDeclaration(parent);
+                        if (targetFile) {
+                            const newName = getSpecifierForModuleSymbol(targetFile.symbol, context);
+                            if (newName !== lit.text) {
+                                return setOriginalNode(factory.createStringLiteral(newName), lit);
                             }
                         }
                     }
-                    return lit;
+                    return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
                 }
             }
         }
