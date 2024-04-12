@@ -8486,7 +8486,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             }
                         }
                     }
-                    return visitNode(lit, visitExistingNodeTreeSymbols) as StringLiteral;
+                    return visitNode(lit, visitExistingNodeTreeSymbols, isStringLiteral)!;
                 }
             }
         }
