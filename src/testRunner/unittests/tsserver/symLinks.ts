@@ -1,25 +1,30 @@
 import * as ts from "../../_namespaces/ts";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
-    dedent,
-} from "../../_namespaces/Utils";
+    buildMonorepoSymlinkedSiblingPackage1,
+    cleanMonorepoSymlinkedSiblingPackage1,
+    getMonorepoSymlinkedSiblingPackagesSys,
+} from "../helpers/monorepoSymlinkedSiblingPackages";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
     protocolLocationFromSubstring,
+    TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
 import {
     createServerHost,
     File,
     libFile,
+    osFlavorToString,
     SymLink,
     TestServerHost,
+    TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: symLinks", () => {
+describe("unittests:: tsserver:: symLinks::", () => {
     it("rename in common file renames all project", () => {
         const folderA = `/users/username/projects/a`;
         const aFile: File = {
@@ -28,7 +33,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const aTsconfig: File = {
             path: `${folderA}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const aC: SymLink = {
             path: `${folderA}/c`,
@@ -43,7 +48,7 @@ describe("unittests:: tsserver:: symLinks", () => {
         };
         const bTsconfig: File = {
             path: `${folderB}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { module: "commonjs" } }),
+            content: jsonToReadableText({ compilerOptions: { module: "commonjs" } }),
         };
         const bC: SymLink = {
             path: `${folderB}/c`,
@@ -59,7 +64,7 @@ describe("unittests:: tsserver:: symLinks", () => {
 
         const files = [cFile, libFile, aFile, aTsconfig, aC, bFile, bTsconfig, bC];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(
             [
                 { file: aFile, projectRootPath: folderA },
@@ -92,13 +97,13 @@ new C();`,
         const recognizerDateTimeTsconfigPath = `${recognizersDateTime}/tsconfig.json`;
         const recognizerDateTimeTsconfigWithoutPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 include: ["src"],
             }),
         };
         const recognizerDateTimeTsconfigWithPathMapping: File = {
             path: recognizerDateTimeTsconfigPath,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: {
                     rootDir: "src",
                     baseUrl: "./",
@@ -123,13 +128,13 @@ new C();`,
         };
         const recongnizerTextPackageJson: File = {
             path: `${recognizersText}/package.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 typings: "dist/types/recognizers-text.d.ts",
             }),
         };
 
         function createSessionAndOpenFile(host: TestServerHost) {
-            const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
+            const session = new TestSession(host);
             session.executeCommandSeq<ts.server.protocol.OpenRequest>({
                 command: ts.server.protocol.CommandTypes.Open,
                 arguments: {
@@ -159,7 +164,7 @@ new C();`,
                     const config = JSON.parse(host.readFile(recognizerDateTimeTsconfigPath)!);
                     host.writeFile(
                         recognizerDateTimeTsconfigPath,
-                        JSON.stringify({
+                        jsonToReadableText({
                             ...config,
                             compilerOptions: { ...config.compilerOptions, resolveJsonModule: true },
                         }),
@@ -228,18 +233,18 @@ new C();`,
             "C:/temp/replay/axios-src/lib/core/settle.js": dedent`
                 export const b2 = 10;
             `,
-            "C:/temp/replay/axios-src/package.json": JSON.stringify({
+            "C:/temp/replay/axios-src/package.json": jsonToReadableText({
                 name: "axios",
                 version: "1.4.0",
                 dependencies: { "follow-redirects": "^1.15.0" },
             }),
-            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": JSON.stringify({
+            "C:/temp/replay/axios-src/node_modules/follow-redirects/package.json": jsonToReadableText({
                 name: "follow-redirects",
                 version: "1.15.0",
             }),
             "C:/temp/replay/axios-src/node_modules/follow-redirects/index.js": "export const x = 10;",
         }, { windowsStyleRoot: "C:/" });
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host), disableAutomaticTypingAcquisition: true });
+        const session = new TestSession({ host, disableAutomaticTypingAcquisition: true });
         openFilesForSession(["c:/temp/replay/axios-src/lib/core/AxiosHeaders.js"], session); // Creates InferredProject1 and AutoImportProvider1
         session.executeCommandSeq<ts.server.protocol.UpdateOpenRequest>({ // Different content from disk
             command: ts.server.protocol.CommandTypes.UpdateOpen,
@@ -265,5 +270,43 @@ new C();`,
         // When we open this file, we will update InferredProject2 which contains this file and the follow-redirect will be resolved again
         openFilesForSession(["c:/temp/replay/axios-src/lib/core/settle.js"], session);
         baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
+    });
+
+    describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {
+        verify(/*built*/ false);
+        verify(/*built*/ true);
+        verify(/*built*/ false, TestServerHostOsFlavor.Linux);
+        verify(/*built*/ true, TestServerHostOsFlavor.Linux);
+        function verify(built: boolean, osFlavor?: TestServerHostOsFlavor) {
+            it(`monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, () => {
+                const indexFile = "/home/src/projects/project/packages/package2/src/index.ts";
+                const host = getMonorepoSymlinkedSiblingPackagesSys(/*forTsserver*/ true, built, osFlavor);
+                const session = new TestSession(host);
+                openFilesForSession([indexFile], session);
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                if (!built) {
+                    buildMonorepoSymlinkedSiblingPackage1(host);
+                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
+                    verifyGetErrRequest({ session, files: [indexFile] });
+                }
+
+                cleanMonorepoSymlinkedSiblingPackage1(host);
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                buildMonorepoSymlinkedSiblingPackage1(host);
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                baselineTsserverLogs("symLinks", `monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, session);
+            });
+        }
     });
 });

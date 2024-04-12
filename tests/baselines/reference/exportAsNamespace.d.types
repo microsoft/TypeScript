@@ -8,4 +8,5 @@ export var X;
 
 export as namespace N
 >N : typeof import("exportAsNamespace")
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

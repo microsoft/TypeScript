@@ -8,7 +8,6 @@ SubB.js(3,41): error TS8011: Type arguments can only be used in TypeScript files
 
 
 ==== BaseA.js (0 errors) ====
-    // regression test for #18254
     export default class BaseA {
     }
 ==== SubA.js (0 errors) ====

@@ -4,5 +4,6 @@
 /// <reference path="missingquote.ts />
 class C {
 >C : C
+>  : ^
 
 }

@@ -25,6 +25,8 @@ import {
     IScriptSnapshot,
     isString,
     LineInfo,
+    missingFileModifiedTime,
+    orderedRemoveItem,
     Path,
     ScriptKind,
     ScriptSnapshot,
@@ -32,7 +34,6 @@ import {
     SourceFile,
     SourceFileLike,
     TextSpan,
-    unorderedRemoveItem,
 } from "./_namespaces/ts";
 import {
     AbsolutePositionAndLineText,
@@ -40,13 +41,14 @@ import {
     Errors,
     ExternalProject,
     InferredProject,
+    isBackgroundProject,
     isConfiguredProject,
     isExternalProject,
     isInferredProject,
+    isProjectDeferredClose,
     maxFileSize,
     NormalizedPath,
     Project,
-    ProjectKind,
     ScriptVersionCache,
     ServerHost,
 } from "./_namespaces/ts.server";
@@ -93,7 +95,7 @@ export class TextStorage {
     /**
      * True when reloading contents of file from the disk is pending
      */
-    private pendingReloadFromDisk = false;
+    pendingReloadFromDisk = false;
 
     constructor(private readonly host: ServerHost, private readonly info: ScriptInfo, initialVersion?: number) {
         this.version = initialVersion || 0;
@@ -180,6 +182,14 @@ export class TextStorage {
         const reloaded = this.reload(newText);
         this.fileSize = fileSize; // NB: after reload since reload clears it
         this.ownFileText = !tempFileName || tempFileName === this.info.fileName;
+        // In case we update this text before mTime gets updated to present file modified time
+        // because its schedule to do that later, update the mTime so we dont re-update the text
+        // Eg. with npm ci where file gets created and editor calls say get error request before
+        // the timeout to update the file stamps in node_modules is run
+        // Test:: watching npm install in codespaces where workspaces folder is hosted at root
+        if (this.ownFileText && this.info.mTime === missingFileModifiedTime.getTime()) {
+            this.info.mTime = (this.host.getModifiedTime!(this.info.fileName) || missingFileModifiedTime).getTime();
+        }
         return reloaded;
     }
 
@@ -398,6 +408,9 @@ export class ScriptInfo {
     /** @internal */
     documentPositionMapper?: DocumentPositionMapper | false;
 
+    /** @internal */
+    deferredDelete?: boolean;
+
     constructor(
         private readonly host: ServerHost,
         readonly fileName: NormalizedPath,
@@ -536,7 +549,8 @@ export class ScriptInfo {
                 }
                 break;
             default:
-                if (unorderedRemoveItem(this.containingProjects, project)) {
+                // We use first configured project as default so we shouldnt change the order of the containing projects
+                if (orderedRemoveItem(this.containingProjects, project)) {
                     project.onFileAddedOrRemoved(this.isSymlink());
                 }
                 break;
@@ -566,7 +580,10 @@ export class ScriptInfo {
             case 0:
                 return Errors.ThrowNoProject();
             case 1:
-                return ensurePrimaryProjectKind(this.containingProjects[0]);
+                return ensurePrimaryProjectKind(
+                    !isProjectDeferredClose(this.containingProjects[0]) ?
+                        this.containingProjects[0] : undefined,
+                );
             default:
                 // If this file belongs to multiple projects, below is the order in which default project is used
                 // - for open script info, its default configured project during opening is default if info is part of it
@@ -582,6 +599,7 @@ export class ScriptInfo {
                 for (let index = 0; index < this.containingProjects.length; index++) {
                     const project = this.containingProjects[index];
                     if (isConfiguredProject(project)) {
+                        if (project.deferredClose) continue;
                         if (!project.isSourceOfProjectReferenceRedirect(this.fileName)) {
                             // If we havent found default configuredProject and
                             // its not the last one, find it and use that one if there
@@ -675,14 +693,14 @@ export class ScriptInfo {
     }
 
     isOrphan() {
-        return !forEach(this.containingProjects, p => !p.isOrphan());
+        return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
     }
 
     /** @internal */
     isContainedByBackgroundProject() {
         return some(
             this.containingProjects,
-            p => p.projectKind === ProjectKind.AutoImportProvider || p.projectKind === ProjectKind.Auxiliary,
+            isBackgroundProject,
         );
     }
 
@@ -730,7 +748,7 @@ export class ScriptInfo {
  * reported as the default project for a ScriptInfo.
  */
 function ensurePrimaryProjectKind(project: Project | undefined) {
-    if (!project || project.projectKind === ProjectKind.AutoImportProvider || project.projectKind === ProjectKind.Auxiliary) {
+    if (!project || isBackgroundProject(project)) {
         return Errors.ThrowNoProject();
     }
     return project;

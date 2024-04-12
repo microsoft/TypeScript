@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/app/src/index.ts]
 
@@ -67,11 +67,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -94,6 +94,16 @@ Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/app/src
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/app/src/index.ts :: Config file name: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/tsconfig.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/app/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/app/src/index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/app/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/app/src/index.ts"
@@ -132,7 +142,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/user/username/projects/app/src/index.ts SVC-1-0 ""
@@ -146,7 +156,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
@@ -156,6 +166,116 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/user/username/projects/app/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "0333346acdfbcfde2103d83f912052f0beb5f13f46ae44827e03843ee2a5fb41",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 1,
+            "tsSize": 0,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "outDir": "",
+            "rootDir": ""
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": true,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/app/src/index.ts",
+        "configFile": "/user/username/projects/app/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 
@@ -196,6 +316,25 @@ FsWatchesRecursive::
   {}
 /user/username/projects/shared/src: *new*
   {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/user/username/projects/app/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/user/username/projects/app/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json *default*
+/user/username/projects/shared/src/index.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -593,6 +732,12 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
             "kind": "keyword",
             "kindModifiers": "",
             "sortText": "15"

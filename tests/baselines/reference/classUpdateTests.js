@@ -208,7 +208,7 @@ var I = /** @class */ (function (_super) {
 var J = /** @class */ (function (_super) {
     __extends(J, _super);
     function J(p1) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this) || this; // NO ERROR
         _this.p1 = p1;
         return _this;
     }
@@ -228,7 +228,7 @@ var K = /** @class */ (function (_super) {
 var L = /** @class */ (function (_super) {
     __extends(L, _super);
     function L(p1) {
-        var _this = _super.call(this) || this;
+        var _this = _super.call(this) || this; // NO ERROR
         _this.p1 = p1;
         return _this;
     }

@@ -1,0 +1,311 @@
+//// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
+
+=== a.ts ===
+namespace numerics {
+>numerics : typeof numerics
+>         : ^^^^^^^^^^^^^^^
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+>                   : ^^^^^^^^^^^^^^^^^^
+
+        Warning,
+>Warning : DiagnosticCategory.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Error,
+>Error : DiagnosticCategory.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Message,
+>Message : DiagnosticCategory.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+
+    export enum DiagnosticCategory2 {
+>DiagnosticCategory2 : DiagnosticCategory2
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+        Warning,
+>Warning : DiagnosticCategory2.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Error,
+>Error : DiagnosticCategory2.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Suggestion,
+>Suggestion : DiagnosticCategory2.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Message,
+>Message : DiagnosticCategory2.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+namespace strings {
+>strings : typeof strings
+>        : ^^^^^^^^^^^^^^
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+>                   : ^^^^^^^^^^^^^^^^^^
+
+        Warning = "Warning",
+>Warning : DiagnosticCategory.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Warning" : "Warning"
+>          : ^^^^^^^^^
+
+        Error = "Error",
+>Error : DiagnosticCategory.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"Error" : "Error"
+>        : ^^^^^^^
+
+        Suggestion = "Suggestion",
+>Suggestion : DiagnosticCategory.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Suggestion" : "Suggestion"
+>             : ^^^^^^^^^^^^
+
+        Message = "Message",
+>Message : DiagnosticCategory.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Message" : "Message"
+>          : ^^^^^^^^^
+    }
+}
+
+declare namespace ambients {
+>ambients : typeof ambients
+>         : ^^^^^^^^^^^^^^^
+
+    export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+>                   : ^^^^^^^^^^^^^^^^^^
+
+        Warning,
+>Warning : DiagnosticCategory.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Error,
+>Error : DiagnosticCategory.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        Message,
+>Message : DiagnosticCategory.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
+
+function f(x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) {
+>f : (x: numerics.DiagnosticCategory, y: strings.DiagnosticCategory) => void
+>  : ^ ^^                           ^^ ^^                          ^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numerics : any
+>         : ^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strings : any
+>        : ^^^
+
+    x = y;
+>x = y : strings.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    y = x;
+>y = x : numerics.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function g(x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) {
+>g : (x: numerics.DiagnosticCategory2, y: strings.DiagnosticCategory) => void
+>  : ^ ^^                            ^^ ^^                          ^^^^^^^^^
+>x : numerics.DiagnosticCategory2
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numerics : any
+>         : ^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strings : any
+>        : ^^^
+
+    x = y;
+>x = y : strings.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory2
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    y = x;
+>y = x : numerics.DiagnosticCategory2
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory2
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function h(x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>h : (x: numerics.DiagnosticCategory, y: ambients.DiagnosticCategory) => void
+>  : ^ ^^                           ^^ ^^                           ^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>numerics : any
+>         : ^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ambients : any
+>         : ^^^
+
+    x = y;
+>x = y : ambients.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    y = x;
+>y = x : numerics.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : numerics.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
+>i : (x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) => void
+>  : ^ ^^                          ^^ ^^                           ^^^^^^^^^
+>x : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>strings : any
+>        : ^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ambients : any
+>         : ^^^
+
+    x = y;
+>x = y : ambients.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    y = x;
+>y = x : strings.DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : ambients.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : strings.DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+=== f.ts ===
+export enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    Warning,
+>Warning : DiagnosticCategory.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Error,
+>Error : DiagnosticCategory.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Suggestion,
+>Suggestion : DiagnosticCategory.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Message,
+>Message : DiagnosticCategory.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+export let x: DiagnosticCategory;
+>x : DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^
+
+(() => {
+>(() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }})() : void
+>                                                                                                                                                                                                                                         : ^^^^
+>(() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }}) : () => void
+>                                                                                                                                                                                                                                       : ^^^^^^^^^^
+>() => {    enum DiagnosticCategory {        Warning = "Warning",        Error = "Error",        Suggestion = "Suggestion",        Message = "Message",    }    function f(y: DiagnosticCategory) {        x = y;        y = x;    }} : () => void
+>                                                                                                                                                                                                                                     : ^^^^^^^^^^
+
+    enum DiagnosticCategory {
+>DiagnosticCategory : DiagnosticCategory
+>                   : ^^^^^^^^^^^^^^^^^^
+
+        Warning = "Warning",
+>Warning : DiagnosticCategory.Warning
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Warning" : "Warning"
+>          : ^^^^^^^^^
+
+        Error = "Error",
+>Error : DiagnosticCategory.Error
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>"Error" : "Error"
+>        : ^^^^^^^
+
+        Suggestion = "Suggestion",
+>Suggestion : DiagnosticCategory.Suggestion
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Suggestion" : "Suggestion"
+>             : ^^^^^^^^^^^^
+
+        Message = "Message",
+>Message : DiagnosticCategory.Message
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"Message" : "Message"
+>          : ^^^^^^^^^
+    }
+    function f(y: DiagnosticCategory) {
+>f : (y: DiagnosticCategory) => void
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^
+
+        x = y;
+>x = y : DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^
+>x : import("f").DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^
+
+        y = x;
+>y = x : import("f").DiagnosticCategory
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^
+>x : import("f").DiagnosticCategory
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+})()

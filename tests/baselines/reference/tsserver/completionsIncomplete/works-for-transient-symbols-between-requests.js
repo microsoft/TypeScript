@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -331,11 +331,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -358,6 +358,16 @@ Info seq  [hh:mm:ss:mss] Search path: /
 Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tsconfig.json",
+        "reason": "Creating possible configured project for /index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
@@ -573,7 +583,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undef
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/foo/constants.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-0 ""
@@ -886,6 +896,115 @@ Info seq  [hh:mm:ss:mss] 	Files (102)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 101,
+            "tsSize": 2290,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 158,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "commonjs"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/index.ts",
+        "configFile": "/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 
@@ -1113,6 +1232,421 @@ FsWatchesRecursive::
 /: *new*
   {}
 
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1148,6 +1682,422 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1162,7 +2112,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-1 "s"
@@ -1665,6 +2615,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -1745,6 +2701,166 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "S2_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S2_0",
+              "exportMapKey": "4 * S2_0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "S3_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S3_0",
+              "exportMapKey": "4 * S3_0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "S4_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S4_0",
+              "exportMapKey": "4 * S4_0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "S5_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S5_0",
+              "exportMapKey": "4 * S5_0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "S6_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S6_0",
+              "exportMapKey": "4 * S6_0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "S7_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S7_0",
+              "exportMapKey": "4 * S7_0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "S8_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S8_0",
+              "exportMapKey": "4 * S8_0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "S9_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S9_0",
+              "exportMapKey": "4 * S9_0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -1948,26 +3064,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S2_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S2_0",
-              "exportMapKey": "4 * S2_0 ",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
-            }
-          },
-          {
             "name": "S20_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -2165,26 +3261,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "S3_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S3_0",
-              "exportMapKey": "4 * S3_0 ",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -2388,26 +3464,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S4_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S4_0",
-              "exportMapKey": "4 * S4_0 ",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
-            }
-          },
-          {
             "name": "S40_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -2605,26 +3661,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "S5_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S5_0",
-              "exportMapKey": "4 * S5_0 ",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -2828,26 +3864,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S6_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S6_0",
-              "exportMapKey": "4 * S6_0 ",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
-            }
-          },
-          {
             "name": "S60_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -3045,26 +4061,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "S7_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S7_0",
-              "exportMapKey": "4 * S7_0 ",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -3268,26 +4264,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S8_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S8_0",
-              "exportMapKey": "4 * S8_0 ",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
-            }
-          },
-          {
             "name": "S80_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -3485,26 +4461,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "S9_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S9_0",
-              "exportMapKey": "4 * S9_0 ",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -3739,6 +4695,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3774,6 +4736,422 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/foo/constants.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3789,7 +5167,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (102)
 	/index.ts SVC-1-2 "si"
@@ -4285,6 +5663,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -4352,6 +5736,166 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "4 * S1_0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "S2_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S2_0",
+              "exportMapKey": "4 * S2_0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "S3_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S3_0",
+              "exportMapKey": "4 * S3_0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "S4_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S4_0",
+              "exportMapKey": "4 * S4_0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "S5_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S5_0",
+              "exportMapKey": "4 * S5_0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "S6_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S6_0",
+              "exportMapKey": "4 * S6_0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "S7_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S7_0",
+              "exportMapKey": "4 * S7_0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "S8_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S8_0",
+              "exportMapKey": "4 * S8_0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "S9_0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "S9_0",
+              "exportMapKey": "4 * S9_0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -4555,26 +6099,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S2_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S2_0",
-              "exportMapKey": "4 * S2_0 ",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
-            }
-          },
-          {
             "name": "S20_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -4772,26 +6296,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S29_0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "S3_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S3_0",
-              "exportMapKey": "4 * S3_0 ",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -4995,26 +6499,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S4_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S4_0",
-              "exportMapKey": "4 * S4_0 ",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
-            }
-          },
-          {
             "name": "S40_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -5212,26 +6696,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S49_0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "S5_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S5_0",
-              "exportMapKey": "4 * S5_0 ",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -5435,26 +6899,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S6_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S6_0",
-              "exportMapKey": "4 * S6_0 ",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
-            }
-          },
-          {
             "name": "S60_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -5652,26 +7096,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S69_0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "S7_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S7_0",
-              "exportMapKey": "4 * S7_0 ",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -5875,26 +7299,6 @@ Info seq  [hh:mm:ss:mss] response:
             }
           },
           {
-            "name": "S8_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S8_0",
-              "exportMapKey": "4 * S8_0 ",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
-            }
-          },
-          {
             "name": "S80_0",
             "kind": "const",
             "kindModifiers": "export",
@@ -6092,26 +7496,6 @@ Info seq  [hh:mm:ss:mss] response:
               "exportMapKey": "5 * S89_0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "S9_0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "S9_0",
-              "exportMapKey": "4 * S9_0 ",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -6359,3 +7743,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*

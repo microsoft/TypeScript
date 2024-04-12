@@ -70,7 +70,6 @@ import {
     NodeArray,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectFlags,
     ObjectLiteralExpression,
     ObjectType,
@@ -112,9 +111,7 @@ import {
     visitNode,
     visitNodes,
 } from "../_namespaces/ts";
-import {
-    ImportAdder,
-} from "../_namespaces/ts.codefix";
+import { ImportAdder } from "../_namespaces/ts.codefix";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
@@ -913,7 +910,7 @@ export function tryGetAutoImportableReferenceFromTypeNode(importTypeNode: TypeNo
             const typeArguments = visitNodes(node.typeArguments, visit, isTypeNode);
             return factory.createTypeReferenceNode(qualifier, typeArguments);
         }
-        return visitEachChild(node, visit, nullTransformationContext);
+        return visitEachChild(node, visit, /*context*/ undefined);
     }
 }
 

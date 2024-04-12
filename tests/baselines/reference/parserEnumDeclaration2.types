@@ -3,8 +3,10 @@
 === parserEnumDeclaration2.ts ===
 declare module M {
 >M : typeof M
+>  : ^^^^^^^^
 
   declare enum E {
 >E : E
+>  : ^
   }
 }

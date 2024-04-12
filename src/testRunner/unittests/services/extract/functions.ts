@@ -1,7 +1,5 @@
 import * as ts from "../../../_namespaces/ts";
-import {
-    testExtractSymbol,
-} from "./helpers";
+import { testExtractSymbol } from "./helpers";
 
 describe("unittests:: services:: extract:: extractFunctions", () => {
     testExtractFunction(

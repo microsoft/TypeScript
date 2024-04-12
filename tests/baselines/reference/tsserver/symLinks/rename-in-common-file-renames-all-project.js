@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/users/username/projects/c/fc.ts]
 export const C = 8
@@ -21,14 +21,22 @@ interface Array<T> { length: number; [n: number]: T; }
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/a/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/a/c] symlink(/users/username/projects/c)
 //// [/users/username/projects/b/b.ts]
 import {C} from "./c/fc"; console.log(C)
 
 //// [/users/username/projects/b/tsconfig.json]
-{"compilerOptions":{"module":"commonjs"}}
+{
+  "compilerOptions": {
+    "module": "commonjs"
+  }
+}
 
 //// [/users/username/projects/b/c] symlink(/users/username/projects/c)
 
@@ -46,6 +54,16 @@ Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/a
 Info seq  [hh:mm:ss:mss] For info: /users/username/projects/a/a.ts :: Config file name: /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/a/tsconfig.json 2000 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/username/projects/a/tsconfig.json",
+        "reason": "Creating possible configured project for /users/username/projects/a/a.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/a/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/a/a.ts",
@@ -65,7 +83,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/a/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/a/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -82,6 +100,69 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/users/username/projects/a/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "b9af92da02c3f29a4a4dcb5162558ecb87aacbef30605f56fe50b79ff9db72e3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 58,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "commonjs"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/username/projects/a/a.ts",
+        "configFile": "/users/username/projects/a/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -113,6 +194,25 @@ FsWatchesRecursive::
 /users/username/projects/a: *new*
   {}
 
+Projects::
+/users/username/projects/a/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+/users/username/projects/a/a.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -129,6 +229,16 @@ Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/b
 Info seq  [hh:mm:ss:mss] For info: /users/username/projects/b/b.ts :: Config file name: /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/b/tsconfig.json 2000 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/users/username/projects/b/tsconfig.json",
+        "reason": "Creating possible configured project for /users/username/projects/b/b.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /users/username/projects/b/tsconfig.json : {
  "rootNames": [
   "/users/username/projects/b/b.ts",
@@ -147,7 +257,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/b/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /users/username/projects/b/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
@@ -164,6 +274,69 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/users/username/projects/b/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "0add50c9c982ef1b2a827920e76267f864b8fe0dd1bf090ce146c1ecb3f64c31",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 2,
+            "tsSize": 58,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 1,
+            "dtsSize": 334,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "commonjs"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/users/username/projects/b/b.ts",
+        "configFile": "/users/username/projects/b/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -208,6 +381,37 @@ FsWatchesRecursive::
   {}
 /users/username/projects/b: *new*
   {}
+
+Projects::
+/users/username/projects/a/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/users/username/projects/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/lib/lib.d.ts *changed*
+    version: Text-1
+    containingProjects: 2 *changed*
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json *new*
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json
+/users/username/projects/b/b.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json
 
 Before request
 
@@ -273,6 +477,30 @@ FsWatchesRecursive::
 /users/username/projects/b:
   {}
 
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -336,6 +564,30 @@ FsWatchesRecursive::
   {}
 /users/username/projects/b:
   {}
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 2
+        /users/username/projects/a/tsconfig.json
+        /users/username/projects/b/tsconfig.json
+/users/username/projects/a/a.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/a/c/fc.ts (Open)
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/a/tsconfig.json *default*
+/users/username/projects/b/b.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
+/users/username/projects/b/c/fc.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /users/username/projects/b/tsconfig.json *default*
 
 Before request
 

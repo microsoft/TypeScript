@@ -1,10 +1,9 @@
+import { jsonToReadableText } from "../helpers";
 import {
     GetErrForProjectDiagnostics,
     verifyGetErrScenario,
 } from "../helpers/tsserver";
-import {
-    File,
-} from "../helpers/virtualFileSystemWithWatch";
+import { File } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: with project references and error reporting", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
@@ -80,7 +79,7 @@ export let x: string = 10;`,
         };
         const dependencyConfig: File = {
             path: `${dependecyLocation}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { composite: true, declarationDir: "../decls" } }),
+            content: jsonToReadableText({ compilerOptions: { composite: true, declarationDir: "../decls" } }),
         };
         const usageTs: File = {
             path: `${usageLocation}/usage.ts`,
@@ -96,7 +95,7 @@ fnErr();
         };
         const usageConfig: File = {
             path: `${usageLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { composite: true },
                 references: [{ path: "../dependency" }],
             }),
@@ -116,7 +115,7 @@ let x: string = 10;`,
         };
         const dependencyConfig: File = {
             path: `${dependecyLocation}/tsconfig.json`,
-            content: JSON.stringify({ compilerOptions: { composite: true, outFile: "../dependency.js" } }),
+            content: jsonToReadableText({ compilerOptions: { composite: true, outFile: "../dependency.js" } }),
         };
         const usageTs: File = {
             path: `${usageLocation}/usage.ts`,
@@ -127,7 +126,7 @@ fnErr();
         };
         const usageConfig: File = {
             path: `${usageLocation}/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 compilerOptions: { composite: true, outFile: "../usage.js" },
                 references: [{ path: "../dependency" }],
             }),

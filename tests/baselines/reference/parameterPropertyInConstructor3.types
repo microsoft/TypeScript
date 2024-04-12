@@ -3,8 +3,10 @@
 === parameterPropertyInConstructor3.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
   constructor(public constructor: string) {}
 >constructor : string
+>            : ^^^^^^
 }
 

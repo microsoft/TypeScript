@@ -1,0 +1,369 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/./a.js ===
+// /**
+//  * First overload
+//  * @overload
+//  * @param {number} a
+//  * @returns {void}
+//  */
+// 
+// /**
+//  * Second overload
+//  * @overload
+//  * @param {string} a
+//  * @returns {void}
+//  */
+// 
+// /**
+//  * @param {string | number} a
+//  * @returns {void}
+//  */
+// function f(a) {}
+// 
+// f(1);
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**a: number**): void
+// | First overload
+// | ----------------------------------------------------------------------
+// f("");
+//   ^
+// | ----------------------------------------------------------------------
+// | f(**a: string**): void
+// | Second overload
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./a.js",
+      "position": 238,
+      "name": "a"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "First overload",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Second overload",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 238,
+        "length": 1
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./a.js",
+      "position": 244,
+      "name": "b"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "First overload",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "f",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "a",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "a",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [
+            {
+              "text": "Second overload",
+              "kind": "text"
+            }
+          ],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 244,
+        "length": 2
+      },
+      "selectedItemIndex": 1,
+      "argumentIndex": 0,
+      "argumentCount": 1
+    }
+  }
+]

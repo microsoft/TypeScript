@@ -1,3 +1,4 @@
+// === Inlay Hints ===
 function bar () { return require('./a').a; }
                ^
 {

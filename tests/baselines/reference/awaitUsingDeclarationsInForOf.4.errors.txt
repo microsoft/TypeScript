@@ -1,0 +1,16 @@
+awaitUsingDeclarationsInForOf.4.ts(4,8): error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+awaitUsingDeclarationsInForOf.4.ts(4,26): error TS2448: Block-scoped variable 'of' used before its declaration.
+
+
+==== awaitUsingDeclarationsInForOf.4.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55555
+    
+    {
+      for (await using of of of) {};
+           ~~~~~
+!!! error TS2853: 'await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.
+                             ~~
+!!! error TS2448: Block-scoped variable 'of' used before its declaration.
+!!! related TS2728 awaitUsingDeclarationsInForOf.4.ts:4:20: 'of' is declared here.
+    }
+    

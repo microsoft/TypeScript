@@ -1,16 +1,16 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    protocol,
-} from "../../_namespaces/ts.server";
+import { protocol } from "../../_namespaces/ts.server";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
+    closeFilesForSession,
     openFilesForSession,
+    TestSession,
 } from "../helpers/tsserver";
 import {
     createServerHost,
     File,
+    libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
@@ -35,7 +35,7 @@ const ambientDeclaration: File = {
 };
 const mobxPackageJson: File = {
     path: "/node_modules/mobx/package.json",
-    content: `{ "name": "mobx", "version": "1.0.0" }`,
+    content: jsonToReadableText({ name: "mobx", version: "1.0.0" }),
 };
 const mobxDts: File = {
     path: "/node_modules/mobx/index.d.ts",
@@ -69,8 +69,8 @@ describe("unittests:: tsserver:: exportMapCache", () => {
     });
 
     it("invalidates the cache when files are deleted", () => {
-        const { host, projectService, exportMapCache, session } = setup();
-        projectService.closeClientFile(aTs.path);
+        const { host, exportMapCache, session } = setup();
+        closeFilesForSession([aTs], session);
         host.deleteFile(aTs.path);
         host.runQueuedTimeoutCallbacks();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -85,6 +85,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         project.getPackageJsonAutoImportProvider();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         baselineTsserverLogs("exportMapCache", "does not invalidate the cache when package.json is changed inconsequentially", session);
     });
 
@@ -95,6 +96,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
         project.getPackageJsonAutoImportProvider();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         baselineTsserverLogs("exportMapCache", "invalidates the cache when package.json change results in AutoImportProvider change", session);
     });
 
@@ -130,7 +132,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             },
         });
         project.getLanguageService(/*ensureSynchronized*/ true);
-        assert.notEqual(programBefore, project.getCurrentProgram()!);
+        assert.notEqual(programBefore, project.getCurrentProgram());
 
         // Get same info from cache again
         let sigintPropAfter: readonly ts.SymbolExportInfo[] | undefined;
@@ -162,8 +164,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             }`,
         };
         const host = createServerHost([utilsTs, classesTs, tsconfig]);
-        const session = createSession(host, { canUseEvents: true, logger: createLoggerWithInMemoryLogs(host) });
-        const projectService = session.getProjectService();
+        const session = new TestSession(host);
         openFilesForSession([classesTs], session);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -187,7 +188,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             },
         });
 
-        const project = projectService.configuredProjects.get(tsconfig.path)!;
+        const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
         const exportMapCache = project.getCachedExportInfoMap();
         assert.ok(exportMapCache.isUsableByFile(classesTs.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
@@ -209,6 +210,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
 
         // Cache is invalidated because other file has changed
         assert.ok(!exportMapCache.isUsableByFile(classesTs.path as ts.Path));
@@ -268,7 +270,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         content: `foo`,
     };
 
-    const files = [libTsconfig, libIndex, appTsconfig, appIndex];
+    const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
     const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
 
     it("does not invalidate the cache when referenced project changes inconsequentially", () => {
@@ -289,7 +291,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         });
 
         // If lib/index.ts were part of the same project, we would recognize that
-        // this change does not modify the shape of the progrm exports and the cache
+        // this change does not modify the shape of the program exports and the cache
         // would not be cleared. But because this file is part of the AutoImportProvider,
         // the cache clears unconditionally during its updateGraph. This might be ok,
         // but this failing test shows the behavior I originally expected when prototyping
@@ -297,6 +299,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         project.getPackageJsonAutoImportProvider();
         assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
         assert.ok(!exportMapCache.isEmpty());
+        baselineTsserverLogs("exportMapCache", "does not invalidate the cache when referenced project changes inconsequentially", session);
     });
 
     it("invalidates the cache when referenced project changes signatures", () => {
@@ -321,19 +324,19 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         const newCompletions = triggerCompletions();
         assert.ok(newCompletions.entries.some(e => e.name === "food"));
         assert.ok(!newCompletions.entries.some(e => e.name === "foo"));
+        baselineTsserverLogs("exportMapCache", "invalidates the cache when referenced project changes signatures", session);
     });
 });
 
 function createSetup(files: readonly File[], openFiles: readonly File[], completionRequestLocation: protocol.FileLocationRequestArgs) {
     return () => {
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession(openFiles, session);
-        const projectService = session.getProjectService();
-        const project = projectService.configuredProjects.values().next().value;
+        const project = ts.firstIterator(session.getProjectService().configuredProjects.values());
         triggerCompletions();
         const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-        return { host, project, projectService, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
+        return { host, project, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
 
         function triggerCompletions() {
             return session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({

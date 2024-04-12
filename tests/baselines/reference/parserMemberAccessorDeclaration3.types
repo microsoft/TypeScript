@@ -3,7 +3,9 @@
 === parserMemberAccessorDeclaration3.ts ===
 class C {
 >C : C
+>  : ^
 
   get 0() { }
 >0 : void
+>  : ^^^^
 }
