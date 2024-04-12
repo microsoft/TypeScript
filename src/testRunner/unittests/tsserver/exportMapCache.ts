@@ -1,5 +1,8 @@
 import * as ts from "../../_namespaces/ts";
-import { protocol } from "../../_namespaces/ts.server";
+import {
+    protocol,
+    updateProjectIfDirty,
+} from "../../_namespaces/ts.server";
 import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
@@ -49,7 +52,7 @@ const exportEqualsMappedType: File = {
             export = exp;`,
 };
 
-describe("unittests:: tsserver:: exportMapCache", () => {
+describe("unittests:: tsserver:: exportMapCache::", () => {
     const files = [aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType];
     const setup = createSetup(files, [aTs, bTs], { file: bTs.path, line: 1, offset: 3 });
     it("caches auto-imports in the same file", () => {
@@ -236,12 +239,12 @@ describe("unittests:: tsserver:: exportMapCache", () => {
 describe("unittests:: tsserver:: exportMapCache:: project references", () => {
     const libTsconfig: File = {
         path: "/packages/lib/tsconfig.json",
-        content: `{
-            "compilerOptions": {
-                "composite": true,
-                "module": "commonjs"
-            }
-        }`,
+        content: jsonToReadableText({
+            compilerOptions: {
+                composite: true,
+                module: "commonjs",
+            },
+        }),
     };
 
     const libIndex: File = {
@@ -251,18 +254,18 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
 
     const appTsconfig: File = {
         path: "/packages/app/tsconfig.json",
-        content: `{
-            "compilerOptions": {
-                "composite": true,
-                "module": "commonjs",
-                "paths": {
-                    "lib": ["../lib/index.ts"]
-                }
+        content: jsonToReadableText({
+            compilerOptions: {
+                composite: true,
+                module: "commonjs",
+                paths: {
+                    lib: ["../lib/index.ts"],
+                },
             },
-            "references": [
-                { "path": "../lib" }
-            ]
-        }`,
+            references: [
+                { path: "../lib" },
+            ],
+        }),
     };
 
     const appIndex: File = {
@@ -270,61 +273,78 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
         content: `foo`,
     };
 
-    const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
-    const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
-
-    it("does not invalidate the cache when referenced project changes inconsequentially", () => {
-        const { session, project, exportMapCache } = setup();
-        assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
-            arguments: {
-                changedFiles: [{
-                    fileName: libIndex.path,
-                    textChanges: [{
-                        newText: "\nfoo.toFixed()",
-                        start: { line: 1, offset: 3 },
-                        end: { line: 1, offset: 3 },
+    function verifyReferences(includesLib: boolean) {
+        const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
+        if (includesLib) {
+            files.push({
+                path: "/packages/app/other.ts",
+                content: `import { foo } from "../lib";`,
+            });
+        }
+        const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
+        it("does not invalidate the cache when referenced project changes inconsequentially", () => {
+            const { session, project, exportMapCache } = setup();
+            assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: libIndex.path,
+                        textChanges: [{
+                            newText: "\nfoo.toFixed()",
+                            start: { line: 1, offset: 3 },
+                            end: { line: 1, offset: 3 },
+                        }],
                     }],
-                }],
-            },
+                },
+            });
+
+            // If lib/index.ts were part of the same project, we would recognize that
+            // this change does not modify the shape of the program exports and the cache
+            // would not be cleared. But because this file is part of the AutoImportProvider,
+            // the cache clears unconditionally during its updateGraph. This might be ok,
+            // but this failing test shows the behavior I originally expected when prototyping
+            // my version of this feature - that the cache could be reused across trivial changes.
+            updateProjectIfDirty(project);
+            project.getPackageJsonAutoImportProvider();
+            assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
+            assert.ok(!exportMapCache.isEmpty());
+            baselineTsserverLogs("exportMapCache", `does not invalidate the cache when referenced project changes inconsequentially${includesLib ? " referencedInProject" : ""}`, session);
         });
 
-        // If lib/index.ts were part of the same project, we would recognize that
-        // this change does not modify the shape of the program exports and the cache
-        // would not be cleared. But because this file is part of the AutoImportProvider,
-        // the cache clears unconditionally during its updateGraph. This might be ok,
-        // but this failing test shows the behavior I originally expected when prototyping
-        // my version of this feature - that the cache could be reused across trivial changes.
-        project.getPackageJsonAutoImportProvider();
-        assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
-        assert.ok(!exportMapCache.isEmpty());
-        baselineTsserverLogs("exportMapCache", "does not invalidate the cache when referenced project changes inconsequentially", session);
+        it("invalidates the cache when referenced project changes signatures", () => {
+            const { session, project, exportMapCache, triggerCompletions } = setup();
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: libIndex.path,
+                        textChanges: [{
+                            newText: "export const food = 0;",
+                            start: { line: 1, offset: 1 },
+                            end: { line: 1, offset: 3 },
+                        }],
+                    }],
+                },
+            });
+
+            updateProjectIfDirty(project);
+            project.getPackageJsonAutoImportProvider();
+            assert.ok(exportMapCache.isEmpty());
+
+            const newCompletions = triggerCompletions();
+            assert.ok(newCompletions.entries.some(e => e.name === "food"));
+            assert.ok(!newCompletions.entries.some(e => e.name === "foo"));
+            baselineTsserverLogs("exportMapCache", `invalidates the cache when referenced project changes signatures${includesLib ? " referencedInProject" : ""}`, session);
+        });
+    }
+
+    describe("when referenced project file is not part of project", () => {
+        verifyReferences(/*includesLib*/ false);
     });
 
-    it("invalidates the cache when referenced project changes signatures", () => {
-        const { session, project, exportMapCache, triggerCompletions } = setup();
-        session.executeCommandSeq<protocol.UpdateOpenRequest>({
-            command: protocol.CommandTypes.UpdateOpen,
-            arguments: {
-                changedFiles: [{
-                    fileName: libIndex.path,
-                    textChanges: [{
-                        newText: "export const food = 0;",
-                        start: { line: 1, offset: 1 },
-                        end: { line: 1, offset: 3 },
-                    }],
-                }],
-            },
-        });
-
-        project.getPackageJsonAutoImportProvider();
-        assert.ok(exportMapCache.isEmpty());
-
-        const newCompletions = triggerCompletions();
-        assert.ok(newCompletions.entries.some(e => e.name === "food"));
-        assert.ok(!newCompletions.entries.some(e => e.name === "foo"));
-        baselineTsserverLogs("exportMapCache", "invalidates the cache when referenced project changes signatures", session);
+    describe("when referenced project file is part of project", () => {
+        verifyReferences(/*includesLib*/ true);
     });
 });
 
