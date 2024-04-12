@@ -2600,7 +2600,7 @@ export function createLanguageService(
         }
         else {
             // determines if the cursor is in an element tag
-            const tag = findAncestor(token.parent, n => {
+            const tag = findAncestor(token.parent, (n): boolean => {
                 if (isJsxOpeningElement(n) || isJsxClosingElement(n)) {
                     return true;
                 }

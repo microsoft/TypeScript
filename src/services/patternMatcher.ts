@@ -528,7 +528,7 @@ function breakIntoSpans(identifier: string, word: boolean): TextSpan[] {
     return result;
 }
 
-function charIsPunctuation(ch: number) {
+function charIsPunctuation(ch: number): boolean {
     switch (ch) {
         case CharacterCodes.exclamation:
         case CharacterCodes.doubleQuote:
