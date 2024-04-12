@@ -50,7 +50,6 @@
             "smartStep": true,
             "preLaunchTask": "npm: build:tests",
             "console": "integratedTerminal",
-            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
         },
         {
             // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
@@ -58,7 +57,6 @@
             "request": "attach",
             "name": "Attach to VS Code TS Server via Port",
             "processId": "${command:PickProcess}",
-            "customDescriptionGenerator": "'__tsDebuggerDisplay' in this ? this.__tsDebuggerDisplay(defaultValue) : defaultValue"
         }
     ]
 }
