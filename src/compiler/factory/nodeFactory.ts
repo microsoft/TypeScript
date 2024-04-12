@@ -6518,7 +6518,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return createGlobalMethodCall("Reflect", "set", receiver ? [target, propertyKey, value, receiver] : [target, propertyKey, value]);
     }
 
-    function tryAddPropertyAssignment(properties: PropertyAssignment[], propertyName: string, expression: Expression | undefined) {
+    function tryAddPropertyAssignment(properties: PropertyAssignment[], propertyName: string, expression: Expression | undefined): boolean {
         if (expression) {
             properties.push(createPropertyAssignment(propertyName, expression));
             return true;
