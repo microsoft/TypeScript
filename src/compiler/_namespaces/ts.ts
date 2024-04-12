@@ -55,7 +55,7 @@ export * from "../transformers/generators";
 export * from "../transformers/module/module";
 export * from "../transformers/module/system";
 export * from "../transformers/module/esnextAnd2015";
-export * from "../transformers/module/node";
+export * from "../transformers/module/impliedNodeFormatDependent";
 export * from "../transformers/declarations/diagnostics";
 export * from "../transformers/declarations";
 export * from "../transformer";
