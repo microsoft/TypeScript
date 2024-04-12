@@ -34814,7 +34814,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (candidate.typeParameters) {
                     // If we are *inside the body of candidate*, we need to create a clone of `candidate` with differing type parameter identities,
                     // so our inference results for this call doesn't pollute expression types referencing the outer type parameter!
-                    if (candidate.declaration && findAncestor(node, a => a === candidate.declaration)) {
+                    const paramLocation = candidate.typeParameters[0].symbol.declarations?.[0]?.parent;
+                    const candidateParameterContext = paramLocation || (candidate.declaration && isConstructorDeclaration(candidate.declaration) ? candidate.declaration.parent : candidate.declaration);
+                    if (candidateParameterContext && findAncestor(node, a => a === candidateParameterContext)) {
                         candidate = getImplementationSignature(candidate);
                     }
                     let typeArgumentTypes: readonly Type[] | undefined;
