@@ -48231,8 +48231,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return !!strictNullChecks &&
             !isOptionalParameter(parameter) &&
             !isJSDocParameterTag(parameter) &&
-            !!parameter.initializer &&
-            !hasSyntacticModifier(parameter, ModifierFlags.ParameterPropertyModifier);
+            !!parameter.initializer;
     }
 
     function isOptionalUninitializedParameterProperty(parameter: ParameterDeclaration | JSDocParameterTag) {
