@@ -1054,7 +1054,7 @@ function tryGetModuleNameFromPackageJsonDependencies(moduleFileName: Path, { sou
 
     const candidates = getOwnKeys(dependencies);
     for (const name of candidates) {
-        const resolved = resolveModuleName(name, combinePaths(sourceDirectory, "dummy.ts"), options, host as (typeof host & { readFile: NonNullable<(typeof host)["readFile"]> }), cache, /*redirectedReference*/ undefined, importMode);
+        const resolved = resolveModuleName(name, combinePaths(sourceDirectory, "dummy.ts"), options, host as (typeof host & { readFile: NonNullable<(typeof host)["readFile"]>; }), cache, /*redirectedReference*/ undefined, importMode);
         if (resolved && resolved.resolvedModule && resolved.resolvedModule) {
             const resolvedPath = toPath(resolved.resolvedModule.resolvedFileName, sourceDirectory, getCanonicalFileName);
             if (resolvedPath === moduleFileName) {
