@@ -4400,7 +4400,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
 
     /** @internal */ jsDocParsingMode?: JSDocParsingMode;
 
-
     /** @internal */ scriptSnapshot: IScriptSnapshot | undefined;
     /** @internal */ nameTable: Map<__String, number> | undefined;
     /** @internal */ sourceMapper?: DocumentPositionMapper;
@@ -4410,7 +4409,6 @@ export interface SourceFile extends Declaration, LocalsContainer {
     getLineStarts(): readonly number[];
     getPositionOfLineAndCharacter(line: number, character: number): number;
     update(newText: string, textChangeRange: TextChangeRange): SourceFile;
-
 }
 
 /**

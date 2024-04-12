@@ -1,4 +1,7 @@
-import { SignatureObject, SymbolObject } from "../compiler/objectConstructors";
+import {
+    SignatureObject,
+    SymbolObject,
+} from "../compiler/objectConstructors";
 import {
     __String,
     ApplicableRefactorInfo,

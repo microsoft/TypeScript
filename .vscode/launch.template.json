@@ -49,14 +49,14 @@
             "sourceMaps": true,
             "smartStep": true,
             "preLaunchTask": "npm: build:tests",
-            "console": "integratedTerminal",
+            "console": "integratedTerminal"
         },
         {
             // See: https://github.com/microsoft/TypeScript/wiki/Debugging-Language-Service-in-VS-Code
             "type": "node",
             "request": "attach",
             "name": "Attach to VS Code TS Server via Port",
-            "processId": "${command:PickProcess}",
+            "processId": "${command:PickProcess}"
         }
     ]
 }

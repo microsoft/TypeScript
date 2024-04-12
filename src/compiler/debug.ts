@@ -93,9 +93,7 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
-import {
-    BaseSyntaxObject,
-} from "./nodeConstructors";
+import { BaseSyntaxObject } from "./nodeConstructors";
 import {
     SignatureObject,
     SymbolObject,
