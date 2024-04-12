@@ -1138,7 +1138,6 @@ Projects::
     projectProgramVersion: 1
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/decls/fns.d.ts 2:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/dependency/tsconfig.json
@@ -1149,54 +1148,6 @@ Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/main/tscon
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/decls/FnS.d.ts :: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/main/tsconfig.json WatchType: Failed Lookup Locations
 Before request
 //// [/user/username/projects/myproject/decls/FnS.d.ts] deleted
-
-PolledWatches::
-/user/username/projects/myproject/decls/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/dependency/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/decls/fns.d.ts:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
 
 Timeout callback:: count: 4
 1: /user/username/projects/myproject/main/tsconfig.json *new*
@@ -1235,8 +1186,10 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
-/user/username/projects/myproject/decls/fns.d.ts *deleted*
+/user/username/projects/myproject/decls/fns.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0 *changed*
         /user/username/projects/myproject/main/tsconfig.json *deleted*
@@ -1346,6 +1299,8 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -1662,50 +1617,6 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts: *new*
-  {"pollingInterval":2000}
-/user/username/projects/myproject/dependency/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/dependency/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/main/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/main/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/package.json:
-  {"pollingInterval":2000}
-/user/username/projects/myproject/random/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/package.json:
-  {"pollingInterval":2000}
-
-FsWatches::
-/a/lib/lib.d.ts:
-  {}
-/user/username/projects/myproject/decls/FnS.d.ts.map:
-  {}
-/user/username/projects/myproject/dependency/tsconfig.json:
-  {}
-/user/username/projects/myproject/main/tsconfig.json:
-  {}
-/user/username/projects/myproject/random/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject/decls:
-  {}
-/user/username/projects/myproject/dependency:
-  {}
-/user/username/projects/myproject/main:
-  {}
-/user/username/projects/myproject/random:
-  {}
-
 Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
@@ -2010,8 +1921,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2035,6 +1944,8 @@ FsWatches::
 /a/lib/lib.d.ts:
   {}
 /user/username/projects/myproject/decls/FnS.d.ts.map:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2083,6 +1994,12 @@ ScriptInfos::
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
+    containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
     containingProjects: 1
@@ -2111,6 +2028,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/random/random.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/random
 Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/random/random.ts :: Config file name: /user/username/projects/myproject/random/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/fns.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/decls/FnS.d.ts.map 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/main/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -2138,8 +2056,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2161,6 +2077,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2212,6 +2130,12 @@ ScriptInfos::
     sourceInfos: 1
         /user/username/projects/myproject/dependency/fns.ts
     documentPositionMapper: DocumentPositionMapper1
+    containingProjects: 0
+/user/username/projects/myproject/decls/fns.d.ts *deleted*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    sourceMapFilePath: /user/username/projects/myproject/decls/fns.d.ts.map
     containingProjects: 0
 /user/username/projects/myproject/dependency/FnS.ts (Open)
     version: SVC-1-0
@@ -2266,8 +2190,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2289,6 +2211,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:
   {}
@@ -2378,8 +2302,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2401,6 +2323,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/FnS.ts: *new*
   {}
@@ -2491,8 +2415,6 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2514,6 +2436,8 @@ PolledWatches::
 
 FsWatches::
 /a/lib/lib.d.ts:
+  {}
+/user/username/projects/myproject/decls/fns.d.ts:
   {}
 /user/username/projects/myproject/dependency/FnS.ts:
   {}
@@ -2666,8 +2590,6 @@ PolledWatches::
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
-/user/username/projects/myproject/decls/FnS.d.ts:
-  {"pollingInterval":2000}
 /user/username/projects/myproject/dependency/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/dependency/package.json:
@@ -2688,6 +2610,8 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/user/username/projects/myproject/decls/fns.d.ts:
+  {}
 /user/username/projects/myproject/dependency/FnS.ts:
   {}
 /user/username/projects/myproject/dependency/tsconfig.json:

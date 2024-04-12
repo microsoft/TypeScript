@@ -204,7 +204,6 @@ ScriptInfos::
         /home/username/project/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/username/project/src/b.ts 2:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/username/project/src/b.ts 2:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
@@ -219,6 +218,8 @@ PolledWatches::
   {"pollingInterval":500}
 /home/username/project/package.json:
   {"pollingInterval":2000}
+/home/username/project/src/b.ts: *new*
+  {"pollingInterval":500}
 /home/username/project/src/package.json:
   {"pollingInterval":2000}
 
@@ -254,8 +255,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/username/project/tsconfig.json *default*
-/home/username/project/src/b.ts *deleted*
+/home/username/project/src/b.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /home/username/project/tsconfig.json *deleted*
 
@@ -344,6 +347,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/username/project/src/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/home/username/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 
@@ -368,7 +372,7 @@ PolledWatches::
   {"pollingInterval":500}
 /home/username/project/package.json:
   {"pollingInterval":2000}
-/home/username/project/src/b.ts: *new*
+/home/username/project/src/b.ts:
   {"pollingInterval":500}
 /home/username/project/src/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -406,6 +410,11 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/username/project/tsconfig.json *default*
+/home/username/project/src/b.ts *deleted*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /home/username/project/src/c.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1

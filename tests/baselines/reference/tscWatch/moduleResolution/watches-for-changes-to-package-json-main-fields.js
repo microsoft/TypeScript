@@ -138,6 +138,8 @@ FsWatches::
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
   {}
+/user/username/projects/myproject/node_modules/pkg2: *new*
+  {}
 /user/username/projects/myproject/packages/pkg1: *new*
   {}
 /user/username/projects/myproject/packages/pkg2: *new*
@@ -288,6 +290,8 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/pkg2:
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
@@ -440,6 +444,8 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
+  {}
+/user/username/projects/myproject/node_modules/pkg2:
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
