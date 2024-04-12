@@ -2813,7 +2813,6 @@ declare namespace ts {
             addMissingFileRoot(fileName: NormalizedPath): void;
             removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
             registerFileUpdate(fileName: string): void;
-            markAsDirty(): void;
             /**
              * Updates set of files that contribute to this project
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -2858,10 +2857,8 @@ declare namespace ts {
         class AutoImportProviderProject extends Project {
             private hostProject;
             private rootFileNames;
-            isOrphan(): boolean;
             updateGraph(): boolean;
             hasRoots(): boolean;
-            markAsDirty(): void;
             getScriptFileNames(): string[];
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
@@ -2895,8 +2892,6 @@ declare namespace ts {
             getAllProjectErrors(): readonly Diagnostic[];
             setProjectErrors(projectErrors: Diagnostic[]): void;
             close(): void;
-            markAsDirty(): void;
-            isOrphan(): boolean;
             getEffectiveTypeRoots(): string[];
         }
         /**

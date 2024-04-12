@@ -1308,6 +1308,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         }
     }
 
+    /** @internal */
     markAsDirty() {
         if (!this.dirty) {
             this.projectStateVersion++;
@@ -2599,6 +2600,7 @@ export class AutoImportProviderProject extends Project {
         return !some(this.rootFileNames);
     }
 
+    /** @internal */
     override isOrphan() {
         return true;
     }
@@ -2634,6 +2636,7 @@ export class AutoImportProviderProject extends Project {
         return !!this.rootFileNames?.length;
     }
 
+    /** @internal */
     override markAsDirty() {
         this.rootFileNames = undefined;
         super.markAsDirty();
@@ -2911,6 +2914,7 @@ export class ConfiguredProject extends Project {
         super.close();
     }
 
+    /** @internal */
     override markAsDirty() {
         if (this.deferredClose) return;
         super.markAsDirty();
@@ -2991,6 +2995,7 @@ export class ConfiguredProject extends Project {
                 ) || false;
     }
 
+    /** @internal */
     override isOrphan(): boolean {
         return !!this.deferredClose;
     }
