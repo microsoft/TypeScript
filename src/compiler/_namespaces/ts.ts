@@ -75,7 +75,3 @@ import * as moduleSpecifiers from "./ts.moduleSpecifiers";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance";
 export { performance };
-/** @internal */ import * as NodeConstructors from "../nodeConstructors";
-/** @internal */ export { NodeConstructors };
-/** @internal */ import * as ObjectConstructors from "../objectConstructors";
-/** @internal */ export { ObjectConstructors };

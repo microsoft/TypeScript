@@ -159,10 +159,44 @@ export abstract class BaseSyntaxObject implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    abstract forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined;
-    abstract getChildren(sourceFile?: SourceFileLike): readonly Node[];
-    abstract getFirstToken(sourceFile?: SourceFileLike): Node | undefined;
-    abstract getLastToken(sourceFile?: SourceFileLike): Node | undefined;
+    forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
+        return forEachChild(this, cbNode, cbNodeArray);
+    }
+
+    getChildren(sourceFile?: SourceFileLike): readonly Node[] {
+        Debug.assertValidTextRange(this, "Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
+        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
+    }
+
+    getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
+        Debug.assertValidTextRange(this);
+        const children = this.getChildren(sourceFile);
+        if (!children.length) {
+            return undefined;
+        }
+
+        const child = find(children, child => child.kind < SyntaxKind.FirstJSDocNode || child.kind > SyntaxKind.LastJSDocNode);
+        if (!child) {
+            return undefined;
+        }
+
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getFirstToken(sourceFile);
+    }
+
+    getLastToken(sourceFile?: SourceFileLike): Node | undefined {
+        Debug.assertValidTextRange(this);
+        const children = this.getChildren(sourceFile);
+        if (!children.length) {
+            return undefined;
+        }
+
+        const child = lastOrUndefined(children);
+        if (!child) {
+            return undefined;
+        }
+
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getLastToken(sourceFile);
+    }
 }
 
 /** @internal */
@@ -196,6 +230,7 @@ export abstract class BaseTokenObject extends BaseSyntaxObject {
 /** @internal */
 export class TokenObject<TKind extends SyntaxKind> extends BaseTokenObject implements Token<TKind> {
     declare kind: TKind;
+
     constructor(kind: TKind) {
         super(kind);
     }
@@ -263,45 +298,6 @@ export abstract class BaseNodeObject extends BaseSyntaxObject {
     override emitNode: EmitNode | undefined = undefined;
     // NOTE: Non-token nodes may have modifiers, so they are defined to reduce polymorphism
     override modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
-
-    override forEachChild<T>(cbNode: (node: Node) => T, cbNodeArray?: (nodes: NodeArray<Node>) => T): T | undefined {
-        return forEachChild(this, cbNode, cbNodeArray);
-    }
-
-    override getChildren(sourceFile?: SourceFileLike): readonly Node[] {
-        Debug.assertValidTextRange(this, "Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
-        return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
-    }
-
-    override getFirstToken(sourceFile?: SourceFileLike): Node | undefined {
-        Debug.assertValidTextRange(this);
-        const children = this.getChildren(sourceFile);
-        if (!children.length) {
-            return undefined;
-        }
-
-        const child = find(children, child => child.kind < SyntaxKind.FirstJSDocNode || child.kind > SyntaxKind.LastJSDocNode);
-        if (!child) {
-            return undefined;
-        }
-
-        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getFirstToken(sourceFile);
-    }
-
-    override getLastToken(sourceFile?: SourceFileLike): Node | undefined {
-        Debug.assertValidTextRange(this);
-        const children = this.getChildren(sourceFile);
-        if (!children.length) {
-            return undefined;
-        }
-
-        const child = lastOrUndefined(children);
-        if (!child) {
-            return undefined;
-        }
-
-        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getLastToken(sourceFile);
-    }
 }
 
 /** @internal */
@@ -314,8 +310,11 @@ export class NodeObject<TKind extends SyntaxKind> extends BaseNodeObject impleme
 }
 
 /** @internal */
-export class SourceFileObject extends BaseNodeObject implements SourceFile {
+export class SourceFileObject extends BaseSyntaxObject implements SourceFile {
     declare kind: SyntaxKind.SourceFile;
+
+    // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
+    override emitNode: EmitNode | undefined = undefined;
 
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;

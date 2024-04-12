@@ -1,3 +1,4 @@
+import { SignatureObject, SymbolObject } from "../compiler/objectConstructors";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -182,7 +183,6 @@ import {
     noop,
     normalizePath,
     NumericLiteral,
-    ObjectConstructors,
     ObjectLiteralElement,
     ObjectLiteralExpression,
     OperationCanceledException,
@@ -287,7 +287,7 @@ function ensureSymbolExtraFields(symbol: Symbol) {
     return extra;
 }
 
-ObjectConstructors.SymbolObject.prototype.getDocumentationComment = function (this: Symbol | TransientSymbol, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+SymbolObject.prototype.getDocumentationComment = function (this: Symbol | TransientSymbol, checker: TypeChecker | undefined): SymbolDisplayPart[] {
     const extra = ensureSymbolExtraFields(this);
     if (!extra.documentationComment) {
         extra.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
@@ -303,7 +303,7 @@ ObjectConstructors.SymbolObject.prototype.getDocumentationComment = function (th
     return extra.documentationComment;
 };
 
-ObjectConstructors.SymbolObject.prototype.getContextualDocumentationComment = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+SymbolObject.prototype.getContextualDocumentationComment = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
     if (context) {
         const extra = ensureSymbolExtraFields(this);
         if (isGetAccessor(context)) {
@@ -322,12 +322,12 @@ ObjectConstructors.SymbolObject.prototype.getContextualDocumentationComment = fu
     return this.getDocumentationComment(checker);
 };
 
-ObjectConstructors.SymbolObject.prototype.getJsDocTags = function (this: Symbol, checker?: TypeChecker): JSDocTagInfo[] {
+SymbolObject.prototype.getJsDocTags = function (this: Symbol, checker?: TypeChecker): JSDocTagInfo[] {
     const extra = ensureSymbolExtraFields(this);
     return extra.tags ??= getJsDocTagsOfDeclarations(this.declarations, checker);
 };
 
-ObjectConstructors.SymbolObject.prototype.getContextualJsDocTags = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+SymbolObject.prototype.getContextualJsDocTags = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
     if (context) {
         const extra = ensureSymbolExtraFields(this);
         if (isGetAccessor(context)) {
@@ -361,12 +361,12 @@ function ensureSignatureExtraFields(signature: Signature) {
     return extra;
 }
 
-ObjectConstructors.SignatureObject.prototype.getDocumentationComment = function (this: Signature): SymbolDisplayPart[] {
+SignatureObject.prototype.getDocumentationComment = function (this: Signature): SymbolDisplayPart[] {
     const extra = ensureSignatureExtraFields(this);
     return extra.documentationComment ??= getDocumentationComment(singleElementArray(this.declaration), this.checker);
 };
 
-ObjectConstructors.SignatureObject.prototype.getJsDocTags = function (this: Signature): JSDocTagInfo[] {
+SignatureObject.prototype.getJsDocTags = function (this: Signature): JSDocTagInfo[] {
     const extra = ensureSignatureExtraFields(this);
     return extra.jsDocTags ??= getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker);
 };
