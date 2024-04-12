@@ -2907,12 +2907,17 @@ function parseJsonConfigFileContentWorker(
 
     const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
     const { raw } = parsedConfig;
-    const options = extend(existingOptions, parsedConfig.options || {});
-    let watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
-        extend(existingWatchOptions, parsedConfig.watchOptions) :
-        parsedConfig.watchOptions || existingWatchOptions;
-    handleOptionConfigDirTemplateSubstitution(options, configDirTemplateSubstitutionOptions, basePath);
-    watchOptions = handleWatchOptionsConfigDirTemplateSubstitution(watchOptions, basePath, !existingWatchOptions || !parsedConfig.watchOptions);
+    const options = handleOptionConfigDirTemplateSubstitution(
+        extend(existingOptions, parsedConfig.options || {}),
+        configDirTemplateSubstitutionOptions,
+        basePath,
+    ) as CompilerOptions;
+    const watchOptions = handleWatchOptionsConfigDirTemplateSubstitution(
+        existingWatchOptions && parsedConfig.watchOptions ?
+            extend(existingWatchOptions, parsedConfig.watchOptions) :
+            parsedConfig.watchOptions || existingWatchOptions,
+        basePath,
+    );
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
     const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
     const configFileSpecs = getConfigFileSpecs();
@@ -2985,7 +2990,6 @@ function parseJsonConfigFileContentWorker(
             validatedIncludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
                 validatedIncludeSpecsBeforeSubstitution,
                 basePathForFileNames,
-                /*createCopyOnSubstitute*/ true,
             ) || validatedIncludeSpecsBeforeSubstitution;
         }
 
@@ -2994,7 +2998,6 @@ function parseJsonConfigFileContentWorker(
             validatedExcludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
                 validatedExcludeSpecsBeforeSubstitution,
                 basePathForFileNames,
-                /*createCopyOnSubstitute*/ true,
             ) || validatedExcludeSpecsBeforeSubstitution;
         }
 
@@ -3002,7 +3005,6 @@ function parseJsonConfigFileContentWorker(
         const validatedFilesSpec = getSubstitutedStringArrayWithConfigDirTemplate(
             validatedFilesSpecBeforeSubstitution,
             basePathForFileNames,
-            /*createCopyOnSubstitute*/ true,
         ) || validatedFilesSpecBeforeSubstitution;
 
         return {
@@ -3086,16 +3088,14 @@ function parseJsonConfigFileContentWorker(
 export function handleWatchOptionsConfigDirTemplateSubstitution(
     watchOptions: WatchOptions | undefined,
     basePath: string,
-    createCopyOnSubstitute?: boolean,
 ) {
-    return handleOptionConfigDirTemplateSubstitution(watchOptions, configDirTemplateSubstitutionWatchOptions, basePath, createCopyOnSubstitute) as WatchOptions | undefined;
+    return handleOptionConfigDirTemplateSubstitution(watchOptions, configDirTemplateSubstitutionWatchOptions, basePath) as WatchOptions | undefined;
 }
 
 function handleOptionConfigDirTemplateSubstitution(
     options: OptionsBase | undefined,
     optionDeclarations: readonly CommandLineOption[],
     basePath: string,
-    createCopyOnSubstitute?: boolean,
 ) {
     if (!options) return options;
     let result: OptionsBase | undefined;
@@ -3111,12 +3111,12 @@ function handleOptionConfigDirTemplateSubstitution(
                     break;
                 case "list":
                     Debug.assert(option.element.isFilePath);
-                    const listResult = getSubstitutedStringArrayWithConfigDirTemplate(value as string[], basePath, createCopyOnSubstitute);
+                    const listResult = getSubstitutedStringArrayWithConfigDirTemplate(value as string[], basePath);
                     if (listResult) setOptionValue(option, listResult);
                     break;
                 case "object":
                     Debug.assert(option.name === "paths");
-                    const objectResult = getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(value as MapLike<string[]>, basePath, createCopyOnSubstitute);
+                    const objectResult = getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(value as MapLike<string[]>, basePath);
                     if (objectResult) setOptionValue(option, objectResult);
                     break;
                 default:
@@ -3127,13 +3127,7 @@ function handleOptionConfigDirTemplateSubstitution(
     return result || options;
 
     function setOptionValue(option: CommandLineOption, value: CompilerOptionsValue) {
-        if (createCopyOnSubstitute) {
-            if (!result) result = assign({}, options);
-            result[option.name] = value;
-        }
-        else {
-            options![option.name] = value;
-        }
+        (result ??= assign({}, options))[option.name] = value;
     }
 }
 
@@ -3146,30 +3140,24 @@ function getSubstitutedPathWithConfigDirTemplate(value: string, basePath: string
     return getNormalizedAbsolutePath(value.replace(configDirTemplate, "./"), basePath);
 }
 
-function getSubstitutedStringArrayWithConfigDirTemplate(list: string[] | undefined, basePath: string, createCopyOnSubstitute?: boolean): string[] | undefined;
-function getSubstitutedStringArrayWithConfigDirTemplate(list: readonly string[] | undefined, basePath: string, createCopyOnSubstitute: true): string[] | undefined;
-function getSubstitutedStringArrayWithConfigDirTemplate(list: readonly string[] | string[] | undefined, basePath: string, createCopyOnSubstitute?: boolean) {
+function getSubstitutedStringArrayWithConfigDirTemplate(list: readonly string[] | undefined, basePath: string) {
     if (!list) return list;
     let result: string[] | undefined;
     list.forEach((element, index) => {
         if (!startsWithConfigDirTemplate(element)) return;
-        if (createCopyOnSubstitute) result ??= list.slice();
-        else result ??= list as unknown as string[];
-        result[index] = getSubstitutedPathWithConfigDirTemplate(element, basePath);
+        (result ??= list.slice())[index] = getSubstitutedPathWithConfigDirTemplate(element, basePath);
     });
     return result;
 }
 
-function getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(mapLike: MapLike<string[]>, basePath: string, createCopyOnSubstitute?: boolean) {
+function getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(mapLike: MapLike<string[]>, basePath: string) {
     let result: MapLike<string[]> | undefined;
     const ownKeys = getOwnKeys(mapLike);
     ownKeys.forEach(key => {
         if (!isArray(mapLike[key])) return;
-        const subStitution = getSubstitutedStringArrayWithConfigDirTemplate(mapLike[key], basePath, createCopyOnSubstitute);
+        const subStitution = getSubstitutedStringArrayWithConfigDirTemplate(mapLike[key], basePath);
         if (!subStitution) return;
-        if (createCopyOnSubstitute) result ??= assign({}, mapLike);
-        else result ??= mapLike;
-        mapLike[key] = subStitution;
+        (result ??= assign({}, mapLike))[key] = subStitution;
     });
     return result;
 }

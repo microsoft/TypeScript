@@ -3464,7 +3464,7 @@ export class ProjectService {
 
             if (args.watchOptions) {
                 const watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
-                const substitution = handleWatchOptionsConfigDirTemplateSubstitution(watchOptions, this.currentDirectory, /*createCopyOnSubstitute*/ true);
+                const substitution = handleWatchOptionsConfigDirTemplateSubstitution(watchOptions, this.currentDirectory);
                 this.hostConfiguration.watchOptions = substitution;
                 this.hostConfiguration.beforeSubstitution = substitution === watchOptions ? undefined : watchOptions;
                 this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
@@ -3483,7 +3483,6 @@ export class ProjectService {
             handleWatchOptionsConfigDirTemplateSubstitution(
                 this.hostConfiguration.beforeSubstitution,
                 basePath,
-                /*createCopyOnSubstitute*/ true,
             );
         return projectOptions && hostWatchOptions ?
             { ...hostWatchOptions, ...projectOptions } :
