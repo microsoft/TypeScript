@@ -352,7 +352,7 @@ FsWatches::
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/node_modules: *new*
+/user/username/projects/myproject/node_modules/@issue/b: *new*
   {}
 /user/username/projects/myproject/packages/A/src: *new*
   {}
