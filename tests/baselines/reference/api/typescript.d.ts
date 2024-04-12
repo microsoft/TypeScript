@@ -2814,7 +2814,6 @@ declare namespace ts {
             addMissingFileRoot(fileName: NormalizedPath): void;
             removeFile(info: ScriptInfo, fileExists: boolean, detachFromProject: boolean): void;
             registerFileUpdate(fileName: string): void;
-            markAsDirty(): void;
             /**
              * Updates set of files that contribute to this project
              * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -2859,10 +2858,8 @@ declare namespace ts {
         class AutoImportProviderProject extends Project {
             private hostProject;
             private rootFileNames;
-            isOrphan(): boolean;
             updateGraph(): boolean;
             hasRoots(): boolean;
-            markAsDirty(): void;
             getScriptFileNames(): string[];
             getLanguageService(): never;
             getHostForAutoImportProvider(): never;
@@ -3119,7 +3116,7 @@ declare namespace ts {
             /**
              * Open files: with value being project root path, and key being Path of the file that is open
              */
-            readonly openFiles: Map<string, NormalizedPath | undefined>;
+            readonly openFiles: Map<Path, NormalizedPath | undefined>;
             /**
              * Map of open files that are opened without complete path but have projectRoot as current directory
              */
@@ -3188,6 +3185,13 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
+            /**
+             * This function goes through all the openFiles and tries to file the config file for them.
+             * If the config file is found and it refers to existing project, it schedules the reload it for reload
+             * If there is no existing project it just opens the configured project for the config file
+             * shouldReloadProjectFor provides a way to filter out files to reload configured project for
+             */
+            private delayReloadConfiguredProjectsForFile;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
             /**
@@ -3247,7 +3251,6 @@ declare namespace ts {
             private refreshScriptInfosInDirectory;
             private stopWatchingScriptInfo;
             private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
-            private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
             getOrCreateScriptInfoForNormalizedPath(fileName: NormalizedPath, openedByClient: boolean, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, hostToQueryFileExistsOn?: {
                 fileExists(path: string): boolean;
             }): ScriptInfo | undefined;
@@ -3269,9 +3272,7 @@ declare namespace ts {
             /**
              * This function goes through all the openFiles and tries to file the config file for them.
              * If the config file is found and it refers to existing project, it reloads it either immediately
-             * or schedules it for reload depending on delayReload option
              * If there is no existing project it just opens the configured project for the config file
-             * reloadForInfo provides a way to filter out files to reload configured project for
              */
             private reloadConfiguredProjectForFiles;
             /**
@@ -3321,7 +3322,6 @@ declare namespace ts {
             hasDeferredExtension(): boolean;
             private enableRequestedPluginsAsync;
             private enableRequestedPluginsWorker;
-            private enableRequestedPluginsForProjectAsync;
             configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
         }
         function formatMessage<T extends protocol.Message>(msg: T, logger: Logger, byteLength: (s: string, encoding: BufferEncoding) => number, newLine: string): string;
