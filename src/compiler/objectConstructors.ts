@@ -49,14 +49,25 @@ export class SymbolObject implements Symbol {
     escapedName: __String = "" as __String;
     declarations?: Declaration[] = undefined;
     valueDeclaration?: Declaration = undefined;
+
+    // TODO: Can we remove this property? Possibly not, but most call sites use it as a key in a Map, but we could store
+    //       the symbol itself.
     id = 0;
+
+    // TODO: Can we remove this property? We could possibly just change `mergedSymbols` in checker to be a Map with this
+    //       symbol as the key.
     mergeId = 0;
     parent?: Symbol = undefined;
     members?: SymbolTable = undefined;
     exports?: SymbolTable = undefined;
     exportSymbol?: Symbol = undefined;
+
+    // TODO: Can we remove this property or turn it into a flag along with `isReplaceableByMethod`?
     constEnumOnlyModule: boolean | undefined = undefined;
+    // TODO: Does this property require all symbol flags or a subset? Could we use a different enum and combine it with
+    //       `constEnumOnlyModule` and `isReplaceableByMethod`?
     isReferenced?: SymbolFlags = undefined;
+    // TODO: This is set by checker and not the binder. It should be moved to `SymbolLinks`.
     lastAssignmentPos?: number = undefined;
     links?: SymbolLinks = undefined; // used by TransientSymbol
 
@@ -119,9 +130,9 @@ export class SymbolObject implements Symbol {
 export class TypeObject implements Type {
     flags: TypeFlags;
     checker: TypeChecker;
+    id = 0;
 
     // TODO: Review for polymorphism
-    declare id: number;
     declare symbol: Symbol;
     declare pattern?: DestructuringPattern;
     declare aliasSymbol?: Symbol;
@@ -260,6 +271,8 @@ export class SignatureObject implements Signature {
     declare thisParameter?: Symbol;
     declare resolvedReturnType?: Type;
     declare resolvedTypePredicate?: TypePredicate;
+    // TODO: Could we combine `minArgumentCount` and `resolvedMinArgumentCount` as two int16 values? How much slower
+    //       would getters/setters be for these?
     declare minArgumentCount: number;
     declare resolvedMinArgumentCount?: number;
     declare target?: Signature;
