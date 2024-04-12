@@ -56,6 +56,7 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
@@ -243,6 +244,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
