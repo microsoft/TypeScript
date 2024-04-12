@@ -26,30 +26,48 @@ export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
     }
 }
 
+// indirect
+type Assign<T, U> = Omit<T, keyof U> & U;
+
+class Base<T> {
+    constructor(public t: T) { }
+}
+
+export class Foo<T> extends Base<T> {
+    update(): Foo<Assign<T, { x: number }>> {
+        const v: Assign<T, { x: number }> = Object.assign(this.t, { x: 1 });
+        return new Foo(v);
+    }
+}
+
 //// [inferenceOuterResultNotIncorrectlyInstantiatedWithInnerResult.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Zip = exports.Test = void 0;
 // simple example
-var Test = /** @class */ (function () {
-    function Test(a, b) {
+export class Test {
+    constructor(a, b) {
         this.a = a;
         this.b = b;
     }
-    Test.prototype.test = function (c) {
+    test(c) {
         return new Test(this.b, c);
-    };
-    return Test;
-}());
-exports.Test = Test;
-var Zip = /** @class */ (function () {
-    function Zip(left, right) {
+    }
+}
+export class Zip {
+    constructor(left, right) {
         this.left = left;
         this.right = right;
     }
-    Zip.prototype.zip = function (right) {
+    zip(right) {
         return new Zip(this, right);
-    };
-    return Zip;
-}());
-exports.Zip = Zip;
+    }
+}
+class Base {
+    constructor(t) {
+        this.t = t;
+    }
+}
+export class Foo extends Base {
+    update() {
+        const v = Object.assign(this.t, { x: 1 });
+        return new Foo(v);
+    }
+}

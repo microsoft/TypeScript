@@ -75,3 +75,65 @@ export class Zip<out T0, out T1> implements Supervisor<readonly [T0, T1]> {
 >      : ^^^^^^^^^^^^^
     }
 }
+
+// indirect
+type Assign<T, U> = Omit<T, keyof U> & U;
+>Assign : Assign<T, U>
+>       : ^^^^^^^^^^^^
+
+class Base<T> {
+>Base : Base<T>
+>     : ^^^^^^^
+
+    constructor(public t: T) { }
+>t : T
+>  : ^
+}
+
+export class Foo<T> extends Base<T> {
+>Foo : Foo<T>
+>    : ^^^^^^
+>Base : Base<T>
+>     : ^^^^^^^
+
+    update(): Foo<Assign<T, { x: number }>> {
+>update : () => Foo<Assign<T, { x: number; }>>
+>       : ^^^^^^                              
+>x : number
+>  : ^^^^^^
+
+        const v: Assign<T, { x: number }> = Object.assign(this.t, { x: 1 });
+>v : Assign<T, { x: number; }>
+>  : ^^^^^^^^^^^^^^^      ^^^^
+>x : number
+>  : ^^^^^^
+>Object.assign(this.t, { x: 1 }) : T & { x: number; }
+>                                : ^^^^^^^^^^^^^^^^^^
+>Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_2 extends {}, U_1, V>(target: T_2, source1: U_1, source2: V): T_2 & U_1 & V; <T_3 extends {}, U_2, V_1, W>(target: T_3, source1: U_2, source2: V_1, source3: W): T_3 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
+>              : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_2 extends {}, U_1, V>(target: T_2, source1: U_1, source2: V): T_2 & U_1 & V; <T_3 extends {}, U_2, V_1, W>(target: T_3, source1: U_2, source2: V_1, source3: W): T_3 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
+>       : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>this.t : T
+>       : ^
+>this : this
+>     : ^^^^
+>t : T
+>  : ^
+>{ x: 1 } : { x: number; }
+>         : ^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+        return new Foo(v);
+>new Foo(v) : Foo<Assign<T, { x: number; }>>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>v : Assign<T, { x: number; }>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+}
