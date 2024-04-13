@@ -18985,7 +18985,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const skippedPrivateMembers = new Set<__String>();
         const indexInfos = left === emptyObjectType ? getIndexInfosOfType(right) : getUnionIndexInfos([left, right]);
 
+        // propagating flags of the right properties should be preserved if they override the left properties
+        let finalObjectFlags = objectFlags & ~ObjectFlags.PropagatingFlags;
         for (const rightProp of getPropertiesOfType(right)) {
+            finalObjectFlags |= getObjectFlags(getTypeOfSymbol(rightProp)) & ObjectFlags.PropagatingFlags;
             if (getDeclarationModifierFlagsFromSymbol(rightProp) & (ModifierFlags.Private | ModifierFlags.Protected)) {
                 skippedPrivateMembers.add(rightProp.escapedName);
             }
@@ -19021,12 +19024,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             else {
+                finalObjectFlags |= getObjectFlags(getTypeOfSymbol(leftProp)) & ObjectFlags.PropagatingFlags;
                 members.set(leftProp.escapedName, getSpreadSymbol(leftProp, readonly));
             }
         }
 
         const spread = createAnonymousType(symbol, members, emptyArray, emptyArray, sameMap(indexInfos, info => getIndexInfoWithReadonly(info, readonly)));
-        spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral | ObjectFlags.ContainsSpread | objectFlags;
+        spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral | ObjectFlags.ContainsSpread | finalObjectFlags;
         return spread;
     }
 
