@@ -740,6 +740,7 @@ class SymbolObject implements Symbol {
 
     getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
         if (this.tags === undefined) {
+            this.tags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
             this.tags = getJsDocTagsOfDeclarations(this.declarations, checker);
         }
 
@@ -988,7 +989,7 @@ function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, che
                     if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
                         return symbol.getContextualJsDocTags(declaration, checker);
                     }
-                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags(checker) : undefined;
                 }
             });
             if (inheritedTags) {
