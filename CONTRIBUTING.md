@@ -14,7 +14,7 @@ Some search tips:
  * *Don't* restrict your search to only open issues. An issue with a title similar to yours may have been closed as a duplicate of one with a less-findable title.
  * Check for synonyms. For example, if your bug involves an interface, it likely also occurs with type aliases or classes.
  * Search for the title of the issue you're about to log. This sounds obvious but 80% of the time this is sufficient to find a duplicate when one exists.
- * Read more than the first page of results. Many bugs here use the same words so relevancy sorting is not particularly strong.
+ * Read more than the first page of the results. Many bugs here use the same words so relevancy sorting is not particularly strong.
  * If you have a crash, search for the first few topmost function names shown in the call stack.
 
 ## 3. Do you have a question?
@@ -41,8 +41,8 @@ In general, things we find useful when reviewing suggestions are:
 * A description of the problem you're trying to solve
 * An overview of the suggested solution
 * Examples of how the suggestion would work in various places
-  * Code examples showing e.g. "this would be an error, this wouldn't"
-  * Code examples showing the generated JavaScript (if applicable)
+* Code examples showing e.g. "this would be an error, this wouldn't"
+* Code examples showing the generated JavaScript (if applicable)
 * If relevant, precedent in other languages can be useful for establishing context and expected behavior
 
 # Instructions for Contributing Code
@@ -58,7 +58,7 @@ In general, things we find useful when reviewing suggestions are:
 
 ## Get Started
 
-1. Install node using the version you downloaded from [nodejs.org](https://nodejs.org).
+1. Install Node using the version you downloaded from [nodejs.org](https://nodejs.org).
 2. Open a terminal.
 3. Make a fork&mdash;your own copy&mdash;of TypeScript on your GitHub account, then make a clone&mdash;a local copy&mdash;on your computer. ([Here are some step-by-step instructions](https://github.com/anitab-org/mentorship-android/wiki/Fork%2C-Clone-%26-Remote)). Add `--depth=1` to the end of the `git clone` command to save time.
 4. Install the hereby command line tool: `npm install -g hereby`
@@ -78,13 +78,13 @@ hereby clean             # Delete the built compiler.
 hereby LKG               # Replace the last known good with the built one.
                          # Bootstrapping step to be executed when the built compiler reaches a stable state.
 hereby tests             # Build the test infrastructure using the built compiler.
-hereby runtests          # Run tests using the built compiler and test infrastructure.
+hereby run tests          # Run tests using the built compiler and test infrastructure.
                          # You can override the specific suite runner used or specify a test for this command.
                          # Use --tests=<testPath> for a specific test and/or --runner=<runnerName> for a specific suite.
-                         # Valid runners include conformance, compiler, fourslash, and project
-hereby runtests-parallel # Like runtests, but split across multiple threads. Uses a number of threads equal to the system
+                         # Valid runners include conformance, compiler, four slashes, and project
+hereby run tests-parallel # Like run tests, but split across multiple threads. Uses some threads equal to the system
                          # core count by default. Use --workers=<number> to adjust this.
-hereby baseline-accept   # This replaces the baseline test results with the results obtained from hereby runtests.
+hereby baseline-accept   # This replaces the baseline test results with the results obtained from hereby run tests.
 hereby lint              # Runs eslint on the TypeScript source.
 hereby help              # List the above commands.
 ```
@@ -116,36 +116,36 @@ TypeScript is currently accepting contributions in the form of bug fixes. A bug 
 
 ## Contributing features
 
-Features (things that add new or improved functionality to TypeScript) may be accepted, but will need to first be approved (labelled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
+Features (things that add new or improved functionality to TypeScript) may be accepted but will need to first be approved (labeled ["help wanted"](https://github.com/Microsoft/TypeScript/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) or in the "Backlog" milestone) by a TypeScript project maintainer in the suggestion issue. Features with language design impact, or that are adequately satisfied with external tools, will not be accepted.
 
 ## Issue claiming
 
 If you intend to work on an issue, please avoid leaving comments like "I'm going to work on this". There are a few reasons for this. These comments tend to [discourage anyone from working in the area](https://devblogs.microsoft.com/oldnewthing/20091201-00/?p=15843), yet many issues are much more difficult than they first appear, and you might find yourself trying to fix several issues before finding one that can be completed. Many issues have a long trail of people indicating that they're going to try to fix it, but no PR.
 
-Conversely, you do not need to ask anyone's permission before starting work on an issue marked as "help wanted". It's always fine to try! We ask that you choose issues tagged in the "Backlog" milestone as these are issues that we've identified as needing fixes / implementations.
+Conversely, you do not need to ask anyone's permission before starting work on an issue marked as "help wanted". It's always fine to try! We ask that you choose issues tagged in the "Backlog" milestone as these are issues that we've identified as needing fixes/implementations.
 
 The sheer quantity of open issues, combined with their general difficulty, makes it extremely unlikely that you and another contributor are a) working on the same issue and b) both going to find a solution.
 
 ## Legal
 
-You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are granting us permission to use the submitted change according to the terms of the project's license, and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
+You will need to complete a Contributor License Agreement (CLA). Briefly, this agreement testifies that you are permitting us to use the submitted change according to the terms of the project's license and that the work being submitted is under appropriate copyright. Upon submitting a pull request, you will automatically be given instructions on how to sign the CLA.
 
 ## Housekeeping
 
 Your pull request should:
 
 * Include a description of what your change intends to do
-* Be based on reasonably recent commit in the **main** branch
+* Be based on reasonably recent commits in the **main** branch
 * Include adequate tests
-    * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
-    * Tests should include reasonable permutations of the target fix/change
-    * Include baseline changes with your change
+* At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
+* Tests should include reasonable permutations of the target fix/change
+* Include baseline changes with your change
 * Follow the code conventions described in [Coding guidelines](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines)
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Force-pushing
 
-Avoid force-pushing your changes, especially when updating your PR based on review feedback. Force-pushed changes are not easily viewable on GitHub, and not at all viewable if a force-push also rebases against main. TypeScript PRs are squash merged, so the specific commits on your PR branch do not matter, only the PR title itself. Don't worry about having a perfect commit history; instead focus on making your changes as easy to review and merge as possible.
+Avoid force-pushing your changes, especially when updating your PR based on review feedback. Force-pushed changes are not easily viewable on GitHub, and not at all viewable if a force-push also rebases against the main. TypeScript PRs are squash merged, so the specific commits on your PR branch do not matter, only the PR title itself. Don't worry about having a perfect commit history; instead, focus on making your changes as easy to review and merge as possible.
 
 ## Contributing `lib.d.ts` fixes
 
@@ -155,7 +155,7 @@ There are three relevant locations to be aware of when it comes to TypeScript's 
 * `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
 * `built/local`: the build output location, including where `src/lib` files will be copied to.
 
-Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/main/src/lib). **Most** of these files can be updated by hand, except for any generated files (see below).
 
 Library files in `built/local/` are updated automatically by running the standard build task:
 
