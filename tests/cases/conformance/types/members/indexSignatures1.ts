@@ -312,7 +312,7 @@ interface AA {
 const aa: AA = { [sym]: '123' };
 
 const obj1: { [key: symbol]: string } = { [sym]: 'hello '};
-const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Permitted for backwards compatibility
+const obj2: { [key: string]: string } = { [sym]: 'hello '};  // Error
 const obj3: { [key: number]: string } = { [sym]: 'hello '};  // Error
 
 // Repro from #45772
