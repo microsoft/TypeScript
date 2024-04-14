@@ -4432,7 +4432,7 @@ declare namespace Intl {
         /**
          * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `Collator`.
          * If none of the provided locales are supported, an empty array is returned.
-         * @param locales A BCP 47 language tag, or list of tags.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
          * @param options Options for the locale matching algorithm.
          */
         supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
@@ -4504,7 +4504,7 @@ declare namespace Intl {
         /**
          * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `NumberFormat`.
          * If none of the provided locales are supported, an empty array is returned.
-         * @param locales A BCP 47 language tag, or list of tags.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
          * @param options Options for the locale matching algorithm.
          */
         supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
@@ -4580,7 +4580,7 @@ declare namespace Intl {
         /**
          * Takes a list of locale identifiers, and returns the subset of identifiers that are supported by the current implementation of `DateTimeFormat`.
          * If none of the provided locales are supported, an empty array is returned.
-         * @param locales A BCP 47 language tag, or list of tags.
+         * @param locales A Unicode BCP 47 locale identifier, or list of identifiers.
          * @param options Options for the locale matching algorithm.
          */
         supportedLocalesOf(locales?: string | readonly string[], options?: SupportedLocalesOptions): string[];
@@ -4593,7 +4593,7 @@ interface String {
     /**
      * Determines whether two strings are equivalent, according to the specified locale.
      * @param that String to compare to the target string.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the comparison. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the comparison. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.Collator` constructor.
      */
     localeCompare(that: string, locales?: string | readonly string[], options?: Intl.CollatorOptions): number;
@@ -4602,7 +4602,7 @@ interface String {
 interface Number {
     /**
      * Converts a number to a string, according to the current or specified locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -4611,20 +4611,20 @@ interface Number {
 interface Date {
     /**
      * Converts a date and time to a string, according to the specified locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
     /**
      * Converts a date to a string, according to the specified locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleDateString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;
 
     /**
      * Converts a time to a string, according to the specified locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.DateTimeFormat` constructor.
      */
     toLocaleTimeString(locales?: string | readonly string[], options?: Intl.DateTimeFormatOptions): string;

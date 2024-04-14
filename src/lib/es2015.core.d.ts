@@ -451,7 +451,7 @@ interface String {
 
     /**
      * Converts all alphabetic characters to lowercase, using locale-sensitive case mappings.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion.
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
      */
@@ -459,7 +459,7 @@ interface String {
 
     /**
      * Converts all alphabetic characters to uppercase, using locale-sensitive case mappings.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion.
      * This method does not perform locale matching; instead, it always selects the first supported locale.
      * If omitted, the default locale is used.
      */
@@ -574,7 +574,7 @@ interface Int8Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -584,7 +584,7 @@ interface Uint8Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -594,7 +594,7 @@ interface Uint8ClampedArray {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -604,7 +604,7 @@ interface Int16Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -614,7 +614,7 @@ interface Uint16Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -624,7 +624,7 @@ interface Int32Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -634,7 +634,7 @@ interface Uint32Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -644,7 +644,7 @@ interface Float32Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
@@ -654,7 +654,7 @@ interface Float64Array {
     /**
      * Returns a string representation of a TypedArray.
      * Each element is converted to a string using its `toLocaleString` method, then concatenated using the list separator of the current locale.
-     * @param locales A BCP 47 language tag, or list of tags, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
+     * @param locales A Unicode BCP 47 locale identifier, or list of identifiers, specifying the preferred locale to use for the conversion. If omitted, the default locale is used.
      * @param options Corresponds to the `options` parameter of the `Intl.NumberFormat` constructor.
      */
     toLocaleString(locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
