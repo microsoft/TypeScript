@@ -430,3 +430,27 @@ interface I2 {
 >a : Symbol(a, Decl(declFileMethods_1.ts, 90, 21))
 }
 
+class C3 {
+>C3 : Symbol(C3, Decl(declFileMethods_1.ts, 91, 1))
+
+    constructor(/** comment for a */ public a: string, /** comment for b */ private b: number) {}
+>a : Symbol(C3.a, Decl(declFileMethods_1.ts, 94, 16))
+>b : Symbol(C3.b, Decl(declFileMethods_1.ts, 94, 54))
+}
+
+class C4 {
+>C4 : Symbol(C4, Decl(declFileMethods_1.ts, 95, 1))
+
+    /** This is a public method. */
+    public publicMethod() {}
+>publicMethod : Symbol(C4.publicMethod, Decl(declFileMethods_1.ts, 97, 10))
+  
+    /** This is a private method, and will be stripped in the declaration file. */
+    private privateMethod() {}
+>privateMethod : Symbol(C4.privateMethod, Decl(declFileMethods_1.ts, 99, 28))
+  
+    /** @author foo */
+    private jsdoc() {}
+>jsdoc : Symbol(C4.jsdoc, Decl(declFileMethods_1.ts, 102, 30))
+}
+

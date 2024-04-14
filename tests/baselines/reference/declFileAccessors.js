@@ -277,9 +277,7 @@ export declare class c1 {
     get p3(): number;
     /** setter property*/
     set p3(/** this is value*/ value: number);
-    /** private getter property*/
     private get pp3();
-    /** private setter property*/
     private set pp3(value);
     /** static getter property*/
     static get s3(): number;
@@ -301,9 +299,7 @@ declare class c2 {
     get p3(): number;
     /** setter property*/
     set p3(/** this is value*/ value: number);
-    /** private getter property*/
     private get pp3();
-    /** private setter property*/
     private set pp3(value);
     /** static getter property*/
     static get s3(): number;

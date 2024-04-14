@@ -491,13 +491,9 @@ declare class c1 {
     get p3(): number;
     /** setter property*/
     set p3(/** this is value*/ value: number);
-    /** pp1 is property of c1*/
     private pp1;
-    /** sum with property*/
     private pp2;
-    /** getter property*/
     private get pp3();
-    /** setter property*/
     private set pp3(value);
     /** Constructor method*/
     constructor();
@@ -541,13 +537,9 @@ declare class c1 {
     get b_p3(): number;
     /** setter property */
     set b_p3(value: number);
-    /** pp1 is property of c1 */
     private b_pp1;
-    /** sum with property */
     private b_pp2;
-    /** getter property */
     private get b_pp3();
-    /** setter property */
     private set b_pp3(value);
     /** s1 is static property of c1 */
     static b_s1: number;

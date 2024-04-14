@@ -12,6 +12,7 @@ import {
     canHaveModifiers,
     canProduceDiagnostics,
     ClassDeclaration,
+    ClassElement,
     compact,
     concatenate,
     ConditionalTypeNode,
@@ -764,6 +765,15 @@ export function transformDeclarations(context: TransformationContext) {
     function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {
         const visibilityResult = resolver.isEntityNameVisible(entityName, enclosingDeclaration);
         handleSymbolAccessibilityError(visibilityResult);
+    }
+
+    function removeCommentsFromPrivateClassMembers(node: NodeArray<ClassElement>) {
+        node.forEach(member => {
+            if (hasEffectiveModifier(member, ModifierFlags.Private)) {
+                removeAllComments(member);
+            }
+        });
+        return node;
     }
 
     function preserveJsDoc<T extends Node>(updated: T, original: Node): T {
@@ -1568,7 +1578,7 @@ export function transformDeclarations(context: TransformationContext) {
                     ),
                 ] : undefined;
                 const memberNodes = concatenate(concatenate(privateIdentifier, parameterProperties), visitNodes(input.members, visitDeclarationSubtree, isClassElement));
-                const members = factory.createNodeArray(memberNodes);
+                const members = removeCommentsFromPrivateClassMembers(factory.createNodeArray(memberNodes));
 
                 const extendsClause = getEffectiveBaseTypeNode(input);
                 if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
