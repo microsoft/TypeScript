@@ -208,6 +208,7 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
+    HasInferredType,
     HasInitializer,
     hasInitializer,
     HasJSDoc,
@@ -460,6 +461,7 @@ import {
     Pattern,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    PrimitiveLiteral,
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
@@ -2370,6 +2372,17 @@ export function isVarConst(node: VariableDeclaration | VariableDeclarationList):
 }
 
 /**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const`, `using` or `await using` declaration.
+ * @internal
+ */
+export function isVarConstLike(node: VariableDeclaration | VariableDeclarationList) {
+    const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+    return blockScopeKind === NodeFlags.Const ||
+        blockScopeKind === NodeFlags.Using ||
+        blockScopeKind === NodeFlags.AwaitUsing;
+}
+
+/**
  * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `let` declaration.
  * @internal
  */
@@ -2690,6 +2703,11 @@ export function isVariableLike(node: Node): node is VariableLikeDeclaration {
         }
     }
     return false;
+}
+
+/** @internal */
+export function isVariableLikeOrExport(node: Node): node is VariableLikeDeclaration | ExportAssignment {
+    return isVariableLike(node) || isExportAssignment(node);
 }
 
 /** @internal */
@@ -11422,5 +11440,60 @@ export function createNameResolver({
         }
 
         return false;
+    }
+}
+
+/** @internal */
+export function isPrimitiveLiteralValue(node: Expression, includeBigInt = true): node is PrimitiveLiteral {
+    Debug.type<PrimitiveLiteral>(node);
+    switch (node.kind) {
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+        case SyntaxKind.BigIntLiteral:
+            return includeBigInt;
+        case SyntaxKind.PrefixUnaryExpression:
+            if (node.operator === SyntaxKind.MinusToken) {
+                return isNumericLiteral(node.operand) || (includeBigInt && isBigIntLiteral(node.operand));
+            }
+            if (node.operator === SyntaxKind.PlusToken) {
+                return isNumericLiteral(node.operand);
+            }
+            return false;
+        default:
+            assertType<never>(node);
+            return false;
+    }
+}
+
+/** @internal */
+export function unwrapParenthesizedExpression(o: Expression) {
+    while (o.kind === SyntaxKind.ParenthesizedExpression) {
+        o = (o as ParenthesizedExpression).expression;
+    }
+    return o;
+}
+
+/** @internal */
+export function hasInferredType(node: Node): node is HasInferredType {
+    Debug.type<HasInferredType>(node);
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.PropertyAssignment:
+            return true;
+        default:
+            assertType<never>(node);
+            return false;
     }
 }

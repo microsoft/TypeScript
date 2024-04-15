@@ -827,6 +827,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
     },
+    {
+        name: "isolatedDeclarations",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Ensure_that_each_file_can_have_declaration_emit_generated_without_type_information,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsEmit: true,
+    },
 
     // Strict Type Checks
     {

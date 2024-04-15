@@ -682,6 +682,7 @@ import {
     isPartOfTypeQuery,
     isPlainJsFile,
     isPrefixUnaryExpression,
+    isPrimitiveLiteralValue,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
@@ -48585,6 +48586,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
+    function isLiteralComputedName(node: ComputedPropertyName) {
+        const expression = node.expression;
+        if (isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
+            return true;
+        }
+        const type = getTypeOfExpression(expression);
+        if (!isTypeUsableAsPropertyName(type)) {
+            return false;
+        }
+
+        // Only identifiers of the for A.B.C can be used
+        if (!isEntityNameExpression(expression)) {
+            return false;
+        }
+        const symbol = getSymbolAtLocation(expression);
+        if (!symbol) {
+            return false;
+        }
+        // Ensure not type narrowing
+        const declaredType = getTypeOfSymbol(symbol);
+        return declaredType === type;
+    }
 
     function literalTypeToNode(type: FreshableType, enclosing: Node, tracker: SymbolTracker): Expression {
         const enumResult = type.flags & TypeFlags.EnumLike ? nodeBuilder.symbolToExpression(type.symbol, SymbolFlags.Value, enclosing, /*flags*/ undefined, tracker)
@@ -48710,6 +48733,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return node && getExternalModuleFileFromDeclaration(node);
             },
             isLiteralConstDeclaration,
+            isLiteralComputedName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);
