@@ -2,6 +2,7 @@ import {
     SignatureObject,
     SymbolObject,
 } from "../compiler/objectConstructors";
+import { SymbolObjectInternals } from "../compiler/symbolObjectInternals";
 import {
     __String,
     ApplicableRefactorInfo,
@@ -290,64 +291,69 @@ function ensureSymbolExtraFields(symbol: Symbol) {
     return extra;
 }
 
-SymbolObject.prototype.getDocumentationComment = function (this: Symbol | TransientSymbol, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-    const extra = ensureSymbolExtraFields(this);
-    if (!extra.documentationComment) {
-        extra.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
+class ServicesSymbolObjectInternals extends SymbolObjectInternals {
+    override getDocumentationComment(symbol: SymbolObject, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        const extra = ensureSymbolExtraFields(symbol);
+        if (!extra.documentationComment) {
+            extra.documentationComment = emptyArray; // Set temporarily to avoid an infinite loop finding inherited docs
 
-        if (!this.declarations && isTransientSymbol(this) && this.links.target && isTransientSymbol(this.links.target) && this.links.target.links.tupleLabelDeclaration) {
-            const labelDecl = this.links.target.links.tupleLabelDeclaration;
-            extra.documentationComment = getDocumentationComment([labelDecl], checker);
+            if (!symbol.declarations && isTransientSymbol(symbol) && symbol.links.target && isTransientSymbol(symbol.links.target) && symbol.links.target.links.tupleLabelDeclaration) {
+                const labelDecl = symbol.links.target.links.tupleLabelDeclaration;
+                extra.documentationComment = getDocumentationComment([labelDecl], checker);
+            }
+            else {
+                extra.documentationComment = getDocumentationComment(symbol.declarations, checker);
+            }
         }
-        else {
-            extra.documentationComment = getDocumentationComment(this.declarations, checker);
-        }
+        return extra.documentationComment;
     }
-    return extra.documentationComment;
-};
 
-SymbolObject.prototype.getContextualDocumentationComment = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
-    if (context) {
-        const extra = ensureSymbolExtraFields(this);
-        if (isGetAccessor(context)) {
-            extra.contextualGetAccessorDocumentationComment ??= getDocumentationComment(filter(this.declarations, isGetAccessor), checker);
-            if (length(extra.contextualGetAccessorDocumentationComment)) {
-                return extra.contextualGetAccessorDocumentationComment;
+    override getContextualDocumentationComment(symbol: SymbolObject, context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        if (context) {
+            const extra = ensureSymbolExtraFields(symbol);
+            if (isGetAccessor(context)) {
+                extra.contextualGetAccessorDocumentationComment ??= getDocumentationComment(filter(symbol.declarations, isGetAccessor), checker);
+                if (length(extra.contextualGetAccessorDocumentationComment)) {
+                    return extra.contextualGetAccessorDocumentationComment;
+                }
+            }
+            else if (isSetAccessor(context)) {
+                extra.contextualSetAccessorDocumentationComment ??= getDocumentationComment(filter(symbol.declarations, isSetAccessor), checker);
+                if (length(extra.contextualSetAccessorDocumentationComment)) {
+                    return extra.contextualSetAccessorDocumentationComment;
+                }
             }
         }
-        else if (isSetAccessor(context)) {
-            extra.contextualSetAccessorDocumentationComment ??= getDocumentationComment(filter(this.declarations, isSetAccessor), checker);
-            if (length(extra.contextualSetAccessorDocumentationComment)) {
-                return extra.contextualSetAccessorDocumentationComment;
-            }
-        }
+        return this.getDocumentationComment(symbol, checker);
     }
-    return this.getDocumentationComment(checker);
-};
 
-SymbolObject.prototype.getJsDocTags = function (this: Symbol, checker?: TypeChecker): JSDocTagInfo[] {
-    const extra = ensureSymbolExtraFields(this);
-    return extra.tags ??= getJsDocTagsOfDeclarations(this.declarations, checker);
-};
-
-SymbolObject.prototype.getContextualJsDocTags = function (this: Symbol, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
-    if (context) {
-        const extra = ensureSymbolExtraFields(this);
-        if (isGetAccessor(context)) {
-            extra.contextualGetAccessorTags ??= getJsDocTagsOfDeclarations(filter(this.declarations, isGetAccessor), checker);
-            if (length(extra.contextualGetAccessorTags)) {
-                return extra.contextualGetAccessorTags;
-            }
-        }
-        else if (isSetAccessor(context)) {
-            extra.contextualSetAccessorTags ??= getJsDocTagsOfDeclarations(filter(this.declarations, isSetAccessor), checker);
-            if (length(extra.contextualSetAccessorTags)) {
-                return extra.contextualSetAccessorTags;
-            }
-        }
+    override getJsDocTags(symbol: SymbolObject, checker?: TypeChecker): JSDocTagInfo[] {
+        const extra = ensureSymbolExtraFields(symbol);
+        return extra.tags ??= getJsDocTagsOfDeclarations(symbol.declarations, checker);
     }
-    return this.getJsDocTags(checker);
-};
+
+    override getContextualJsDocTags(symbol: SymbolObject, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        if (context) {
+            const extra = ensureSymbolExtraFields(symbol);
+            if (isGetAccessor(context)) {
+                extra.contextualGetAccessorTags ??= getJsDocTagsOfDeclarations(filter(symbol.declarations, isGetAccessor), checker);
+                if (length(extra.contextualGetAccessorTags)) {
+                    return extra.contextualGetAccessorTags;
+                }
+            }
+            else if (isSetAccessor(context)) {
+                extra.contextualSetAccessorTags ??= getJsDocTagsOfDeclarations(filter(symbol.declarations, isSetAccessor), checker);
+                if (length(extra.contextualSetAccessorTags)) {
+                    return extra.contextualSetAccessorTags;
+                }
+            }
+        }
+        return this.getJsDocTags(symbol, checker);
+    }
+}
+
+// Override the internals for symbols
+SymbolObjectInternals.internals = new ServicesSymbolObjectInternals();
 
 interface SignatureExtraFields {
     // Undefined is used to indicate the value has not been computed. If, after computing, the

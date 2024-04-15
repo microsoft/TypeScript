@@ -42,6 +42,7 @@ import {
     UnionOrIntersectionType,
     UnionType,
 } from "./_namespaces/ts";
+import { SymbolObjectInternals } from "./symbolObjectInternals";
 
 /** @internal */
 export class SymbolObject implements Symbol {
@@ -76,14 +77,6 @@ export class SymbolObject implements Symbol {
     declare assignmentDeclarationMembers?: Map<number, Declaration>;
     declare globalExports?: SymbolTable;
 
-    // TODO: Added by services, review for migration/polymorphism:
-    // documentationComment?: SymbolDisplayPart[];
-    // tags?: JSDocTagInfo[]; // same
-    // contextualGetAccessorDocumentationComment?: SymbolDisplayPart[];
-    // contextualSetAccessorDocumentationComment?: SymbolDisplayPart[];
-    // contextualGetAccessorTags?: JSDocTagInfo[];
-    // contextualSetAccessorTags?: JSDocTagInfo[];
-
     constructor(flags: SymbolFlags, name: __String) {
         this.flags = flags;
         this.escapedName = name;
@@ -109,20 +102,20 @@ export class SymbolObject implements Symbol {
         return this.declarations;
     }
 
-    getDocumentationComment(_checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        throw new TypeError("Not implemented.");
+    getDocumentationComment(checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        return SymbolObjectInternals.internals.getDocumentationComment(this, checker);
     }
 
-    getContextualDocumentationComment(_context: Node | undefined, _checker: TypeChecker | undefined): SymbolDisplayPart[] {
-        throw new TypeError("Not implemented.");
+    getContextualDocumentationComment(context: Node | undefined, checker: TypeChecker | undefined): SymbolDisplayPart[] {
+        return SymbolObjectInternals.internals.getContextualDocumentationComment(this, context, checker);
     }
 
-    getJsDocTags(_checker?: TypeChecker): JSDocTagInfo[] {
-        throw new TypeError("Not implemented.");
+    getJsDocTags(checker?: TypeChecker): JSDocTagInfo[] {
+        return SymbolObjectInternals.internals.getJsDocTags(this, checker);
     }
 
-    getContextualJsDocTags(_context: Node | undefined, _checker: TypeChecker | undefined): JSDocTagInfo[] {
-        throw new TypeError("Not implemented.");
+    getContextualJsDocTags(context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
+        return SymbolObjectInternals.internals.getContextualJsDocTags(this, context, checker);
     }
 }
 
