@@ -30712,55 +30712,83 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return false;
     }
 
-    function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
-        return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(
-            contextualType,
-            concatenate(
-                map(
-                    filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
-                        if (!p.symbol) {
-                            return false;
-                        }
-                        if (p.kind === SyntaxKind.PropertyAssignment) {
-                            return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                        }
-                        if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                            return isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                        }
+    function getObjectMembersDiscriminators(type: UnionType, node: ObjectLiteralExpression, symTable?: SymbolTable) {
+        return concatenate(
+            map(
+                filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
+                    if (!p.symbol) {
                         return false;
-                    }),
-                    prop => ([() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const),
-                ),
-                map(
-                    filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                    s => [() => undefinedType, s.escapedName] as const,
-                ),
+                    }
+                    if (p.kind === SyntaxKind.PropertyAssignment) {
+                        return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(type, p.symbol.escapedName);
+                    }
+                    if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                        return isDiscriminantProperty(type, p.symbol.escapedName);
+                    }
+                    return false;
+                }),
+                prop => [() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const,
             ),
-            isTypeAssignableTo,
+            map(
+                filter(getPropertiesOfType(type), s => !!(s.flags & SymbolFlags.Optional) && !!symTable && !symTable.has(s.escapedName) && isDiscriminantProperty(type, s.escapedName)),
+                s => [() => undefinedType, s.escapedName] as const,
+            ),
         );
+    }
+
+    function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
+        return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(contextualType, getObjectMembersDiscriminators(contextualType, node, node.symbol.members), isTypeAssignableTo);
     }
 
     function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
+
+        const symTable = createSymbolTable();
+        const nodeMembers = node?.symbol?.members;
+        if (nodeMembers) {
+            for (const [name, symbol] of nodeMembers) {
+                symTable.set(name, symbol);
+            }
+        }
+
+        const spreadObjectLiterals = filter(node.properties, (p): p is JsxSpreadAttribute => p.kind === SyntaxKind.JsxSpreadAttribute && isObjectLiteralExpression(p.expression));
+
+        for (const spreadObj of spreadObjectLiterals) {
+            const objMembers = (spreadObj.expression as ObjectLiteralExpression).symbol.members;
+            if (objMembers) {
+                for (const [name, symbol] of objMembers) {
+                    symTable.set(name, symbol);
+                }
+            }
+        }
+
         return discriminateTypeByDiscriminableItems(
             contextualType,
             concatenate(
-                map(
-                    filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
-                    prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const),
+                concatenate(
+                    map(
+                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
+                        prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const),
+                    ),
+                    map(
+                        filter(getPropertiesOfType(contextualType), s => {
+                            if (!(s.flags & SymbolFlags.Optional)) {
+                                return false;
+                            }
+                            const element = node.parent.parent;
+                            if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
+                                return false;
+                            }
+                            return !symTable.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
+                        }),
+                        s => [() => undefinedType, s.escapedName] as const,
+                    ),
                 ),
-                map(
-                    filter(getPropertiesOfType(contextualType), s => {
-                        if (!(s.flags & SymbolFlags.Optional) || !node?.symbol?.members) {
-                            return false;
-                        }
-                        const element = node.parent.parent;
-                        if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
-                            return false;
-                        }
-                        return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
-                    }),
-                    s => [() => undefinedType, s.escapedName] as const,
+                flatten(
+                    map(
+                        spreadObjectLiterals,
+                        prop => getObjectMembersDiscriminators(contextualType, prop.expression as ObjectLiteralExpression, symTable),
+                    ),
                 ),
             ),
             isTypeAssignableTo,
