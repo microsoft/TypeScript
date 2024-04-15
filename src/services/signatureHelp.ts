@@ -287,9 +287,6 @@ function getArgumentOrParameterListInfo(node: Node, position: number, sourceFile
     const { list, argumentIndex } = info;
 
     const argumentCount = getArgumentCount(checker, list);
-    if (argumentIndex !== 0) {
-        Debug.assertLessThan(argumentIndex, argumentCount);
-    }
     const argumentsSpan = getApplicableSpanForArguments(list, sourceFile);
     return { list, argumentIndex, argumentCount, argumentsSpan };
 }
@@ -660,9 +657,6 @@ function createSignatureHelpItems(
     const callTargetDisplayParts = callTargetSymbol ? symbolToDisplayParts(typeChecker, callTargetSymbol, useFullPrefix ? sourceFile : undefined, /*meaning*/ undefined) : emptyArray;
     const items = map(candidates, candidateSignature => getSignatureHelpItem(candidateSignature, callTargetDisplayParts, isTypeParameterList, typeChecker, enclosingDeclaration, sourceFile));
 
-    if (argumentIndex !== 0) {
-        Debug.assertLessThan(argumentIndex, argumentCount);
-    }
     let selectedItemIndex = 0;
     let itemsSeen = 0;
     for (let i = 0; i < items.length; i++) {
