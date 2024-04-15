@@ -71,7 +71,6 @@ import {
     isObjectBindingPattern,
     isPropertyAccessExpression,
     isPropertyName,
-    isRightSideOfAccessExpression,
     isRightSideOfPropertyAccess,
     isStaticModifier,
     isSwitchStatement,
