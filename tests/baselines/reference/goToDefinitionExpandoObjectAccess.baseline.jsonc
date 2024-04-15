@@ -1,0 +1,19 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/index.js ===
+// const A = {};
+// <|A.[|B|]|> = class Foo { }
+// new A./*GOTO DEF*/B();
+// A.B.prototype.C = null;
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "B",
+    "containerName": "A",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]
