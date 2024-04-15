@@ -6,15 +6,13 @@ import {
     AsExpression,
     BinaryExpression,
     BindingElement,
+    ClassExpression,
     CompilerOptions,
-    ComputedPropertyName,
     Debug,
     ElementAccessExpression,
-    EntityNameOrEntityNameExpression,
     ExportAssignment,
     Expression,
     forEachReturnStatement,
-    FunctionDeclaration,
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
@@ -26,7 +24,6 @@ import {
     Identifier,
     IntersectionTypeNode,
     isBlock,
-    isClassExpression,
     isConstTypeReference,
     isDeclarationReadonly,
     isEntityNameExpression,
@@ -34,6 +31,7 @@ import {
     isIdentifier,
     isJSDocTypeAssertion,
     isKeyword,
+    isParameter,
     isPrimitiveLiteralValue,
     isShorthandPropertyAssignment,
     isSpreadAssignment,
@@ -43,7 +41,6 @@ import {
     MethodDeclaration,
     Node,
     NodeArray,
-    NodeBuilderFlags,
     NodeFlags,
     nodeIsMissing,
     ObjectLiteralExpression,
@@ -59,8 +56,7 @@ import {
     SetAccessorDeclaration,
     SignatureDeclaration,
     SymbolAccessibility,
-    SymbolTracker,
-    SymbolVisibilityResult,
+    SyntacticTypeNodeBuilderContext,
     SyntaxKind,
     TypeAssertion,
     TypeNode,
@@ -69,19 +65,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
-interface SyntacticExpressionToTypeContext {
-    flags: NodeBuilderFlags;
-    tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
-    isUndefinedIdentifier(name: Identifier): boolean;
-    isLiteralComputedName(name: ComputedPropertyName): boolean;
-    isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
-    isOptionalParameter(name: ParameterDeclaration): boolean;
-    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
-    trackComputedName(accessExpression: EntityNameOrEntityNameExpression): void;
-}
-
-export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) {
+export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
     const strictNullChecks = getStrictOptionValue(options, "strictNullChecks");
 
     return {
@@ -90,16 +74,16 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         serializeReturnTypeForSignature,
         serializeTypeOfExpression,
     };
-    function serializeExistingTypeAnnotation(type: TypeNode | undefined) {
-        return !!type;
+    function serializeExistingTypeAnnotation(type: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext) {
+        return type === undefined ? undefined : !isParameter(type.parent) || !context.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
     }
-    function serializeTypeOfExpression(expr: Expression, context: SyntacticExpressionToTypeContext, addUndefined?: boolean, preserveLiterals?: boolean) {
+    function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
         return typeFromExpression(expr, context, /*isConstContext*/ false, addUndefined, preserveLiterals) ?? inferExpressionType(expr, context);
     }
-    function serializeTypeOfDeclaration(node: HasInferredType, context: SyntacticExpressionToTypeContext) {
+    function serializeTypeOfDeclaration(node: HasInferredType, context: SyntacticTypeNodeBuilderContext) {
         switch (node.kind) {
             case SyntaxKind.PropertySignature:
-                return serializeExistingTypeAnnotation(getEffectiveTypeAnnotationNode(node));
+                return serializeExistingTypeAnnotation(getEffectiveTypeAnnotationNode(node), context);
             case SyntaxKind.Parameter:
                 return typeFromParameter(node, context);
             case SyntaxKind.VariableDeclaration:
@@ -113,14 +97,14 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
             case SyntaxKind.PropertyAccessExpression:
             case SyntaxKind.ElementAccessExpression:
             case SyntaxKind.BinaryExpression:
-                return serializeExistingTypeAnnotation(getEffectiveTypeAnnotationNode(node)) || inferTypeOfDeclaration(node, context);
+                return serializeExistingTypeAnnotation(getEffectiveTypeAnnotationNode(node), context) || inferTypeOfDeclaration(node, context);
             case SyntaxKind.PropertyAssignment:
                 return typeFromExpression(node.initializer, context) || inferTypeOfDeclaration(node, context);
             default:
                 Debug.assertNever(node, `Node needs to be an inferrable node, found ${Debug.formatSyntaxKind((node as Node).kind)}`);
         }
     }
-    function serializeReturnTypeForSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticExpressionToTypeContext): boolean {
+    function serializeReturnTypeForSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext): boolean | undefined {
         switch (node.kind) {
             case SyntaxKind.GetAccessor:
                 return typeFromAccessor(node, context);
@@ -163,77 +147,80 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         return accessorType;
     }
 
-    function typeFromAccessor(node: AccessorDeclaration, context: SyntacticExpressionToTypeContext) {
+    function typeFromAccessor(node: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) {
         const accessorDeclarations = context.getAllAccessorDeclarations(node);
         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
         if (accessorType) {
-            return serializeExistingTypeAnnotation(accessorType);
+            return serializeExistingTypeAnnotation(accessorType, context);
         }
         if (accessorDeclarations.getAccessor) {
             return createReturnFromSignature(accessorDeclarations.getAccessor, context);
         }
         return false;
     }
-    function typeFromVariable(node: VariableDeclaration, context: SyntacticExpressionToTypeContext) {
+    function typeFromVariable(node: VariableDeclaration, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
         if (declaredType) {
-            return serializeExistingTypeAnnotation(declaredType);
+            return serializeExistingTypeAnnotation(declaredType, context);
         }
         let resultType;
         if (node.initializer) {
-            if (!(isClassExpression(node.initializer) || context.isExpandoFunctionDeclaration(node))) {
+            if (!context.isExpandoFunctionDeclaration(node)) {
                 resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isVarConstLike(node));
             }
         }
         return resultType ?? inferTypeOfDeclaration(node, context);
     }
-    function typeFromParameter(node: ParameterDeclaration, context: SyntacticExpressionToTypeContext) {
+    function typeFromParameter(node: ParameterDeclaration, context: SyntacticTypeNodeBuilderContext) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.SetAccessor) {
             return typeFromAccessor(parent, context);
         }
         const declaredType = getEffectiveTypeAnnotationNode(node);
+        const addUndefined = context.requiresAddingImplicitUndefined(node);
         let resultType;
-        if (declaredType) {
-            return serializeExistingTypeAnnotation(declaredType);
-        }
-        if (node.initializer && isIdentifier(node.name)) {
-            resultType = typeFromExpression(node.initializer, context);
+        if (!addUndefined) {
+            if (declaredType) {
+                return serializeExistingTypeAnnotation(declaredType, context);
+            }
+            if (node.initializer && isIdentifier(node.name)) {
+                resultType = typeFromExpression(node.initializer, context);
+            }
         }
         return resultType ?? inferTypeOfDeclaration(node, context);
     }
-    function typeFromProperty(node: PropertyDeclaration, context: SyntacticExpressionToTypeContext) {
+    function typeFromProperty(node: PropertyDeclaration, context: SyntacticTypeNodeBuilderContext) {
         const declaredType = getEffectiveTypeAnnotationNode(node);
         if (declaredType) {
-            return serializeExistingTypeAnnotation(declaredType);
+            return serializeExistingTypeAnnotation(declaredType, context);
         }
         let resultType;
         if (node.initializer) {
             const isReadonly = isDeclarationReadonly(node);
-            resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, isReadonly);
+            resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isReadonly);
         }
         return resultType ?? inferTypeOfDeclaration(node, context);
     }
 
     function inferTypeOfDeclaration(
         node: PropertyAssignment | PropertyAccessExpression | BinaryExpression | ElementAccessExpression | VariableDeclaration | ParameterDeclaration | BindingElement | PropertyDeclaration | PropertySignature | ExportAssignment,
-        context: SyntacticExpressionToTypeContext,
+        context: SyntacticTypeNodeBuilderContext,
     ) {
         context.tracker.reportInferenceFallback(node);
         return false;
     }
 
-    function inferExpressionType(node: Expression, context: SyntacticExpressionToTypeContext) {
+    function inferExpressionType(node: Expression, context: SyntacticTypeNodeBuilderContext) {
         context.tracker.reportInferenceFallback(node);
         return false;
     }
 
-    function inferReturnTypeOfSignatureSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticExpressionToTypeContext) {
+    function inferReturnTypeOfSignatureSignature(node: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) {
         context.tracker.reportInferenceFallback(node);
         return false;
     }
 
-    function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration, allAccessors: AllAccessorDeclarations, context: SyntacticExpressionToTypeContext) {
+    function inferAccessorType(node: GetAccessorDeclaration | SetAccessorDeclaration, allAccessors: AllAccessorDeclarations, context: SyntacticTypeNodeBuilderContext) {
         if (node.kind === SyntaxKind.GetAccessor) {
             return createReturnFromSignature(node, context);
         }
@@ -243,16 +230,16 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         }
     }
 
-    function typeFromTypeAssertion(expression: Expression, type: TypeNode, context: SyntacticExpressionToTypeContext, requiresAddingUndefined: boolean) {
+    function typeFromTypeAssertion(expression: Expression, type: TypeNode, context: SyntacticTypeNodeBuilderContext, requiresAddingUndefined: boolean) {
         if (isConstTypeReference(type)) {
             return typeFromExpression(expression, context, /*isConstContext*/ true, requiresAddingUndefined);
         }
         if (requiresAddingUndefined && !canAddUndefined(type)) {
             context.tracker.reportInferenceFallback(type);
         }
-        return serializeExistingTypeAnnotation(type);
+        return serializeExistingTypeAnnotation(type, context);
     }
-    function typeFromExpression(node: Expression, context: SyntacticExpressionToTypeContext, isConstContext = false, requiresAddingUndefined = false, preserveLiterals = false): boolean {
+    function typeFromExpression(node: Expression, context: SyntacticTypeNodeBuilderContext, isConstContext = false, requiresAddingUndefined = false, preserveLiterals = false): boolean | undefined {
         switch (node.kind) {
             case SyntaxKind.ParenthesizedExpression:
                 if (isJSDocTypeAssertion(node)) {
@@ -303,16 +290,18 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
                 return typeFromArrayLiteral(node as ArrayLiteralExpression, context, isConstContext);
             case SyntaxKind.ObjectLiteralExpression:
                 return typeFromObjectLiteral(node as ObjectLiteralExpression, context, isConstContext);
+            case SyntaxKind.ClassExpression:
+                return inferExpressionType(node as ClassExpression, context);
         }
-        return false;
+        return undefined;
     }
-    function typeFromFunctionLikeExpression(fnNode: FunctionExpression | ArrowFunction, context: SyntacticExpressionToTypeContext) {
-        const returnType = serializeExistingTypeAnnotation(fnNode.type) && createReturnFromSignature(fnNode, context);
-        const typeParameters = reuseTypeParameters(fnNode.typeParameters);
+    function typeFromFunctionLikeExpression(fnNode: FunctionExpression | ArrowFunction, context: SyntacticTypeNodeBuilderContext) {
+        const returnType = serializeExistingTypeAnnotation(fnNode.type, context) ?? createReturnFromSignature(fnNode, context);
+        const typeParameters = reuseTypeParameters(fnNode.typeParameters, context);
         const parameters = fnNode.parameters.every(p => ensureParameter(p, context));
         return returnType && typeParameters && parameters;
     }
-    function canGetTypeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticExpressionToTypeContext, isConstContext: boolean) {
+    function canGetTypeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
         if (!isConstContext) {
             context.tracker.reportInferenceFallback(arrayLiteral);
             return false;
@@ -325,22 +314,21 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         }
         return true;
     }
-    function typeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticExpressionToTypeContext, isConstContext: boolean) {
+    function typeFromArrayLiteral(arrayLiteral: ArrayLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
         if (!canGetTypeFromArrayLiteral(arrayLiteral, context, isConstContext)) {
             return false;
         }
 
+        let canInferArray = true;
         for (const element of arrayLiteral.elements) {
             Debug.assert(element.kind !== SyntaxKind.SpreadElement);
             if (element.kind !== SyntaxKind.OmittedExpression) {
-                if (typeFromExpression(element, context, isConstContext)) {
-                    inferExpressionType(element, context);
-                }
+                canInferArray = (typeFromExpression(element, context, isConstContext) ?? inferExpressionType(element, context)) && canInferArray;
             }
         }
         return true;
     }
-    function canGetTypeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticExpressionToTypeContext) {
+    function canGetTypeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticTypeNodeBuilderContext) {
         let result = true;
         for (const prop of objectLiteral.properties) {
             if (prop.flags & NodeFlags.ThisNodeHasError) {
@@ -369,8 +357,8 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         }
         return result;
     }
-    function typeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticExpressionToTypeContext, isConstContext: boolean): boolean {
-        if (!canGetTypeFromObjectLiteral(objectLiteral, context)) return inferExpressionType(objectLiteral, context);
+    function typeFromObjectLiteral(objectLiteral: ObjectLiteralExpression, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean): boolean {
+        if (!canGetTypeFromObjectLiteral(objectLiteral, context)) return false;
 
         let canInferObjectLiteral = true;
         for (const prop of objectLiteral.properties) {
@@ -378,59 +366,55 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
 
             const name = prop.name;
             if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (isEntityNameExpression(prop.name.expression)) {
+                if (!context.isLiteralComputedName(prop.name)) {
+                    context.tracker.reportInferenceFallback(prop.name);
+                }
+                else if (isEntityNameExpression(prop.name.expression)) {
                     const visibilityResult = context.isEntityNameVisible(prop.name.expression, /*shouldComputeAliasToMakeVisible*/ false);
-
-                    if (!context.isLiteralComputedName(prop.name)) {
-                        context.tracker.reportInferenceFallback(prop.name);
-                    }
-                    if (visibilityResult.accessibility === SymbolAccessibility.Accessible) {
-                        context.trackComputedName(prop.name.expression);
-                    }
-                    else {
+                    if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
                         context.tracker.reportInferenceFallback(prop.name);
                     }
                 }
             }
             switch (prop.kind) {
                 case SyntaxKind.MethodDeclaration:
-                    canInferObjectLiteral ||= typeFromObjectLiteralMethod(prop, name, context);
+                    canInferObjectLiteral = !!typeFromObjectLiteralMethod(prop, name, context) && canInferObjectLiteral;
                     break;
                 case SyntaxKind.PropertyAssignment:
-                    canInferObjectLiteral ||= typeFromObjectLiteralPropertyAssignment(prop, name, context, isConstContext);
+                    canInferObjectLiteral = !!typeFromObjectLiteralPropertyAssignment(prop, name, context, isConstContext) && canInferObjectLiteral;
                     break;
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.GetAccessor:
-                    canInferObjectLiteral ||= typeFromObjectLiteralAccessor(prop, name, context);
+                    canInferObjectLiteral = !!typeFromObjectLiteralAccessor(prop, name, context) && canInferObjectLiteral;
                     break;
             }
         }
 
-        return true;
+        return canInferObjectLiteral;
     }
 
-    function typeFromObjectLiteralPropertyAssignment(prop: PropertyAssignment, name: PropertyName, context: SyntacticExpressionToTypeContext, isConstContext: boolean) {
-        return typeFromExpression(prop.initializer, context, isConstContext) || inferTypeOfDeclaration(prop, context);
+    function typeFromObjectLiteralPropertyAssignment(prop: PropertyAssignment, name: PropertyName, context: SyntacticTypeNodeBuilderContext, isConstContext: boolean) {
+        return typeFromExpression(prop.initializer, context, isConstContext) ?? inferTypeOfDeclaration(prop, context);
     }
 
-    function ensureParameter(p: ParameterDeclaration, context: SyntacticExpressionToTypeContext) {
+    function ensureParameter(p: ParameterDeclaration, context: SyntacticTypeNodeBuilderContext) {
         return typeFromParameter(p, context);
     }
-    function reuseTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
+    function reuseTypeParameters(typeParameters: NodeArray<TypeParameterDeclaration> | undefined, context: SyntacticTypeNodeBuilderContext) {
         // TODO: We will probably need to add a fake scopes for the signature (to hold the type parameters and the parameter)
         // For now this is good enough since the new serialization is used for Nodes in the same context.
         return typeParameters?.every(tp =>
-            serializeExistingTypeAnnotation(tp.constraint) &&
-            serializeExistingTypeAnnotation(tp.default)
+            serializeExistingTypeAnnotation(tp.constraint, context) &&
+            serializeExistingTypeAnnotation(tp.default, context)
         ) ?? true;
     }
-    function typeFromObjectLiteralMethod(method: MethodDeclaration, name: PropertyName, context: SyntacticExpressionToTypeContext): boolean {
+    function typeFromObjectLiteralMethod(method: MethodDeclaration, name: PropertyName, context: SyntacticTypeNodeBuilderContext): boolean {
         const returnType = createReturnFromSignature(method, context);
-        const typeParameters = reuseTypeParameters(method.typeParameters);
+        const typeParameters = reuseTypeParameters(method.typeParameters, context);
         const parameters = method.parameters.every(p => ensureParameter(p, context));
         return returnType && typeParameters && parameters;
     }
-    function typeFromObjectLiteralAccessor(accessor: GetAccessorDeclaration | SetAccessorDeclaration, name: PropertyName, context: SyntacticExpressionToTypeContext) {
+    function typeFromObjectLiteralAccessor(accessor: GetAccessorDeclaration | SetAccessorDeclaration, name: PropertyName, context: SyntacticTypeNodeBuilderContext) {
         const allAccessors = context.getAllAccessorDeclarations(accessor);
         const getAccessorType = allAccessors.getAccessor && getTypeAnnotationFromAccessor(allAccessors.getAccessor);
         const setAccessorType = allAccessors.setAccessor && getTypeAnnotationFromAccessor(allAccessors.setAccessor);
@@ -439,7 +423,7 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
             const parameters = accessor.parameters.every(p => ensureParameter(p, context));
 
             if (isGetAccessor(accessor)) {
-                return parameters && serializeExistingTypeAnnotation(getAccessorType);
+                return parameters && serializeExistingTypeAnnotation(getAccessorType, context);
             }
             else {
                 return parameters;
@@ -447,7 +431,7 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         }
         else if (allAccessors.firstAccessor === accessor) {
             const foundType = getAccessorType ?? setAccessorType;
-            const propertyType = foundType ? serializeExistingTypeAnnotation(foundType) : inferAccessorType(accessor, allAccessors, context);
+            const propertyType = foundType ? serializeExistingTypeAnnotation(foundType, context) : inferAccessorType(accessor, allAccessors, context);
 
             return propertyType;
         }
@@ -481,11 +465,11 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         return false;
     }
 
-    function createReturnFromSignature(fn: SignatureDeclaration | JSDocSignature, context: SyntacticExpressionToTypeContext) {
+    function createReturnFromSignature(fn: SignatureDeclaration | JSDocSignature, context: SyntacticTypeNodeBuilderContext) {
         let returnType;
         const returnTypeNode = getEffectiveReturnTypeNode(fn);
         if (returnTypeNode) {
-            returnType = serializeExistingTypeAnnotation(returnTypeNode);
+            returnType = serializeExistingTypeAnnotation(returnTypeNode, context);
         }
         if (!returnType && isValueSignatureDeclaration(fn)) {
             returnType = typeFromSingleReturnExpression(fn, context);
@@ -493,7 +477,7 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         return returnType ?? inferReturnTypeOfSignatureSignature(fn, context);
     }
 
-    function typeFromSingleReturnExpression(declaration: FunctionLikeDeclaration | undefined, context: SyntacticExpressionToTypeContext): boolean {
+    function typeFromSingleReturnExpression(declaration: FunctionLikeDeclaration | undefined, context: SyntacticTypeNodeBuilderContext): boolean | undefined {
         let candidateExpr: Expression | undefined;
         if (declaration && !nodeIsMissing(declaration.body)) {
             const body = declaration.body;
@@ -515,6 +499,6 @@ export function createSyntacticExpressionToTypeWorker(options: CompilerOptions) 
         if (candidateExpr) {
             return typeFromExpression(candidateExpr, context);
         }
-        return false;
+        return undefined;
     }
 }

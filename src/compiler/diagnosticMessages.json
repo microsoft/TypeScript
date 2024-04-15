@@ -6814,10 +6814,6 @@
         "category": "Error",
         "code": 9023
     },
-    "Declaration emit for this expression requires adding a type reference directive to '{0}' with --isolatedDeclarations.": {
-        "category": "Error",
-        "code": 9024
-    },
     "Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.": {
         "category": "Error",
         "code": 9025
