@@ -105,6 +105,10 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/decls 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/fns.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/dependency/package.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/package.json 2000 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/usage/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Project: /user/username/projects/myproject/usage/tsconfig.json WatchType: Type roots
@@ -204,12 +208,20 @@ After request
 PolledWatches::
 /user/username/projects/myproject/decls: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/dependency/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/usage/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/usage/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -350,22 +362,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 	/user/username/projects/myproject/usage/usage.ts SVC-1-1 "import {\n    fn1,\n    fn2,\n} from '../decls/fns'\nfn1();\nfn2();\nexport function fn3() { }"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
-Info seq  [hh:mm:ss:mss] After ensureProjectForOpenFiles:
-Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/usage/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (3)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/myproject/usage/usage.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/myproject/usage/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": [
@@ -410,12 +406,11 @@ After request
 //// [/user/username/projects/myproject/usage/usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn3 = void 0;
+exports.fn3 = fn3;
 var fns_1 = require("../decls/fns");
 (0, fns_1.fn1)();
 (0, fns_1.fn2)();
 function fn3() { }
-exports.fn3 = fn3;
 
 
 
@@ -437,7 +432,7 @@ Info seq  [hh:mm:ss:mss] response:
           {
             "name": "/user/username/projects/myproject/usage/usage.js",
             "writeByteOrderMark": false,
-            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = void 0;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\nexports.fn3 = fn3;\n"
+            "text": "\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { value: true });\nexports.fn3 = fn3;\nvar fns_1 = require(\"../decls/fns\");\n(0, fns_1.fn1)();\n(0, fns_1.fn2)();\nfunction fn3() { }\n"
           }
         ],
         "emitSkipped": false,

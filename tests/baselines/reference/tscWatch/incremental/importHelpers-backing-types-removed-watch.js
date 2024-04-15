@@ -38,9 +38,9 @@ export const x = {...{}};
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -56,8 +56,12 @@ exports.x = tslib_1.__assign({});
 PolledWatches::
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -112,8 +116,12 @@ Input::
 PolledWatches *deleted*::
 /users/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/package.json:
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
+/users/username/projects/project/package.json:
+  {"pollingInterval":2000}
 
 FsWatches *deleted*::
 /a/lib/lib.d.ts:
@@ -135,14 +143,14 @@ FsWatchesRecursive *deleted*::
 
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mindex.tsx[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2354: [0mThis syntax requires an imported helper but module 'tslib' cannot be found.
 
 [7m1[0m export const x = {...{}};
 [7m [0m [91m                  ~~~~~[0m
 
-[[90m12:00:39 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -153,8 +161,12 @@ PolledWatches::
   {"pollingInterval":500}
 /users/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 /users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/users/username/projects/project/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

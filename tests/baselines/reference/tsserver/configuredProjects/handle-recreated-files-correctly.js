@@ -211,7 +211,6 @@ ScriptInfos::
         /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/commonFile2.ts 2:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonFile2.ts 2:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
@@ -223,22 +222,6 @@ Before running Timeout callback:: count: 2
 3: /a/b/tsconfig.json
 4: *ensureProjectForOpenFiles*
 //// [/a/b/commonFile2.ts] deleted
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/a/b/commonFile2.ts:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
 
 Timeout callback:: count: 2
 3: /a/b/tsconfig.json *new*
@@ -255,8 +238,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json *default*
-/a/b/commonFile2.ts *deleted*
+/a/b/commonFile2.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /a/b/tsconfig.json *deleted*
 
@@ -309,6 +294,8 @@ Projects::
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
 
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /a/b/commonFile2.ts 0:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /a/b/commonFile2.ts :: WatchInfo: /a/b 1 undefined Config: /a/b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Scheduled: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
@@ -330,14 +317,24 @@ Projects::
     projectProgramVersion: 2
     dirty: true *changed*
 
+ScriptInfos::
+/a/b/commonFile1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/commonFile2.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/commonFile2.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/b/commonFile1.ts SVC-1-0 "let x = 1"
-	/a/b/commonFile2.ts Text-2 "let y = 1"
+	/a/b/commonFile2.ts Text-1 "let y = 1"
 
 
 	commonFile1.ts
@@ -377,20 +374,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/a/b/commonFile2.ts: *new*
-  {}
-/a/b/tsconfig.json:
-  {}
-
-FsWatchesRecursive::
-/a/b:
-  {}
-
 Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
@@ -402,7 +385,8 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /a/b/tsconfig.json *default*
-/a/b/commonFile2.ts *new*
-    version: Text-2
-    containingProjects: 1
-        /a/b/tsconfig.json
+/a/b/commonFile2.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /a/b/tsconfig.json *new*

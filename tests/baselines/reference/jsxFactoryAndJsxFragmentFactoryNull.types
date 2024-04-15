@@ -11,12 +11,18 @@ declare var h: any;
 ><><span>1</span><><span>2.1</span><span>2.2</span></></> : error
 ><span>1</span> : error
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><><span>2.1</span><span>2.2</span></> : error
 ><span>2.1</span> : error
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 ><span>2.2</span> : error
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 

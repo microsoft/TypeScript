@@ -175,6 +175,7 @@ import {
     JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
+    JSDocImportTag,
     JSDocLink,
     JSDocLinkCode,
     JSDocLinkPlain,
@@ -386,6 +387,7 @@ import {
     unescapeLeadingUnderscores,
     UnionOrIntersectionTypeNode,
     UnionTypeNode,
+    unsetNodeChildren,
     UpdateExpression,
     VariableDeclaration,
     VariableDeclarationList,
@@ -1125,6 +1127,7 @@ const forEachChildTable: ForEachChildTable = {
     [SyntaxKind.JSDocReadonlyTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocDeprecatedTag]: forEachChildInJSDocTag,
     [SyntaxKind.JSDocOverrideTag]: forEachChildInJSDocTag,
+    [SyntaxKind.JSDocImportTag]: forEachChildInJSDocImportTag,
     [SyntaxKind.PartiallyEmittedExpression]: forEachChildInPartiallyEmittedExpression,
 };
 
@@ -1211,6 +1214,14 @@ function forEachChildInJSDocLinkCodeOrPlain<T>(node: JSDocLink | JSDocLinkCode |
 
 function forEachChildInJSDocTag<T>(node: JSDocUnknownTag | JSDocClassTag | JSDocPublicTag | JSDocPrivateTag | JSDocProtectedTag | JSDocReadonlyTag | JSDocDeprecatedTag | JSDocOverrideTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNode(cbNode, node.tagName)
+        || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
+}
+
+function forEachChildInJSDocImportTag<T>(node: JSDocImportTag, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    return visitNode(cbNode, node.tagName)
+        || visitNode(cbNode, node.importClause)
+        || visitNode(cbNode, node.moduleSpecifier)
+        || visitNode(cbNode, node.attributes)
         || (typeof node.comment === "string" ? undefined : visitNodes(cbNode, cbNodes, node.comment));
 }
 
@@ -3875,7 +3886,7 @@ namespace Parser {
     }
 
     function parseJSDocType(): TypeNode {
-        scanner.setInJSDocType(true);
+        scanner.setSkipJsDocLeadingAsterisks(true);
         const pos = getNodePos();
         if (parseOptional(SyntaxKind.ModuleKeyword)) {
             // TODO(rbuckton): We never set the type for a JSDocNamepathType. What should we put here?
@@ -3893,13 +3904,13 @@ namespace Parser {
                 }
             }
 
-            scanner.setInJSDocType(false);
+            scanner.setSkipJsDocLeadingAsterisks(false);
             return finishNode(moduleTag, pos);
         }
 
         const hasDotDotDot = parseOptional(SyntaxKind.DotDotDotToken);
         let type = parseTypeOrTypePredicate();
-        scanner.setInJSDocType(false);
+        scanner.setSkipJsDocLeadingAsterisks(false);
         if (hasDotDotDot) {
             type = finishNode(factory.createJSDocVariadicType(type), pos);
         }
@@ -8346,6 +8357,16 @@ namespace Parser {
             return parseImportEqualsDeclaration(pos, hasJSDoc, modifiers, identifier, isTypeOnly);
         }
 
+        const importClause = tryParseImportClause(identifier, afterImportPos, isTypeOnly);
+        const moduleSpecifier = parseModuleSpecifier();
+        const attributes = tryParseImportAttributes();
+
+        parseSemicolon();
+        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
+        return withJSDoc(finishNode(node, pos), hasJSDoc);
+    }
+
+    function tryParseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks = false) {
         // ImportDeclaration:
         //  import ImportClause from ModuleSpecifier ;
         //  import ModuleSpecifier;
@@ -8355,18 +8376,17 @@ namespace Parser {
             token() === SyntaxKind.AsteriskToken || // import *
             token() === SyntaxKind.OpenBraceToken // import {
         ) {
-            importClause = parseImportClause(identifier, afterImportPos, isTypeOnly);
+            importClause = parseImportClause(identifier, pos, isTypeOnly, skipJsDocLeadingAsterisks);
             parseExpected(SyntaxKind.FromKeyword);
         }
-        const moduleSpecifier = parseModuleSpecifier();
+        return importClause;
+    }
+
+    function tryParseImportAttributes() {
         const currentToken = token();
-        let attributes: ImportAttributes | undefined;
         if ((currentToken === SyntaxKind.WithKeyword || currentToken === SyntaxKind.AssertKeyword) && !scanner.hasPrecedingLineBreak()) {
-            attributes = parseImportAttributes(currentToken);
+            return parseImportAttributes(currentToken);
         }
-        parseSemicolon();
-        const node = factory.createImportDeclaration(modifiers, importClause, moduleSpecifier, attributes);
-        return withJSDoc(finishNode(node, pos), hasJSDoc);
     }
 
     function parseImportAttribute() {
@@ -8422,7 +8442,7 @@ namespace Parser {
         return finished;
     }
 
-    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean) {
+    function parseImportClause(identifier: Identifier | undefined, pos: number, isTypeOnly: boolean, skipJsDocLeadingAsterisks: boolean) {
         // ImportClause:
         //  ImportedDefaultBinding
         //  NameSpaceImport
@@ -8437,7 +8457,9 @@ namespace Parser {
             !identifier ||
             parseOptional(SyntaxKind.CommaToken)
         ) {
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(true);
             namedBindings = token() === SyntaxKind.AsteriskToken ? parseNamespaceImport() : parseNamedImportsOrExports(SyntaxKind.NamedImports);
+            if (skipJsDocLeadingAsterisks) scanner.setSkipJsDocLeadingAsterisks(false);
         }
 
         return finishNode(factory.createImportClause(isTypeOnly, identifier, namedBindings), pos);
@@ -9073,6 +9095,9 @@ namespace Parser {
                     case "throws":
                         tag = parseThrowsTag(start, tagName, margin, indentText);
                         break;
+                    case "import":
+                        tag = parseImportTag(start, tagName, margin, indentText);
+                        break;
                     default:
                         tag = parseUnknownTag(start, tagName, margin, indentText);
                         break;
@@ -9227,7 +9252,7 @@ namespace Parser {
 
                     let name: EntityName | JSDocMemberName = parseIdentifierName();
                     while (parseOptional(SyntaxKind.DotToken)) {
-                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifier()), pos);
+                        name = finishNode(factory.createQualifiedName(name, token() === SyntaxKind.PrivateIdentifier ? createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ false) : parseIdentifierName()), pos);
                     }
                     while (token() === SyntaxKind.PrivateIdentifier) {
                         reScanHashToken();
@@ -9445,13 +9470,29 @@ namespace Parser {
                 return finishNode(factory.createJSDocSatisfiesTag(tagName, typeExpression, comments), start);
             }
 
+            function parseImportTag(start: number, tagName: Identifier, margin: number, indentText: string): JSDocImportTag {
+                const afterImportTagPos = scanner.getTokenFullStart();
+
+                let identifier: Identifier | undefined;
+                if (isIdentifier()) {
+                    identifier = parseIdentifier();
+                }
+
+                const importClause = tryParseImportClause(identifier, afterImportTagPos, /*isTypeOnly*/ true, /*skipJsDocLeadingAsterisks*/ true);
+                const moduleSpecifier = parseModuleSpecifier();
+                const attributes = tryParseImportAttributes();
+
+                const comments = margin !== undefined && indentText !== undefined ? parseTrailingTagComments(start, getNodePos(), margin, indentText) : undefined;
+                return finishNode(factory.createJSDocImportTag(tagName, importClause, moduleSpecifier, attributes, comments), start);
+            }
+
             function parseExpressionWithTypeArgumentsForAugments(): ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; } {
                 const usedBrace = parseOptional(SyntaxKind.OpenBraceToken);
                 const pos = getNodePos();
                 const expression = parsePropertyAccessEntityNameExpression();
-                scanner.setInJSDocType(true);
+                scanner.setSkipJsDocLeadingAsterisks(true);
                 const typeArguments = tryParseTypeArguments();
-                scanner.setInJSDocType(false);
+                scanner.setSkipJsDocLeadingAsterisks(false);
                 const node = factory.createExpressionWithTypeArguments(expression, typeArguments) as ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression; };
                 const res = finishNode(node, pos);
                 if (usedBrace) {
@@ -9962,9 +10003,7 @@ namespace IncrementalParser {
 
             // Ditch any existing LS children we may have created.  This way we can avoid
             // moving them forward.
-            if (node._children) {
-                node._children = undefined;
-            }
+            unsetNodeChildren(node);
 
             setTextRangePosEnd(node, node.pos + delta, node.end + delta);
 
@@ -9982,7 +10021,6 @@ namespace IncrementalParser {
         }
 
         function visitArray(array: IncrementalNodeArray) {
-            array._children = undefined;
             setTextRangePosEnd(array, array.pos + delta, array.end + delta);
 
             for (const node of array) {
@@ -10121,7 +10159,7 @@ namespace IncrementalParser {
             const fullEnd = child.end;
             if (fullEnd >= changeStart) {
                 child.intersectsChange = true;
-                child._children = undefined;
+                unsetNodeChildren(child);
 
                 // Adjust the pos or end (or both) of the intersecting element accordingly.
                 adjustIntersectingElement(child, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10154,7 +10192,6 @@ namespace IncrementalParser {
             const fullEnd = array.end;
             if (fullEnd >= changeStart) {
                 array.intersectsChange = true;
-                array._children = undefined;
 
                 // Adjust the pos or end (or both) of the intersecting array accordingly.
                 adjustIntersectingElement(array, changeStart, changeRangeOldEnd, changeRangeNewEnd, delta);
@@ -10307,7 +10344,6 @@ namespace IncrementalParser {
         readonly parent: Node;
         intersectsChange: boolean;
         length?: number;
-        _children: Node[] | undefined;
     }
 
     export interface IncrementalNode extends Node, IncrementalElement {
@@ -10510,19 +10546,20 @@ export function processPragmasIntoFields(context: PragmaContext, reportDiagnosti
                 const typeReferenceDirectives = context.typeReferenceDirectives;
                 const libReferenceDirectives = context.libReferenceDirectives;
                 forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
-                    const { types, lib, path, ["resolution-mode"]: res } = arg.arguments;
-                    if (arg.arguments["no-default-lib"]) {
+                    const { types, lib, path, ["resolution-mode"]: res, preserve: _preserve } = arg.arguments;
+                    const preserve = _preserve === "true" ? true : undefined;
+                    if (arg.arguments["no-default-lib"] === "true") {
                         context.hasNoDefaultLib = true;
                     }
                     else if (types) {
                         const parsed = parseResolutionMode(res, types.pos, types.end, reportDiagnostic);
-                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}) });
+                        typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value, ...(parsed ? { resolutionMode: parsed } : {}), ...(preserve ? { preserve } : {}) });
                     }
                     else if (lib) {
-                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
+                        libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value, ...(preserve ? { preserve } : {}) });
                     }
                     else if (path) {
-                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
+                        referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value, ...(preserve ? { preserve } : {}) });
                     }
                     else {
                         reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);

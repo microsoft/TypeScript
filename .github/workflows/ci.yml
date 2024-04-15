@@ -21,11 +21,13 @@ defaults:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-14
         node-version:
           - '20'
           - '18'
@@ -35,12 +37,18 @@ jobs:
           - 'true'
         include:
           - node-version: '*'
-            bundle: 'false'
+            bundle: false
+            os: ubuntu-latest
+        exclude:
+          # No Node 14 on ARM macOS
+          - node-version: '14'
+            os: macos-14
 
-    name: Test Node ${{ matrix.node-version }} with --bundle=${{ matrix.bundle }}
+    runs-on: ${{ matrix.os }}
+    name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - name: Use node version ${{ matrix.node-version }}
         uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
@@ -49,14 +57,22 @@ jobs:
       - run: npm ci
 
       - name: Tests
+        id: test
         # run tests, but lint separately
         run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+
+      - name: Print baseline diff on failure
+        if: ${{ failure() && steps.test.conclusion == 'failure' }}
+        run: |
+          npx hereby baseline-accept
+          git add tests/baselines/reference
+          git diff --staged --exit-code
 
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -70,14 +86,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
           check-latest: true
       - run: npm ci
 
-      - uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: ~/.cache/dprint
           key: ${{ runner.os }}-dprint-${{ hashFiles('package-lock.json', '.dprint.jsonc') }}
@@ -91,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -108,7 +124,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -122,7 +138,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
 
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
@@ -163,11 +179,11 @@ jobs:
     if: github.event_name == 'pull_request'
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
         with:
           path: pr
 
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
         with:
           path: base
           ref: ${{ github.base_ref }}
@@ -205,7 +221,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -222,7 +238,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -242,7 +258,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633 # v4.1.2
       - uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '*'
@@ -261,6 +277,7 @@ jobs:
           git add tests/baselines/reference
 
       - name: Check baselines
+        id: check-baselines
         run: |
           function print_diff() {
             if ! git diff --staged --exit-code --quiet --diff-filter=$1; then
@@ -273,5 +290,13 @@ jobs:
             print_diff ACR "Missing baselines"
             print_diff MTUXB "Modified baselines"
             print_diff D "Unused baselines"
+            git diff --staged > fix_baselines.patch
             exit 1
           fi
+
+      - name: Upload baseline diff artifact
+        if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: fix_baselines.patch
+          path: fix_baselines.patch

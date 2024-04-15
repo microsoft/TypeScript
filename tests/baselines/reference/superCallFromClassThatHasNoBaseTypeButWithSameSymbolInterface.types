@@ -5,11 +5,14 @@ interface Foo extends Array<number> {}
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor() {
         super(); // error
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
     }
 }
 

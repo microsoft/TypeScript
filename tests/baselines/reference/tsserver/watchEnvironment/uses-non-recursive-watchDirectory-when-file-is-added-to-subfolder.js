@@ -1,20 +1,20 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/a/username/project/src/index.ts]
+//// [/a/username/project/src/index.ts] Inode:: 5
 import {} from "./"
 
-//// [/a/username/project/src/file1.ts]
+//// [/a/username/project/src/file1.ts] Inode:: 6
 
 
-//// [/a/username/project/tsconfig.json]
+//// [/a/username/project/tsconfig.json] Inode:: 7
 {
   "watchOptions": {
     "synchronousWatchDirectory": true
   }
 }
 
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 9
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -72,6 +72,8 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/username/projec
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/src 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/src/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/username/project/package.json 2000 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/username/project/node_modules/@types 1 {"synchronousWatchDirectory":true} Project: /a/username/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/username/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -168,18 +170,22 @@ After request
 PolledWatches::
 /a/username/project/node_modules/@types: *new*
   {"pollingInterval":500}
+/a/username/project/package.json: *new*
+  {"pollingInterval":2000}
+/a/username/project/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":9}
 /a/username/project: *new*
-  {}
+  {"inode":3}
 /a/username/project/src: *new*
-  {}
+  {"inode":4}
 /a/username/project/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /a/username/project/tsconfig.json: *new*
-  {}
+  {"inode":7}
 
 Projects::
 /a/username/project/tsconfig.json (Configured) *new*
@@ -243,7 +249,7 @@ Before running Timeout callback:: count: 3
 1: /a/username/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
 3: /a/username/project/tsconfig.jsonFailedLookupInvalidation
-//// [/a/username/project/src/file2.ts]
+//// [/a/username/project/src/file2.ts] Inode:: 10
 
 
 
@@ -315,20 +321,24 @@ After running Timeout callback:: count: 0
 PolledWatches::
 /a/username/project/node_modules/@types:
   {"pollingInterval":500}
+/a/username/project/package.json:
+  {"pollingInterval":2000}
+/a/username/project/src/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":9}
 /a/username/project:
-  {}
+  {"inode":3}
 /a/username/project/src:
-  {}
+  {"inode":4}
 /a/username/project/src/file1.ts:
-  {}
+  {"inode":6}
 /a/username/project/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /a/username/project/tsconfig.json:
-  {}
+  {"inode":7}
 
 Timeout callback:: count: 0
 3: /a/username/project/tsconfig.jsonFailedLookupInvalidation *deleted*

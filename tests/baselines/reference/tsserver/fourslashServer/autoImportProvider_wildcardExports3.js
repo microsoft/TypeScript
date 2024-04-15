@@ -197,6 +197,8 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/apps/web/pack
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/ui/src/Card.tsx 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/ui/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/packages/ui/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -258,8 +260,11 @@ watchedFiles::
   {"pollingInterval":2000}
 /project/packages/ui/package.json:
   {"pollingInterval":250}
+  {"pollingInterval":2000} *new*
 /project/packages/ui/src/Card.tsx: *new*
   {"pollingInterval":500}
+/project/packages/ui/src/package.json: *new*
+  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /project/apps/web/app: *new*
@@ -475,6 +480,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -482,12 +493,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -589,18 +594,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -608,6 +601,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -675,8 +680,11 @@ watchedFiles::
   {"pollingInterval":2000}
 /project/packages/ui/package.json:
   {"pollingInterval":250}
+  {"pollingInterval":2000}
 /project/packages/ui/src/Card.tsx:
   {"pollingInterval":500}
+/project/packages/ui/src/package.json:
+  {"pollingInterval":2000}
 
 watchedDirectoriesRecursive::
 /project/apps/web/app:

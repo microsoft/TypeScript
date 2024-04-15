@@ -56,6 +56,7 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
@@ -243,6 +244,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
@@ -264,19 +268,24 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             const chunkSize = 50;
-            for (let i = 0; i < currentModuleInfo.exportedNames!.length; i += chunkSize) {
+            for (let i = 0; i < currentModuleInfo.exportedNames.length; i += chunkSize) {
                 append(
                     statements,
                     factory.createExpressionStatement(
                         reduceLeft(
-                            currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                            currentModuleInfo.exportedNames.slice(i, i + chunkSize),
                             (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
                             factory.createVoidZero() as Expression,
                         ),
                     ),
                 );
+            }
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
             }
         }
 
@@ -601,8 +610,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
+            }
         }
 
         // Visit each statement of the module body.
@@ -775,7 +789,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
                     return visitImportCallExpression(node);
                 }
                 break;
@@ -1704,7 +1718,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        statements = appendExportsOfHoistedDeclaration(statements, node);
+        // NOTE: CommonJS/AMD/UMD exports are hoisted to the top of the module body and do not need to be added here.
         return singleOrMany(statements);
     }
 

@@ -13,7 +13,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "AMD",
+          "module": "amd",
           "noLib": true
         }
       },
@@ -303,9 +303,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "compilerOptionsForInferredProjects",
       "arguments": {
         "options": {
-          "module": "AMD",
+          "module": "amd",
           "noLib": true,
-          "target": "ES5"
+          "target": "es5"
         }
       },
       "seq": 3,

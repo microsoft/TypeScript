@@ -3,4 +3,5 @@
 === parserEnumDeclaration2.d.ts ===
 declare enum E {
 >E : E
+>  : ^
 }

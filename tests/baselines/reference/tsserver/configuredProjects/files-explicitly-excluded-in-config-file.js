@@ -12,9 +12,11 @@ let t = 1;
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {},
-                    "exclude": ["/a/c"]
-                }
+  "compilerOptions": {},
+  "exclude": [
+    "/a/c"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:

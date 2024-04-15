@@ -44,9 +44,9 @@ export function temp(): string;
 /a/lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:40 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -59,8 +59,18 @@ var bar_1 = require("bar");
 
 
 PolledWatches::
+/user/username/projects/myproject/node_modules/bar/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*

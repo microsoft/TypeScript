@@ -3,9 +3,7 @@ import {
     UnionToIntersection,
     Version,
 } from "./_namespaces/ts";
-import {
-    deprecate,
-} from "./deprecate";
+import { deprecate } from "./deprecate";
 
 /** @internal */
 export interface DeprecationOptions {
