@@ -70,9 +70,9 @@ export declare class Observable<T> {
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
->       : ^^^^^^^                 ^^^^^             
+>       : ^    ^^                 ^^^^^             
 >pred : (e: T) => boolean
->     : ^^^^ ^^^^^       
+>     : ^ ^^ ^^^^^       
 >e : T
 >  : ^
 }

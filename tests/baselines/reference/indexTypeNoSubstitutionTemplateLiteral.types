@@ -15,7 +15,7 @@ Foo[`b`] = function () {};
 >`b` : "b"
 >    : ^^^
 >function () {} : () => void
->               : ^^^^^^^^^^
+>               :           
 
 type Test = keyof typeof Foo;
 >Test : "b"

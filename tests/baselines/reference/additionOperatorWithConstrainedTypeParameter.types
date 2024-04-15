@@ -4,7 +4,7 @@
 // test for #17069
 function sum<T extends Record<K, number>, K extends string>(n: number, v: T, k: K) {
 >sum : <T extends Record<K, number>, K extends string>(n: number, v: T, k: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >v : T
@@ -42,7 +42,7 @@ function sum<T extends Record<K, number>, K extends string>(n: number, v: T, k: 
 }
 function realSum<T extends Record<K, number>, K extends string>(n: number, vs: T[], k: K) {
 >realSum : <T extends Record<K, number>, K extends string>(n: number, vs: T[], k: K) => void
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^   ^^^^^ ^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^      ^^  ^^   ^^ ^^ ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >vs : T[]

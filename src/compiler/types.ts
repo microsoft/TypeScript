@@ -764,6 +764,8 @@ export type JSDocSyntaxKind =
     | SyntaxKind.GreaterThanToken
     | SyntaxKind.OpenBracketToken
     | SyntaxKind.CloseBracketToken
+    | SyntaxKind.OpenParenToken
+    | SyntaxKind.CloseParenToken
     | SyntaxKind.EqualsToken
     | SyntaxKind.CommaToken
     | SyntaxKind.DotToken
@@ -4092,6 +4094,7 @@ export const enum FlowFlags {
 
 /** @internal */
 export type FlowNode =
+    | FlowUnreachable
     | FlowStart
     | FlowLabel
     | FlowAssignment
@@ -4104,7 +4107,15 @@ export type FlowNode =
 /** @internal */
 export interface FlowNodeBase {
     flags: FlowFlags;
-    id?: number; // Node id used by flow type cache in checker
+    id: number; // Node id used by flow type cache in checker
+    node: unknown; // Node or other data
+    antecedent: FlowNode | FlowNode[] | undefined;
+}
+
+/** @internal */
+export interface FlowUnreachable extends FlowNodeBase {
+    node: undefined;
+    antecedent: undefined;
 }
 
 // FlowStart represents the start of a control flow. For a function expression or arrow
@@ -4112,13 +4123,15 @@ export interface FlowNodeBase {
 // property for the containing control flow).
 /** @internal */
 export interface FlowStart extends FlowNodeBase {
-    node?: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration;
+    node: FunctionExpression | ArrowFunction | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | undefined;
+    antecedent: undefined;
 }
 
 // FlowLabel represents a junction with multiple possible preceding control flows.
 /** @internal */
 export interface FlowLabel extends FlowNodeBase {
-    antecedents: FlowNode[] | undefined;
+    node: undefined;
+    antecedent: FlowNode[] | undefined;
 }
 
 // FlowAssignment represents a node that assigns a value to a narrowable reference,
@@ -4146,10 +4159,15 @@ export interface FlowCondition extends FlowNodeBase {
 // dprint-ignore
 /** @internal */
 export interface FlowSwitchClause extends FlowNodeBase {
-    switchStatement: SwitchStatement;
-    clauseStart: number;   // Start index of case/default clause range
-    clauseEnd: number;     // End index of case/default clause range
+    node: FlowSwitchClauseData;
     antecedent: FlowNode;
+}
+
+/** @internal */
+export interface FlowSwitchClauseData {
+    switchStatement: SwitchStatement;
+    clauseStart: number; // Start index of case/default clause range
+    clauseEnd: number; // End index of case/default clause range
 }
 
 // FlowArrayMutation represents a node potentially mutates an array, i.e. an
@@ -4162,9 +4180,14 @@ export interface FlowArrayMutation extends FlowNodeBase {
 
 /** @internal */
 export interface FlowReduceLabel extends FlowNodeBase {
+    node: FlowReduceLabelData;
+    antecedent: FlowNode;
+}
+
+/** @internal */
+export interface FlowReduceLabelData {
     target: FlowLabel;
     antecedents: FlowNode[];
-    antecedent: FlowNode;
 }
 
 export type FlowType = Type | IncompleteType;
@@ -4192,6 +4215,18 @@ export interface SourceFileLike {
     lineMap?: readonly number[];
     /** @internal */
     getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
+}
+
+/** @internal */
+export interface FutureSourceFile {
+    readonly path: Path;
+    readonly fileName: string;
+    readonly impliedNodeFormat?: ResolutionMode;
+    readonly packageJsonScope?: PackageJsonInfo;
+    readonly externalModuleIndicator?: true | undefined;
+    readonly commonJsModuleIndicator?: true | undefined;
+    readonly statements: readonly never[];
+    readonly imports: readonly never[];
 }
 
 /** @internal */
@@ -4685,21 +4720,79 @@ export interface Program extends ScriptReferenceHost {
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     isSourceFileDefaultLibrary(file: SourceFile): boolean;
     /**
-     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-     * impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+     * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+     * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+     * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+     * Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
      */
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     /**
-     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
-     * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
-     * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
-     * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
-     * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This function only returns a result
+     * when module resolution settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided
+     * via import attributes, which cause an `import` or `require` condition to be used during resolution regardless of module resolution
+     * settings. In absence of overriding attributes, and in modes that support differing resolution, the result indicates the syntax the
+     * usage would emit to JavaScript. Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
      */
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    /**
+     * @internal
+     * The resolution mode to use for module resolution or module specifier resolution
+     * outside the context of an existing module reference, where
+     * `program.getModeForUsageLocation` should be used instead.
+     */
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
+    /** @internal */ shouldTransformImportCall(sourceFile: SourceFile): boolean;
 
     // For testing purposes only.
     // This is set on created program to let us know how the program was created using old program
@@ -4754,6 +4847,7 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    /** @internal */ getCompilerOptionsForFile(file: SourceFile): CompilerOptions;
     /** @internal */ getBuildInfo?(): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     /**
@@ -4869,8 +4963,12 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getSourceFile(fileName: string): SourceFile | undefined;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -5011,6 +5109,7 @@ export interface TypeChecker {
     isArgumentsSymbol(symbol: Symbol): boolean;
     isUnknownSymbol(symbol: Symbol): boolean;
     getMergedSymbol(symbol: Symbol): Symbol;
+    /** @internal */ symbolIsValue(symbol: Symbol, includeTypeOnlyMembers?: boolean): boolean;
 
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
     isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
@@ -5525,6 +5624,9 @@ export interface RequireVariableDeclarationList extends VariableDeclarationList 
 }
 
 /** @internal */
+export type CanHaveModuleSpecifier = AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode;
+
+/** @internal */
 export type LateVisibilityPaintedStatement =
     | AnyImportOrJsDocImport
     | VariableStatement
@@ -5629,7 +5731,7 @@ export interface EmitResolver {
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
-    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+    createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
@@ -5637,6 +5739,7 @@ export interface EmitResolver {
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
     // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
     getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
+    getEnumMemberValue(node: EnumMember): EvaluatorResult | undefined;
     getReferencedValueDeclaration(reference: Identifier): Declaration | undefined;
     getReferencedValueDeclarations(reference: Identifier): Declaration[] | undefined;
     getTypeReferenceSerializationKind(typeName: EntityName, location?: Node): TypeReferenceSerializationKind;
@@ -5968,6 +6071,13 @@ export const enum NodeCheckFlags {
     InCheckIdentifier                        = 1 << 22,
 }
 
+/** @internal */
+export interface EvaluatorResult<T extends string | number | undefined = string | number | undefined> {
+    value: T;
+    isSyntacticallyString: boolean;
+    resolvedOtherFiles: boolean;
+}
+
 // dprint-ignore
 /** @internal */
 export interface NodeLinks {
@@ -5978,7 +6088,7 @@ export interface NodeLinks {
     resolvedSymbol?: Symbol;            // Cached name resolution result
     resolvedIndexInfo?: IndexInfo;      // Cached indexing info resolution result
     effectsSignature?: Signature;       // Signature with possible control flow effects
-    enumMemberValue?: string | number;  // Constant value of enum member
+    enumMemberValue?: EvaluatorResult;  // Constant value of enum member
     isVisible?: boolean;                // Is this node visible
     containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
     hasReportedStatementInAmbientContext?: boolean; // Cache boolean if we report statements in ambient context
@@ -7318,6 +7428,7 @@ export const enum ScriptTarget {
     ES2020 = 7,
     ES2021 = 8,
     ES2022 = 9,
+    ES2023 = 10,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
@@ -8215,6 +8326,8 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     getCanonicalFileName(fileName: string): string;
 
     isEmitBlocked(emitFileName: string): boolean;
+    shouldTransformImportCall(sourceFile: SourceFile): boolean;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     writeFile: WriteFileCallback;
     getBuildInfo(): BuildInfo | undefined;
@@ -9456,6 +9569,7 @@ export interface PrinterOptions {
     omitTrailingSemicolon?: boolean;
     noEmitHelpers?: boolean;
     /** @internal */ module?: CompilerOptions["module"];
+    /** @internal */ moduleResolution?: CompilerOptions["moduleResolution"];
     /** @internal */ target?: CompilerOptions["target"];
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
@@ -9590,6 +9704,8 @@ export interface ModuleSpecifierResolutionHost {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     getCommonSourceDirectory(): string;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
 }
 
 /** @internal */
@@ -9669,7 +9785,6 @@ export interface DiagnosticCollection {
 // SyntaxKind.SyntaxList
 export interface SyntaxList extends Node {
     kind: SyntaxKind.SyntaxList;
-    _children: Node[];
 }
 
 // dprint-ignore
@@ -10089,6 +10204,6 @@ export interface Queue<T> {
 
 /** @internal */
 export interface EvaluationResolver {
-    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): string | number | undefined;
-    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): string | number | undefined;
+    evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
+    evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
 }

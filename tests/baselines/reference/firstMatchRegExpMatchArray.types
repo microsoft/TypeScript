@@ -7,11 +7,11 @@ const match = ''.match(/ /)
 >''.match(/ /) : RegExpMatchArray | null
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
 >   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/ / : RegExp
 >    : ^^^^^^
 

@@ -7,7 +7,7 @@
  */
 function f(args, bwarg) {
 >f : (args?: string | undefined, bwarg: (number | null) | null) => void
->  : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^      ^^^^^^^^^^^^^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >args : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
 >bwarg : number | null
@@ -20,7 +20,7 @@ function f(args, bwarg) {
  */
 function g(arg: string) {
 >g : (arg: string) => void
->  : ^^^^^^      ^^^^^^^^^
+>  : ^   ^^      ^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 }

@@ -18,7 +18,7 @@ export type ImmutableModel<T> = { [K in keyof T]: T[K] extends ImmutableTypes ? 
 export interface IImmutableMap<T extends ImmutableModel<T>> extends Map<string, any> {
     set<K extends keyof T>(key: K, value: T[K]): IImmutableMap<T>;
 >set : <K extends keyof T>(key: K, value: T[K]) => IImmutableMap<T>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^    ^^^^^                
+>    : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^    ^^^^^                
 >key : K
 >    : ^
 >value : T[K]
@@ -40,7 +40,7 @@ export type ImmutableModel2<T> = { [K in keyof T]: isImmutableType<T[K]> };
 export interface IImmutableMap2<T extends ImmutableModel2<T>> extends Map<string, any> {
     set<K extends keyof T>(key: K, value: T[K]): IImmutableMap2<T>;
 >set : <K extends keyof T>(key: K, value: T[K]) => IImmutableMap2<T>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^    ^^^^^                 
+>    : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^    ^^^^^                 
 >key : K
 >    : ^
 >value : T[K]

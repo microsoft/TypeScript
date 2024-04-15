@@ -6,7 +6,7 @@ var obj = {
 >obj : { [Symbol.asyncIterator](): { next(): { then(): void; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [Symbol.asyncIterator]() {        return {            next() {                return { then() { } };            }        };    }} : { [Symbol.asyncIterator](): { next(): { then(): void; }; }; }
->                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                              ^^^
 
     [Symbol.asyncIterator]() {
 >[Symbol.asyncIterator] : () => { next(): { then(): void; }; }

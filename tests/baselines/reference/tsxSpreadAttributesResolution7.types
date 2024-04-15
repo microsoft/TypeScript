@@ -19,7 +19,7 @@ type TextProps = { editable: false }
 >true : true
 >     : ^^^^
 >onEdit : (newText: string) => void
->       : ^^^^^^^^^^      ^^^^^    
+>       : ^       ^^      ^^^^^    
 >newText : string
 >        : ^^^^^^
 
@@ -88,7 +88,7 @@ const textPropsTrue: TextProps = {
 >onEdit : () => void
 >       : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
 };
 
@@ -100,5 +100,5 @@ let y2 = <TextComponent {...textPropsTrue} />
 >TextComponent : typeof TextComponent
 >              : ^^^^^^^^^^^^^^^^^^^^
 >textPropsTrue : { editable: true; onEdit: (newText: string) => void; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^      ^^^^^^^^^^^^
 

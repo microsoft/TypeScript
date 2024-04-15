@@ -161,7 +161,7 @@ type IntersectionInline = { kind: 'int',    num: number } & ToString
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
->                 : ^^^^^^^^                ^^^^^      
+>                 : ^     ^^                ^^^^^      
 >value : IntersectionFail
 >      : ^^^^^^^^^^^^^^^^
 
@@ -307,7 +307,7 @@ type FooBar = Foo & Bar;
 
 function foo(so: any) {
 >foo : (so: any) => enums.Genre
->    : ^^^^^   ^^^^^^^^^^^^^^^^
+>    : ^  ^^   ^^^^^^^^^^^^^^^^
 >so : any
 
     const val = so as FooBar;

@@ -3,7 +3,7 @@
 === spreadObjectOrFalsy.ts ===
 function f1<T>(a: T & undefined) {
 >f1 : <T>(a: T & undefined) => any
->   : ^ ^^^^^             ^^^^^^^^
+>   : ^ ^^ ^^             ^^^^^^^^
 >a : T & undefined
 >  : ^^^^^^^^^^^^^
 
@@ -16,7 +16,7 @@ function f1<T>(a: T & undefined) {
 
 function f2<T>(a: T | T & undefined) {
 >f2 : <T>(a: T | (T & undefined)) => T | (T & undefined)
->   : ^ ^^^^^    ^             ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^    ^             ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : T | (T & undefined)
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -29,7 +29,7 @@ function f2<T>(a: T | T & undefined) {
 
 function f3<T extends undefined>(a: T) {
 >f3 : <T extends undefined>(a: T) => any
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^
 >a : T
 >  : ^
 
@@ -42,7 +42,7 @@ function f3<T extends undefined>(a: T) {
 
 function f4<T extends undefined>(a: object | T) {
 >f4 : <T extends undefined>(a: object | T) => {}
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^
 >a : object | T
 >  : ^^^^^^^^^^
 
@@ -55,7 +55,7 @@ function f4<T extends undefined>(a: object | T) {
 
 function f5<S, T extends undefined>(a: S | T) {
 >f5 : <S, T extends undefined>(a: S | T) => S | T
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^ ^^     ^^^^^^^^^^
 >a : S | T
 >  : ^^^^^
 
@@ -68,7 +68,7 @@ function f5<S, T extends undefined>(a: S | T) {
 
 function f6<T extends object | undefined>(a: T) {
 >f6 : <T extends object | undefined>(a: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >a : T
 >  : ^
 
@@ -83,7 +83,7 @@ function f6<T extends object | undefined>(a: T) {
 
 function g1<T extends {}, A extends { z: (T | undefined) & T }>(a: A) {
 >g1 : <T extends {}, A extends { z: (T | undefined) & T; }>(a: A) => T
->   : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^                   ^^^^^^^^ ^^^^^^
+>   : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^                   ^^^^^ ^^ ^^^^^^
 >z : T
 >  : ^
 >a : A
@@ -139,16 +139,16 @@ class Foo<T extends string> {
             this.data.toLocaleLowerCase();
 >this.data.toLocaleLowerCase() : string
 >                              : ^^^^^^
->this.data.toLocaleLowerCase : (locales?: string | string[] | undefined) => string
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.data.toLocaleLowerCase : (locales?: string | string[]) => string
+>                            : ^       ^^^                 ^^^^^^^^^^^
 >this.data : T
 >          : ^
 >this : this & DatafulFoo<T>
 >     : ^^^^^^^^^^^^^^^^^^^^
 >data : T
 >     : ^
->toLocaleLowerCase : (locales?: string | string[] | undefined) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleLowerCase : (locales?: string | string[]) => string
+>                  : ^       ^^^                 ^^^^^^^^^^^
         }
     }
     hasData(): this is DatafulFoo<T> {

@@ -3,7 +3,7 @@
 === controlFlowInstanceOfGuardPrimitives.ts ===
 function distinguish(thing: string | number | Date) {
 >distinguish : (thing: string | number | Date) => void
->            : ^^^^^^^^                      ^^^^^^^^^
+>            : ^     ^^                      ^^^^^^^^^
 >thing : string | number | Date
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -19,11 +19,11 @@ function distinguish(thing: string | number | Date) {
 >console.log("Aha!! It's a Date in " + thing.getFullYear()) : void
 >                                                           : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Aha!! It's a Date in " + thing.getFullYear() : string
 >                                              : ^^^^^^
 >"Aha!! It's a Date in " : "Aha!! It's a Date in "
@@ -51,11 +51,11 @@ function distinguish(thing: string | number | Date) {
 >console.log("Aha!! It's a string of length " + thing.length) : void
 >                                                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Aha!! It's a string of length " + thing.length : string
 >                                                : ^^^^^^
 >"Aha!! It's a string of length " : "Aha!! It's a string of length "
@@ -72,11 +72,11 @@ function distinguish(thing: string | number | Date) {
 >console.log("Aha!! It's the number " + thing.toPrecision(3)) : void
 >                                                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Aha!! It's the number " + thing.toPrecision(3) : string
 >                                                : ^^^^^^
 >"Aha!! It's the number " : "Aha!! It's the number "
@@ -84,11 +84,11 @@ function distinguish(thing: string | number | Date) {
 >thing.toPrecision(3) : string
 >                     : ^^^^^^
 >thing.toPrecision : (precision?: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^         ^^^      ^^^^^^^^^^^
 >thing : number
 >      : ^^^^^^
 >toPrecision : (precision?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
     }
@@ -98,7 +98,7 @@ distinguish(new Date());
 >distinguish(new Date()) : void
 >                        : ^^^^
 >distinguish : (thing: string | number | Date) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                      ^^^^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor
@@ -108,7 +108,7 @@ distinguish("beef");
 >distinguish("beef") : void
 >                    : ^^^^
 >distinguish : (thing: string | number | Date) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                      ^^^^^^^^^
 >"beef" : "beef"
 >       : ^^^^^^
 
@@ -116,7 +116,7 @@ distinguish(3.14159265);
 >distinguish(3.14159265) : void
 >                        : ^^^^
 >distinguish : (thing: string | number | Date) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                      ^^^^^^^^^
 >3.14159265 : 3.14159265
 >           : ^^^^^^^^^^
 

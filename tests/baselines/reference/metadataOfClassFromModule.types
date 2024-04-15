@@ -7,7 +7,7 @@ module MyModule {
 
     export function inject(target: any, key: string): void { }
 >inject : (target: any, key: string) => void
->       : ^^^^^^^^^   ^^^^^^^      ^^^^^    
+>       : ^      ^^   ^^   ^^      ^^^^^    
 >target : any
 >key : string
 >    : ^^^^^^
@@ -22,7 +22,7 @@ module MyModule {
 
         @inject leftLeg: Leg;
 >inject : (target: any, key: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^   ^^   ^^      ^^^^^^^^^
 >leftLeg : Leg
 >        : ^^^
     }

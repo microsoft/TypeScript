@@ -21,7 +21,7 @@ Element.prototype.remove ??= function () {
 >this.parentNode?.removeChild(this) : Element | undefined
 >                                   : ^^^^^^^^^^^^^^^^^^^
 >this.parentNode?.removeChild : (<T extends Node>(child: T) => T) | undefined
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^^ ^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^^^
 >this.parentNode : ParentNode | null
 >                : ^^^^^^^^^^^^^^^^^
 >this : Element
@@ -29,7 +29,7 @@ Element.prototype.remove ??= function () {
 >parentNode : ParentNode | null
 >           : ^^^^^^^^^^^^^^^^^
 >removeChild : (<T extends Node>(child: T) => T) | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^ ^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^^^
 >this : Element
 >     : ^^^^^^^
 

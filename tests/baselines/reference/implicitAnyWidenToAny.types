@@ -115,7 +115,7 @@ var array5 = <any[]>[null, undefined];
 
 var objLit: { new (n: number): any; };
 >objLit : new (n: number) => any
->       : ^^^^^^^^      ^^^^^   
+>       : ^^^^^ ^^      ^^^^^   
 >n : number
 >  : ^^^^^^
 
@@ -129,7 +129,7 @@ var obj0 = new objLit(1);
 >new objLit(1) : any
 >              : ^^^
 >objLit : new (n: number) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 

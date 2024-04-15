@@ -14,15 +14,15 @@ var my = my ?? {};
 /** @param {number} n */
 my.method = function(n) {
 >my.method = function(n) {    return n + 1;} : (n: number) => number
->                                            : ^^^^      ^^^^^^^^^^^
+>                                            : ^ ^^      ^^^^^^^^^^^
 >my.method : (n: number) => number
->          : ^^^^      ^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >my : typeof my
 >   : ^^^^^^^^^
 >method : (n: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >function(n) {    return n + 1;} : (n: number) => number
->                                : ^^^^      ^^^^^^^^^^^
+>                                :                      
 >n : number
 >  : ^^^^^^
 
@@ -146,7 +146,7 @@ my.predicate.query.another = function () {
 >another : () => number
 >        : ^^^^^^^^^^^^
 >function () {    return 1;} : () => number
->                            : ^^^^^^^^^^^^
+>                            :             
 
     return 1;
 >1 : 1
@@ -177,9 +177,9 @@ my.predicate.query.result = 'none'
  */
 my.predicate.sort = my.predicate.sort ?? function (first, second) {
 >my.predicate.sort = my.predicate.sort ?? function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
->                                                                                                                : ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^
+>                                                                                                                : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort : (first: number, second: number) => number
->                  : ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^
+>                  : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate : typeof my.predicate
 >             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
@@ -187,11 +187,11 @@ my.predicate.sort = my.predicate.sort ?? function (first, second) {
 >predicate : typeof my.predicate
 >          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate.sort ?? function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
->                                                                                            : ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^
+>                                                                                            :                                          
 >my.predicate.sort : (first: number, second: number) => number
->                  : ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^
+>                  : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >my.predicate : typeof my.predicate
 >             : ^^^^^^^^^^^^^^^^^^^
 >my : typeof my
@@ -199,9 +199,9 @@ my.predicate.sort = my.predicate.sort ?? function (first, second) {
 >predicate : typeof my.predicate
 >          : ^^^^^^^^^^^^^^^^^^^
 >sort : (first: number, second: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^      ^^      ^^      ^^^^^^^^^^^
 >function (first, second) {    return first > second ? first : second;} : (first: number, second: number) => number
->                                                                       : ^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^
+>                                                                       :                                          
 >first : number
 >      : ^^^^^^
 >second : number
@@ -270,7 +270,7 @@ min.nest = this.min.nest ?? function () { };
 >nest : { (): void; other: typeof other; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.min.nest ?? function () { } : { (): void; other: typeof other; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 :                                   
 >this.min.nest : { (): void; other: typeof other; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.min : typeof min
@@ -282,7 +282,7 @@ min.nest = this.min.nest ?? function () { };
 >nest : { (): void; other: typeof other; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () { } : { (): void; other: typeof other; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :                                   
 
 min.nest.other = self.min.nest.other ?? class { };
 >min.nest.other = self.min.nest.other ?? class { } : typeof other

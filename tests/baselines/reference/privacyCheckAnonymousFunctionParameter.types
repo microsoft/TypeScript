@@ -16,9 +16,9 @@ module Query {
 
     export function fromDoWhile<T>(doWhile: (test: Iterator<T>) => boolean): Iterator<T> {
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->            : ^ ^^^^^^^^^^^                              ^^^^^           
+>            : ^ ^^       ^^                              ^^^^^           
 >doWhile : (test: Iterator<T>) => boolean
->        : ^^^^^^^           ^^^^^       
+>        : ^    ^^           ^^^^^       
 >test : Iterator<T>
 >     : ^^^^^^^^^^^
 
@@ -33,9 +33,9 @@ module Query {
 >fromDoWhile(test => {            return true;        }) : Iterator<unknown>
 >                                                        : ^^^^^^^^^^^^^^^^^
 >fromDoWhile : <T>(doWhile: (test: Iterator<T>) => boolean) => Iterator<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^       ^^                              ^^^^^^^^^^^^^^^^
 >test => {            return true;        } : (test: Iterator<unknown>) => true
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : Iterator<unknown>
 >     : ^^^^^^^^^^^^^^^^^
 

@@ -3,9 +3,9 @@
 === inferredRestTypeFixedOnce.ts ===
 function wrap<Args extends unknown[]>(_: (...args: Args) => void) {}
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
->     : ^    ^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>     : ^    ^^^^^^^^^^^^^^^^^^^^ ^^                       ^^^^^^^^^
 >_ : (...args: Args) => void
->  : ^^^^^^^^^^    ^^^^^    
+>  : ^^^^    ^^    ^^^^^    
 >args : Args
 >     : ^^^^
 
@@ -13,9 +13,9 @@ wrap(({ cancelable } = {}) => {});
 >wrap(({ cancelable } = {}) => {}) : void
 >                                  : ^^^^
 >wrap : <Args extends unknown[]>(_: (...args: Args) => void) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^^^^^^^^^^^^^^^^^^^ ^^                       ^^^^^^^^^
 >({ cancelable } = {}) => {} : ({ cancelable }?: { cancelable: any; }) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cancelable : any
 >           : ^^^
 >{} : {}

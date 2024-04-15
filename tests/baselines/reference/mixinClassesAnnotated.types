@@ -52,9 +52,9 @@ interface Printable {
 
 const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                                 
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^                                                 
 ><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->                                                                                                                                                                                                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                                 
+>                                                                                                                                                                                                                                                 :                                                                                                  
 >superClass : T
 >           : ^
 >message : string
@@ -62,7 +62,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
 
     class extends superClass {
 >class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
->                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >superClass : Base
 >           : ^^^^
 
@@ -108,7 +108,7 @@ interface Tagged {
 
 function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                       
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^                       
 >superClass : T
 >           : ^
 
@@ -150,7 +150,7 @@ function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> &
     }
     return C;
 >C : { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^
 }
 
 const Thing1 = Tagged(Derived);
@@ -159,7 +159,7 @@ const Thing1 = Tagged(Derived);
 >Tagged(Derived) : Constructor<Tagged> & typeof Derived
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 
@@ -167,13 +167,13 @@ const Thing2 = Tagged(Printable(Derived));
 >Thing2 : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Tagged(Printable(Derived)) : Constructor<Tagged> & Constructor<Printable> & { message: string; } & typeof Derived
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Printable(Derived) : Constructor<Printable> & { message: string; } & typeof Derived
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 

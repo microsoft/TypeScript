@@ -9,7 +9,7 @@ interface Mixin {
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^^^^^^^^^^^^^          ^^^^^                                                   
+>      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^   ^^         ^^          ^^^^^                                                   
 >args : any
 >     : ^^^
 >baseClass : TBaseClass
@@ -31,7 +31,7 @@ function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass:
     }
     return MixinClass;
 >MixinClass : { new (...args: any): MixinClass; prototype: Mixin<any>.MixinClass; } & TBaseClass
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 abstract class AbstractBase {
@@ -45,11 +45,11 @@ abstract class AbstractBase {
 
 const MixedBase = Mixin(AbstractBase);
 >MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
 >Mixin(AbstractBase) : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^              ^^^                   ^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
 >AbstractBase : typeof AbstractBase
 >             : ^^^^^^^^^^^^^^^^^^^
 
@@ -66,5 +66,5 @@ new MixedBase();
 >new MixedBase() : any
 >                : ^^^
 >MixedBase : typeof AbstractBase & (abstract new (...args: any) => Mixin)
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
 

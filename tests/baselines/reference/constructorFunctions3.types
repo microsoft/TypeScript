@@ -107,7 +107,7 @@ function A () {
 /** @param {number} n */
 A.prototype.z = function f(n) {
 >A.prototype.z = function f(n) {    return n + this.x} : (n: number) => number
->                                                      : ^^^^      ^^^^^^^^^^^
+>                                                      : ^ ^^      ^^^^^^^^^^^
 >A.prototype.z : any
 >A.prototype : any
 >            : ^^^
@@ -118,9 +118,9 @@ A.prototype.z = function f(n) {
 >z : any
 >  : ^^^
 >function f(n) {    return n + this.x} : (n: number) => number
->                                      : ^^^^      ^^^^^^^^^^^
+>                                      : ^ ^^      ^^^^^^^^^^^
 >f : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -139,17 +139,17 @@ A.prototype.z = function f(n) {
 /** @param {number} m */
 A.t = function g(m) {
 >A.t = function g(m) {    return m + 1} : (m: number) => number
->                                       : ^^^^      ^^^^^^^^^^^
+>                                       : ^ ^^      ^^^^^^^^^^^
 >A.t : (m: number) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >t : (m: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >function g(m) {    return m + 1} : (m: number) => number
->                                 : ^^^^      ^^^^^^^^^^^
+>                                 :                      
 >g : (m: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -173,11 +173,11 @@ a.z(3)
 >a.z(3) : number
 >       : ^^^^^^
 >a.z : (n: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
 >  : ^
 >z : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -185,11 +185,11 @@ A.t(2)
 >A.t(2) : number
 >       : ^^^^^^
 >A.t : (m: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >t : (m: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 

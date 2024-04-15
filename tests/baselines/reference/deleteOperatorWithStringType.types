@@ -101,15 +101,15 @@ var ResultIsBoolean5 = delete { x: "", y: (s: string) => { return s; } };
 >delete { x: "", y: (s: string) => { return s; } } : boolean
 >                                                  : ^^^^^^^
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
->                                           : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
 >   : ^^
 >y : (s: string) => string
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             : ^^^^      ^^^^^^^^^^^
+>                             :                      
 >s : string
 >  : ^^^^^^
 >s : string
@@ -198,11 +198,11 @@ var ResultIsBoolean12 = delete STRING.charAt(0);
 >STRING.charAt(0) : string
 >                 : ^^^^^^
 >STRING.charAt : (pos: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^      ^^^^^^^^^^^
 >STRING : string
 >       : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

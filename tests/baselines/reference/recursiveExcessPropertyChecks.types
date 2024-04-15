@@ -17,7 +17,7 @@ type NodeWithId = ITreeItem & { Id?: number };
 
 function getMaxId(items: NodeWithId[]) {
 >getMaxId : (items: NodeWithId[]) => void
->         : ^^^^^^^^            ^^^^^^^^^
+>         : ^     ^^            ^^^^^^^^^
 >items : NodeWithId[]
 >      : ^^^^^^^^^^^^
 }
@@ -34,7 +34,7 @@ getMaxId(nodes);
 >getMaxId(nodes) : void
 >                : ^^^^
 >getMaxId : (items: NodeWithId[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^            ^^^^^^^^^
 >nodes : ITreeItem[]
 >      : ^^^^^^^^^^^
 

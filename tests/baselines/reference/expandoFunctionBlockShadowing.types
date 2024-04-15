@@ -72,7 +72,7 @@ if (Math.random()) {
 >Y : { (): void; test: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function Y() {} : { (): void; test: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :                            
 >Y : { (): void; test: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

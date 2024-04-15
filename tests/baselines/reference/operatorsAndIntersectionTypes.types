@@ -141,11 +141,11 @@ const s5 = serialNo.toPrecision(0);
 >serialNo.toPrecision(0) : string
 >                        : ^^^^^^
 >serialNo.toPrecision : (precision?: number) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^^      ^^^^^^^^^^^
 >serialNo : SerialNo
 >         : ^^^^^^^^
 >toPrecision : (precision?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

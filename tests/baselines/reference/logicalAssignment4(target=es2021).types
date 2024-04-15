@@ -3,7 +3,7 @@
 === logicalAssignment4.ts ===
 function foo1(results: number[] | undefined) {
 >foo1 : (results: number[] | undefined) => void
->     : ^^^^^^^^^^                    ^^^^^^^^^
+>     : ^       ^^                    ^^^^^^^^^
 >results : number[] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -11,7 +11,7 @@ function foo1(results: number[] | undefined) {
 >(results ||= []).push(100) : number
 >                           : ^^^^^^
 >(results ||= []).push : (...items: number[]) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >(results ||= []) : number[]
 >                 : ^^^^^^^^
 >results ||= [] : number[]
@@ -21,14 +21,14 @@ function foo1(results: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 }
 
 function foo2(results: number[] | undefined) {
 >foo2 : (results: number[] | undefined) => void
->     : ^^^^^^^^^^                    ^^^^^^^^^
+>     : ^       ^^                    ^^^^^^^^^
 >results : number[] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -36,7 +36,7 @@ function foo2(results: number[] | undefined) {
 >(results ??= []).push(100) : number
 >                           : ^^^^^^
 >(results ??= []).push : (...items: number[]) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >(results ??= []) : number[]
 >                 : ^^^^^^^^
 >results ??= [] : number[]
@@ -46,14 +46,14 @@ function foo2(results: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 }
 
 function foo3(results: number[] | undefined) {
 >foo3 : (results: number[] | undefined) => void
->     : ^^^^^^^^^^                    ^^^^^^^^^
+>     : ^       ^^                    ^^^^^^^^^
 >results : number[] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -69,18 +69,18 @@ function foo3(results: number[] | undefined) {
 >results.push(100) : number
 >                  : ^^^^^^
 >results.push : (...items: number[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >results : number[]
 >        : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 }
 
 function foo4(results: number[] | undefined) {
 >foo4 : (results: number[] | undefined) => void
->     : ^^^^^^^^^^                    ^^^^^^^^^
+>     : ^       ^^                    ^^^^^^^^^
 >results : number[] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -96,11 +96,11 @@ function foo4(results: number[] | undefined) {
 >results.push(100) : number
 >                  : ^^^^^^
 >results.push : (...items: number[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >results : number[]
 >        : ^^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 }
@@ -120,7 +120,7 @@ declare const v: number
 
 function doSomethingWithAlias(thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) {
 >doSomethingWithAlias : (thing: ThingWithOriginal | undefined, defaultValue: ThingWithOriginal | undefined) => void
->                     : ^^^^^^^^                             ^^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>                     : ^     ^^                             ^^            ^^                             ^^^^^^^^^
 >thing : ThingWithOriginal | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defaultValue : ThingWithOriginal | undefined

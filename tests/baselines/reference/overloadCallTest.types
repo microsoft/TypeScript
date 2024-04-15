@@ -8,17 +8,17 @@ class foo {
     constructor() {
         function bar(): string;
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^ ^^      ^^^^^^^^^
 
         function bar(s:string);
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
         function bar(foo?: string) { return "foo" };
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >"foo" : "foo"
@@ -28,7 +28,7 @@ class foo {
 >test : any
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >"test" : "test"
 >       : ^^^^^^
 
@@ -38,7 +38,7 @@ class foo {
 >bar() : string
 >      : ^^^^^^
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
         goo = bar("test");
 >goo = bar("test") : any
@@ -46,7 +46,7 @@ class foo {
 >    : ^^^^^^
 >bar("test") : any
 >bar : { (): string; (s: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >"test" : "test"
 >       : ^^^^^^
     }

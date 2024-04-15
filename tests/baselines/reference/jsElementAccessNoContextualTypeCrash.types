@@ -33,15 +33,15 @@ self['Common'] = self['Common'] || {};
  */
 Common.localize = function (string) {
 >Common.localize = function (string) {    return string;} : (string: string) => string
->                                                         : ^^^^^^^^^      ^^^^^      
+>                                                         : ^      ^^      ^^^^^      
 >Common.localize : (string: string) => string
->                : ^^^^^^^^^      ^^^^^^^^^^^
+>                : ^      ^^      ^^^^^^^^^^^
 >Common : typeof Common
 >       : ^^^^^^^^^^^^^
 >localize : (string: string) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^^^^^^^^^^
 >function (string) {    return string;} : (string: string) => string
->                                       : ^^^^^^^^^      ^^^^^^^^^^^
+>                                       :                           
 >string : string
 >       : ^^^^^^
 

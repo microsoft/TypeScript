@@ -3,19 +3,19 @@
 === typeGuardNarrowsToLiteralTypeUnion.ts ===
 declare function isFoo(value: string) : value is ("foo" | "bar");
 >isFoo : (value: string) => value is ("foo" | "bar")
->      : ^^^^^^^^      ^^^^^                        
+>      : ^     ^^      ^^^^^                        
 >value : string
 >      : ^^^^^^
 
 declare function doThis(value: "foo" | "bar"): void;
 >doThis : (value: "foo" | "bar") => void
->       : ^^^^^^^^             ^^^^^    
+>       : ^     ^^             ^^^^^    
 >value : "foo" | "bar"
 >      : ^^^^^^^^^^^^^
 
 declare function doThat(value: string) : void;
 >doThat : (value: string) => void
->       : ^^^^^^^^      ^^^^^    
+>       : ^     ^^      ^^^^^    
 >value : string
 >      : ^^^^^^
 
@@ -27,7 +27,7 @@ if (isFoo(value)) {
 >isFoo(value) : boolean
 >             : ^^^^^^^
 >isFoo : (value: string) => value is "foo" | "bar"
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -35,7 +35,7 @@ if (isFoo(value)) {
 >doThis(value) : void
 >              : ^^^^
 >doThis : (value: "foo" | "bar") => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^             ^^^^^^^^^
 >value : "foo" | "bar"
 >      : ^^^^^^^^^^^^^
 
@@ -44,7 +44,7 @@ if (isFoo(value)) {
 >doThat(value) : void
 >              : ^^^^
 >doThat : (value: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^      ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 }

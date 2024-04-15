@@ -3,7 +3,7 @@
 === wrapClass.ts ===
 export function wrapClass(param: any) {
 >wrapClass : (param: any) => typeof Wrapped
->          : ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^   ^^^^^^^^^^^^^^^^^^^
 >param : any
 
     return class Wrapped {
@@ -30,13 +30,13 @@ export type Constructor<T = {}> = new (...args: any[]) => T;
 
 export function Timestamped<TBase extends Constructor>(Base: TBase) {
 >Timestamped : <TBase extends Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
->            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : TBase
 >     : ^^^^^
 
     return class extends Base {
 >class extends Base {        timestamp = Date.now();    } : { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
->                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : {}
 >     : ^^
 
@@ -58,15 +58,15 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 === index.ts ===
 import { wrapClass, Timestamped } from "./wrapClass";
 >wrapClass : (param: any) => typeof Wrapped
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^   ^^^^^^^^^^^^^^^^^^^
 >Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export default wrapClass(0);
 >wrapClass(0) : typeof Wrapped
 >             : ^^^^^^^^^^^^^^
 >wrapClass : (param: any) => typeof Wrapped
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^   ^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -87,9 +87,9 @@ export class TimestampedUser extends Timestamped(User) {
 >TimestampedUser : TimestampedUser
 >                : ^^^^^^^^^^^^^^^
 >Timestamped(User) : Timestamped<typeof User>.(Anonymous class) & User
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  :             ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Timestamped : <TBase extends import("wrapClass").Constructor<{}>>(Base: TBase) => { new (...args: any[]): (Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & TBase
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >User : typeof User
 >     : ^^^^^^^^^^^
 
@@ -98,6 +98,6 @@ export class TimestampedUser extends Timestamped(User) {
 >super() : void
 >        : ^^^^
 >super : { new (...args: any[]): Timestamped<typeof User>.(Anonymous class); prototype: Timestamped<any>.(Anonymous class); } & typeof User
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^    ^^     ^^^            ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }

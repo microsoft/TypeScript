@@ -30,6 +30,7 @@ Info seq  [hh:mm:ss:mss] For info: ^memfs:/foo.ts :: No config files found.
 Info seq  [hh:mm:ss:mss] Loading global plugin plugin-a
 Info seq  [hh:mm:ss:mss] Enabling plugin plugin-a from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Dynamically importing plugin-a from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
+request import plugin-a
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -83,6 +84,7 @@ Should be true because async imports have already been triggered in the backgrou
 hasPendingPluginEnablements:: true
 Should be false because resolution of async imports happens in a later turn
 pluginModuleInstantiated:: false
+fulfill import plugin-a
 Info seq  [hh:mm:ss:mss] Plugin validation succeeded
 Info seq  [hh:mm:ss:mss] Scheduled: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] got projects updated in background ^memfs:/foo.ts
@@ -97,6 +99,17 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+after waitForPendingPlugins
+
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
 at this point all plugin modules should have been instantiated and all plugins should have been invoked
 pluginModuleInstantiated:: true
 pluginInvoked:: true

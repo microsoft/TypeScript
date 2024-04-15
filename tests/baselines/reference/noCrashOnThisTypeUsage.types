@@ -8,9 +8,9 @@ interface IListenable {
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
->        : ^^^^^^^^^^                                     ^^^^^^^^^^^^^^^^^^^^       ^^^^^    
+>        : ^       ^^                                     ^^               ^^^       ^^^^^    
 >handler : (change: any, oldValue?: any) => void
->        : ^^^^^^^^^   ^^^^^^^^^^^^^   ^^^^^    
+>        : ^      ^^   ^^        ^^^   ^^^^^    
 >change : any
 >oldValue : any
 >fireImmediately : boolean | undefined
@@ -19,7 +19,7 @@ interface IListenable {
 
 function notifyListeners<T>(listenable: IListenable, change: T) {
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
->                : ^ ^^^^^^^^^^^^^^           ^^^^^^^^^^ ^^^^^^^^^
+>                : ^ ^^          ^^           ^^      ^^ ^^^^^^^^^
 >listenable : IListenable
 >           : ^^^^^^^^^^^
 >change : T
@@ -49,7 +49,7 @@ export class ObservableValue<T> {
 >notifyListeners(this, {            type: "update",            object: this,            newValue,            oldValue        }) : void
 >                                                                                                                               : ^^^^
 >notifyListeners : <T_1>(listenable: IListenable, change: T_1) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^          ^^           ^^      ^^   ^^^^^^^^^
 >this : this
 >     : ^^^^
 >{            type: "update",            object: this,            newValue,            oldValue        } : { type: string; object: this; newValue: T; oldValue: any; }
@@ -84,9 +84,9 @@ export class ObservableValue<T> {
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) {}
 >observe : (handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean) => void
->        : ^^^^^^^^^^                                     ^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>        : ^       ^^                                     ^^               ^^^       ^^^^^^^^^
 >handler : (change: any, oldValue?: any) => void
->        : ^^^^^^^^^   ^^^^^^^^^^^^^   ^^^^^    
+>        : ^      ^^   ^^        ^^^   ^^^^^    
 >change : any
 >oldValue : any
 >fireImmediately : boolean | undefined

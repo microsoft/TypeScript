@@ -14,7 +14,7 @@ interface Config<T1 extends { type: string }> {
 
 declare function test<
 >test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
->     : ^  ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                               ^^^^^       
+>     : ^  ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^      ^^                               ^^^^^       
 
   T1 extends { type: string },
 >type : string
@@ -31,9 +31,9 @@ const result = test({
 >result : { readonly produceThing: { type: "foo"; }; readonly useIt: { readonly type: "foo"; }; readonly extra: 10; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test({  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,}) : { readonly produceThing: { type: "foo"; }; readonly useIt: { readonly type: "foo"; }; readonly extra: 10; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                              :                                                                                                            
 >test : <T1 extends { type: string; }, const TConfig extends Config<T1>>(config: { produceThing: T1; } & TConfig) => TConfig
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^      ^^                               ^^^^^^^^^^^^
 >{  produceThing: {} as {    type: "foo";  },  useIt: {    type: "foo",  },  extra: 10,} : { produceThing: { type: "foo"; }; useIt: { type: "foo"; }; extra: 10; }
 >                                                                                        : ^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ const result = test({
 >produceThing : { type: "foo"; }
 >             : ^^^^^^^^     ^^^
 >{} as {    type: "foo";  } : { type: "foo"; }
->                           : ^^^^^^^^     ^^^
+>                           :                 
 >{} : {}
 >   : ^^
 

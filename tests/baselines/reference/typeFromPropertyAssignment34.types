@@ -50,5 +50,5 @@ N.commands.b = function () { };
 >b : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
->                : ^^^^^^^^^^
+>                :           
 

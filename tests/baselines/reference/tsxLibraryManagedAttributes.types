@@ -87,7 +87,7 @@ declare class ReactComponent<P={}, S={}> {
 
     setState(s: Partial<S>): S;
 >setState : (s: Partial<S>) => S
->         : ^^^^          ^^^^^ 
+>         : ^ ^^          ^^^^^ 
 >s : Partial<S>
 >  : ^^^^^^^^^^
 
@@ -127,7 +127,7 @@ class Component extends ReactComponent {
 >Component : Component
 >          : ^^^^^^^^^
 >ReactComponent : ReactComponent<{}, {}>
->               : ^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^  ^
 
     static propTypes = {
 >propTypes : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }
@@ -274,7 +274,7 @@ class JustPropTypes extends ReactComponent {
 >JustPropTypes : JustPropTypes
 >              : ^^^^^^^^^^^^^
 >ReactComponent : ReactComponent<{}, {}>
->               : ^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^  ^
 
     static propTypes = {
 >propTypes : { foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }
@@ -363,7 +363,7 @@ class JustDefaultProps extends ReactComponent {
 >JustDefaultProps : JustDefaultProps
 >                 : ^^^^^^^^^^^^^^^^
 >ReactComponent : ReactComponent<{}, {}>
->               : ^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^  ^
 
     static defaultProps = {
 >defaultProps : { foo: number; }

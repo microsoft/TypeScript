@@ -4,8 +4,8 @@
 new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
 >new Intl.DateTimeFormat().formatRange(new Date(0), new Date()) : string
 >                                                               : ^^^^^^
->new Intl.DateTimeFormat().formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat().formatRange : (startDate: Date | number | bigint, endDate: Date | number | bigint) => string
+>                                      : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -14,8 +14,8 @@ new Intl.DateTimeFormat().formatRange(new Date(0), new Date());
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->formatRange : (startDate: number | bigint | Date, endDate: number | bigint | Date) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (startDate: Date | number | bigint, endDate: Date | number | bigint) => string
+>            : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^
 >new Date(0) : Date
 >            : ^^^^
 >Date : DateConstructor
@@ -32,8 +32,8 @@ const [ part ] = new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000);
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000) : Intl.DateTimeRangeFormatPart[]
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.DateTimeFormat().formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeRangeFormatPart[]
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.DateTimeFormat().formatRangeToParts : (startDate: Date | number | bigint, endDate: Date | number | bigint) => Intl.DateTimeRangeFormatPart[]
+>                                             : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.DateTimeFormat() : Intl.DateTimeFormat
 >                          : ^^^^^^^^^^^^^^^^^^^
 >Intl.DateTimeFormat : Intl.DateTimeFormatConstructor
@@ -42,8 +42,8 @@ const [ part ] = new Intl.DateTimeFormat().formatRangeToParts(1000, 1000000000);
 >     : ^^^^^^^^^^^
 >DateTimeFormat : Intl.DateTimeFormatConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->formatRangeToParts : (startDate: number | bigint | Date, endDate: number | bigint | Date) => Intl.DateTimeRangeFormatPart[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (startDate: Date | number | bigint, endDate: Date | number | bigint) => Intl.DateTimeRangeFormatPart[]
+>                   : ^         ^^                      ^^       ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1000 : 1000
 >     : ^^^^
 >1000000000 : 1000000000

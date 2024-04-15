@@ -21,11 +21,11 @@ type SomeResponse = 'yes' | 'no' | 'idk';
 
 let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
 >validate : (x: unknown) => SomeResponse
->         : ^^^^       ^^^^^            
+>         : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 >x => (x === 'yes' || x === 'no') ? x : 'idk' : (x: unknown) => "yes" | "no" | "idk"
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >(x === 'yes' || x === 'no') ? x : 'idk' : "yes" | "no" | "idk"
@@ -78,12 +78,12 @@ if (u === 5) {
 >  : ^^^^^^
 >u.toString(10) : string
 >               : ^^^^^^
->u.toString : (radix?: number | undefined) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>u.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >u : 5
 >  : ^
->toString : (radix?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 }
@@ -504,7 +504,7 @@ if (u === StringEnum.B) {
 
 function switchTestEnum(x: unknown) {
 >switchTestEnum : (x: unknown) => void
->               : ^^^^       ^^^^^^^^^
+>               : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -573,7 +573,7 @@ function switchTestEnum(x: unknown) {
 
 function switchTestCollectEnum(x: unknown) {
 >switchTestCollectEnum : (x: unknown) => void
->                      : ^^^^       ^^^^^^^^^
+>                      : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -652,7 +652,7 @@ function switchTestCollectEnum(x: unknown) {
 
 function switchTestLiterals(x: unknown) {
 >switchTestLiterals : (x: unknown) => void
->                   : ^^^^       ^^^^^^^^^
+>                   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -783,7 +783,7 @@ function switchTestLiterals(x: unknown) {
 
 function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
 >switchTestObjects : (x: unknown, y: () => void, z: { prop: number; }) => void
->                  : ^^^^       ^^^^^          ^^^^^                 ^^^^^^^^^
+>                  : ^ ^^       ^^ ^^          ^^ ^^                 ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >y : () => void
@@ -844,7 +844,7 @@ function switchTestObjects(x: unknown, y: () => void, z: { prop: number }) {
 
 function switchResponse(x: unknown): SomeResponse {
 >switchResponse : (x: unknown) => SomeResponse
->               : ^^^^       ^^^^^            
+>               : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 
@@ -887,7 +887,7 @@ function switchResponse(x: unknown): SomeResponse {
 
 function switchResponseWrong(x: unknown): SomeResponse {
 >switchResponseWrong : (x: unknown) => SomeResponse
->                    : ^^^^       ^^^^^            
+>                    : ^ ^^       ^^^^^            
 >x : unknown
 >  : ^^^^^^^
 
@@ -932,7 +932,7 @@ function switchResponseWrong(x: unknown): SomeResponse {
 
 function f2(x: unknown): string | undefined {
 >f2 : (x: unknown) => string | undefined
->   : ^^^^       ^^^^^                  
+>   : ^ ^^       ^^^^^                  
 >x : unknown
 >  : ^^^^^^^
 
@@ -967,7 +967,7 @@ function f2(x: unknown): string | undefined {
 
 function notNotEquals(u: unknown)  {
 >notNotEquals : (u: unknown) => void
->             : ^^^^       ^^^^^^^^^
+>             : ^ ^^       ^^^^^^^^^
 >u : unknown
 >  : ^^^^^^^
 

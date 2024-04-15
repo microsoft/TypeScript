@@ -29,9 +29,9 @@ import { SomeType } from "some-dep";
 
 export const foo = (thing: SomeType) => {
 >foo : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
->    : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(thing: SomeType) => {  return thing;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
->                                       : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       :                                                                         
 >thing : import("node_modules/some-dep/dist/inner").SomeType
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -43,9 +43,9 @@ export const foo = (thing: SomeType) => {
 
 export const bar = (thing: SomeType) => {
 >bar : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
->    : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
->                                           : ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           :                                                                      
 >thing : import("node_modules/some-dep/dist/inner").SomeType
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -15,12 +15,12 @@ class C extends null {
         return Object.create(null);
 >Object.create(null) : any
 >                    : ^^^
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
     }
 }
 
@@ -32,11 +32,11 @@ class D extends null {
         return Object.create(null);
 >Object.create(null) : any
 >                    : ^^^
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
     }
 }

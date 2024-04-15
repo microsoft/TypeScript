@@ -6,7 +6,7 @@ const noOp = () => {};
 >noOp : () => void
 >     : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 
 const testReflectApply = Reflect.apply(noOp, this, []);
 >testReflectApply : any
@@ -212,7 +212,7 @@ const testArrayFind = [""].find((val, idx, obj) => {
 >find : any
 >     : ^^^
 >(val, idx, obj) => {    return true;} : (val: any, idx: any, obj: any) => boolean
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^   ^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
 >val : any
 >    : ^^^
 >idx : any
@@ -239,7 +239,7 @@ const testArrayFindIndex = [""].findIndex((val, idx, obj) => {
 >findIndex : any
 >          : ^^^
 >(val, idx, obj) => {    return true;} : (val: any, idx: any, obj: any) => boolean
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^   ^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
 >val : any
 >    : ^^^
 >idx : any
@@ -392,11 +392,11 @@ const testObjectConstructorKeys = Object.keys({});
 >Object.keys({}) : string[]
 >                : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

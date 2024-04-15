@@ -17,13 +17,13 @@ declare namespace JSX {
 
         toString(renderId?: number): string;
 >toString : (renderId?: number) => string
->         : ^^^^^^^^^^^^      ^^^^^      
+>         : ^        ^^^      ^^^^^      
 >renderId : number
 >         : ^^^^^^
 
         bindDOM(renderId?: number): number;
 >bindDOM : (renderId?: number) => number
->        : ^^^^^^^^^^^^      ^^^^^      
+>        : ^        ^^^      ^^^^^      
 >renderId : number
 >         : ^^^^^^
 
@@ -33,7 +33,7 @@ declare namespace JSX {
 
         instantiateComponents(renderId?: number): number;
 >instantiateComponents : (renderId?: number) => number
->                      : ^^^^^^^^^^^^      ^^^^^      
+>                      : ^        ^^^      ^^^^^      
 >renderId : number
 >         : ^^^^^^
 
@@ -47,7 +47,7 @@ export namespace Element {
 
     export function isElement(el: any): el is JSX.Element {
 >isElement : (el: any) => el is JSX.Element
->          : ^^^^^   ^^^^^                 
+>          : ^  ^^   ^^^^^                 
 >el : any
 >JSX : any
 >    : ^^^
@@ -66,7 +66,7 @@ export namespace Element {
 
     export function createElement(args: any[]) {
 >createElement : (args: any[]) => {}
->              : ^^^^^^^     ^^^^^^^
+>              : ^    ^^     ^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -79,17 +79,17 @@ export namespace Element {
 
 export let createElement = Element.createElement;
 >createElement : (args: any[]) => {}
->              : ^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^     ^^^^^^^
 >Element.createElement : (args: any[]) => {}
->                      : ^^^^^^^^^^^^^^^^^^^
+>                      :                    
 >Element : typeof Element
 >        : ^^^^^^^^^^^^^^
 >createElement : (args: any[]) => {}
->              : ^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^     ^^^^^^^
 
 function toCamelCase(text: string): string {
 >toCamelCase : (text: string) => string
->            : ^^^^^^^      ^^^^^      
+>            : ^    ^^      ^^^^^      
 >text : string
 >     : ^^^^^^
 
@@ -111,11 +111,11 @@ function toCamelCase(text: string): string {
 >text.substring(1) : string
 >                  : ^^^^^^
 >text.substring : (start: number, end?: number) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 }

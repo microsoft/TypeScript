@@ -23,7 +23,7 @@ class Dog extends Animal { woof }
 
 function run(a: Animal) {
 >run : (a: Animal) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : Animal
 >  : ^^^^^^
 
@@ -40,7 +40,7 @@ function run(a: Animal) {
 
 function f<T extends Cat | Dog>(a: T) {
 >f : <T extends Cat | Dog>(a: T) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >a : T
 >  : ^
 
@@ -58,7 +58,7 @@ function f<T extends Cat | Dog>(a: T) {
 >run(a) : void
 >       : ^^^^
 >run : (a: Animal) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : Cat | Dog
 >  : ^^^^^^^^^
 }

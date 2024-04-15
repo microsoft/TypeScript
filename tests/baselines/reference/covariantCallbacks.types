@@ -6,9 +6,9 @@
 interface P<T> {
     then(cb: (value: T) => void): void;
 >then : (cb: (value: T) => void) => void
->     : ^^^^^                  ^^^^^    
+>     : ^  ^^                  ^^^^^    
 >cb : (value: T) => void
->   : ^^^^^^^^ ^^^^^    
+>   : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 
@@ -24,7 +24,7 @@ interface B extends A { b: string }
 
 function f1(a: P<A>, b: P<B>) {
 >f1 : (a: P<A>, b: P<B>) => void
->   : ^^^^    ^^^^^    ^^^^^^^^^
+>   : ^ ^^    ^^ ^^    ^^^^^^^^^
 >a : P<A>
 >  : ^^^^
 >b : P<B>
@@ -49,7 +49,7 @@ function f1(a: P<A>, b: P<B>) {
 
 function f2(a: Promise<A>, b: Promise<B>) {
 >f2 : (a: Promise<A>, b: Promise<B>) => void
->   : ^^^^          ^^^^^          ^^^^^^^^^
+>   : ^ ^^          ^^ ^^          ^^^^^^^^^
 >a : Promise<A>
 >  : ^^^^^^^^^^
 >b : Promise<B>
@@ -75,9 +75,9 @@ function f2(a: Promise<A>, b: Promise<B>) {
 interface AList1 {
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
->        : ^^^^^                 ^^^^^    
+>        : ^  ^^                 ^^^^^    
 >cb : (item: A) => void
->   : ^^^^^^^ ^^^^^    
+>   : ^    ^^ ^^^^^    
 >item : A
 >     : ^
 }
@@ -85,16 +85,16 @@ interface AList1 {
 interface BList1 {
     forEach(cb: (item: B) => void): void;
 >forEach : (cb: (item: B) => void) => void
->        : ^^^^^                 ^^^^^    
+>        : ^  ^^                 ^^^^^    
 >cb : (item: B) => void
->   : ^^^^^^^ ^^^^^    
+>   : ^    ^^ ^^^^^    
 >item : B
 >     : ^
 }
 
 function f11(a: AList1, b: BList1) {
 >f11 : (a: AList1, b: BList1) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : AList1
 >  : ^^^^^^
 >b : BList1
@@ -120,9 +120,9 @@ function f11(a: AList1, b: BList1) {
 interface AList2 {
     forEach(cb: (item: A) => boolean): void;
 >forEach : (cb: (item: A) => boolean) => void
->        : ^^^^^                    ^^^^^    
+>        : ^  ^^                    ^^^^^    
 >cb : (item: A) => boolean
->   : ^^^^^^^ ^^^^^       
+>   : ^    ^^ ^^^^^       
 >item : A
 >     : ^
 }
@@ -130,16 +130,16 @@ interface AList2 {
 interface BList2 {
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
->        : ^^^^^                 ^^^^^    
+>        : ^  ^^                 ^^^^^    
 >cb : (item: A) => void
->   : ^^^^^^^ ^^^^^    
+>   : ^    ^^ ^^^^^    
 >item : A
 >     : ^
 }
 
 function f12(a: AList2, b: BList2) {
 >f12 : (a: AList2, b: BList2) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : AList2
 >  : ^^^^^^
 >b : BList2
@@ -165,9 +165,9 @@ function f12(a: AList2, b: BList2) {
 interface AList3 {
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
->        : ^^^^^                 ^^^^^    
+>        : ^  ^^                 ^^^^^    
 >cb : (item: A) => void
->   : ^^^^^^^ ^^^^^    
+>   : ^    ^^ ^^^^^    
 >item : A
 >     : ^
 }
@@ -175,9 +175,9 @@ interface AList3 {
 interface BList3 {
     forEach(cb: (item: A, context: any) => void): void;
 >forEach : (cb: (item: A, context: any) => void) => void
->        : ^^^^^                               ^^^^^    
+>        : ^  ^^                               ^^^^^    
 >cb : (item: A, context: any) => void
->   : ^^^^^^^ ^^^^^^^^^^^   ^^^^^    
+>   : ^    ^^ ^^       ^^   ^^^^^    
 >item : A
 >     : ^
 >context : any
@@ -186,7 +186,7 @@ interface BList3 {
 
 function f13(a: AList3, b: BList3) {
 >f13 : (a: AList3, b: BList3) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : AList3
 >  : ^^^^^^
 >b : BList3
@@ -212,9 +212,9 @@ function f13(a: AList3, b: BList3) {
 interface AList4 {
     forEach(cb: (item: A) => A): void;
 >forEach : (cb: (item: A) => A) => void
->        : ^^^^^              ^^^^^    
+>        : ^  ^^              ^^^^^    
 >cb : (item: A) => A
->   : ^^^^^^^ ^^^^^ 
+>   : ^    ^^ ^^^^^ 
 >item : A
 >     : ^
 }
@@ -222,16 +222,16 @@ interface AList4 {
 interface BList4 {
     forEach(cb: (item: B) => B): void;
 >forEach : (cb: (item: B) => B) => void
->        : ^^^^^              ^^^^^    
+>        : ^  ^^              ^^^^^    
 >cb : (item: B) => B
->   : ^^^^^^^ ^^^^^ 
+>   : ^    ^^ ^^^^^ 
 >item : B
 >     : ^
 }
 
 function f14(a: AList4, b: BList4) {
 >f14 : (a: AList4, b: BList4) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : AList4
 >  : ^^^^^^
 >b : BList4
@@ -260,7 +260,7 @@ type Bivar<T> = { set(value: T): void }
 >Bivar : Bivar<T>
 >      : ^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 
@@ -290,37 +290,37 @@ bs = bu;
 
 declare let bfu: Bivar<(x: unknown) => void>;
 >bfu : Bivar<(x: unknown) => void>
->    : ^^^^^^^^^^       ^^^^^    ^
+>    : ^^^^^^^ ^^       ^^^^^    ^
 >x : unknown
 >  : ^^^^^^^
 
 declare let bfs: Bivar<(x: string) => void>;
 >bfs : Bivar<(x: string) => void>
->    : ^^^^^^^^^^      ^^^^^    ^
+>    : ^^^^^^^ ^^      ^^^^^    ^
 >x : string
 >  : ^^^^^^
 
 bfu = bfs;
 >bfu = bfs : Bivar<(x: string) => void>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^ ^^      ^^^^^^^^^^
 >bfu : Bivar<(x: unknown) => void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^       ^^^^^^^^^^
 >bfs : Bivar<(x: string) => void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^^^^^^
 
 bfs = bfu;
 >bfs = bfu : Bivar<(x: unknown) => void>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^ ^^       ^^^^^^^^^^
 >bfs : Bivar<(x: string) => void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^^^^^^^^^
 >bfu : Bivar<(x: unknown) => void>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^       ^^^^^^^^^^
 
 type Bivar1<T> = { set(value: T): void }
 >Bivar1 : Bivar1<T>
 >       : ^^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 
@@ -328,43 +328,43 @@ type Bivar2<T> = { set(value: T): void }
 >Bivar2 : Bivar2<T>
 >       : ^^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 
 declare let b1fu: Bivar1<(x: unknown) => void>;
 >b1fu : Bivar1<(x: unknown) => void>
->     : ^^^^^^^^^^^       ^^^^^    ^
+>     : ^^^^^^^^ ^^       ^^^^^    ^
 >x : unknown
 >  : ^^^^^^^
 
 declare let b2fs: Bivar2<(x: string) => void>;
 >b2fs : Bivar2<(x: string) => void>
->     : ^^^^^^^^^^^      ^^^^^    ^
+>     : ^^^^^^^^ ^^      ^^^^^    ^
 >x : string
 >  : ^^^^^^
 
 b1fu = b2fs;
 >b1fu = b2fs : Bivar2<(x: string) => void>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^ ^^      ^^^^^^^^^^
 >b1fu : Bivar1<(x: unknown) => void>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^       ^^^^^^^^^^
 >b2fs : Bivar2<(x: string) => void>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^      ^^^^^^^^^^
 
 b2fs = b1fu;
 >b2fs = b1fu : Bivar1<(x: unknown) => void>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^ ^^       ^^^^^^^^^^
 >b2fs : Bivar2<(x: string) => void>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^      ^^^^^^^^^^
 >b1fu : Bivar1<(x: unknown) => void>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^ ^^       ^^^^^^^^^^
 
 type SetLike<T> = { set(value: T): void, get(): T }
 >SetLike : SetLike<T>
 >        : ^^^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 >get : () => T
@@ -372,37 +372,37 @@ type SetLike<T> = { set(value: T): void, get(): T }
 
 declare let sx: SetLike1<(x: unknown) => void>;
 >sx : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^       ^^^^^    ^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 >x : unknown
 >  : ^^^^^^^
 
 declare let sy: SetLike1<(x: string) => void>;
 >sy : SetLike1<(x: string) => void>
->   : ^^^^^^^^^^^^^      ^^^^^    ^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 >x : string
 >  : ^^^^^^
 
 sx = sy;  // Error
 >sx = sy : SetLike1<(x: string) => void>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 >sx : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 >sy : SetLike1<(x: string) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 
 sy = sx;
 >sy = sx : SetLike1<(x: unknown) => void>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 >sy : SetLike1<(x: string) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 >sx : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 
 type SetLike1<T> = { set(value: T): void, get(): T }
 >SetLike1 : SetLike1<T>
 >         : ^^^^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 >get : () => T
@@ -412,7 +412,7 @@ type SetLike2<T> = { set(value: T): void, get(): T }
 >SetLike2 : SetLike2<T>
 >         : ^^^^^^^^^^^
 >set : (value: T) => void
->    : ^^^^^^^^ ^^^^^    
+>    : ^     ^^ ^^^^^    
 >value : T
 >      : ^
 >get : () => T
@@ -420,29 +420,29 @@ type SetLike2<T> = { set(value: T): void, get(): T }
 
 declare let s1: SetLike1<(x: unknown) => void>;
 >s1 : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^       ^^^^^    ^
+>   : ^^^^^^^^^^ ^^       ^^^^^    ^
 >x : unknown
 >  : ^^^^^^^
 
 declare let s2: SetLike2<(x: string) => void>;
 >s2 : SetLike2<(x: string) => void>
->   : ^^^^^^^^^^^^^      ^^^^^    ^
+>   : ^^^^^^^^^^ ^^      ^^^^^    ^
 >x : string
 >  : ^^^^^^
 
 s1 = s2;  // Error
 >s1 = s2 : SetLike2<(x: string) => void>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 >s1 : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 >s2 : SetLike2<(x: string) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 
 s2 = s1;
 >s2 = s1 : SetLike1<(x: unknown) => void>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 >s2 : SetLike2<(x: string) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^      ^^^^^^^^^^
 >s1 : SetLike1<(x: unknown) => void>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^ ^^       ^^^^^^^^^^
 

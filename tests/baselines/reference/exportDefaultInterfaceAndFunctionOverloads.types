@@ -3,19 +3,19 @@
 === exportDefaultInterfaceAndFunctionOverloads.ts ===
 export default function foo(value: number): number
 >foo : { (value: number): number; (value: string): string; }
->    : ^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^     ^^      ^^^      ^^^     ^^      ^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
 export default function foo(value: string): string
 >foo : { (value: number): number; (value: string): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>    : ^^^     ^^      ^^^^^^^^^^^^     ^^      ^^^      ^^^
 >value : string
 >      : ^^^^^^
 
 export default function foo(value: string | number): string | number {
 >foo : { (value: number): number; (value: string): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^     ^^      ^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^
 >value : string | number
 >      : ^^^^^^^^^^^^^^^
 

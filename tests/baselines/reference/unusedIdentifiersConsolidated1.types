@@ -3,7 +3,7 @@
 === unusedIdentifiersConsolidated1.ts ===
 function greeter(person: string) {
 >greeter : (person: string) => void
->        : ^^^^^^^^^      ^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^
 >person : string
 >       : ^^^^^^
 
@@ -59,7 +59,7 @@ class Dummy<usedtypeparameter, unusedtypeparameter> {
 
     public greeter(person: string) {
 >greeter : (person: string) => void
->        : ^^^^^^^^^      ^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^
 >person : string
 >       : ^^^^^^
 
@@ -110,7 +110,7 @@ namespace Validation {
     export interface StringValidator {
         isAcceptable(s: string): boolean;
 >isAcceptable : (s: string) => boolean
->             : ^^^^      ^^^^^       
+>             : ^ ^^      ^^^^^       
 >s : string
 >  : ^^^^^^
     }
@@ -133,7 +133,7 @@ namespace Validation {
 
         isAcceptable(s2: string) {
 >isAcceptable : (s2: string) => boolean
->             : ^^^^^      ^^^^^^^^^^^^
+>             : ^  ^^      ^^^^^^^^^^^^
 >s2 : string
 >   : ^^^^^^
 
@@ -141,11 +141,11 @@ namespace Validation {
 >lettersRegexp.test(s2) : boolean
 >                       : ^^^^^^^
 >lettersRegexp.test : (string: string) => boolean
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^      ^^^^^^^^^^^^
 >lettersRegexp : RegExp
 >              : ^^^^^^
 >test : (string: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^      ^^      ^^^^^^^^^^^^
 >s2 : string
 >   : ^^^^^^
         }
@@ -162,7 +162,7 @@ namespace Validation {
 
         isAcceptable(s3: string) {
 >isAcceptable : (s3: string) => boolean
->             : ^^^^^      ^^^^^^^^^^^^
+>             : ^  ^^      ^^^^^^^^^^^^
 >s3 : string
 >   : ^^^^^^
 
@@ -186,7 +186,7 @@ namespace Validation {
     interface usedLocallyInterface2 {
         someFunction(s1: string): void;
 >someFunction : (s1: string) => void
->             : ^^^^^      ^^^^^    
+>             : ^  ^^      ^^^^^    
 >s1 : string
 >   : ^^^^^^
     }

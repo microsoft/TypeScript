@@ -101,7 +101,7 @@ var f1 = function () { return new C1();}
 >f1 : () => C1
 >   : ^^^^^^^^
 >function () { return new C1();} : () => C1
->                                : ^^^^^^^^
+>                                :         
 >new C1() : C1
 >         : ^^
 >C1 : typeof C1

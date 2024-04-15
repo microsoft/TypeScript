@@ -29,13 +29,13 @@ export { C as C2 };
 
 declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
->    : ^^^^^^^^^^     ^^^^^   
+>    : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 
 @foo
 >foo : (...args: any[]) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^
 
 export class D {
 >D : D

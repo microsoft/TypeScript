@@ -23,7 +23,7 @@ module TypeScript {
         export interface IDiagnosticWriter {
             Alert(output: string): void;
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^    
+>      : ^      ^^      ^^^^^    
 >output : string
 >       : ^^^^^^
         }
@@ -40,7 +40,7 @@ module TypeScript {
 
         export function Alert(output: string) {
 >Alert : (output: string) => void
->      : ^^^^^^^^^      ^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >output : string
 >       : ^^^^^^
 
@@ -52,11 +52,11 @@ module TypeScript {
 >diagnosticWriter.Alert(output) : void
 >                               : ^^^^
 >diagnosticWriter.Alert : (output: string) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^      ^^      ^^^^^^^^^
 >diagnosticWriter : IDiagnosticWriter
 >                 : ^^^^^^^^^^^^^^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >output : string
 >       : ^^^^^^
             }
@@ -64,7 +64,7 @@ module TypeScript {
 
         export function debugPrint(s: string) {
 >debugPrint : (s: string) => void
->           : ^^^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -76,7 +76,7 @@ module TypeScript {
 >Alert(s) : void
 >         : ^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
             }
@@ -84,7 +84,7 @@ module TypeScript {
 
         export function assert(condition: boolean, s: string) {
 >assert : (condition: boolean, s: string) => void
->       : ^^^^^^^^^^^^       ^^^^^      ^^^^^^^^^
+>       : ^         ^^       ^^ ^^      ^^^^^^^^^
 >condition : boolean
 >          : ^^^^^^^
 >s : string
@@ -104,7 +104,7 @@ module TypeScript {
 >Alert(s) : void
 >         : ^^^^
 >Alert : (output: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
                 }
@@ -136,7 +136,7 @@ module TypeScript {
 
         log(s: string): void;
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
     }
@@ -177,7 +177,7 @@ module TypeScript {
 
         public log(s: string): void {
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
         }
@@ -375,7 +375,7 @@ module TypeScript {
 
         public log(s: string): void {
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -383,7 +383,7 @@ module TypeScript {
 >this.logger.log(s) : void
 >                   : ^^^^
 >this.logger.log : (s: string) => void
->                : ^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^      ^^^^^^^^^
 >this.logger : ILogger
 >            : ^^^^^^^
 >this : this
@@ -391,7 +391,7 @@ module TypeScript {
 >logger : ILogger
 >       : ^^^^^^^
 >log : (s: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
         }
@@ -439,7 +439,7 @@ module TypeScript {
 
         public log(s: string): void {
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -447,7 +447,7 @@ module TypeScript {
 >this.logContents.push(s) : number
 >                         : ^^^^^^
 >this.logContents.push : (...items: any[]) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^     ^^^^^^^^^^^^^^^^^^
 >this.logContents : any[]
 >                 : ^^^^^
 >this : this
@@ -455,7 +455,7 @@ module TypeScript {
 >logContents : any[]
 >            : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
         }
@@ -463,7 +463,7 @@ module TypeScript {
 
     export function timeFunction(logger: ILogger, funcDescription: string, func: () =>any): any {
 >timeFunction : (logger: ILogger, funcDescription: string, func: () => any) => any
->             : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^         ^^^^^   
+>             : ^      ^^       ^^               ^^      ^^    ^^         ^^^^^   
 >logger : ILogger
 >       : ^^^^^^^
 >funcDescription : string
@@ -503,11 +503,11 @@ module TypeScript {
 >logger.log(funcDescription + " completed in " + (end - start) + " msec") : void
 >                                                                         : ^^^^
 >logger.log : (s: string) => void
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >logger : ILogger
 >       : ^^^^^^^
 >log : (s: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >funcDescription + " completed in " + (end - start) + " msec" : string
 >                                                             : ^^^^^^
 >funcDescription + " completed in " + (end - start) : string
@@ -536,7 +536,7 @@ module TypeScript {
 
     export function stringToLiteral(value: string, length: number): string {
 >stringToLiteral : (value: string, length: number) => string
->                : ^^^^^^^^      ^^^^^^^^^^      ^^^^^      
+>                : ^     ^^      ^^      ^^      ^^^^^      
 >value : string
 >      : ^^^^^^
 >length : number
@@ -550,9 +550,9 @@ module TypeScript {
 
         var addChar = (index: number) => {
 >addChar : (index: number) => void
->        : ^^^^^^^^      ^^^^^^^^^
+>        : ^     ^^      ^^^^^^^^^
 >(index: number) => {            var ch = value.charCodeAt(index);            switch (ch) {                case 0x09: // tab                    result += "\\t";                    break;                case 0x0a: // line feed                    result += "\\n";                    break;                case 0x0b: // vertical tab                    result += "\\v";                    break;                case 0x0c: // form feed                    result += "\\f";                    break;                case 0x0d: // carriage return                    result += "\\r";                    break;                case 0x22:  // double quote                    result += "\\\"";                    break;                case 0x27: // single quote                    result += "\\\'";                    break;                case 0x5c: // Backslash                    result += "\\";                    break;                default:                    result += value.charAt(index);            }        } : (index: number) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              :                        
 >index : number
 >      : ^^^^^^
 
@@ -562,11 +562,11 @@ module TypeScript {
 >value.charCodeAt(index) : number
 >                        : ^^^^^^
 >value.charCodeAt : (index: number) => number
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^      ^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^      ^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
 
@@ -687,11 +687,11 @@ module TypeScript {
 >value.charAt(index) : string
 >                    : ^^^^^^
 >value.charAt : (pos: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >index : number
 >      : ^^^^^^
             }
@@ -745,7 +745,7 @@ module TypeScript {
 >addChar(i) : void
 >           : ^^^^
 >addChar : (index: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^      ^^^^^^^^^
 >i : number
 >  : ^^^^^^
 
@@ -787,7 +787,7 @@ module TypeScript {
 >addChar(i) : void
 >           : ^^^^
 >addChar : (index: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^      ^^^^^^^^^
 >i : number
 >  : ^^^^^^
         }
@@ -822,7 +822,7 @@ module TypeScript {
 >addChar(i) : void
 >           : ^^^^
 >addChar : (index: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^      ^^^^^^^^^
 >i : number
 >  : ^^^^^^
         }

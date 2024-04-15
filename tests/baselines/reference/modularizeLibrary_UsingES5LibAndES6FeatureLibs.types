@@ -19,7 +19,7 @@ var p = new Proxy(t, {});
 >p : {}
 >  : ^^
 >new Proxy(t, {}) : {}
->                 : ^^
+>                 :   
 >Proxy : ProxyConstructor
 >      : ^^^^^^^^^^^^^^^^
 >t : {}
@@ -31,11 +31,11 @@ Reflect.ownKeys({});
 >Reflect.ownKeys({}) : (string | symbol)[]
 >                    : ^^^^^^^^^^^^^^^^^^^
 >Reflect.ownKeys : (target: object) => (string | symbol)[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >Reflect : typeof Reflect
 >        : ^^^^^^^^^^^^^^
 >ownKeys : (target: object) => (string | symbol)[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^      ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

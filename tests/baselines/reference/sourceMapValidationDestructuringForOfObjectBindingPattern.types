@@ -3,11 +3,11 @@
 === sourceMapValidationDestructuringForOfObjectBindingPattern.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
->    : ^^^^^^   ^^^^^    
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 interface Robot {
@@ -140,11 +140,11 @@ for (let {name: nameA } of robots) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -162,11 +162,11 @@ for (let {name: nameA } of getRobots()) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -202,11 +202,11 @@ for (let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -228,11 +228,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of multiRobots
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >primaryA : string
 >         : ^^^^^^
 }
@@ -256,11 +256,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of getMultiRob
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >primaryA : string
 >         : ^^^^^^
 }
@@ -320,11 +320,11 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "m
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >primaryA : string
 >         : ^^^^^^
 }
@@ -345,11 +345,11 @@ for (let {name: nameA, skill: skillA } of robots) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -371,11 +371,11 @@ for (let {name: nameA, skill: skillA } of getRobots()) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -415,11 +415,11 @@ for (let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -445,11 +445,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -477,11 +477,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
@@ -545,11 +545,11 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }

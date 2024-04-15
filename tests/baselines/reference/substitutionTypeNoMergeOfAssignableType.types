@@ -33,7 +33,7 @@ interface Entry {
  
  function makeEntityStore<T extends Record<string, Entity>>(config: T): Nodes<T> {
 >makeEntityStore : <T extends Record<string, Entity>>(config: T) => Nodes<T>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^        
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^        
 >config : T
 >       : ^
 
@@ -48,9 +48,9 @@ interface Entry {
 >myTest : Nodes<{ test: { fields: { id: {}; }; }; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeEntityStore({ test: { fields: { id: {} } } }) : Nodes<{ test: { fields: { id: {}; }; }; }>
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^                                   ^
 >makeEntityStore : <T extends Record<string, Entity>>(config: T) => Nodes<T>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^        
 >{ test: { fields: { id: {} } } } : { test: { fields: { id: {}; }; }; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : { fields: { id: {}; }; }
@@ -72,5 +72,5 @@ interface Entry {
 >myTest : Nodes<{ test: { fields: { id: {}; }; }; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : Fields<{ fields: { id: {}; }; }>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^           ^^^^
  

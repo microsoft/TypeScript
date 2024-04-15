@@ -5,13 +5,13 @@ var a = {
 >a : { foo: () => void; bar: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  "foo" : function() { },  "bar" : 5} : { foo: () => void; bar: number; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^^          ^^^^^^^^^^^^^^^^
 
   "foo" : function() { },
 >"foo" : () => void
 >      : ^^^^^^^^^^
 >function() { } : () => void
->               : ^^^^^^^^^^
+>               :           
 
   "bar" : 5
 >"bar" : number
@@ -37,7 +37,7 @@ a.bar.toString();
 >a.bar.toString() : string
 >                 : ^^^^^^
 >a.bar.toString : (radix?: number) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^      ^^^^^^^^^^^
 >a.bar : number
 >      : ^^^^^^
 >a : { foo: () => void; bar: number; }
@@ -45,5 +45,5 @@ a.bar.toString();
 >bar : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 

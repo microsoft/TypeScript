@@ -563,7 +563,7 @@ declare module "Number/_Internal" {
 >        : ^^^^^^^
 
         'string': {
->'string' : { all: Format<IterationMap[KnownIterationMapKeys], 's'>; '+': Format<IterationMap[PositiveIterationKeys], 's'>; '-': Format<IterationMap[NegativeIterationKeys], 's'>; '0': Format<IterationMap['0'], 's'>; }
+>'string' : { all: Format<IterationMap[KnownIterationMapKeys], "s">; '+': Format<IterationMap[PositiveIterationKeys], "s">; '-': Format<IterationMap[NegativeIterationKeys], "s">; '0': Format<IterationMap["0"], "s">; }
 >         : ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                              ^^^
 
             'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
@@ -584,7 +584,7 @@ declare module "Number/_Internal" {
 
         };
         'number': {
->'number' : { all: Format<IterationMap[KnownIterationMapKeys], 'n'>; '+': Format<IterationMap[PositiveIterationKeys], 'n'>; '-': Format<IterationMap[NegativeIterationKeys], 'n'>; '0': Format<IterationMap['0'], 'n'>; }
+>'number' : { all: Format<IterationMap[KnownIterationMapKeys], "n">; '+': Format<IterationMap[PositiveIterationKeys], "n">; '-': Format<IterationMap[NegativeIterationKeys], "n">; '0': Format<IterationMap["0"], "n">; }
 >         : ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                              ^^^
 
             'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;

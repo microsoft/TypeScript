@@ -60,18 +60,18 @@ let obj2 = {
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    onClick: () => {}} : { onClick: () => void; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^          ^^^
 
     onClick: () => {}
 >onClick : () => void
 >        : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
 }
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^           ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^           ^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >buttonProps : ButtonProps
 >            : ^^^^^^^^^^^
 >JSX : any
@@ -79,7 +79,7 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^           ^^^           ^^           ^^^^^^^^^^^^^^^^^
 >linkProps : LinkProps
 >          : ^^^^^^^^^
 >JSX : any
@@ -87,7 +87,7 @@ export function MainButton(linkProps: LinkProps): JSX.Element;
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^           ^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^           ^^^
 >hyphenProps : HyphenProps
 >            : ^^^^^^^^^^^
 >JSX : any
@@ -95,7 +95,7 @@ export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >props : ButtonProps | LinkProps | HyphenProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
@@ -146,11 +146,11 @@ const b0 = <MainButton to='/some/path'>GO</MainButton>;
 ><MainButton to='/some/path'>GO</MainButton> : JSX.Element
 >                                            : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >to : string
 >   : ^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 
 const b1 = <MainButton onClick={(e) => {}}>Hello world</MainButton>;
 >b1 : JSX.Element
@@ -158,15 +158,15 @@ const b1 = <MainButton onClick={(e) => {}}>Hello world</MainButton>;
 ><MainButton onClick={(e) => {}}>Hello world</MainButton> : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >onClick : (e: React.MouseEvent<any>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e) => {} : (e: React.MouseEvent<any>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<any>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 
 const b2 = <MainButton {...obj} />;
 >b2 : JSX.Element
@@ -174,7 +174,7 @@ const b2 = <MainButton {...obj} />;
 ><MainButton {...obj} /> : JSX.Element
 >                        : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >obj : { children: string; to: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -184,7 +184,7 @@ const b3 = <MainButton {...{to: 10000}} {...obj} />;
 ><MainButton {...{to: 10000}} {...obj} /> : JSX.Element
 >                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >{to: 10000} : { to: number; }
 >            : ^^^^^^^^^^^^^^^
 >to : number
@@ -200,7 +200,7 @@ const b4 = <MainButton {...obj1} />;  // any; just pick the first overload
 ><MainButton {...obj1} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >obj1 : any
 
 const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the second overload
@@ -209,7 +209,7 @@ const b5 = <MainButton {...obj1} to="/to/somewhere" />;  // should pick the seco
 ><MainButton {...obj1} to="/to/somewhere" /> : JSX.Element
 >                                            : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >obj1 : any
 >to : string
 >   : ^^^^^^
@@ -220,7 +220,7 @@ const b6 = <MainButton {...obj2} />;
 ><MainButton {...obj2} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -230,21 +230,21 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 ><MainButton {...{onClick: () => { console.log("hi") }}} /> : JSX.Element
 >                                                           : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >{onClick: () => { console.log("hi") }} : { onClick: () => void; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
 >        : ^^^^^^^^^^
 >() => { console.log("hi") } : () => void
->                            : ^^^^^^^^^^
+>                            :           
 >console.log("hi") : void
 >                  : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (message?: any, ...optionalParams: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^   ^^^^^              ^^     ^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 
@@ -254,7 +254,7 @@ const b8 = <MainButton {...{onClick() {}}} />;  // OK; method declaration get re
 ><MainButton {...{onClick() {}}} /> : JSX.Element
 >                                   : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >{onClick() {}} : { onClick(): void; }
 >               : ^^^^^^^^^^^^^^^^^^^^
 >onClick : () => void
@@ -266,13 +266,13 @@ const b9 = <MainButton to='/some/path' extra-prop>GO</MainButton>;
 ><MainButton to='/some/path' extra-prop>GO</MainButton> : JSX.Element
 >                                                       : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >to : string
 >   : ^^^^^^
 >extra-prop : true
 >           : ^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 
 const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 >b10 : JSX.Element
@@ -280,13 +280,13 @@ const b10 = <MainButton to='/some/path' children="hi" ></MainButton>;
 ><MainButton to='/some/path' children="hi" ></MainButton> : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >to : string
 >   : ^^^^^^
 >children : string
 >         : ^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 
 const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton>;
 >b11 : JSX.Element
@@ -294,11 +294,11 @@ const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello 
 ><MainButton onClick={(e) => {}} className="hello" data-format>Hello world</MainButton> : JSX.Element
 >                                                                                       : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >onClick : (e: React.MouseEvent<any>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(e) => {} : (e: React.MouseEvent<any>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<any>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >className : string
@@ -306,7 +306,7 @@ const b11 = <MainButton onClick={(e) => {}} className="hello" data-format>Hello 
 >data-format : true
 >            : ^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 
 const b12 = <MainButton data-format="Hello world" />
 >b12 : JSX.Element
@@ -314,7 +314,7 @@ const b12 = <MainButton data-format="Hello world" />
 ><MainButton data-format="Hello world" /> : JSX.Element
 >                                         : ^^^^^^^^^^^
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^           ^^           ^^^^^^^^^^^^^^^^^         ^^         ^^^^^^^^^^^^^^^^^           ^^           ^^^^^^^^^^^^^^^^^
 >data-format : string
 >            : ^^^^^^
 

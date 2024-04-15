@@ -26,7 +26,7 @@ interface IProps {
 
 function VerticalNavMenuItem(prop: IProps) {
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->                    : ^^^^^^^      ^^^^^^^^^^^^^^^^
+>                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >prop : IProps
 >     : ^^^^^^
 
@@ -57,7 +57,7 @@ function VerticalNav() {
 ><VerticalNavMenuItem primaryText={2} /> : JSX.Element
 >                                        : ^^^^^^^^^^^
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >primaryText : number
 >            : ^^^^^^
 >2 : 2
@@ -67,7 +67,7 @@ function VerticalNav() {
 ><VerticalNavMenuItem justRandomProp={2} primaryText={"hello"} /> : JSX.Element
 >                                                                 : ^^^^^^^^^^^
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >justRandomProp : number
 >               : ^^^^^^
 >2 : 2
@@ -81,7 +81,7 @@ function VerticalNav() {
 ><VerticalNavMenuItem justRandomProp1={true} primaryText={"hello"} /> : JSX.Element
 >                                                                     : ^^^^^^^^^^^
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^    ^^      ^^^^^^^^^^^^^^^^
 >justRandomProp1 : boolean
 >                : ^^^^^^^
 >true : true

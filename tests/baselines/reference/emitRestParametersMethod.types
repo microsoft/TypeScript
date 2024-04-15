@@ -13,13 +13,13 @@ class C {
 
     public bar(...rest) { }
 >bar : (...rest: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
 
     public foo(x: number, ...rest) { }
 >foo : (x: number, ...rest: any[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >rest : any[]
@@ -36,13 +36,13 @@ class D {
 
     public bar(...rest) { }
 >bar : (...rest: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
 
     public foo(x: number, ...rest) { }
 >foo : (x: number, ...rest: any[]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >rest : any[]

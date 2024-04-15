@@ -73,7 +73,7 @@ class c {
 
     a(eval) { //error
 >a : (eval: any) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^^^^^^^^
 >eval : any
 >     : ^^^
     }
@@ -100,7 +100,7 @@ var eval = function () {
 >eval : () => void
 >     : ^^^^^^^^^^
 >function () {} : () => void
->               : ^^^^^^^^^^
+>               :           
 
 };
 

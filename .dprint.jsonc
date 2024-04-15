@@ -23,11 +23,10 @@
         "constructorType.spaceAfterNewKeyword": true,
         "constructSignature.spaceAfterNewKeyword": true,
 
-        // Let eslint-plugin-simple-import-sort handle this.
-        "module.sortImportDeclarations": "maintain",
-        "module.sortExportDeclarations": "maintain",
-        "exportDeclaration.sortNamedExports": "maintain",
-        "importDeclaration.sortNamedImports": "maintain"
+        "module.sortImportDeclarations": "caseInsensitive",
+        "module.sortExportDeclarations": "caseInsensitive",
+        "exportDeclaration.sortNamedExports": "caseInsensitive",
+        "importDeclaration.sortNamedImports": "caseInsensitive"
     },
     "prettier": {
         "newLineKind": "lf",
@@ -53,7 +52,8 @@
         "tests/**",
         "internal/**",
         "**/*.generated.*",
-        "scripts/*.d.*"
+        "scripts/*.d.*",
+        "**/_namespaces/**"
     ],
     // Note: if adding new languages, make sure settings.template.json is updated too.
     "plugins": [

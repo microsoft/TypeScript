@@ -27,7 +27,7 @@ class Foo {
 >f : () => string
 >  : ^^^^^^^^^^^^
 >() => this.x : () => string
->             : ^^^^^^^^^^^^
+>             :             
 >this.x : string
 >       : ^^^^^^
 >this : this
@@ -39,7 +39,7 @@ class Foo {
 
 function myFn(a:any) { }
 >myFn : (a: any) => void
->     : ^^^^   ^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^
 >a : any
 
 class myCls {
@@ -51,7 +51,7 @@ class myCls {
 >myFn(() => {            myFn(() => {                var x = this;            });        }) : void
 >                                                                                           : ^^^^
 >myFn : (a: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^
 >() => {            myFn(() => {                var x = this;            });        } : () => void
 >                                                                                     : ^^^^^^^^^^
 
@@ -59,7 +59,7 @@ class myCls {
 >myFn(() => {                var x = this;            }) : void
 >                                                        : ^^^^
 >myFn : (a: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^   ^^^^^^^^^
 >() => {                var x = this;            } : () => void
 >                                                  : ^^^^^^^^^^
 

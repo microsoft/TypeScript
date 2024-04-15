@@ -36,7 +36,7 @@ export = {
 >default : () => void
 >        : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 
 };
 
@@ -183,7 +183,7 @@ const d3 = await import("./d"); // { default: [Function: default] }
 >d3 : { default: () => void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >await import("./d") : { default: () => void; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^^^^          ^^^
 >import("./d") : Promise<{ default: () => void; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./d" : "./d"
@@ -200,8 +200,8 @@ d3.default();
 >        : ^^^^^^^^^^
 
 import e1 from "./e.mjs"; // 0
->e1 : 0
->   : ^
+>e1 : any
+>   : ^^^
 
 import e2 = require("./e.mjs"); // 0
 >e2 : 0
@@ -313,8 +313,8 @@ import d2 = require("./d"); // [Function: default]
 >   : ^^^^^^^^^^
 
 import e1 from "./e.mjs"; // 0
->e1 : 0
->   : ^
+>e1 : any
+>   : ^^^
 
 import e2 = require("./e.mjs"); // 0
 >e2 : 0
@@ -379,7 +379,7 @@ const c2 = require("./c"); // { default: [Function: default] }
 >c2 : { default: () => void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >require("./c") : { default: () => void; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                         
 >require : any
 >        : ^^^
 >"./c" : "./c"
@@ -393,7 +393,7 @@ const d2 = require("./d"); // [Function: default]
 >d2 : () => void
 >   : ^^^^^^^^^^
 >require("./d") : () => void
->               : ^^^^^^^^^^
+>               :           
 >require : any
 >        : ^^^
 >"./d" : "./d"
@@ -436,6 +436,23 @@ const g2 = require("./g"); // { default: 0 }
 >   : ^^^^^^^^^
 >require("./g") : typeof g1
 >               : ^^^^^^^^^
+>require : any
+>        : ^^^
+>"./g" : "./g"
+>      : ^^^^^
+
+=== /main4.cjs ===
+exports.x = require("./g");
+>exports.x = require("./g") : typeof import("/g")
+>                           : ^^^^^^^^^^^^^^^^^^^
+>exports.x : typeof import("/g")
+>          : ^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("/main4")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : typeof import("/g")
+>  : ^^^^^^^^^^^^^^^^^^^
+>require("./g") : typeof import("/g")
+>               : ^^^^^^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >"./g" : "./g"

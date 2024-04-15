@@ -22,9 +22,9 @@ interface IHasVisualizationModel {
 }
 var f = (x: IHasVisualizationModel) => x;
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
->  : ^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x: IHasVisualizationModel) => x : (x: IHasVisualizationModel) => IHasVisualizationModel
->                                 : ^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 :                                                      
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : IHasVisualizationModel
@@ -32,11 +32,11 @@ var f = (x: IHasVisualizationModel) => x;
 
 f = (x) => moduleA;
 >f = (x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x) => moduleA : (x: IHasVisualizationModel) => typeof moduleA
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >moduleA : typeof moduleA

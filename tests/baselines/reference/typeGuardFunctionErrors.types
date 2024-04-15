@@ -32,7 +32,7 @@ class C extends A {
 
 function hasANonBooleanReturnStatement(x): x is A {
 >hasANonBooleanReturnStatement : (x: any) => x is A
->                              : ^^^^^^^^^^^^      
+>                              : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 
@@ -43,7 +43,7 @@ function hasANonBooleanReturnStatement(x): x is A {
 
 function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is x
->                                    : ^^^^^^^^^^^^      
+>                                    : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 >is : any
@@ -76,7 +76,7 @@ function hasMissingParameter(): x is A {
 
 function hasMissingTypeInTypeGuardType(x): x is {
 >hasMissingTypeInTypeGuardType : (x: any) => x is {}
->                              : ^^^^^^^^^^^^       
+>                              : ^ ^^^^^^^^^^       
 >x : any
 >  : ^^^
 
@@ -87,7 +87,7 @@ function hasMissingTypeInTypeGuardType(x): x is {
 
 function hasNonMatchingParameter(y): x is A {
 >hasNonMatchingParameter : (y: any) => x is A
->                        : ^^^^^^^^^^^^      
+>                        : ^ ^^^^^^^^^^      
 >y : any
 >  : ^^^
 
@@ -98,7 +98,7 @@ function hasNonMatchingParameter(y): x is A {
 
 function hasNonMatchingParameterType1(x: A): x is B {
 >hasNonMatchingParameterType1 : (x: A) => x is B
->                             : ^^^^ ^^^^^      
+>                             : ^ ^^ ^^^^^      
 >x : A
 >  : ^
 
@@ -109,7 +109,7 @@ function hasNonMatchingParameterType1(x: A): x is B {
 
 function hasNonMatchingParameterType2(x: string): x is number {
 >hasNonMatchingParameterType2 : (x: string) => x is number
->                             : ^^^^      ^^^^^           
+>                             : ^ ^^      ^^^^^           
 >x : string
 >  : ^^^^^^
 
@@ -120,7 +120,7 @@ function hasNonMatchingParameterType2(x: string): x is number {
 
 function hasNonMathcingGenericType<T>(a: string): a is T[] {
 >hasNonMathcingGenericType : <T>(a: string) => a is T[]
->                          : ^ ^^^^^      ^^^^^        
+>                          : ^ ^^ ^^      ^^^^^        
 >a : string
 >  : ^^^^^^
 
@@ -139,19 +139,19 @@ let b: B;
 
 declare function isB(p1): p1 is B;
 >isB : (p1: any) => p1 is B
->    : ^^^^^^^^^^^^^       
+>    : ^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 
 declare function isC(p1): p1 is C;
 >isC : (p1: any) => p1 is C
->    : ^^^^^^^^^^^^^       
+>    : ^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 
 declare function funA(p1: any, p2: any): p1 is B;
 >funA : (p1: any, p2: any) => p1 is B
->     : ^^^^^   ^^^^^^   ^^^^^       
+>     : ^  ^^   ^^  ^^   ^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -159,7 +159,7 @@ declare function funA(p1: any, p2: any): p1 is B;
 
 declare function hasNoTypeGuard(x);
 >hasNoTypeGuard : (x: any) => any
->               : ^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -168,7 +168,7 @@ if (isB(b)) {
 >isB(b) : boolean
 >       : ^^^^^^^
 >isB : (p1: any) => p1 is B
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^^^
 >b : B
 >  : ^
 
@@ -186,7 +186,7 @@ if (funA(0, a)) {
 >funA(0, a) : boolean
 >           : ^^^^^^^
 >funA : (p1: any, p2: any) => p1 is B
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^   ^^  ^^   ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >a : A
@@ -206,7 +206,7 @@ if (hasNoTypeGuard(a)) {
 >hasNoTypeGuard(a) : any
 >                  : ^^^
 >hasNoTypeGuard : (x: any) => any
->               : ^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^
 >a : A
 >  : ^
 
@@ -222,9 +222,9 @@ if (hasNoTypeGuard(a)) {
 // Type predicate type is not assignable
 declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
->                                             : ^^^^^     ^^^            ^^^^^^^^
+>                                             : ^  ^^     ^^^            ^^^^^^^^
 >p1 : (p1: any) => p1 is B
->   : ^^^^^^^^^^^^^       
+>   : ^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 
@@ -232,14 +232,14 @@ acceptingDifferentSignatureTypeGuardFunction(isC);
 >acceptingDifferentSignatureTypeGuardFunction(isC) : any
 >                                                  : ^^^
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^  ^^     ^^^            ^^^^^^^^
 >isC : (p1: any) => p1 is C
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^^^^^^^^
 
 // Boolean not assignable to type guard
 var assign1: (p1, p2) => p1 is A;
 >assign1 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^       
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -247,11 +247,11 @@ var assign1: (p1, p2) => p1 is A;
 
 assign1 = function(p1, p2): boolean {
 >assign1 = function(p1, p2): boolean {    return true;} : (p1: any, p2: any) => boolean
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^       
+>                                                       : ^  ^^^^^^^  ^^^^^^^^^^       
 >assign1 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
 >function(p1, p2): boolean {    return true;} : (p1: any, p2: any) => boolean
->                                             : ^^^^^^^^^^^^^^^^^^^^^^       
+>                                             : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -266,7 +266,7 @@ assign1 = function(p1, p2): boolean {
 // Must have matching parameter index
 var assign2: (p1, p2) => p1 is A;
 >assign2 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^       
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -274,11 +274,11 @@ var assign2: (p1, p2) => p1 is A;
 
 assign2 = function(p1, p2): p2 is A {
 >assign2 = function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^       
+>                                                       : ^  ^^^^^^^  ^^^^^^^^^^       
 >assign2 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
 >function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
->                                             : ^^^^^^^^^^^^^^^^^^^^^^       
+>                                             : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -293,7 +293,7 @@ assign2 = function(p1, p2): p2 is A {
 // No matching signature
 var assign3: (p1, p2) => p1 is A;
 >assign3 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^       
+>        : ^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -301,11 +301,11 @@ var assign3: (p1, p2) => p1 is A;
 
 assign3 = function(p1, p2, p3): p1 is A {
 >assign3 = function(p1, p2, p3): p1 is A {    return true;} : (p1: any, p2: any, p3: any) => p1 is A
->                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                                                           : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >assign3 : (p1: any, p2: any) => p1 is A
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
 >function(p1, p2, p3): p1 is A {    return true;} : (p1: any, p2: any, p3: any) => p1 is A
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                                                 : ^  ^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >p1 : any
 >   : ^^^
 >p2 : any
@@ -330,7 +330,7 @@ var b1: b is A;
 
 function b2(a: b is A) {};
 >b2 : (a: b, is: any, A: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^  ^^^^^^^ ^^^^^^^^^^^^^^
 >a : b
 >  : ^
 >is : any
@@ -406,7 +406,7 @@ interface I2 {
 // Reference to rest parameter
 function b4(...a): a is A {
 >b4 : (...a: any[]) => a is A
->   : ^^^^^^^^^^^^^^^^^      
+>   : ^^^^ ^^^^^^^^^^^^      
 >a : any[]
 >  : ^^^^^
 
@@ -418,7 +418,7 @@ function b4(...a): a is A {
 // Reference to binding pattern
 function b5({a, b, p1}, p2, p3): p1 is A {
 >b5 : ({ a, b, p1 }: { a: any; b: any; p1: any; }, p2: any, p3: any) => p1 is A
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >a : any
 >  : ^^^
 >b : any
@@ -437,7 +437,7 @@ function b5({a, b, p1}, p2, p3): p1 is A {
 
 function b6([a, b, p1], p2, p3): p1 is A {
 >b6 : ([a, b, p1]: [any, any, any], p2: any, p3: any) => p1 is A
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>   : ^          ^^^^^^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >a : any
 >  : ^^^
 >b : any
@@ -456,7 +456,7 @@ function b6([a, b, p1], p2, p3): p1 is A {
 
 function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 >b7 : ({ a, b, c: { p1 } }: { a: any; b: any; c: { p1: any; }; }, p2: any, p3: any) => p1 is A
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>   : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^       
 >a : any
 >  : ^^^
 >b : any
@@ -509,8 +509,8 @@ type KeySet<T extends Keys> = { [k in T]: true }
 
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
->hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | 'd'>
->       : ^ ^^^^^^^^^^^^^^^^^^         ^^^^^                    
+>hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
+>       : ^ ^^^^^^^^^^^^^^^ ^^         ^^^^^                    
 >x : KeySet<T>
 >  : ^^^^^^^^^
 
@@ -547,19 +547,19 @@ declare var alsoAnError: NeedsFoo<number>; // also error, as expected
 
 declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
 >newError1 : (x: any) => x is NeedsFoo<Bar>
->          : ^^^^   ^^^^^                  
+>          : ^ ^^   ^^^^^                  
 >x : any
 >  : ^^^
 
 declare function newError2(x: any): x is NeedsFoo<number>; // should error
 >newError2 : (x: any) => x is NeedsFoo<number>
->          : ^^^^   ^^^^^                     
+>          : ^ ^^   ^^^^^                     
 >x : any
 >  : ^^^
 
 declare function newError3(x: number): x is NeedsFoo<number>; // should error
 >newError3 : (x: number) => x is NeedsFoo<number>
->          : ^^^^      ^^^^^                     
+>          : ^ ^^      ^^^^^                     
 >x : number
 >  : ^^^^^^
 

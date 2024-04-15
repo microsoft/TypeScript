@@ -5,7 +5,7 @@ const x = require('./ch').x
 >x : { grey: {}; }
 >  : ^^^^^^^^^^^^^
 >require('./ch').x : { grey: {}; }
->                  : ^^^^^^^^^^^^^
+>                  :              
 >require('./ch') : typeof import("ch")
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any

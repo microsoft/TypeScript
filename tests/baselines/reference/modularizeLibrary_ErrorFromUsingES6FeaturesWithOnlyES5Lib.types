@@ -5,7 +5,7 @@
 // Using Es6 array
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any
->  : ^^^^      ^^^^^      ^^^^^      ^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -30,7 +30,7 @@ f(1, 2, 3);  // no error
 >f(1, 2, 3) : any
 >           : ^^^
 >f : (x: number, y: number, z: number) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -97,9 +97,9 @@ Math.sign(1);
 // Using ES6 object
 var o = {
 >o : { [x: number]: (value: any) => boolean; a: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; a: number; }
->                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                            : ^^^^^^^^^^^^^^^                       ^^^^^^^^^^^^^^
 
     a: 2,
 >a : number
@@ -109,7 +109,7 @@ var o = {
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->                     : ^^^^^^^^   ^^^^^^^^^^^^
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : any
 >                   : ^^^
 >Symbol : any
@@ -128,11 +128,11 @@ o.hasOwnProperty(Symbol.hasInstance);
 >o.hasOwnProperty(Symbol.hasInstance) : boolean
 >                                     : ^^^^^^^
 >o.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >o : { [x: number]: (value: any) => boolean; a: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >Symbol.hasInstance : any
 >                   : ^^^
 >Symbol : any
@@ -224,13 +224,13 @@ var s = Symbol();
 // Using ES6 wellknown-symbol
 const o1 = {
 >o1 : { [x: number]: (value: any) => boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^                       ^^^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean
->                     : ^^^^^^^^   ^^^^^^^^^^^^
+>                     : ^     ^^   ^^^^^^^^^^^^
 >Symbol.hasInstance : any
 >                   : ^^^
 >Symbol : any

@@ -32,7 +32,7 @@ class C extends Base {
 >obj : { [x: number]: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                [super.bar()]() { } // needs capture            } : { [x: number]: () => void; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^          ^^^
 
                 [super.bar()]() { } // needs capture
 >[super.bar()] : () => void

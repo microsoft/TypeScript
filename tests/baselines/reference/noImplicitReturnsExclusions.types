@@ -6,7 +6,7 @@
 
 function f1(b: boolean): undefined {
 >f1 : (b: boolean) => undefined
->   : ^^^^       ^^^^^         
+>   : ^ ^^       ^^^^^         
 >b : boolean
 >  : ^^^^^^^
 
@@ -19,7 +19,7 @@ function f1(b: boolean): undefined {
 
 function f2(b: boolean): void {
 >f2 : (b: boolean) => void
->   : ^^^^       ^^^^^    
+>   : ^ ^^       ^^^^^    
 >b : boolean
 >  : ^^^^^^^
 
@@ -32,7 +32,7 @@ function f2(b: boolean): void {
 
 function f3(b: boolean): any {
 >f3 : (b: boolean) => any
->   : ^^^^       ^^^^^   
+>   : ^ ^^       ^^^^^   
 >b : boolean
 >  : ^^^^^^^
 
@@ -45,7 +45,7 @@ function f3(b: boolean): any {
 
 function f4(b: boolean): string | undefined {  // Error
 >f4 : (b: boolean) => string | undefined
->   : ^^^^       ^^^^^                  
+>   : ^ ^^       ^^^^^                  
 >b : boolean
 >  : ^^^^^^^
 
@@ -58,7 +58,7 @@ function f4(b: boolean): string | undefined {  // Error
 
 function f5(b: boolean): string | void {
 >f5 : (b: boolean) => string | void
->   : ^^^^       ^^^^^             
+>   : ^ ^^       ^^^^^             
 >b : boolean
 >  : ^^^^^^^
 
@@ -71,7 +71,7 @@ function f5(b: boolean): string | void {
 
 function f6(b: boolean): unknown {  // Error
 >f6 : (b: boolean) => unknown
->   : ^^^^       ^^^^^       
+>   : ^ ^^       ^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -84,7 +84,7 @@ function f6(b: boolean): unknown {  // Error
 
 function f10(b: boolean) {
 >f10 : (b: boolean) => void
->    : ^^^^       ^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -95,7 +95,7 @@ function f10(b: boolean) {
 
 function f11(b: boolean) {
 >f11 : (b: boolean) => undefined
->    : ^^^^       ^^^^^^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -108,7 +108,7 @@ function f11(b: boolean) {
 
 function f12(b: boolean) {
 >f12 : (b: boolean) => any
->    : ^^^^       ^^^^^   
+>    : ^ ^^       ^^^^^   
 >b : boolean
 >  : ^^^^^^^
 
@@ -123,7 +123,7 @@ function f12(b: boolean) {
 
 function f13(b: boolean) {  // Error
 >f13 : (b: boolean) => unknown
->    : ^^^^       ^^^^^       
+>    : ^ ^^       ^^^^^       
 >b : boolean
 >  : ^^^^^^^
 
@@ -138,7 +138,7 @@ function f13(b: boolean) {  // Error
 
 function f14(b: boolean) {  // Error
 >f14 : (b: boolean) => 42 | undefined
->    : ^^^^       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -151,7 +151,7 @@ function f14(b: boolean) {  // Error
 
 function f15(b: boolean) {  // Error
 >f15 : (b: boolean) => 42 | undefined
->    : ^^^^       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -170,7 +170,7 @@ function f15(b: boolean) {  // Error
 
 function f16(b: boolean) {  // Error
 >f16 : (b: boolean) => 42 | undefined
->    : ^^^^       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^       ^^^^^^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -207,35 +207,35 @@ declare class HistoryItem {
 
 interface Thenable<T> {
   then<TResult>(
->then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => void) | undefined): Thenable<TResult_1>; }
->     : ^^^       ^^^^^^^^^^^^^^^^                                         ^^^^^^^^^^^^^^^                                            ^^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : { <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => TResult | Thenable<TResult>): Thenable<TResult>; <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => void): Thenable<TResult_1>; }
+>     : ^^^       ^^           ^^^                                         ^^          ^^^                                            ^^^                 ^^^         ^^           ^^^                                             ^^          ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
->            : ^^^^^^^^^ ^^^^^                           ^^^^^^^^^^^^^
+>            : ^^     ^^ ^^^^^                           ^^^^^^^^^^^^^
 >value : T
 >      : ^
 
     onrejected?: (reason: any) => TResult | Thenable<TResult>
 >onrejected : ((reason: any) => TResult | Thenable<TResult>) | undefined
->           : ^^^^^^^^^^   ^^^^^                           ^^^^^^^^^^^^^
+>           : ^^      ^^   ^^^^^                           ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 
   ): Thenable<TResult>;
   then<TResult>(
->then : { <TResult_1>(onfulfilled?: ((value: T) => TResult_1 | Thenable<TResult_1>) | undefined, onrejected?: ((reason: any) => TResult_1 | Thenable<TResult_1>) | undefined): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^                                         ^^^^^^^^^^^^^^^                     ^^^                 ^^^
+>then : { <TResult_1>(onfulfilled?: (value: T) => TResult_1 | Thenable<TResult_1>, onrejected?: (reason: any) => TResult_1 | Thenable<TResult_1>): Thenable<TResult_1>; <TResult>(onfulfilled?: (value: T) => TResult | Thenable<TResult>, onrejected?: (reason: any) => void): Thenable<TResult>; }
+>     : ^^^         ^^           ^^^                                             ^^          ^^^                                                ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^           ^^^                                         ^^          ^^^                     ^^^                 ^^^
 
     onfulfilled?: (value: T) => TResult | Thenable<TResult>,
 >onfulfilled : ((value: T) => TResult | Thenable<TResult>) | undefined
->            : ^^^^^^^^^ ^^^^^                           ^^^^^^^^^^^^^
+>            : ^^     ^^ ^^^^^                           ^^^^^^^^^^^^^
 >value : T
 >      : ^
 
     onrejected?: (reason: any) => void
 >onrejected : ((reason: any) => void) | undefined
->           : ^^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>           : ^^      ^^   ^^^^^    ^^^^^^^^^^^^^
 >reason : any
 >       : ^^^
 
@@ -244,7 +244,7 @@ interface Thenable<T> {
 
 export declare function executeCommand<T = unknown>(
 >executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
->               : ^ ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^     ^^^^^           
+>               : ^ ^^^^^^^^^^^^       ^^      ^^^^^    ^^     ^^^^^           
 
   command: string,
 >command : string
@@ -258,7 +258,7 @@ export declare function executeCommand<T = unknown>(
 
 export declare function registerCommand(
 >registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
->                : ^^^^^^^^^^      ^^^^^^^^^^^^                       ^^^^^^^^^^^^   ^^^^^    
+>                : ^       ^^      ^^        ^^                       ^^       ^^^   ^^^^^    
 
   command: string,
 >command : string
@@ -266,7 +266,7 @@ export declare function registerCommand(
 
   callback: (...args: any[]) => any,
 >callback : (...args: any[]) => any
->         : ^^^^^^^^^^     ^^^^^   
+>         : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 
@@ -280,11 +280,11 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }}) : void
 >                                                                                                                                                                                                                                      : ^^^^
 >registerCommand : (command: string, callback: (...args: any[]) => any, thisArg?: any) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^       ^^      ^^        ^^                       ^^       ^^^   ^^^^^^^^^
 >"_references-view.showHistoryItem" : "_references-view.showHistoryItem"
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async (item) => { // Error, contextual return type of Promise<unknown>  if (item instanceof HistoryItem) {    return executeCommand("vscode.open", item.input.location.uri);  }} : (item: any) => Promise<unknown>
->                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                 : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 
@@ -300,7 +300,7 @@ registerCommand("_references-view.showHistoryItem", async (item) => { // Error, 
 >executeCommand("vscode.open", item.input.location.uri) : Thenable<unknown>
 >                                                       : ^^^^^^^^^^^^^^^^^
 >executeCommand : <T = unknown>(command: string, ...rest: any[]) => Thenable<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^       ^^      ^^^^^    ^^     ^^^^^^^^^^^^^^^^
 >"vscode.open" : "vscode.open"
 >              : ^^^^^^^^^^^^^
 >item.input.location.uri : string

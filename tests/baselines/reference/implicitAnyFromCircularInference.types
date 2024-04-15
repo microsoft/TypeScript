@@ -45,16 +45,16 @@ function g() { return g(); }
 
 // Error expected
 var f1 = function () {
->f1 : () => never
->   : ^^^^^^^^^^^
->function () {    return f1();} : () => never
->                               : ^^^^^^^^^^^
+>f1 : () => any
+>   : ^^^^^^^^^
+>function () {    return f1();} : () => any
+>                               :          
 
     return f1();
->f1() : never
->     : ^^^^^
->f1 : () => never
->   : ^^^^^^^^^^^
+>f1() : any
+>     : ^^^
+>f1 : () => any
+>   : ^^^^^^^^^
 
 };
 
@@ -63,7 +63,7 @@ var f2 = () => f2();
 >f2 : () => any
 >   : ^^^^^^^^^
 >() => f2() : () => any
->           : ^^^^^^^^^
+>           :          
 >f2() : any
 >     : ^^^
 >f2 : () => any
@@ -104,7 +104,7 @@ interface A {
 
 function foo(x: A): string { return "abc"; }
 >foo : (x: A) => string
->    : ^^^^ ^^^^^      
+>    : ^ ^^ ^^^^^      
 >x : A
 >  : ^
 >"abc" : "abc"
@@ -120,7 +120,7 @@ class C {
 >foo(this) : string
 >          : ^^^^^^
 >foo : (x: A) => string
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 }

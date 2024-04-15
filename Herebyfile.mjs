@@ -538,6 +538,8 @@ export const lint = task({
             "--format",
             formatter,
             "--report-unused-disable-directives",
+            "--max-warnings",
+            "0",
         ];
 
         if (cmdLineOptions.fix) {

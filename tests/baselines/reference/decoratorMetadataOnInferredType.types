@@ -3,11 +3,11 @@
 === decoratorMetadataOnInferredType.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
->    : ^^^^^^      ^^^^^    
+>    : ^   ^^      ^^^^^    
 >msg : string
 >    : ^^^^^^
 
@@ -21,18 +21,18 @@ class A {
 >console.log('new A') : void
 >                     : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >'new A' : "new A"
 >        : ^^^^^^^
 }
 
 function decorator(target: Object, propertyKey: string) {
 >decorator : (target: Object, propertyKey: string) => void
->          : ^^^^^^^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^
+>          : ^      ^^      ^^           ^^      ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propertyKey : string
@@ -45,7 +45,7 @@ export class B {
 
     @decorator
 >decorator : (target: Object, propertyKey: string) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^      ^^           ^^      ^^^^^^^^^
 
     x = new A();
 >x : A

@@ -2,8 +2,8 @@
 
 === narrowExceptionVariableInCatchClause.ts ===
 declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
->isFooError : (x: any) => x is { type: 'foo'; dontPanic(): any; }
->           : ^^^^   ^^^^^                                 ^^^   
+>isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
+>           : ^ ^^   ^^^^^                                 ^^^   
 >x : any
 >  : ^^^
 >type : "foo"
@@ -26,7 +26,7 @@ function tryCatch() {
 >isFooError(err) : boolean
 >                : ^^^^^^^
 >isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >err : any
 >    : ^^^
 

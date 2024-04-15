@@ -4,7 +4,7 @@
 interface IFoo<T> {
     foo(x: T): T;
 >foo : (x: T) => T
->    : ^^^^ ^^^^^ 
+>    : ^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -17,11 +17,11 @@ iFoo.foo(1);
 >iFoo.foo(1) : number
 >            : ^^^^^^
 >iFoo.foo : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >iFoo : IFoo<number>
 >     : ^^^^^^^^^^^^
 >foo : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -31,7 +31,7 @@ class IntFooBad implements IFoo<number> { // error
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 }
@@ -46,7 +46,7 @@ class IntFoo implements IFoo<number> {
 
     foo(x: number): number { return null; }
 >foo : (x: number) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 }
@@ -61,7 +61,7 @@ class StringFoo2 implements IFoo<string> {
 
     foo(x: string): string { return null; }
 >foo : (x: string) => string
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 }
@@ -74,11 +74,11 @@ stringFoo2.foo("hm");
 >stringFoo2.foo("hm") : string
 >                     : ^^^^^^
 >stringFoo2.foo : (x: string) => string
->               : ^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^      ^^^^^^^^^^^
 >stringFoo2 : StringFoo2
 >           : ^^^^^^^^^^
 >foo : (x: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >"hm" : "hm"
 >     : ^^^^
 
@@ -106,7 +106,7 @@ class StringFoo3 implements IFoo<string> { // error
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

@@ -22,11 +22,11 @@ class C {
 >console.log(C.f1, C.f2, C.f3) : void
 >                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >C.f1 : number
 >     : ^^^^^^
 >C : typeof C
@@ -58,11 +58,11 @@ class C {
 >console.log(C.f1, C.f2, C.f3) : void
 >                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >C.f1 : number
 >     : ^^^^^^
 >C : typeof C

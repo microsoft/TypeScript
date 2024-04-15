@@ -5,7 +5,7 @@
 
 declare function f(a:number,b:number): void;
 >f : (a: number, b: number) => void
->  : ^^^^      ^^^^^      ^^^^^    
+>  : ^ ^^      ^^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 >b : number
@@ -13,7 +13,7 @@ declare function f(a:number,b:number): void;
 
 function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 >func1 : ({ a, b }?: { a: number; b?: number; }) => void
->      : ^^^^^^^^^^^^                          ^^^^^^^^^
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -37,7 +37,7 @@ function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 >f(a, b) : void
 >        : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -48,7 +48,7 @@ function func1( {a, b}: {a: number, b?: number} = {a: 1, b: 2} ) {
 
 function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 >func2 : ({ a, b }?: { a: number; b?: number; }) => void
->      : ^^^^^^^^^^^^                          ^^^^^^^^^
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -74,7 +74,7 @@ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 >f(a, b) : void
 >        : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -85,7 +85,7 @@ function func2( {a, b = 3}: {a: number, b?:number} = {a: 1,b: 2} ) {
 
 function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
 >func3 : ({ a, b }?: { a: number; b?: number; }) => void
->      : ^^^^^^^^^^^^                          ^^^^^^^^^
+>      : ^        ^^^                          ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -105,7 +105,7 @@ function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
 >f(a,b) : void
 >       : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number | undefined
@@ -116,7 +116,7 @@ function func3( {a, b}: {a: number, b?: number} = {a: 1} ) {
 
 function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
 >func4 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -156,7 +156,7 @@ function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 
 >f(b,c) : void
 >       : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >c : number | undefined
@@ -167,7 +167,7 @@ function func4( {a: {b, c}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 
 
 function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {b: 1,c: 2},d: 3} ) {
 >func5 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -209,7 +209,7 @@ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {
 >f(b, c) : void
 >        : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >c : number
@@ -220,7 +220,7 @@ function func5({a: {b, c = 4}, d}: {a: {b: number,c?: number},d: number} = {a: {
 
 function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1,c: 2}, d: 3} ) {
 >func6 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -270,7 +270,7 @@ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: n
 >f(b, c) : void
 >        : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >c : number | undefined
@@ -281,7 +281,7 @@ function func6( {a: {b, c} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: n
 
 function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, d: number} = {a: {b: 1, c: 2}, d: 3} ) {
 >func7 : ({ a: { b, c }, d }?: { a: { b: number; c?: number; }; d: number; }) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^                                             ^^^^^^^^^
+>      : ^                  ^^^                                             ^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -333,7 +333,7 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 >f(b, c) : void
 >        : ^^^^
 >f : (a: number, b: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >c : number
@@ -350,7 +350,7 @@ interface Foo {
 
 function performFoo({ bar }: Foo = {}) {
 >performFoo : ({ bar }?: Foo) => void
->           : ^^^^^^^^^^^   ^^^^^^^^^
+>           : ^       ^^^   ^^^^^^^^^
 >bar : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -360,14 +360,14 @@ function performFoo({ bar }: Foo = {}) {
 >useBar(bar) : void
 >            : ^^^^
 >useBar : (bar: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^
 >bar : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 }
 
 declare function useBar(bar: number): void;
 >useBar : (bar: number) => void
->       : ^^^^^^      ^^^^^    
+>       : ^   ^^      ^^^^^    
 >bar : number
 >    : ^^^^^^
 
@@ -375,11 +375,11 @@ performFoo();
 >performFoo() : void
 >             : ^^^^
 >performFoo : ({ bar }?: Foo) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^       ^^^   ^^^^^^^^^
 
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
->            : ^^^^^^^^^^^   ^^^^^^^^^
+>            : ^       ^^^   ^^^^^^^^^
 >bar : number
 >    : ^^^^^^
 >{} : {}
@@ -389,14 +389,14 @@ function performFoo2({ bar = null }: Foo = {}) {
 >useBar2(bar) : void
 >             : ^^^^
 >useBar2 : (bar: number | undefined) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^                  ^^^^^^^^^
 >bar : number
 >    : ^^^^^^
 }
 
 declare function useBar2(bar: number | undefined): void;
 >useBar2 : (bar: number | undefined) => void
->        : ^^^^^^                  ^^^^^    
+>        : ^   ^^                  ^^^^^    
 >bar : number | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -404,5 +404,5 @@ performFoo2();
 >performFoo2() : void
 >              : ^^^^
 >performFoo2 : ({ bar }?: Foo) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^       ^^^   ^^^^^^^^^
 

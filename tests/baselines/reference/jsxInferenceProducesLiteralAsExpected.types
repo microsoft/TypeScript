@@ -48,7 +48,7 @@ interface TestProps<T> {
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^ ^^^^^^^^^            ^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >props : TestProps<T>
 >      : ^^^^^^^^^^^^
 ><></> : JSX.Element
@@ -68,7 +68,7 @@ const el1 = <Test model={model} foo="c" />;
 ><Test model={model} foo="c" /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
 >      : ^^^^^^^^^^
 >model : TestObject
@@ -82,7 +82,7 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 ><Test<TestObject> model={model} foo="c" /> : JSX.Element
 >                                           : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
 >      : ^^^^^^^^^^
 >model : TestObject

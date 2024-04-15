@@ -149,9 +149,9 @@ var p: typeof p;
 
 var fn = function (s: string) { return 42; }
 >fn : (s: string) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >function (s: string) { return 42; } : (s: string) => number
->                                    : ^^^^      ^^^^^^^^^^^
+>                                    :                      
 >s : string
 >  : ^^^^^^
 >42 : 42
@@ -159,9 +159,9 @@ var fn = function (s: string) { return 42; }
 
 var fn = (s: string) => 3;
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => 3 : (s: string) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -169,29 +169,29 @@ var fn = (s: string) => 3;
 
 var fn: (s: string) => number;
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 var fn: { (s: string): number };
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
 var fn = <(s: string) => number> null;
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 ><(s: string) => number> null : (s: string) => number
->                             : ^^^^      ^^^^^      
+>                             : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 
 var fn: typeof fn;
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >fn : (s: string) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
 var a: string[]; 
 >a : string[]

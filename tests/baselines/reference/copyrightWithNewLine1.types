@@ -15,11 +15,11 @@ var el = document.getElementById('content');
 >document.getElementById('content') : HTMLElement
 >                                   : ^^^^^^^^^^^
 >document.getElementById : (elementId: string) => HTMLElement
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^         ^^      ^^^^^^^^^^^^^^^^
 >document : Document
 >         : ^^^^^^^^
 >getElementById : (elementId: string) => HTMLElement
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^         ^^      ^^^^^^^^^^^^^^^^
 >'content' : "content"
 >          : ^^^^^^^^^
 

@@ -11,15 +11,15 @@ function* g2(): Iterator<() => Iterable<(x: string) => number>> {
 >yield function* () {        yield x => x.length;    } () : undefined
 >                                                         : ^^^^^^^^^
 >function* () {        yield x => x.length;    } () : Generator<(x: any) => any, void, unknown>
->                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function* () {        yield x => x.length;    } : () => Generator<(x: any) => any, void, unknown>
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         yield x => x.length;
 >yield x => x.length : any
 >                    : ^^^
 >x => x.length : (x: any) => any
->              : ^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x.length : any

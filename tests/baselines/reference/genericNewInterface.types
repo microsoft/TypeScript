@@ -3,9 +3,9 @@
 === genericNewInterface.ts ===
 function createInstance<T>(ctor: new (s: string) => T): T {
 >createInstance : <T>(ctor: new (s: string) => T) => T
->               : ^ ^^^^^^^^                    ^^^^^ 
+>               : ^ ^^    ^^                    ^^^^^ 
 >ctor : new (s: string) => T
->     : ^^^^^^^^      ^^^^^ 
+>     : ^^^^^ ^^      ^^^^^ 
 >s : string
 >  : ^^^^^^
 
@@ -13,7 +13,7 @@ function createInstance<T>(ctor: new (s: string) => T): T {
 >new ctor(42) : T
 >             : ^
 >ctor : new (s: string) => T
->     : ^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^ ^^      ^^^^^^
 >42 : 42
 >   : ^^
 }
@@ -26,7 +26,7 @@ interface INewable<T> {
 
 function createInstance2<T>(ctor: INewable<T>): T {
 >createInstance2 : <T>(ctor: INewable<T>) => T
->                : ^ ^^^^^^^^           ^^^^^ 
+>                : ^ ^^    ^^           ^^^^^ 
 >ctor : INewable<T>
 >     : ^^^^^^^^^^^
 

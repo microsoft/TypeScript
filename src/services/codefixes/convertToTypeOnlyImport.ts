@@ -104,7 +104,8 @@ function canConvertImportDeclarationForSpecifier(specifier: ImportSpecifier, sou
     const checker = program.getTypeChecker();
     for (const specifier of nonTypeOnlySpecifiers) {
         const isUsedAsValue = FindAllReferences.Core.eachSymbolReferenceInFile(specifier.name, checker, sourceFile, usage => {
-            return !isValidTypeOnlyAliasUseSite(usage);
+            const symbol = checker.getSymbolAtLocation(usage);
+            return !!symbol && checker.symbolIsValue(symbol) || !isValidTypeOnlyAliasUseSite(usage);
         });
         if (isUsedAsValue) {
             return false;

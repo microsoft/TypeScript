@@ -95,7 +95,7 @@ class SomeDerivedClass extends SomeBaseClass {
 >y : () => string
 >  : ^^^^^^^^^^^^
 >() => super.func() : () => string
->                   : ^^^^^^^^^^^^
+>                   :             
 >super.func() : string
 >             : ^^^^^^
 >super.func : () => string

@@ -24,7 +24,7 @@ interface Goo {
 
 function foo<T>(f: { y: T }): T { return null }
 >foo : <T>(f: { y: T; }) => T
->    : ^ ^^^^^         ^^^^^ 
+>    : ^ ^^ ^^         ^^^^^ 
 >f : { y: T; }
 >  : ^^^^^ ^^^
 >y : T
@@ -34,11 +34,11 @@ var x = foo(new C()).x; // was Error that property x does not exist on type {}
 >x : () => Goo
 >  : ^^^^^^^^^
 >foo(new C()).x : () => Goo
->               : ^^^^^^^^^
+>               :          
 >foo(new C()) : I
 >             : ^
 >foo : <T>(f: { y: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^         ^^^^^^
 >new C() : C
 >        : ^
 >C : typeof C

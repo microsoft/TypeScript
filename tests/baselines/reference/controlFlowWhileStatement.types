@@ -357,7 +357,7 @@ function h1() {
 }
 declare function len(s: string | number): number;
 >len : (s: string | number) => number
->    : ^^^^               ^^^^^      
+>    : ^ ^^               ^^^^^      
 >s : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -389,7 +389,7 @@ function h2() {
 >len(x) : number
 >       : ^^^^^^
 >len : (s: string | number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -433,7 +433,7 @@ function h3() {
 >len(x) : number
 >       : ^^^^^^
 >len : (s: string | number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
     }

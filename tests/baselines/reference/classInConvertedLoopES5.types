@@ -37,7 +37,7 @@ for (const row of ['1', '2', '3', '4', '5']) {
 >factory : () => RowClass
 >        : ^^^^^^^^^^^^^^
 >() => new RowClass() : () => RowClass
->                     : ^^^^^^^^^^^^^^
+>                     :               
 >new RowClass() : RowClass
 >               : ^^^^^^^^
 >RowClass : typeof RowClass

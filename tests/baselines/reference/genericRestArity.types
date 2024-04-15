@@ -5,11 +5,11 @@
 
 declare function call<TS extends unknown[]>(
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
->     : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^  ^^^^^    
+>     : ^  ^^^^^^^^^^^^^^^^^^^^       ^^                     ^^^^^    ^^  ^^^^^    
 
     handler: (...args: TS) => void,
 >handler : (...args: TS) => void
->        : ^^^^^^^^^^  ^^^^^    
+>        : ^^^^    ^^  ^^^^^    
 >args : TS
 >     : ^^
 
@@ -21,9 +21,9 @@ call((x: number, y: number) => x + y);
 >call((x: number, y: number) => x + y) : void
 >                                      : ^^^^
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^^^^^^^^^^^^       ^^                     ^^^^^    ^^  ^^^^^^^^^
 >(x: number, y: number) => x + y : (x: number, y: number) => number
->                                : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -39,9 +39,9 @@ call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7);
 >call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7) : void
 >                                                           : ^^^^
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^^^^^^^^^^^^^^^^^^^       ^^                     ^^^^^    ^^  ^^^^^^^^^
 >(x: number, y: number) => x + y : (x: number, y: number) => number
->                                : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number

@@ -13,11 +13,11 @@ function truePromise(): Promise<true> {
 >Promise.resolve(true) : Promise<true>
 >                      : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 }
@@ -30,7 +30,7 @@ interface Wrap<T> {
 
 function wrap<T>(value: T): Wrap<T> {
 >wrap : <T>(value: T) => Wrap<T>
->     : ^ ^^^^^^^^^ ^^^^^       
+>     : ^ ^^     ^^ ^^^^^       
 >value : T
 >      : ^
 
@@ -42,21 +42,21 @@ function wrap<T>(value: T): Wrap<T> {
 }
 
 function wrappedFoo(): Wrap<'foo'> {
->wrappedFoo : () => Wrap<'foo'>
+>wrappedFoo : () => Wrap<"foo">
 >           : ^^^^^^           
 
     return wrap('foo');
 >wrap('foo') : Wrap<"foo">
 >            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^ ^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 }
 
 function wrapBar(value: 'bar'): Wrap<'bar'> {
->wrapBar : (value: 'bar') => Wrap<'bar'>
->        : ^^^^^^^^     ^^^^^           
+>wrapBar : (value: "bar") => Wrap<"bar">
+>        : ^     ^^     ^^^^^           
 >value : "bar"
 >      : ^^^^^
 
@@ -68,7 +68,7 @@ function wrapBar(value: 'bar'): Wrap<'bar'> {
 }
 
 function wrappedBar(): Wrap<'bar'> {
->wrappedBar : () => Wrap<'bar'>
+>wrappedBar : () => Wrap<"bar">
 >           : ^^^^^^           
 
     const value = 'bar';
@@ -83,7 +83,7 @@ function wrappedBar(): Wrap<'bar'> {
 >wrapBar(value) : Wrap<"bar">
 >               : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 >value : "bar"
 >      : ^^^^^
 
@@ -93,7 +93,7 @@ function wrappedBar(): Wrap<'bar'> {
 >wrapBar('bar') : Wrap<"bar">
 >               : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 >'bar' : "bar"
 >      : ^^^^^
 
@@ -109,7 +109,7 @@ function wrappedBar(): Wrap<'bar'> {
 >wrapBar(value2) : Wrap<"bar">
 >                : ^^^^^^^^^^^
 >wrapBar : (value: "bar") => Wrap<"bar">
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^     ^^^^^^^^^^^^^^^^
 >value2 : string
 >       : ^^^^^^
 
@@ -117,13 +117,13 @@ function wrappedBar(): Wrap<'bar'> {
 >wrap(value) : Wrap<"bar">
 >            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^ ^^^^^^^^^^^^
 >value : "bar"
 >      : ^^^^^
 }
 
 function wrappedBaz(): Wrap<'baz'> {
->wrappedBaz : () => Wrap<'baz'>
+>wrappedBaz : () => Wrap<"baz">
 >           : ^^^^^^           
 
     const value: 'baz' = 'baz';
@@ -136,7 +136,7 @@ function wrappedBaz(): Wrap<'baz'> {
 >wrap(value) : Wrap<"baz">
 >            : ^^^^^^^^^^^
 >wrap : <T>(value: T) => Wrap<T>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^ ^^^^^^^^^^^^
 >value : "baz"
 >      : ^^^^^
 }
@@ -163,7 +163,7 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >[1, 2, 3, 4, 5].map(v => ({ type: 'folder' })) : { type: "folder"; }[]
 >                                               : ^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, 4, 5].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1, 2, 3, 4, 5] : number[]
 >                : ^^^^^^^^
 >1 : 1
@@ -177,9 +177,9 @@ a = [1, 2, 3, 4, 5].map(v => ({ type: 'folder' }));
 >5 : 5
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >v => ({ type: 'folder' }) : (v: number) => { type: "folder"; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >({ type: 'folder' }) : { type: "folder"; }
@@ -211,13 +211,13 @@ let mappedArr: Array<[number, number]> = arr.map(([x, y]) => {
 >arr.map(([x, y]) => {    return [x, y];}) : [number, number][]
 >                                          : ^^^^^^^^^^^^^^^^^^
 >arr.map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >arr : [number, number][]
 >    : ^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [number, number], index: number, array: [number, number][]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >([x, y]) => {    return [x, y];} : ([x, y]: [number, number]) => [number, number]
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -300,13 +300,13 @@ function bug(): Diagnostic[] {
 >values.map((value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	}) : { severity: 1; message: string; }[]
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >values.map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >values : any[]
 >       : ^^^^^
 >map : <U>(callbackfn: (value: any, index: number, array: any[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(value) => {		return {			severity: DiagnosticSeverity.Error,			message: 'message'		}	} : (value: any) => { severity: 1; message: string; }
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 
@@ -337,7 +337,7 @@ function bug(): Diagnostic[] {
 
 function objectToMap(obj: any) {
 >objectToMap : (obj: any) => Map<string, any>
->            : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^
 >obj : any
 >    : ^^^
 
@@ -349,21 +349,21 @@ function objectToMap(obj: any) {
 >Object.keys(obj).map(key => [key, obj[key]]) : [string, any][]
 >                                             : ^^^^^^^^^^^^^^^
 >Object.keys(obj).map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.keys(obj) : string[]
 >                 : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >obj : any
 >    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >key => [key, obj[key]] : (key: string) => [string, any]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >[key, obj[key]] : [string, any]
@@ -383,7 +383,7 @@ function objectToMap(obj: any) {
 
 interface Person {
   phoneNumbers: {
->phoneNumbers : { __typename: 'PhoneNumber'; }[]
+>phoneNumbers : { __typename: "PhoneNumber"; }[]
 >             : ^^^^^^^^^^^^^^             ^^^^^
 
     __typename: 'PhoneNumber';
@@ -405,15 +405,15 @@ function createPerson(): Person {
 >phoneNumbers : { __typename: "PhoneNumber"; }[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map(() => ({      __typename: 'PhoneNumber'    })) : { __typename: "PhoneNumber"; }[]
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       :                               ^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >() => ({      __typename: 'PhoneNumber'    }) : () => { __typename: "PhoneNumber"; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({      __typename: 'PhoneNumber'    }) : { __typename: "PhoneNumber"; }
@@ -441,7 +441,7 @@ type Box<T> = { value: T };
 
 declare function box<T>(value: T): Box<T>;
 >box : <T>(value: T) => Box<T>
->    : ^ ^^^^^^^^^ ^^^^^      
+>    : ^ ^^     ^^ ^^^^^      
 >value : T
 >      : ^
 
@@ -465,7 +465,7 @@ let zz: Box<WinCondition> = box({ type: 'draw' });
 >box({ type: 'draw' }) : Box<{ type: "draw"; }>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^ ^^^^^^^^^^^
 >{ type: 'draw' } : { type: "draw"; }
 >                 : ^^^^^^^^^^^^^^^^^
 >type : "draw"
@@ -483,7 +483,7 @@ let yy: Box<WinType> = box('draw');
 >box('draw') : Box<"draw">
 >            : ^^^^^^^^^^^
 >box : <T>(value: T) => Box<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^ ^^^^^^^^^^^
 >'draw' : "draw"
 >       : ^^^^^^
 
@@ -500,7 +500,7 @@ interface OK<T> {
 }
 export function ok<T>(value: T): OK<T> {
 >ok : <T>(value: T) => OK<T>
->   : ^ ^^^^^^^^^ ^^^^^     
+>   : ^ ^^     ^^ ^^^^^     
 >value : T
 >      : ^
 
@@ -529,7 +529,7 @@ let result: OK<[string, number]> = ok(["hello", 12]);
 >ok(["hello", 12]) : OK<[string, number]>
 >                  : ^^^^^^^^^^^^^^^^^^^^
 >ok : <T>(value: T) => OK<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^ ^^^^^^^^^^
 >["hello", 12] : [string, number]
 >              : ^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -555,7 +555,7 @@ const a3: I[] = ['a', 'b'].map(name => {
 >['a', 'b'].map(name => {    return {        code: 'mapped',        name,    }}) : { code: "mapped"; name: string; }[]
 >                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >['a', 'b'].map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >['a', 'b'] : string[]
 >           : ^^^^^^^^
 >'a' : "a"
@@ -563,9 +563,9 @@ const a3: I[] = ['a', 'b'].map(name => {
 >'b' : "b"
 >    : ^^^
 >map : <U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >name => {    return {        code: 'mapped',        name,    }} : (name: string) => { code: "mapped"; name: string; }
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 
@@ -619,11 +619,11 @@ const f1: F = () => {
 >Promise.all([        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ]) : Promise<({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]>
 >                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        {            name: "David Gomes",            age: 23,            position: "GOALKEEPER",        }, {            name: "Cristiano Ronaldo",            age: 33,            position: "STRIKER",        }    ] : ({ name: string; age: number; position: "GOALKEEPER"; } | { name: string; age: number; position: "STRIKER"; })[]
 >                                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         {
@@ -677,11 +677,11 @@ const f1: F = () => {
 
 declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
->         : ^ ^^^^^ ^^^^^                         ^^^^^ 
+>         : ^ ^^ ^^ ^^ ^^                         ^^^^^ 
 >z : U
 >  : ^
 >f : (acc: U, t: boolean) => U
->  : ^^^^^^ ^^^^^       ^^^^^ 
+>  : ^   ^^ ^^ ^^       ^^^^^ 
 >acc : U
 >    : ^
 >t : boolean
@@ -693,11 +693,11 @@ let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
 >foldLeft(true, (acc, t) => acc && t) : boolean
 >                                     : ^^^^^^^
 >foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^ ^^                         ^^^^^^
 >true : true
 >     : ^^^^
 >(acc, t) => acc && t : (acc: boolean, t: boolean) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >acc : boolean
 >    : ^^^^^^^
 >t : boolean
@@ -725,7 +725,7 @@ type Foo = { state: State }
 
 declare function bar<T>(f: () => T[]): T[];
 >bar : <T>(f: () => T[]) => T[]
->    : ^ ^^^^^         ^^^^^   
+>    : ^ ^^ ^^         ^^^^^   
 >f : () => T[]
 >  : ^^^^^^   
 
@@ -735,7 +735,7 @@ let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); 
 >bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : { state: State.A; }[]
 >                                                                : ^^^^^^^^^^^^^^^^^^^^^
 >bar : <T>(f: () => T[]) => T[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^         ^^^^^^^^
 >() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State.A; }[] | { state: State.B; }[]
@@ -791,18 +791,18 @@ class ClassWithConvert<T> {
 
   convert(converter: { to: (v: T) => T; }) { }
 >convert : (converter: { to: (v: T) => T; }) => void
->        : ^^^^^^^^^^^^                    ^^^^^^^^^
+>        : ^         ^^                    ^^^^^^^^^
 >converter : { to: (v: T) => T; }
 >          : ^^^^^^           ^^^
 >to : (v: T) => T
->   : ^^^^ ^^^^^ 
+>   : ^ ^^ ^^^^^ 
 >v : T
 >  : ^
 }
 
 function fn<T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) { }
 >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
->   : ^ ^^^^^^^                   ^^^^^                         ^^^^^^^^^
+>   : ^ ^^   ^^                   ^^ ^^                         ^^^^^^^^^
 >arg : ClassWithConvert<T>
 >    : ^^^^^^^^^^^^^^^^^^^
 >f : () => ClassWithConvert<T>
@@ -812,7 +812,7 @@ fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A));
 >fn(new ClassWithConvert(Enum.A), () => new ClassWithConvert(Enum.A)) : void
 >                                                                     : ^^^^
 >fn : <T>(arg: ClassWithConvert<T>, f: () => ClassWithConvert<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^                   ^^ ^^                         ^^^^^^^^^
 >new ClassWithConvert(Enum.A) : ClassWithConvert<Enum>
 >                             : ^^^^^^^^^^^^^^^^^^^^^^
 >ClassWithConvert : typeof ClassWithConvert
@@ -844,13 +844,13 @@ type Func<T> = (x: T) => T;
 
 declare function makeFoo<T>(x: T): Func<T>;
 >makeFoo : <T>(x: T) => Func<T>
->        : ^ ^^^^^ ^^^^^       
+>        : ^ ^^ ^^ ^^^^^       
 >x : T
 >  : ^
 
 declare function baz<U>(x: Func<U>, y: Func<U>): void;
 >baz : <U>(x: Func<U>, y: Func<U>) => void
->    : ^ ^^^^^       ^^^^^       ^^^^^    
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^    
 >x : Func<U>
 >  : ^^^^^^^
 >y : Func<U>
@@ -860,11 +860,11 @@ baz(makeFoo(Enum.A), makeFoo(Enum.A));
 >baz(makeFoo(Enum.A), makeFoo(Enum.A)) : void
 >                                      : ^^^^
 >baz : <U>(x: Func<U>, y: Func<U>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^       ^^ ^^       ^^^^^^^^^
 >makeFoo(Enum.A) : Func<Enum>
 >                : ^^^^^^^^^^
 >makeFoo : <T>(x: T) => Func<T>
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^^^^
 >Enum.A : Enum.A
 >       : ^^^^^^
 >Enum : typeof Enum
@@ -874,7 +874,7 @@ baz(makeFoo(Enum.A), makeFoo(Enum.A));
 >makeFoo(Enum.A) : Func<Enum>
 >                : ^^^^^^^^^^
 >makeFoo : <T>(x: T) => Func<T>
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^ ^^^^^^^^^^^^
 >Enum.A : Enum.A
 >       : ^^^^^^
 >Enum : typeof Enum

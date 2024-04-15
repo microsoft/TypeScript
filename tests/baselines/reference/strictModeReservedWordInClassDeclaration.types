@@ -29,7 +29,7 @@ class Foo {
     }
     public banana(x: public) { }
 >banana : (x: public) => void
->       : ^^^^      ^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >x : public
 >  : ^^^^^^
 }
@@ -46,7 +46,7 @@ class C {
     }
     foo1(private, static, public) {
 >foo1 : (private: any, static: any, public: any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^
 >private : any
 >        : ^^^
 >static : any
@@ -62,7 +62,7 @@ class C {
 >z : () => void
 >  : ^^^^^^^^^^
 >function let() { } : () => void
->                   : ^^^^^^^^^^
+>                   :           
 >let : () => void
 >    : ^^^^^^^^^^
     }

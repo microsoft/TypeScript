@@ -49,7 +49,7 @@ class List<T>
 
 function asList<T>(arg: T): List<T> { return new List(); }
 >asList : <T>(arg: T) => List<T>
->       : ^ ^^^^^^^ ^^^^^       
+>       : ^ ^^   ^^ ^^^^^       
 >arg : T
 >    : ^
 >new List() : List<T>
@@ -61,26 +61,26 @@ function asList<T>(arg: T): List<T> { return new List(); }
 // The correct type is "List<A | B.foo>"
 function fn1(x: C): List<C> { return asList(x); }
 >fn1 : (x: C) => List<C>
->    : ^^^^ ^^^^^       
+>    : ^ ^^ ^^^^^       
 >x : C
 >  : ^
 >asList(x) : List<C>
 >          : ^^^^^^^
 >asList : <T>(arg: T) => List<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^^^^^^^^
 >x : C
 >  : ^
 
 // If we use the literal "foo" instead of B.foo, the correct type is inferred
 function fn2(x: D): List<D> { return asList(x); }
 >fn2 : (x: D) => List<D>
->    : ^^^^ ^^^^^       
+>    : ^ ^^ ^^^^^       
 >x : D
 >  : ^
 >asList(x) : List<D>
 >          : ^^^^^^^
 >asList : <T>(arg: T) => List<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^^^^^^^^
 >x : D
 >  : ^
 

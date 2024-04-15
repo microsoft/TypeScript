@@ -3,7 +3,7 @@
 === discriminatedUnionTypes2.ts ===
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
 >f10 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
->    : ^^^^                                                                                       ^^^^^^^^^
+>    : ^ ^^                                                                                       ^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : false
@@ -76,7 +76,7 @@ function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 
 function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {
 >f11 : (x: { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }) => void
->    : ^^^^                                                                                       ^^^^^^^^^
+>    : ^ ^^                                                                                       ^^^^^^^^^
 >x : { kind: false; a: string; } | { kind: true; b: string; } | { kind: string; c: string; }
 >  : ^^^^^^^^     ^^^^^      ^^^^^^^^^^^^^^    ^^^^^      ^^^^^^^^^^^^^^      ^^^^^      ^^^
 >kind : false
@@ -143,7 +143,7 @@ function f11(x : { kind: false, a: string } | { kind: true, b: string } | { kind
 
 function f13(x: { a: null; b: string } | { a: string, c: number }) {
 >f13 : (x: { a: null; b: string; } | { a: string; c: number; }) => void
->    : ^^^^                                                   ^^^^^^^^^
+>    : ^ ^^                                                   ^^^^^^^^^
 >x : { a: null; b: string; } | { a: string; c: number; }
 >  : ^^^^^    ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
 >a : null
@@ -176,7 +176,7 @@ function f13(x: { a: null; b: string } | { a: string, c: number }) {
 
 function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {
 >f14 : <T>(x: { a: 0; b: string; } | { a: T; c: number; }) => void
->    : ^ ^^^^^                                           ^^^^^^^^^
+>    : ^ ^^ ^^                                           ^^^^^^^^^
 >x : { a: 0; b: string; } | { a: T; c: number; }
 >  : ^^^^^ ^^^^^      ^^^^^^^^^^^ ^^^^^      ^^^
 >a : 0
@@ -222,7 +222,7 @@ type Result<T> = { error?: undefined, value: T } | { error: Error };
 
 function f15(x: Result<number>) {
 >f15 : (x: Result<number>) => void
->    : ^^^^              ^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >x : Result<number>
 >  : ^^^^^^^^^^^^^^
 
@@ -263,7 +263,7 @@ f15({ value: 10 });
 >f15({ value: 10 }) : void
 >                   : ^^^^
 >f15 : (x: Result<number>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >{ value: 10 } : { value: number; }
 >              : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -275,7 +275,7 @@ f15({ error: new Error("boom") });
 >f15({ error: new Error("boom") }) : void
 >                                  : ^^^^
 >f15 : (x: Result<number>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >{ error: new Error("boom") } : { error: Error; }
 >                             : ^^^^^^^^^^^^^^^^^
 >error : Error
@@ -315,7 +315,7 @@ type DataCarrier<Data> = WithError | WithoutError<Data>
 
 function f20<Data>(carrier: DataCarrier<Data>) {
 >f20 : <Data>(carrier: DataCarrier<Data>) => void
->    : ^    ^^^^^^^^^^^                 ^^^^^^^^^
+>    : ^    ^^       ^^                 ^^^^^^^^^
 >carrier : DataCarrier<Data>
 >        : ^^^^^^^^^^^^^^^^^
 
@@ -394,7 +394,7 @@ type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]:
 
 function f30(foo: Foo) {
 >f30 : (foo: Foo) => void
->    : ^^^^^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 
@@ -419,7 +419,7 @@ function f30(foo: Foo) {
 
 function f31(foo: Foo) {
 >f31 : (foo: Foo) => void
->    : ^^^^^^   ^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >foo : Foo
 >    : ^^^
 
@@ -491,7 +491,7 @@ type abc = a | b | c;
 
 function f(problem: abc & (b | c)) {
 >f : (problem: abc & (b | c)) => void
->  : ^^^^^^^^^^             ^^^^^^^^^
+>  : ^       ^^             ^^^^^^^^^
 >problem : b | c
 >        : ^^^^^
 
@@ -549,9 +549,9 @@ type RuntimeValue =
 >      : ^^^^^^^
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
->foo1 : (x: RuntimeValue & { type: 'number'; }) => void
->     : ^^^^                                  ^^^^^^^^^
->x : { type: "number"; value: number; } & { type: 'number'; }
+>foo1 : (x: RuntimeValue & { type: "number"; }) => void
+>     : ^ ^^                                  ^^^^^^^^^
+>x : { type: "number"; value: number; } & { type: "number"; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^
 >type : "number"
 >     : ^^^^^^^^
@@ -588,9 +588,9 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: RuntimeValue & ({ type: 'number'; } | { type: 'string'; })) => void
->     : ^^^^                                                          ^^^^^^^^^
->x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
+>foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
+>     : ^ ^^                                                          ^^^^^^^^^
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^
 >type : "number"
 >     : ^^^^^^^^

@@ -21,7 +21,7 @@ class AA {
 
     #method2(a, ...b) {};
 >#method2 : (a: any, ...b: any[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >a : any
 >b : any[]
 >  : ^^^^^
@@ -48,7 +48,7 @@ class AA {
 >func : () => void
 >     : ^^^^^^^^^^
 >this.#method : () => void
->             : ^^^^^^^^^^
+>             :           
 >this : this
 >     : ^^^^
 
@@ -79,7 +79,7 @@ class AA {
 >this.#method2(0, ...arr, 3) : void
 >                            : ^^^^
 >this.#method2 : (a: any, ...b: any[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >0 : 0
@@ -95,7 +95,7 @@ class AA {
 >b : any
 >new this.#method2(0, ...arr, 3) : any
 >this.#method2 : (a: any, ...b: any[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >0 : 0
@@ -113,7 +113,7 @@ class AA {
 >this.#method2`head${1}middle${2}tail` : void
 >                                      : ^^^^
 >this.#method2 : (a: any, ...b: any[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >`head${1}middle${2}tail` : string
@@ -127,7 +127,7 @@ class AA {
 >this.getInstance().#method2`test${1}and${2}` : void
 >                                             : ^^^^
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this.getInstance() : AA
 >                   : ^^
 >this.getInstance : () => AA
@@ -147,7 +147,7 @@ class AA {
 >this.getInstance().#method2(0, ...arr, 3) : void
 >                                          : ^^^^
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this.getInstance() : AA
 >                   : ^^
 >this.getInstance : () => AA
@@ -169,9 +169,9 @@ class AA {
 >b2 : any
 >new (this.getInstance().#method2)(0, ...arr, 3) : any
 >(this.getInstance().#method2) : (a: any, ...b: any[]) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this.getInstance() : AA
 >                   : ^^
 >this.getInstance : () => AA
@@ -195,7 +195,7 @@ class AA {
 >this.getInstance().#method2`head${1}middle${2}tail` : void
 >                                                    : ^^^^
 >this.getInstance().#method2 : (a: any, ...b: any[]) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >this.getInstance() : AA
 >                   : ^^
 >this.getInstance : () => AA

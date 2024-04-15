@@ -21,7 +21,7 @@ export type Blah =
 
 declare function thing(blah: Blah): void;
 >thing : (blah: Blah) => void
->      : ^^^^^^^    ^^^^^    
+>      : ^    ^^    ^^^^^    
 >blah : Blah
 >     : ^^^^
 
@@ -35,7 +35,7 @@ thing({
 >thing({    type: foo1,    abc: "hello!"}) : void
 >                                          : ^^^^
 >thing : (blah: Blah) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^    ^^^^^^^^^
 >{    type: foo1,    abc: "hello!"} : { type: string; abc: string; }
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ thing({
 >thing({    type: foo2,    abc: "hello!",    extra: 123,}) : void
 >                                                          : ^^^^
 >thing : (blah: Blah) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^    ^^^^^^^^^
 >{    type: foo2,    abc: "hello!",    extra: 123,} : { type: string; abc: string; extra: number; }
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -97,7 +97,7 @@ thing({
 >thing({    type: bar,    xyz: 123,    extra: 123,}) : void
 >                                                    : ^^^^
 >thing : (blah: Blah) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^    ^^^^^^^^^
 >{    type: bar,    xyz: 123,    extra: 123,} : { type: string; xyz: number; extra: number; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

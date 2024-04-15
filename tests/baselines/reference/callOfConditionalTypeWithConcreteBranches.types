@@ -9,7 +9,7 @@ type Q<T> = number extends T ? (n: number) => void : never;
 
 function fn<T>(arg: Q<T>) {
 >fn : <T>(arg: Q<T>) => void
->   : ^ ^^^^^^^    ^^^^^^^^^
+>   : ^ ^^   ^^    ^^^^^^^^^
 >arg : Q<T>
 >    : ^^^^
 
@@ -28,37 +28,37 @@ fn<string | number>(m => m.toFixed());
 >fn<string | number>(m => m.toFixed()) : void
 >                                      : ^^^^
 >fn : <T>(arg: Q<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >m.toFixed() : string
 >            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 fn<number>(m => m.toFixed());
 >fn<number>(m => m.toFixed()) : void
 >                             : ^^^^
 >fn : <T>(arg: Q<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^    ^^^^^^^^^
 >m => m.toFixed() : (m: number) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >m.toFixed() : string
 >            : ^^^^^^
 >m.toFixed : (fractionDigits?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 // Ensure the following real-world example that relies on substitution still works
 type ExtractParameters<T> = "parameters" extends keyof T
@@ -77,19 +77,19 @@ type Q2<T> = number extends T ? (cb: (n: number) => void) => void : never;
 >Q2 : Q2<T>
 >   : ^^^^^
 >cb : (n: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
 function fn2<T>(arg: Q2<T>) {
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^ ^^^^^^^     ^^^^^^^^^
+>    : ^ ^^   ^^     ^^^^^^^^^
 >arg : Q2<T>
 >    : ^^^^^
 
   function useT(_arg: T): void {}
 >useT : (_arg: T) => void
->     : ^^^^^^^ ^^^^^    
+>     : ^    ^^ ^^^^^    
 >_arg : T
 >     : ^
 
@@ -100,13 +100,13 @@ function fn2<T>(arg: Q2<T>) {
 >arg : Q2<T>
 >    : ^^^^^
 >arg => useT(arg) : (arg: T & number) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : T & number
 >    : ^^^^^^^^^^
 >useT(arg) : void
 >          : ^^^^
 >useT : (_arg: T) => void
->     : ^^^^^^^^^^^^^^^^^
+>     : ^    ^^ ^^^^^^^^^
 >arg : T & number
 >    : ^^^^^^^^^^
 }
@@ -115,15 +115,15 @@ fn2<string | number>(m => m(42));
 >fn2<string | number>(m => m(42)) : void
 >                                 : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >m(42) : void
 >      : ^^^^
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -131,15 +131,15 @@ fn2<number>(m => m(42));
 >fn2<number>(m => m(42)) : void
 >                        : ^^^^
 >fn2 : <T>(arg: Q2<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^     ^^^^^^^^^
 >m => m(42) : (m: (n: number) => void) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >m(42) : void
 >      : ^^^^
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 

@@ -9,13 +9,13 @@ type Falsy = false | 0 | 0n | '' | null | undefined;
 
 declare function isFalsy(value: unknown): value is Falsy;
 >isFalsy : (value: unknown) => value is Falsy
->        : ^^^^^^^^       ^^^^^              
+>        : ^     ^^       ^^^^^              
 >value : unknown
 >      : ^^^^^^^
 
 function fx1(x: string | number | undefined) {
 >fx1 : (x: string | number | undefined) => void
->    : ^^^^                           ^^^^^^^^^
+>    : ^ ^^                           ^^^^^^^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -23,7 +23,7 @@ function fx1(x: string | number | undefined) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ function fx1(x: string | number | undefined) {
 
 function fx2<T>(x: T | undefined) {
 >fx2 : <T>(x: T | undefined) => void
->    : ^ ^^^^^             ^^^^^^^^^
+>    : ^ ^^ ^^             ^^^^^^^^^
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -43,7 +43,7 @@ function fx2<T>(x: T | undefined) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
 >x : T | undefined
 >  : ^^^^^^^^^^^^^
 
@@ -55,7 +55,7 @@ function fx2<T>(x: T | undefined) {
 
 function fx3<T extends string | number>(x: T) {
 >fx3 : <T extends string | number>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -63,7 +63,7 @@ function fx3<T extends string | number>(x: T) {
 >isFalsy(x) : boolean
 >           : ^^^^^^^
 >isFalsy : (value: unknown) => value is Falsy
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^       ^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -75,7 +75,7 @@ function fx3<T extends string | number>(x: T) {
 
 declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
 >isA : (obj: unknown) => obj is { a: false; } | { b: 0; }
->    : ^^^^^^       ^^^^^                                
+>    : ^   ^^       ^^^^^                                
 >obj : unknown
 >    : ^^^^^^^
 >a : false
@@ -87,7 +87,7 @@ declare function isA(obj: unknown): obj is { a: false } | { b: 0 };
 
 function fx4(obj: { b: number }) {
 >fx4 : (obj: { b: number; }) => void
->    : ^^^^^^              ^^^^^^^^^
+>    : ^   ^^              ^^^^^^^^^
 >obj : { b: number; }
 >    : ^^^^^      ^^^
 >b : number
@@ -97,7 +97,7 @@ function fx4(obj: { b: number }) {
 >isA(obj) : boolean
 >         : ^^^^^^^
 >isA : (obj: unknown) => obj is { a: false; } | { b: 0; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { b: number; }
 >    : ^^^^^^^^^^^^^^
 
@@ -137,13 +137,13 @@ declare class YS extends Y { ys: string }
 
 declare function isXSorY(obj: unknown): obj is XS | Y;
 >isXSorY : (obj: unknown) => obj is XS | Y
->        : ^^^^^^       ^^^^^             
+>        : ^   ^^       ^^^^^             
 >obj : unknown
 >    : ^^^^^^^
 
 function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 >fx5 : <T extends X>(obj: X | YS, c: typeof XS | typeof Y) => void
->    : ^^^^^^^^^^^^^^^^^^^      ^^^^^                    ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^   ^^      ^^ ^^                    ^^^^^^^^^
 >obj : X | YS
 >    : ^^^^^^
 >c : typeof XS | typeof Y
@@ -169,7 +169,7 @@ function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 >isXSorY(obj) : boolean
 >             : ^^^^^^^
 >isXSorY : (obj: unknown) => obj is XS | Y
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^       ^^^^^^^^^^^^^^^^^^
 >obj : X | YS
 >    : ^^^^^^
 
@@ -183,12 +183,12 @@ function fx5<T extends X>(obj: X | YS, c: typeof XS | typeof Y) {
 
 declare function isEmptyStrOrUndefined(mixed: any): mixed is "" | undefined;
 >isEmptyStrOrUndefined : (mixed: any) => mixed is "" | undefined
->                      : ^^^^^^^^   ^^^^^                       
+>                      : ^     ^^   ^^^^^                       
 >mixed : any
 
 function fx10(s: string | undefined) {
 >fx10 : (s: string | undefined) => void
->     : ^^^^                  ^^^^^^^^^
+>     : ^ ^^                  ^^^^^^^^^
 >s : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -196,7 +196,7 @@ function fx10(s: string | undefined) {
 >isEmptyStrOrUndefined(s) : boolean
 >                         : ^^^^^^^
 >isEmptyStrOrUndefined : (mixed: any) => mixed is "" | undefined
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -228,7 +228,7 @@ function fx10(s: string | undefined) {
 
 function f1(x: any): asserts x is number | undefined { }
 >f1 : (x: any) => asserts x is number | undefined
->   : ^^^^   ^^^^^                               
+>   : ^ ^^   ^^^^^                               
 >x : any
 
 let v1: number | string | undefined;
@@ -239,7 +239,7 @@ f1(v1);
 >f1(v1) : void
 >       : ^^^^
 >f1 : (x: any) => asserts x is number | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v1 : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -249,7 +249,7 @@ v1;  // number | undefined
 
 function f2(x: any): asserts x is 6 | undefined { }
 >f2 : (x: any) => asserts x is 6 | undefined
->   : ^^^^   ^^^^^                          
+>   : ^ ^^   ^^^^^                          
 >x : any
 
 let v2: number | string | undefined;
@@ -260,7 +260,7 @@ f2(v2);
 >f2(v2) : void
 >       : ^^^^
 >f2 : (x: any) => asserts x is 6 | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v2 : string | number | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -271,50 +271,50 @@ v2;  // 6 | undefined
 // #39105
 
 declare function isEmptyString(value: string): value is '';
->isEmptyString : (value: string) => value is ''
->              : ^^^^^^^^      ^^^^^           
+>isEmptyString : (value: string) => value is ""
+>              : ^     ^^      ^^^^^           
 >value : string
 >      : ^^^^^^
 
 declare function isMaybeEmptyString(value: string | null | undefined): value is '' | null | undefined;
->isMaybeEmptyString : (value: string | null | undefined) => value is '' | null | undefined
->                   : ^^^^^^^^                         ^^^^^                              
+>isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
+>                   : ^     ^^                         ^^^^^                              
 >value : string | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function isZero(value: number): value is 0;
 >isZero : (value: number) => value is 0
->       : ^^^^^^^^      ^^^^^          
+>       : ^     ^^      ^^^^^          
 >value : number
 >      : ^^^^^^
 
 declare function isMaybeZero(value: number | null | undefined): value is 0 | null | undefined;
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^^^^^^^^                         ^^^^^                             
+>            : ^     ^^                         ^^^^^                             
 >value : number | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function isEmptyArray<T>(value: T[]): value is [];
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^ ^^^^^^^^^   ^^^^^           
+>             : ^ ^^     ^^   ^^^^^           
 >value : T[]
 >      : ^^^
 
 declare function isMaybeEmptyArray<T>(value: T[] | null | undefined): value is [] | null | undefined;
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^ ^^^^^^^^^                      ^^^^^                              
+>                  : ^ ^^     ^^                      ^^^^^                              
 >value : T[] | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 
 const TEST_CASES = [
 >TEST_CASES : (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^
+>           : ^^^     ^^      ^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^     ^^        ^^^^^^^^^^^^^
 >[    (value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    },    (value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    },    (value: number) => {        if (isZero(value)) {            value;  // 0        }        else {            value;  // number        }        if (isMaybeZero(value)) {            value; // 0        }        else {            value;  // number        }    },    (value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    },    (value: string[]) => {        if (isEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }        if (isMaybeEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }    },    (value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    },] : (((value: string) => void) | ((value: number) => void) | ((value: string[]) => void))[]
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^                       ^^^^^                       ^^^^^                         ^^^^
 
     (value: string) => {
 >(value: string) => {        if (isEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }        if (isMaybeEmptyString(value)) {            value;  // ""        }        else {            value;  // string        }    } : (value: string) => void
->                                                                                                                                                                                                                                                                                 : ^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                 : ^     ^^      ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -322,7 +322,7 @@ const TEST_CASES = [
 >isEmptyString(value) : boolean
 >                     : ^^^^^^^
 >isEmptyString : (value: string) => value is ""
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^      ^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -339,7 +339,7 @@ const TEST_CASES = [
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
 >isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -355,7 +355,7 @@ const TEST_CASES = [
     },
     (value?: string) => {
 >(value?: string) => {        if (isMaybeEmptyString(value)) {            value;  // "" | undefined        }        else {            value;  // string        }    } : (value?: string) => void
->                                                                                                                                                                     : ^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                     : ^     ^^^      ^^^^^^^^^
 >value : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -363,7 +363,7 @@ const TEST_CASES = [
 >isMaybeEmptyString(value) : boolean
 >                          : ^^^^^^^
 >isMaybeEmptyString : (value: string | null | undefined) => value is "" | null | undefined
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -379,7 +379,7 @@ const TEST_CASES = [
     },
     (value: number) => {
 >(value: number) => {        if (isZero(value)) {            value;  // 0        }        else {            value;  // number        }        if (isMaybeZero(value)) {            value; // 0        }        else {            value;  // number        }    } : (value: number) => void
->                                                                                                                                                                                                                                                                : ^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                                                                                                                                : ^     ^^      ^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -387,7 +387,7 @@ const TEST_CASES = [
 >isZero(value) : boolean
 >              : ^^^^^^^
 >isZero : (value: number) => value is 0
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^      ^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -404,7 +404,7 @@ const TEST_CASES = [
 >isMaybeZero(value) : boolean
 >                   : ^^^^^^^
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -420,7 +420,7 @@ const TEST_CASES = [
     },
     (value?: number) => {
 >(value?: number) => {        if (isMaybeZero(value)) {            value;  // 0 | undefined        }        else {            value;  // number        }    } : (value?: number) => void
->                                                                                                                                                             : ^^^^^^^^^      ^^^^^^^^^
+>                                                                                                                                                             : ^     ^^^      ^^^^^^^^^
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -428,7 +428,7 @@ const TEST_CASES = [
 >isMaybeZero(value) : boolean
 >                   : ^^^^^^^
 >isMaybeZero : (value: number | null | undefined) => value is 0 | null | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -444,7 +444,7 @@ const TEST_CASES = [
     },
     (value: string[]) => {
 >(value: string[]) => {        if (isEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }        if (isMaybeEmptyArray(value)) {            value;  // []        }        else {            value;  // string[]        }    } : (value: string[]) => void
->                                                                                                                                                                                                                                                                                     : ^^^^^^^^        ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                     : ^     ^^        ^^^^^^^^^
 >value : string[]
 >      : ^^^^^^^^
 
@@ -452,7 +452,7 @@ const TEST_CASES = [
 >isEmptyArray(value) : boolean
 >                    : ^^^^^^^
 >isEmptyArray : <T>(value: T[]) => value is []
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^   ^^^^^^^^^^^^^^^^
 >value : string[]
 >      : ^^^^^^^^
 
@@ -469,7 +469,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string[]
 >      : ^^^^^^^^
 
@@ -485,7 +485,7 @@ const TEST_CASES = [
     },
     (value?: string[]) => {
 >(value?: string[]) => {        if (isMaybeEmptyArray(value)) {            value;  // [] | undefined        }        else {            value;  // string[]        }    } : (value?: string[]) => void
->                                                                                                                                                                        : ^^^^^^^^^        ^^^^^^^^^
+>                                                                                                                                                                        : ^     ^^^        ^^^^^^^^^
 >value : string[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 
@@ -493,7 +493,7 @@ const TEST_CASES = [
 >isMaybeEmptyArray(value) : boolean
 >                         : ^^^^^^^
 >isMaybeEmptyArray : <T>(value: T[] | null | undefined) => value is [] | null | undefined
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 
@@ -517,7 +517,7 @@ type EmptyString = '' | null | undefined;
 
 function isEmpty(value: string | EmptyString): value is EmptyString {
 >isEmpty : (value: string | EmptyString) => value is EmptyString
->        : ^^^^^^^^                    ^^^^^                    
+>        : ^     ^^                    ^^^^^                    
 >value : string | null | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -551,8 +551,8 @@ let test: string | null | undefined;
 if (isEmpty(test)) {
 >isEmpty(test) : boolean
 >              : ^^^^^^^
->isEmpty : (value: string | null | undefined) => value is EmptyString
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>isEmpty : (value: string | EmptyString) => value is EmptyString
+>        : ^     ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : string | null | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -565,12 +565,12 @@ if (isEmpty(test)) {
 
 declare function assert<T>(value: any): asserts value is T
 >assert : <T>(value: any) => asserts value is T
->       : ^ ^^^^^^^^^   ^^^^^                  
+>       : ^ ^^     ^^   ^^^^^                  
 >value : any
 
 function test1(foo: number | string | boolean) {
 >test1 : (foo: number | string | boolean) => void
->      : ^^^^^^                         ^^^^^^^^^
+>      : ^   ^^                         ^^^^^^^^^
 >foo : string | number | boolean
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -578,7 +578,7 @@ function test1(foo: number | string | boolean) {
 >assert<1 | string>(foo) : void
 >                        : ^^^^
 >assert : <T>(value: any) => asserts value is T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string | number | boolean
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -591,7 +591,7 @@ function test1(foo: number | string | boolean) {
 
 function check1(x: unknown): x is (string | 0) {
 >check1 : (x: unknown) => x is (string | 0)
->       : ^^^^       ^^^^^                 
+>       : ^ ^^       ^^^^^                 
 >x : unknown
 >  : ^^^^^^^
 
@@ -616,7 +616,7 @@ function check1(x: unknown): x is (string | 0) {
 
 function check2(x: unknown): x is ("hello" | 0) {
 >check2 : (x: unknown) => x is ("hello" | 0)
->       : ^^^^       ^^^^^                  
+>       : ^ ^^       ^^^^^                  
 >x : unknown
 >  : ^^^^^^^
 
@@ -639,7 +639,7 @@ function check2(x: unknown): x is ("hello" | 0) {
 
 function test3(x: unknown) {
 >test3 : (x: unknown) => void
->      : ^^^^       ^^^^^^^^^
+>      : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -690,7 +690,7 @@ function test3(x: unknown) {
 >check1(x) : boolean
 >          : ^^^^^^^
 >check1 : (x: unknown) => x is string | 0
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -702,7 +702,7 @@ function test3(x: unknown) {
 >check2(x) : boolean
 >          : ^^^^^^^
 >check2 : (x: unknown) => x is 0 | "hello"
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^
 >x : string | 0
 >  : ^^^^^^^^^^
 
@@ -717,13 +717,13 @@ function test3(x: unknown) {
 
 function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null {}
 >assertRelationIsNullOrStringArray : (v: (string | number)[] | null) => asserts v is string[] | null
->                                  : ^^^^                          ^^^^^                            
+>                                  : ^ ^^                          ^^^^^                            
 >v : (string | number)[] | null
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f1x(obj: (string | number)[] | null) {
 >f1x : (obj: (string | number)[] | null) => void
->    : ^^^^^^                          ^^^^^^^^^
+>    : ^   ^^                          ^^^^^^^^^
 >obj : (string | number)[] | null
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -731,7 +731,7 @@ function f1x(obj: (string | number)[] | null) {
 >assertRelationIsNullOrStringArray(obj) : void
 >                                       : ^^^^
 >assertRelationIsNullOrStringArray : (v: (string | number)[] | null) => asserts v is string[] | null
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^ ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : (string | number)[] | null
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -756,7 +756,7 @@ type MyDiscriminatedUnion = { type: 'A', aProp: number } | { type: 'B', bProp: s
 
 declare function isMyDiscriminatedUnion(item: unknown): item is MyDiscriminatedUnion;
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^^^^^^^       ^^^^^                            
+>                       : ^    ^^       ^^^^^                            
 >item : unknown
 >     : ^^^^^^^
 
@@ -780,7 +780,7 @@ isMyDiscriminatedUnion(working) && working.type === 'A' && working.aProp;
 >isMyDiscriminatedUnion(working) : boolean
 >                                : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >working : unknown
 >        : ^^^^^^^
 >working.type === 'A' : boolean
@@ -808,7 +808,7 @@ isMyDiscriminatedUnion(broken) && broken.type === 'A' && broken.aProp;
 >isMyDiscriminatedUnion(broken) : boolean
 >                               : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >broken : Record<string, any> | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >broken.type === 'A' : boolean
@@ -836,7 +836,7 @@ isMyDiscriminatedUnion(workingAgain) && workingAgain.type === 'A' && workingAgai
 >isMyDiscriminatedUnion(workingAgain) : boolean
 >                                     : ^^^^^^^
 >isMyDiscriminatedUnion : (item: unknown) => item is MyDiscriminatedUnion
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >workingAgain : unknown
 >             : ^^^^^^^
 >workingAgain.type === 'A' : boolean
@@ -879,8 +879,8 @@ type Union =
 >     : ^^^
 
 function example1(value: Union): { type: 'a'; variant: 2 } | null {
->example1 : (value: Union) => { type: 'a'; variant: 2; } | null
->         : ^^^^^^^^     ^^^^^                                 
+>example1 : (value: Union) => { type: "a"; variant: 2; } | null
+>         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"
@@ -922,8 +922,8 @@ function example1(value: Union): { type: 'a'; variant: 2 } | null {
 }
 
 function example2(value: Union): { type: 'a'; variant: 2 } | null {
->example2 : (value: Union) => { type: 'a'; variant: 2; } | null
->         : ^^^^^^^^     ^^^^^                                 
+>example2 : (value: Union) => { type: "a"; variant: 2; } | null
+>         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"
@@ -977,8 +977,8 @@ function example2(value: Union): { type: 'a'; variant: 2 } | null {
 }
 
 function example3(value: Union): { type: 'a'; variant: 2 } | null {
->example3 : (value: Union) => { type: 'a'; variant: 2; } | null
->         : ^^^^^^^^     ^^^^^                                 
+>example3 : (value: Union) => { type: "a"; variant: 2; } | null
+>         : ^     ^^     ^^^^^                                 
 >value : Union
 >      : ^^^^^
 >type : "a"

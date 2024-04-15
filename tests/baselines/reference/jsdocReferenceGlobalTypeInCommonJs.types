@@ -5,7 +5,7 @@ const other = require('./other');
 >other : () => string
 >      : ^^^^^^^^^^^^
 >require('./other') : () => string
->                   : ^^^^^^^^^^^^
+>                   :             
 >require : any
 >        : ^^^
 >'./other' : "./other"
@@ -18,11 +18,11 @@ var ppk;
 
 Puppeteer.connect;
 >Puppeteer.connect : (name: string) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^    ^^      ^^^^^^^^^
 >Puppeteer : typeof Puppeteer
 >          : ^^^^^^^^^^^^^^^^
 >connect : (name: string) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^^
 
 === puppet.d.ts ===
 export as namespace Puppeteer;
@@ -36,7 +36,7 @@ export interface Keyboard {
 }
 export function connect(name: string): void;
 >connect : (name: string) => void
->        : ^^^^^^^      ^^^^^    
+>        : ^    ^^      ^^^^^    
 >name : string
 >     : ^^^^^^
 

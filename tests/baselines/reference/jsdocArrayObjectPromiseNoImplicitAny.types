@@ -25,7 +25,7 @@ var numberArray = [5];
  */
 function returnNotAnyArray(arr) {
 >returnNotAnyArray : (arr: any[]) => any[]
->                  : ^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^^^^^^^^^^^^^^^^
 >arr : any[]
 >    : ^^^^^
 
@@ -41,11 +41,11 @@ var notAnyPromise = Promise.resolve(5);
 >Promise.resolve(5) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 
@@ -56,11 +56,11 @@ var numberPromise = Promise.resolve(5);
 >Promise.resolve(5) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 
@@ -70,7 +70,7 @@ var numberPromise = Promise.resolve(5);
  */
 function returnNotAnyPromise(pr) {
 >returnNotAnyPromise : (pr: Promise<any>) => Promise<any>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pr : Promise<any>
 >   : ^^^^^^^^^^^^
 
@@ -107,7 +107,7 @@ var paramedObject = {valueOf: 1};
  */
 function returnNotAnyObject(obj) {
 >returnNotAnyObject : (obj: Object) => Object
->                   : ^^^^^^      ^^^^^      
+>                   : ^   ^^      ^^^^^      
 >obj : Object
 >    : ^^^^^^
 

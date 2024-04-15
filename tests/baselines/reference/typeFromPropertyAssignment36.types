@@ -3,7 +3,7 @@
 === typeFromPropertyAssignment36.ts ===
 function f(b: boolean) {
 >f : (b: boolean) => { (): void; e: number; q: boolean; r: number; s: string; }
->  : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 
@@ -159,7 +159,7 @@ var test = f(true).s
 >f(true) : { (): void; e: number; q: boolean; r: number; s: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (b: boolean) => { (): void; e: number; q: boolean; r: number; s: string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >s : string
@@ -304,7 +304,7 @@ const g = function() {
 >g : { (): void; expando: number; both: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function() {} : { (): void; expando: number; both: string | number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              :                                                      
 }
 if (!!false) {
 >!!false : false

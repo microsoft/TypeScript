@@ -5,7 +5,7 @@ var f1 = () => {
 >f1 : () => void
 >   : ^^^^^^^^^^
 >() => {    this.age = 10} : () => void
->                          : ^^^^^^^^^^
+>                          :           
 
     this.age = 10
 >this.age = 10 : 10
@@ -23,9 +23,9 @@ var f1 = () => {
 
 var f2 = (x: string) => {
 >f2 : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >(x: string) => {    this.name = x} : (x: string) => void
->                                   : ^^^^      ^^^^^^^^^
+>                                   :                    
 >x : string
 >  : ^^^^^^
 
@@ -44,7 +44,7 @@ var f2 = (x: string) => {
 
 function foo(func: () => boolean) { }
 >foo : (func: () => boolean) => void
->    : ^^^^^^^             ^^^^^^^^^
+>    : ^    ^^             ^^^^^^^^^
 >func : () => boolean
 >     : ^^^^^^       
 
@@ -52,7 +52,7 @@ foo(() => {
 >foo(() => {    this.age = 100;    return true;}) : void
 >                                                 : ^^^^
 >foo : (func: () => boolean) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^             ^^^^^^^^^
 >() => {    this.age = 100;    return true;} : () => true
 >                                            : ^^^^^^^^^^
 

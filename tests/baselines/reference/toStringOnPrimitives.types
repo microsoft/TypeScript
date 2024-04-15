@@ -31,9 +31,9 @@ aBool.toString();
 >1..toString() : string
 >              : ^^^^^^
 >1..toString : (radix?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^^      ^^^^^^^^^^^
 >1. : 1
 >   : ^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 

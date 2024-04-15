@@ -271,7 +271,7 @@ class A {
 
 function destructure<T extends A>(x: T) {
 >destructure : <T extends A>(x: T) => void
->            : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

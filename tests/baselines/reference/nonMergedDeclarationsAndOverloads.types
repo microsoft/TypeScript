@@ -15,19 +15,19 @@ class A {
 
     m1 (a: string): void;
 >m1 : (a: string) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >a : string
 >  : ^^^^^^
 
     m1 (a: number): void;
 >m1 : (a: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 
     m1 (a: any): void {
 >m1 : (a: any) => void
->   : ^^^^   ^^^^^    
+>   : ^ ^^   ^^^^^    
 >a : any
 >  : ^^^
     }

@@ -3,8 +3,8 @@
 === bug25618.js ===
 /** @type {<T>(param?: T) => T | undefined} */
 function typed(param) {
->typed : <T>(param?: T | undefined) => T | undefined
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>typed : <T>(param?: T) => T | undefined
+>      : ^ ^^     ^^^ ^^^^^             
 >param : T | undefined
 >      : ^^^^^^^^^^^^^
 
@@ -18,8 +18,8 @@ var n = typed(1);
 >  : ^^^^^^^^^^^^^^^^^^
 >typed(1) : 1 | undefined
 >         : ^^^^^^^^^^^^^
->typed : <T>(param?: T | undefined) => T | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>typed : <T>(param?: T) => T | undefined
+>      : ^ ^^     ^^^ ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

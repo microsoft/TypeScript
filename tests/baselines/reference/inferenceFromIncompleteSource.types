@@ -19,7 +19,7 @@ interface ListProps<T, K extends keyof T> {
 
 declare const Component: <T, K extends keyof T>(x: ListProps<T, K>) => void;
 >Component : <T, K extends keyof T>(x: ListProps<T, K>) => void
->          : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^               ^^^^^    
+>          : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^    
 >x : ListProps<T, K>
 >  : ^^^^^^^^^^^^^^^
 
@@ -27,7 +27,7 @@ Component({items: [{name:' string'}], itemKey: 'name' });
 >Component({items: [{name:' string'}], itemKey: 'name' }) : void
 >                                                         : ^^^^
 >Component : <T, K extends keyof T>(x: ListProps<T, K>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >{items: [{name:' string'}], itemKey: 'name' } : { items: { name: string; }[]; itemKey: "name"; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >items : { name: string; }[]

@@ -11,7 +11,7 @@ export interface A<a> {
 
 function fn<a>(values: A<a>, value: a) : void {
 >fn : <a>(values: A<a>, value: a) => void
->   : ^ ^^^^^^^^^^    ^^^^^^^^^ ^^^^^    
+>   : ^ ^^      ^^    ^^     ^^ ^^^^^    
 >values : A<a>
 >       : ^^^^
 >value : a
@@ -20,7 +20,7 @@ function fn<a>(values: A<a>, value: a) : void {
 
 declare let handlers: A<(value: number) => void>;
 >handlers : A<(value: number) => void>
->         : ^^^^^^^^^^      ^^^^^    ^
+>         : ^^^     ^^      ^^^^^    ^
 >value : number
 >      : ^^^^^^
 
@@ -28,17 +28,17 @@ fn(handlers, value => alert(value));
 >fn(handlers, value => alert(value)) : void
 >                                    : ^^^^
 >fn : <a>(values: A<a>, value: a) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^    ^^     ^^ ^^^^^^^^^
 >handlers : A<(value: number) => void>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^     ^^      ^^^^^^^^^^
 >value => alert(value) : (value: number) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >alert(value) : void
 >             : ^^^^
 >alert : (message?: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^^   ^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -51,7 +51,7 @@ interface BaseProps<T> {
 
   nextValues: (cur: T) => T;
 >nextValues : (cur: T) => T
->           : ^^^^^^ ^^^^^ 
+>           : ^   ^^ ^^^^^ 
 >cur : T
 >    : ^
 }
@@ -78,19 +78,19 @@ declare class GenericComponent<Props = {}, Values = object>
 
 new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 >new GenericComponent({ initialValues: 12, nextValues: val => 12 }) : GenericComponent<{ initialValues: number; nextValues: (val: number) => number; }, number>
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >GenericComponent : typeof GenericComponent
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ initialValues: 12, nextValues: val => 12 } : { initialValues: number; nextValues: (val: number) => number; }
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
 >initialValues : number
 >              : ^^^^^^
 >12 : 12
 >   : ^^
 >nextValues : (val: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^^^
 >val => 12 : (val: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+>          :                        
 >val : number
 >    : ^^^^^^
 >12 : 12
@@ -100,11 +100,11 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 
 declare function useStringOrNumber<T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)): void;
 >useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)) => void
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                                                                ^^^^^    
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^     ^^                                                                ^^^^^    
 >t : T
 >  : ^
 >useIt : T extends string ? (s: string) => void : (n: number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^^^      ^^^^^    
+>      : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    ^^^^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 >n : number
@@ -113,12 +113,12 @@ declare function useStringOrNumber<T extends string | number>(t: T, useIt: T ext
 useStringOrNumber("", foo => {});
 >useStringOrNumber("", foo => {}) : void
 >                                 : ^^^^
->useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? (s: string) => void : (n: number) => void) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useStringOrNumber : <T extends string | number>(t: T, useIt: T extends string ? ((s: string) => void) : ((n: number) => void)) => void
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^     ^^                                                                ^^^^^^^^^
 >"" : ""
 >   : ^^
 >foo => {} : (foo: string) => void
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 
@@ -156,7 +156,7 @@ interface ActionHandler<S, P> {
 
 declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>): ActionHandler<S, P>
 >handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
->        : ^ ^^ ^^^^^^^^^^^^^^             ^^^^^^^^^^^             ^^^^^                   
+>        : ^ ^^ ^^          ^^             ^^       ^^             ^^^^^                   
 >actionType : ActionType<P>
 >           : ^^^^^^^^^^^^^
 >handler : Handler<S, P>
@@ -164,7 +164,7 @@ declare function handler<S, P>(actionType: ActionType<P>, handler: Handler<S, P>
 
 declare function createReducer<S>(
 >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
->              : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^                       ^^^^^   
+>              : ^ ^^            ^^ ^^^^^              ^^                       ^^^^^   
 
         defaultState: S,
 >defaultState : S
@@ -210,7 +210,7 @@ const NON_VOID_ACTION: ActionType<number> = 'NON_VOID_ACTION'
 createReducer(
 >createReducer(    defaultState,    handler(NON_VOID_ACTION, (state, _payload) => state),    handler(VOID_ACTION, state => state)) : any
 >createReducer : <S>(defaultState: S, ...actionHandlers: ActionHandler<S, any>[]) => any
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^            ^^ ^^^^^              ^^                       ^^^^^^^^
 
     defaultState,
 >defaultState : AppState
@@ -220,11 +220,11 @@ createReducer(
 >handler(NON_VOID_ACTION, (state, _payload) => state) : ActionHandler<AppState, number>
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^          ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^
 >NON_VOID_ACTION : ActionType<number>
 >                : ^^^^^^^^^^^^^^^^^^
 >(state, _payload) => state : (state: AppState, _payload: number) => AppState
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^     ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
 >state : AppState
 >      : ^^^^^^^^
 >_payload : number
@@ -236,11 +236,11 @@ createReducer(
 >handler(VOID_ACTION, state => state) : ActionHandler<AppState, void>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >handler : <S, P>(actionType: ActionType<P>, handler: Handler<S, P>) => ActionHandler<S, P>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^ ^^          ^^             ^^       ^^             ^^^^^^^^^^^^^^^^^^^^^^^^
 >VOID_ACTION : ActionType<void>
 >            : ^^^^^^^^^^^^^^^^
 >state => state : (state: AppState) => AppState
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 >state : AppState
 >      : ^^^^^^^^
 >state : AppState
@@ -256,13 +256,13 @@ type R = {
 
   a: (x: number) => void;
 >a : (x: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 
   b: (x: string) => void;
 >b : (x: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -274,7 +274,7 @@ type O = {
 
   on<P extends keyof R>(x: P, callback: R[P]): void;
 >on : <P extends keyof R>(x: P, callback: R[P]) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^    ^^^^^    
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^        ^^    ^^^^^    
 >x : P
 >  : ^
 >callback : R[P]
@@ -290,15 +290,15 @@ x.on('a', a => {});
 >x.on('a', a => {}) : void
 >                   : ^^^^
 >x.on : <P extends keyof R>(x: P, callback: R[P]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^        ^^    ^^^^^^^^^
 >x : O
 >  : ^
 >on : <P extends keyof R>(x: P, callback: R[P]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^        ^^    ^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 >a => {} : (a: number) => void
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -338,7 +338,7 @@ type CreateElementChildren<P> =
 
 declare function createElement<P extends {}>(
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>              : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>
@@ -352,7 +352,7 @@ declare function createElement<P extends {}>(
 
 declare function createElement2<P extends {}>(
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>               : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 
   type: ComponentClass<P>,
 >type : ComponentClass<P>
@@ -370,18 +370,18 @@ class InferFunctionTypes extends Component<{children: (foo: number) => string}> 
 >Component : Component<{ children: (foo: number) => string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^                       ^^^^
 >children : (foo: number) => string
->         : ^^^^^^      ^^^^^      
+>         : ^   ^^      ^^^^^      
 >foo : number
 >    : ^^^^^^
 
 createElement(InferFunctionTypes, (foo) => "" + foo);
 >createElement(InferFunctionTypes, (foo) => "" + foo) : any
 >createElement : <P extends {}>(type: ComponentClass<P>, ...children: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >InferFunctionTypes : typeof InferFunctionTypes
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(foo) => "" + foo : (foo: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >"" + foo : string
@@ -394,13 +394,13 @@ createElement(InferFunctionTypes, (foo) => "" + foo);
 createElement2(InferFunctionTypes, [(foo) => "" + foo]);
 >createElement2(InferFunctionTypes, [(foo) => "" + foo]) : any
 >createElement2 : <P extends {}>(type: ComponentClass<P>, child: P extends { children?: infer C | undefined; } ? C extends any[] ? C : C[] : unknown) => any
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >InferFunctionTypes : typeof InferFunctionTypes
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[(foo) => "" + foo] : ((foo: number) => string)[]
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >(foo) => "" + foo : (foo: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^^^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >"" + foo : string
@@ -446,7 +446,7 @@ type BoxConsumerFromOuterBox<T> =
 
 declare function passContentsToFunc<T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>): void;
 >passContentsToFunc : <T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>) => void
->                   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^                          ^^^^^    
+>                   : ^ ^^        ^^ ^^        ^^                          ^^^^^    
 >outerBox : T
 >         : ^
 >consumer : BoxConsumerFromOuterBox<T>
@@ -460,11 +460,11 @@ passContentsToFunc(outerBoxOfString, box => box.value);
 >passContentsToFunc(outerBoxOfString, box => box.value) : void
 >                                                       : ^^^^
 >passContentsToFunc : <T>(outerBox: T, consumer: BoxConsumerFromOuterBox<T>) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^        ^^ ^^        ^^                          ^^^^^^^^^
 >outerBoxOfString : OuterBox<string>
 >                 : ^^^^^^^^^^^^^^^^
 >box => box.value : (box: InnerBox<string>) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >box : InnerBox<string>
 >    : ^^^^^^^^^^^^^^^^
 >box.value : string
@@ -488,23 +488,23 @@ class Interesting {
 >compiles : () => Promise<DooDad>
 >         : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		});	} : () => Promise<DooDad>
->                                                                                                                                   : ^^^^^^               
+>                                                                                                                                   :                      
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		} : () => "SOMETHING" | "ELSE"
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -530,23 +530,23 @@ class Interesting {
 >doesnt : () => Promise<DooDad>
 >       : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			return 'ELSE';		});	} : () => Promise<DooDad>
->                                                                                         : ^^^^^^               
+>                                                                                         :                      
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {			return 'ELSE';		} : () => "ELSE"
 >                            : ^^^^^^^^^^^^
 
@@ -560,23 +560,23 @@ class Interesting {
 >slightlyDifferentErrorMessage : () => Promise<DooDad>
 >                              : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		});	} : () => Promise<DooDad>
->                                                                                                                                        : ^^^^^^               
+>                                                                                                                                        :                      
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"SOMETHING" | "ELSE">
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		} : () => "SOMETHING"
 >                                                                           : ^^^^^^^^^^^^^^^^^
 
@@ -604,7 +604,7 @@ class Interesting {
 
 declare function invoke<T>(f: () => T): T;
 >invoke : <T>(f: () => T) => T
->       : ^ ^^^^^       ^^^^^ 
+>       : ^ ^^ ^^       ^^^^^ 
 >f : () => T
 >  : ^^^^^^ 
 
@@ -614,7 +614,7 @@ let xx: 0 | 1 | 2 = invoke(() => 1);
 >invoke(() => 1) : 1
 >                : ^
 >invoke : <T>(f: () => T) => T
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^ ^^       ^^^^^^
 >() => 1 : () => 1
 >        : ^^^^^^^
 >1 : 1
@@ -624,7 +624,7 @@ let xx: 0 | 1 | 2 = invoke(() => 1);
 
 declare function assignPartial<T>(target: T, partial: Partial<T>): T;
 >assignPartial : <T>(target: T, partial: Partial<T>) => T
->              : ^ ^^^^^^^^^^ ^^^^^^^^^^^          ^^^^^ 
+>              : ^ ^^      ^^ ^^       ^^          ^^^^^ 
 >target : T
 >       : ^
 >partial : Partial<T>
@@ -632,24 +632,24 @@ declare function assignPartial<T>(target: T, partial: Partial<T>): T;
 
 let obj = {
 >obj : { foo(bar: string): void; }
->    : ^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^^^^^^   ^^      ^^^^^^^^^^
 >{  foo(bar: string) {}} : { foo(bar: string): void; }
->                        : ^^^^^^^^^^^      ^^^^^^^^^^
+>                        : ^^^^^^   ^^      ^^^^^^^^^^
 
   foo(bar: string) {}
 >foo : (bar: string) => void
->    : ^^^^^^      ^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >bar : string
 >    : ^^^^^^
 }
 
 assignPartial(obj, { foo(...args) {} });  // args has type [string]
 >assignPartial(obj, { foo(...args) {} }) : { foo(bar: string): void; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^   ^^      ^^^^^^^^^^
 >assignPartial : <T>(target: T, partial: Partial<T>) => T
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^      ^^ ^^       ^^          ^^^^^^
 >obj : { foo(bar: string): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^   ^^      ^^^^^^^^^^
 >{ foo(...args) {} } : { foo(bar: string): void; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : (bar: string) => void

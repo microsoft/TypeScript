@@ -18,7 +18,7 @@ declare var window: Window;
 interface Window {
     onmousemove: (ev: MouseEvent) => any;
 >onmousemove : (ev: MouseEvent) => any
->            : ^^^^^          ^^^^^   
+>            : ^  ^^          ^^^^^   
 >ev : MouseEvent
 >   : ^^^^^^^^^^
     
@@ -27,7 +27,7 @@ var o = {
 >o : { counter: number; start: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    counter: 0,    start: function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    }} : { counter: number; start: () => void; }
->                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^
 
     counter: 0,
 >counter : number
@@ -39,17 +39,17 @@ var o = {
 >start : () => void
 >      : ^^^^^^^^^^
 >function() {        window.onmousemove = () => {            this.counter++            var f = () => this.counter;        }    } : () => void
->                                                                                                                                : ^^^^^^^^^^
+>                                                                                                                                :           
 
         window.onmousemove = () => {
 >window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                                       : ^^^^^^^^^^
 >window.onmousemove : (ev: MouseEvent) => any
->                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^  ^^          ^^^^^^^^
 >window : Window
 >       : ^^^^^^
 >onmousemove : (ev: MouseEvent) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^
 >() => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                  : ^^^^^^^^^^
 
@@ -67,7 +67,7 @@ var o = {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => this.counter : () => number
->                   : ^^^^^^^^^^^^
+>                   :             
 >this.counter : number
 >             : ^^^^^^
 >this : { counter: number; start: () => void; }
@@ -101,7 +101,7 @@ class X {
 >outer : () => void
 >      : ^^^^^^^^^^
 >() => {            var x = this.value;            var inner = () => {                var y = this.value;			}			inner();		} : () => void
->                                                                                                                           : ^^^^^^^^^^
+>                                                                                                                           :           
 
             var x = this.value;
 >x : string
@@ -117,7 +117,7 @@ class X {
 >inner : () => void
 >      : ^^^^^^^^^^
 >() => {                var y = this.value;			} : () => void
->                                               : ^^^^^^^^^^
+>                                               :           
 
                 var y = this.value;
 >y : string

@@ -3,7 +3,7 @@
 === declFileObjectLiteralWithAccessors.ts ===
 function /*1*/makePoint(x: number) { 
 >makePoint : (x: number) => { b: number; x: number; }
->          : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -44,9 +44,9 @@ var /*4*/point = makePoint(2);
 >point : { b: number; x: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >makePoint(2) : { b: number; x: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             :                          
 >makePoint : (x: number) => { b: number; x: number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 

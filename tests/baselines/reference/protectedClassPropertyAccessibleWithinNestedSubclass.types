@@ -156,7 +156,7 @@ class C extends B {
 >c3 : () => string
 >   : ^^^^^^^^^^^^
 >c.foo : () => string
->      : ^^^^^^^^^^^^
+>      :             
 >c : C
 >  : ^
 >foo : () => string
@@ -166,7 +166,7 @@ class C extends B {
 >c4 : () => void
 >   : ^^^^^^^^^^
 >c.bar : () => void
->      : ^^^^^^^^^^
+>      :           
 >c : C
 >  : ^
 >bar : () => void
@@ -206,7 +206,7 @@ class C extends B {
 >sc3 : () => string
 >    : ^^^^^^^^^^^^
 >C.foo : () => string
->      : ^^^^^^^^^^^^
+>      :             
 >C : typeof C
 >  : ^^^^^^^^
 >foo : () => string
@@ -216,7 +216,7 @@ class C extends B {
 >sc4 : () => void
 >    : ^^^^^^^^^^
 >C.bar : () => void
->      : ^^^^^^^^^^
+>      :           
 >C : typeof C
 >  : ^^^^^^^^
 >bar : () => void
