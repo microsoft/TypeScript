@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/declarationEmitNoTypeParamLeak1.ts] ////
+
+=== declarationEmitNoTypeParamLeak1.ts ===
+type BrokenType<T> = 'a' | 'b';
+>BrokenType : Symbol(BrokenType, Decl(declarationEmitNoTypeParamLeak1.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitNoTypeParamLeak1.ts, 0, 16))
+
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(declarationEmitNoTypeParamLeak1.ts, 0, 31))
+
+    constructor(readonly arg?: BrokenType<any>) {}
+>arg : Symbol(MyClass.arg, Decl(declarationEmitNoTypeParamLeak1.ts, 3, 16))
+>BrokenType : Symbol(BrokenType, Decl(declarationEmitNoTypeParamLeak1.ts, 0, 0))
+}
