@@ -292,10 +292,28 @@ export function transformDeclarations(context: TransformationContext) {
     const { stripInternal, isolatedDeclarations } = options;
     return transformRoot;
 
-    function reportInferenceFallback(node: Node) {
-        if (!isolatedDeclarations) return;
+    function reportExpandoFunctionErrors(node: FunctionDeclaration | VariableDeclaration) {
+        resolver.getPropertiesOfContainerFunction(node).forEach(p => {
+            if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
+                const errorTarget = isBinaryExpression(p.valueDeclaration) ?
+                    p.valueDeclaration.left :
+                    p.valueDeclaration;
 
-        context.addDiagnostic(getDiagnostic(node));
+                context.addDiagnostic(createDiagnosticForNode(
+                    errorTarget,
+                    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
+                ));
+            }
+        });
+    }
+    function reportInferenceFallback(node: Node) {
+        if (!isolatedDeclarations || isSourceFileJS(currentSourceFile)) return;
+        if (isVariableDeclaration(node) && resolver.isExpandoFunctionDeclaration(node)) {
+            reportExpandoFunctionErrors(node);
+        }
+        else {
+            context.addDiagnostic(getDiagnostic(node));
+        }
 
         type WithSpecialDiagnostic =
             | GetAccessorDeclaration
@@ -1577,18 +1595,7 @@ export function transformDeclarations(context: TransformationContext) {
                     const props = resolver.getPropertiesOfContainerFunction(input);
 
                     if (isolatedDeclarations) {
-                        props.forEach(p => {
-                            if (isExpandoPropertyDeclaration(p.valueDeclaration)) {
-                                const errorTarget = isBinaryExpression(p.valueDeclaration) ?
-                                    p.valueDeclaration.left :
-                                    p.valueDeclaration;
-
-                                context.addDiagnostic(createDiagnosticForNode(
-                                    errorTarget,
-                                    Diagnostics.Assigning_properties_to_functions_without_declaring_them_is_not_supported_with_isolatedDeclarations_Add_an_explicit_declaration_for_the_properties_assigned_to_this_function,
-                                ));
-                            }
-                        });
+                        reportExpandoFunctionErrors(input);
                     }
                     // Use parseNodeFactory so it is usable as an enclosing declaration
                     const fakespace = parseNodeFactory.createModuleDeclaration(/*modifiers*/ undefined, clean.name || factory.createIdentifier("_default"), factory.createModuleBlock([]), NodeFlags.Namespace);

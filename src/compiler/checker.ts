@@ -48283,22 +48283,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!declaration) {
             return false;
         }
-        let symbol: Symbol;
+        let symbol: Symbol | undefined;
         if (isVariableDeclaration(declaration)) {
-            if (
-                declaration.type ||
-                !isVarConstLike(declaration) ||
-                !declaration.initializer ||
-                !isFunctionExpressionOrArrowFunction(declaration.initializer)
-            ) {
+            if (declaration.type || !isInJSFile(declaration) && !isVarConstLike(declaration)) {
                 return false;
             }
-            symbol = getSymbolOfDeclaration(declaration.initializer);
+            const initializer = getDeclaredExpandoInitializer(declaration);
+            if (!initializer || !canHaveSymbol(initializer)) {
+                return false;
+            }
+            symbol = getSymbolOfDeclaration(initializer);
         }
         else {
             symbol = getSymbolOfDeclaration(declaration);
         }
-        if (!(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
+        if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }
         return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
