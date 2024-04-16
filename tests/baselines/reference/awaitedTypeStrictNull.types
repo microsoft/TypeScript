@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
 
 === Performance Stats ===
-Instantiation count: 25,000 / 25,000
+Instantiation count: 25,000 -> 25,000
 
 === awaitedTypeStrictNull.ts ===
 type T1 = Awaited<number>;

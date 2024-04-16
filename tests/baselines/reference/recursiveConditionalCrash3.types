@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/recursiveConditionalCrash3.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 2,500
-Type Count: 500 / 25,000
-Instantiation count: 1,000 / 50,000
+Assignability cache: 100 -> 2,500
+Type Count: 500 -> 25,000
+Instantiation count: 1,000 -> 50,000
 
 === recursiveConditionalCrash3.ts ===
 // #43529

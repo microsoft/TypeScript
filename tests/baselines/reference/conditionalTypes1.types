@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
 
 === Performance Stats ===
-Instantiation count: 1,000 / 1,000
+Instantiation count: 1,000 -> 1,000
 
 === conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"

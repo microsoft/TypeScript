@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
 
 === Performance Stats ===
-Type Count: 2,500 / 2,500
-Instantiation count: 2,500 / 2,500
+Type Count: 2,500 -> 2,500
+Instantiation count: 2,500 -> 2,500
 
 === jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");

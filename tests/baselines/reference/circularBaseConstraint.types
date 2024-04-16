@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/circularBaseConstraint.ts] ////
 
 === Performance Stats ===
-Instantiation count: 2,500 / 2,500
+Instantiation count: 2,500 -> 2,500
 
 === circularBaseConstraint.ts ===
 // Repro from #54610

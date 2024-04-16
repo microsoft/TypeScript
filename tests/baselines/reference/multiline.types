@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
 === Performance Stats ===
-Type Count: 2,500 / 2,500
-Instantiation count: 2,500 / 2,500
+Type Count: 2,500 -> 2,500
+Instantiation count: 2,500 -> 2,500
 
 === a.ts ===
 export const texts: string[] = [];

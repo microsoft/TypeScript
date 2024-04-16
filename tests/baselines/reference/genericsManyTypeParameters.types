@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericsManyTypeParameters.ts] ////
 
 === Performance Stats ===
-Strict subtype cache: 10,000 / 10,000
+Strict subtype cache: 10,000 -> 10,000
 
 === genericsManyTypeParameters.ts ===
 function Foo<

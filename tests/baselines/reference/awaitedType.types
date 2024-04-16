@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/awaitedType.ts] ////
 
 === Performance Stats ===
-Instantiation count: 25,000 / 25,000
+Instantiation count: 25,000 -> 25,000
 
 === awaitedType.ts ===
 type T1 = Awaited<number>;

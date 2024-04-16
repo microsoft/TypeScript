@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/resolvingClassDeclarationWhenInBaseTypeResolution.ts] ////
 
 === Performance Stats ===
-Type Count: 2,500 / 2,500
+Type Count: 2,500 -> 2,500
 
 === resolvingClassDeclarationWhenInBaseTypeResolution.ts ===
 module rionegrensis {

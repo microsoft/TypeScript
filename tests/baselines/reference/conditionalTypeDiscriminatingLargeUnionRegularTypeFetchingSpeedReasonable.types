@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts] ////
 
 === Performance Stats ===
-Strict subtype cache: 2,500 / 2,500
-Assignability cache: 10,000 / 10,000
-Type Count: 10,000 / 10,000
-Instantiation count: 100,000 / 100,000
+Strict subtype cache: 2,500 -> 2,500
+Assignability cache: 10,000 -> 10,000
+Type Count: 10,000 -> 10,000
+Instantiation count: 100,000 -> 100,000
 
 === conditionalTypeDiscriminatingLargeUnionRegularTypeFetchingSpeedReasonable.ts ===
 type BigUnion =

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/RealWorld/parserharness.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 / 1,000
+Type Count: 1,000 -> 1,000
 
 === parserharness.ts ===
 //﻿

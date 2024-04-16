@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/tuple/variadicTuples1.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 / 1,000
-Instantiation count: 2,500 / 2,500
+Type Count: 1,000 -> 1,000
+Instantiation count: 2,500 -> 2,500
 
 === variadicTuples1.ts ===
 // Variadics in tuple types

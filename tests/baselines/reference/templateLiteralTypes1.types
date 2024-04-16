@@ -1,8 +1,8 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes1.ts] ////
 
 === Performance Stats ===
-Type Count: 10,000 / 10,000
-Instantiation count: 2,500 / 2,500
+Type Count: 10,000 -> 10,000
+Instantiation count: 2,500 -> 2,500
 
 === templateLiteralTypes1.ts ===
 // Template types example from #12754
