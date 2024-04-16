@@ -1,3 +1,6 @@
+// @target: esnext
+// @lib: esnext
+
 function f1(x: number): number | Promise<number> {
   return Promise.resolve(x);
 }
