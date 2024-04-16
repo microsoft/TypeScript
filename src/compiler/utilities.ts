@@ -1687,11 +1687,11 @@ export const enum GetLiteralTextFlags {
 }
 
 /** @internal */
-export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile | undefined, flags: GetLiteralTextFlags) {
+export function getLiteralText(node: LiteralLikeNode, flags: GetLiteralTextFlags) {
     // If we don't need to downlevel and we can reach the original source text using
     // the node's parent reference, then simply get the text as it was originally written.
-    if (sourceFile && canUseOriginalText(node, flags)) {
-        return getSourceTextOfNodeFromSourceFile(sourceFile, node);
+    if (canUseOriginalText(node, flags)) {
+        return getSourceTextOfNodeFromSourceFile(getSourceFileOfNode(node), node);
     }
 
     // If we can't reach the original source text, use the canonical form if it's a number,
