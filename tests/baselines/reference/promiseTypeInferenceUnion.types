@@ -1,0 +1,114 @@
+//// [tests/cases/compiler/promiseTypeInferenceUnion.ts] ////
+
+=== promiseTypeInferenceUnion.ts ===
+function f1(x: number): number | Promise<number> {
+>f1 : (x: number) => number | Promise<number>
+>   : ^ ^^      ^^^^^                        
+>x : number
+>  : ^^^^^^
+
+  return Promise.resolve(x);
+>Promise.resolve(x) : any
+>                   : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>x : number
+>  : ^^^^^^
+}
+
+function f2(x: number): number | PromiseLike<number> {
+>f2 : (x: number) => number | PromiseLike<number>
+>   : ^ ^^      ^^^^^                            
+>x : number
+>  : ^^^^^^
+
+  return Promise.resolve(x);
+>Promise.resolve(x) : any
+>                   : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>x : number
+>  : ^^^^^^
+}
+
+function f3(x: number): number | Promise<number> | PromiseLike<number> {
+>f3 : (x: number) => number | Promise<number> | PromiseLike<number>
+>   : ^ ^^      ^^^^^                                              
+>x : number
+>  : ^^^^^^
+
+  return Promise.resolve(x);
+>Promise.resolve(x) : any
+>                   : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>x : number
+>  : ^^^^^^
+}
+
+const g1: Promise<number> = Promise.resolve(f1(42));
+>g1 : Promise<number>
+>   : ^^^^^^^^^^^^^^^
+>Promise.resolve(f1(42)) : any
+>                        : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>f1(42) : number | Promise<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : (x: number) => number | Promise<number>
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+const g2: Promise<number> = Promise.resolve(f2(42));
+>g2 : Promise<number>
+>   : ^^^^^^^^^^^^^^^
+>Promise.resolve(f2(42)) : any
+>                        : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>f2(42) : number | PromiseLike<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f2 : (x: number) => number | PromiseLike<number>
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
+const g3: Promise<number> = Promise.resolve(f3(42));
+>g3 : Promise<number>
+>   : ^^^^^^^^^^^^^^^
+>Promise.resolve(f3(42)) : any
+>                        : ^^^
+>Promise.resolve : any
+>                : ^^^
+>Promise : any
+>        : ^^^
+>resolve : any
+>        : ^^^
+>f3(42) : number | Promise<number> | PromiseLike<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f3 : (x: number) => number | Promise<number> | PromiseLike<number>
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>42 : 42
+>   : ^^
+
