@@ -89,22 +89,17 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export abstract class BaseSyntaxObject implements Node {
-    kind = SyntaxKind.Unknown;
-    pos = -1;
-    end = -1;
-    id = 0;
-    flags: NodeFlags = NodeFlags.None;
-    transformFlags: TransformFlags = TransformFlags.None;
-    parent: Node = undefined!;
-    original: Node | undefined = undefined;
-
-    abstract modifierFlagsCache: ModifierFlags; // TODO: move this off `Node`
+export abstract class BaseNodeObject implements Node {
+    abstract pos: number;
+    abstract end: number;
+    abstract kind: SyntaxKind;
+    abstract id: number;
+    abstract flags: NodeFlags;
+    abstract transformFlags: TransformFlags;
+    abstract parent: Node;
+    abstract original: Node | undefined;
+    abstract modifierFlagsCache: ModifierFlags;
     abstract emitNode: EmitNode | undefined;
-
-    constructor(kind: SyntaxKind) {
-        this.kind = kind;
-    }
 
     getSourceFile(): SourceFile {
         return getSourceFileOfNode(this);
@@ -180,7 +175,7 @@ export abstract class BaseSyntaxObject implements Node {
             return undefined;
         }
 
-        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getFirstToken(sourceFile);
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseNodeObject).getFirstToken(sourceFile);
     }
 
     getLastToken(sourceFile?: SourceFileLike): Node | undefined {
@@ -195,12 +190,12 @@ export abstract class BaseSyntaxObject implements Node {
             return undefined;
         }
 
-        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseSyntaxObject).getLastToken(sourceFile);
+        return child.kind < SyntaxKind.FirstNode ? child : (child as BaseNodeObject).getLastToken(sourceFile);
     }
 }
 
 /** @internal */
-export abstract class BaseTokenObject extends BaseSyntaxObject {
+export abstract class BaseTokenObject extends BaseNodeObject {
     // NOTE: Tokens generally do not have or need emitNode entries, so they are declared but not defined to reduce
     // memory footprint.
     declare emitNode: EmitNode | undefined;
@@ -228,18 +223,34 @@ export abstract class BaseTokenObject extends BaseSyntaxObject {
 }
 
 /** @internal */
-export class TokenObject<TKind extends SyntaxKind> extends BaseTokenObject implements Token<TKind> {
-    declare kind: TKind;
-
+export class TokenObject<TKind extends SyntaxKind> implements Token<TKind> {
+    pos: number;
+    end: number;
+    kind: TKind;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node;
+    original: Node | undefined;
     constructor(kind: TKind) {
-        super(kind);
+        this.pos = -1;
+        this.end = -1;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
     }
 }
 
 /** @internal */
-export class IdentifierObject extends BaseTokenObject implements Identifier {
-    declare kind: SyntaxKind.Identifier;
+export interface TokenObject<TKind extends SyntaxKind> extends BaseTokenObject {}
+Object.setPrototypeOf(TokenObject.prototype, BaseTokenObject.prototype);
 
+/** @internal */
+export class IdentifierObject implements Identifier {
+    // #region Brands
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
@@ -249,17 +260,37 @@ export class IdentifierObject extends BaseTokenObject implements Identifier {
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
+    // #endregion Brands
 
+    pos: number;
+    end: number;
+    kind: SyntaxKind.Identifier;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node;
+    original: Node | undefined;
     // NOTE: Though tokens, Identifiers often need emitNode
-    override emitNode: EmitNode | undefined = undefined;
-
-    escapedText: __String = "" as __String;
-    symbol: Symbol = undefined!; // initialized by checker
-    jsDoc?: JSDoc[] = undefined; // initialized by parser (JsDocContainer)
-    flowNode?: FlowNode = undefined; // initialized by binder (FlowContainer)
+    emitNode: EmitNode | undefined;
+    escapedText: __String;
+    symbol: Symbol; // initialized by checker
+    jsDoc?: JSDoc[]; // initialized by parser (JsDocContainer)
+    flowNode?: FlowNode; // initialized by binder (FlowContainer)
 
     constructor() {
-        super(SyntaxKind.Identifier);
+        this.pos = -1;
+        this.end = -1;
+        this.kind = SyntaxKind.Identifier;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+        this.escapedText = "" as __String;
+        this.symbol = undefined!;
+        this.jsDoc = undefined;
+        this.flowNode = undefined;
     }
 
     get text(): string {
@@ -268,23 +299,43 @@ export class IdentifierObject extends BaseTokenObject implements Identifier {
 }
 
 /** @internal */
-export class PrivateIdentifierObject extends BaseTokenObject implements PrivateIdentifier {
-    declare kind: SyntaxKind.PrivateIdentifier;
+export interface IdentifierObject extends BaseTokenObject {}
+Object.setPrototypeOf(IdentifierObject.prototype, BaseTokenObject.prototype);
 
+/** @internal */
+export class PrivateIdentifierObject implements PrivateIdentifier {
+    // #region Brands
     declare _primaryExpressionBrand: any;
     declare _memberExpressionBrand: any;
     declare _leftHandSideExpressionBrand: any;
     declare _updateExpressionBrand: any;
     declare _unaryExpressionBrand: any;
     declare _expressionBrand: any;
+    // #endregion Brands
 
+    pos: number;
+    end: number;
+    kind: SyntaxKind.PrivateIdentifier;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node;
+    original: Node | undefined;
     // NOTE: Though tokens, PrivateIdentifiers often need emitNode
-    override emitNode: EmitNode | undefined = undefined;
-
-    escapedText: __String = "" as __String;
+    emitNode: EmitNode | undefined = undefined;
+    escapedText: __String;
 
     constructor() {
-        super(SyntaxKind.PrivateIdentifier);
+        this.pos = -1;
+        this.end = -1;
+        this.kind = SyntaxKind.PrivateIdentifier;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+        this.escapedText = "" as __String;
     }
 
     get text(): string {
@@ -293,28 +344,55 @@ export class PrivateIdentifierObject extends BaseTokenObject implements PrivateI
 }
 
 /** @internal */
-export abstract class BaseNodeObject extends BaseSyntaxObject {
-    // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
-    override emitNode: EmitNode | undefined = undefined;
-    // NOTE: Non-token nodes may have modifiers, so they are defined to reduce polymorphism
-    override modifierFlagsCache: ModifierFlags = ModifierFlags.None; // TODO: move this off `Node`
-}
+export interface PrivateIdentifierObject extends BaseTokenObject {}
+Object.setPrototypeOf(PrivateIdentifierObject.prototype, BaseTokenObject.prototype);
 
 /** @internal */
-export class NodeObject<TKind extends SyntaxKind> extends BaseNodeObject implements Node {
-    declare kind: TKind;
+export class NodeObject implements Node {
+    pos: number;
+    end: number;
+    kind: SyntaxKind;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node;
+    original: Node | undefined;
+    // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
+    emitNode: EmitNode | undefined;
+    // NOTE: Non-token nodes may have modifiers, so they are defined to reduce polymorphism
+    modifierFlagsCache: ModifierFlags; // TODO: move this off `Node`
 
-    constructor(kind: TKind) {
-        super(kind);
+    constructor(kind: SyntaxKind) {
+        this.pos = -1;
+        this.end = -1;
+        this.kind = kind;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
+        this.modifierFlagsCache = ModifierFlags.None;
     }
 }
 
 /** @internal */
-export class SourceFileObject extends BaseSyntaxObject implements SourceFile {
-    declare kind: SyntaxKind.SourceFile;
+export interface NodeObject extends BaseNodeObject {}
+Object.setPrototypeOf(NodeObject.prototype, BaseNodeObject.prototype);
 
+/** @internal */
+export class SourceFileObject implements SourceFile {
+    pos: number;
+    end: number;
+    kind: SyntaxKind.SourceFile;
+    id: number;
+    flags: NodeFlags;
+    transformFlags: TransformFlags;
+    parent: Node;
+    original: Node | undefined;
     // NOTE: Non-token nodes often need emitNode entries, so they are defined to reduce polymorphism.
-    override emitNode: EmitNode | undefined = undefined;
+    emitNode: EmitNode | undefined;
+    declare modifierFlagsCache: ModifierFlags;
 
     declare _declarationBrand: any;
     declare _localsContainerBrand: any;
@@ -373,8 +451,6 @@ export class SourceFileObject extends BaseSyntaxObject implements SourceFile {
     declare endFlowNode?: FlowNode;
     declare symbol: Symbol;
     declare localSymbol?: Symbol;
-    declare modifierFlagsCache: ModifierFlags;
-    declare transformFlags: TransformFlags;
     declare locals?: SymbolTable;
     declare nextContainer?: HasLocals;
     declare scriptSnapshot: IScriptSnapshot;
@@ -383,7 +459,15 @@ export class SourceFileObject extends BaseSyntaxObject implements SourceFile {
     declare private namedDeclarations: Map<string, Declaration[]> | undefined;
 
     constructor() {
-        super(SyntaxKind.SourceFile);
+        this.pos = -1;
+        this.end = -1;
+        this.kind = SyntaxKind.SourceFile;
+        this.id = 0;
+        this.flags = NodeFlags.None;
+        this.transformFlags = TransformFlags.None;
+        this.parent = undefined!;
+        this.original = undefined;
+        this.emitNode = undefined;
     }
 
     public update(newText: string, textChangeRange: TextChangeRange): SourceFile {
@@ -575,6 +659,10 @@ export class SourceFileObject extends BaseSyntaxObject implements SourceFile {
         }
     }
 }
+
+/** @internal */
+export interface SourceFileObject extends BaseNodeObject {}
+Object.setPrototypeOf(SourceFileObject.prototype, BaseNodeObject.prototype);
 
 let scanner: Scanner | undefined;
 

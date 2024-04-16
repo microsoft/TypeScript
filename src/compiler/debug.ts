@@ -93,7 +93,7 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
-import { BaseSyntaxObject } from "./nodeConstructors";
+import { BaseNodeObject } from "./nodeConstructors";
 import {
     SignatureObject,
     SymbolObject,
@@ -711,7 +711,7 @@ export namespace Debug {
             },
         });
 
-        Object.defineProperties(BaseSyntaxObject.prototype, {
+        Object.defineProperties(BaseNodeObject.prototype, {
             [debugDescriptionSymbol]: {
                 value(this: Node) {
                     const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :

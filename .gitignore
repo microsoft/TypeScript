@@ -63,4 +63,6 @@ TEST-results.xml
 package-lock.json
 .eslintcache
 *v8.log
+*.heapsnapshot
+*.heapprofile
 /lib/
