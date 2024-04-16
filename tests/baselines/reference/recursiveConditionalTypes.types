@@ -5,7 +5,7 @@ Identity cache: 100 / 100 (nearest 100)
 Assignability cache: 300 / 300 (nearest 100)
 Type Count: 507,700 / 507,900 (nearest 100)
 Instantiation count: 524,500 / 524,500 (nearest 500)
-Symbol count: 1,072,500 / 1,072,500 (nearest 500)
+Symbol count: 1,072,500 / 1,073,000 (nearest 500)
 
 === recursiveConditionalTypes.ts ===
 // Awaiting promises
