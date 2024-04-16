@@ -8531,12 +8531,14 @@ export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Dia
         Comparison.EqualTo;
 }
 
+// A diagnostic with more elaboration should be considered *less than* a diagnostic
+// with less elaboration that is otherwise similar.
 function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     if (!d1.relatedInformation && !d2.relatedInformation) {
         return Comparison.EqualTo;
     }
     if (d1.relatedInformation && d2.relatedInformation) {
-        return compareValues(d1.relatedInformation.length, d2.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
+        return compareValues(d2.relatedInformation.length, d1.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
             const d2i = d2.relatedInformation![index];
             return compareDiagnostics(d1i, d2i); // EqualTo is 0, so falsy, and will cause the next item to be compared
         }) || Comparison.EqualTo;
@@ -8544,15 +8546,17 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
 }
 
+// An diagnostic message with more elaboration should be considered *less than* a diagnostic message
+// with less elaboration that is otherwise similar.
 function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
     if (typeof t1 === "string" && typeof t2 === "string") {
         return compareStringsCaseSensitive(t1, t2);
     }
     else if (typeof t1 === "string") {
-        return Comparison.LessThan;
+        return Comparison.GreaterThan;
     }
     else if (typeof t2 === "string") {
-        return Comparison.GreaterThan;
+        return Comparison.LessThan;
     }
     let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
     if (res) {
@@ -8562,25 +8566,41 @@ function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | Di
         return Comparison.EqualTo;
     }
     if (!t1.next) {
-        return Comparison.LessThan;
-    }
-    if (!t2.next) {
         return Comparison.GreaterThan;
     }
-    const len = Math.min(t1.next.length, t2.next.length);
+    if (!t2.next) {
+        return Comparison.LessThan;
+    }
+
+    res = compareValues(t2.next.length, t1.next.length);
+    if (res) {
+        return res;
+    }
+
+    const len = t2.next.length;
     for (let i = 0; i < len; i++) {
         res = compareMessageText(t1.next[i], t2.next[i]);
         if (res) {
             return res;
         }
     }
-    if (t1.next.length < t2.next.length) {
-        return Comparison.LessThan;
-    }
-    else if (t1.next.length > t2.next.length) {
-        return Comparison.GreaterThan;
-    }
+
     return Comparison.EqualTo;
+}
+
+/** @internal */
+export function diagnosticsEqualityComparer(d1: Diagnostic, d2: Diagnostic): boolean {
+    return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) === Comparison.EqualTo &&
+        compareValues(d1.start, d2.start) === Comparison.EqualTo &&
+        compareValues(d1.length, d2.length) === Comparison.EqualTo &&
+        compareValues(d1.code, d2.code) === Comparison.EqualTo &&
+        messageTextEqualityComparer(d1.messageText, d2.messageText);
+}
+
+function messageTextEqualityComparer(m1: string | DiagnosticMessageChain, m2: string | DiagnosticMessageChain): boolean {
+    const t1 = typeof m1 === "string" ? m1 : m1.messageText;
+    const t2 = typeof m2 === "string" ? m2 : m2.messageText;
+    return compareStringsCaseSensitive(t1, t2) === Comparison.EqualTo;
 }
 
 /** @internal */

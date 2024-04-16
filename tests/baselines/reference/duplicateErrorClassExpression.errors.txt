@@ -1,13 +1,11 @@
 duplicateErrorClassExpression.ts(17,5): error TS2416: Property 'foo' in type 'Derived' is not assignable to the same property in base type 'Base'.
   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
-duplicateErrorClassExpression.ts(17,5): error TS2416: Property 'foo' in type 'Derived' is not assignable to the same property in base type 'Base'.
-  Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
     'string' index signatures are incompatible.
       Property 'a' is missing in type 'ADerived' but required in type 'ABase'.
 duplicateErrorClassExpression.ts(20,5): error TS2538: Type 'typeof Derived' cannot be used as an index type.
 
 
-==== duplicateErrorClassExpression.ts (3 errors) ====
+==== duplicateErrorClassExpression.ts (2 errors) ====
     interface ComplicatedTypeBase {
         [s: string]: ABase;
     }
@@ -25,9 +23,6 @@ duplicateErrorClassExpression.ts(20,5): error TS2538: Type 'typeof Derived' cann
     }
     const x = class Derived extends Base {
         foo!: ComplicatedTypeDerived;
-        ~~~
-!!! error TS2416: Property 'foo' in type 'Derived' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'Derived' is not assignable to the same property in base type 'Base'.
 !!! error TS2416:   Type 'ComplicatedTypeDerived' is not assignable to type 'ComplicatedTypeBase'.
