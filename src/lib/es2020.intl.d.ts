@@ -21,25 +21,25 @@ declare namespace Intl {
         toString(): string;
 
         /** The Unicode Language Identifier associated with the locale. */
-        baseName: string;
+        readonly baseName: string;
         /** The calendar system associated with the locale. */
-        calendar: string | undefined;
+        readonly calendar: string | undefined;
         /** The case sorting rule associated with the locale. */
-        caseFirst?: CollatorOptionsCaseFirst | undefined;
+        readonly caseFirst?: CollatorOptionsCaseFirst | undefined;
         /** The character collation associated with the locale. */
-        collation: string | undefined;
+        readonly collation: string | undefined;
         /** The hour cycle type associated with the locale. */
-        hourCycle: DateTimeFormatOptionsHourCycle | undefined;
+        readonly hourCycle: DateTimeFormatOptionsHourCycle | undefined;
         /** The primary language subtag associated with the locale. */
-        language: string;
+        readonly language: string;
         /** The number system used by the locale. */
-        numberingSystem: string | undefined;
+        readonly numberingSystem: string | undefined;
         /** The numeric sorting rule associated with the locale. */
-        numeric?: boolean | undefined;
+        readonly numeric?: boolean | undefined;
         /** The region code associated with the locale. */
-        region: string | undefined;
+        readonly region: string | undefined;
         /** The language script associated with the locale. */
-        script: string | undefined;
+        readonly script: string | undefined;
     }
 
     interface LocaleConstructor {
