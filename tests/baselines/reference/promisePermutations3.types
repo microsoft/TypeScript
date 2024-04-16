@@ -1,11 +1,8 @@
 //// [tests/cases/compiler/promisePermutations3.ts] ////
 
 === Performance Stats ===
-Subtype cache: 300 / 300 (nearest 100)
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 1,500 / 1,500 (nearest 100)
-Instantiation count: 5,500 / 6,000 (nearest 500)
-Symbol count: 27,500 / 27,500 (nearest 500)
+Type Count: 1,000
+Instantiation count: 5,000
 
 === promisePermutations3.ts ===
 // same as promisePermutations but without the same overloads in IPromise<T>
