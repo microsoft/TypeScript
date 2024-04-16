@@ -247,7 +247,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
                 }
                 return typeFromExpression((node as ParenthesizedExpression).expression, context, isConstContext, requiresAddingUndefined);
             case SyntaxKind.Identifier:
-                if (context.isUndefinedIdentifier(node as Identifier)) {
+                if (context.isUndefinedIdentifierExpression(node as Identifier)) {
                     return true;
                 }
                 break;
@@ -366,7 +366,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
 
             const name = prop.name;
             if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (!context.isLiteralComputedName(prop.name)) {
+                if (!context.isNonNarrowedBindableName(prop.name)) {
                     context.tracker.reportInferenceFallback(prop.name);
                 }
                 else if (isEntityNameExpression(prop.name.expression)) {

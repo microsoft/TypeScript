@@ -1145,7 +1145,7 @@ export function transformDeclarations(context: TransformationContext) {
                     && isEntityNameExpression(input.name.expression)
                     // If the symbol is not accessible we get another TS error no need to add to that
                     && resolver.isEntityNameVisible(input.name.expression, input.parent).accessibility === SymbolAccessibility.Accessible
-                    && !resolver.isLiteralComputedName(input.name)
+                    && !resolver.isNonNarrowedBindableName(input.name)
                 ) {
                     context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }

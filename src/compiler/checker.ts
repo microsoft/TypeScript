@@ -683,7 +683,6 @@ import {
     isPartOfTypeQuery,
     isPlainJsFile,
     isPrefixUnaryExpression,
-    isPrimitiveLiteralValue,
     isPrivateIdentifier,
     isPrivateIdentifierClassElementDeclaration,
     isPrivateIdentifierPropertyAccessExpression,
@@ -6137,15 +6136,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 bundled: !!compilerOptions.outFile && !!enclosingDeclaration && isExternalOrCommonJsModule(getSourceFileOfNode(enclosingDeclaration)),
                 isEntityNameVisible: (entityName, shouldComputeAliasToMakeVisible) => isEntityNameVisible(entityName, context.enclosingDeclaration!, shouldComputeAliasToMakeVisible),
                 isExpandoFunctionDeclaration,
-                isOptionalParameter,
-                isLiteralComputedName,
-                trackComputedName(accessExpression) {
-                    trackComputedName(accessExpression, context.enclosingDeclaration, context);
-                },
+                isNonNarrowedBindableName,
                 getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
                 requiresAddingImplicitUndefined,
-                isUndefinedIdentifier(node: Identifier) {
-                    return getResolvedSymbol(node) === undefinedSymbol;
+                isUndefinedIdentifierExpression(node: Identifier) {
+                    Debug.assert(isExpressionNode(node));
+                    return getSymbolAtLocation(node) === undefinedSymbol;
                 },
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
@@ -48289,10 +48285,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let symbol: Symbol;
         if (isVariableDeclaration(declaration)) {
-            if (declaration.type || !isVarConstLike(declaration)) {
-                return false;
-            }
-            if (!(declaration.initializer && isFunctionExpressionOrArrowFunction(declaration.initializer))) {
+            if (
+                declaration.type ||
+                !isVarConstLike(declaration) ||
+                !declaration.initializer ||
+                !isFunctionExpressionOrArrowFunction(declaration.initializer)
+            ) {
                 return false;
             }
             symbol = getSymbolOfDeclaration(declaration.initializer);
@@ -48300,7 +48298,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             symbol = getSymbolOfDeclaration(declaration);
         }
-        if (!symbol || !(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
+        if (!(symbol.flags & SymbolFlags.Function | SymbolFlags.Variable)) {
             return false;
         }
         return !!forEachEntry(getExportsOfSymbol(symbol), p => p.flags & SymbolFlags.Value && isExpandoPropertyDeclaration(p.valueDeclaration));
@@ -48637,20 +48635,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         return false;
     }
-    function isLiteralComputedName(node: ComputedPropertyName) {
-        const expression = node.expression;
-        if (isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
-            return true;
-        }
-        const type = getTypeOfExpression(expression);
-        if (!isTypeUsableAsPropertyName(type)) {
+    function isNonNarrowedBindableName(node: ComputedPropertyName) {
+        if (!hasBindableName(node.parent)) {
             return false;
         }
 
-        // Only identifiers of the for A.B.C can be used
+        const expression = node.expression;
         if (!isEntityNameExpression(expression)) {
-            return false;
+            return true;
         }
+
+        const type = getTypeOfExpression(expression);
         const symbol = getSymbolAtLocation(expression);
         if (!symbol) {
             return false;
@@ -48784,7 +48779,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return node && getExternalModuleFileFromDeclaration(node);
             },
             isLiteralConstDeclaration,
-            isLiteralComputedName,
+            isNonNarrowedBindableName,
             isLateBound: (nodeIn: Declaration): nodeIn is LateBoundDeclaration => {
                 const node = getParseTreeNode(nodeIn, isDeclaration);
                 const symbol = node && getSymbolOfDeclaration(node);

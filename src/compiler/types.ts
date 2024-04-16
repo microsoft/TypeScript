@@ -5725,7 +5725,7 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
-    isLiteralComputedName(node: ComputedPropertyName): boolean;
+    isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
@@ -10234,12 +10234,10 @@ export type HasInferredType =
 /** @internal */
 export interface SyntacticTypeNodeBuilderContext {
     tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
-    isUndefinedIdentifier(name: Identifier): boolean;
-    isLiteralComputedName(name: ComputedPropertyName): boolean;
+    isUndefinedIdentifierExpression(name: Identifier): boolean;
+    isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
-    isOptionalParameter(name: ParameterDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
     isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
-    trackComputedName(accessExpression: EntityNameOrEntityNameExpression): void;
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 }
