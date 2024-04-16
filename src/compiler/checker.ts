@@ -11244,7 +11244,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result.aliasTypeArguments = length(args) ? args : undefined;
                 }
             }
-            result.objectFlags |= getObjectFlags(type) & ObjectFlags.JSLiteral; // Propagate JSLiteral flag
+            result.objectFlags |= getPropagatingFlagsOfTypes([type]) | getObjectFlags(type) & (ObjectFlags.JSLiteral | ObjectFlags.ArrayLiteral | ObjectFlags.ObjectLiteral);
             if (result.symbol && result.symbol.flags & SymbolFlags.Class && type === getDeclaredTypeOfClassOrInterface(result.symbol)) {
                 result.objectFlags |= ObjectFlags.IsClassInstanceClone; // Propagate the knowledge that this type is equivalent to the symbol's class instance type
             }
