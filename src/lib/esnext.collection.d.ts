@@ -12,9 +12,9 @@ interface MapConstructor {
 
 interface ReadonlySetLike<T> {
     /**
-     * Despite its name, returns an iterable of the values in the set-like.
+     * Despite its name, returns an iterator of the values in the set-like.
      */
-    keys(): Iterable<T>;
+    keys(): Iterator<T>;
     /**
      * @returns a boolean indicating whether an element with the specified value exists in the set-like or not.
      */
