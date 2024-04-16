@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 1,000
+Type Count: 1,000
 
 === keyofAndIndexedAccess2.ts ===
 function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {

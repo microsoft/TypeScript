@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/deepComparisons.ts] ////
 
 === Performance Stats ===
-Type Count: 2,500 -> 2,500
-Instantiation count: 2,500 -> 2,500
+Type Count: 2,500
+Instantiation count: 2,500
 
 === deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {

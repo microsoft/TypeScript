@@ -799,7 +799,14 @@ export namespace Compiler {
                     perfLines.push(`=== Performance Stats ===`);
                     for (const [name, threshold, preValue, postValue] of perfStats) {
                         if (postValue >= threshold) {
-                            perfLines.push(`${name}: ${valueToString(preValue)} -> ${valueToString(postValue)}`);
+                            const preString = valueToString(preValue);
+                            const postString = valueToString(postValue);
+                            if (preString === postString) {
+                                perfLines.push(`${name}: ${preString}`);
+                            }
+                            else {
+                                perfLines.push(`${name}: ${preString} -> ${postString}`);
+                            }
                         }
                     }
                     perfLines.push("");

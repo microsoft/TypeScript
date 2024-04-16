@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
 
 === Performance Stats ===
-Assignability cache: 10,000 -> 10,000
-Type Count: 25,000 -> 25,000
+Assignability cache: 10,000
+Type Count: 25,000
 Instantiation count: 250,000 -> 500,000
-Symbol count: 100,000 -> 100,000
+Symbol count: 100,000
 
 === styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />

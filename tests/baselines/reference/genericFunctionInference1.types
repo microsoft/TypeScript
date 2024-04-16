@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/genericFunctionInference1.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 1,000
-Instantiation count: 2,500 -> 2,500
+Type Count: 1,000
+Instantiation count: 2,500
 
 === genericFunctionInference1.ts ===
 declare function pipe<A extends any[], B>(ab: (...args: A) => B): (...args: A) => B;

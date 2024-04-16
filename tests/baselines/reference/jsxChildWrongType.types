@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/jsxChildWrongType.tsx] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 1,000
+Type Count: 1,000
 
 === index.tsx ===
 /// <reference path="react18/react18.d.ts" />

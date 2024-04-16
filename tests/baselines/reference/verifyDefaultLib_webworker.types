@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/verifyDefaultLib_webworker.ts] ////
 
 === Performance Stats ===
-Type Count: 5,000 -> 5,000
+Type Count: 5,000
 
 === verifyDefaultLib_webworker.ts ===
 var x: Worker;

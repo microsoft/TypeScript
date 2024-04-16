@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/correlatedUnions.ts] ////
 
 === Performance Stats ===
-Type Count: 1,000 -> 1,000
+Type Count: 1,000
 
 === correlatedUnions.ts ===
 // Various repros from #30581
