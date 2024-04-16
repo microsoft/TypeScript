@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/reactSFCAndFunctionResolvable.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,300 / 2,300 (nearest 100)
-Type Count: 7,100 / 7,100 (nearest 100)
-Instantiation count: 74,500 / 74,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500 / 2,500
+Type Count: 5,000 / 5,000
+Instantiation count: 50,000 / 50,000
+Symbol count: 50,000 / 50,000
 
 === reactSFCAndFunctionResolvable.tsx ===
 /// <reference path="react16.d.ts" />

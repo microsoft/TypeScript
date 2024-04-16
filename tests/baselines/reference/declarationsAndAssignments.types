@@ -1,10 +1,7 @@
 //// [tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 500 / 1,200 (nearest 100)
-Instantiation count: 500 / 500 (nearest 500)
-Symbol count: 27,000 / 28,000 (nearest 500)
+Type Count: 500 / 1,000
 
 === declarationsAndAssignments.ts ===
 function f0() {
