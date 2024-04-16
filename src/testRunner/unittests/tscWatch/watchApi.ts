@@ -46,7 +46,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             system: sys,
             cb,
         });
-        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
+        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, ts.getDirectoryPath(config.path));
         host.resolveModuleNames = (moduleNames, containingFile) =>
             moduleNames.map(m => {
                 const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);

@@ -58,6 +58,7 @@ import {
     getPathComponents,
     getSnapshotText,
     getWatchFactory,
+    handleWatchOptionsConfigDirTemplateSubstitution,
     hasExtension,
     hasProperty,
     hasTSFileExtension,
@@ -516,6 +517,7 @@ export interface HostConfiguration {
     hostInfo: string;
     extraFileExtensions?: FileExtensionInfo[];
     watchOptions?: WatchOptions;
+    /** @internal */ beforeSubstitution?: WatchOptions;
 }
 
 export interface OpenConfiguredProjectResult {
@@ -1722,7 +1724,7 @@ export class ProjectService {
                 });
             },
             flags,
-            this.getWatchOptionsFromProjectWatchOptions(config.parsedCommandLine!.watchOptions),
+            this.getWatchOptionsFromProjectWatchOptions(config.parsedCommandLine!.watchOptions, getDirectoryPath(configFileName)),
             WatchType.WildcardDirectory,
             configFileName,
         );
@@ -2100,7 +2102,7 @@ export class ProjectService {
                 configFileName,
                 (_fileName, eventKind) => this.onConfigFileChanged(canonicalConfigFilePath, eventKind),
                 PollingInterval.High,
-                this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions),
+                this.getWatchOptionsFromProjectWatchOptions(configFileExistenceInfo?.config?.parsedCommandLine?.watchOptions, getDirectoryPath(configFileName)),
                 WatchType.ConfigFile,
                 forProject,
             );
@@ -2626,13 +2628,14 @@ export class ProjectService {
         const configFile = parseJsonText(configFilename, isString(configFileContent) ? configFileContent : "") as TsConfigSourceFile;
         const configFileErrors = configFile.parseDiagnostics as Diagnostic[];
         if (!isString(configFileContent)) configFileErrors.push(configFileContent);
+        const configDir = getDirectoryPath(configFilename);
         const parsedCommandLine = parseJsonSourceFileConfigFileContent(
             configFile,
             cachedDirectoryStructureHost,
-            getDirectoryPath(configFilename),
-            /*existingOptions*/ {},
+            configDir,
+            /*existingOptions*/ undefined,
             configFilename,
-            /*resolutionStack*/ [],
+            /*resolutionStack*/ undefined,
             this.hostConfiguration.extraFileExtensions,
             this.extendedConfigCache,
         );
@@ -2668,9 +2671,9 @@ export class ProjectService {
         if (
             !oldCommandLine && !isJsonEqual(
                 // Old options
-                this.getWatchOptionsFromProjectWatchOptions(/*projectOptions*/ undefined),
+                this.getWatchOptionsFromProjectWatchOptions(/*projectOptions*/ undefined, configDir),
                 // New options
-                this.getWatchOptionsFromProjectWatchOptions(parsedCommandLine.watchOptions),
+                this.getWatchOptionsFromProjectWatchOptions(parsedCommandLine.watchOptions, configDir),
             )
         ) {
             // Reset the config file watcher
@@ -3588,7 +3591,10 @@ export class ProjectService {
             }
 
             if (args.watchOptions) {
-                this.hostConfiguration.watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
+                const watchOptions = convertWatchOptions(args.watchOptions)?.watchOptions;
+                const substitution = handleWatchOptionsConfigDirTemplateSubstitution(watchOptions, this.currentDirectory);
+                this.hostConfiguration.watchOptions = substitution;
+                this.hostConfiguration.beforeSubstitution = substitution === watchOptions ? undefined : watchOptions;
                 this.logger.info(`Host watch options changed to ${JSON.stringify(this.hostConfiguration.watchOptions)}, it will be take effect for next watches.`);
             }
         }
@@ -3596,14 +3602,19 @@ export class ProjectService {
 
     /** @internal */
     getWatchOptions(project: Project) {
-        return this.getWatchOptionsFromProjectWatchOptions(project.getWatchOptions());
+        return this.getWatchOptionsFromProjectWatchOptions(project.getWatchOptions(), project.getCurrentDirectory());
     }
 
     /** @internal */
-    private getWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined) {
-        return projectOptions && this.hostConfiguration.watchOptions ?
-            { ...this.hostConfiguration.watchOptions, ...projectOptions } :
-            projectOptions || this.hostConfiguration.watchOptions;
+    private getWatchOptionsFromProjectWatchOptions(projectOptions: WatchOptions | undefined, basePath: string) {
+        const hostWatchOptions = !this.hostConfiguration.beforeSubstitution ? this.hostConfiguration.watchOptions :
+            handleWatchOptionsConfigDirTemplateSubstitution(
+                this.hostConfiguration.beforeSubstitution,
+                basePath,
+            );
+        return projectOptions && hostWatchOptions ?
+            { ...hostWatchOptions, ...projectOptions } :
+            projectOptions || hostWatchOptions;
     }
 
     closeLog() {

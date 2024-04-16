@@ -786,21 +786,27 @@ export namespace Compiler {
             const postPerformanceValues = getPerformanceBaselineValues();
 
             if (!isSymbolBaseline) {
-                const perfStats: [name: string, reportThreshold: number, rounding: number, beforeValue: number, afterValue: number][] = [];
-                perfStats.push(["Strict subtype cache", 1000, 100, prePerformanceValues.strictSubtype, postPerformanceValues.strictSubtype]);
-                perfStats.push(["Subtype cache", 1000, 100, prePerformanceValues.subtype, postPerformanceValues.subtype]);
-                perfStats.push(["Identity cache", 1000, 100, prePerformanceValues.identity, postPerformanceValues.identity]);
-                perfStats.push(["Assignability cache", 1000, 100, prePerformanceValues.assignability, postPerformanceValues.assignability]);
-                perfStats.push(["Type Count", 1000, 100, prePerformanceValues.typeCount, postPerformanceValues.typeCount]);
-                perfStats.push(["Instantiation count", 1500, 500, prePerformanceValues.instantiation, postPerformanceValues.instantiation]);
-                perfStats.push(["Symbol count", 45000, 500, prePerformanceValues.symbol, postPerformanceValues.symbol]);
+                const perfStats: [name: string, reportThreshold: number, beforeValue: number, afterValue: number][] = [];
+                perfStats.push(["Strict subtype cache", 1000, prePerformanceValues.strictSubtype, postPerformanceValues.strictSubtype]);
+                perfStats.push(["Subtype cache", 1000, prePerformanceValues.subtype, postPerformanceValues.subtype]);
+                perfStats.push(["Identity cache", 1000, prePerformanceValues.identity, postPerformanceValues.identity]);
+                perfStats.push(["Assignability cache", 1000, prePerformanceValues.assignability, postPerformanceValues.assignability]);
+                perfStats.push(["Type Count", 1000, prePerformanceValues.typeCount, postPerformanceValues.typeCount]);
+                perfStats.push(["Instantiation count", 1500, prePerformanceValues.instantiation, postPerformanceValues.instantiation]);
+                perfStats.push(["Symbol count", 45000, prePerformanceValues.symbol, postPerformanceValues.symbol]);
 
-                if (perfStats.some(([, threshold, , , postValue]) => postValue >= threshold)) {
+                if (perfStats.some(([, threshold, , postValue]) => postValue >= threshold)) {
                     perfLines.push(`=== Performance Stats ===`);
-                    for (const [name, _, rounding, preValue, postValue] of perfStats) {
-                        const preDisplay = valueToString(preValue, rounding);
-                        if (preDisplay !== "0") {
-                            perfLines.push(`${name}: ${preDisplay} / ${valueToString(postValue, rounding)} (nearest ${rounding})`);
+                    for (const [name, threshold, preValue, postValue] of perfStats) {
+                        if (postValue >= threshold) {
+                            const preString = valueToString(preValue);
+                            const postString = valueToString(postValue);
+                            if (preString === postString) {
+                                perfLines.push(`${name}: ${preString}`);
+                            }
+                            else {
+                                perfLines.push(`${name}: ${preString} -> ${postString}`);
+                            }
                         }
                     }
                     perfLines.push("");
@@ -809,10 +815,24 @@ export namespace Compiler {
             }
 
             return result ? (`//// [${header}] ////\r\n\r\n${perfLines.join("\n")}${result}`) : null; // eslint-disable-line no-null/no-null
+
+            function valueToString(value: number) {
+                return roundToHumanLogarithm(value).toLocaleString("en-US");
+            }
         }
 
-        function valueToString(value: number, rounding: number) {
-            return (Math.round(value / rounding) * rounding).toLocaleString("en-US");
+        /**
+         * Rounds to a number like 10, 25, 50, 100, 250, 500, 1000, etc
+         */
+        function roundToHumanLogarithm(n: number) {
+            if (n < 10) return 0;
+            const powerOfTen = Math.floor(Math.log10(n));
+            const basePowerOfTen = Math.pow(10, powerOfTen);
+            const multipliers = [1, 2.5, 5, 10];
+            const closestMultiplier = multipliers.reduce((prev, curr) => {
+                return Math.abs(curr * basePowerOfTen - n) < Math.abs(prev * basePowerOfTen - n) ? curr : prev;
+            });
+            return closestMultiplier * basePowerOfTen;
         }
 
         function getPerformanceBaselineValues() {

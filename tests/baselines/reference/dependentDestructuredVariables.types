@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 2,200 / 2,300 (nearest 100)
-Instantiation count: 1,500 / 1,500 (nearest 500)
-Symbol count: 34,000 / 34,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 1,000
 
 === dependentDestructuredVariables.ts ===
 type Action =
