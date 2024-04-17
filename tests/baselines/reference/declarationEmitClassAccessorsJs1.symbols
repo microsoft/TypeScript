@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/declarationEmitClassAccessorsJs1.ts] ////
+
+=== index.js ===
+// https://github.com/microsoft/TypeScript/issues/58167
+
+export class VFile {
+>VFile : Symbol(VFile, Decl(index.js, 0, 0))
+
+  /**
+   * @returns {string}
+   */
+  get path() {
+>path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+
+    return ''
+  }
+
+  /**
+   * @param {URL | string} path
+   */
+  set path(path) {
+>path : Symbol(VFile.path, Decl(index.js, 2, 20), Decl(index.js, 8, 3))
+>path : Symbol(path, Decl(index.js, 13, 11))
+  }
+}
+
