@@ -1514,14 +1514,21 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         const packageJson = getPackageScopeForPath(containingFile, state);
         if (packageJson && !packageJson.dependenciesPrecached) {
             packageJson.dependenciesPrecached = true;
-            const deps = packageJson.contents.packageJsonContent.dependencies;
-            if (deps && typeof deps === "object") {
-                const jsonDir = packageJson.packageDirectory;
-                const toResolve = getOwnKeys(deps as MapLike<unknown>);
-                for (const depName of toResolve) {
-                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, resolutionMode, redirectedReference).get(jsonDir);
-                    if (cached) continue;
-                    void resolveModuleName(depName, combinePaths(jsonDir, "package.json"), compilerOptions, host, cache, redirectedReference, resolutionMode);
+            const configDir = compilerOptions.configFilePath && getDirectoryPath(compilerOptions.configFilePath);
+            // We skip dep precaching if the context package.json is outside the project config's scope.
+            // This is to skip a vscode-like structure, where there's a root package.json with many dependencies, but
+            //  a tsconfig in a project folder with no references to any of them (because they're all for scripts in another folder).
+            //  Such `dependencies` from a parent directory of the project are much less likely to be used.
+            if (!configDir || startsWith(packageJson.packageDirectory, configDir)) {
+                const deps = packageJson.contents.packageJsonContent.dependencies;
+                if (deps && typeof deps === "object") {
+                    const jsonDir = packageJson.packageDirectory;
+                    const toResolve = getOwnKeys(deps as MapLike<unknown>);
+                    for (const depName of toResolve) {
+                        const cached = cache.getOrCreateCacheForNonRelativeName(depName, resolutionMode, redirectedReference).get(jsonDir);
+                        if (cached) continue;
+                        void resolveModuleName(depName, combinePaths(jsonDir, "package.json"), compilerOptions, host, cache, redirectedReference, resolutionMode);
+                    }
                 }
             }
         }
