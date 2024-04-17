@@ -321,7 +321,7 @@ import {
     WithStatement,
 } from "./_namespaces/ts";
 import * as performance from "./_namespaces/ts.performance";
-import { SymbolObject as SymbolObject } from "./objectConstructors";
+import { SymbolObject } from "./objectConstructors";
 
 /** @internal */
 export const enum ModuleInstanceState {
