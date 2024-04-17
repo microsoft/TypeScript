@@ -419,6 +419,7 @@ import {
     ModuleDeclaration,
     ModuleDetectionKind,
     ModuleKind,
+    ModuleResolutionCache,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
     MultiMap,
@@ -581,7 +582,6 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
-    ModuleResolutionCache,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -9121,10 +9121,8 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
         setSymlinksFromResolutionCache(cache) {
-            cache?.forEach(elem =>
-                processResolution(this, elem.resolvedModule)
-            );
-        }
+            cache?.forEach(elem => processResolution(this, elem.resolvedModule));
+        },
     };
 
     function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
