@@ -1,11 +1,10 @@
 isolatedDeclarationErrorsClassesExpressions.ts(1,20): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
-isolatedDeclarationErrorsClassesExpressions.ts(15,26): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 isolatedDeclarationErrorsClassesExpressions.ts(15,26): error TS9021: Extends clause can't contain an expression with --isolatedDeclarations.
 isolatedDeclarationErrorsClassesExpressions.ts(19,25): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 isolatedDeclarationErrorsClassesExpressions.ts(19,35): error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsClassesExpressions.ts (5 errors) ====
+==== isolatedDeclarationErrorsClassesExpressions.ts (4 errors) ====
     export const cls = class {
                        ~~~~~
 !!! error TS9022: Inference from class expressions is not supported with --isolatedDeclarations.
@@ -24,8 +23,6 @@ isolatedDeclarationErrorsClassesExpressions.ts(19,35): error TS9022: Inference f
     }
     
     export class Mix extends id(Base) {
-                             ~~~~~~~~
-!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
                              ~~~~~~~~
 !!! error TS9021: Extends clause can't contain an expression with --isolatedDeclarations.
     

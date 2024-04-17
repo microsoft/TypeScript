@@ -117,6 +117,7 @@ import {
     isFunctionDeclaration,
     isFunctionLike,
     isGlobalScopeAugmentation,
+    isHeritageClause,
     isIdentifierText,
     isImportEqualsDeclaration,
     isIndexSignatureDeclaration,
@@ -125,7 +126,6 @@ import {
     isJSDocImportTag,
     isJsonSourceFile,
     isLateVisibilityPaintedStatement,
-    isLiteralExpression,
     isLiteralImportTypeNode,
     isMappedTypeNode,
     isMethodDeclaration,
@@ -312,7 +312,13 @@ export function transformDeclarations(context: TransformationContext) {
             reportExpandoFunctionErrors(node);
         }
         else {
-            context.addDiagnostic(getDiagnostic(node));
+            const heritageClause = findAncestor(node, isHeritageClause);
+            if (heritageClause) {
+                context.addDiagnostic(createDiagnosticForNode(node, Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations));
+            }
+            else {
+                context.addDiagnostic(getDiagnostic(node));
+            }
         }
 
         type WithSpecialDiagnostic =
@@ -1800,19 +1806,6 @@ export function transformDeclarations(context: TransformationContext) {
                 if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                     // We must add a temporary declaration for the extends clause expression
 
-                    // Isolated declarations does not allow inferred type in the extends clause
-                    if (isolatedDeclarations) {
-                        if (
-                            // Checking if it's a separate compiler error so we don't make it an isolatedDeclarations error.
-                            // This is only an approximation as we need type information to figure out if something
-                            // is a constructor type or not.
-                            !isLiteralExpression(extendsClause.expression) &&
-                            extendsClause.expression.kind !== SyntaxKind.FalseKeyword &&
-                            extendsClause.expression.kind !== SyntaxKind.TrueKeyword
-                        ) {
-                            context.addDiagnostic(createDiagnosticForNode(extendsClause, Diagnostics.Extends_clause_can_t_contain_an_expression_with_isolatedDeclarations));
-                        }
-                    }
                     const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
                     const newId = factory.createUniqueName(`${oldId}_base`, GeneratedIdentifierFlags.Optimistic);
                     getSymbolAccessibilityDiagnostic = () => ({

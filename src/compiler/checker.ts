@@ -48288,7 +48288,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let symbol: Symbol | undefined;
         if (isVariableDeclaration(declaration)) {
-            if (declaration.type || !isInJSFile(declaration) && !isVarConstLike(declaration)) {
+            if (declaration.type || (!isInJSFile(declaration) && !isVarConstLike(declaration))) {
                 return false;
             }
             const initializer = getDeclaredExpandoInitializer(declaration);
