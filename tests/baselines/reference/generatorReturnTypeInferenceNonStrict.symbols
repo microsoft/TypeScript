@@ -7,7 +7,7 @@ declare const iterableIterator: IterableIterator<number>;
 
 declare const generator: Generator<number, string, boolean>;
 >generator : Symbol(generator, Decl(generatorReturnTypeInferenceNonStrict.ts, 1, 13))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 
 declare const never: never;
 >never : Symbol(never, Decl(generatorReturnTypeInferenceNonStrict.ts, 2, 13))

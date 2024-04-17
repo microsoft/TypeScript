@@ -239,7 +239,7 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 
     *entries(): Generator<[key: K, value: V], void> {
 >entries : Symbol(IterableWeakMap.entries, Decl(esNextWeakRefs_IterableWeakMap.ts, 62, 47))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
 >K : Symbol(K, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 29))
 >V : Symbol(V, Decl(esNextWeakRefs_IterableWeakMap.ts, 9, 46))
 

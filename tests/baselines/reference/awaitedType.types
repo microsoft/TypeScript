@@ -1,6 +1,7 @@
 //// [tests/cases/compiler/awaitedType.ts] ////
 
 === Performance Stats ===
+Type Count: 1,000
 Instantiation count: 25,000
 
 === awaitedType.ts ===
