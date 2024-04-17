@@ -42,7 +42,7 @@ const MyComponent2 = () => null;
 >MyComponent2 : { (): any; defaultProps: MyComponentProps; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => null : { (): any; defaultProps: MyComponentProps; }
->           :                                             
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /**
  * @type {MyComponentProps}

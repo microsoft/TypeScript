@@ -31,7 +31,7 @@ export function F(x: IA | IAB) {
 >useB : (t: number) => void
 >     : ^ ^^      ^^^^^^^^^
 >(t: number) => { } : (t: number) => void
->                   :                    
+>                   : ^ ^^      ^^^^^^^^^
 >t : number
 >  : ^^^^^^
 

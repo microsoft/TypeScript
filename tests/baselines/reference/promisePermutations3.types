@@ -353,9 +353,9 @@ var r1a = r1.then(testFunction, testFunction, testFunction);
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
 var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, testFunction, testFunction);
 >r1b : IPromise<IPromise<number>>
@@ -375,17 +375,17 @@ var r1b = r1.then(testFunction, testFunction, testFunction).then(testFunction, t
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<number>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
 var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
 >r1c : IPromise<Promise<number>>
@@ -401,9 +401,9 @@ var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
 >testFunctionP : () => Promise<number>
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >testFunctionP : () => Promise<number>
->              :                      
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >testFunctionP : () => Promise<number>
->              :                      
+>              : ^^^^^^^^^^^^^^^^^^^^^
 
 var s1: Promise<number>;
 >s1 : Promise<number>
@@ -423,9 +423,9 @@ var s1a = s1.then(testFunction, testFunction, testFunction);
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
 var s1b = s1.then(testFunctionP, testFunctionP, testFunctionP);
 >s1b : Promise<number>
@@ -441,9 +441,9 @@ var s1b = s1.then(testFunctionP, testFunctionP, testFunctionP);
 >testFunctionP : () => Promise<number>
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >testFunctionP : () => Promise<number>
->              :                      
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >testFunctionP : () => Promise<number>
->              :                      
+>              : ^^^^^^^^^^^^^^^^^^^^^
 
 var s1c = s1.then(testFunctionP, testFunction, testFunction);
 >s1c : Promise<IPromise<number>>
@@ -461,7 +461,7 @@ var s1c = s1.then(testFunctionP, testFunction, testFunction);
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
 var s1d = s1.then(testFunctionP, testFunction, testFunction).then(testFunction, testFunction, testFunction);
 >s1d : Promise<IPromise<number>>
@@ -483,15 +483,15 @@ var s1d = s1.then(testFunctionP, testFunction, testFunction).then(testFunction, 
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = IPromise<number>, TResult2 = never>(onfulfilled?: (value: IPromise<number>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: IPromise<number>) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: IPromise<number>) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: IPromise<number>) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: IPromise<number>) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
 >             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction : () => IPromise<number>
->             :                       
+>             : ^^^^^^^^^^^^^^^^^^^^^^
 
 var r2: IPromise<{ x: number; }>;
 >r2 : IPromise<{ x: number; }>
@@ -503,7 +503,7 @@ var r2a = r2.then(testFunction2, testFunction2, testFunction2);
 >r2a : IPromise<IPromise<{ x: number; }>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r2.then(testFunction2, testFunction2, testFunction2) : IPromise<IPromise<{ x: number; }>>
->                                                     : ^^^^^^^^^^^^^^^^^^              ^^
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r2.then : <U>(success?: (value: { x: number; }) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >        : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >r2 : IPromise<{ x: number; }>
@@ -513,15 +513,15 @@ var r2a = r2.then(testFunction2, testFunction2, testFunction2);
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
 >r2b : IPromise<IPromise<{ x: number; }>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r2.then(testFunction2, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2) : IPromise<IPromise<{ x: number; }>>
->                                                                                                       : ^^^^^^^^^^^^^^^^^^              ^^
+>                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r2.then(testFunction2, testFunction2, testFunction2).then : <U>(success?: (value: IPromise<{ x: number; }>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >                                                          : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >r2.then(testFunction2, testFunction2, testFunction2) : IPromise<IPromise<{ x: number; }>>
@@ -535,17 +535,17 @@ var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<{ x: number; }>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var s2: Promise<{ x: number; }>;
 >s2 : Promise<{ x: number; }>
@@ -557,7 +557,7 @@ var s2a = s2.then(testFunction2, testFunction2, testFunction2);
 >s2a : Promise<IPromise<{ x: number; }>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2, testFunction2, testFunction2) : Promise<IPromise<{ x: number; }>>
->                                                     : ^^^^^^^^^^^^^^^^^              ^^
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then : { <TResult1 = { x: number; }, TResult2 = never>(onfulfilled?: (value: { x: number; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: { x: number; }) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: { x: number; }) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: { x: number; }) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: { x: number; }) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : Promise<{ x: number; }>
@@ -567,15 +567,15 @@ var s2a = s2.then(testFunction2, testFunction2, testFunction2);
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var s2b = s2.then(testFunction2P, testFunction2P, testFunction2P);
 >s2b : Promise<{ x: number; }>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2P, testFunction2P, testFunction2P) : Promise<{ x: number; }>
->                                                        : ^^^^^^^^              ^
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then : { <TResult1 = { x: number; }, TResult2 = never>(onfulfilled?: (value: { x: number; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: { x: number; }) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: { x: number; }) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: { x: number; }) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: { x: number; }) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : Promise<{ x: number; }>
@@ -585,15 +585,15 @@ var s2b = s2.then(testFunction2P, testFunction2P, testFunction2P);
 >testFunction2P : () => Promise<{ x: number; }>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2P : () => Promise<{ x: number; }>
->               :                              
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2P : () => Promise<{ x: number; }>
->               :                              
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var s2c = s2.then(testFunction2P, testFunction2, testFunction2);
 >s2c : Promise<IPromise<{ x: number; }>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2P, testFunction2, testFunction2) : Promise<IPromise<{ x: number; }>>
->                                                      : ^^^^^^^^^^^^^^^^^              ^^
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then : { <TResult1 = { x: number; }, TResult2 = never>(onfulfilled?: (value: { x: number; }) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: { x: number; }) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: { x: number; }) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: { x: number; }) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: { x: number; }) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2 : Promise<{ x: number; }>
@@ -605,13 +605,13 @@ var s2c = s2.then(testFunction2P, testFunction2, testFunction2);
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var s2d = s2.then(testFunction2P, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
 >s2d : Promise<IPromise<{ x: number; }>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2P, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2) : Promise<IPromise<{ x: number; }>>
->                                                                                                        : ^^^^^^^^^^^^^^^^^              ^^
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2P, testFunction2, testFunction2).then : { <TResult1 = IPromise<{ x: number; }>, TResult2 = never>(onfulfilled?: (value: IPromise<{ x: number; }>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: IPromise<{ x: number; }>) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: IPromise<{ x: number; }>) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: IPromise<{ x: number; }>) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: IPromise<{ x: number; }>) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s2.then(testFunction2P, testFunction2, testFunction2) : Promise<IPromise<{ x: number; }>>
@@ -627,15 +627,15 @@ var s2d = s2.then(testFunction2P, testFunction2, testFunction2).then(testFunctio
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = IPromise<{ x: number; }>, TResult2 = never>(onfulfilled?: (value: IPromise<{ x: number; }>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: IPromise<{ x: number; }>) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: IPromise<{ x: number; }>) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: IPromise<{ x: number; }>) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: IPromise<{ x: number; }>) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction2 : () => IPromise<{ x: number; }>
->              :                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r3: IPromise<number>;
 >r3 : IPromise<number>
@@ -655,9 +655,9 @@ var r3a = r3.then(testFunction3, testFunction3, testFunction3);
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
 >r3b : IPromise<IPromise<number>>
@@ -677,17 +677,17 @@ var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<number>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s3: Promise<number>;
 >s3 : Promise<number>
@@ -707,9 +707,9 @@ var s3a = s3.then(testFunction3, testFunction3, testFunction3);
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
 >s3b : Promise<number>
@@ -725,9 +725,9 @@ var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
 >testFunction3P : (x: number) => Promise<number>
 >               : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >testFunction3P : (x: number) => Promise<number>
->               :                               
+>               : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >testFunction3P : (x: number) => Promise<number>
->               :                               
+>               : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 
 var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
 >s3c : Promise<IPromise<number>>
@@ -745,7 +745,7 @@ var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
 >s3d : Promise<number>
@@ -767,15 +767,15 @@ var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunctio
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = IPromise<number>, TResult2 = never>(onfulfilled?: (value: IPromise<number>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: IPromise<number>) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: IPromise<number>) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: IPromise<number>) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: IPromise<number>) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction3 : (x: number) => IPromise<number>
->              :                                
+>              : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var r4: IPromise<string>;
 >r4 : IPromise<string>
@@ -807,9 +807,9 @@ var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
 >r4b : IPromise<IPromise<string>>
@@ -831,7 +831,7 @@ var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testF
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<string>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
@@ -839,7 +839,7 @@ var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testF
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s4: Promise<string>;
 >s4 : Promise<string>
@@ -859,9 +859,9 @@ var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
 >s4b : Promise<string>
@@ -877,9 +877,9 @@ var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error
 >testFunction4P : (x: number, y?: string) => Promise<string>
 >               : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^
 >testFunction4P : (x: number, y?: string) => Promise<string>
->               :              ^                            
+>               : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^
 >testFunction4P : (x: number, y?: string) => Promise<string>
->               :              ^                            
+>               : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^
 
 var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
 >s4c : Promise<string>
@@ -897,7 +897,7 @@ var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction4 : (x: number, y?: string) => IPromise<string>
->              :              ^                             
+>              : ^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
 >s4d : Promise<IPromise<string>>
@@ -947,9 +947,9 @@ var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
 >              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
->              :                                                           
+>              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
->              :                                                           
+>              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 
 var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >r5b : IPromise<IPromise<string>>
@@ -969,17 +969,17 @@ var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<string>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s5: Promise<string>;
 >s5 : Promise<string>
@@ -999,9 +999,9 @@ var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
 >              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
->              :                                                           
+>              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
->              :                                                           
+>              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 
 var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
 >s5b : Promise<string>
@@ -1017,9 +1017,9 @@ var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
 >testFunction5P : (x: number, cb: (a: string) => string) => Promise<string>
 >               : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^
 >testFunction5P : (x: number, cb: (a: string) => string) => Promise<string>
->               :                                                          
+>               : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^
 >testFunction5P : (x: number, cb: (a: string) => string) => Promise<string>
->               :                                                          
+>               : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^
 
 var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
 >s5c : Promise<string>
@@ -1037,7 +1037,7 @@ var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
 >              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 >testFunction5 : (x: number, cb: (a: string) => string) => IPromise<string>
->              :                                                           
+>              : ^ ^^      ^^  ^^                     ^^^^^^^^^^^^^^^^^^^^^
 
 var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >s5d : Promise<IPromise<string>>
@@ -1057,17 +1057,17 @@ var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPro
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: string) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: string) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: string) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r6: IPromise<string>;
 >r6 : IPromise<string>
@@ -1087,9 +1087,9 @@ var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
 >              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              :                                                    
+>              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              :                                                    
+>              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >r6b : IPromise<IPromise<string>>
@@ -1109,17 +1109,17 @@ var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<string>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s6: Promise<string>;
 >s6 : Promise<string>
@@ -1139,9 +1139,9 @@ var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
 >              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              :                                                    
+>              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              :                                                    
+>              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
 >s6b : Promise<string>
@@ -1157,9 +1157,9 @@ var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
 >testFunction6P : (x: number, cb: <T>(a: T) => T) => Promise<string>
 >               : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^
 >testFunction6P : (x: number, cb: <T>(a: T) => T) => Promise<string>
->               :                                                   
+>               : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^
 >testFunction6P : (x: number, cb: <T>(a: T) => T) => Promise<string>
->               :                                                   
+>               : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^
 
 var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
 >s6c : Promise<string>
@@ -1177,7 +1177,7 @@ var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
 >              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction6 : (x: number, cb: <T>(a: T) => T) => IPromise<string>
->              :                                                    
+>              : ^ ^^      ^^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >s6d : Promise<IPromise<string>>
@@ -1197,17 +1197,17 @@ var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPro
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = string, TResult2 = never>(onfulfilled?: (value: string) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: string) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: string) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: string) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: string) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r7: IPromise<string>;
 >r7 : IPromise<string>
@@ -1227,9 +1227,9 @@ var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
 >              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              :                                         
+>              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              :                                         
+>              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >r7b : IPromise<IPromise<string>>
@@ -1249,17 +1249,17 @@ var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<string>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s7: Promise<string>;
 >s7 : Promise<string>
@@ -1279,9 +1279,9 @@ var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
 >              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              :                                         
+>              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              :                                         
+>              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
 >s7b : IPromise<Promise<string>>
@@ -1297,9 +1297,9 @@ var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
 >testFunction7P : (cb: <T>(a: T) => T) => Promise<string>
 >               : ^  ^^              ^^^^^^^^^^^^^^^^^^^^
 >testFunction7P : (cb: <T>(a: T) => T) => Promise<string>
->               :                                        
+>               : ^  ^^              ^^^^^^^^^^^^^^^^^^^^
 >testFunction7P : (cb: <T>(a: T) => T) => Promise<string>
->               :                                        
+>               : ^  ^^              ^^^^^^^^^^^^^^^^^^^^
 
 var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
 >s7c : IPromise<IPromise<string>>
@@ -1317,7 +1317,7 @@ var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
 >              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 >testFunction7 : (cb: <T>(a: T) => T) => IPromise<string>
->              :                                         
+>              : ^  ^^              ^^^^^^^^^^^^^^^^^^^^^
 
 var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
 >s7d : IPromise<Promise<string>>
@@ -1337,17 +1337,17 @@ var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromis
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: Promise<string>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 
 var r8: IPromise<number>;
 >r8 : IPromise<number>
@@ -1379,9 +1379,9 @@ var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
->              :                                          
+>              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
->              :                                          
+>              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 
 var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
 >r8b : IPromise<IPromise<number>>
@@ -1401,17 +1401,17 @@ var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nI
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >then : <U>(success?: (value: IPromise<number>) => U, error?: (error: any) => U, progress?: (progress: any) => void) => IPromise<U>
 >     : ^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s8: Promise<number>;
 >s8 : Promise<number>
@@ -1431,9 +1431,9 @@ var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
->              :                                          
+>              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
->              :                                          
+>              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 
 var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
 >s8b : Promise<unknown>
@@ -1449,9 +1449,9 @@ var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
 >testFunction8P : <T>(x: T, cb: (a: T) => T) => Promise<T>
 >               : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^
 >testFunction8P : <T>(x: T, cb: (a: T) => T) => Promise<T>
->               :                                         
+>               : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^
 >testFunction8P : <T>(x: T, cb: (a: T) => T) => Promise<T>
->               :                                         
+>               : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^
 
 var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
 >s8c : Promise<unknown>
@@ -1469,7 +1469,7 @@ var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 >testFunction8 : <T>(x: T, cb: (a: T) => T) => IPromise<T>
->              :                                          
+>              : ^ ^^ ^^ ^^  ^^           ^^^^^^^^^^^^^^^^
 
 var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
 >s8d : Promise<IPromise<number>>
@@ -1489,17 +1489,17 @@ var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nI
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >then : { <TResult1 = IPromise<number>, TResult2 = never>(onfulfilled?: (value: IPromise<number>) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: IPromise<number>) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U_1>(success?: (value: IPromise<number>) => Promise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Promise<U_1>; <U_2>(success?: (value: IPromise<number>) => U_2, error?: (error: any) => Promise<U_2>, progress?: (progress: any) => void): Promise<U_2>; <U_3>(success?: (value: IPromise<number>) => U_3, error?: (error: any) => U_3, progress?: (progress: any) => void): Promise<U_3>; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^        ^^^^        ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r9: IPromise<number>;
 >r9 : IPromise<number>
@@ -1519,9 +1519,9 @@ var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              :                                             
+>              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              :                                             
+>              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 
 var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
 >r9b : IPromise<IPromise<string>>
@@ -1537,9 +1537,9 @@ var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
 >r9c : IPromise<IPromise<number>>
@@ -1555,9 +1555,9 @@ var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r9d = r9.then(testFunction, sIPromise, nIPromise); // error
 >r9d : IPromise<IPromise<number>>
@@ -1603,9 +1603,9 @@ var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise,
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s9: Promise<number>;
 >s9 : Promise<number>
@@ -1625,9 +1625,9 @@ var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              :                                             
+>              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              :                                             
+>              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 
 var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
 >s9b : Promise<unknown>
@@ -1643,9 +1643,9 @@ var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
 >testFunction9P : <T>(x: T, cb: <U>(a: U) => U) => Promise<T>
 >               : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^
 >testFunction9P : <T>(x: T, cb: <U>(a: U) => U) => Promise<T>
->               :                                            
+>               : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^
 >testFunction9P : <T>(x: T, cb: <U>(a: U) => U) => Promise<T>
->               :                                            
+>               : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^
 
 var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
 >s9c : Promise<unknown>
@@ -1663,7 +1663,7 @@ var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
 >              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction9 : <T>(x: T, cb: <U>(a: U) => U) => IPromise<T>
->              :                                             
+>              : ^ ^^ ^^ ^^  ^^              ^^^^^^^^^^^^^^^^
 
 var s9d = s9.then(sPromise, sPromise, sPromise); // ok
 >s9d : Promise<string>
@@ -1679,9 +1679,9 @@ var s9d = s9.then(sPromise, sPromise, sPromise); // ok
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 
 var s9e = s9.then(nPromise, nPromise, nPromise); // ok
 >s9e : Promise<number>
@@ -1697,9 +1697,9 @@ var s9e = s9.then(nPromise, nPromise, nPromise); // ok
 >nPromise : (x: any) => Promise<number>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >nPromise : (x: any) => Promise<number>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >nPromise : (x: any) => Promise<number>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 
 var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
 >s9f : Promise<number>
@@ -1745,9 +1745,9 @@ var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise,
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r10 = testFunction10(x => x);
 >r10 : IPromise<unknown>
@@ -1777,9 +1777,9 @@ var r10a = r10.then(testFunction10, testFunction10, testFunction10); // ok
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
 >               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               :                                       
+>               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               :                                       
+>               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 
 var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
 >r10b : IPromise<IPromise<string>>
@@ -1795,9 +1795,9 @@ var r10b = r10.then(sIPromise, sIPromise, sIPromise); // ok
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
 >r10c : IPromise<IPromise<number>>
@@ -1813,9 +1813,9 @@ var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r10d = r10.then(testFunction, sIPromise, nIPromise); // error
 >r10d : IPromise<IPromise<number>>
@@ -1861,9 +1861,9 @@ var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromis
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s10 = testFunction10P(x => x);
 >s10 : Promise<unknown>
@@ -1893,9 +1893,9 @@ var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
 >               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               :                                       
+>               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               :                                       
+>               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 
 var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
 >s10b : Promise<unknown>
@@ -1911,9 +1911,9 @@ var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
 >testFunction10P : <T>(cb: <U>(a: U) => U) => Promise<T>
 >                : ^^^^  ^^              ^^^^^^^^^^^^^^^
 >testFunction10P : <T>(cb: <U>(a: U) => U) => Promise<T>
->                :                                      
+>                : ^^^^  ^^              ^^^^^^^^^^^^^^^
 >testFunction10P : <T>(cb: <U>(a: U) => U) => Promise<T>
->                :                                      
+>                : ^^^^  ^^              ^^^^^^^^^^^^^^^
 
 var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
 >s10c : Promise<unknown>
@@ -1931,7 +1931,7 @@ var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
 >               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 >testFunction10 : <T>(cb: <U>(a: U) => U) => IPromise<T>
->               :                                       
+>               : ^^^^  ^^              ^^^^^^^^^^^^^^^^
 
 var s10d = s10.then(sPromise, sPromise, sPromise); // ok
 >s10d : Promise<string>
@@ -1947,9 +1947,9 @@ var s10d = s10.then(sPromise, sPromise, sPromise); // ok
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >sPromise : (x: any) => Promise<string>
->         :                            
+>         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 
 var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
 >s10e : Promise<IPromise<number>>
@@ -1967,7 +1967,7 @@ var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
 >nPromise : (x: any) => Promise<number>
 >         : ^ ^^   ^^^^^^^^^^^^^^^^^^^^
 >nIPromise : (x: any) => IPromise<number>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
 >s10f : Promise<number>
@@ -2015,7 +2015,7 @@ var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromis
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 >sIPromise : (x: any) => IPromise<string>
->          :                             
+>          : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^
 
 var r11: IPromise<number>;
 >r11 : IPromise<number>
@@ -2035,9 +2035,9 @@ var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
 >               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
->               :                                                                  
+>               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
->               :                                                                  
+>               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 
 var s11: Promise<number>;
 >s11 : Promise<number>
@@ -2057,9 +2057,9 @@ var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
 >               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
->               :                                                                  
+>               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
->               :                                                                  
+>               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 
 var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
 >s11b : Promise<string>
@@ -2075,9 +2075,9 @@ var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
 >testFunction11P : { (x: number): Promise<number>; (x: string): Promise<string>; }
 >                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction11P : { (x: number): Promise<number>; (x: string): Promise<string>; }
->                :                                                                
+>                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 >testFunction11P : { (x: number): Promise<number>; (x: string): Promise<string>; }
->                :                                                                
+>                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^
 
 var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
 >s11c : Promise<string>
@@ -2095,13 +2095,13 @@ var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
 >               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
->               :                                                                  
+>               : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^
 
 var r12 = testFunction12(x => x);
 >r12 : IPromise<(x: any) => any>
 >    : ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >testFunction12(x => x) : IPromise<(x: any) => any>
->                       : ^^^^^^^^^               ^
+>                       : ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
 >               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: any) => any
@@ -2125,15 +2125,15 @@ var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
 >               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
->               :                                                                  
+>               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
->               :                                                                  
+>               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 
 var s12 = testFunction12(x => x);
 >s12 : IPromise<(x: any) => any>
 >    : ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >testFunction12(x => x) : IPromise<(x: any) => any>
->                       : ^^^^^^^^^               ^
+>                       : ^^^^^^^^^^ ^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
 >               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: any) => any
@@ -2157,9 +2157,9 @@ var s12a = s12.then(testFunction12, testFunction12, testFunction12); // ok
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
 >               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
->               :                                                                  
+>               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
->               :                                                                  
+>               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 
 var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 >s12b : IPromise<Promise<unknown>>
@@ -2175,9 +2175,9 @@ var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
 >testFunction12P : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): Promise<T_1>; }
 >                : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^
 >testFunction12P : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): Promise<T_1>; }
->                :                                                                 
+>                : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^
 >testFunction12P : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): Promise<T_1>; }
->                :                                                                 
+>                : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^
 
 var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
 >s12c : IPromise<IPromise<unknown>>
@@ -2195,5 +2195,5 @@ var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
 >               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 >testFunction12 : { <T>(x: T): IPromise<T>; <T_1>(x: T_1, y: T_1): IPromise<T_1>; }
->               :                                                                  
+>               : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
 

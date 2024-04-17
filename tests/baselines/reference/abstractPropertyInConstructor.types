@@ -78,7 +78,7 @@ abstract class AbstractClass {
 >innerFunction : () => string
 >              : ^^^^^^^^^^^^
 >() => {            return this.prop;        } : () => string
->                                              :             
+>                                              : ^^^^^^^^^^^^
 
             return this.prop;
 >this.prop : string
@@ -137,7 +137,7 @@ abstract class AbstractClass {
 >fn : () => string
 >   : ^^^^^^^^^^^^
 >() => this.prop : () => string
->                :             
+>                : ^^^^^^^^^^^^
 >this.prop : string
 >          : ^^^^^^
 >this : this
@@ -181,7 +181,7 @@ abstract class DerivedAbstractClass extends AbstractClass {
 >cb : (s: string) => void
 >   : ^ ^^      ^^^^^^^^^
 >(s: string) => {} : (s: string) => void
->                  :                    
+>                  : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -289,7 +289,7 @@ class Implementation extends DerivedAbstractClass {
 >cb : (s: string) => void
 >   : ^ ^^      ^^^^^^^^^
 >(s: string) => {} : (s: string) => void
->                  :                    
+>                  : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 

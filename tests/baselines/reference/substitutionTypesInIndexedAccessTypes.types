@@ -51,7 +51,7 @@ const withoutBoundaryResult = withoutBoundary({
 >withoutBoundaryResult : { select: true; }
 >                      : ^^^^^^^^^^^^^^^^^
 >withoutBoundary({  select: true,}) : { select: true; }
->                                   :                  
+>                                   : ^^^^^^^^^^^^^^^^^
 >withoutBoundary : <T extends UserArgs>(args?: T) => T
 >                : ^ ^^^^^^^^^^^^^^^^^^^    ^^^ ^^^^^^
 >{  select: true,} : { select: true; }

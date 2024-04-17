@@ -11,7 +11,7 @@ const a = dropPrivateProps1({foo: 42, _bar: 'secret'}); // type is {foo: number}
 >a : { foo: number; }
 >  : ^^^^^^^^^^^^^^^^
 >dropPrivateProps1({foo: 42, _bar: 'secret'}) : { foo: number; }
->                                             :                 
+>                                             : ^^^^^^^^^^^^^^^^
 >dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
 >                  : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{foo: 42, _bar: 'secret'} : { foo: number; _bar: string; }
@@ -30,7 +30,7 @@ const b = dropPrivateProps2({foo: 42, _bar: 'secret'}); // type is {foo: number,
 >b : { foo: number; }
 >  : ^^^^^^^^^^^^^^^^
 >dropPrivateProps2({foo: 42, _bar: 'secret'}) : { foo: number; }
->                                             :                 
+>                                             : ^^^^^^^^^^^^^^^^
 >dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
 >                  : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{foo: 42, _bar: 'secret'} : { foo: number; _bar: string; }
@@ -57,7 +57,7 @@ export const dropPrivateProps1 = <Obj>(obj: Obj) => excludePrivateKeys1(obj);
 >dropPrivateProps1 : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
 >                  : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><Obj>(obj: Obj) => excludePrivateKeys1(obj) : <Obj>(obj: Obj) => { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
->                                            :                                                                                       
+>                                            : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
 >    : ^^^
 >excludePrivateKeys1(obj) : { [K in import("internal").PublicKeys1<keyof Obj>]: Obj[K]; }
@@ -71,7 +71,7 @@ export const dropPrivateProps2 = <Obj>(obj: Obj) => excludePrivateKeys2(obj);
 >dropPrivateProps2 : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
 >                  : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><Obj>(obj: Obj) => excludePrivateKeys2(obj) : <Obj>(obj: Obj) => { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }
->                                            :                                                                                                                                            
+>                                            : ^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Obj
 >    : ^^^
 >excludePrivateKeys2(obj) : { [K in keyof Obj extends infer T ? T extends keyof Obj ? T extends `_${string}` ? never : T : never : never]: Obj[K]; }

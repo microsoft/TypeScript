@@ -5,7 +5,7 @@ const eslintReact = require('./eslint-plugin-react.js');
 >eslintReact : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require('./eslint-plugin-react.js') : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
->                                    :                                                                                                                         
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./eslint-plugin-react.js' : "./eslint-plugin-react.js"
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -66,21 +66,21 @@ module.exports = {
 >module : { exports: { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
->        : ^^^^^^^^^^^                                                                                                          ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  plugins: {    react: {      deprecatedRules,      rules: allRules,    },  },} : { plugins: { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }; }
->                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                      ^^^^^^^^^                         ^^^^^^^^^
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   plugins: {
 >plugins : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    react: {      deprecatedRules,      rules: allRules,    },  } : { react: { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                      ^^^^^^^^^                         ^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     react: {
 >react : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      deprecatedRules,      rules: allRules,    } : { deprecatedRules: { "jsx-sort-default-props": boolean; }; rules: { 'no-unsafe': boolean; }; }
->                                                   : ^^^^^^^^^^^^^^^^^^^                                      ^^^^^^^^^                         ^^^
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       deprecatedRules,
 >deprecatedRules : { "jsx-sort-default-props": boolean; }
@@ -90,7 +90,7 @@ module.exports = {
 >rules : { 'no-unsafe': boolean; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >allRules : { 'no-unsafe': boolean; }
->         :                          
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     },
   },

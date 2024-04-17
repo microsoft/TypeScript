@@ -12,7 +12,7 @@ const Select = (p: {value?: unknown}) => <p></p>;
 >Select : (p: { value?: unknown; }) => JSX.Element
 >       : ^ ^^                    ^^^^^^^^^^^^^^^^
 >(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => JSX.Element
->                                  :                                         
+>                                  : ^ ^^                    ^^^^^^^^^^^^^^^^
 >p : { value?: unknown; }
 >  : ^^^^^^^^^^       ^^^
 >value : unknown

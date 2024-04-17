@@ -48,7 +48,7 @@ class C<T> {
 >sb : () => number
 >   : ^^^^^^^^^^^^
 >() => 1 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -93,7 +93,7 @@ class C<T> {
 >ib : () => number
 >   : ^^^^^^^^^^^^
 >() => this.ia : () => number
->              :             
+>              : ^^^^^^^^^^^^
 >this.ia : number
 >        : ^^^^^^
 >this : this

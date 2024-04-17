@@ -23,7 +23,7 @@ const addOne = function (num: number) {
 >addOne : (num: number) => number
 >       : ^   ^^      ^^^^^^^^^^^
 >function (num: number) {    return num + 1;} : (num: number) => number
->                                             :                        
+>                                             : ^   ^^      ^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 

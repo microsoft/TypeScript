@@ -13,7 +13,7 @@ var f = function foo(...x: number[]) { }
 >f : (...x: number[]) => void
 >  : ^^^^ ^^        ^^^^^^^^^
 >function foo(...x: number[]) { } : (...x: number[]) => void
->                                 :  ^^^                    
+>                                 : ^^^^ ^^        ^^^^^^^^^
 >foo : (...x: number[]) => void
 >    : ^^^^ ^^        ^^^^^^^^^
 >x : number[]
@@ -23,7 +23,7 @@ var f2 = (...x: number[], ...y: number[]) => { }
 >f2 : (...x: number[], ...y: number[]) => void
 >   : ^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^
 >(...x: number[], ...y: number[]) => { } : (...x: number[], ...y: number[]) => void
->                                        :  ^^^             ^^^                    
+>                                        : ^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^
 >x : number[]
 >  : ^^^^^^^^
 >y : number[]
@@ -73,7 +73,7 @@ var b = {
 >b : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
 >  : ^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
 >{    foo(...x: number[]) { },    a: function foo(...x: number[], ...y: number[]) { },    b: (...x: number[]) => { }} : { foo(...x: number[]): void; a: (...x: number[], ...y: number[]) => void; b: (...x: number[]) => void; }
->                                                                                                                     : ^^^^^^^^^ ^^        ^^^^^^^^^^^^ ^^^             ^^^                    ^^^^^ ^^^                    ^^^
+>                                                                                                                     : ^^^^^^^^^ ^^        ^^^^^^^^^^^^^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^^^^^^^^^^ ^^        ^^^^^^^^^^^^
 
     foo(...x: number[]) { },
 >foo : (...x: number[]) => void
@@ -85,7 +85,7 @@ var b = {
 >a : (...x: number[], ...y: number[]) => void
 >  : ^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^
 >function foo(...x: number[], ...y: number[]) { } : (...x: number[], ...y: number[]) => void
->                                                 :  ^^^             ^^^                    
+>                                                 : ^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^
 >foo : (...x: number[], ...y: number[]) => void
 >    : ^^^^ ^^        ^^^^^ ^^        ^^^^^^^^^
 >x : number[]
@@ -97,7 +97,7 @@ var b = {
 >b : (...x: number[]) => void
 >  : ^^^^ ^^        ^^^^^^^^^
 >(...x: number[]) => { } : (...x: number[]) => void
->                        :  ^^^                    
+>                        : ^^^^ ^^        ^^^^^^^^^
 >x : number[]
 >  : ^^^^^^^^
 }
@@ -115,7 +115,7 @@ var f3 = function foo(...x: Array<string>) { }
 >f3 : (...x: Array<string>) => void
 >   : ^^^^ ^^             ^^^^^^^^^
 >function foo(...x: Array<string>) { } : (...x: Array<string>) => void
->                                      :  ^^^                         
+>                                      : ^^^^ ^^             ^^^^^^^^^
 >foo : (...x: Array<string>) => void
 >    : ^^^^ ^^             ^^^^^^^^^
 >x : string[]
@@ -125,7 +125,7 @@ var f4 = (...x: Array<string>, ...y: Array<string>) => { }
 >f4 : (...x: Array<string>, ...y: Array<string>) => void
 >   : ^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^
 >(...x: Array<string>, ...y: Array<string>) => { } : (...x: Array<string>, ...y: Array<string>) => void
->                                                  :  ^^^                  ^^^                         
+>                                                  : ^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
 >y : string[]
@@ -175,7 +175,7 @@ var b2 = {
 >b2 : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
 >   : ^^^^^^^^^ ^^             ^^^^^^^^^^^^^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^^^^^^^^
 >{    foo(...x: Array<string>) { },    a: function foo(...x: Array<string>, ...y: Array<string>) { },    b: (...x: Array<string>) => { }} : { foo(...x: Array<string>): void; a: (...x: Array<string>, ...y: Array<string>) => void; b: (...x: Array<string>) => void; }
->                                                                                                                                         : ^^^^^^^^^ ^^             ^^^^^^^^^^^^ ^^^                  ^^^                         ^^^^^ ^^^                         ^^^
+>                                                                                                                                         : ^^^^^^^^^ ^^             ^^^^^^^^^^^^^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^^^^^^^^
 
     foo(...x: Array<string>) { },
 >foo : (...x: Array<string>) => void
@@ -187,7 +187,7 @@ var b2 = {
 >a : (...x: Array<string>, ...y: Array<string>) => void
 >  : ^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^
 >function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: Array<string>, ...y: Array<string>) => void
->                                                           :  ^^^                  ^^^                         
+>                                                           : ^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^
 >foo : (...x: Array<string>, ...y: Array<string>) => void
 >    : ^^^^ ^^             ^^^^^ ^^             ^^^^^^^^^
 >x : string[]
@@ -199,7 +199,7 @@ var b2 = {
 >b : (...x: Array<string>) => void
 >  : ^^^^ ^^             ^^^^^^^^^
 >(...x: Array<string>) => { } : (...x: Array<string>) => void
->                             :  ^^^                         
+>                             : ^^^^ ^^             ^^^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
 }

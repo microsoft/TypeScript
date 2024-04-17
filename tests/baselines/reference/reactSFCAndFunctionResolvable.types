@@ -59,7 +59,7 @@ const RandomComponent: React.SFC = () => {
 
     condition1
 >condition1      ? Radio      : Checkbox : ((props: {}) => React.ReactElement<{}>) | React.SFC<{}>
->                                        : ^                                     ^^^^^^^^^^^^^^  ^
+>                                        : ^^     ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >condition1 : boolean
 >           : ^^^^^^^
 
@@ -73,11 +73,11 @@ const RandomComponent: React.SFC = () => {
 
   const OtherComponent =
 >OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     condition2
 >condition2      ? OtherRadio      : Checkbox : (() => React.ReactElement<{}>) | React.SFC<{}>
->                                             : ^                            ^^^^^^^^^^^^^^  ^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >condition2 : boolean
 >           : ^^^^^^^
 
@@ -87,7 +87,7 @@ const RandomComponent: React.SFC = () => {
 
       : Checkbox;
 >Checkbox : React.SFC<{}>
->         : ^^^^^^^^^^  ^
+>         : ^^^^^^^^^^^^^
 
   return condition1 ? <Component /> : <OtherComponent />;
 >condition1 ? <Component /> : <OtherComponent /> : JSX.Element
@@ -101,7 +101,7 @@ const RandomComponent: React.SFC = () => {
 ><OtherComponent /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >OtherComponent : (() => React.ReactElement<{}>) | React.SFC<{}>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 

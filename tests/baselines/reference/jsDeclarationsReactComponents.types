@@ -20,7 +20,7 @@ const TabbedShowLayout = ({
 >TabbedShowLayout : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
 >                 : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({}) => {    return (        <div />    );} : { ({}: {}): JSX.Element; propTypes: { version: PropTypes.Requireable<number>; }; defaultProps: { tabs: undefined; }; }
->                                            :                                                                                                                       
+>                                            : ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }) => {
     return (
@@ -128,7 +128,7 @@ TabbedShowLayout.defaultProps = {
 >TabbedShowLayout : React.SFC<{}>
 >                 : ^^^^^^^^^^^^^
 >defaultProps : Partial<{}> | undefined
->             : ^^^^^^^^  ^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    tabs: "default value"} : { tabs: string; }
 >                            : ^^^^^^^^^^^^^^^^^
 
@@ -156,7 +156,7 @@ const TabbedShowLayout = () => {
 >TabbedShowLayout : { defaultProps: { tabs: string; }; } & ((props?: { elem: string; }) => JSX.Element)
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                 ^^^^^^^^^^^^^^^^^
 >() => {    return (        <div className="" key="">            ok        </div>    );} : { (): JSX.Element; defaultProps: { tabs: string; }; }
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return (
 >(        <div className="" key="">            ok        </div>    ) : JSX.Element
@@ -213,7 +213,7 @@ const TabbedShowLayout = (/** @type {{className: string}}*/prop) => {
 >TabbedShowLayout : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
 >                 : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(/** @type {{className: string}}*/prop) => {    return (        <div className={prop.className} key="">            ok        </div>    );} : { (prop: { className: string; }): JSX.Element; defaultProps: { tabs: string; }; }
->                                                                                                                                           :                                                                                  
+>                                                                                                                                           : ^^^    ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prop : { className: string; }
 >     : ^^^^^^^^^^^^^      ^^^
 

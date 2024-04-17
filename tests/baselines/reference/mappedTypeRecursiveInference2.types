@@ -34,7 +34,7 @@ const shallow = type(["ark", "|>", (x) => x.length])
 >shallow : ["ark", "|>", (x: "ark") => number]
 >        : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >type(["ark", "|>", (x) => x.length]) : ["ark", "|>", (x: "ark") => number]
->                                     : ^^^^^^^^^^^^^^                    ^
+>                                     : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
 >     : ^   ^^   ^^                       ^^^^^^^^
 >["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
@@ -58,7 +58,7 @@ const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
 >objectLiteral : { a: ["ark", "|>", (x: "ark") => number]; }
 >              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >type({ a: ["ark", "|>", (x) => x.length] }) : { a: ["ark", "|>", (x: "ark") => number]; }
->                                            :                                            
+>                                            : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
 >     : ^   ^^   ^^                       ^^^^^^^^
 >{ a: ["ark", "|>", (x) => x.length] } : { a: ["ark", "|>", (x: "ark") => number]; }
@@ -66,7 +66,7 @@ const objectLiteral = type({ a: ["ark", "|>", (x) => x.length] })
 >a : ["ark", "|>", (x: "ark") => number]
 >  : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >["ark", "|>", (x) => x.length] : ["ark", "|>", (x: "ark") => number]
->                               : ^^^^^^^^^^^^^^                    ^
+>                               : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >"ark" : "ark"
 >      : ^^^^^
 >"|>" : "|>"
@@ -86,7 +86,7 @@ const nestedTuple = type([["ark", "|>", (x) => x.length]])
 >nestedTuple : [["ark", "|>", (x: "ark") => number]]
 >            : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >type([["ark", "|>", (x) => x.length]]) : [["ark", "|>", (x: "ark") => number]]
->                                       : ^^^^^^^^^^^^^^^                    ^^
+>                                       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >type : <def>(def: validateDefinition<def>) => def
 >     : ^   ^^   ^^                       ^^^^^^^^
 >[["ark", "|>", (x) => x.length]] : [["ark", "|>", (x: "ark") => number]]

@@ -324,7 +324,7 @@ const fn = (value: MyUnion) => {
 >fn : (value: MyUnion) => void
 >   : ^     ^^       ^^^^^^^^^
 >(value: MyUnion) => {    value.foo;  // Error    if ('foo' in value) {        value.foo;    }    if (value.tag === 'B') {        value.foo;    }} : (value: MyUnion) => void
->                                                                                                                                                  :                         
+>                                                                                                                                                  : ^     ^^       ^^^^^^^^^
 >value : MyUnion
 >      : ^^^^^^^
 
@@ -378,7 +378,7 @@ const fn2 = <T extends MyUnion>(value: T): MyUnion => {
 >fn2 : <T extends MyUnion>(value: T) => MyUnion
 >    : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^       
 ><T extends MyUnion>(value: T): MyUnion => {    value.foo;  // Error    if ('foo' in value) {        value.foo;    }    if (value.tag === 'B') {        value.foo;    }} : <T extends MyUnion>(value: T) => MyUnion
->                                                                                                                                                                        :                                         
+>                                                                                                                                                                        : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^       
 >value : T
 >      : ^
 

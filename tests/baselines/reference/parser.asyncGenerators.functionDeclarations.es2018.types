@@ -78,7 +78,7 @@ async function * f10() {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {    } : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >yield : () => void
 >      : ^^^^^^^^^^
 
@@ -103,7 +103,7 @@ async function * f12() {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {    } : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >yield : () => void
 >      : ^^^^^^^^^^
 

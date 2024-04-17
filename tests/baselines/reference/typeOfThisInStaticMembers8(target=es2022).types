@@ -15,7 +15,7 @@ class C {
 >arrowFunctionBoundary : () => number
 >                      : ^^^^^^^^^^^^
 >() => this.f + 1 : () => number
->                 :             
+>                 : ^^^^^^^^^^^^
 >this.f + 1 : number
 >           : ^^^^^^
 >this.f : number
@@ -31,7 +31,7 @@ class C {
 >functionExprBoundary : () => any
 >                     : ^^^^^^^^^
 >function () { return this.f + 2 } : () => any
->                                  :          
+>                                  : ^^^^^^^^^
 >this.f + 2 : any
 >           : ^^^
 >this.f : any

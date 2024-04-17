@@ -18,7 +18,7 @@ var r = a || ((a) => a.toLowerCase());
 >r : (a: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >a || ((a) => a.toLowerCase()) : (a: string) => string
->                              :                      
+>                              : ^ ^^      ^^^^^^^^^^^
 >a : (a: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >((a) => a.toLowerCase()) : (a: string) => string

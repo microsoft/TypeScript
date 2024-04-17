@@ -37,7 +37,7 @@ const a = new Test<{
 >a : Test<{ property: string; }>
 >  : ^^^^^^^^^^^^^^^^^      ^^^^
 >new Test<{    property: string}>() : Test<{ property: string; }>
->                                   : ^^^^^                     ^
+>                                   : ^^^^^^^^^^^^^^^^^      ^^^^
 >Test : typeof Test
 >     : ^^^^^^^^^^^
 

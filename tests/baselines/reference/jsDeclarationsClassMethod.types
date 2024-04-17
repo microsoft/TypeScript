@@ -86,7 +86,7 @@ C1.staticProp = function (x, y) {
 >staticProp : (x: number, y: number) => number
 >           : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function (x, y) {    return x + y;} : (x: number, y: number) => number
->                                    :                                 
+>                                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -180,7 +180,7 @@ C2.staticProp = function (x, y) {
 >staticProp : (x: number, y: number) => number
 >           : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function (x, y) {    return x + y;} : (x: number, y: number) => number
->                                    :                                 
+>                                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number

@@ -5,7 +5,7 @@ const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 >o : { [k: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : { [k: string]: number; }
->                                                   :                         
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >                   : ^^^ ^^^^^^^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                        ^^^^^^^^^
 >Object : ObjectConstructor
@@ -37,7 +37,7 @@ const o2 = Object.fromEntries(new URLSearchParams());
 >o2 : { [k: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries(new URLSearchParams()) : { [k: string]: string; }
->                                          :                         
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >                   : ^^^ ^^^^^^^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                        ^^^^^^^^^
 >Object : ObjectConstructor
@@ -53,7 +53,7 @@ const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
 >o3 : { [k: string]: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries(new Map([[Symbol("key"), "value"]])) : { [k: string]: string; }
->                                                        :                         
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >                   : ^^^ ^^^^^^^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                        ^^^^^^^^^
 >Object : ObjectConstructor
@@ -157,7 +157,7 @@ const o5 = Object.fromEntries(frozenArray2);
 >o5 : { [k: string]: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries(frozenArray2) : { [k: string]: number; }
->                                 :                         
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.fromEntries : { <T = any>(entries: Iterable<readonly [PropertyKey, T]>): { [k: string]: T; }; (entries: Iterable<readonly any[]>): any; }
 >                   : ^^^ ^^^^^^^^       ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                        ^^^^^^^^^
 >Object : ObjectConstructor

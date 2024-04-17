@@ -172,7 +172,7 @@ let holder = {invalidGuard};
 >holder : { invalidGuard: (c: any) => this is number; }
 >       : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >{invalidGuard} : { invalidGuard: (c: any) => this is number; }
->               : ^^^^^^^^^^^^^^^^                          ^^^
+>               : ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >invalidGuard : (c: any) => this is number
 >             : ^ ^^   ^^^^^^^^^^^^^^^^^^^
 
@@ -210,7 +210,7 @@ let detached = a.isFollower;
 >detached : () => this is FollowerGuard
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a.isFollower : () => this is FollowerGuard
->             :                            
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : RoyalGuard
 >  : ^^^^^^^^^^
 >isFollower : () => this is FollowerGuard

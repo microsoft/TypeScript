@@ -33,7 +33,7 @@ reproduce({
 >name : () => number
 >     : ^^^^^^^^^^^^
 >() => { return 123 } : () => number
->                     :             
+>                     : ^^^^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -67,7 +67,7 @@ reproduce({
 >name : () => number
 >     : ^^^^^^^^^^^^
 >function () { return 123 } : () => number
->                           :             
+>                           : ^^^^^^^^^^^^
 >123 : 123
 >    : ^^^
 

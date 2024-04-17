@@ -172,7 +172,7 @@ var r7 = true ? () => { } : null;
 >r7 : () => void
 >   : ^^^^^^^^^^
 >true ? () => { } : null : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
 >() => { } : () => void
@@ -192,7 +192,7 @@ var r8 = true ? <T>(x: T) => { return x } : null;
 >r8 : <T>(x: T) => T
 >   : ^ ^^ ^^ ^^^^^^
 >true ? <T>(x: T) => { return x } : null : <T>(x: T) => T
->                                        :               
+>                                        : ^ ^^ ^^ ^^^^^^
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T>(x: T) => T
@@ -206,7 +206,7 @@ var r8b = true ? null : <T>(x: T) => { return x }; // type parameters not identi
 >r8b : <T>(x: T) => T
 >    : ^ ^^ ^^ ^^^^^^
 >true ? null : <T>(x: T) => { return x } : <T>(x: T) => T
->                                        :               
+>                                        : ^ ^^ ^^ ^^^^^^
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T>(x: T) => T
