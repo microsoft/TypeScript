@@ -5984,27 +5984,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
             typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
-                withContext(enclosingDeclaration, flags, tracker, context => {
-                    if (expr) {
-                        syntacticNodeBuilder.serializeTypeOfExpression(expr, context, addUndefined);
-                    }
-                    return expressionOrTypeToTypeNode(context, expr, type, addUndefined);
-                }),
-            serializeTypeForDeclaration: (declaration: Declaration, type: Type, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
-                withContext(enclosingDeclaration, flags, tracker, context => {
-                    if (declaration && hasInferredType(declaration)) {
-                        syntacticNodeBuilder.serializeTypeOfDeclaration(declaration, context);
-                    }
-                    return serializeTypeForDeclaration(context, declaration, type, symbol);
-                }),
-            serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) =>
-                withContext(enclosingDeclaration, flags, tracker, context => {
-                    if (signature.declaration) {
-                        syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, context);
-                    }
-                    return serializeReturnTypeForSignature(context, signature);
-                }),
+            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined)),
+            serializeTypeForDeclaration: (declaration: Declaration, type: Type, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeTypeForDeclaration(context, declaration, type, symbol)),
+            serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeReturnTypeForSignature(context, signature)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
             signatureToSignatureDeclaration: (signature: Signature, kind: SignatureDeclaration["kind"], enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => signatureToSignatureDeclarationHelper(signature, kind, context)),
             symbolToEntityName: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToName(symbol, context, meaning, /*expectsIdentifier*/ false)),
@@ -6038,6 +6020,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return setTextRangeWorker(setOriginalNode(range, location), location);
         }
 
+        /**
+         * Same as expressionOrTypeToTypeNodeHelper, but also checks if the expression can be syntactically typed.
+         */
+        function expressionOrTypeToTypeNodeHelper(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
+            const oldFlags = context.flags;
+            if (expr && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                syntacticNodeBuilder.serializeTypeOfExpression(expr, context, addUndefined);
+            }
+            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
+            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
+            context.flags = oldFlags;
+            return result;
+        }
         function expressionOrTypeToTypeNode(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
             if (expr) {
                 const typeNode = isAssertionExpression(expr) ? expr.type
@@ -6637,7 +6632,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
-                const key = `${getTypeId(type)}|${context.flags}`;
+                const key = `${getTypeId(type)}|${context.flags & ~NodeBuilderFlags.NoSyntacticPrinter}`; // Temporary workaround fix in #58221
                 if (links) {
                     links.serializedTypes ||= new Map();
                 }
@@ -8184,6 +8179,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const decl = declaration ?? symbol.valueDeclaration ?? symbol.declarations?.[0];
             const expr = decl && isDeclarationWithPossibleInnerTypeNodeReuse(decl) ? getPossibleTypeNodeReuseExpression(decl) : undefined;
 
+            if (decl && hasInferredType(decl) && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                syntacticNodeBuilder.serializeTypeOfDeclaration(decl, context);
+            }
+            context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
             const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
@@ -8206,6 +8205,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let returnTypeNode: TypeNode | undefined;
             const returnType = getReturnTypeOfSignature(signature);
             if (returnType && !(suppressAny && isTypeAny(returnType))) {
+                if (signature.declaration && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
+                    syntacticNodeBuilder.serializeReturnTypeForSignature(signature.declaration, context);
+                }
+                context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
                 returnTypeNode = serializeReturnTypeForSignatureWorker(context, signature);
             }
             else if (!suppressAny) {

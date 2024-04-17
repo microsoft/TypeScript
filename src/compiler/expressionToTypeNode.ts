@@ -75,7 +75,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
         serializeTypeOfExpression,
     };
     function serializeExistingTypeAnnotation(type: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext) {
-        return type === undefined ? undefined : !isParameter(type.parent) || !context.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
+        return type === undefined ? undefined : !type.parent || !isParameter(type.parent) || !context.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
     }
     function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
         return typeFromExpression(expr, context, /*isConstContext*/ false, addUndefined, preserveLiterals) ?? inferExpressionType(expr, context);

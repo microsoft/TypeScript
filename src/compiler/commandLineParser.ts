@@ -834,7 +834,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Ensure_that_each_file_can_have_declaration_emit_generated_without_type_information,
         defaultValueDescription: false,
         affectsBuildInfo: true,
-        affectsEmit: true,
+        affectsSemanticDiagnostics: true,
     },
 
     // Strict Type Checks
