@@ -16,6 +16,10 @@ interface AsyncIterator<T, TReturn = any, TNext = undefined> {
     throw?(e?: any): Promise<IteratorResult<T, TReturn>>;
 }
 
+interface AsyncBuiltinIterator<T, TReturn = void, TNext = undefined> extends AsyncIterator<T, TReturn, TNext> {
+    [Symbol.asyncIterator](): AsyncBuiltinIterator<T, TReturn, TNext>;
+}
+
 interface AsyncIterable<T> {
     [Symbol.asyncIterator](): AsyncIterator<T>;
 }
