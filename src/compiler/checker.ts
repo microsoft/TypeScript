@@ -6009,7 +6009,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!nodeIsSynthesized(range) && !(range.flags & NodeFlags.Synthesized) && (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(range))) {
                 range = factory.cloneNode(range);
             }
-            if (!location || nodeIsSynthesized(location)) {
+            if (!location) {
                 return range;
             }
             if (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(getOriginalNode(location))) {
