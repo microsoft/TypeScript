@@ -2805,13 +2805,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 }
 
-/** @internal */
 function codePointAt(s: string, i: number): number {
     // TODO(jakebailey): this is wrong and should have ?? 0; but all users are okay with it
     return s.codePointAt(i)!;
 }
 
-/** @internal */
 function charSize(ch: number) {
     if (ch >= 0x10000) {
         return 2;
