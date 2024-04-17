@@ -82,7 +82,7 @@ module A {
 >fn : (s: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
->                                                  :                      
+>                                                  : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -203,7 +203,7 @@ module Y {
 >fn : (s: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >(s: string) => {        return 'hello ' + s;    } : (s: string) => string
->                                                  :                      
+>                                                  : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 

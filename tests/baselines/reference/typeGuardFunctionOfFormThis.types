@@ -211,7 +211,7 @@ class ArrowGuard {
 >isElite : () => this is ArrowElite
 >        : ^^^^^^                  
 >(): this is ArrowElite => {        return this instanceof ArrowElite;    } : () => this is ArrowElite
->                                                                           :                         
+>                                                                           : ^^^^^^                  
 
         return this instanceof ArrowElite;
 >this instanceof ArrowElite : boolean
@@ -225,7 +225,7 @@ class ArrowGuard {
 >isMedic : () => this is ArrowMedic
 >        : ^^^^^^                  
 >(): this is ArrowMedic => {        return this instanceof ArrowMedic;    } : () => this is ArrowMedic
->                                                                           :                         
+>                                                                           : ^^^^^^                  
 
         return this instanceof ArrowMedic;
 >this instanceof ArrowMedic : boolean

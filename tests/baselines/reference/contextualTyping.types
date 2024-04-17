@@ -272,7 +272,7 @@ var c3t13 = <IFoo>({
 >f : (i: number, s: string) => string
 >  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >function(i, s) { return s; } : (i: number, s: string) => string
->                             :                                 
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >s : string
@@ -841,7 +841,7 @@ objc8.t13 = <IFoo>({
 >f : (i: number, s: string) => string
 >  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >function(i, s) { return s; } : (i: number, s: string) => string
->                             :                                 
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >s : string
@@ -953,7 +953,7 @@ var c12t1 = <(s: string) => string> (function(s) { return s });
 >c12t1 : (s: string) => string
 >      : ^ ^^      ^^^^^      
 ><(s: string) => string> (function(s) { return s }) : (s: string) => string
->                                                   :                      
+>                                                   : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >(function(s) { return s }) : (s: string) => string
@@ -994,7 +994,7 @@ var c12t4 = <() => IFoo> function() { return <IFoo>({}) };
 >c12t4 : () => IFoo
 >      : ^^^^^^    
 ><() => IFoo> function() { return <IFoo>({}) } : () => IFoo
->                                              :           
+>                                              : ^^^^^^    
 >function() { return <IFoo>({}) } : () => IFoo
 >                                 : ^^^^^^    
 ><IFoo>({}) : IFoo
@@ -1008,7 +1008,7 @@ var c12t5 = <(n: number) => IFoo> function(n) { return <IFoo>({}) };
 >c12t5 : (n: number) => IFoo
 >      : ^ ^^      ^^^^^    
 ><(n: number) => IFoo> function(n) { return <IFoo>({}) } : (n: number) => IFoo
->                                                        :                    
+>                                                        : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >function(n) { return <IFoo>({}) } : (n: number) => IFoo
@@ -1026,7 +1026,7 @@ var c12t6 = <(n: number, s: string) => IFoo> function(n, s) { return <IFoo>({}) 
 >c12t6 : (n: number, s: string) => IFoo
 >      : ^ ^^      ^^ ^^      ^^^^^    
 ><(n: number, s: string) => IFoo> function(n, s) { return <IFoo>({}) } : (n: number, s: string) => IFoo
->                                                                      :                               
+>                                                                      : ^ ^^      ^^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 >s : string
@@ -1048,7 +1048,7 @@ var c12t7 = <{
 >c12t7 : (n: number, s: string) => number
 >      : ^ ^^      ^^ ^^      ^^^^^      
 ><{    (n: number, s: string): number;        //(s1: string, s2: string): number;}> function(n:number) { return n } : (n: number, s: string) => number
->                                                                                                                   :                                 
+>                                                                                                                   : ^ ^^      ^^ ^^      ^^^^^      
 
     (n: number, s: string): number;    
 >n : number
@@ -1069,7 +1069,7 @@ var c12t8 = <(n: number, s: string) => number> function(n) { return n; };
 >c12t8 : (n: number, s: string) => number
 >      : ^ ^^      ^^ ^^      ^^^^^      
 ><(n: number, s: string) => number> function(n) { return n; } : (n: number, s: string) => number
->                                                             :                                 
+>                                                             : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >s : string
@@ -1117,7 +1117,7 @@ var c12t11 = <{(n: number, s: string): string;}[]> [function(n, s) { return s; }
 >c12t11 : ((n: number, s: string) => string)[]
 >       : ^^ ^^      ^^ ^^      ^^^^^      ^^^
 ><{(n: number, s: string): string;}[]> [function(n, s) { return s; }] : ((n: number, s: string) => string)[]
->                                                                     : ^                                ^^^
+>                                                                     : ^^ ^^      ^^ ^^      ^^^^^      ^^^
 >n : number
 >  : ^^^^^^
 >s : string
@@ -1165,7 +1165,7 @@ var c12t13 = <IFoo> ({
 >f : (i: number, s: string) => string
 >  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >function(i, s) { return s; } : (i: number, s: string) => string
->                             :                                 
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >s : string
@@ -1357,7 +1357,7 @@ Point.prototype = {
 >add : (dx: number, dy: number) => Point
 >    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
->                                                                           :                                  
+>                                                                           : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number

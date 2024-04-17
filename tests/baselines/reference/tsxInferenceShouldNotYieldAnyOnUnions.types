@@ -65,7 +65,7 @@ ShouldInferFromData({ data: "1", convert: n => "" + n });
 >convert : (n: string) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: string) => string
->            :                      
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >"" + n : string
@@ -89,7 +89,7 @@ ShouldInferFromData({ data: 2, convert: n => "" + n });
 >convert : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => "" + n : (n: number) => string
->            :                      
+>            : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >"" + n : string

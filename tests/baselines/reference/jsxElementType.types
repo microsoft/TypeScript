@@ -82,7 +82,7 @@ const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
 >              : ^         ^^                  ^^^^^^^^^^^^^^^^
 >({ title }: { title: string }) => <div>{title}</div> : ({ title }: { title: string; }) => JSX.Element
->                                                     :                                               
+>                                                     : ^         ^^                  ^^^^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 >title : string
@@ -130,7 +130,7 @@ const RenderString = ({ title }: { title: string }) => title;
 >RenderString : ({ title }: { title: string; }) => string
 >             : ^         ^^                  ^^^^^^^^^^^
 >({ title }: { title: string }) => title : ({ title }: { title: string; }) => string
->                                        :                                          
+>                                        : ^         ^^                  ^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 >title : string
@@ -172,7 +172,7 @@ const RenderNumber = ({ title }: { title: string }) => title.length;
 >RenderNumber : ({ title }: { title: string; }) => number
 >             : ^         ^^                  ^^^^^^^^^^^
 >({ title }: { title: string }) => title.length : ({ title }: { title: string; }) => number
->                                               :                                          
+>                                               : ^         ^^                  ^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 >title : string
@@ -218,7 +218,7 @@ const RenderArray = ({ title }: { title: string }) => [title];
 >RenderArray : ({ title }: { title: string; }) => string[]
 >            : ^         ^^                  ^^^^^^^^^^^^^
 >({ title }: { title: string }) => [title] : ({ title }: { title: string; }) => string[]
->                                          :                                            
+>                                          : ^         ^^                  ^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 >title : string
@@ -263,7 +263,7 @@ const RenderPromise = async ({ title }: { title: string }) => "react";
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
 >              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >async ({ title }: { title: string }) => "react" : ({ title }: { title: string; }) => Promise<string>
->                                                :                                                   
+>                                                : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 >title : string

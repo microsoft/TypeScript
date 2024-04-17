@@ -52,7 +52,7 @@ class RC3 extends React.Component<{}, {}> {
 >RC3 : RC3
 >    : ^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
@@ -70,7 +70,7 @@ class RC4 extends React.Component<{}, {}> {
 >RC4 : RC4
 >    : ^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

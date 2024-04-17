@@ -58,13 +58,13 @@ export const Fs = {
 >Fs : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
 >   : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >{    ADD1: n => n + 1,    ID: n => n,    SUB1: n => n - 1} : { ADD1: (n: any) => any; ID: (n: any) => any; SUB1: (n: any) => number; }
->                                                           : ^^^^^^^^               ^^^^^^               ^^^^^^^^                  ^^^
+>                                                           : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 
     ADD1: n => n + 1,
 >ADD1 : (n: any) => any
 >     : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
->           :                
+>           : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any
@@ -75,7 +75,7 @@ export const Fs = {
 >ID : (n: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >n => n : (n: any) => any
->       :                
+>       : ^ ^^^^^^^^^^^^^
 >n : any
 >n : any
 
@@ -83,7 +83,7 @@ export const Fs = {
 >SUB1 : (n: any) => number
 >     : ^ ^^^^^^^^^^^^^^^^
 >n => n - 1 : (n: any) => number
->           :                   
+>           : ^ ^^^^^^^^^^^^^^^^
 >n : any
 >n - 1 : number
 >      : ^^^^^^

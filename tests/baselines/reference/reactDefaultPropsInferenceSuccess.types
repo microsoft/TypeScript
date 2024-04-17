@@ -42,13 +42,13 @@ class FieldFeedback<P extends Props = BaseProps> extends React.Component<P> {
 >defaultProps : { when: () => boolean; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    when: () => true  } : { when: () => boolean; }
->                         : ^^^^^^^^             ^^^
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     when: () => true
 >when : () => boolean
 >     : ^^^^^^^^^^^^^
 >() => true : () => boolean
->           :              
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -73,7 +73,7 @@ const Test1 = () => <FieldFeedback when={value => !!value} />;
 >Test1 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedback when={value => !!value} /> : () => JSX.Element
->                                                :                  
+>                                                : ^^^^^^^^^^^^^^^^^
 ><FieldFeedback when={value => !!value} /> : JSX.Element
 >                                          : ^^^^^^^^^^^
 >FieldFeedback : typeof FieldFeedback
@@ -96,7 +96,7 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >Test2 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedback when={value => console.log(value)} /> : () => JSX.Element
->                                                           :                  
+>                                                           : ^^^^^^^^^^^^^^^^^
 ><FieldFeedback when={value => console.log(value)} /> : JSX.Element
 >                                                     : ^^^^^^^^^^^
 >FieldFeedback : typeof FieldFeedback
@@ -138,7 +138,7 @@ class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> 
 >when : () => true
 >     : ^^^^^^^^^^
 >() => true : () => true
->           :           
+>           : ^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -163,7 +163,7 @@ const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</Field
 >Test1a : () => JSX.Element
 >       : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : () => JSX.Element
->                                                                               :                  
+>                                                                               : ^^^^^^^^^^^^^^^^^
 ><FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta> : JSX.Element
 >                                                                         : ^^^^^^^^^^^
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
@@ -190,7 +190,7 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >Test2a : () => JSX.Element
 >       : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : () => JSX.Element
->                                                                                          :                  
+>                                                                                          : ^^^^^^^^^^^^^^^^^
 ><FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta> : JSX.Element
 >                                                                                    : ^^^^^^^^^^^
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
@@ -234,13 +234,13 @@ class FieldFeedback2<P extends MyPropsProps = MyPropsProps> extends FieldFeedbac
 >defaultProps : { when: () => boolean; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    when: () => true  } : { when: () => boolean; }
->                         : ^^^^^^^^             ^^^
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     when: () => true
 >when : () => boolean
 >     : ^^^^^^^^^^^^^
 >() => true : () => boolean
->           :              
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -281,7 +281,7 @@ const Test3 = () => <FieldFeedback2 when={value => !!value} />;
 >Test3 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedback2 when={value => !!value} /> : () => JSX.Element
->                                                 :                  
+>                                                 : ^^^^^^^^^^^^^^^^^
 ><FieldFeedback2 when={value => !!value} /> : JSX.Element
 >                                           : ^^^^^^^^^^^
 >FieldFeedback2 : typeof FieldFeedback2
@@ -304,7 +304,7 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >Test4 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedback2 when={value => console.log(value)} /> : () => JSX.Element
->                                                            :                  
+>                                                            : ^^^^^^^^^^^^^^^^^
 ><FieldFeedback2 when={value => console.log(value)} /> : JSX.Element
 >                                                      : ^^^^^^^^^^^
 >FieldFeedback2 : typeof FieldFeedback2
@@ -331,7 +331,7 @@ const Test5 = () => <FieldFeedback2 />;
 >Test5 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <FieldFeedback2 /> : () => JSX.Element
->                         :                  
+>                         : ^^^^^^^^^^^^^^^^^
 ><FieldFeedback2 /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >FieldFeedback2 : typeof FieldFeedback2

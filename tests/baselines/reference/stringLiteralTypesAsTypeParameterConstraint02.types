@@ -18,7 +18,7 @@ let f = foo((y: "foo" | "bar") => y === "foo" ? y : "foo");
 >f : (x: "foo") => "foo"
 >  : ^ ^^^^^^^^^^^^^^^^^
 >foo((y: "foo" | "bar") => y === "foo" ? y : "foo") : (x: "foo") => "foo"
->                                                   :                    
+>                                                   : ^ ^^^^^^^^^^^^^^^^^
 >foo : <T extends "foo">(f: (x: T) => T) => (x: T) => T
 >    : ^ ^^^^^^^^^^^^^^^^ ^^           ^^^^^^ ^^ ^^^^^^
 >(y: "foo" | "bar") => y === "foo" ? y : "foo" : (y: "foo" | "bar") => "foo"

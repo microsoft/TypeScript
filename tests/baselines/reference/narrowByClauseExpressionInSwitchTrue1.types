@@ -23,7 +23,7 @@ const isA = (x: AorB): x is A => x.type === "A";
 >isA : (x: AorB) => x is A
 >    : ^ ^^    ^^^^^      
 >(x: AorB): x is A => x.type === "A" : (x: AorB) => x is A
->                                    :                    
+>                                    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 >x.type === "A" : boolean
@@ -41,7 +41,7 @@ const isB = (x: AorB): x is B => x.type === "B";
 >isB : (x: AorB) => x is B
 >    : ^ ^^    ^^^^^      
 >(x: AorB): x is B => x.type === "B" : (x: AorB) => x is B
->                                    :                    
+>                                    : ^ ^^    ^^^^^      
 >x : AorB
 >  : ^^^^
 >x.type === "B" : boolean

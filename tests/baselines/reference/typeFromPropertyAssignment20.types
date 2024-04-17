@@ -7,9 +7,9 @@
 >function outer (f) { return f }(    function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    }) : () => void
 >                                                                                                                                                                                                                                                                                                                : ^^^^^^^^^^
 >function outer (f) { return f } : (f: () => void) => () => void
->                                : ^ ^^^^^^^^^^^^^^^^^          
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >outer : (f: () => void) => () => void
->      : ^ ^^^^^^^^^^^^^^^^^          
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : () => void
 >  : ^^^^^^^^^^
 >f : () => void
@@ -17,7 +17,7 @@
 
     function inner () {
 >function inner () {        function Async() {            this._trampolineEnabled = true;        }        Async.prototype.disableTrampolineIfNecessary = function dtin(b) {            if (b) {                this._trampolineEnabled = false;            }        };    } : () => void
->                                                                                                                                                                                                                                                                           :           
+>                                                                                                                                                                                                                                                                           : ^^^^^^^^^^
 >inner : () => void
 >      : ^^^^^^^^^^
 

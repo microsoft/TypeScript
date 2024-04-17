@@ -740,7 +740,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 >reducerBroken : (state: number, { type, payload }: Action3) => number
 >              : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
->                                                                                                                                                                                                        :                                                      
+>                                                                                                                                                                                                        : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >state : number
 >      : ^^^^^^
 >type : "add" | "remove"

@@ -5,7 +5,7 @@ var f = require('./first');
 >f : <T>(x: T, k: (t: T) => void) => void
 >  : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >require('./first') : <T>(x: T, k: (t: T) => void) => void
->                   :                                     
+>                   : ^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >require : any
 >'./first' : "./first"
 >          : ^^^^^^^^^

@@ -1633,7 +1633,7 @@ const checkIsTouchDevice = () =>
 >checkIsTouchDevice : () => boolean
 >                   : ^^^^^^^^^^^^^
 >() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
->                                                                            :              
+>                                                                            : ^^^^^^^^^^^^^
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
@@ -1686,7 +1686,7 @@ const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
 >  : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->                                                   :                                      
+>                                                   : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >a : P
 >  : ^
 

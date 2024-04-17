@@ -463,7 +463,7 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >x : (x: number) => any
 >  : ^ ^^^^^^^^^^^^^^^^
 >x => (x, undefined) : (x: number) => any
->                    :                   
+>                    : ^ ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x, undefined) : undefined
@@ -477,7 +477,7 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >y : (y: string) => any
 >  : ^ ^^^^^^^^^^^^^^^^
 >y => (y, undefined) : (y: string) => any
->                    :                   
+>                    : ^ ^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >(y, undefined) : undefined
@@ -499,7 +499,7 @@ var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >x : (x: number) => any
 >  : ^ ^^^^^^^^^^^^^^^^
 >x => (x, undefined) : (x: number) => any
->                    :                   
+>                    : ^ ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x, undefined) : undefined
@@ -513,7 +513,7 @@ var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >y : (y: string) => any
 >  : ^ ^^^^^^^^^^^^^^^^
 >y => (y, undefined) : (y: string) => any
->                    :                   
+>                    : ^ ^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >(y, undefined) : undefined

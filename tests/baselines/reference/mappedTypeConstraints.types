@@ -148,7 +148,7 @@ const modifier = <T extends TargetProps>(targetProps: T) => {
 >modifier : <T extends TargetProps>(targetProps: T) => void
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^           ^^ ^^^^^^^^^
 ><T extends TargetProps>(targetProps: T) => {    let {bar, ...rest} = targetProps;    rest.foo;} : <T extends TargetProps>(targetProps: T) => void
->                                                                                                :                                                
+>                                                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^           ^^ ^^^^^^^^^
 >targetProps : T
 >            : ^
 

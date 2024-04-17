@@ -74,7 +74,7 @@ function f2() {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => { x /* number */ } : () => void
->                         :           
+>                         : ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -82,7 +82,7 @@ function f2() {
 >f : () => void
 >  : ^^^^^^^^^^
 >function() { x /* number */ } : () => void
->                              :           
+>                              : ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -477,7 +477,7 @@ function f7() {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => { e /* Error */ } : () => void
->                        :           
+>                        : ^^^^^^^^^^
 >e : Error
 >  : ^^^^^
         }

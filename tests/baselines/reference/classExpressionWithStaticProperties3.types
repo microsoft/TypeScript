@@ -52,7 +52,7 @@ for (let i = 0; i < 3; i++) {
 >y : () => number
 >  : ^^^^^^^^^^^^
 >() => C.x * 2 : () => number
->              :             
+>              : ^^^^^^^^^^^^
 >C.x * 2 : number
 >        : ^^^^^^
 >C.x : number
@@ -70,11 +70,11 @@ arr.forEach(C => console.log(C.y()));
 >arr.forEach(C => console.log(C.y())) : void
 >                                     : ^^^^
 >arr.forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
->            : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>            : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >arr : { y(): number; }[]
 >    : ^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: { y(): number; }, index: number, array: { y(): number; }[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >C => console.log(C.y()) : (C: { y(): number; }) => any
 >                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C : { y(): number; }

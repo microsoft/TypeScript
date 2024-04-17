@@ -12,7 +12,7 @@ const BaseFactory = () => {
 >BaseFactory : { (): Base; Base: typeof Base; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return new Base();} : { (): Base; Base: typeof Base; }
->                               :                                 
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return new Base();
 >new Base() : Base
@@ -68,7 +68,7 @@ const test = (base) => {
 >test : (base: InstanceType<BaseFactory["Base"]>) => Base
 >     : ^    ^^                                 ^^^^^^^^^
 >(base) => {    return base;} : (base: InstanceType<BaseFactory["Base"]>) => Base
->                             :                                                  
+>                             : ^    ^^                                 ^^^^^^^^^
 >base : Base
 >     : ^^^^
 

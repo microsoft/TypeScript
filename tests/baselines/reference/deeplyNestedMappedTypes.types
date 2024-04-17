@@ -209,7 +209,7 @@ export const Input = Type.Object({
 >Input : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; }>; }>; }>
->                                                                                                                     : ^^^^^^^^                                                             ^
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -223,7 +223,7 @@ export const Input = Type.Object({
 >level1 : TObject<{ level2: TObject<{ foo: TString; }>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({        level2: Type.Object({            foo: Type.String(),        })    }) : TObject<{ level2: TObject<{ foo: TString; }>; }>
->                                                                                          : ^^^^^^^^                                       ^
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -237,7 +237,7 @@ export const Input = Type.Object({
 >level2 : TObject<{ foo: TString; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({            foo: Type.String(),        }) : TObject<{ foo: TString; }>
->                                                       : ^^^^^^^^                 ^
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -273,7 +273,7 @@ export const Output = Type.Object({
 >Output : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({    level1: Type.Object({        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    })}) : TObject<{ level1: TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>; }>
->                                                                                                                                                    : ^^^^^^^^                                                                           ^
+>                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -287,7 +287,7 @@ export const Output = Type.Object({
 >level1 : TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({        level2: Type.Object({            foo: Type.String(),            bar: Type.String(),        })    }) : TObject<{ level2: TObject<{ foo: TString; bar: TString; }>; }>
->                                                                                                                         : ^^^^^^^^                                                     ^
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -301,7 +301,7 @@ export const Output = Type.Object({
 >level2 : TObject<{ foo: TString; bar: TString; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object({            foo: Type.String(),            bar: Type.String(),        }) : TObject<{ foo: TString; bar: TString; }>
->                                                                                      : ^^^^^^^^                               ^
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Type.Object : <T extends TProperties>(object: T) => TObject<T>
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^
 >Type : typeof Type
@@ -517,7 +517,7 @@ export interface TObject<T extends TProperties = TProperties> extends TSchema {
 
     static: PropertiesReduce<T, this['params']>
 >static : Evaluate<Readonly<Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyOptionalPropertyKeys<T>>>> & Readonly<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, ReadonlyPropertyKeys<T>>> & Partial<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, OptionalPropertyKeys<T>>> & Required<Pick<{ [K in keyof T]: Static<T[K], this["params"]>; }, Exclude<keyof T, ReadonlyOptionalPropertyKeys<T> | ReadonlyPropertyKeys<T> | OptionalPropertyKeys<T>>>>>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: 'object'
 >type : "object"

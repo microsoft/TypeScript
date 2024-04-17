@@ -177,7 +177,7 @@ const displayEnum = (value: string) => upperFirst(value.toLowerCase())
 >displayEnum : (value: string) => Capitalize<string>
 >            : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >(value: string) => upperFirst(value.toLowerCase()) : (value: string) => Capitalize<string>
->                                                   :                                      
+>                                                   : ^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >upperFirst(value.toLowerCase()) : Capitalize<string>

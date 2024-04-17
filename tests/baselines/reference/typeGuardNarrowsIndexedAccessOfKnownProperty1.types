@@ -191,7 +191,7 @@ function subarea(s: Subshape): number {
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^                 ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >under : { shape: Shape; }
 >      : ^^^^^^^^^^^^^^^^^
 >shape : Square
@@ -213,7 +213,7 @@ function subarea(s: Subshape): number {
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^                 ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >under : { shape: Shape; }
 >      : ^^^^^^^^^^^^^^^^^
 >shape : Square
@@ -299,7 +299,7 @@ function subarea(s: Subshape): number {
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^                 ^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >under : { shape: Shape; }
 >      : ^^^^^^^^^^^^^^^^^
 >"shape" : "shape"

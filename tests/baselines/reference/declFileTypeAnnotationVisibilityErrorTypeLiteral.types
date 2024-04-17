@@ -93,7 +93,7 @@ module m {
 >x3 : { (): m2.public1[]; [n: number]: private1; [s: string]: m2.public1; x: private1; y: m2.public1; method(): private1; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { (): m2.public1[]; [n: number]: private1; [s: string]: m2.public1; x: private1; y: m2.public1; method(): private1; }
->  :                                                                                                                      
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Function type
     export var y: (a: private1) => m2.public1;
@@ -108,7 +108,7 @@ module m {
 >y2 : (a: private1) => m2.public1
 >   : ^ ^^        ^^^^^^^^^^^^^^^
 >y : (a: private1) => m2.public1
->  :                            
+>  : ^ ^^        ^^^^^^^^^^^^^^^
 
     // constructor type
     export var z: new (a: private1) => m2.public1;
@@ -123,5 +123,5 @@ module m {
 >z2 : new (a: private1) => m2.public1
 >   : ^^^^^ ^^        ^^^^^^^^^^^^^^^
 >z : new (a: private1) => m2.public1
->  :                                
+>  : ^^^^^ ^^        ^^^^^^^^^^^^^^^
 }

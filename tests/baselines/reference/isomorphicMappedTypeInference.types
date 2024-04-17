@@ -209,7 +209,7 @@ function f1() {
 >b : Boxified<{ a: number; b: string; c: boolean; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify(v) : Boxified<{ a: number; b: string; c: boolean; }>
->          : ^^^^^^^^^                                     ^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
 >       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >v : { a: number; b: string; c: boolean; }
@@ -411,7 +411,7 @@ function f4() {
 >b : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify(boxify(b)) : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
->                    :                                                     
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unboxify : <T extends object>(obj: Boxified<T>) => T
 >         : ^ ^^^^^^^^^^^^^^^^^   ^^           ^^^^^^
 >boxify(b) : Boxified<{ a: Box<number>; b: Box<string>; c: Box<boolean>; }>
@@ -443,7 +443,7 @@ function f5(s: string) {
 >b : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeRecord({        a: box(42),        b: box("hello"),        c: box(true)    }) : { a: Box<number> | Box<string> | Box<boolean>; b: Box<number> | Box<string> | Box<boolean>; c: Box<number> | Box<string> | Box<boolean>; }
->                                                                                  :                                                                                                                                           
+>                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeRecord : <T, K extends string>(obj: { [P in K]: T; }) => { [P in K]: T; }
 >           : ^ ^^ ^^^^^^^^^^^^^^^^^   ^^                ^^^^^^^^^^^^^^^^^^^^^
 >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
@@ -524,7 +524,7 @@ function f6(s: string) {
 >b : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeDictionary({        a: box(42),        b: box("hello"),        c: box(true)    }) : { [x: string]: Box<number> | Box<string> | Box<boolean>; }
->                                                                                      :                                                           
+>                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >makeDictionary : <T>(obj: { [x: string]: T; }) => { [x: string]: T; }
 >               : ^ ^^   ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: box(42),        b: box("hello"),        c: box(true)    } : { a: Box<number>; b: Box<string>; c: Box<boolean>; }
@@ -683,7 +683,7 @@ var g1 = applySpec({
 >g1 : (...args: any[]) => { sum: number; nested: { mul: string; }; }
 >   : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec({    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }}) : (...args: any[]) => { sum: number; nested: { mul: string; }; }
->                                                                                   :  ^^^                                                          
+>                                                                                   : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >          : ^ ^^   ^^       ^^^^^^^^^    ^^     ^^^^^^
 >{    sum: (a: any) => 3,    nested: {        mul: (b: any) => "n"    }} : { sum: (a: any) => number; nested: { mul: (b: any) => string; }; }
@@ -693,7 +693,7 @@ var g1 = applySpec({
 >sum : (a: any) => number
 >    : ^ ^^   ^^^^^^^^^^^
 >(a: any) => 3 : (a: any) => number
->              :                   
+>              : ^ ^^   ^^^^^^^^^^^
 >a : any
 >3 : 3
 >  : ^
@@ -702,13 +702,13 @@ var g1 = applySpec({
 >nested : { mul: (b: any) => string; }
 >       : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^
 >{        mul: (b: any) => "n"    } : { mul: (b: any) => string; }
->                                   : ^^^^^^^                  ^^^
+>                                   : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^
 
         mul: (b: any) => "n"
 >mul : (b: any) => string
 >    : ^ ^^   ^^^^^^^^^^^
 >(b: any) => "n" : (b: any) => string
->                :                   
+>                : ^ ^^   ^^^^^^^^^^^
 >b : any
 >"n" : "n"
 >    : ^^^
@@ -720,7 +720,7 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 >g2 : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
 >   : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec({ foo: { bar: { baz: (x: any) => true } } }) : (...args: any[]) => { foo: { bar: { baz: boolean; }; }; }
->                                                       :  ^^^                                                     
+>                                                       : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >applySpec : <T>(obj: Spec<T>) => (...args: any[]) => T
 >          : ^ ^^   ^^       ^^^^^^^^^    ^^     ^^^^^^
 >{ foo: { bar: { baz: (x: any) => true } } } : { foo: { bar: { baz: (x: any) => boolean; }; }; }
@@ -728,15 +728,15 @@ var g2 = applySpec({ foo: { bar: { baz: (x: any) => true } } });
 >foo : { bar: { baz: (x: any) => boolean; }; }
 >    : ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^
 >{ bar: { baz: (x: any) => true } } : { bar: { baz: (x: any) => boolean; }; }
->                                   : ^^^^^^^^^^^^^^                   ^^^^^^
+>                                   : ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^
 >bar : { baz: (x: any) => boolean; }
 >    : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^^
 >{ baz: (x: any) => true } : { baz: (x: any) => boolean; }
->                          : ^^^^^^^                   ^^^
+>                          : ^^^^^^^^ ^^   ^^^^^^^^^^^^^^^
 >baz : (x: any) => boolean
 >    : ^ ^^   ^^^^^^^^^^^^
 >(x: any) => true : (x: any) => boolean
->                 :                    
+>                 : ^ ^^   ^^^^^^^^^^^^
 >x : any
 >true : true
 >     : ^^^^
@@ -747,7 +747,7 @@ const foo = <T>(object: T, partial: Partial<T>) => object;
 >foo : <T>(object: T, partial: Partial<T>) => T
 >    : ^ ^^      ^^ ^^       ^^          ^^^^^^
 ><T>(object: T, partial: Partial<T>) => object : <T>(object: T, partial: Partial<T>) => T
->                                              :                                         
+>                                              : ^ ^^      ^^ ^^       ^^          ^^^^^^
 >object : T
 >       : ^
 >partial : Partial<T>
@@ -789,7 +789,7 @@ o = foo(o, {b: 9});
 >o : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(o, {b: 9}) : { a: number; b: number; }
->               :                          
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(object: T, partial: Partial<T>) => T
 >    : ^ ^^      ^^ ^^       ^^          ^^^^^^
 >o : { a: number; b: number; }

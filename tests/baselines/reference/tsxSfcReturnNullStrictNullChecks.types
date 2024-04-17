@@ -9,7 +9,7 @@ const Foo = (props: any) => null;
 >Foo : (props: any) => null
 >    : ^     ^^   ^^^^^^^^^
 >(props: any) => null : (props: any) => null
->                     :                     
+>                     : ^     ^^   ^^^^^^^^^
 >props : any
 
 function Greet(x: {name?: string}) {

@@ -11,7 +11,7 @@ const createScopedActionType = <S extends string>(scope: S) => <T extends string
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
 >                       : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^    ^^ ^^^^^           
 ><S extends string>(scope: S) => <T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
->                                                                                                 :                                                                           
+>                                                                                                 : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^    ^^ ^^^^^           
 >scope : S
 >      : ^
 ><T extends string>(type: T) => `${scope}/${type}` as `${S}/${T}` : <T extends string>(type: T) => `${S}/${T}`
@@ -31,7 +31,7 @@ const createActionInMyScope = createScopedActionType("MyScope");  // <T extends 
 >createActionInMyScope : <T extends string>(type: T) => `MyScope/${T}`
 >                      : ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >createScopedActionType("MyScope") : <T extends string>(type: T) => `MyScope/${T}`
->                                  :                                              
+>                                  : ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^
 >createScopedActionType : <S extends string>(scope: S) => <T extends string>(type: T) => `${S}/${T}`
 >                       : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^    ^^ ^^^^^           
 >"MyScope" : "MyScope"
@@ -393,7 +393,7 @@ let p1 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a');
 >p1 : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a') : { readonly b: { readonly c: 42; readonly d: "hello"; }; }
->                                                        :                                                          
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >        : ^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^                 ^^^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }
@@ -423,7 +423,7 @@ let p2 = getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b');
 >p2 : { readonly c: 42; readonly d: "hello"; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp({ a: { b: {c: 42, d: 'hello' }}} as const, 'a.b') : { readonly c: 42; readonly d: "hello"; }
->                                                          :                                         
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProp : { <T, P0 extends keyof T & string, P1 extends keyof T[P0] & string, P2 extends keyof T[P0][P1] & string>(obj: T, path: `${P0}.${P1}.${P2}`): T[P0][P1][P2]; <T_1, P0_1 extends keyof T_1 & string, P1_1 extends keyof T_1[P0_1] & string>(obj: T_1, path: `${P0_1}.${P1_1}`): T_1[P0_1][P1_1]; <T_2, P0_2 extends keyof T_2 & string>(obj: T_2, path: P0_2): T_2[P0_2]; (obj: object, path: string): unknown; }
 >        : ^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^                   ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^                 ^^^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^   ^^      ^^    ^^      ^^^^^^^^^^^^^
 >{ a: { b: {c: 42, d: 'hello' }}} as const : { readonly a: { readonly b: { readonly c: 42; readonly d: "hello"; }; }; }

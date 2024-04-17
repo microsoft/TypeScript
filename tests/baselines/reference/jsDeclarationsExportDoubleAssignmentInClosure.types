@@ -14,7 +14,7 @@ function foo() {
 >module : { exports: { (o: any): any; methods: () => void; }; }
 >       : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (o: any): any; methods: () => void; }
->        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^
+>        : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports = function (o) {        return (o == null) ? create(base) : defineProperties(Object(o), descriptors);    } : (o: any) => any
 >                                                                                                                   : ^ ^^^^^^^^^^^^^
 >exports : any
@@ -45,7 +45,7 @@ function foo() {
 >m : () => void
 >  : ^^^^^^^^^^
 >function () {        // I have no idea what to put here    } : () => void
->                                                             :           
+>                                                             : ^^^^^^^^^^
 
         // I have no idea what to put here
     }

@@ -44,7 +44,7 @@ var f = (x: number) => { return x.toFixed() };
 >f : (x: number) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(x: number) => { return x.toFixed() } : (x: number) => string
->                                      :                      
+>                                      : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x.toFixed() : string

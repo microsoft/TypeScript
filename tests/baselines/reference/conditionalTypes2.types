@@ -197,7 +197,7 @@ function f12(x: string | (() => string) | undefined) {
 >f : () => string
 >  : ^^^^^^^^^^^^
 >getFunction(x) : () => string
->               :             
+>               : ^^^^^^^^^^^^
 >getFunction : <T>(item: T) => Extract<T, Function>
 >            : ^ ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | (() => string) | undefined
