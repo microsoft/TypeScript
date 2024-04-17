@@ -37,6 +37,7 @@ module.exports = createRule({
             /** @type {import("@typescript-eslint/utils").TSESTree.Node | undefined} */
             let current = node;
             while (current) {
+                // https://github.com/typescript-eslint/typescript-eslint/blob/e44a1a280f08f9fd0d29f74e5c3e73b7b64a9606/packages/eslint-plugin/src/util/collectUnusedVariables.ts#L440
                 if (current.type.startsWith("Export")) {
                     isExportedCache.set(node, true);
                     return true;
