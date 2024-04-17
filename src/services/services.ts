@@ -438,7 +438,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(sourceFile?: SourceFileLike): Node[] {
+    public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
         return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
     }
@@ -473,7 +473,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     }
 }
 
-function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
     if (!isNodeKind(node.kind)) {
         return emptyArray;
     }
