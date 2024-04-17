@@ -10,3 +10,7 @@
 /** oops �� oops */
 
 //// [parseReplacementCharacter.js]
+"oops �� oops";
+'oops �� oops';
+"oops \uFFFD\uFFFD oops";
+"".concat("oops �� oops");
