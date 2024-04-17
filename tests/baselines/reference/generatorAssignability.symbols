@@ -6,15 +6,15 @@ declare let _: any;
 
 declare const g1: Generator<number, void, string>;
 >g1 : Symbol(g1, Decl(generatorAssignability.ts, 1, 13))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
 declare const g2: Generator<number, void, undefined>;
 >g2 : Symbol(g2, Decl(generatorAssignability.ts, 2, 13))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
 declare const g3: Generator<number, void, boolean>;
 >g3 : Symbol(g3, Decl(generatorAssignability.ts, 3, 13))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
 declare const g4: AsyncGenerator<number, void, string>;
 >g4 : Symbol(g4, Decl(generatorAssignability.ts, 4, 13))
@@ -104,7 +104,7 @@ async function asyncfn() {
 
 function* f1(): Generator<number, void, boolean> {
 >f1 : Symbol(f1, Decl(generatorAssignability.ts, 40, 1))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
     // yield* over iterable
     yield* g1; // error

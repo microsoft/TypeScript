@@ -5,7 +5,7 @@
 
 type SyncSequenceFactory = () => Generator<string, string, string>;
 >SyncSequenceFactory : Symbol(SyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 0, 0))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
 type AsyncSequenceFactory = () => AsyncGenerator<string, string, string>;
 >AsyncSequenceFactory : Symbol(AsyncSequenceFactory, Decl(typeOfYieldWithUnionInContextualReturnType.ts, 2, 67))

@@ -380,7 +380,7 @@ interface B<T> { variant: 'b', value: Array<T> }
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
 >variant : Symbol(B.variant, Decl(dependentDestructuredVariables.ts, 148, 16))
 >value : Symbol(B.value, Decl(dependentDestructuredVariables.ts, 148, 30))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 148, 12))
 
 type AB<T> = A<T> | B<T>;
@@ -401,7 +401,7 @@ declare function printValueList<T>(t: Array<T>): void;
 >printValueList : Symbol(printValueList, Decl(dependentDestructuredVariables.ts, 152, 43))
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 154, 32))
 >t : Symbol(t, Decl(dependentDestructuredVariables.ts, 154, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 5 more)
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 4 more)
 >T : Symbol(T, Decl(dependentDestructuredVariables.ts, 154, 32))
 
 function unrefined1<T>(ab: AB<T>): void {
@@ -477,7 +477,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 
 declare var it: Iterator<number>;
 >it : Symbol(it, Decl(dependentDestructuredVariables.ts, 183, 11))
->Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 
 const { value, done } = it.next();
 >value : Symbol(value, Decl(dependentDestructuredVariables.ts, 184, 7))
@@ -747,7 +747,7 @@ type FooGenMethod = {
 >e : Symbol(e, Decl(dependentDestructuredVariables.ts, 286, 23))
 
   ): Generator<any, any, any>;
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 }
 
 let fooGenM: FooGenMethod = {

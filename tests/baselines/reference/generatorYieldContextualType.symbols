@@ -7,7 +7,7 @@ declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >R : Symbol(R, Decl(generatorYieldContextualType.ts, 0, 22))
 >S : Symbol(S, Decl(generatorYieldContextualType.ts, 0, 25))
 >gen : Symbol(gen, Decl(generatorYieldContextualType.ts, 0, 29))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 >R : Symbol(R, Decl(generatorYieldContextualType.ts, 0, 22))
 >T : Symbol(T, Decl(generatorYieldContextualType.ts, 0, 20))
 >S : Symbol(S, Decl(generatorYieldContextualType.ts, 0, 25))
@@ -27,7 +27,7 @@ declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T
 >R : Symbol(R, Decl(generatorYieldContextualType.ts, 6, 22))
 >S : Symbol(S, Decl(generatorYieldContextualType.ts, 6, 25))
 >gen : Symbol(gen, Decl(generatorYieldContextualType.ts, 6, 29))
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 >R : Symbol(R, Decl(generatorYieldContextualType.ts, 6, 22))
 >T : Symbol(T, Decl(generatorYieldContextualType.ts, 6, 20))
 >S : Symbol(S, Decl(generatorYieldContextualType.ts, 6, 25))
@@ -130,7 +130,7 @@ type StepGenerator =
 >StepGenerator : Symbol(StepGenerator, Decl(generatorYieldContextualType.ts, 43, 1))
 
   | Generator<
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 
       QuickPickStep | QuickInputStep,
 >QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
@@ -190,7 +190,7 @@ type StepResultGenerator<T> =
 >T : Symbol(T, Decl(generatorYieldContextualType.ts, 66, 25))
 
   | Generator<QuickPickStep | QuickInputStep, StepResult<T>, any | undefined>
->Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
 >QuickPickStep : Symbol(QuickPickStep, Decl(generatorYieldContextualType.ts, 38, 1))
 >QuickInputStep : Symbol(QuickInputStep, Decl(generatorYieldContextualType.ts, 32, 1))
 >StepResult : Symbol(StepResult, Decl(generatorYieldContextualType.ts, 61, 10), Decl(generatorYieldContextualType.ts, 64, 1))

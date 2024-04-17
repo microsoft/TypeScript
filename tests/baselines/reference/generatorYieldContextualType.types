@@ -1,8 +1,5 @@
 //// [tests/cases/conformance/generators/generatorYieldContextualType.ts] ////
 
-=== Performance Stats ===
-Type Count: 1,000
-
 === generatorYieldContextualType.ts ===
 declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
