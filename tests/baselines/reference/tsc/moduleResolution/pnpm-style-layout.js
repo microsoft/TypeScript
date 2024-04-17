@@ -175,13 +175,15 @@ Resolving real path for '/home/src/projects/component-type-checker/packages/app/
 ======== Module name '@component-type-checker/sdk' was successfully resolved to '/home/src/projects/component-type-checker/packages/sdk/src/index.ts' with Package ID '@component-type-checker/sdk1/src/index.ts@0.0.2'. ========
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
-======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/app/package.json'. ========
+======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Explicitly specified module resolution kind: 'Node10'.
 'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
 Resolving module name '@component-type-checker/button' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button'.
 Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button', target file types: TypeScript, Declaration.
 Loading module '@component-type-checker/button' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/component-type-checker/packages/app/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__button'
 Found 'package.json' at '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/package.json'.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button.ts' does not exist.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button.tsx' does not exist.
@@ -194,14 +196,17 @@ File '/home/src/projects/component-type-checker/packages/app/node_modules/@compo
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
+File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
-======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/app/package.json'. ========
+======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Explicitly specified module resolution kind: 'Node10'.
 'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/components'.
 Resolving module name '@component-type-checker/components' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/components'.
 Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/components', target file types: TypeScript, Declaration.
 Loading module '@component-type-checker/components' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/component-type-checker/packages/app/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__components'
 Found 'package.json' at '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/package.json'.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components.ts' does not exist.
 File '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components.tsx' does not exist.
@@ -217,30 +222,15 @@ Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/
 Found peerDependency '@component-type-checker/button' with '0.0.2' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/app/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts'.
 ======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.2'. ========
+File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
 ======== Resolving module '@component-type-checker/components' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
-Explicitly specified module resolution kind: 'Node10'.
-'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/components'.
-Resolving module name '@component-type-checker/components' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/components'.
-Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/components', target file types: TypeScript, Declaration.
-Loading module '@component-type-checker/components' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/component-type-checker/packages/app/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'component-type-checker__components'
-Resolution for module '@component-type-checker/components' was found in cache from location '/home/src/projects/component-type-checker/packages/app'.
+Resolution for module '@component-type-checker/components' was found in cache from location '/home/src/projects/component-type-checker/packages/app/src'.
 ======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.2'. ========
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
 ======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
-Explicitly specified module resolution kind: 'Node10'.
-'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
-Resolving module name '@component-type-checker/button' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button'.
-Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button', target file types: TypeScript, Declaration.
-Loading module '@component-type-checker/button' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/component-type-checker/packages/app/src/node_modules' does not exist, skipping all lookups in it.
-Scoped package detected, looking in 'component-type-checker__button'
-Resolution for module '@component-type-checker/button' was found in cache from location '/home/src/projects/component-type-checker/packages/app'.
+Resolution for module '@component-type-checker/button' was found in cache from location '/home/src/projects/component-type-checker/packages/app/src'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
 File '/home/src/projects/component-type-checker/packages/app/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/app/package.json' exists according to earlier cached lookups.
@@ -270,6 +260,29 @@ Found 'package.json' at '/home/src/projects/component-type-checker/node_modules/
 Found peerDependency '@component-type-checker/button' with '0.0.1' version.
 Resolving real path for '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/components/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts'.
 ======== Module name '@component-type-checker/components' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/index.ts' with Package ID '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.1'. ========
+File '/home/src/projects/component-type-checker/packages/sdk/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/component-type-checker/packages/sdk/package.json' exists according to earlier cached lookups.
+======== Resolving module '@component-type-checker/button' from '/home/src/projects/component-type-checker/packages/sdk/src/index.ts'. ========
+Explicitly specified module resolution kind: 'Node10'.
+'baseUrl' option is set to '/home/src/projects/component-type-checker/packages/app', using this value to resolve non-relative module name '@component-type-checker/button'.
+Resolving module name '@component-type-checker/button' relative to base url '/home/src/projects/component-type-checker/packages/app' - '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button'.
+Loading module as file / folder, candidate module location '/home/src/projects/component-type-checker/packages/app/@component-type-checker/button', target file types: TypeScript, Declaration.
+Loading module '@component-type-checker/button' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/home/src/projects/component-type-checker/packages/sdk/src/node_modules' does not exist, skipping all lookups in it.
+Scoped package detected, looking in 'component-type-checker__button'
+Found 'package.json' at '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button/package.json'.
+File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button.ts' does not exist.
+File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button.tsx' does not exist.
+File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button.d.ts' does not exist.
+'package.json' does not have a 'typesVersions' field.
+'package.json' does not have a 'typings' field.
+'package.json' does not have a 'types' field.
+'package.json' has 'main' field './src/index.ts' that references '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button/src/index.ts'.
+File '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button/src/index.ts' exists - use it as a name resolution result.
+'package.json' does not have a 'peerDependencies' field.
+Resolving real path for '/home/src/projects/component-type-checker/packages/sdk/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts'.
+======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.1'. ========
 File '/home/src/projects/component-type-checker/packages/sdk/src/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/packages/sdk/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.1/node_modules/@component-type-checker/components/src/package.json' does not exist.
