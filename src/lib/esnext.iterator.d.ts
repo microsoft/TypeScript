@@ -38,7 +38,7 @@ interface NativeIterator<T, TReturn = void, TNext = undefined> extends Iterator<
      * Creates an iterator whose values are the result of applying the callback to the values from this iterator and then flattening the resulting iterators or iterables.
      * @param callback A function that accepts up to two arguments to be used to transform values from the underlying iterator into new iterators or iterables to be flattened into the result.
      */
-    flatMap<U>(callback: (value: T, index: number) => (Iterator<U> | Iterable<U>)): NativeIterator<U>;
+    flatMap<U>(callback: (value: T, index: number) => Iterator<U> | Iterable<U>): NativeIterator<U>;
 
     /**
      * Calls the specified callback function for all the elements in this iterator. The return value of the callback function is the accumulated result, and is provided as an argument in the next call to the callback function.
@@ -105,7 +105,6 @@ interface IteratorConstructor {
 }
 
 declare var Iterator: (abstract new <T>() => NativeIterator<T>) & IteratorConstructor;
-
 
 // TODO BEFORE MERGING: update all existing IterableIterator-return methods to return NativeIterator
 // I have only done a couple so far, for illustration
