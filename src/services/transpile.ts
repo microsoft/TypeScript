@@ -51,14 +51,37 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
 
 /*
  * This function will compile source text from 'input' argument using specified compiler options.
- * If not options are provided - it will use a set of default compiler options.
+ * If no options are provided - it will use a set of default compiler options.
  * Extra compiler options that will unconditionally be used by this function are:
  * - isolatedModules = true
  * - allowNonTsExtensions = true
  * - noLib = true
  * - noResolve = true
+ * - declaration = false
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
+    return transpileWorker(input, transpileOptions, /*declarations*/ false);
+}
+
+/*
+ * This function will create a declaration file from 'input' argument using specified compiler options.
+ * If no options are provided - it will use a set of default compiler options.
+ * Extra compiler options that will unconditionally be used by this function are:
+ * - isolatedModules = true
+ * - allowNonTsExtensions = true
+ * - noLib = true
+ * - noResolve = true
+ * - declaration = true
+ * - emitDeclarationOnly = true
+ * - declarationDir = undefined
+ * Note that this declaration file may differ from one produced by a full program typecheck,
+ * in that only types in the single input file are available to be used in the generated declarations.
+ */
+export function transpileDeclaration(input: string, transpileOptions: TranspileOptions): TranspileOutput {
+    return transpileWorker(input, transpileOptions, /*declarations*/ true);
+}
+
+function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
 
     const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
@@ -85,6 +108,15 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
 
     // Filename can be non-ts file.
     options.allowNonTsExtensions = true;
+
+    if (declaration) {
+        options.declaration = true;
+        options.declarationDir = undefined;
+        options.emitDeclarationOnly = true;
+    }
+    else {
+        options.declaration = false;
+    }
 
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
