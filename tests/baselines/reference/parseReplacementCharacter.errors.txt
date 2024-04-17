@@ -1,0 +1,13 @@
+parseReplacementCharacter.ts(1,1): error TS1490: File appears to be binary.
+
+
+==== parseReplacementCharacter.ts (1 errors) ====
+    "oops �� oops";
+    
+!!! error TS1490: File appears to be binary.
+    'oops �� oops';
+    `oops �� oops`;
+    `${"oops �� oops"}`;
+    // oops �� oops
+    /* oops �� oops */
+    /** oops �� oops */
