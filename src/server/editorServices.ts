@@ -4114,7 +4114,14 @@ export class ProjectService {
     }
 
     private removeOrphanConfiguredProjects(toRetainConfiguredProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
-        const toRemoveConfiguredProjects = new Map(this.configuredProjects);
+        const orphanConfiguredProjects = this.getOrphanConfiguredProjects(toRetainConfiguredProjects);
+        // Remove all the non marked projects
+        orphanConfiguredProjects.forEach(project => this.removeProject(project));
+    }
+
+    /** @internal */
+    getOrphanConfiguredProjects(toRetainConfiguredProjects: readonly ConfiguredProject[] | ConfiguredProject | undefined) {
+        const toRemoveConfiguredProjects = new Set(this.configuredProjects.values());
         const markOriginalProjectsAsUsed = (project: Project) => {
             if (project.originalConfiguredProjects && (isConfiguredProject(project) || !project.isOrphan())) {
                 project.originalConfiguredProjects.forEach(
@@ -4138,7 +4145,7 @@ export class ProjectService {
         this.inferredProjects.forEach(markOriginalProjectsAsUsed);
         this.externalProjects.forEach(markOriginalProjectsAsUsed);
         this.configuredProjects.forEach(project => {
-            if (!toRemoveConfiguredProjects.has(project.canonicalConfigFilePath)) return;
+            if (!toRemoveConfiguredProjects.has(project)) return;
             // If project has open ref (there are more than zero references from external project/open file), keep it alive as well as any project it references
             if (project.hasOpenRef()) {
                 retainConfiguredProject(project);
@@ -4149,15 +4156,14 @@ export class ProjectService {
             }
         });
 
-        // Remove all the non marked projects
-        toRemoveConfiguredProjects.forEach(project => this.removeProject(project));
+        return toRemoveConfiguredProjects;
 
         function isRetained(project: ConfiguredProject) {
-            return !toRemoveConfiguredProjects.has(project.canonicalConfigFilePath) || project.hasOpenRef();
+            return !toRemoveConfiguredProjects.has(project) || project.hasOpenRef();
         }
 
         function retainConfiguredProject(project: ConfiguredProject) {
-            if (toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath)) {
+            if (toRemoveConfiguredProjects.delete(project)) {
                 // Keep original projects used
                 markOriginalProjectsAsUsed(project);
                 // Keep all the references alive
