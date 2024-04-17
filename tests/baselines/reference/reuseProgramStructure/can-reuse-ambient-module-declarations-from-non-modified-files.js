@@ -72,6 +72,9 @@ File '/fs.jsx' does not exist.
 File '/a/b/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File 'package.json' does not exist.
 
 MissingPaths:: [
@@ -210,6 +213,9 @@ File '/a/fs.jsx' does not exist.
 File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: [
   "lib.d.ts"

@@ -74,6 +74,7 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -108,6 +109,13 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does 
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
+File '/user/username/projects/myproject/packages/pkg1/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/packages/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/node_modules/pkg2/build/package.json' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'const' from '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts'. ========
@@ -118,6 +126,8 @@ Resolving module name 'const' relative to base url '/user/username/projects/mypr
 Loading module as file / folder, candidate module location '/user/username/projects/myproject/packages/pkg2/const', target file types: TypeScript, Declaration.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name 'const' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
+File '/user/username/projects/myproject/node_modules/pkg2/build/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/node_modules/pkg2/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.

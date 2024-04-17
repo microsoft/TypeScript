@@ -63,6 +63,8 @@ File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist.
@@ -218,6 +220,8 @@ File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -361,6 +365,8 @@ File '/user/username/projects/myproject/src/fileB.d.mts' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -511,6 +517,12 @@ File '/user/username/projects/myproject/src/fileB.mjs.js' does not exist.
 File '/user/username/projects/myproject/src/fileB.mjs.jsx' does not exist.
 Directory '/user/username/projects/myproject/src/fileB.mjs' does not exist, skipping all lookups in it.
 ======== Module name './fileB.mjs' was not resolved. ========
+File '/user/username/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/fileB.mjs 1 undefined Failed Lookup Locations
 File '/a/lib/package.json' does not exist according to earlier cached lookups.

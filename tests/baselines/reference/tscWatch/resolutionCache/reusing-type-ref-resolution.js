@@ -70,6 +70,11 @@ File '/users/username/projects/project/node_modules/pkg0/index.tsx' does not exi
 File '/users/username/projects/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg0/index.d.ts', result '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'. ========
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'pkg1' from '/users/username/projects/project/fileWithImports.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -91,6 +96,11 @@ Directory '/users/username/node_modules' does not exist, skipping all lookups in
 Directory '/users/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'pkg1' was not resolved. ========
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
@@ -515,6 +525,11 @@ File '/users/username/projects/project/node_modules/pkg1/index.tsx' does not exi
 File '/users/username/projects/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg1/index.d.ts', result '/users/username/projects/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/users/username/projects/project/node_modules/pkg1/index.d.ts'. ========
+File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.
+File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/users/username/package.json' does not exist according to earlier cached lookups.
+File '/users/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/node_modules/package.json' does not exist according to earlier cached lookups.
 File '/users/username/projects/project/package.json' does not exist according to earlier cached lookups.

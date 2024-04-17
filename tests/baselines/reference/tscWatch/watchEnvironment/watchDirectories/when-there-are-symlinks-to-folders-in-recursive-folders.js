@@ -66,6 +66,12 @@ File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
+File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/user/projects/myproject/node_modules/reala/package.json' does not exist.
 File '/home/user/projects/myproject/node_modules/package.json' does not exist.
 File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
@@ -299,6 +305,12 @@ Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -495,6 +507,12 @@ Directory '/home/user/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
+File '/home/user/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/user/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/user/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.

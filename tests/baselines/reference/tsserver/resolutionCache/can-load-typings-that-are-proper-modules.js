@@ -57,6 +57,9 @@ Info seq  [hh:mm:ss:mss] Directory '/a/b/node_modules' does not exist, skipping 
 Info seq  [hh:mm:ss:mss] Directory '/a/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Directory '/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] ======== Module name 'lib' was not resolved. ========
+Info seq  [hh:mm:ss:mss] File '/a/b/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] Auto discovery for typings is enabled in project '/dev/null/inferredProject1*'. Running extra resolution pass for module 'lib' using cache location '/a/cache'.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/lib.d.ts' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/cache/node_modules/@types/lib/package.json' does not exist.

@@ -217,6 +217,11 @@ File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does 
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
+File '/home/src/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist.
 File '/home/src/projects/node_modules/package.json' does not exist.
@@ -239,6 +244,11 @@ File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 ======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
+File '/home/src/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -261,6 +271,11 @@ File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not ex
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+File '/home/src/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -307,6 +322,11 @@ File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not ex
 File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+File '/home/src/projects/project1/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -358,6 +378,11 @@ Directory '/home/src/projects/project2/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+File '/home/src/projects/project2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -373,6 +398,11 @@ Directory '/home/src/projects/project2/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+File '/home/src/projects/project2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -410,6 +440,11 @@ Directory '/home/src/projects/project3/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-es5'
 Resolution for module '@typescript/lib-es5' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
+File '/home/src/projects/project3/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -425,6 +460,11 @@ Directory '/home/src/projects/project3/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+File '/home/src/projects/project3/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -469,6 +509,11 @@ File '/home/src/projects/node_modules/@typescript/lib-esnext/index.tsx' does not
 File '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts'.
 ======== Module name '@typescript/lib-esnext' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts'. ========
+File '/home/src/projects/project4/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-esnext/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -484,6 +529,11 @@ Directory '/home/src/projects/project4/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-dom'
 Resolution for module '@typescript/lib-dom' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
+File '/home/src/projects/project4/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.
@@ -499,6 +549,11 @@ Directory '/home/src/projects/project4/node_modules' does not exist, skipping al
 Scoped package detected, looking in 'typescript__lib-webworker'
 Resolution for module '@typescript/lib-webworker' was found in cache from location '/home/src/projects'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
+File '/home/src/projects/project4/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/@typescript/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/node_modules/package.json' does not exist according to earlier cached lookups.

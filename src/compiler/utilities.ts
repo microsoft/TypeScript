@@ -581,6 +581,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
+    ModuleResolutionCache,
 } from "./_namespaces/ts";
 
 /** @internal */
@@ -9079,6 +9080,7 @@ export interface SymlinkCache {
         ) => void,
         typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
     ): void;
+    setSymlinksFromResolutionCache(cache: ModuleResolutionCache | undefined): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -9118,6 +9120,11 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
+        setSymlinksFromResolutionCache(cache) {
+            cache?.forEach(elem =>
+                processResolution(this, elem.resolvedModule)
+            );
+        }
     };
 
     function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {

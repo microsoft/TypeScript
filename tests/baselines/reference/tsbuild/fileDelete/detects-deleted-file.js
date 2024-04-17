@@ -76,6 +76,9 @@ File '/src/child/child2.ts' exists - use it as a name resolution result.
 File '/src/child/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/src/child/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
@@ -97,6 +100,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/src/child/child', target file types: TypeScript, Declaration.
 File '/src/child/child.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child' was successfully resolved to '/src/child/child.ts'. ========
+File '/src/main/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/src/child/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -337,6 +343,9 @@ File '/src/child/child2.js' does not exist.
 File '/src/child/child2.jsx' does not exist.
 Directory '/src/child/child2' does not exist, skipping all lookups in it.
 ======== Module name '../child/child2' was not resolved. ========
+File '/src/child/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 [96msrc/child/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2307: [0mCannot find module '../child/child2' or its corresponding type declarations.

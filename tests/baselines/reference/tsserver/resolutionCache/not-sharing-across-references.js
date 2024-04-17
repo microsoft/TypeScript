@@ -123,6 +123,11 @@ Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/ind
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/node_modules/moduleX/index.d.ts', result '/users/username/projects/node_modules/moduleX/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
@@ -141,6 +146,11 @@ Info seq  [hh:mm:ss:mss] Module resolution kind is not specified, using 'Node10'
 Info seq  [hh:mm:ss:mss] Loading module as file / folder, candidate module location '/users/username/projects/common/moduleB', target file types: TypeScript, Declaration.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/moduleB.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] ======== Module name '../common/moduleB' was successfully resolved to '/users/username/projects/common/moduleB.ts'. ========
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/app/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
@@ -162,6 +172,11 @@ Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/ind
 Info seq  [hh:mm:ss:mss] File '/users/username/projects/node_modules/moduleX/index.d.ts' exists - use it as a name resolution result.
 Info seq  [hh:mm:ss:mss] Resolving real path for '/users/username/projects/node_modules/moduleX/index.d.ts', result '/users/username/projects/node_modules/moduleX/index.d.ts'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/common/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/users/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations

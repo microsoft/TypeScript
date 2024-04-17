@@ -342,6 +342,7 @@ export interface PackageJsonPathFields {
     imports?: object;
     exports?: object;
     name?: string;
+    dependencies?: object;
 }
 
 interface PackageJson extends PackageJsonPathFields {
@@ -843,6 +844,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
     /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
+    forEach(cb: (elem: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, key: string, mode?: ResolutionMode) => void): void;
 }
 
 export interface ModeAwareCache<T> {
@@ -869,6 +871,7 @@ export interface PerDirectoryResolutionCache<T> {
     update(options: CompilerOptions): void;
     /** @internal */ directoryToModuleNameMap: CacheWithRedirects<Path, ModeAwareCache<T>>;
     /** @internal */ isReadonly?: boolean;
+    forEach(cb: (elem: T, key: string, mode: ResolutionMode) => void): void;
 }
 
 export interface NonRelativeNameResolutionCache<T> {
@@ -881,18 +884,21 @@ export interface NonRelativeNameResolutionCache<T> {
      */
     update(options: CompilerOptions): void;
     /** @internal */ isReadonly?: boolean;
+    forEach(cb: (elem: T, key: string, mode?: ResolutionMode) => void): void;
 }
 
 export interface PerNonRelativeNameCache<T> {
     get(directory: string): T | undefined;
     set(directory: string, result: T): void;
     /** @internal */ isReadonly?: boolean;
+    forEach(cb: (elem: T, key: string) => void): void;
 }
 
 export interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
     getPackageJsonInfoCache(): PackageJsonInfoCache;
     /** @internal */ clearAllExceptPackageJsonInfoCache(): void;
     /** @internal */ optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>;
+    forEach(cb: (elem: ResolvedModuleWithFailedLookupLocations, key: string, mode?: ResolutionMode) => void): void;
 }
 
 /**
@@ -1081,6 +1087,7 @@ function createPerDirectoryResolutionCache<T>(
         clear,
         update,
         directoryToModuleNameMap,
+        forEach,
     };
 
     function clear() {
@@ -1089,6 +1096,12 @@ function createPerDirectoryResolutionCache<T>(
 
     function update(options: CompilerOptions) {
         directoryToModuleNameMap.update(options);
+    }
+
+    function forEach(cb: (elem: T, key: string, mode: ResolutionMode) => void) {
+        directoryToModuleNameMap.getOwnMap().forEach(cache => {
+            cache.forEach(cb);
+        });
     }
 
     function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
@@ -1169,6 +1182,7 @@ function createNonRelativeNameResolutionCache<T>(
         getOrCreateCacheForNonRelativeName,
         clear,
         update,
+        forEach,
     };
 
     function clear() {
@@ -1177,6 +1191,12 @@ function createNonRelativeNameResolutionCache<T>(
 
     function update(options: CompilerOptions) {
         moduleNameToDirectoryMap.update(options);
+    }
+
+    function forEach(cb: (elem: T, key: string, mode?: ResolutionMode) => void) {
+        moduleNameToDirectoryMap.getOwnMap().forEach(cache => {
+            cache.forEach(cb);
+        });
     }
 
     function getFromNonRelativeNameCache(nonRelativeModuleName: string, mode: ResolutionMode, directoryName: string, redirectedReference?: ResolvedProjectReference): T | undefined {
@@ -1192,7 +1212,11 @@ function createNonRelativeNameResolutionCache<T>(
     function createPerModuleNameCache(): PerNonRelativeNameCache<T> {
         const directoryPathMap = new Map<Path, T>();
 
-        return { get, set };
+        return { get, set, forEach };
+
+        function forEach(cb: (elem: T, key: string) => void) {
+            directoryPathMap.forEach((v, k) => cb(v, k));
+        }
 
         function get(directory: string): T | undefined {
             return directoryPathMap.get(toPath(directory, currentDirectory, getCanonicalFileName));
@@ -1265,6 +1289,7 @@ interface ModuleOrTypeReferenceResolutionCache<T> extends PerDirectoryResolution
     getPackageJsonInfoCache(): PackageJsonInfoCache;
     clearAllExceptPackageJsonInfoCache(): void;
     optionsToRedirectsKey: Map<CompilerOptions, RedirectsCacheKey>;
+    forEach(cb: (elem: T, key: string, mode?: ResolutionMode) => void): void;
 }
 function createModuleOrTypeReferenceResolutionCache<T>(
     currentDirectory: string,
@@ -1296,6 +1321,7 @@ function createModuleOrTypeReferenceResolutionCache<T>(
         ...nonRelativeNameResolutionCache,
         clear,
         update,
+        forEach,
         getPackageJsonInfoCache: () => packageJsonInfoCache,
         clearAllExceptPackageJsonInfoCache,
         optionsToRedirectsKey,
@@ -1314,6 +1340,11 @@ function createModuleOrTypeReferenceResolutionCache<T>(
     function update(options: CompilerOptions) {
         perDirectoryResolutionCache.update(options);
         nonRelativeNameResolutionCache.update(options);
+    }
+
+    function forEach(cb: (item: T, key: string, mode?: ResolutionMode) => void): void {
+        perDirectoryResolutionCache.forEach(cb);
+        nonRelativeNameResolutionCache.forEach(cb);
     }
 }
 
@@ -1472,6 +1503,26 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         }
         else {
             trace(host, Diagnostics.Module_name_0_was_not_resolved, moduleName);
+        }
+    }
+
+    if (cache) {
+        // Pre-cache resolutions for all `dependencies` of the `package.json` context of the input file.
+        // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
+        // should get (re)used.
+        const state = getTemporaryModuleResolutionState(cache.getPackageJsonInfoCache(), host, compilerOptions);
+        const packageJson = getPackageScopeForPath(containingFile, state);
+        if (packageJson && !packageJson.dependenciesPrecached) {
+            packageJson.dependenciesPrecached = true;
+            const deps = packageJson.contents.packageJsonContent.dependencies;
+            if (deps && typeof deps === "object") {
+                const toResolve = getOwnKeys(deps as MapLike<unknown>);
+                for (const depName of toResolve) {
+                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, resolutionMode, redirectedReference).get(containingDirectory);
+                    if (cached) continue;
+                    void resolveModuleName(depName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
+                }
+            }
         }
     }
 
@@ -2366,6 +2417,7 @@ export function getTemporaryModuleResolutionState(packageJsonInfoCache: PackageJ
 export interface PackageJsonInfo {
     packageDirectory: string;
     contents: PackageJsonInfoContents;
+    dependenciesPrecached?: boolean;
 }
 /** @internal */
 export interface PackageJsonInfoContents {

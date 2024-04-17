@@ -115,6 +115,7 @@ Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
 File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 ======== Resolving type reference directive 'typerefs2', containing file 'f2.ts', root directory 'node_modules/@types'. ========
 Resolving with primary search path 'node_modules/@types'.
 File 'node_modules/@types/typerefs2/package.json' does not exist according to earlier cached lookups.
@@ -124,10 +125,12 @@ File 'node_modules/@types/typerefs2/index.d.ts' exists - use it as a name resolu
 Explicitly specified module resolution kind: 'Classic'.
 File 'b2.ts' exists - use it as a name resolution result.
 ======== Module name './b2' was successfully resolved to 'b2.ts'. ========
+File 'package.json' does not exist according to earlier cached lookups.
 ======== Resolving module './f1' from 'f2.ts'. ========
 Explicitly specified module resolution kind: 'Classic'.
 File 'f1.ts' exists - use it as a name resolution result.
 ======== Module name './f1' was successfully resolved to 'f1.ts'. ========
+File 'package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: []
 
@@ -268,6 +271,7 @@ Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
 File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old program, it was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts'.
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
@@ -397,6 +401,7 @@ Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
 File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old program, it was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts'.
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
@@ -526,6 +531,7 @@ Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
 File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old program, it was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts'.
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.
 Reusing resolution of module './f1' from 'f2.ts' of old program, it was successfully resolved to 'f1.ts'.
@@ -640,6 +646,7 @@ File 'package.json' does not exist according to earlier cached lookups.
 Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
+File 'package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: [
   "lib.d.ts"
@@ -764,6 +771,7 @@ File 'package.json' does not exist according to earlier cached lookups.
 Explicitly specified module resolution kind: 'Classic'.
 File 'b1.ts' exists - use it as a name resolution result.
 ======== Module name './b1' was successfully resolved to 'b1.ts'. ========
+File 'package.json' does not exist according to earlier cached lookups.
 File 'package.json' does not exist according to earlier cached lookups.
 Reusing resolution of type reference directive 'typerefs2' from 'f2.ts' of old program, it was successfully resolved to 'node_modules/@types/typerefs2/index.d.ts'.
 Reusing resolution of module './b2' from 'f2.ts' of old program, it was successfully resolved to 'b2.ts'.

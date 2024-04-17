@@ -79,6 +79,9 @@ File '/src/child/child2.ts' exists - use it as a name resolution result.
 File '/src/child/package.json' does not exist according to earlier cached lookups.
 File '/src/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+File '/src/child/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
@@ -119,6 +122,9 @@ File '/src/child.jsx' does not exist.
 File '/child.js' does not exist.
 File '/child.jsx' does not exist.
 ======== Module name 'child' was not resolved. ========
+File '/src/main/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
@@ -316,6 +322,9 @@ File '/src/child/child2.d.ts' does not exist.
 File '/src/child/child2.js' does not exist.
 File '/src/child/child2.jsx' does not exist.
 ======== Module name '../child/child2' was not resolved. ========
+File '/src/child/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
 [96msrc/child/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2792: [0mCannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
