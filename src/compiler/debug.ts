@@ -93,7 +93,7 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
-import { BaseNodeObject } from "./nodeConstructors";
+import { NodeObject, TokenOrIdentifierObject } from "./nodeConstructors";
 import {
     SignatureObject,
     SymbolObject,
@@ -711,94 +711,96 @@ export namespace Debug {
             },
         });
 
-        Object.defineProperties(BaseNodeObject.prototype, {
-            [debugDescriptionSymbol]: {
-                value(this: Node) {
-                    const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
-                        isIdentifier(this) ? `Identifier '${idText(this)}'` :
-                        isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
-                        isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
-                        isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
-                        isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
-                        isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
-                        isParameter(this) ? "ParameterDeclaration" :
-                        isConstructorDeclaration(this) ? "ConstructorDeclaration" :
-                        isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
-                        isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
-                        isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
-                        isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
-                        isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
-                        isTypePredicateNode(this) ? "TypePredicateNode" :
-                        isTypeReferenceNode(this) ? "TypeReferenceNode" :
-                        isFunctionTypeNode(this) ? "FunctionTypeNode" :
-                        isConstructorTypeNode(this) ? "ConstructorTypeNode" :
-                        isTypeQueryNode(this) ? "TypeQueryNode" :
-                        isTypeLiteralNode(this) ? "TypeLiteralNode" :
-                        isArrayTypeNode(this) ? "ArrayTypeNode" :
-                        isTupleTypeNode(this) ? "TupleTypeNode" :
-                        isOptionalTypeNode(this) ? "OptionalTypeNode" :
-                        isRestTypeNode(this) ? "RestTypeNode" :
-                        isUnionTypeNode(this) ? "UnionTypeNode" :
-                        isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
-                        isConditionalTypeNode(this) ? "ConditionalTypeNode" :
-                        isInferTypeNode(this) ? "InferTypeNode" :
-                        isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
-                        isThisTypeNode(this) ? "ThisTypeNode" :
-                        isTypeOperatorNode(this) ? "TypeOperatorNode" :
-                        isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
-                        isMappedTypeNode(this) ? "MappedTypeNode" :
-                        isLiteralTypeNode(this) ? "LiteralTypeNode" :
-                        isNamedTupleMember(this) ? "NamedTupleMember" :
-                        isImportTypeNode(this) ? "ImportTypeNode" :
-                        formatSyntaxKind(this.kind);
-                    return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
+        for (const prototype of [NodeObject.prototype, TokenOrIdentifierObject.prototype]) {
+            Object.defineProperties(prototype, {
+                [debugDescriptionSymbol]: {
+                    value(this: Node) {
+                        const nodeHeader = isGeneratedIdentifier(this) ? "GeneratedIdentifier" :
+                            isIdentifier(this) ? `Identifier '${idText(this)}'` :
+                            isPrivateIdentifier(this) ? `PrivateIdentifier '${idText(this)}'` :
+                            isStringLiteral(this) ? `StringLiteral ${JSON.stringify(this.text.length < 10 ? this.text : this.text.slice(10) + "...")}` :
+                            isNumericLiteral(this) ? `NumericLiteral ${this.text}` :
+                            isBigIntLiteral(this) ? `BigIntLiteral ${this.text}n` :
+                            isTypeParameterDeclaration(this) ? "TypeParameterDeclaration" :
+                            isParameter(this) ? "ParameterDeclaration" :
+                            isConstructorDeclaration(this) ? "ConstructorDeclaration" :
+                            isGetAccessorDeclaration(this) ? "GetAccessorDeclaration" :
+                            isSetAccessorDeclaration(this) ? "SetAccessorDeclaration" :
+                            isCallSignatureDeclaration(this) ? "CallSignatureDeclaration" :
+                            isConstructSignatureDeclaration(this) ? "ConstructSignatureDeclaration" :
+                            isIndexSignatureDeclaration(this) ? "IndexSignatureDeclaration" :
+                            isTypePredicateNode(this) ? "TypePredicateNode" :
+                            isTypeReferenceNode(this) ? "TypeReferenceNode" :
+                            isFunctionTypeNode(this) ? "FunctionTypeNode" :
+                            isConstructorTypeNode(this) ? "ConstructorTypeNode" :
+                            isTypeQueryNode(this) ? "TypeQueryNode" :
+                            isTypeLiteralNode(this) ? "TypeLiteralNode" :
+                            isArrayTypeNode(this) ? "ArrayTypeNode" :
+                            isTupleTypeNode(this) ? "TupleTypeNode" :
+                            isOptionalTypeNode(this) ? "OptionalTypeNode" :
+                            isRestTypeNode(this) ? "RestTypeNode" :
+                            isUnionTypeNode(this) ? "UnionTypeNode" :
+                            isIntersectionTypeNode(this) ? "IntersectionTypeNode" :
+                            isConditionalTypeNode(this) ? "ConditionalTypeNode" :
+                            isInferTypeNode(this) ? "InferTypeNode" :
+                            isParenthesizedTypeNode(this) ? "ParenthesizedTypeNode" :
+                            isThisTypeNode(this) ? "ThisTypeNode" :
+                            isTypeOperatorNode(this) ? "TypeOperatorNode" :
+                            isIndexedAccessTypeNode(this) ? "IndexedAccessTypeNode" :
+                            isMappedTypeNode(this) ? "MappedTypeNode" :
+                            isLiteralTypeNode(this) ? "LiteralTypeNode" :
+                            isNamedTupleMember(this) ? "NamedTupleMember" :
+                            isImportTypeNode(this) ? "ImportTypeNode" :
+                            formatSyntaxKind(this.kind);
+                        return `${nodeHeader}${this.flags ? ` (${formatNodeFlags(this.flags)})` : ""}`;
+                    },
                 },
-            },
-            __debugKind: {
-                get(this: Node) {
-                    return formatSyntaxKind(this.kind);
+                __debugKind: {
+                    get(this: Node) {
+                        return formatSyntaxKind(this.kind);
+                    },
                 },
-            },
-            __debugNodeFlags: {
-                get(this: Node) {
-                    return formatNodeFlags(this.flags);
+                __debugNodeFlags: {
+                    get(this: Node) {
+                        return formatNodeFlags(this.flags);
+                    },
                 },
-            },
-            __debugModifierFlags: {
-                get(this: Node) {
-                    return formatModifierFlags(getEffectiveModifierFlagsNoCache(this));
+                __debugModifierFlags: {
+                    get(this: Node) {
+                        return formatModifierFlags(getEffectiveModifierFlagsNoCache(this));
+                    },
                 },
-            },
-            __debugTransformFlags: {
-                get(this: Node) {
-                    return formatTransformFlags(this.transformFlags);
+                __debugTransformFlags: {
+                    get(this: Node) {
+                        return formatTransformFlags(this.transformFlags);
+                    },
                 },
-            },
-            __debugIsParseTreeNode: {
-                get(this: Node) {
-                    return isParseTreeNode(this);
+                __debugIsParseTreeNode: {
+                    get(this: Node) {
+                        return isParseTreeNode(this);
+                    },
                 },
-            },
-            __debugEmitFlags: {
-                get(this: Node) {
-                    return formatEmitFlags(getEmitFlags(this));
+                __debugEmitFlags: {
+                    get(this: Node) {
+                        return formatEmitFlags(getEmitFlags(this));
+                    },
                 },
-            },
-            __debugGetText: {
-                value(this: Node, includeTrivia?: boolean) {
-                    if (nodeIsSynthesized(this)) return "";
-                    // avoid recomputing
-                    let text = weakNodeTextMap.get(this);
-                    if (text === undefined) {
-                        const parseNode = getParseTreeNode(this);
-                        const sourceFile = parseNode && getSourceFileOfNode(parseNode);
-                        text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
-                        weakNodeTextMap.set(this, text);
-                    }
-                    return text;
+                __debugGetText: {
+                    value(this: Node, includeTrivia?: boolean) {
+                        if (nodeIsSynthesized(this)) return "";
+                        // avoid recomputing
+                        let text = weakNodeTextMap.get(this);
+                        if (text === undefined) {
+                            const parseNode = getParseTreeNode(this);
+                            const sourceFile = parseNode && getSourceFileOfNode(parseNode);
+                            text = sourceFile ? getSourceTextOfNodeFromSourceFile(sourceFile, parseNode, includeTrivia) : "";
+                            weakNodeTextMap.set(this, text);
+                        }
+                        return text;
+                    },
                 },
-            },
-        });
+            });
+        }
 
         isDebugInfoEnabled = true;
     }
