@@ -3,7 +3,7 @@
 === neverReturningFunctions1.ts ===
 function fail(message?: string): never {
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -18,7 +18,7 @@ function fail(message?: string): never {
 
 function f01(x: string | undefined) {
 >f01 : (x: string | undefined) => void
->    : ^^^^                  ^^^^^^^^^
+>    : ^ ^^                  ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -31,8 +31,8 @@ function f01(x: string | undefined) {
 >          : ^^^^^^^^^
 >fail("undefined argument") : never
 >                           : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"undefined argument" : "undefined argument"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -47,7 +47,7 @@ function f01(x: string | undefined) {
 
 function f02(x: number): number {
 >f02 : (x: number) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -64,8 +64,8 @@ function f02(x: number): number {
     fail("negative number");
 >fail("negative number") : never
 >                        : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"negative number" : "negative number"
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -76,7 +76,7 @@ function f02(x: number): number {
 
 function f03(x: string) {
 >f03 : (x: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -87,8 +87,8 @@ function f03(x: string) {
     fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
     x;  // Unreachable
 >x : string
@@ -97,11 +97,11 @@ function f03(x: string) {
 
 function f11(x: string | undefined, fail: (message?: string) => never) {
 >f11 : (x: string | undefined, fail: (message?: string) => never) => void
->    : ^^^^                  ^^^^^^^^                           ^^^^^^^^^
+>    : ^ ^^                  ^^    ^^                           ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -114,8 +114,8 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 >          : ^^^^^^^^^
 >fail("undefined argument") : never
 >                           : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"undefined argument" : "undefined argument"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -130,11 +130,11 @@ function f11(x: string | undefined, fail: (message?: string) => never) {
 
 function f12(x: number, fail: (message?: string) => never): number {
 >f12 : (x: number, fail: (message?: string) => never) => number
->    : ^^^^      ^^^^^^^^                           ^^^^^      
+>    : ^ ^^      ^^    ^^                           ^^^^^      
 >x : number
 >  : ^^^^^^
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -151,8 +151,8 @@ function f12(x: number, fail: (message?: string) => never): number {
     fail("negative number");
 >fail("negative number") : never
 >                        : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"negative number" : "negative number"
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -163,11 +163,11 @@ function f12(x: number, fail: (message?: string) => never): number {
 
 function f13(x: string, fail: (message?: string) => never) {
 >f13 : (x: string, fail: (message?: string) => never) => void
->    : ^^^^      ^^^^^^^^                           ^^^^^^^^^
+>    : ^ ^^      ^^    ^^                           ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -178,8 +178,8 @@ function f13(x: string, fail: (message?: string) => never) {
     fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
     x;  // Unreachable
 >x : string
@@ -192,14 +192,14 @@ namespace Debug {
 
     export declare function fail(message?: string): never;
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 }
 
 function f21(x: string | undefined) {
 >f21 : (x: string | undefined) => void
->    : ^^^^                  ^^^^^^^^^
+>    : ^ ^^                  ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -212,12 +212,12 @@ function f21(x: string | undefined) {
 >          : ^^^^^^^^^
 >Debug.fail("undefined argument") : never
 >                                 : ^^^^^
->Debug.fail : (message?: string | undefined) => never
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Debug.fail : (message?: string) => never
+>           : ^       ^^^      ^^^^^^^^^^
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"undefined argument" : "undefined argument"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -232,7 +232,7 @@ function f21(x: string | undefined) {
 
 function f22(x: number): number {
 >f22 : (x: number) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -249,12 +249,12 @@ function f22(x: number): number {
     Debug.fail("negative number");
 >Debug.fail("negative number") : never
 >                              : ^^^^^
->Debug.fail : (message?: string | undefined) => never
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Debug.fail : (message?: string) => never
+>           : ^       ^^^      ^^^^^^^^^^
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"negative number" : "negative number"
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -265,7 +265,7 @@ function f22(x: number): number {
 
 function f23(x: string) {
 >f23 : (x: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -276,12 +276,12 @@ function f23(x: string) {
     Debug.fail();
 >Debug.fail() : never
 >             : ^^^^^
->Debug.fail : (message?: string | undefined) => never
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Debug.fail : (message?: string) => never
+>           : ^       ^^^      ^^^^^^^^^^
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
     x;  // Unreachable
 >x : string
@@ -290,7 +290,7 @@ function f23(x: string) {
 
 function f24(x: string) {
 >f24 : (x: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -301,16 +301,16 @@ function f24(x: string) {
     ((Debug).fail)();
 >((Debug).fail)() : never
 >                 : ^^^^^
->((Debug).fail) : (message?: string | undefined) => never
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(Debug).fail : (message?: string | undefined) => never
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((Debug).fail) : (message?: string) => never
+>               : ^       ^^^      ^^^^^^^^^^
+>(Debug).fail : (message?: string) => never
+>             : ^       ^^^      ^^^^^^^^^^
 >(Debug) : typeof Debug
 >        : ^^^^^^^^^^^^
 >Debug : typeof Debug
 >      : ^^^^^^^^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
     x;  // Unreachable
 >x : string
@@ -323,7 +323,7 @@ class Test {
 
     fail(message?: string): never {
 >fail : (message?: string) => never
->     : ^^^^^^^^^^^      ^^^^^     
+>     : ^       ^^^      ^^^^^     
 >message : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -337,7 +337,7 @@ class Test {
     }
     f1(x: string | undefined) {
 >f1 : (x: string | undefined) => void
->   : ^^^^                  ^^^^^^^^^
+>   : ^ ^^                  ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -350,12 +350,12 @@ class Test {
 >          : ^^^^^^^^^
 >this.fail("undefined argument") : never
 >                                : ^^^^^
->this.fail : (message?: string | undefined) => never
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.fail : (message?: string) => never
+>          : ^       ^^^      ^^^^^^^^^^
 >this : this
 >     : ^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"undefined argument" : "undefined argument"
 >                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -369,7 +369,7 @@ class Test {
     }
     f2(x: number): number {
 >f2 : (x: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -386,12 +386,12 @@ class Test {
         this.fail("negative number");
 >this.fail("negative number") : never
 >                             : ^^^^^
->this.fail : (message?: string | undefined) => never
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.fail : (message?: string) => never
+>          : ^       ^^^      ^^^^^^^^^^
 >this : this
 >     : ^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 >"negative number" : "negative number"
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -401,7 +401,7 @@ class Test {
     }
     f3(x: string) {
 >f3 : (x: string) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -412,12 +412,12 @@ class Test {
         this.fail();
 >this.fail() : never
 >            : ^^^^^
->this.fail : (message?: string | undefined) => never
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.fail : (message?: string) => never
+>          : ^       ^^^      ^^^^^^^^^^
 >this : this
 >     : ^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : string
@@ -427,7 +427,7 @@ class Test {
 
 function f30(x: string | number | undefined) {
 >f30 : (x: string | number | undefined) => void
->    : ^^^^                           ^^^^^^^^^
+>    : ^ ^^                           ^^^^^^^^^
 >x : string | number | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -444,8 +444,8 @@ function f30(x: string | number | undefined) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : string | number | undefined
@@ -471,8 +471,8 @@ function f30(x: string | number | undefined) {
             fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
             x;  // Unreachable
 >x : string | number | undefined
@@ -486,8 +486,8 @@ function f30(x: string | number | undefined) {
             fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
             x;  // Unreachable
 >x : string | number | undefined
@@ -504,7 +504,7 @@ function f30(x: string | number | undefined) {
 
 function f31(x: { a: string | number }) {
 >f31 : (x: { a: string | number; }) => void
->    : ^^^^                       ^^^^^^^^^
+>    : ^ ^^                       ^^^^^^^^^
 >x : { a: string | number; }
 >  : ^^^^^               ^^^
 >a : string | number
@@ -527,8 +527,8 @@ function f31(x: { a: string | number }) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;    // Unreachable
 >x : { a: string | number; }
@@ -557,7 +557,7 @@ function f31(x: { a: string | number }) {
 
 function f40(x: number) {
 >f40 : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -569,8 +569,8 @@ function f40(x: number) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : number
@@ -584,8 +584,8 @@ function f40(x: number) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : number
@@ -598,7 +598,7 @@ function f40(x: number) {
 
 function f41(x: number) {
 >f41 : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -615,8 +615,8 @@ function f41(x: number) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : number
@@ -629,7 +629,7 @@ function f41(x: number) {
 
 function f42(x: number) {
 >f42 : (x: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -641,8 +641,8 @@ function f42(x: number) {
         fail();
 >fail() : never
 >       : ^^^^^
->fail : (message?: string | undefined) => never
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fail : (message?: string) => never
+>     : ^       ^^^      ^^^^^^^^^^
 
         x;  // Unreachable
 >x : number
@@ -666,7 +666,7 @@ function f43() {
 >fail : () => never
 >     : ^^^^^^     
 >(): never => { throw new Error(); } : () => never
->                                    : ^^^^^^     
+>                                    :            
 >new Error() : Error
 >            : ^^^^^
 >Error : ErrorConstructor
@@ -676,7 +676,7 @@ function f43() {
 >f : (() => never)[]
 >  : ^^^^^^^^^^^^^^^
 >[fail] : (() => never)[]
->       : ^^^^^^^^^^^^^^^
+>       : ^           ^^^
 >fail : () => never
 >     : ^^^^^^^^^^^
 
@@ -742,7 +742,7 @@ export interface Component<T extends object = any> {
 
 	init(data?: T): void;
 >init : (data?: T) => void
->     : ^^^^^^^^ ^^^^^    
+>     : ^    ^^^ ^^^^^    
 >data : T | undefined
 >     : ^^^^^^^^^^^^^
 
@@ -760,7 +760,7 @@ export interface Component<T extends object = any> {
 
 	tick?(time: number, timeDelta: number): void;
 >tick : ((time: number, timeDelta: number) => void) | undefined
->     : ^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^
+>     : ^^    ^^      ^^         ^^      ^^^^^    ^^^^^^^^^^^^^
 >time : number
 >     : ^^^^^^
 >timeDelta : number
@@ -768,7 +768,7 @@ export interface Component<T extends object = any> {
 
 	update(oldData: T): void;
 >update : (oldData: T) => void
->       : ^^^^^^^^^^ ^^^^^    
+>       : ^       ^^ ^^^^^    
 >oldData : T
 >        : ^
 
@@ -778,7 +778,7 @@ export interface Component<T extends object = any> {
 
 	extendSchema(update: unknown): void;
 >extendSchema : (update: unknown) => void
->             : ^^^^^^^^^       ^^^^^    
+>             : ^      ^^       ^^^^^    
 >update : unknown
 >       : ^^^^^^^
 
@@ -821,7 +821,7 @@ export interface ComponentConstructor<T extends object> {
 
 declare function registerComponent<T extends object>(
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                      ^^^^^                       
+>                  : ^ ^^^^^^^^^^^^^^^^^    ^^      ^^         ^^                      ^^^^^                       
 
     name: string,
 >name : string
@@ -839,15 +839,15 @@ export type ComponentDefinition<T extends object = object> = T & Partial<Compone
 
 const Component = registerComponent('test-component', {
 >Component : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >registerComponent('test-component', {	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}}) : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^                                                                                                                                                                                                                                     ^
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^^^^^^^^^^^^^    ^^      ^^         ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'test-component' : "test-component"
 >                 : ^^^^^^^^^^^^^^^^
 >{	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}} : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 	schema: {
 >schema : { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }
@@ -907,7 +907,7 @@ const Component = registerComponent('test-component', {
 >this.data : any
 >          : ^^^
 >this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : any
 >     : ^^^
 >num : any
@@ -923,7 +923,7 @@ const Component = registerComponent('test-component', {
 >this.el : any
 >        : ^^^
 >this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >el : any
 >   : ^^^
 >setAttribute : any
@@ -956,7 +956,7 @@ const Component = registerComponent('test-component', {
 
 	multiply(f: number) {
 >multiply : (f: number) => number
->         : ^^^^      ^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >f : number
 >  : ^^^^^^
 
@@ -973,7 +973,7 @@ const Component = registerComponent('test-component', {
 >this.data : any
 >          : ^^^
 >this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data : any
 >     : ^^^
 >num : any
@@ -987,7 +987,7 @@ const Component = registerComponent('test-component', {
 >this.system : any
 >            : ^^^
 >this : { schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; } & Component<any>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >system : any
 >       : ^^^
 >data : any
@@ -1023,7 +1023,7 @@ class SuperThrowable extends MyThrowable {
 
     err(msg: string): never {
 >err : (msg: string) => never
->    : ^^^^^^      ^^^^^     
+>    : ^   ^^      ^^^^^     
 >msg : string
 >    : ^^^^^^
 
@@ -1058,14 +1058,14 @@ class SuperThrowable extends MyThrowable {
 interface Services {
     panic(message: string): never;
 >panic : (message: string) => never
->      : ^^^^^^^^^^      ^^^^^     
+>      : ^       ^^      ^^^^^     
 >message : string
 >        : ^^^^^^
 }
 
 function foo(services: Readonly<Services>, s: string | null): string {
 >foo : (services: Readonly<Services>, s: string | null) => string
->    : ^^^^^^^^^^^                  ^^^^^             ^^^^^      
+>    : ^        ^^                  ^^ ^^             ^^^^^      
 >services : Readonly<Services>
 >         : ^^^^^^^^^^^^^^^^^^
 >s : string | null
@@ -1081,11 +1081,11 @@ function foo(services: Readonly<Services>, s: string | null): string {
 >services.panic("ouch") : never
 >                       : ^^^^^
 >services.panic : (message: string) => never
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^      ^^^^^^^^^^
 >services : Readonly<Services>
 >         : ^^^^^^^^^^^^^^^^^^
 >panic : (message: string) => never
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^      ^^^^^^^^^^
 >"ouch" : "ouch"
 >       : ^^^^^^
 

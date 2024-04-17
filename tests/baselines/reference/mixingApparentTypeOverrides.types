@@ -9,13 +9,13 @@ type Constructor<T> = new(...args: any[]) => T;
 
 function Tagged<T extends Constructor<{}>>(Base: T) {
 >Tagged : <T extends Constructor<{}>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : T
 >     : ^
 
   return class extends Base {
 >class extends Base {    _tag: string;    constructor(...args: any[]) {      super(...args);      this._tag = "";    }  } : { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
->                                                                                                                         : ^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : {}
 >     : ^^
 
@@ -69,9 +69,9 @@ class B extends Tagged(A) {
 >B : B
 >  : ^
 >Tagged(A) : Tagged<typeof A>.(Anonymous class) & A
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          :        ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >Tagged : <T extends Constructor<{}>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: Tagged<any>.(Anonymous class); } & T
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 

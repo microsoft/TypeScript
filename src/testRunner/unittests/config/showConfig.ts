@@ -115,6 +115,21 @@ describe("unittests:: config:: showConfig", () => {
         ],
     });
 
+    showTSConfigCorrectly("Show TSConfig with configDir template template", ["-p", "tsconfig.json"], {
+        compilerOptions: {
+            outDir: "${configDir}/outDir", // eslint-disable-line no-template-curly-in-string
+            typeRoots: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+            paths: {
+                "@myscope/*": ["${configDir}/types/*"], // eslint-disable-line no-template-curly-in-string
+                "other/*": ["other/*"],
+            },
+        },
+        include: [
+            "${configDir}/src/**/*", // eslint-disable-line no-template-curly-in-string
+        ],
+        files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string
+    });
+
     // Bulk validation of all option declarations
     for (const option of ts.optionDeclarations) {
         baselineOption(option, /*isCompilerOptions*/ true);

@@ -16,7 +16,7 @@ declare function getNum(): number;
 
 declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^^^^^^                    ^^^^^^^^      ^^^^^^^^^^                        ^^^^^    
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^    
 >arg : { x: Bar; y: Date; }
 >    : ^^^^^   ^^^^^    ^^^
 >x : Bar
@@ -32,7 +32,7 @@ foo({
 >foo({    x: Bar,    y: Date}, getNum()) : void
 >                                        : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
 >{    x: Bar,    y: Date} : { x: typeof Bar; y: DateConstructor; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -58,7 +58,7 @@ foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum) : void
 >                                                  : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^
 
@@ -87,7 +87,7 @@ foo({
 >foo({    x: new Bar(),    y: new Date()}, getNum(), [    1,    2,    getNum]) : void
 >                                                                              : ^^^^
 >foo : (arg: { x: Bar; y: Date; }, item: number, items?: [number, number, number]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^                    ^^    ^^      ^^     ^^^                        ^^^^^^^^^
 >{    x: new Bar(),    y: new Date()} : { x: Bar; y: Date; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^
 

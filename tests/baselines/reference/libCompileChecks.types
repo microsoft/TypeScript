@@ -1,10 +1,9 @@
 //// [tests/cases/compiler/libCompileChecks.ts] ////
 
 === Performance Stats ===
-Assignability cache: 3,700 / 3,700 (nearest 100)
-Type Count: 14,200 / 14,200 (nearest 100)
-Instantiation count: 3,500 / 3,500 (nearest 500)
-Symbol count: 33,500 / 33,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
 
 === libCompileChecks.ts ===
 

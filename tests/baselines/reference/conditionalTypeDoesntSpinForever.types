@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/conditionalTypeDoesntSpinForever.ts] ////
 
 === Performance Stats ===
-Assignability cache: 600 / 600 (nearest 100)
-Type Count: 1,400 / 1,600 (nearest 100)
-Instantiation count: 3,500 / 4,000 (nearest 500)
-Symbol count: 28,000 / 28,000 (nearest 500)
+Type Count: 1,000
+Instantiation count: 2,500 -> 5,000
 
 === conditionalTypeDoesntSpinForever.ts ===
 // A *self-contained* demonstration of the problem follows...
@@ -59,7 +57,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       name: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {name: TYPE}>
 >name : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->     : ^    ^^^^^^    ^^^^^                                               
+>     : ^    ^^ ^^^    ^^^^^                                               
 >t : TYPE
 >  : ^^^^
 >name : TYPE
@@ -68,17 +66,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildNameFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildNameFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                          : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                               ^^^
+>                          : ^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                               ^^^
 ><SO_FAR>(soFar: SO_FAR) => (    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                                                                                                                                                                                                                                                                            : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                               ^^^
+>                                                                                                                                                                                                                                                                            :                                  ^                                        ^                                                             
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    }  ) : {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                               ^^^
+>                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                               ^^^
 
     "name" in soFar ? {} : {
 >"name" in soFar ? {} : {      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    } : {} | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                               ^^^
+>                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                               ^^^
 >"name" in soFar : boolean
 >                : ^^^^^^^
 >"name" : "name"
@@ -88,13 +86,13 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >{} : {}
 >   : ^^
 >{      name: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}>    } : { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                                                                                                                                                                                                                  : ^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                               ^^^
+>                                                                                                                                                                                                                  : ^^^^^^^^^    ^^        ^^^    ^^^^^                                               ^^^
 
       name: <TYPE>(instance: TYPE = undefined) =>
 >name : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->     : ^    ^^^^^^^^^^^^^    ^^^^^                                               
+>     : ^    ^^        ^^^    ^^^^^                                               
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) as BuildPubSubRecordType<SO_FAR & {name: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
->                                                                                                                                                                                                : ^    ^^^^^^^^^^^^^    ^^^^^                                               
+>                                                                                                                                                                                                :                ^                                                          
 >instance : TYPE
 >         : ^^^^
 >undefined : undefined
@@ -106,17 +104,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE}) : BuildPubSubRecordType<SO_FAR & { name: TYPE; }>
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {name: instance as TYPE}) as SO_FAR & {name: TYPE} : SO_FAR & { name: TYPE; }
 >                                                                            : ^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {name: instance as TYPE}) : SO_FAR & { name: TYPE; }
 >                                                   : ^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -163,9 +161,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildStoredAsConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildStoredAsConstructor : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->                         : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                       ^^^
+>                         : ^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                       ^^^
 ><SO_FAR>(soFar: SO_FAR) => (    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : <SO_FAR>(soFar: SO_FAR) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                       ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      :                                                            ^                              ^                                                                                                                                                                                                                                                                                  
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "storedAs" in soFar ? {} : {      storedAsJsonEncodedRedisString: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}>,      storedAsRedisHash: () =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}>,    }  ) : {} | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
@@ -189,7 +187,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >storedAsJsonEncodedRedisString : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>
 >                               : ^^^^^^                                                                                                    
 >() =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}> : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>
->                                                                                                                                                                                                                                              : ^^^^^^                                                                                                    
+>                                                                                                                                                                                                                                              :                                                                                                           
 
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}> : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>
@@ -197,15 +195,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
 >                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
 >                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -231,7 +229,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >storedAsRedisHash : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>
 >                  : ^^^^^^                                                                                       
 >() =>        buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}> : () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>
->                                                                                                                                                                                                                    : ^^^^^^                                                                                       
+>                                                                                                                                                                                                                    :                                                                                              
 
         buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) as          BuildPubSubRecordType<SO_FAR & {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}> : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>
@@ -239,15 +237,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash})) : BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }>
 >                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {storedAs: PubSubRecordIsStoredInRedisAsA.redisHash}) : SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -285,7 +283,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       identifier: <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>
 >identifier : <TYPE extends Partial<SO_FAR["record"]>>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^                                                     
+>           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^    ^^^^^                                                     
 >t : TYPE
 >  : ^^^^
 >identifier : TYPE
@@ -295,17 +293,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildIdentifierFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildIdentifierFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                     ^^^
+>                                : ^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                     ^^^
 ><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                                                                                                                                                                                                                                                                                                                    : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                     ^^^
+>                                                                                                                                                                                                                                                                                                                                    :                                        ^                                              ^                                                                   
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    }  ) : {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                     ^^^
+>                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                     ^^^
 
     "identifier" in soFar || (!("record" in soFar)) ? {} : {
 >"identifier" in soFar || (!("record" in soFar)) ? {} : {      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    } : {} | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                     ^^^
+>                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                     ^^^
 >"identifier" in soFar || (!("record" in soFar)) : boolean
 >                                                : ^^^^^^^
 >"identifier" in soFar : boolean
@@ -329,13 +327,13 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >{} : {}
 >   : ^^
 >{      identifier: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}>    } : { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                     ^^^
+>                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                     ^^^
 
       identifier: <TYPE>(instance: TYPE = undefined) =>
 >identifier : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->           : ^    ^^^^^^^^^^^^^    ^^^^^                                                     
+>           : ^    ^^        ^^^    ^^^^^                                                     
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) as BuildPubSubRecordType<SO_FAR & {identifier: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
->                                                                                                                                                                                                                  : ^    ^^^^^^^^^^^^^    ^^^^^                                                     
+>                                                                                                                                                                                                                  :                ^                                                                
 >instance : TYPE
 >         : ^^^^
 >undefined : undefined
@@ -347,17 +345,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE}) : BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>
 >                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {identifier: instance as TYPE}) as SO_FAR & {identifier: TYPE} : SO_FAR & { identifier: TYPE; }
 >                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {identifier: instance as TYPE}) : SO_FAR & Record<"record", unknown> & { identifier: TYPE; }
 >                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR & Record<"record", unknown>
@@ -387,7 +385,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       record: <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & {record: TYPE}>
 >record : <TYPE>(t?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->       : ^    ^^^^^^    ^^^^^                                                 
+>       : ^    ^^ ^^^    ^^^^^                                                 
 >t : TYPE
 >  : ^^^^
 >record : TYPE
@@ -396,17 +394,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildRecordFieldConstructor = <SO_FAR>(soFar: SO_FAR) => (
 >buildRecordFieldConstructor : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                            : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                 ^^^
+>                            : ^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 ><SO_FAR>(soFar: SO_FAR) => (    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : <SO_FAR>(soFar: SO_FAR) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                                                                                                                                                                                                                                                                                      : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                 ^^^
+>                                                                                                                                                                                                                                                                                      :                                    ^                                          ^                                                               
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    }  ) : {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                 ^^^
+>                                                                                                                                                                                                                                                           : ^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 
     "record" in soFar ? {} : {
 >"record" in soFar ? {} : {      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    } : {} | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                 ^^^
+>                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 >"record" in soFar : boolean
 >                  : ^^^^^^^
 >"record" : "record"
@@ -416,13 +414,13 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >{} : {}
 >   : ^^
 >{      record: <TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}>    } : { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                                                                                                                                                                                                                          : ^^^^^^^^^^^    ^^^^^^^^^^^^^    ^^^^^                                                 ^^^
+>                                                                                                                                                                                                                          : ^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 
       record: <TYPE>(instance: TYPE = undefined) =>
 >record : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->       : ^    ^^^^^^^^^^^^^    ^^^^^                                                 
+>       : ^    ^^        ^^^    ^^^^^                                                 
 ><TYPE>(instance: TYPE = undefined) =>        buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) as BuildPubSubRecordType<SO_FAR & {record: TYPE}> : <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
->                                                                                                                                                                                                      : ^    ^^^^^^^^^^^^^    ^^^^^                                                 
+>                                                                                                                                                                                                      :                ^                                                            
 >instance : TYPE
 >         : ^^^^
 >undefined : undefined
@@ -434,17 +432,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE}) : BuildPubSubRecordType<SO_FAR & { record: TYPE; }>
 >                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {record: instance as TYPE}) as SO_FAR & {record: TYPE} : SO_FAR & { record: TYPE; }
 >                                                                                : ^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign({}, soFar, {record: instance as TYPE}) : SO_FAR & { record: TYPE; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^    ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -474,7 +472,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       maxMsToWaitBeforePublishing: (t: number) => BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,
 >maxMsToWaitBeforePublishing : (t: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
->                            : ^^^^      ^^^^^                                                                        
+>                            : ^ ^^      ^^^^^                                                                        
 >t : number
 >  : ^^^^^^
 >maxMsToWaitBeforePublishing : number
@@ -489,19 +487,19 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildMaxMsToWaitBeforePublishingFieldConstructor = <SO_FAR>(soFar: SO_FAR): MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> => (
 >buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR>(soFar: SO_FAR) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
->                                                 : ^      ^^^^^^^^^      ^^^^^                                                   
+>                                                 : ^      ^^     ^^      ^^^^^                                                   
 ><SO_FAR>(soFar: SO_FAR): MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> => (    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) as MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> : <SO_FAR>(soFar: SO_FAR) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^      ^^^^^^^^^      ^^^^^                                                   
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         :                                                                               
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) as MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR> : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(    "maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    }  ) : {} | { maxMsToWaitBeforePublishing: (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>; neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
 
     "maxMsToWaitBeforePublishing" in soFar ? {} : {
 >"maxMsToWaitBeforePublishing" in soFar ? {} : {      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    } : {} | { maxMsToWaitBeforePublishing: (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>; neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
 >"maxMsToWaitBeforePublishing" in soFar : boolean
 >                                       : ^^^^^^^
 >"maxMsToWaitBeforePublishing" : "maxMsToWaitBeforePublishing"
@@ -511,13 +509,13 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >{} : {}
 >   : ^^
 >{      maxMsToWaitBeforePublishing: (instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}>,      neverDelayPublishing: () =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,    } : { maxMsToWaitBeforePublishing: (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>; neverDelayPublishing: () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>; }
->                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^      ^^^^^                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                   ^^^
 
       maxMsToWaitBeforePublishing: (instance: number = 0) =>
 >maxMsToWaitBeforePublishing : (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
->                            : ^^^^^^^^^^^^      ^^^^^                                                                        
+>                            : ^        ^^^      ^^^^^                                                                        
 >(instance: number = 0) =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: number}> : (instance?: number) => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
->                                                                                                                                                                                                   : ^^^^^^^^^^^^      ^^^^^                                                                        
+>                                                                                                                                                                                                   :          ^                                                                                     
 >instance : number
 >         : ^^^^^^
 >0 : 0
@@ -529,15 +527,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
 >                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: instance}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -555,7 +553,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >neverDelayPublishing : () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>
 >                     : ^^^^^^                                                                   
 >() =>        buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}> : () => BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>
->                                                                                                                                                                   : ^^^^^^                                                                   
+>                                                                                                                                                                   :                                                                          
 
         buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}>,
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) as BuildPubSubRecordType<SO_FAR & {maxMsToWaitBeforePublishing: 0}> : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: 0; }>
@@ -563,15 +561,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildPubSubRecordType(Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0})) : BuildPubSubRecordType<SO_FAR & { maxMsToWaitBeforePublishing: number; }>
 >                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType : <SO_FAR_1>(soFar: SO_FAR_1) => BuildPubSubRecordType<SO_FAR_1>
->                      : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^        ^^     ^^        ^^^^^                               
 >Object.assign({}, soFar, {maxMsToWaitBeforePublishing: 0}) : SO_FAR & { maxMsToWaitBeforePublishing: number; }
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >{} : {}
 >   : ^^
 >soFar : SO_FAR
@@ -611,7 +609,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
       hasField: (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
 >hasField : (fieldName: string | number | symbol) => fieldName is keyof SO_FAR
->         : ^^^^^^^^^^^^                        ^^^^^                         
+>         : ^         ^^                        ^^^^^                         
 >fieldName : string | number | symbol
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -619,17 +617,17 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildType = <SO_FAR>(soFar: SO_FAR) => (
 >buildType : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->          : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^
+>          : ^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 ><SO_FAR>(soFar: SO_FAR) => (    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : <SO_FAR>(soFar: SO_FAR) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                                                                                                                                                                                                                                                                                                                                                    : ^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                    :                                  ^                   ^                     ^                                                                                                                               
 >soFar : SO_FAR
 >      : ^^^^^^
 >(    "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    }  ) : {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 
     "identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {
 >"identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar ? {} : {      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    } : {} | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 >"identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar && "PubSubRecordIsStoredInRedisAsA" in soFar : boolean
 >                                                                                                                                  : ^^^^^^^
 >"identifier" in soFar && "object" in soFar && "maxMsToWaitBeforePublishing" in soFar : boolean
@@ -663,7 +661,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >{} : {}
 >   : ^^
 >{      type: soFar,      fields: () => new Set(Object.keys(soFar) as (keyof SO_FAR)[]),      hasField: (fieldName: string | number | symbol) => fieldName in soFar    } : { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^^^^^^^^^^
+>                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 
       type: soFar,
 >type : SO_FAR
@@ -675,7 +673,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >fields : () => Set<keyof SO_FAR>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => new Set(Object.keys(soFar) as (keyof SO_FAR)[]) : () => Set<keyof SO_FAR>
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      :                        
 >new Set(Object.keys(soFar) as (keyof SO_FAR)[]) : Set<keyof SO_FAR>
 >                                                : ^^^^^^^^^^^^^^^^^
 >Set : SetConstructor
@@ -685,19 +683,19 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >Object.keys(soFar) : string[]
 >                   : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
       hasField: (fieldName: string | number | symbol) => fieldName in soFar
 >hasField : (fieldName: string | number | symbol) => boolean
->         : ^^^^^^^^^^^^                        ^^^^^^^^^^^^
+>         : ^         ^^                        ^^^^^^^^^^^^
 >(fieldName: string | number | symbol) => fieldName in soFar : (fieldName: string | number | symbol) => boolean
->                                                            : ^^^^^^^^^^^^                        ^^^^^^^^^^^^
+>                                                            :                                                 
 >fieldName : string | number | symbol
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >fieldName in soFar : boolean
@@ -722,9 +720,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
   
   const buildPubSubRecordType = <SO_FAR>(soFar: SO_FAR) => Object.assign(
 >buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
->                      : ^      ^^^^^^^^^      ^^^^^                             
+>                      : ^      ^^     ^^      ^^^^^                             
 ><SO_FAR>(soFar: SO_FAR) => Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) as BuildPubSubRecordType<SO_FAR> : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
->                                                                                                                                                                                                                                                                                                                                : ^      ^^^^^^^^^      ^^^^^                             
+>                                                                                                                                                                                                                                                                                                                                :                                                         
 >soFar : SO_FAR
 >      : ^^^^^^
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) as BuildPubSubRecordType<SO_FAR> : BuildPubSubRecordType<SO_FAR>
@@ -732,11 +730,11 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >Object.assign(    {},    buildNameFieldConstructor(soFar),    buildIdentifierFieldConstructor(soFar),    buildRecordFieldConstructor(soFar),    buildStoredAsConstructor(soFar),    buildMaxMsToWaitBeforePublishingFieldConstructor(soFar),    buildType(soFar)  ) : any
 >                                                                                                                                                                                                                                                                    : ^^^
 >Object.assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >assign : { <T extends {}, U>(target: T, source: U): T & U; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_2 extends {}, U_2, V_1, W>(target: T_2, source1: U_2, source2: V_1, source3: W): T_2 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^  ^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 
     {},
 >{} : {}
@@ -744,25 +742,25 @@ export enum PubSubRecordIsStoredInRedisAsA {
 
     buildNameFieldConstructor(soFar),
 >buildNameFieldConstructor(soFar) : { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { name: TYPE; }>; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildNameFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { name?: undefined; } | { name: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { name: TYPE; }>; }
->                          : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                 ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
     buildIdentifierFieldConstructor(soFar),
 >buildIdentifierFieldConstructor(soFar) : { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { identifier: TYPE; }>; }
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildIdentifierFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { identifier?: undefined; } | { identifier: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { identifier: TYPE; }>; }
->                                : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                       ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
     buildRecordFieldConstructor(soFar),
 >buildRecordFieldConstructor(soFar) : { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR & { record: TYPE; }>; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildRecordFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { record?: undefined; } | { record: <TYPE>(instance?: TYPE) => BuildPubSubRecordType<SO_FAR_1 & { record: TYPE; }>; }
->                            : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^    ^^^^^                                                   ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -770,7 +768,7 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildStoredAsConstructor(soFar) : { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildStoredAsConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => { storedAsJsonEncodedRedisString?: undefined; storedAsRedisHash?: undefined; } | { storedAsJsonEncodedRedisString: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.jsonEncodedRedisString; }>; storedAsRedisHash: () => BuildPubSubRecordType<SO_FAR_1 & { storedAs: PubSubRecordIsStoredInRedisAsA.redisHash; }>; }
->                         : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                         ^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -778,15 +776,15 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >buildMaxMsToWaitBeforePublishingFieldConstructor(soFar) : MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR>
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildMaxMsToWaitBeforePublishingFieldConstructor : <SO_FAR_1>(soFar: SO_FAR_1) => MaxMsToWaitBeforePublishingFieldConstructor<SO_FAR_1>
->                                                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^        ^^     ^^        ^^^^^                                                     
 >soFar : SO_FAR
 >      : ^^^^^^
 
     buildType(soFar)
 >buildType(soFar) : { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR; fields: () => Set<keyof SO_FAR>; hasField: (fieldName: string | number | symbol) => boolean; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 >buildType : <SO_FAR_1>(soFar: SO_FAR_1) => { type?: undefined; fields?: undefined; hasField?: undefined; } | { type: SO_FAR_1; fields: () => Set<keyof SO_FAR_1>; hasField: (fieldName: string | number | symbol) => boolean; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                        ^^^^^^^^^^^^^^^
 >soFar : SO_FAR
 >      : ^^^^^^
 
@@ -795,9 +793,9 @@ export enum PubSubRecordIsStoredInRedisAsA {
 >PubSubRecordType : BuildPubSubRecordType<{}>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildPubSubRecordType({}) : BuildPubSubRecordType<{}>
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^^^^^^^^^^^^^^^^^^^  ^
 >buildPubSubRecordType : <SO_FAR>(soFar: SO_FAR) => BuildPubSubRecordType<SO_FAR>
->                      : ^      ^^^^^^^^^^^^^^^^^^^^                             
+>                      : ^      ^^     ^^      ^^^^^                             
 >{} : {}
 >   : ^^
 

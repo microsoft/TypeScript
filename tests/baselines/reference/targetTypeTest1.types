@@ -21,7 +21,7 @@ declare class Point
 
       public add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
->    : ^^^^^      ^^^^^^      ^^^^^     
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -71,7 +71,7 @@ function Point(x, y) {
 
 declare function EF1(a:number, b:number):number;
 >EF1 : (a: number, b: number) => number
->    : ^^^^      ^^^^^      ^^^^^      
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : number
@@ -79,7 +79,7 @@ declare function EF1(a:number, b:number):number;
 
 function EF1(a,b) { return a+b; }
 >EF1 : (a: number, b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -97,7 +97,7 @@ var x = EF1(1,2);
 >EF1(1,2) : number
 >         : ^^^^^^
 >EF1 : (a: number, b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -127,9 +127,9 @@ Point.origin = new Point(0, 0);
 // dx, dy, and return type inferred using target typing
 Point.prototype.add = function(dx, dy) {
 >Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
->                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                         : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >Point.prototype.add : (dx: number, dy: number) => Point
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >Point.prototype : Point
 >                : ^^^^^
 >Point : typeof Point
@@ -137,9 +137,9 @@ Point.prototype.add = function(dx, dy) {
 >prototype : Point
 >          : ^^^^^
 >add : (dx: number, dy: number) => Point
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^  ^^      ^^^^^^^^^^
 >function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -184,7 +184,7 @@ var f : number = 5;
 // dx, dy, and return type of add inferred using target typing
 Point.prototype = {
 >Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
->                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 >Point.prototype : Point
 >                : ^^^^^
 >Point : typeof Point
@@ -192,7 +192,7 @@ Point.prototype = {
 >prototype : Point
 >          : ^^^^^
 >{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
->                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
 
     x: 0,
 >x : number
@@ -208,9 +208,9 @@ Point.prototype = {
 
     add: function(dx, dy) {
 >add : (dx: number, dy: number) => Point
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
->                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           :                                  
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -250,11 +250,11 @@ declare var z;
 
 z = function(a: number) {
 >z = function(a: number) {    a} : (a: number) => void
->                                : ^^^^      ^^^^^^^^^
+>                                : ^ ^^      ^^^^^^^^^
 >z : any
 >  : ^^^
 >function(a: number) {    a} : (a: number) => void
->                            : ^^^^      ^^^^^^^^^
+>                            : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -283,7 +283,7 @@ declare class C {
 
 	C1M1(c:number,d:number):number;
 >C1M1 : (c: number, d: number) => number
->     : ^^^^      ^^^^^      ^^^^^      
+>     : ^ ^^      ^^ ^^      ^^^^^      
 >c : number
 >  : ^^^^^^
 >d : number
@@ -325,7 +325,7 @@ function C(a,b) {
 
 C.prototype = 
 >C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
->                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >C.prototype : C
 >            : ^
 >C : typeof C
@@ -335,7 +335,7 @@ C.prototype =
 
 	{	a:0,
 >{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
->                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >0 : 0
@@ -349,9 +349,9 @@ C.prototype =
 
 		C1M1: function(c,d) {     
 >C1M1 : (c: number, d: number) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                :                              
 >c : number
 >  : ^^^^^^
 >d : number

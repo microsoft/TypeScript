@@ -23,15 +23,15 @@ export interface IAB {
 
 export function F(x: IA | IAB) {
 >F : (x: IA | IAB) => void
->  : ^^^^        ^^^^^^^^^
+>  : ^ ^^        ^^^^^^^^^
 >x : IA | IAB
 >  : ^^^^^^^^
 
     const useB = (t: number) => { };
 >useB : (t: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >(t: number) => { } : (t: number) => void
->                   : ^^^^      ^^^^^^^^^
+>                   :                    
 >t : number
 >  : ^^^^^^
 
@@ -65,7 +65,7 @@ export function F(x: IA | IAB) {
 >useB(el.B) : void
 >           : ^^^^
 >useB : (t: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >el.B : number
 >     : ^^^^^^
 >el : { A: number; B: number; }

@@ -3,7 +3,7 @@
 === decoratorOnClassMethodOverload2.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                          ^^^^^                          
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >target : any
 >propertyKey : string
 >            : ^^^^^^
@@ -20,7 +20,7 @@ class C {
 
     @dec
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     method() { }
 >method : () => any

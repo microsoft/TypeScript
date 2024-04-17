@@ -13,17 +13,17 @@ exports.fn1();
 
 exports.fn2 = Math.min;
 >exports.fn2 = Math.min : (...values: number[]) => number
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^      ^^        ^^^^^^^^^^^
 >exports.fn2 : (...values: number[]) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^      ^^        ^^^^^^^^^^^
 >exports : typeof import("x")
 >        : ^^^^^^^^^^^^^^^^^^
 >fn2 : (...values: number[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^        ^^^^^^^^^^^
 >Math.min : (...values: number[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         :  ^^^                           
 >Math : Math
 >     : ^^^^
 >min : (...values: number[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^        ^^^^^^^^^^^
 

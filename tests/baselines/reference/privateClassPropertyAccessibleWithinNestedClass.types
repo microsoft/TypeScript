@@ -127,7 +127,7 @@ class C {
 >x1 : () => any
 >   : ^^^^^^^^^
 >x.foo : () => any
->      : ^^^^^^^^^
+>      :          
 >x : C
 >  : ^
 >foo : () => any
@@ -137,7 +137,7 @@ class C {
 >x2 : () => void
 >   : ^^^^^^^^^^
 >x.bar : () => void
->      : ^^^^^^^^^^
+>      :           
 >x : C
 >  : ^
 >bar : () => void
@@ -187,7 +187,7 @@ class C {
 >sx3 : () => void
 >    : ^^^^^^^^^^
 >C.bar : () => void
->      : ^^^^^^^^^^
+>      :           
 >C : typeof C
 >  : ^^^^^^^^
 >bar : () => void
@@ -197,7 +197,7 @@ class C {
 >sx4 : () => typeof C.foo
 >    : ^^^^^^^^^^^^^^^^^^
 >C.foo : () => typeof C.foo
->      : ^^^^^^^^^^^^^^^^^^
+>      :                   
 >C : typeof C
 >  : ^^^^^^^^
 >foo : () => typeof C.foo
@@ -215,7 +215,7 @@ class C {
 >y1 : () => any
 >   : ^^^^^^^^^
 >y.foo : () => any
->      : ^^^^^^^^^
+>      :          
 >y : C
 >  : ^
 >foo : () => any
@@ -225,7 +225,7 @@ class C {
 >y2 : () => void
 >   : ^^^^^^^^^^
 >y.bar : () => void
->      : ^^^^^^^^^^
+>      :           
 >y : C
 >  : ^
 >bar : () => void

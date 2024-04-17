@@ -19,7 +19,7 @@ if (true) {
 >foo : () => void
 >    : ^^^^^^^^^^
 >function () {    new B();  } : () => void
->                             : ^^^^^^^^^^
+>                             :           
 
     new B();
 >new B() : B

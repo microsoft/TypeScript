@@ -5,7 +5,7 @@
 
 function foo(x, x) { }
 >foo : (x: any, x: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -13,11 +13,11 @@ function foo(x, x) { }
 
 var f = function foo(x, x) { }
 >f : (x: any, x: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >function foo(x, x) { } : (x: any, x: any) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       :                         
 >foo : (x: any, x: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -25,9 +25,9 @@ var f = function foo(x, x) { }
 
 var f2 = function (x, x) { }
 >f2 : (x: any, x: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >function (x, x) { } : (x: any, x: any) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    :                         
 >x : any
 >  : ^^^
 >x : any
@@ -35,9 +35,9 @@ var f2 = function (x, x) { }
 
 var f3 = (x, x) => { }
 >f3 : (x: any, x: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >(x, x) => { } : (x: any, x: any) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              :                         
 >x : any
 >  : ^^^
 >x : any
@@ -45,9 +45,9 @@ var f3 = (x, x) => { }
 
 var f4 = <T>(x: T, x: T) => { }
 >f4 : <T>(x: T, x: T) => void
->   : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
->                       : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>                       :                        
 >x : T
 >  : ^
 >x : T
@@ -55,7 +55,7 @@ var f4 = <T>(x: T, x: T) => { }
 
 function foo2(x: string, x: number) { }
 >foo2 : (x: string, x: number) => void
->     : ^^^^      ^^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -63,11 +63,11 @@ function foo2(x: string, x: number) { }
 
 var f5 = function foo(x: string, x: number) { }
 >f5 : (x: string, x: number) => void
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function foo(x: string, x: number) { } : (x: string, x: number) => void
->                                       : ^^^^      ^^^^^      ^^^^^^^^^
+>                                       :                               
 >foo : (x: string, x: number) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -75,9 +75,9 @@ var f5 = function foo(x: string, x: number) { }
 
 var f6 = function (x: string, x: number) { }
 >f6 : (x: string, x: number) => void
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function (x: string, x: number) { } : (x: string, x: number) => void
->                                    : ^^^^      ^^^^^      ^^^^^^^^^
+>                                    :                               
 >x : string
 >  : ^^^^^^
 >x : number
@@ -85,9 +85,9 @@ var f6 = function (x: string, x: number) { }
 
 var f7 = (x: string, x: number) => { }
 >f7 : (x: string, x: number) => void
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: string, x: number) => { } : (x: string, x: number) => void
->                              : ^^^^      ^^^^^      ^^^^^^^^^
+>                              :                               
 >x : string
 >  : ^^^^^^
 >x : number
@@ -95,9 +95,9 @@ var f7 = (x: string, x: number) => { }
 
 var f8 = <T>(x: T, y: T) => { }
 >f8 : <T>(x: T, y: T) => void
->   : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(x: T, y: T) => { } : <T>(x: T, y: T) => void
->                       : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>                       :                        
 >x : T
 >  : ^
 >y : T
@@ -109,7 +109,7 @@ class C {
 
     foo(x, x) { }
 >foo : (x: any, x: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -117,7 +117,7 @@ class C {
 
     foo2(x: number, x: string) { }
 >foo2 : (x: number, x: string) => void
->     : ^^^^      ^^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -125,7 +125,7 @@ class C {
 
     foo3<T>(x: T, x: T) { }
 >foo3 : <T>(x: T, x: T) => void
->     : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -147,7 +147,7 @@ interface I {
 
     foo(x, x);
 >foo : { (x: any, x: any): any; (x: number, x: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -155,7 +155,7 @@ interface I {
 
     foo(x: number, x: string);
 >foo : { (x: any, x: any): any; (x: number, x: string): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>    : ^^^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -163,7 +163,7 @@ interface I {
 
     foo3<T>(x: T, x: T);
 >foo3 : <T>(x: T, x: T) => any
->     : ^ ^^^^^ ^^^^^ ^^^^^^^^
+>     : ^ ^^ ^^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -172,11 +172,11 @@ interface I {
 
 var a: {
 >a : { foo(x: any, x: any): any; foo2(x: number, x: string): any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 
     foo(x, x);
 >foo : (x: any, x: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -184,7 +184,7 @@ var a: {
 
     foo2(x: number, x: string);
 >foo2 : (x: number, x: string) => any
->     : ^^^^      ^^^^^      ^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -194,13 +194,13 @@ var a: {
 
 var b = {
 >b : { foo(x: any, x: any): void; a: (x: number, x: string) => void; b: <T>(x: T, x: T) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^
+>  : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >{    foo(x, x) { },    a: function foo(x: number, x: string) { },    b: <T>(x: T, x: T) => { }} : { foo(x: any, x: any): void; a: (x: number, x: string) => void; b: <T>(x: T, x: T) => void; }
->                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^^^^
+>                                                                                                : ^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^                              ^^^^^                       ^^^
 
     foo(x, x) { },
 >foo : (x: any, x: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x : any
@@ -208,11 +208,11 @@ var b = {
 
     a: function foo(x: number, x: string) { },
 >a : (x: number, x: string) => void
->  : ^^^^      ^^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >function foo(x: number, x: string) { } : (x: number, x: string) => void
->                                       : ^^^^      ^^^^^      ^^^^^^^^^
+>                                       :                               
 >foo : (x: number, x: string) => void
->    : ^^^^      ^^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -220,9 +220,9 @@ var b = {
 
     b: <T>(x: T, x: T) => { }
 >b : <T>(x: T, x: T) => void
->  : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 ><T>(x: T, x: T) => { } : <T>(x: T, x: T) => void
->                       : ^ ^^^^^ ^^^^^ ^^^^^^^^^
+>                       :                        
 >x : T
 >  : ^
 >x : T

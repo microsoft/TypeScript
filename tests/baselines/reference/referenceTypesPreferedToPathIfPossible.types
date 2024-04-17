@@ -9,7 +9,7 @@ export const thing = () => parse();
 >thing : () => import("url").Url
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => parse() : () => import("url").Url
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              :                        
 >parse() : import("url").Url
 >        : ^^^^^^^^^^^^^^^^^
 >parse : () => import("url").Url

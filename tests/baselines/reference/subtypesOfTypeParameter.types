@@ -25,7 +25,7 @@ class D1<T, U> extends C3<T> {
 
 function f1<T, U>(x: T, y: U) {
 >f1 : <T, U>(x: T, y: U) => void
->   : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -112,7 +112,7 @@ module c {
 // errors throughout
 function f2<T, U>(x: T, y: U) {
 >f2 : <T, U>(x: T, y: U) => void
->   : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -328,7 +328,7 @@ function f2<T, U>(x: T, y: U) {
 >r7 : T | (() => void)
 >   : ^^^^^^^^^^^^^^^^
 >true ? () => { } : x : T | (() => void)
->                     : ^^^^^^^^^^^^^^^^
+>                     : ^^^^^          ^
 >true : true
 >     : ^^^^
 >() => { } : () => void
@@ -350,13 +350,13 @@ function f2<T, U>(x: T, y: U) {
 
     var r8 = true ? <T>(x: T) => { return x } : x;
 >r8 : T | (<T_1>(x: T_1) => T_1)
->   : ^^^^^^   ^^^^^^^^^^^^^^^^^
+>   : ^^^^^^   ^^ ^^   ^^^^^^^^^
 >true ? <T>(x: T) => { return x } : x : T | (<T_1>(x: T_1) => T_1)
->                                     : ^^^^^^   ^^^^^^^^^^^^^^^^^
+>                                     : ^^^^^                    ^
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
->                          : ^   ^^^^^^^^^^^^^^^^
+>                          : ^   ^^ ^^   ^^^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -366,15 +366,15 @@ function f2<T, U>(x: T, y: U) {
 
     var r8b = true ? x : <T>(x: T) => { return x }; // type parameters not identical across declarations
 >r8b : T | (<T_1>(x: T_1) => T_1)
->    : ^^^^^^   ^^^^^^^^^^^^^^^^^
+>    : ^^^^^^   ^^ ^^   ^^^^^^^^^
 >true ? x : <T>(x: T) => { return x } : T | (<T_1>(x: T_1) => T_1)
->                                     : ^^^^^^   ^^^^^^^^^^^^^^^^^
+>                                     : ^^^^^                    ^
 >true : true
 >     : ^^^^
 >x : T
 >  : ^
 ><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
->                          : ^   ^^^^^^^^^^^^^^^^
+>                          : ^   ^^ ^^   ^^^^^^^^
 >x : T
 >  : ^
 >x : T
@@ -584,7 +584,7 @@ function f2<T, U>(x: T, y: U) {
 
     function f17<T>(a: T) {
 >f17 : <T>(a: T) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >a : T
 >  : ^
 
@@ -615,7 +615,7 @@ function f2<T, U>(x: T, y: U) {
 
     function f18<T, U extends T>(a: U) {
 >f18 : <T, U extends T>(a: U) => void
->    : ^^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >a : U
 >  : ^
 

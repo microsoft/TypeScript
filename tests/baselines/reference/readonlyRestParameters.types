@@ -3,7 +3,7 @@
 === readonlyRestParameters.ts ===
 function f0(a: string, b: string) {
 >f0 : (a: string, b: string) => void
->   : ^^^^      ^^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -13,7 +13,7 @@ function f0(a: string, b: string) {
 >f0(a, b) : void
 >         : ^^^^
 >f0 : (a: string, b: string) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -23,7 +23,7 @@ function f0(a: string, b: string) {
 >f1(a, b) : void
 >         : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -42,7 +42,7 @@ function f0(a: string, b: string) {
 
 function f1(...args: readonly string[]) {
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^                 ^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >args : readonly string[]
 >     : ^^^^^^^^^^^^^^^^^
 
@@ -50,7 +50,7 @@ function f1(...args: readonly string[]) {
 >f0(...args) : void
 >            : ^^^^
 >f0 : (a: string, b: string) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly string[]
@@ -60,7 +60,7 @@ function f1(...args: readonly string[]) {
 >f1('abc', 'def') : void
 >                 : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >'def' : "def"
@@ -70,7 +70,7 @@ function f1(...args: readonly string[]) {
 >f1('abc', ...args) : void
 >                   : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...args : string
@@ -82,7 +82,7 @@ function f1(...args: readonly string[]) {
 >f1(...args) : void
 >            : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly string[]
@@ -99,7 +99,7 @@ function f2(...args: readonly [string, string]) {
 >f0(...args) : void
 >            : ^^^^
 >f0 : (a: string, b: string) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly [string, string]
@@ -109,7 +109,7 @@ function f2(...args: readonly [string, string]) {
 >f1('abc', 'def') : void
 >                 : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >'def' : "def"
@@ -119,7 +119,7 @@ function f2(...args: readonly [string, string]) {
 >f1('abc', ...args) : void
 >                   : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >'abc' : "abc"
 >      : ^^^^^
 >...args : string
@@ -131,7 +131,7 @@ function f2(...args: readonly [string, string]) {
 >f1(...args) : void
 >            : ^^^^
 >f1 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >...args : string
 >        : ^^^^^^
 >args : readonly [string, string]
@@ -172,7 +172,7 @@ function f2(...args: readonly [string, string]) {
 
 function f4(...args: readonly string[]) {
 >f4 : (...args: readonly string[]) => void
->   : ^^^^^^^^^^                 ^^^^^^^^^
+>   : ^^^^    ^^                 ^^^^^^^^^
 >args : readonly string[]
 >     : ^^^^^^^^^^^^^^^^^
 

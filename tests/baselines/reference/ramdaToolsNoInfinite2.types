@@ -1,10 +1,9 @@
 //// [tests/cases/compiler/ramdaToolsNoInfinite2.ts] ////
 
 === Performance Stats ===
-Assignability cache: 4,800 / 4,800 (nearest 100)
-Type Count: 7,600 / 7,800 (nearest 100)
-Instantiation count: 34,500 / 34,500 (nearest 500)
-Symbol count: 31,000 / 31,500 (nearest 500)
+Assignability cache: 5,000
+Type Count: 10,000
+Instantiation count: 25,000
 
 === ramdaToolsNoInfinite2.ts ===
 declare module "Any/Kind" {
@@ -563,7 +562,7 @@ declare module "Number/_Internal" {
 >        : ^^^^^^^
 
         'string': {
->'string' : { all: Format<IterationMap[KnownIterationMapKeys], 's'>; '+': Format<IterationMap[PositiveIterationKeys], 's'>; '-': Format<IterationMap[NegativeIterationKeys], 's'>; '0': Format<IterationMap['0'], 's'>; }
+>'string' : { all: Format<IterationMap[KnownIterationMapKeys], "s">; '+': Format<IterationMap[PositiveIterationKeys], "s">; '-': Format<IterationMap[NegativeIterationKeys], "s">; '0': Format<IterationMap["0"], "s">; }
 >         : ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                              ^^^
 
             'all': Format<IterationMap[KnownIterationMapKeys], 's'>;
@@ -584,7 +583,7 @@ declare module "Number/_Internal" {
 
         };
         'number': {
->'number' : { all: Format<IterationMap[KnownIterationMapKeys], 'n'>; '+': Format<IterationMap[PositiveIterationKeys], 'n'>; '-': Format<IterationMap[NegativeIterationKeys], 'n'>; '0': Format<IterationMap['0'], 'n'>; }
+>'number' : { all: Format<IterationMap[KnownIterationMapKeys], "n">; '+': Format<IterationMap[PositiveIterationKeys], "n">; '-': Format<IterationMap[NegativeIterationKeys], "n">; '0': Format<IterationMap["0"], "n">; }
 >         : ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                                                ^^^^^^^                              ^^^
 
             'all': Format<IterationMap[KnownIterationMapKeys], 'n'>;

@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/infiniteConstraints.ts] ////
 
 === Performance Stats ===
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 1,000 / 1,000 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 25,500 / 26,000 (nearest 500)
+Instantiation count: 2,500
 
 === infiniteConstraints.ts ===
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
@@ -29,7 +26,7 @@ type AProp<T extends { a: string }> = T
 
 declare function myBug<
 >myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ 
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^ 
 
   T extends { [K in keyof T]: T[K] extends AProp<infer U> ? U : never }
 >(arg: T): T
@@ -40,9 +37,9 @@ const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           :                          
 >myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj1 : { a: string; }
@@ -60,13 +57,13 @@ type Value<V extends string = string> = Record<"val", V>;
 
 declare function value<V extends string>(val: V): Value<V>;
 >value : <V extends string>(val: V) => Value<V>
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^        
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^        
 >val : V
 >    : ^
 
 declare function ensureNoDuplicates<
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^    
 
   T extends {
     [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
@@ -83,7 +80,7 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 >ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
 >                                                                     : ^^^^
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
 >{main: value("test"), alternate: value("test2")} : { main: Value<"test">; alternate: Value<"test2">; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"test">
@@ -91,7 +88,7 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 >value("test") : Value<"test">
 >              : ^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
 >"test" : "test"
 >       : ^^^^^^
 >alternate : Value<"test2">
@@ -99,7 +96,7 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 >value("test2") : Value<"test2">
 >               : ^^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
 >"test2" : "test2"
 >        : ^^^^^^^
 
@@ -109,7 +106,7 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >ensureNoDuplicates({main: value("test")}) : void
 >                                          : ^^^^
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
 >{main: value("test")} : { main: Value<"test">; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"test">
@@ -117,7 +114,7 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 >value("test") : Value<"test">
 >              : ^^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
 >"test" : "test"
 >       : ^^^^^^
 
@@ -127,7 +124,7 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : void
 >                                                                  : ^^^^
 >ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Value<string>>["val"] extends Extract<T[Exclude<keyof T, K>], Value<string>>["val"] ? never : any; }>(vals: T) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
 >{main: value("dup"), alternate: value("dup")} : { main: Value<"dup">; alternate: Value<"dup">; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >main : Value<"dup">
@@ -135,7 +132,7 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >value("dup") : Value<"dup">
 >             : ^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
 >"dup" : "dup"
 >      : ^^^^^
 >alternate : Value<"dup">
@@ -143,7 +140,7 @@ const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("
 >value("dup") : Value<"dup">
 >             : ^^^^^^^^^^^^
 >value : <V extends string>(val: V) => Value<V>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^
 >"dup" : "dup"
 >      : ^^^^^
 

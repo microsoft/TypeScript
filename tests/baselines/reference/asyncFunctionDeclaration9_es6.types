@@ -9,7 +9,7 @@ async function foo(): Promise<void> {
 >v : { [x: number]: () => Promise<void>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ [await]: foo } : { [x: number]: () => Promise<void>; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^                   ^^^
 >[await] : () => Promise<void>
 >        : ^^^^^^^^^^^^^^^^^^^
 >await : any
@@ -17,5 +17,5 @@ async function foo(): Promise<void> {
 > : any
 > : ^^^
 >foo : () => Promise<void>
->    : ^^^^^^^^^^^^^^^^^^^
+>    :                    
 }

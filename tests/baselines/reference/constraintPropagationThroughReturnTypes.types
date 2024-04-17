@@ -3,7 +3,7 @@
 === constraintPropagationThroughReturnTypes.ts ===
 function g<T>(x: T): T {
 >g : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -14,7 +14,7 @@ function g<T>(x: T): T {
  
 function f<S extends { foo: string }>(x: S) {
 >f : <S extends { foo: string; }>(x: S) => void
->  : ^ ^^^^^^^^^^^^^^^^      ^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >x : S
@@ -26,7 +26,7 @@ function f<S extends { foo: string }>(x: S) {
 >g(x) : S
 >     : ^
 >g : <T>(x: T) => T
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >x : S
 >  : ^
 

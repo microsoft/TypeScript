@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 600 / 600 (nearest 100)
-Type Count: 2,600 / 2,600 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 26,500 / 26,500 (nearest 500)
+Type Count: 2,500
+Instantiation count: 2,500
 
 === jsxInferenceProducesLiteralAsExpected.tsx ===
 import React = require("react");
@@ -48,7 +46,7 @@ interface TestProps<T> {
 }
 function Test<T>(props: TestProps<T>) { return <></>; }
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^ ^^^^^^^^^            ^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >props : TestProps<T>
 >      : ^^^^^^^^^^^^
 ><></> : JSX.Element
@@ -68,7 +66,7 @@ const el1 = <Test model={model} foo="c" />;
 ><Test model={model} foo="c" /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
 >      : ^^^^^^^^^^
 >model : TestObject
@@ -82,7 +80,7 @@ const el2 = <Test<TestObject> model={model} foo="c" />;
 ><Test<TestObject> model={model} foo="c" /> : JSX.Element
 >                                           : ^^^^^^^^^^^
 >Test : <T>(props: TestProps<T>) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^     ^^            ^^^^^^^^^^^^^^^^
 >model : TestObject
 >      : ^^^^^^^^^^
 >model : TestObject

@@ -31,7 +31,7 @@ function Cls(t) {
  */
 Cls.prototype.topLevelComment = function (t, v) {
 >Cls.prototype.topLevelComment = function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
->                                                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                               : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >Cls.prototype.topLevelComment : any
 >Cls.prototype : any
 >              : ^^^
@@ -42,7 +42,7 @@ Cls.prototype.topLevelComment = function (t, v) {
 >topLevelComment : any
 >                : ^^^
 >function (t, v) {    return v} : <V extends string>(t: T, v: V) => V
->                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^
 >t : T
 >  : ^
 >v : V
@@ -56,7 +56,7 @@ Cls.prototype.topLevelComment = function (t, v) {
 
 Cls.prototype.nestedComment =
 >Cls.prototype.nestedComment =    /**     * @template {string} U     * @param {T} t     * @param {U} u     * @return {T}     */    function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
->                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >Cls.prototype.nestedComment : any
 >Cls.prototype : any
 >              : ^^^
@@ -75,7 +75,7 @@ Cls.prototype.nestedComment =
      */
     function (t, u) {
 >function (t, u) {        return t    } : <U extends string>(t: T, u: U) => T
->                                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >t : T
 >  : ^
 >u : U
@@ -103,11 +103,11 @@ const s = c.topLevelComment('a', 'b');
 >c.topLevelComment('a', 'b') : "b"
 >                            : ^^^
 >c.topLevelComment : <V extends string>(t: "a", v: V) => V
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^
 >c : Cls<"a">
 >  : ^^^^^^^^
 >topLevelComment : <V extends string>(t: "a", v: V) => V
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 >'b' : "b"
@@ -119,11 +119,11 @@ const t = c.nestedComment('a', 'b');
 >c.nestedComment('a', 'b') : "a"
 >                          : ^^^
 >c.nestedComment : <U extends string>(t: "a", u: U) => "a"
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^
 >c : Cls<"a">
 >  : ^^^^^^^^
 >nestedComment : <U extends string>(t: "a", u: U) => "a"
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 >'b' : "b"

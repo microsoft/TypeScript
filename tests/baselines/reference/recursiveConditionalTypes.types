@@ -1,11 +1,9 @@
 //// [tests/cases/compiler/recursiveConditionalTypes.ts] ////
 
 === Performance Stats ===
-Identity cache: 100 / 100 (nearest 100)
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 507,700 / 507,900 (nearest 100)
-Instantiation count: 524,500 / 524,500 (nearest 500)
-Symbol count: 1,072,500 / 1,072,500 (nearest 500)
+Type Count: 500,000
+Instantiation count: 500,000
+Symbol count: 1,000,000
 
 === recursiveConditionalTypes.ts ===
 // Awaiting promises
@@ -24,9 +22,9 @@ type MyPromise<T> = {
 
     then<U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined): MyPromise<U>;
 >then : <U>(f: ((value: T) => U | PromiseLike<U>) | null | undefined) => MyPromise<U>
->     : ^ ^^^^^                                                     ^^^^^            
+>     : ^ ^^ ^^                                                     ^^^^^            
 >f : ((value: T) => U | PromiseLike<U>) | null | undefined
->  : ^^^^^^^^^ ^^^^^                  ^^^^^^^^^^^^^^^^^^^^
+>  : ^^     ^^ ^^^^^                  ^^^^^^^^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -49,7 +47,7 @@ type P2 = __Awaited<InfinitePromise<number>>;  // Error
 
 function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
 >f11 : <T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) => void
->    : ^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^            ^^^^^^ ^^^^^^            ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^  ^^ ^^  ^^            ^^  ^^ ^^  ^^            ^^^^^^^^^
 >tx : T
 >   : ^
 >ta : __Awaited<T>
@@ -158,7 +156,7 @@ type TT5 = TupleOf<number, 1000>;  // Depth error
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
 >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^                  ^^^^^^                  ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^                  ^^  ^^                  ^^^^^^^^^
 >tn : TupleOf<number, N>
 >   : ^^^^^^^^^^^^^^^^^^
 >tm : TupleOf<number, M>
@@ -182,16 +180,16 @@ function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<
 }
 
 declare function f23<T>(t: TupleOf<T, 3>): T;
->f23 : <T>(t: [T, T, T]) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ 
+>f23 : <T>(t: TupleOf<T, 3>) => T
+>    : ^ ^^ ^^             ^^^^^ 
 >t : [T, T, T]
 >  : ^^^^^^^^^
 
 f23(['a', 'b', 'c']);  // string
 >f23(['a', 'b', 'c']) : string
 >                     : ^^^^^^
->f23 : <T>(t: [T, T, T]) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>f23 : <T>(t: TupleOf<T, 3>) => T
+>    : ^ ^^ ^^             ^^^^^^
 >['a', 'b', 'c'] : [string, string, string]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -217,7 +215,7 @@ type InfBox<T> = Box<InfBox<T>>;
 
 declare function unbox<T>(box: RecBox<T>): T
 >unbox : <T>(box: RecBox<T>) => T
->      : ^ ^^^^^^^         ^^^^^ 
+>      : ^ ^^   ^^         ^^^^^ 
 >box : RecBox<T>
 >    : ^^^^^^^^^
 
@@ -273,7 +271,7 @@ unbox(b1);  // string
 >unbox(b1) : string
 >          : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >b1 : Box<Box<Box<Box<Box<Box<string>>>>>>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -281,7 +279,7 @@ unbox(b2);  // string
 >unbox(b2) : string
 >          : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >b2 : T6
 >   : ^^
 
@@ -289,7 +287,7 @@ unbox(b3);  // InfBox<string>
 >unbox(b3) : InfBox<string>
 >          : ^^^^^^^^^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >b3 : InfBox<string>
 >   : ^^^^^^^^^^^^^^
 
@@ -297,7 +295,7 @@ unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // numbe
 >unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}}) : number
 >                                                                      : ^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >{ value: { value: { value: { value: { value: { value: 5 }}}}}} : { value: { value: { value: { value: { value: { value: number; }; }; }; }; }; }
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { value: { value: { value: { value: { value: number; }; }; }; }; }
@@ -329,7 +327,7 @@ unbox(b4);  // { value: { value: typeof b4 }}
 >unbox(b4) : { value: { value: { value: any; }; }; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >b4 : { value: { value: { value: any; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -337,17 +335,17 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >unbox : <T>(box: RecBox<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^         ^^^^^^
 >{ value: { value: { get value() { return this; } }}} : { value: { value: { readonly value: { readonly value: any; }; }; }; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { value: { readonly value: { readonly value: any; }; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^
 >value : { readonly value: { readonly value: any; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^^^^^^^^^^^^^^^^^^                        ^^^
 >value : { readonly value: any; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>
@@ -369,7 +367,7 @@ type Box2<T> = { value: T };
 
 declare function foo<T>(x: Box1<Box1<T>>): T;
 >foo : <T>(x: Box1<Box1<T>>) => T
->    : ^ ^^^^^             ^^^^^ 
+>    : ^ ^^ ^^             ^^^^^ 
 >x : Box1<Box1<T>>
 >  : ^^^^^^^^^^^^^
 
@@ -381,7 +379,7 @@ foo(z);  // string
 >foo(z) : string
 >       : ^^^^^^
 >foo : <T>(x: Box1<Box1<T>>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^             ^^^^^^
 >z : Box2<Box2<string>>
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -407,7 +405,7 @@ type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
 
 function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^          ^^^^^          ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^          ^^ ^^          ^^^^^^^^^
 >x : Unpack1<T>
 >  : ^^^^^^^^^^
 >y : Unpack2<T>
@@ -433,7 +431,7 @@ function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20(y, x) : void
 >          : ^^^^
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^          ^^ ^^          ^^^^^^^^^
 >y : Unpack2<T>
 >  : ^^^^^^^^^^
 >x : Unpack1<T>
@@ -450,7 +448,7 @@ type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : 
 
 function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^            ^^^^^            ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
 >x : Grow1<[], T>
 >  : ^^^^^^^^^^^^
 >y : Grow2<[], T>
@@ -460,7 +458,7 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >f21(y, x) : void
 >          : ^^^^
 >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
 >y : Grow2<[], T>
 >  : ^^^^^^^^^^^^
 >x : Grow1<[], T>
@@ -549,8 +547,8 @@ type Enumerate<N extends number> = number extends N
     : never;
 
 function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
->foo2 : <T extends unknown[]>(value: T) => Enumerate<T['length']>
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                      
+>foo2 : <T extends unknown[]>(value: T) => Enumerate<T["length"]>
+>     : ^ ^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                      
 >value : T
 >      : ^
 

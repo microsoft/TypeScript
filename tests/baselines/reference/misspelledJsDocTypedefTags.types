@@ -8,8 +8,8 @@ Animation.AnimationModel.ScreenshotCapture.Request;
 >                                           : ^^^
 >Animation.AnimationModel : any
 >                         : ^^^
->Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Animation : { new (effect?: AnimationEffect | null, timeline?: AnimationTimeline | null): Animation; prototype: Animation; }
+>          : ^^^^^^^      ^^^                      ^^        ^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AnimationModel : any
 >               : ^^^
 >ScreenshotCapture : any
@@ -24,8 +24,8 @@ Animation.AnimationModel.ScreenshotCapture.Request;
 >                                           : ^^^
 >Animation.AnimationModel : any
 >                         : ^^^
->Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Animation : { new (effect?: AnimationEffect | null, timeline?: AnimationTimeline | null): Animation; prototype: Animation; }
+>          : ^^^^^^^      ^^^                      ^^        ^^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AnimationModel : any
 >               : ^^^
 >ScreenshotCapture : any

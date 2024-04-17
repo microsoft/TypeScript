@@ -27,7 +27,7 @@ MyClass.staticMethod = function() {}
 >staticMethod : () => void
 >             : ^^^^^^^^^^
 >function() {} : () => void
->              : ^^^^^^^^^^
+>              :           
 
 MyClass.prototype.method = function() {}
 >MyClass.prototype.method = function() {} : () => void

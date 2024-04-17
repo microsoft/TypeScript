@@ -17,15 +17,15 @@ class C {
 >fn : () => Promise<any>
 >   : ^^^^^^^^^^^^^^^^^^
 >async () => await other.apply(this, arguments) : () => Promise<any>
->                                               : ^^^^^^^^^^^^^^^^^^
+>                                               :                   
 >await other.apply(this, arguments) : any
 >other.apply(this, arguments) : any
 >other.apply : (this: Function, thisArg: any, argArray?: any) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >other : () => void
 >      : ^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >this : this
 >     : ^^^^
 >arguments : IArguments

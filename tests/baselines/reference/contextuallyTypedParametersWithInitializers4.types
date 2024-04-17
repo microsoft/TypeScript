@@ -3,7 +3,7 @@
 === contextuallyTypedParametersWithInitializers4.ts ===
 declare function test<
 >test : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>>(context: TContext, methods: TMethods) => void
->     : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^         ^^^^^       ^^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^    
+>     : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^        ^^^^^    ^^         ^^^^^       ^^^       ^^        ^^       ^^        ^^^^^    
 
   TContext,
   TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>,
@@ -22,7 +22,7 @@ test(
 >test(  {    count: 0,  },  {    checkLimit: (ctx, max = 3) => {},  },) : void
 >                                                                       : ^^^^
 >test : <TContext, TMethods extends Record<string, (ctx: TContext, ...args: (1 | 2)[]) => unknown>>(context: TContext, methods: TMethods) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^        ^^^^^    ^^         ^^^^^^^^^^^^^^^       ^^        ^^       ^^        ^^^^^^^^^
   {
 >{    count: 0,  } : { count: number; }
 >                  : ^^^^^^^^^^^^^^^^^^
@@ -36,13 +36,13 @@ test(
   },
   {
 >{    checkLimit: (ctx, max = 3) => {},  } : { checkLimit: (ctx: { count: number; }, max?: number) => void; }
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     checkLimit: (ctx, max = 3) => {},
 >checkLimit : (ctx: { count: number; }, max?: number) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >(ctx, max = 3) => {} : (ctx: { count: number; }, max?: number) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     :                              ^                 
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >max : number

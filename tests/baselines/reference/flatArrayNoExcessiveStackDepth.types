@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/flatArrayNoExcessiveStackDepth.ts] ////
 
 === Performance Stats ===
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 1,100 / 1,100 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 31,000 / 31,000 (nearest 500)
+Type Count: 1,000
+Instantiation count: 2,500
 
 === flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493
@@ -19,13 +17,13 @@ const bar = foo.flatMap(bar => bar as Foo);
 >foo.flatMap(bar => bar as Foo) : string[]
 >                               : ^^^^^^^^
 >foo.flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : unknown[]
 >    : ^^^^^^^^^
 >flatMap : <U, This = undefined>(callback: (this: This, value: unknown, index: number, array: unknown[]) => U | readonly U[], thisArg?: This | undefined) => U[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^        ^^^    ^^^^^^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >bar => bar as Foo : (this: undefined, bar: unknown) => Foo
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>                  : ^    ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^   
 >bar : unknown
 >    : ^^^^^^^
 >bar as Foo : Foo
@@ -39,9 +37,9 @@ interface Foo extends Array<string> {}
 
 const repro_43249 = (value: unknown) => {
 >repro_43249 : (value: unknown) => void
->            : ^^^^^^^^       ^^^^^^^^^
+>            : ^     ^^       ^^^^^^^^^
 >(value: unknown) => {    if (typeof value !== "string") {        throw new Error("No");    }    const match = value.match(/anything/) || [];    const [, extracted] = match;} : (value: unknown) => void
->                                                                                                                                                                              : ^^^^^^^^       ^^^^^^^^^
+>                                                                                                                                                                              :                         
 >value : unknown
 >      : ^^^^^^^
 
@@ -71,11 +69,11 @@ const repro_43249 = (value: unknown) => {
 >value.match(/anything/) : RegExpMatchArray | null
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/anything/ : RegExp
 >           : ^^^^^^
 >[] : []
@@ -93,7 +91,7 @@ const repro_43249 = (value: unknown) => {
 
 function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
 >f : <Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) => void
->  : ^   ^^ ^^^^^^^^^^^^^^^^^^^^                   ^^^^^                 ^^^^^^^^^
+>  : ^   ^^ ^^^^^^^^^^^^^^^^^ ^^                   ^^ ^^                 ^^^^^^^^^
 >x : FlatArray<Arr, any>
 >  : ^^^^^^^^^^^^^^^^^^^
 >y : FlatArray<Arr, D>

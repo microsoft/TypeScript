@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/divideAndConquerIntersections.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 2,800 / 2,900 (nearest 100)
-Instantiation count: 7,500 / 7,500 (nearest 500)
-Symbol count: 26,000 / 26,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 10,000
 
 === divideAndConquerIntersections.ts ===
 type QQ<T extends string[]> =
@@ -156,7 +154,7 @@ type FilterFunction<U extends Update, V extends U> = (up: U) => up is V;
 
 export function matchFilter<U extends Update, Q extends FilterQuery>(
 >matchFilter : <U extends Update, Q extends "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost">(filter: Q | Q[]) => FilterFunction<U, Filter<U, Q>>
->            : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^                               
+>            : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^                               
 
     filter: Q | Q[],
 >filter : Q | Q[]
@@ -168,11 +166,11 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 >console.log("Matching", filter) : void
 >                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Matching" : "Matching"
 >           : ^^^^^^^^^^
 >filter : "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost" | Q[]
@@ -180,7 +178,7 @@ export function matchFilter<U extends Update, Q extends FilterQuery>(
 
     return (up: U): up is Filter<U, Q> => !!up;
 >(up: U): up is Filter<U, Q> => !!up : (up: U) => up is Filter<U, Q>
->                                    : ^^^^^ ^^^^^                  
+>                                    : ^  ^^ ^^^^^                  
 >up : U
 >   : ^
 >!!up : true
@@ -253,7 +251,7 @@ class EventHub<U extends Update> {
 
     use(...middleware: Array<Middleware<U>>): EventHub<U> {
 >use : (...middleware: Array<Middleware<U>>) => EventHub<U>
->    : ^^^^^^^^^^^^^^^^                    ^^^^^           
+>    : ^^^^          ^^                    ^^^^^           
 >middleware : Middleware<U>[]
 >           : ^^^^^^^^^^^^^^^
 
@@ -261,11 +259,11 @@ class EventHub<U extends Update> {
 >console.log("Adding", middleware.length, "generic handlers") : void
 >                                                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Adding" : "Adding"
 >         : ^^^^^^^^
 >middleware.length : number
@@ -283,7 +281,7 @@ class EventHub<U extends Update> {
     }
     on<Q extends FilterQuery>(
 >on : <Q extends "message" | "edited_message" | "channel_post" | "edited_channel_post" | "message_reaction" | "message_reaction_count" | "inline_query" | "chosen_inline_result" | "callback_query" | "shipping_query" | "pre_checkout_query" | "poll" | "poll_answer" | "my_chat_member" | "chat_member" | "chat_join_request" | "chat_boost" | "removed_chat_boost">(filter: Q | Q[], ...middleware: Array<Middleware<Filter<U, Q>>>) => EventHub<Filter<U, Q>>
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^                               ^^^^^                      
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^       ^^^^^          ^^                               ^^^^^                      
 
         filter: Q | Q[],
 >filter : Q | Q[]
@@ -299,11 +297,11 @@ class EventHub<U extends Update> {
 >console.log("Adding", middleware.length, "handlers for", filter) : void
 >                                                                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Adding" : "Adding"
 >         : ^^^^^^^^
 >middleware.length : number

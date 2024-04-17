@@ -26,9 +26,9 @@ class Foo2 {
 
 (<T extends UNKNOWN>(a) => { });
 >(<T extends UNKNOWN>(a) => { }) : <T extends UNKNOWN>(a: any) => void
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 ><T extends UNKNOWN>(a) => { } : <T extends UNKNOWN>(a: any) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 

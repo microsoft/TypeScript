@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 800 / 800 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 26,000 / 26,000 (nearest 500)
+Instantiation count: 2,500
 
 === reactReduxLikeDeferredInferenceAllowsAssignment.ts ===
 declare class Component<P> {
@@ -179,7 +176,7 @@ type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> = <
 
 declare const connect: {
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^              ^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^^^^^^^^^^^^^^^^^^              ^^^^^                                                                             
+>        : ^^^^^^^^^^^^^^^^              ^^^  ^^         ^^^  ^^               ^^                ^^                  ^^              ^^^^^                                                                             
 
   <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(
     mapStateToProps: null | undefined,
@@ -260,9 +257,9 @@ interface AnyAction extends Action {
 
 const simpleAction = (payload: boolean) => ({
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->             : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(payload: boolean) => ({  type: "SIMPLE_ACTION",  payload}) : (payload: boolean) => { type: string; payload: boolean; }
->                                                            : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                            :                                                          
 >payload : boolean
 >        : ^^^^^^^
 >({  type: "SIMPLE_ACTION",  payload}) : { type: string; payload: boolean; }
@@ -283,15 +280,15 @@ const simpleAction = (payload: boolean) => ({
 });
 const thunkAction = (param1: number, param2: string) => async (
 >thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->            : ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+>            : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 >(param1: number, param2: string) => async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->                                                                                                        : ^^^^^^^^^      ^^^^^^^^^^      ^^^^^^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+>                                                                                                        :                                                                                               
 >param1 : number
 >       : ^^^^^^
 >param2 : string
 >       : ^^^^^^
 >async (  dispatch: Dispatch,  { foo }: OwnProps) => {  return foo;} : (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
->                                                                    : ^^^^^^^^^^^        ^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^
+>                                                                    : ^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 
   dispatch: Dispatch,
 >dispatch : Dispatch<AnyAction>
@@ -315,13 +312,13 @@ interface OwnProps {
 interface TestComponentProps extends OwnProps {
   simpleAction: typeof simpleAction;
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   thunkAction(param1: number, param2: string): Promise<string>;
 >thunkAction : (param1: number, param2: string) => Promise<string>
->            : ^^^^^^^^^      ^^^^^^^^^^      ^^^^^               
+>            : ^      ^^      ^^      ^^      ^^^^^               
 >param1 : number
 >       : ^^^^^^
 >param2 : string
@@ -334,20 +331,20 @@ class TestComponent extends Component<TestComponentProps> {}
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const mapDispatchToProps = { simpleAction, thunkAction };
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
+>{ simpleAction, thunkAction } : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                              : ^^^^^^^^^^^^^^^^                                                         ^^^^^^^^^^^^^^^                                                                                              ^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->thunkAction : (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thunkAction : (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>
+>            : ^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^
 
 type Q = HandleThunkActionCreator<typeof simpleAction>;
 >Q : (payload: boolean) => { type: string; payload: boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >simpleAction : (payload: boolean) => { type: string; payload: boolean; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const Test1 = connect(
 >Test1 : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
@@ -355,14 +352,14 @@ const Test1 = connect(
 >connect(  null,  mapDispatchToProps)(TestComponent) : ConnectedComponentClass<typeof TestComponent, Omit<TestComponentProps, "simpleAction" | "thunkAction">>
 >                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect(  null,  mapDispatchToProps) : InferableComponentEnhancerWithProps<{ simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => Promise<string>; }, {}>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect : <no_state = {}, TDispatchProps = {}, TOwnProps = {}>(mapStateToProps: null | undefined, mapDispatchToProps: TDispatchProps) => InferableComponentEnhancerWithProps<ResolveThunks<TDispatchProps>, TOwnProps>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^              ^^^  ^^^^^^^^^^^^^^  ^^               ^^                ^^                  ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   null,
   mapDispatchToProps
->mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch<AnyAction>, { foo }: OwnProps) => Promise<string>; }
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapDispatchToProps : { simpleAction: (payload: boolean) => { type: string; payload: boolean; }; thunkAction: (param1: number, param2: string) => (dispatch: Dispatch, { foo }: OwnProps) => Promise<string>; }
+>                   : ^^^^^^^^^^^^^^^^^       ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^      ^^      ^^^^^^        ^^        ^^       ^^        ^^^^^^^^^^^^^^^^^^^^^^^
 
 )(TestComponent);
 >TestComponent : typeof TestComponent

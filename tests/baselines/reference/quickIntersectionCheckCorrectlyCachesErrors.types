@@ -14,13 +14,13 @@ interface F<P> {
 }
 declare function g(C: F<unknown>): string;
 >g : (C: F<unknown>) => string
->  : ^^^^          ^^^^^      
+>  : ^ ^^          ^^^^^      
 >C : F<unknown>
 >  : ^^^^^^^^^^
 
 export function wu<CP extends { o: object }>(CC: F<CP>) {
 >wu : <CP extends { o: object; }>(CC: F<CP>) => void
->   : ^  ^^^^^^^^^^^^^^      ^^^^^^^^^     ^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^      ^^^^^  ^^     ^^^^^^^^^
 >o : object
 >  : ^^^^^^
 >CC : F<CP>
@@ -38,7 +38,7 @@ export function wu<CP extends { o: object }>(CC: F<CP>) {
 >g(CC) : string
 >      : ^^^^^^
 >g : (C: F<unknown>) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^          ^^^^^^^^^^^
 >CC : F<CP>
 >   : ^^^^^
 

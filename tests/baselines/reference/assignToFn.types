@@ -8,7 +8,7 @@ module M {
     interface I {
 	f(n:number):boolean;
 >f : (n: number) => boolean
->  : ^^^^      ^^^^^       
+>  : ^ ^^      ^^^^^       
 >n : number
 >  : ^^^^^^
     }
@@ -17,11 +17,11 @@ module M {
 >x : I
 >  : ^
 >{ f:function(n) { return true; } } : { f: (n: number) => true; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >f : (n: number) => true
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >function(n) { return true; } : (n: number) => true
->                             : ^^^^^^^^^^^^^^^^^^^
+>                             :                    
 >n : number
 >  : ^^^^^^
 >true : true
@@ -31,11 +31,11 @@ module M {
 >x.f="hello" : "hello"
 >            : ^^^^^^^
 >x.f : (n: number) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^^
 >x : I
 >  : ^
 >f : (n: number) => boolean
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 }

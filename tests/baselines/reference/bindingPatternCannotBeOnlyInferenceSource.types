@@ -70,23 +70,23 @@ type Destructuring<T extends IFuncs, U extends IDestructuring<T>> = (dispatch: D
 
 const funcs1 = {
 >funcs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->       : ^^^^^^^^^^^^^       ^^^^^    ^^^^^^^^^^^^^      ^^^^^^      ^^^^^    ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^       ^^^^^    ^^^
+>       : ^^^^^^^^^^ ^^       ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^    ^^^
 >{    funcA: (a: boolean): void => {},    funcB: (b: string, bb: string): void => {},    funcC: (c: number, cc: number, ccc: boolean): void => {},} : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->                                                                                                                                                   : ^^^^^^^^^^^^^       ^^^^^    ^^^^^^^^^^^^^      ^^^^^^      ^^^^^    ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^       ^^^^^    ^^^
+>                                                                                                                                                   : ^^^^^^^^^                    ^^^^^^^^^                               ^^^^^^^^^                                             ^^^
 
     funcA: (a: boolean): void => {},
 >funcA : (a: boolean) => void
->      : ^^^^       ^^^^^    
+>      : ^ ^^       ^^^^^    
 >(a: boolean): void => {} : (a: boolean) => void
->                         : ^^^^       ^^^^^    
+>                         :                     
 >a : boolean
 >  : ^^^^^^^
 
     funcB: (b: string, bb: string): void => {},
 >funcB : (b: string, bb: string) => void
->      : ^^^^      ^^^^^^      ^^^^^    
+>      : ^ ^^      ^^  ^^      ^^^^^    
 >(b: string, bb: string): void => {} : (b: string, bb: string) => void
->                                    : ^^^^      ^^^^^^      ^^^^^    
+>                                    :                                
 >b : string
 >  : ^^^^^^
 >bb : string
@@ -94,9 +94,9 @@ const funcs1 = {
 
     funcC: (c: number, cc: number, ccc: boolean): void => {},
 >funcC : (c: number, cc: number, ccc: boolean) => void
->      : ^^^^      ^^^^^^      ^^^^^^^       ^^^^^    
+>      : ^ ^^      ^^  ^^      ^^   ^^       ^^^^^    
 >(c: number, cc: number, ccc: boolean): void => {} : (c: number, cc: number, ccc: boolean) => void
->                                                  : ^^^^      ^^^^^^      ^^^^^^^       ^^^^^    
+>                                                  :                                              
 >c : number
 >  : ^^^^^^
 >cc : number
@@ -107,29 +107,29 @@ const funcs1 = {
 };
 type TFuncs1 = typeof funcs1;
 >TFuncs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 >funcs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 
 declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>): T;
 >useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<TFuncs1, T>) => T
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^ 
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^             ^^                         ^^^^^ 
 >destructuring : Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^^
 
 const {} = useReduxDispatch1(
 >useReduxDispatch1(    (d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    })) : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>) => T
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<TFuncs1, T>) => T
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^             ^^                         ^^^^^^
 
     (d, f) => ({
 >(d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : (d: Dispatch<any>, f: { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }) => { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->                                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                           : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Dispatch<any>
 >  : ^^^^^^^^^^^^^
 >f : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 >({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    } : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
@@ -139,7 +139,7 @@ const {} = useReduxDispatch1(
 >funcA : (a: boolean) => void
 >      : ^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcA(...p)) : (a: boolean) => void
->                           : ^^^^^^^^^^^^^^^^^^^^
+>                           :                     
 >p : [a: boolean]
 >  : ^^^^^^^^^^^^
 >d(f.funcA(...p)) : void
@@ -149,11 +149,11 @@ const {} = useReduxDispatch1(
 >f.funcA(...p) : void
 >              : ^^^^
 >f.funcA : (a: boolean) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^       ^^^^^^^^^
 >f : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 >funcA : (a: boolean) => void
->      : ^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^       ^^^^^^^^^
 >...p : boolean
 >     : ^^^^^^^
 >p : [a: boolean]
@@ -163,7 +163,7 @@ const {} = useReduxDispatch1(
 >funcB : (b: string, bb: string) => void
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcB(...p)) : (b: string, bb: string) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           :                                
 >p : [b: string, bb: string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >d(f.funcB(...p)) : void
@@ -173,11 +173,11 @@ const {} = useReduxDispatch1(
 >f.funcB(...p) : void
 >              : ^^^^
 >f.funcB : (b: string, bb: string) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^  ^^      ^^^^^^^^^
 >f : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 >funcB : (b: string, bb: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^  ^^      ^^^^^^^^^
 >...p : string
 >     : ^^^^^^
 >p : [b: string, bb: string]
@@ -187,7 +187,7 @@ const {} = useReduxDispatch1(
 >funcC : (c: number, cc: number, ccc: boolean) => void
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcC(...p)) : (c: number, cc: number, ccc: boolean) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           :                                              
 >p : [c: number, cc: number, ccc: boolean]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d(f.funcC(...p)) : void
@@ -197,11 +197,11 @@ const {} = useReduxDispatch1(
 >f.funcC(...p) : void
 >              : ^^^^
 >f.funcC : (c: number, cc: number, ccc: boolean) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^
 >f : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 >funcC : (c: number, cc: number, ccc: boolean) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^
 >...p : number | boolean
 >     : ^^^^^^^^^^^^^^^^
 >p : [c: number, cc: number, ccc: boolean]

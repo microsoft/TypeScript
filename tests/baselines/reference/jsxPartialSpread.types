@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/jsxPartialSpread.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,600 / 7,600 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxPartialSpread.tsx ===
 /// <reference path="react16.d.ts" />
 const Select = (p: {value?: unknown}) => <p></p>;
 >Select : (p: { value?: unknown; }) => JSX.Element
->       : ^^^^                    ^^^^^^^^^^^^^^^^
+>       : ^ ^^                    ^^^^^^^^^^^^^^^^
 >(p: {value?: unknown}) => <p></p> : (p: { value?: unknown; }) => JSX.Element
->                                  : ^^^^                    ^^^^^^^^^^^^^^^^
+>                                  :                                         
 >p : { value?: unknown; }
 >  : ^^^^^^^^^^       ^^^
 >value : unknown
@@ -30,7 +30,7 @@ import React from 'react';
 
 export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<typeof Select>[0]> }) {
 >Repro : ({ SelectProps }: { SelectProps?: Partial<Parameters<typeof Select>[0]>; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^                                                        ^^^^^^^^^^^^^^^^
+>      : ^               ^^                                                        ^^^^^^^^^^^^^^^^
 >SelectProps : Partial<{ value?: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -38,7 +38,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 >SelectProps : Partial<{ value?: unknown; }> | undefined
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Select : (p: { value?: unknown; }) => JSX.Element
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^                    ^^^^^^^^^^^^^^^^
 
     return (
 >(        <Select value={'test'} {...SelectProps} />    ) : JSX.Element
@@ -48,7 +48,7 @@ export function Repro({ SelectProps = {} }: { SelectProps?: Partial<Parameters<t
 ><Select value={'test'} {...SelectProps} /> : JSX.Element
 >                                           : ^^^^^^^^^^^
 >Select : (p: { value?: unknown; }) => JSX.Element
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^                    ^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >'test' : "test"

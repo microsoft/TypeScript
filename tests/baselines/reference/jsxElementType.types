@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxElementType.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,400 / 2,400 (nearest 100)
-Type Count: 8,000 / 8,000 (nearest 100)
-Instantiation count: 90,500 / 91,000 (nearest 500)
-Symbol count: 67,000 / 67,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxElementType.tsx ===
 /// <reference path="react16.d.ts" />
@@ -80,9 +80,9 @@ let Component: NewReactJSXElementConstructor<{ title: string }>;
 
 const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
->              : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^
 >({ title }: { title: string }) => <div>{title}</div> : ({ title }: { title: string; }) => JSX.Element
->                                                     : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
+>                                                     :                                               
 >title : string
 >      : ^^^^^^
 >title : string
@@ -98,23 +98,23 @@ const RenderElement = ({ title }: { title: string }) => <div>{title}</div>;
 
 Component = RenderElement;
 >Component = RenderElement : ({ title }: { title: string; }) => JSX.Element
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^                  ^^^^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^
 
 <RenderElement />;
 ><RenderElement /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^
 
 <RenderElement title="react" />;
 ><RenderElement title="react" /> : JSX.Element
 >                                : ^^^^^^^^^^^
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 
@@ -122,15 +122,15 @@ Component = RenderElement;
 ><RenderElement excessProp /> : JSX.Element
 >                             : ^^^^^^^^^^^
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^
 >excessProp : true
 >           : ^^^^
 
 const RenderString = ({ title }: { title: string }) => title;
 >RenderString : ({ title }: { title: string; }) => string
->             : ^^^^^^^^^^^^                  ^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >({ title }: { title: string }) => title : ({ title }: { title: string; }) => string
->                                        : ^^^^^^^^^^^^                  ^^^^^^^^^^^
+>                                        :                                          
 >title : string
 >      : ^^^^^^
 >title : string
@@ -140,23 +140,23 @@ const RenderString = ({ title }: { title: string }) => title;
 
 Component = RenderString;
 >Component = RenderString : ({ title }: { title: string; }) => string
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^         ^^                  ^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RenderString : ({ title }: { title: string; }) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 
 <RenderString />;
 ><RenderString /> : JSX.Element
 >                 : ^^^^^^^^^^^
 >RenderString : ({ title }: { title: string; }) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 
 <RenderString title="react" />;
 ><RenderString title="react" /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >RenderString : ({ title }: { title: string; }) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 
@@ -164,15 +164,15 @@ Component = RenderString;
 ><RenderString excessProp /> : JSX.Element
 >                            : ^^^^^^^^^^^
 >RenderString : ({ title }: { title: string; }) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >excessProp : true
 >           : ^^^^
 
 const RenderNumber = ({ title }: { title: string }) => title.length;
 >RenderNumber : ({ title }: { title: string; }) => number
->             : ^^^^^^^^^^^^                  ^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >({ title }: { title: string }) => title.length : ({ title }: { title: string; }) => number
->                                               : ^^^^^^^^^^^^                  ^^^^^^^^^^^
+>                                               :                                          
 >title : string
 >      : ^^^^^^
 >title : string
@@ -186,23 +186,23 @@ const RenderNumber = ({ title }: { title: string }) => title.length;
 
 Component = RenderNumber;
 >Component = RenderNumber : ({ title }: { title: string; }) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^         ^^                  ^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RenderNumber : ({ title }: { title: string; }) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 
 <RenderNumber />;
 ><RenderNumber /> : JSX.Element
 >                 : ^^^^^^^^^^^
 >RenderNumber : ({ title }: { title: string; }) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 
 <RenderNumber title="react" />;
 ><RenderNumber title="react" /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >RenderNumber : ({ title }: { title: string; }) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 
@@ -210,15 +210,15 @@ Component = RenderNumber;
 ><RenderNumber excessProp /> : JSX.Element
 >                            : ^^^^^^^^^^^
 >RenderNumber : ({ title }: { title: string; }) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^                  ^^^^^^^^^^^
 >excessProp : true
 >           : ^^^^
 
 const RenderArray = ({ title }: { title: string }) => [title];
 >RenderArray : ({ title }: { title: string; }) => string[]
->            : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^
+>            : ^         ^^                  ^^^^^^^^^^^^^
 >({ title }: { title: string }) => [title] : ({ title }: { title: string; }) => string[]
->                                          : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^
+>                                          :                                            
 >title : string
 >      : ^^^^^^
 >title : string
@@ -230,23 +230,23 @@ const RenderArray = ({ title }: { title: string }) => [title];
 
 Component = RenderArray;
 >Component = RenderArray : ({ title }: { title: string; }) => string[]
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^         ^^                  ^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RenderArray : ({ title }: { title: string; }) => string[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^                  ^^^^^^^^^^^^^
 
 <RenderArray />;
 ><RenderArray /> : JSX.Element
 >                : ^^^^^^^^^^^
 >RenderArray : ({ title }: { title: string; }) => string[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^                  ^^^^^^^^^^^^^
 
 <RenderArray title="react" />;
 ><RenderArray title="react" /> : JSX.Element
 >                              : ^^^^^^^^^^^
 >RenderArray : ({ title }: { title: string; }) => string[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^                  ^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 
@@ -254,16 +254,16 @@ Component = RenderArray;
 ><RenderArray excessProp /> : JSX.Element
 >                           : ^^^^^^^^^^^
 >RenderArray : ({ title }: { title: string; }) => string[]
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^                  ^^^^^^^^^^^^^
 >excessProp : true
 >           : ^^^^
 
 // React Server Component
 const RenderPromise = async ({ title }: { title: string }) => "react";
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
->              : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >async ({ title }: { title: string }) => "react" : ({ title }: { title: string; }) => Promise<string>
->                                                : ^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^
+>                                                :                                                   
 >title : string
 >      : ^^^^^^
 >title : string
@@ -273,23 +273,23 @@ const RenderPromise = async ({ title }: { title: string }) => "react";
 
 Component = RenderPromise;
 >Component = RenderPromise : ({ title }: { title: string; }) => Promise<string>
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 
 <RenderPromise />;
 ><RenderPromise /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 
 <RenderPromise title="react" />;
 ><RenderPromise title="react" /> : JSX.Element
 >                                : ^^^^^^^^^^^
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >title : string
 >      : ^^^^^^
 
@@ -297,7 +297,7 @@ Component = RenderPromise;
 ><RenderPromise excessProp /> : JSX.Element
 >                             : ^^^^^^^^^^^
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >excessProp : true
 >           : ^^^^
 
@@ -393,7 +393,7 @@ Component = RenderStringClass;
 interface ReactNativeFlatListProps<Item> {}
 function ReactNativeFlatList(
 >ReactNativeFlatList : (props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null
->                    : ^^^^^^^^  ^^^^^^^                                              ^^^^^^^^^
+>                    : ^     ^^  ^^   ^^                                              ^^^^^^^^^
 
   props: {},
 >props : {}
@@ -401,11 +401,11 @@ function ReactNativeFlatList(
 
   ref: React.ForwardedRef<typeof ReactNativeFlatList>
 >ref : React.ForwardedRef<(props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                              ^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^     ^^  ^^   ^^                                              ^^^^^^^^^^
 >React : any
 >      : ^^^
 >ReactNativeFlatList : (props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^  ^^   ^^                                              ^^^^^^^^^
 
 ) {
   return null;
@@ -414,12 +414,12 @@ function ReactNativeFlatList(
 ><ReactNativeFlatList /> : JSX.Element
 >                        : ^^^^^^^^^^^
 >ReactNativeFlatList : (props: {}, ref: React.ForwardedRef<typeof ReactNativeFlatList>) => null
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^  ^^   ^^                                              ^^^^^^^^^
 
 // testing higher-order component compat
 function f1<T extends (props: {}) => React.ReactElement<any>>(Component: T) {
 >f1 : <T extends (props: {}) => React.ReactElement<any>>(Component: T) => JSX.Element
->   : ^ ^^^^^^^^^^^^^^^^^  ^^^^^                       ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^     ^^  ^^^^^                       ^^         ^^ ^^^^^^^^^^^^^^^^
 >props : {}
 >      : ^^
 >React : any

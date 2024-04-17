@@ -9,7 +9,7 @@ const a = 'a';
 
 function f1<T extends { a: string, b: number }>(obj: T) {
 >f1 : <T extends { a: string; b: number; }>(obj: T) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^ ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -94,7 +94,7 @@ const sb = Symbol();
 
 function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
 >f2 : <T extends { [sa]: string; [sb]: number; }>(obj: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^   ^^ ^^^^^^^^^
 >[sa] : string
 >     : ^^^^^^
 >sa : unique symbol
@@ -123,7 +123,7 @@ function f2<T extends { [sa]: string, [sb]: number }>(obj: T) {
 
 function f3<T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) {
 >f3 : <T, K1 extends keyof T, K2 extends keyof T>(obj: T, k1: K1, k2: K2) => void
->   : ^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^  ^^^^^^  ^^^^^^^^^
+>   : ^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^  ^^  ^^  ^^  ^^^^^^^^^
 >obj : T
 >    : ^
 >k1 : K1
@@ -158,7 +158,7 @@ type Item = { a: string, b: number, c: boolean };
 
 function f4<K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) {
 >f4 : <K1 extends keyof Item, K2 extends keyof Item>(obj: Item, k1: K1, k2: K2) => void
->   : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^  ^^^^^^  ^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^   ^^    ^^  ^^  ^^  ^^  ^^^^^^^^^
 >obj : Item
 >    : ^^^^
 >k1 : K1

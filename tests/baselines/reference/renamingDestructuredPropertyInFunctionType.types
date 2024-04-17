@@ -258,13 +258,13 @@ type G13 = new ({ [2]: string }) => void; // Error
 interface I {
   method1(arg: number): any; // OK
 >method1 : (arg: number) => any
->        : ^^^^^^      ^^^^^   
+>        : ^   ^^      ^^^^^   
 >arg : number
 >    : ^^^^^^
 
   method2({ a: string }): any; // Error
 >method2 : ({ a: string }: { a: any; }) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
+>        : ^             ^^^^^^^^^^^^^^^^^^   
 >a : any
 >  : ^^^
 >string : any
@@ -294,7 +294,7 @@ interface I {
 // Below are OK but renaming should be removed from declaration emit
 function f1({ a: string }: O) { }
 >f1 : ({ a: string }: O) => void
->   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^             ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -302,9 +302,9 @@ function f1({ a: string }: O) { }
 
 const f2 = function({ a: string }: O) { };
 >f2 : ({ a: string }: O) => void
->   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^             ^^ ^^^^^^^^^
 >function({ a: string }: O) { } : ({ a: string }: O) => void
->                               : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                               :                           
 >a : any
 >  : ^^^
 >string : string
@@ -312,9 +312,9 @@ const f2 = function({ a: string }: O) { };
 
 const f3 = ({ a: string, b, c }: O) => { };
 >f3 : ({ a: string, b, c }: O) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^                   ^^ ^^^^^^^^^
 >({ a: string, b, c }: O) => { } : ({ a: string, b, c }: O) => void
->                                : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                                :                                 
 >a : any
 >  : ^^^
 >string : string
@@ -325,10 +325,10 @@ const f3 = ({ a: string, b, c }: O) => { };
 >  : ^^^^^^
 
 const f4 = function({ a: string }: O): typeof string { return string; };
->f4 : ({ a: string }: O) => string
->   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
->function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => string
->                                                             : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>f4 : ({ a: string }: O) => typeof string
+>   : ^             ^^ ^^^^^             
+>function({ a: string }: O): typeof string { return string; } : ({ a: string }: O) => typeof string
+>                                                             :                                    
 >a : any
 >  : ^^^
 >string : string
@@ -339,10 +339,10 @@ const f4 = function({ a: string }: O): typeof string { return string; };
 >       : ^^^^^^
 
 const f5 = ({ a: string, b, c }: O): typeof string => '';
->f5 : ({ a: string, b, c }: O) => string
->   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
->({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => string
->                                              : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>f5 : ({ a: string, b, c }: O) => typeof string
+>   : ^                   ^^ ^^^^^             
+>({ a: string, b, c }: O): typeof string => '' : ({ a: string, b, c }: O) => typeof string
+>                                              :                                          
 >a : any
 >  : ^^^
 >string : string
@@ -358,13 +358,13 @@ const f5 = ({ a: string, b, c }: O): typeof string => '';
 
 const obj1 = {
 >obj1 : { method({ a: string }: O): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^
+>     : ^^^^^^^^^             ^^ ^^^^^^^^^^
 >{  method({ a: string }: O) { }} : { method({ a: string }: O): void; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^
+>                                 : ^^^^^^^^^             ^^ ^^^^^^^^^^
 
   method({ a: string }: O) { }
 >method : ({ a: string }: O) => void
->       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^             ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -372,14 +372,14 @@ const obj1 = {
 
 };
 const obj2 = {
->obj2 : { method({ a: string }: O): string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
->{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): string; }
->                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>obj2 : { method({ a: string }: O): typeof string; }
+>     : ^^^^^^^^^             ^^ ^^^             ^^^
+>{  method({ a: string }: O): typeof string { return string; }} : { method({ a: string }: O): typeof string; }
+>                                                               : ^^^^^^^^^             ^^ ^^^             ^^^
 
   method({ a: string }: O): typeof string { return string; }
->method : ({ a: string }: O) => string
->       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^
+>method : ({ a: string }: O) => typeof string
+>       : ^             ^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string
@@ -392,7 +392,7 @@ const obj2 = {
 };
 function f6({ a: string = "" }: O) { }
 >f6 : ({ a: string }: O) => void
->   : ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^             ^^ ^^^^^^^^^
 >a : any
 >  : ^^^
 >string : string
@@ -402,9 +402,9 @@ function f6({ a: string = "" }: O) { }
 
 const f7 = ({ a: string = "", b, c }: O) => { };
 >f7 : ({ a: string, b, c }: O) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^                   ^^ ^^^^^^^^^
 >({ a: string = "", b, c }: O) => { } : ({ a: string, b, c }: O) => void
->                                     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                                     :                                 
 >a : any
 >  : ^^^
 >string : string
@@ -418,21 +418,21 @@ const f7 = ({ a: string = "", b, c }: O) => { };
 
 const f8 = ({ "a": string }: O) => { };
 >f8 : ({ "a": string }: O) => void
->   : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^               ^^ ^^^^^^^^^
 >({ "a": string }: O) => { } : ({ "a": string }: O) => void
->                            : ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                            :                             
 >string : string
 >       : ^^^^^^
 
 function f9 ({ 2: string }) { };
 >f9 : ({ 2: string }: { 2: any; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^
 >string : any
 >       : ^^^
 
 function f10 ({ ["a"]: string }: O) { };
 >f10 : ({ ["a"]: string }: O) => void
->    : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^                 ^^ ^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >string : string
@@ -440,9 +440,9 @@ function f10 ({ ["a"]: string }: O) { };
 
 const f11 =  ({ [2]: string }) => { };
 >f11 : ({ [2]: string }: { 2: any; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^               ^^^^^^^^^^^^^^^^^^^^^^
 >({ [2]: string }) => { } : ({ [2]: string }: { 2: any; }) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         :                                       
 >2 : 2
 >  : ^
 >string : any
@@ -451,7 +451,7 @@ const f11 =  ({ [2]: string }) => { };
 // In below case `string` should be kept because it is used
 function f12({ a: string = "" }: O): typeof string { return "a"; }
 >f12 : ({ a: string }: O) => typeof string
->    : ^^^^^^^^^^^^^^^^ ^^^^^             
+>    : ^             ^^ ^^^^^             
 >a : any
 >  : ^^^
 >string : string

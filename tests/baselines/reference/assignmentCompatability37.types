@@ -31,25 +31,25 @@ module __test2__ {
 
     export var aa:{ new <Tnumber>(param: Tnumber); };;
 >aa : new <Tnumber>(param: Tnumber) => any
->   : ^^^^^       ^^^^^^^^^       ^^^^^^^^
+>   : ^^^^^       ^^     ^^       ^^^^^^^^
 >param : Tnumber
 >      : ^^^^^^^
 
     export var __val__aa = aa;
 >__val__aa : new <Tnumber>(param: Tnumber) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^       ^^     ^^       ^^^^^^^^
 >aa : new <Tnumber>(param: Tnumber) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   :                                     
 }
 __test2__.__val__aa = __test1__.__val__obj4
 >__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test2__.__val__aa : new <Tnumber>(param: Tnumber) => any
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^       ^^     ^^       ^^^^^^^^
 >__test2__ : typeof __test2__
 >          : ^^^^^^^^^^^^^^^^
 >__val__aa : new <Tnumber>(param: Tnumber) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^       ^^     ^^       ^^^^^^^^
 >__test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >__test1__ : typeof __test1__

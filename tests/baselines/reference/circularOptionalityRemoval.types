@@ -4,7 +4,7 @@
 // Constructed repro
 function fn1(x: number | undefined = x > 0 ? x : 0) { }
 >fn1 : (x?: number | undefined) => void
->    : ^^^^^                  ^^^^^^^^^
+>    : ^ ^^^                  ^^^^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >x > 0 ? x : 0 : number | undefined
@@ -23,7 +23,7 @@ function fn1(x: number | undefined = x > 0 ? x : 0) { }
 // Report from user
 function fn2(x?: string = someCondition ? 'value1' : x) { }
 >fn2 : (x?: string) => void
->    : ^^^^^      ^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >someCondition ? 'value1' : x : string | undefined

@@ -5,7 +5,7 @@ var v = {
 >v : { prop: number; func: () => void; func1(): void; a: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ //property prop: 1 /* multiple trailing comments */ /*trailing comments*/, //property func: function () { }, //PropertyName + CallSignature func1() { }, //getter get a() {  return this.prop; } /*trailing 1*/, //setter set a(value) {  this.prop = value; } // trailing 2} : { prop: number; func: () => void; func1(): void; a: any; }
->                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
  //property
  prop: 1 /* multiple trailing comments */ /*trailing comments*/,
@@ -19,7 +19,7 @@ var v = {
 >func : () => void
 >     : ^^^^^^^^^^
 >function () { } : () => void
->                : ^^^^^^^^^^
+>                :           
 
  },
  //PropertyName + CallSignature

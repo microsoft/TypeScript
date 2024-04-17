@@ -389,13 +389,13 @@ new fn4(null, true); // Error
 interface fn5 {
     new(f: (n: string) => void): string;
 >f : (n: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >n : string
 >  : ^^^^^^
 
     new(f: (n: number) => void): number;
 >f : (n: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 }
@@ -411,7 +411,7 @@ var n = new fn5((n) => n.toFixed());
 >fn5 : fn5
 >    : ^^^
 >(n) => n.toFixed() : (n: string) => any
->                   : ^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.toFixed() : any
@@ -431,17 +431,17 @@ var s = new fn5((n) => n.substr(0));
 >fn5 : fn5
 >    : ^^^
 >(n) => n.substr(0) : (n: string) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

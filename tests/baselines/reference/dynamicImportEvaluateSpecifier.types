@@ -36,7 +36,7 @@ const getPath = async () => {
 >getPath : () => Promise<string>
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >async () => {	/* in reality this would do some async FS operation, or a web request */	return "/root/my/cool/path";} : () => Promise<string>
->                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                     :                      
 
 	/* in reality this would do some async FS operation, or a web request */
 	return "/root/my/cool/path";
@@ -49,7 +49,7 @@ const someFunction = async () => {
 >someFunction : () => Promise<void>
 >             : ^^^^^^^^^^^^^^^^^^^
 >async () => {	const result = await import(await getPath());} : () => Promise<void>
->                                                             : ^^^^^^^^^^^^^^^^^^^
+>                                                             :                    
 
 	const result = await import(await getPath());
 >result : any

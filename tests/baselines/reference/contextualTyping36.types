@@ -5,7 +5,7 @@ var foo = <{ id: number; }[]>[{ id: 4 }, <{ id: number; }>({  })];
 >foo : { id: number; }[]
 >    : ^^^^^^      ^^^^^
 ><{ id: number; }[]>[{ id: 4 }, <{ id: number; }>({  })] : { id: number; }[]
->                                                        : ^^^^^^      ^^^^^
+>                                                        :                ^^
 >id : number
 >   : ^^^^^^
 >[{ id: 4 }, <{ id: number; }>({  })] : { id: number; }[]

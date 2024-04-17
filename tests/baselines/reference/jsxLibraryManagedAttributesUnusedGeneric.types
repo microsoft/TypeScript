@@ -51,7 +51,7 @@ namespace jsx {
 
 declare const Comp: (p: { className?: string }) => null
 >Comp : (p: { className?: string; }) => null
->     : ^^^^                       ^^^^^    
+>     : ^ ^^                       ^^^^^    
 >p : { className?: string; }
 >  : ^^^^^^^^^^^^^^      ^^^
 >className : string
@@ -61,7 +61,7 @@ declare const Comp: (p: { className?: string }) => null
 ><Comp css="color:hotpink;" /> : jsx.JSX.Element
 >                              : ^^^^^^^^^^^^^^^
 >Comp : (p: { className?: string; }) => null
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                       ^^^^^^^^^
 >css : string
 >    : ^^^^^^
 

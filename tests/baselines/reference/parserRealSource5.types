@@ -213,7 +213,7 @@ module TypeScript {
 
         public write(s) {
 >write : (s: any) => void
->      : ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 
@@ -232,7 +232,7 @@ module TypeScript {
 
         public writeLine(s) {
 >writeLine : (s: any) => void
->          : ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 
@@ -252,7 +252,7 @@ module TypeScript {
 >this.outfile.WriteLine(this.builder) : void
 >                                     : ^^^^
 >this.outfile.WriteLine : (s: string) => void
->                       : ^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^      ^^^^^^^^^
 >this.outfile : ITextWriter
 >             : ^^^^^^^^^^^
 >this : this
@@ -260,7 +260,7 @@ module TypeScript {
 >outfile : ITextWriter
 >        : ^^^^^^^^^^^
 >WriteLine : (s: string) => void
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^
 >this.builder : string
 >             : ^^^^^^
 >this : this
@@ -285,7 +285,7 @@ module TypeScript {
 
     export function prePrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >prePrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -335,7 +335,7 @@ module TypeScript {
 
     export function postPrintAST(ast: AST, parent: AST, walker: IAstWalker) {
 >postPrintAST : (ast: AST, parent: AST, walker: IAstWalker) => AST
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST

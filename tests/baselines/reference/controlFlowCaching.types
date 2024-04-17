@@ -5,7 +5,7 @@
 
 function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >f : (dim: any, offsets: any, arr: any, acommon: any, centerAnchorLimit: any, g: any, has: any, lin: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^   ^^^^^^^       ^^^^^^^   ^^^^^^^       ^^^^^^^                 ^^^^^^^ ^^^^^^^   ^^^^^^^   ^^^^^^^^^^^^^^
 >dim : any
 >offsets : any
 >arr : any
@@ -431,19 +431,19 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >Math.abs(Math.cos(rotation * Math.PI / 180)) : number
 >                                             : ^^^^^^
 >Math.abs : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >abs : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >Math.cos(rotation * Math.PI / 180) : number
 >                                   : ^^^^^^
 >Math.cos : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >cos : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >rotation * Math.PI / 180 : number
 >                         : ^^^^^^
 >rotation * Math.PI : number
@@ -465,19 +465,19 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >Math.abs(Math.sin(rotation * Math.PI / 180)) : number
 >                                             : ^^^^^^
 >Math.abs : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >abs : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >Math.sin(rotation * Math.PI / 180) : number
 >                                   : ^^^^^^
 >Math.sin : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sin : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >rotation * Math.PI / 180 : number
 >                         : ^^^^^^
 >rotation * Math.PI : number
@@ -580,11 +580,11 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >Math.max(taMajorTick.length > 0 ? taMajorTick.length : 0,        taMinorTick.length > 0 ? taMinorTick.length : 0) : number
 >                                                                                                                  : ^^^^^^
 >Math.max : (...values: number[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^      ^^        ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >max : (...values: number[]) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^        ^^^^^^^^^^^
 >taMajorTick.length > 0 ? taMajorTick.length : 0 : any
 >taMajorTick.length > 0 : boolean
 >                       : ^^^^^^^

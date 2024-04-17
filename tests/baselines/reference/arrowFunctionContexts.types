@@ -49,11 +49,11 @@ window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
 >                                   : ^^^^^^
 >window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^
 >() => null : () => any
 >           : ^^^^^^^^^
 >100 : 100
@@ -63,9 +63,9 @@ window.setTimeout(() => null, 100);
 
 var obj = (n: number) => '';
 >obj : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  :                      
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -73,17 +73,17 @@ var obj = (n: number) => '';
 
 var obj: { (n: number): string; }; // OK
 >obj : (n: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
 var arr = [(n: number) => ''];
 >arr : ((n: number) => string)[]
->    : ^^^^^      ^^^^^^^^^^^^^^
+>    : ^^ ^^      ^^^^^^^^^^^^^^
 >[(n: number) => ''] : ((n: number) => string)[]
->                    : ^^^^^      ^^^^^^^^^^^^^^
+>                    : ^                     ^^^
 >(n: number) => '' : (n: number) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -91,7 +91,7 @@ var arr = [(n: number) => ''];
 
 var arr: { (n: number): string; }[]; // Incorrect error here (bug 829597)
 >arr : ((n: number) => string)[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^ ^^      ^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -130,9 +130,9 @@ module M {
 
     export var a = (s) => '';
 >a : (s: any) => string
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >(s) => '' : (s: any) => string
->          : ^^^^^^^^^^^^^^^^^^
+>          :                   
 >s : any
 >  : ^^^
 >'' : ""
@@ -140,9 +140,9 @@ module M {
 
     var b = (s) => s;
 >b : (s: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >(s) => s : (s: any) => any
->         : ^^^^^^^^^^^^^^^
+>         :                
 >s : any
 >  : ^^^
 >s : any
@@ -202,11 +202,11 @@ module M2 {
 >window.setTimeout(() => null, 100) : number
 >                                   : ^^^^^^
 >window.setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >setTimeout : ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number) & ((handler: TimerHandler, timeout?: number, ...arguments: any[]) => number)
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^^^^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^
 >() => null : () => any
 >           : ^^^^^^^^^
 >100 : 100
@@ -216,9 +216,9 @@ module M2 {
 
     var obj = (n: number) => '';
 >obj : (n: number) => string
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  :                      
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -226,17 +226,17 @@ module M2 {
 
     var obj: { (n: number): string; }; // OK
 >obj : (n: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
     var arr = [(n: number) => ''];
 >arr : ((n: number) => string)[]
->    : ^^^^^      ^^^^^^^^^^^^^^
+>    : ^^ ^^      ^^^^^^^^^^^^^^
 >[(n: number) => ''] : ((n: number) => string)[]
->                    : ^^^^^      ^^^^^^^^^^^^^^
+>                    : ^                     ^^^
 >(n: number) => '' : (n: number) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -244,7 +244,7 @@ module M2 {
 
     var arr: { (n: number): string; }[]; // Incorrect error here (bug 829597)
 >arr : ((n: number) => string)[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^ ^^      ^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -283,9 +283,9 @@ module M2 {
 
         export var a = (s) => '';
 >a : (s: any) => string
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^
 >(s) => '' : (s: any) => string
->          : ^^^^^^^^^^^^^^^^^^
+>          :                   
 >s : any
 >  : ^^^
 >'' : ""
@@ -293,9 +293,9 @@ module M2 {
 
         var b = (s) => s;
 >b : (s: any) => any
->  : ^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^
 >(s) => s : (s: any) => any
->         : ^^^^^^^^^^^^^^^
+>         :                
 >s : any
 >  : ^^^
 >s : any
@@ -307,9 +307,9 @@ module M2 {
 // <Identifier>(ParamList) => { ... } is a generic arrow function
 var generic1 = <T>(n: T) => [n];
 >generic1 : <T>(n: T) => T[]
->         : ^ ^^^^^ ^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^
 ><T>(n: T) => [n] : <T>(n: T) => T[]
->                 : ^ ^^^^^ ^^^^^^^^
+>                 :                 
 >n : T
 >  : ^
 >[n] : T[]
@@ -319,15 +319,15 @@ var generic1 = <T>(n: T) => [n];
 
 var generic1: { <T>(n: T): T[] }; // Incorrect error, Bug 829597
 >generic1 : <T>(n: T) => T[]
->         : ^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 
 var generic2 = <T>(n: T) => { return [n]; };
 >generic2 : <T>(n: T) => T[]
->         : ^ ^^^^^ ^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^
 ><T>(n: T) => { return [n]; } : <T>(n: T) => T[]
->                             : ^ ^^^^^ ^^^^^^^^
+>                             :                 
 >n : T
 >  : ^
 >[n] : T[]
@@ -337,7 +337,7 @@ var generic2 = <T>(n: T) => { return [n]; };
 
 var generic2: { <T>(n: T): T[] };
 >generic2 : <T>(n: T) => T[]
->         : ^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 
@@ -348,9 +348,9 @@ var asserted1 = <any>((n) => [n]);
 ><any>((n) => [n]) : any
 >                  : ^^^
 >((n) => [n]) : (n: any) => any[]
->             : ^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^
 >(n) => [n] : (n: any) => any[]
->           : ^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^
 >n : any
 >  : ^^^
 >[n] : any[]
@@ -368,9 +368,9 @@ var asserted2 = <any>((n) => { return n; });
 ><any>((n) => { return n; }) : any
 >                            : ^^^
 >((n) => { return n; }) : (n: any) => any
->                       : ^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^^^^
 >(n) => { return n; } : (n: any) => any
->                     : ^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^
 >n : any
 >  : ^^^
 >n : any

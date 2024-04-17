@@ -11,9 +11,9 @@ declare function dec(): (target: Function, paramIndex: number) => void;
 
 @dec()
 >dec() : (target: Function, paramIndex: number) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^        ^^          ^^      ^^^^^^^^^
 >dec : () => (target: Function, paramIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^      ^^        ^^          ^^      ^^^^^^^^^
 
 class C {
 >C : C

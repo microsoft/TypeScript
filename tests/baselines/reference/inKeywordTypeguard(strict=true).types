@@ -1,9 +1,7 @@
 //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 1,200 / 1,300 (nearest 100)
-Symbol count: 27,500 / 27,500 (nearest 500)
+Type Count: 1,000
 
 === inKeywordTypeguard.ts ===
 class A { a: string; }
@@ -20,7 +18,7 @@ class B { b: string; }
 
 function negativeClassesTest(x: A | B) {
 >negativeClassesTest : (x: A | B) => void
->                    : ^^^^     ^^^^^^^^^
+>                    : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -61,7 +59,7 @@ function negativeClassesTest(x: A | B) {
 
 function positiveClassesTest(x: A | B) {
 >positiveClassesTest : (x: A | B) => void
->                    : ^^^^     ^^^^^^^^^
+>                    : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -114,7 +112,7 @@ class BWithOptionalProp { b?: string; }
 
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
->                                          : ^^^^                                     ^^^^^^^^^
+>                                          : ^ ^^                                     ^^^^^^^^^
 >x : AWithOptionalProp | BWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -177,7 +175,7 @@ class BWithMethod {
 
 function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMembers : (x: AWithMethod | BWithMethod) => void
->                               : ^^^^                         ^^^^^^^^^
+>                               : ^ ^^                         ^^^^^^^^^
 >x : AWithMethod | BWithMethod
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -215,7 +213,7 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 
 function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMemberMissingInBothClasses : (x: AWithMethod | BWithMethod) => void
->                                                  : ^^^^                         ^^^^^^^^^
+>                                                  : ^ ^^                         ^^^^^^^^^
 >x : AWithMethod | BWithMethod
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -284,7 +282,7 @@ class D { a: string; }
 
 function negativeMultipleClassesTest(x: A | B | C | D) {
 >negativeMultipleClassesTest : (x: A | B | C | D) => void
->                            : ^^^^             ^^^^^^^^^
+>                            : ^ ^^             ^^^^^^^^^
 >x : A | B | C | D
 >  : ^^^^^^^^^^^^^
 
@@ -331,7 +329,7 @@ class ClassWithUnionProp { prop: A | B }
 
 function negativePropTest(x: ClassWithUnionProp) {
 >negativePropTest : (x: ClassWithUnionProp) => void
->                 : ^^^^                  ^^^^^^^^^
+>                 : ^ ^^                  ^^^^^^^^^
 >x : ClassWithUnionProp
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -470,7 +468,7 @@ class UnreachableCodeDetection {
 
 function positiveIntersectionTest(x: { a: string } & { b: string }) {
 >positiveIntersectionTest : (x: { a: string; } & { b: string; }) => void
->                         : ^^^^                               ^^^^^^^^^
+>                         : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } & { b: string; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
@@ -530,7 +528,7 @@ if ('extra' in error) {
 
 function narrowsToNever(x: { l: number } | { r: number }) {
 >narrowsToNever : (x: { l: number; } | { r: number; }) => number
->               : ^^^^                               ^^^^^^^^^^^
+>               : ^ ^^                               ^^^^^^^^^^^
 >x : { l: number; } | { r: number; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >l : number
@@ -606,7 +604,7 @@ type AOrB = { aProp: number } | { bProp: number };
 
 declare function isAOrB(x: unknown): x is AOrB;
 >isAOrB : (x: unknown) => x is AOrB
->       : ^^^^       ^^^^^         
+>       : ^ ^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
@@ -618,7 +616,7 @@ if (isAOrB(x)) {
 >isAOrB(x) : boolean
 >          : ^^^^^^^
 >isAOrB : (x: unknown) => x is AOrB
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -685,26 +683,26 @@ function negativeIntersectionTest() {
 
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 function f1(x: unknown) {
 >f1 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -840,7 +838,7 @@ function f1(x: unknown) {
 
 function f2(x: object) {
 >f2 : (x: object) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -912,7 +910,7 @@ function f2(x: object) {
 
 function f3<T>(x: T) {
 >f3 : <T>(x: T) => void
->   : ^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -1048,7 +1046,7 @@ function f3<T>(x: T) {
 
 function f4(x: { a: string }) {
 >f4 : (x: { a: string; }) => void
->   : ^^^^              ^^^^^^^^^
+>   : ^ ^^              ^^^^^^^^^
 >x : { a: string; }
 >  : ^^^^^      ^^^
 >a : string
@@ -1122,7 +1120,7 @@ function f4(x: { a: string }) {
 
 function f5(x: { a: string } | { b: string }) {
 >f5 : (x: { a: string; } | { b: string; }) => void
->   : ^^^^                               ^^^^^^^^^
+>   : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } | { b: string; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
@@ -1163,7 +1161,7 @@ function f5(x: { a: string } | { b: string }) {
 
 function f6(x: { a: string } | { b: string }) {
 >f6 : (x: { a: string; } | { b: string; }) => void
->   : ^^^^                               ^^^^^^^^^
+>   : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } | { b: string; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
@@ -1206,7 +1204,7 @@ function f6(x: { a: string } | { b: string }) {
 
 function f7(x: { a: string, b: number }, y: { a: string } & { b: number }) {
 >f7 : (x: { a: string; b: number; }, y: { a: string; } & { b: number; }) => void
->   : ^^^^                         ^^^^^                               ^^^^^^^^^
+>   : ^ ^^                         ^^ ^^                               ^^^^^^^^^
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -1266,7 +1264,7 @@ const sym = Symbol();
 
 function f8(x: object) {
 >f8 : (x: object) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -1338,7 +1336,7 @@ function f8(x: object) {
 
 function f9(x: object) {
 >f9 : (x: object) => void
->   : ^^^^      ^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -1410,7 +1408,7 @@ function f9(x: object) {
 
 function f10(x: { a: unknown }) {
 >f10 : (x: { a: unknown; }) => void
->    : ^^^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^
 >x : { a: unknown; }
 >  : ^^^^^       ^^^
 >a : unknown
@@ -1437,7 +1435,7 @@ function f10(x: { a: unknown }) {
 
 function f11(x: { a: any }) {
 >f11 : (x: { a: any; }) => void
->    : ^^^^           ^^^^^^^^^
+>    : ^ ^^           ^^^^^^^^^
 >x : { a: any; }
 >  : ^^^^^   ^^^
 >a : any
@@ -1464,7 +1462,7 @@ function f11(x: { a: any }) {
 
 function f12(x: { a: string }) {
 >f12 : (x: { a: string; }) => void
->    : ^^^^              ^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >x : { a: string; }
 >  : ^^^^^      ^^^
 >a : string
@@ -1491,7 +1489,7 @@ function f12(x: { a: string }) {
 
 function f13(x: { a?: string }) {
 >f13 : (x: { a?: string; }) => void
->    : ^^^^               ^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^
 >x : { a?: string; }
 >  : ^^^^^^      ^^^
 >a : string | undefined
@@ -1518,7 +1516,7 @@ function f13(x: { a?: string }) {
 
 function f14(x: { a: string | undefined }) {
 >f14 : (x: { a: string | undefined; }) => void
->    : ^^^^                          ^^^^^^^^^
+>    : ^ ^^                          ^^^^^^^^^
 >x : { a: string | undefined; }
 >  : ^^^^^                  ^^^
 >a : string | undefined
@@ -1545,7 +1543,7 @@ function f14(x: { a: string | undefined }) {
 
 function f15(x: { a?: string | undefined }) {
 >f15 : (x: { a?: string | undefined; }) => void
->    : ^^^^                           ^^^^^^^^^
+>    : ^ ^^                           ^^^^^^^^^
 >x : { a?: string | undefined; }
 >  : ^^^^^^                  ^^^
 >a : string | undefined
@@ -1572,7 +1570,7 @@ function f15(x: { a?: string | undefined }) {
 
 function f16(x: typeof globalThis, y: Window & typeof globalThis) {
 >f16 : (x: typeof globalThis, y: Window & typeof globalThis) => void
->    : ^^^^                 ^^^^^                          ^^^^^^^^^
+>    : ^ ^^                 ^^ ^^                          ^^^^^^^^^
 >x : typeof globalThis
 >  : ^^^^^^^^^^^^^^^^^
 >globalThis : typeof globalThis
@@ -1595,7 +1593,7 @@ function f16(x: typeof globalThis, y: Window & typeof globalThis) {
 
 function foo<A>(value: A) {
 >foo : <A>(value: A) => void
->    : ^ ^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^     ^^ ^^^^^^^^^
 >value : A
 >      : ^
 
@@ -1635,7 +1633,7 @@ const checkIsTouchDevice = () =>
 >checkIsTouchDevice : () => boolean
 >                   : ^^^^^^^^^^^^^
 >() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
->                                                                            : ^^^^^^^^^^^^^
+>                                                                            :              
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
@@ -1661,7 +1659,7 @@ const checkIsTouchDevice = () =>
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
 >isHTMLTable : <T extends object | null>(table: T) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^       
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^       
 >table : T
 >      : ^
 
@@ -1686,9 +1684,9 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->                                                   : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                   :                                      
 >a : P
 >  : ^
 
@@ -1706,7 +1704,7 @@ const f = <P extends object>(a: P & {}) => {
 
 function test1<T extends any[] | Record<string, any>>(obj: T) {
 >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1716,11 +1714,11 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
@@ -1743,7 +1741,7 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 
 function test2<T extends any[] | Record<string, any>>(obj: T) {
 >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1751,11 +1749,11 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1772,7 +1770,7 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 
 function test3<T extends any[] | Record<string, any>>(obj: T) {
 >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 

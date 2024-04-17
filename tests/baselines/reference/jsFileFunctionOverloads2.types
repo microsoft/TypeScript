@@ -19,8 +19,8 @@
  * @returns {string}
  */
  function getTypeName(x) {
->getTypeName : { (x: number): 'number'; (x: string): 'string'; (x: boolean): 'boolean'; }
->            : ^^^^^^      ^^^        ^^^^^^      ^^^        ^^^^^^       ^^^         ^^^
+>getTypeName : { (x: number): "number"; (x: string): "string"; (x: boolean): "boolean"; }
+>            : ^^^ ^^      ^^^        ^^^ ^^      ^^^        ^^^ ^^       ^^^         ^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -38,9 +38,9 @@
  */
 const identity = x => x;
 >identity : <T>(x: T) => T
->         : ^ ^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^^^^^
 >x => x : <T>(x: T) => T
->       : ^ ^^^^^^^^^^^^
+>       :               
 >x : T
 >  : ^
 >x : T
@@ -64,13 +64,13 @@ const identity = x => x;
  */
 function flatMap(array, iterable = identity) {
 >flatMap : { <T, U>(array: T[], iterable: (x: T) => U[]): U[]; <T, U>(array: T[][]): T[]; }
->        : ^^^ ^^ ^^^^^^^^^   ^^^^^^^^^^^^             ^^^   ^^^ ^^ ^^^^^^^^^     ^^^   ^^^
+>        : ^^^ ^^ ^^     ^^   ^^        ^^             ^^^   ^^^ ^^ ^^     ^^     ^^^   ^^^
 >array : unknown[]
 >      : ^^^^^^^^^
 >iterable : (x: unknown) => unknown
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^^^^^^^^
 >identity : <T_1>(x: T_1) => T_1
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^ ^^   ^^^^^^^^
 
   /** @type {unknown[]} */
   const result = [];
@@ -105,11 +105,11 @@ function flatMap(array, iterable = identity) {
 >result.push(.../** @type {unknown[]} */(iterable(array[i]))) : number
 >                                                             : ^^^^^^
 >result.push : (...items: unknown[]) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >result : unknown[]
 >       : ^^^^^^^^^
 >push : (...items: unknown[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >.../** @type {unknown[]} */(iterable(array[i])) : unknown
 >                                                : ^^^^^^^
 >(iterable(array[i])) : unknown[]
@@ -117,7 +117,7 @@ function flatMap(array, iterable = identity) {
 >iterable(array[i]) : unknown
 >                   : ^^^^^^^
 >iterable : (x: unknown) => unknown
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^       ^^^^^^^^^^^^
 >array[i] : unknown
 >         : ^^^^^^^
 >array : unknown[]

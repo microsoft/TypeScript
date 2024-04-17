@@ -9,9 +9,9 @@ type Person = { name: string; }
 
 const getName1 = (person?: Person): string => {
 >getName1 : (person?: Person) => string
->         : ^^^^^^^^^^      ^^^^^      
+>         : ^      ^^^      ^^^^^      
 >(person?: Person): string => {  return typeof person?.name === 'string' ? person?.name : '';} : (person?: Person) => string
->                                                                                              : ^^^^^^^^^^      ^^^^^      
+>                                                                                              :        ^                   
 >person : Person | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 
@@ -43,9 +43,9 @@ const getName1 = (person?: Person): string => {
 
 const isString = (value: any): value is string => {
 >isString : (value: any) => value is string
->         : ^^^^^^^^   ^^^^^               
+>         : ^     ^^   ^^^^^               
 >(value: any): value is string => {  return typeof value === 'string';} : (value: any) => value is string
->                                                                       : ^^^^^^^^   ^^^^^               
+>                                                                       :                                
 >value : any
 
   return typeof value === 'string';
@@ -61,9 +61,9 @@ const isString = (value: any): value is string => {
 
 const getName2 = (person?: Person): string => {
 >getName2 : (person?: Person) => string
->         : ^^^^^^^^^^      ^^^^^      
+>         : ^      ^^^      ^^^^^      
 >(person?: Person): string => {  return isString(person?.name) ? person?.name : '';} : (person?: Person) => string
->                                                                                    : ^^^^^^^^^^      ^^^^^      
+>                                                                                    :        ^                   
 >person : Person | undefined
 >       : ^^^^^^^^^^^^^^^^^^
 
@@ -73,7 +73,7 @@ const getName2 = (person?: Person): string => {
 >isString(person?.name) : boolean
 >                       : ^^^^^^^
 >isString : (value: any) => value is string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^   ^^^^^^^^^^^^^^^^^^^^
 >person?.name : string | undefined
 >             : ^^^^^^^^^^^^^^^^^^
 >person : Person | undefined

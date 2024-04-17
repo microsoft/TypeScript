@@ -17,13 +17,13 @@ class A {
 
 function f<T extends A>(x: T) {
 >f : <T extends A>(x: T) => void
->  : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
     function g<U extends T>(x: U) {
 >g : <U extends T>(x: U) => void
->  : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : U
 >  : ^
 
@@ -62,7 +62,7 @@ class B<T extends A> {
 
     foo(x: T) {
 >foo : (x: T) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -82,7 +82,7 @@ class B<T extends A> {
     }
     bar<U extends T>(x: U) {
 >bar : <U extends T>(x: U) => void
->    : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : U
 >  : ^
 

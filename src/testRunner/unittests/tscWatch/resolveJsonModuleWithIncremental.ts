@@ -1,9 +1,5 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { jsonToReadableText } from "../helpers";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     libFile,

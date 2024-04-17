@@ -1,11 +1,10 @@
 //// [tests/cases/compiler/jsxCallElaborationCheckNoCrash1.tsx] ////
 
 === Performance Stats ===
-Subtype cache: 100 / 100 (nearest 100)
-Assignability cache: 3,600 / 3,600 (nearest 100)
-Type Count: 7,800 / 7,800 (nearest 100)
-Instantiation count: 75,500 / 75,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxCallElaborationCheckNoCrash1.tsx ===
 /// <reference path="react16.d.ts" />
@@ -20,9 +19,9 @@ type Tags = "span" | "div";
 
 export const Hoc = <Tag extends Tags>(
 >Hoc : <Tag extends Tags>(TagElement: Tag) => React.SFC
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^         
+>    : ^   ^^^^^^^^^^^^^^^          ^^   ^^^^^         
 ><Tag extends Tags>(   TagElement: Tag,): React.SFC => {   const Component = () => <TagElement />;   return Component;} : <Tag extends Tags>(TagElement: Tag) => React.SFC
->                                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^         
+>                                                                                                                       :                                                 
 
    TagElement: Tag,
 >TagElement : Tag
@@ -36,7 +35,7 @@ export const Hoc = <Tag extends Tags>(
 >Component : () => JSX.Element
 >          : ^^^^^^^^^^^^^^^^^
 >() => <TagElement /> : () => JSX.Element
->                     : ^^^^^^^^^^^^^^^^^
+>                     :                  
 ><TagElement /> : JSX.Element
 >               : ^^^^^^^^^^^
 >TagElement : Tag

@@ -42,7 +42,7 @@ class Derived2<T> extends Base2<T> {
 >r2 : () => void
 >   : ^^^^^^^^^^
 >() => super() : () => void
->              : ^^^^^^^^^^
+>              :           
 >super() : void
 >        : ^^^^
 >super : any
@@ -61,7 +61,7 @@ class Derived3<T> extends Base2<T> {
 >r : () => void
 >  : ^^^^^^^^^^
 >function () { super() } : () => void
->                        : ^^^^^^^^^^
+>                        :           
 >super() : void
 >        : ^^^^
 >super : any

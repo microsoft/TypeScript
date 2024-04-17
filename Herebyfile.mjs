@@ -1,26 +1,16 @@
 // @ts-check
-import {
-    CancelToken,
-} from "@esfx/canceltoken";
+import { CancelToken } from "@esfx/canceltoken";
 import assert from "assert";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import esbuild from "esbuild";
-import {
-    EventEmitter,
-} from "events";
+import { EventEmitter } from "events";
 import fs from "fs";
-import {
-    glob,
-} from "glob";
-import {
-    task,
-} from "hereby";
+import { glob } from "glob";
+import { task } from "hereby";
 import path from "path";
 
-import {
-    localizationDirectories,
-} from "./scripts/build/localization.mjs";
+import { localizationDirectories } from "./scripts/build/localization.mjs";
 import cmdLineOptions from "./scripts/build/options.mjs";
 import {
     buildProject,
@@ -548,6 +538,8 @@ export const lint = task({
             "--format",
             formatter,
             "--report-unused-disable-directives",
+            "--max-warnings",
+            "0",
         ];
 
         if (cmdLineOptions.fix) {

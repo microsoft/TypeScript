@@ -79,7 +79,7 @@ module TypeScript {
 
         add(key: string, data): boolean;
 >add : (key: string, data: any) => boolean
->    : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -87,7 +87,7 @@ module TypeScript {
 
         addOrUpdate(key: string, data): boolean;
 >addOrUpdate : (key: string, data: any) => boolean
->            : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -95,9 +95,9 @@ module TypeScript {
 
         map(fn: (k: string, v, c) => void , context): void;
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->    : ^^^^^               ^^^     ^^^         ^^^^^^^^^^^^^^^^^^^    
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^    
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
 >  : ^^^^^^
 >v : any
@@ -109,9 +109,9 @@ module TypeScript {
 
         every(fn: (k: string, v, c) => boolean, context): boolean;
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->      : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^       
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -123,9 +123,9 @@ module TypeScript {
 
         some(fn: (k: string, v, c) => boolean, context): boolean;
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->     : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^       
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^       
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -141,7 +141,7 @@ module TypeScript {
 
         lookup(key: string): any;
 >lookup : (key: string) => any
->       : ^^^^^^      ^^^^^   
+>       : ^   ^^      ^^^^^   
 >key : string
 >    : ^^^^^^
     }
@@ -230,7 +230,7 @@ module TypeScript {
 
         public add(key: string, data): boolean {
 >add : (key: string, data: any) => boolean
->    : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -289,7 +289,7 @@ module TypeScript {
 
         public addOrUpdate(key: string, data): boolean {
 >addOrUpdate : (key: string, data: any) => boolean
->            : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -364,9 +364,9 @@ module TypeScript {
 
         public map(fn: (k: string, v, c) => void , context) {
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->    : ^^^^^               ^^^     ^^^         ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
 >  : ^^^^^^
 >v : any
@@ -412,7 +412,7 @@ module TypeScript {
 >fn(k, this.table[k], context) : void
 >                              : ^^^^
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >this.table[k] : any
@@ -433,9 +433,9 @@ module TypeScript {
 
         public every(fn: (k: string, v, c) => boolean, context) {
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->      : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -483,7 +483,7 @@ module TypeScript {
 >fn(k, this.table[k], context) : boolean
 >                              : ^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >this.table[k] : any
@@ -512,9 +512,9 @@ module TypeScript {
 
         public some(fn: (k: string, v, c) => boolean, context) {
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->     : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -560,7 +560,7 @@ module TypeScript {
 >fn(k, this.table[k], context) : boolean
 >                              : ^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >this.table[k] : any
@@ -599,7 +599,7 @@ module TypeScript {
 
         public lookup(key: string) {
 >lookup : (key: string) => any
->       : ^^^^^^      ^^^^^^^^
+>       : ^   ^^      ^^^^^^^^
 >key : string
 >    : ^^^^^^
 
@@ -666,7 +666,7 @@ module TypeScript {
 >this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys()) : string[]
 >                                                                        : ^^^^^^^^
 >this.primaryTable.getAllKeys().concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.primaryTable.getAllKeys() : string[]
 >                               : ^^^^^^^^
 >this.primaryTable.getAllKeys : () => string[]
@@ -680,7 +680,7 @@ module TypeScript {
 >getAllKeys : () => string[]
 >           : ^^^^^^^^^^^^^^
 >concat : { (...items: ConcatArray<string>[]): string[]; (...items: (string | ConcatArray<string>)[]): string[]; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.secondaryTable.getAllKeys() : string[]
 >                                 : ^^^^^^^^
 >this.secondaryTable.getAllKeys : () => string[]
@@ -697,7 +697,7 @@ module TypeScript {
 
         public add(key: string, data): boolean {
 >add : (key: string, data: any) => boolean
->    : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>    : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -715,7 +715,7 @@ module TypeScript {
 >this.primaryTable.add(key, data) : boolean
 >                                 : ^^^^^^^
 >this.primaryTable.add : (key: string, data: any) => boolean
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -723,7 +723,7 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >add : (key: string, data: any) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : any
@@ -734,7 +734,7 @@ module TypeScript {
 >this.secondaryTable.add(key, data) : boolean
 >                                   : ^^^^^^^
 >this.secondaryTable.add : (key: string, data: any) => boolean
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -742,7 +742,7 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >add : (key: string, data: any) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : any
@@ -752,7 +752,7 @@ module TypeScript {
 
         public addOrUpdate(key: string, data): boolean {
 >addOrUpdate : (key: string, data: any) => boolean
->            : ^^^^^^      ^^^^^^^^^^^^^^^^       
+>            : ^   ^^      ^^    ^^^^^^^^^^       
 >key : string
 >    : ^^^^^^
 >data : any
@@ -770,7 +770,7 @@ module TypeScript {
 >this.primaryTable.addOrUpdate(key, data) : boolean
 >                                         : ^^^^^^^
 >this.primaryTable.addOrUpdate : (key: string, data: any) => boolean
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -778,7 +778,7 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >addOrUpdate : (key: string, data: any) => boolean
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : any
@@ -789,7 +789,7 @@ module TypeScript {
 >this.secondaryTable.addOrUpdate(key, data) : boolean
 >                                           : ^^^^^^^
 >this.secondaryTable.addOrUpdate : (key: string, data: any) => boolean
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -797,7 +797,7 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >addOrUpdate : (key: string, data: any) => boolean
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^    ^^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >data : any
@@ -807,9 +807,9 @@ module TypeScript {
 
         public map(fn: (k: string, v, c) => void , context) {
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->    : ^^^^^               ^^^     ^^^         ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^    
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^    
 >k : string
 >  : ^^^^^^
 >v : any
@@ -823,7 +823,7 @@ module TypeScript {
 >this.primaryTable.map(fn, context) : void
 >                                   : ^^^^
 >this.primaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -831,9 +831,9 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 
@@ -841,7 +841,7 @@ module TypeScript {
 >this.secondaryTable.map(fn, context) : void
 >                                     : ^^^^
 >this.secondaryTable.map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -849,18 +849,18 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >map : (fn: (k: string, v: any, c: any) => void, context: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^               ^^^     ^^^         ^^       ^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
         }
 
         public every(fn: (k: string, v, c) => boolean, context) {
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->      : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -876,7 +876,7 @@ module TypeScript {
 >this.primaryTable.every(fn, context) : boolean
 >                                     : ^^^^^^^
 >this.primaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -884,15 +884,15 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 >this.secondaryTable.every(fn, context) : boolean
 >                                       : ^^^^^^^
 >this.secondaryTable.every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -900,18 +900,18 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >every : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
         }
 
         public some(fn: (k: string, v, c) => boolean, context) {
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->     : ^^^^^               ^^^     ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^       
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^       
 >k : string
 >  : ^^^^^^
 >v : any
@@ -927,7 +927,7 @@ module TypeScript {
 >this.primaryTable.some(fn, context) : boolean
 >                                    : ^^^^^^^
 >this.primaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -935,15 +935,15 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 >this.secondaryTable.some(fn, context) : boolean
 >                                      : ^^^^^^^
 >this.secondaryTable.some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -951,9 +951,9 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >some : (fn: (k: string, v: any, c: any) => boolean, context: any) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^               ^^^     ^^^            ^^       ^^^^^^^^^^^^^^^^^
 >fn : (k: string, v: any, c: any) => boolean
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
         }
@@ -993,7 +993,7 @@ module TypeScript {
 
         public lookup(key: string) {
 >lookup : (key: string) => any
->       : ^^^^^^      ^^^^^^^^
+>       : ^   ^^      ^^^^^^^^
 >key : string
 >    : ^^^^^^
 
@@ -1003,7 +1003,7 @@ module TypeScript {
 >this.primaryTable.lookup(key) : any
 >                              : ^^^
 >this.primaryTable.lookup : (key: string) => any
->                         : ^^^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^      ^^^^^^^^
 >this.primaryTable : IHashTable
 >                  : ^^^^^^^^^^
 >this : this
@@ -1011,7 +1011,7 @@ module TypeScript {
 >primaryTable : IHashTable
 >             : ^^^^^^^^^^
 >lookup : (key: string) => any
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^
 >key : string
 >    : ^^^^^^
 
@@ -1032,7 +1032,7 @@ module TypeScript {
 >this.secondaryTable.lookup(key) : any
 >                                : ^^^
 >this.secondaryTable.lookup : (key: string) => any
->                           : ^^^^^^^^^^^^^^^^^^^^
+>                           : ^   ^^      ^^^^^^^^
 >this.secondaryTable : IHashTable
 >                    : ^^^^^^^^^^
 >this : this
@@ -1040,7 +1040,7 @@ module TypeScript {
 >secondaryTable : IHashTable
 >               : ^^^^^^^^^^
 >lookup : (key: string) => any
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^
 >key : string
 >    : ^^^^^^
             }
@@ -1049,7 +1049,7 @@ module TypeScript {
 
     export function numberHashFn(key: number): number {
 >numberHashFn : (key: number) => number
->             : ^^^^^^      ^^^^^      
+>             : ^   ^^      ^^^^^      
 >key : number
 >    : ^^^^^^
 
@@ -1156,7 +1156,7 @@ module TypeScript {
 
     export function combineHashes(key1: number, key2: number) {
 >combineHashes : (key1: number, key2: number) => number
->              : ^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^
+>              : ^    ^^      ^^    ^^      ^^^^^^^^^^^
 >key1 : number
 >     : ^^^^^^
 >key2 : number
@@ -1224,13 +1224,13 @@ module TypeScript {
 >size : number
 >     : ^^^^^^
 >hashFn : (key: any) => number
->       : ^^^^^^^^^^^^^^      
+>       : ^   ^^^^^^^^^^      
 >key : any
 >    : ^^^
 
                     public equalsFn: (key1, key2) =>boolean) {
 >equalsFn : (key1: any, key2: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>         : ^    ^^^^^^^    ^^^^^^^^^^       
 >key1 : any
 >     : ^^^
 >key2 : any
@@ -1274,7 +1274,7 @@ module TypeScript {
 
         public add(key, data): boolean {
 >add : (key: any, data: any) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^       
+>    : ^   ^^^^^^^    ^^^^^^^^^^       
 >key : any
 >    : ^^^
 >data : any
@@ -1302,11 +1302,11 @@ module TypeScript {
 >this.hashFn(key) : number
 >                 : ^^^^^^
 >this.hashFn : (key: any) => number
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >hashFn : (key: any) => number
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -1360,11 +1360,11 @@ module TypeScript {
 >this.equalsFn(key, current.key) : boolean
 >                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 >current.key : any
@@ -1432,7 +1432,7 @@ module TypeScript {
 
         public remove(key) {
 >remove : (key: any) => any
->       : ^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -1446,11 +1446,11 @@ module TypeScript {
 >this.hashFn(key) : number
 >                 : ^^^^^^
 >this.hashFn : (key: any) => number
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >hashFn : (key: any) => number
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -1512,11 +1512,11 @@ module TypeScript {
 >this.equalsFn(key, current.key) : boolean
 >                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 >current.key : any
@@ -1616,7 +1616,7 @@ module TypeScript {
 
         public lookup(key) {
 >lookup : (key: any) => any
->       : ^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -1630,11 +1630,11 @@ module TypeScript {
 >this.hashFn(key) : number
 >                 : ^^^^^^
 >this.hashFn : (key: any) => number
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >hashFn : (key: any) => number
->       : ^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -1688,11 +1688,11 @@ module TypeScript {
 >this.equalsFn(key, current.key) : boolean
 >                                : ^^^^^^^
 >this.equalsFn : (key1: any, key2: any) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >equalsFn : (key1: any, key2: any) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^^^^^^    ^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 >current.key : any
@@ -1738,7 +1738,7 @@ module TypeScript {
 
         public lookup(key, findValue?: boolean) {
 >lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 >findValue : boolean
@@ -1843,7 +1843,7 @@ module TypeScript {
 
         public add(key, data): boolean {
 >add : (key: any, data: any) => boolean
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^       
+>    : ^   ^^^^^^^    ^^^^^^^^^^       
 >key : any
 >    : ^^^
 >data : any
@@ -1853,13 +1853,13 @@ module TypeScript {
 >lookupData : { key: any; data: any; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.lookup(key) : { key: any; data: any; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 :                         
 >this.lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 

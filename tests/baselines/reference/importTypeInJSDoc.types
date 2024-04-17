@@ -5,7 +5,7 @@ declare namespace MyClass {
     export interface Bar {
         doer: (x: string) => void;
 >doer : (x: string) => void
->     : ^^^^      ^^^^^    
+>     : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
     }
@@ -20,7 +20,7 @@ declare class MyClass {
 
     static Bar: (x: string, y?: number) => void;
 >Bar : (x: string, y?: number) => void
->    : ^^^^      ^^^^^^      ^^^^^    
+>    : ^ ^^      ^^ ^^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 >y : number
@@ -70,15 +70,15 @@ a = new Foo({doer: Foo.Bar});
 >Foo : typeof import("externs")
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{doer: Foo.Bar} : { doer: (x: string, y?: number) => void; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^
 >doer : (x: string, y?: number) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >Foo.Bar : (x: string, y?: number) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        :              ^                 
 >Foo : typeof import("externs")
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : (x: string, y?: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^      ^^^^^^^^^
 
 const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 >q : import("externs").Bar
@@ -86,11 +86,11 @@ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 >({ doer: q => q }) : import("externs").Bar
 >                   : ^^^^^^^^^^^^^^^^^^^^^
 >{ doer: q => q } : { doer: (q: string) => string; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >doer : (q: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >q => q : (q: string) => string
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       :                      
 >q : string
 >  : ^^^^^^
 >q : string
@@ -98,11 +98,11 @@ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 
 const r = /** @type {typeof import("./externs").Bar} */(r => r);
 >r : (x: string, y?: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >(r => r) : (x: string, y?: number) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         :              ^                 
 >r => r : (r: string) => string
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >r : string
 >  : ^^^^^^
 >r : string

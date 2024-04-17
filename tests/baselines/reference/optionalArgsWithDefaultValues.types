@@ -3,7 +3,7 @@
 === optionalArgsWithDefaultValues.ts ===
 function foo(x: number, y?:boolean=false, z?=0) {}
 >foo : (x: number, y?: boolean, z?: number) => void
->    : ^^^^      ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^       ^^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : boolean
@@ -21,7 +21,7 @@ class CCC {
 
     public foo(x: number, y?:boolean=false, z?=0) {}
 >foo : (x: number, y?: boolean, z?: number) => void
->    : ^^^^      ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^       ^^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : boolean
@@ -35,7 +35,7 @@ class CCC {
 
     static foo2(x: number, y?:boolean=false, z?=0) {}
 >foo2 : (x: number, y?: boolean, z?: number) => void
->     : ^^^^      ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^^       ^^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : boolean
@@ -50,9 +50,9 @@ class CCC {
 
 var a = (x?=0) => { return 1; };
 >a : (x?: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^^^^
 >(x?=0) => { return 1; } : (x?: number) => number
->                        : ^^^^^^^^^^^^^^^^^^^^^^
+>                        :   ^                   
 >x : number
 >  : ^^^^^^
 >0 : 0
@@ -62,9 +62,9 @@ var a = (x?=0) => { return 1; };
 
 var b = (x, y?:number = 2) => { x; };
 >b : (x: any, y?: number) => void
->  : ^^^^^^^^^^^^^      ^^^^^^^^^
+>  : ^ ^^^^^^^ ^^^      ^^^^^^^^^
 >(x, y?:number = 2) => { x; } : (x: any, y?: number) => void
->                             : ^^^^^^^^^^^^^      ^^^^^^^^^
+>                             :           ^                 
 >x : any
 >  : ^^^
 >y : number

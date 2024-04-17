@@ -1,10 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/parserRealSource11.ts] ////
 
 === Performance Stats ===
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 1,300 / 1,300 (nearest 100)
-Instantiation count: 500 / 500 (nearest 500)
-Symbol count: 28,000 / 28,000 (nearest 500)
+Type Count: 1,000
 
 === parserRealSource11.ts ===
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
@@ -139,7 +136,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -339,7 +336,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -780,7 +777,7 @@ module TypeScript {
 
         public print(context: PrintContext) {
 >print : (context: PrintContext) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^
 >context : PrintContext
 >        : ^^^^^^^^^^^^
 
@@ -1058,7 +1055,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -1098,7 +1095,7 @@ module TypeScript {
 
         public netFreeUses(container: Symbol, freeUses: StringHashTable) {
 >netFreeUses : (container: Symbol, freeUses: StringHashTable) => void
->            : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^         ^^      ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >container : Symbol
 >          : ^^^^^^
 >freeUses : StringHashTable
@@ -1132,7 +1129,7 @@ module TypeScript {
 
         public static getResolvedIdentifierName(name: string): string {
 >getResolvedIdentifierName : (name: string) => string
->                          : ^^^^^^^      ^^^^^      
+>                          : ^    ^^      ^^^^^      
 >name : string
 >     : ^^^^^^
 
@@ -1187,11 +1184,11 @@ module TypeScript {
 >name.charAt(i) : string
 >               : ^^^^^^
 >name.charAt : (pos: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >'\\' : "\\"
@@ -1201,11 +1198,11 @@ module TypeScript {
 >name.charAt(i+1) : string
 >                 : ^^^^^^
 >name.charAt : (pos: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >i+1 : number
 >    : ^^^^^^
 >i : number
@@ -1221,15 +1218,15 @@ module TypeScript {
 >parseInt(name.substr(i + 2, 4), 16) : number
 >                                    : ^^^^^^
 >parseInt : (string: string, radix?: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^     ^^^      ^^^^^^^^^^^
 >name.substr(i + 2, 4) : string
 >                      : ^^^^^^
 >name.substr : (from: number, length?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >i + 2 : number
 >      : ^^^^^^
 >i : number
@@ -1249,11 +1246,11 @@ module TypeScript {
 >name.substr(start, i - start) : string
 >                              : ^^^^^^
 >name.substr : (from: number, length?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >start : number
 >      : ^^^^^^
 >i - start : number
@@ -1271,11 +1268,11 @@ module TypeScript {
 >String.fromCharCode(charCode) : string
 >                              : ^^^^^^
 >String.fromCharCode : (...codes: number[]) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^     ^^        ^^^^^^^^^^^
 >String : StringConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >fromCharCode : (...codes: number[]) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^^^^^^^
 >charCode : number
 >         : ^^^^^^
 
@@ -1312,11 +1309,11 @@ module TypeScript {
 >name.substring(start) : string
 >                      : ^^^^^^
 >name.substring : (start: number, end?: number) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >start : number
 >      : ^^^^^^
 
@@ -1414,7 +1411,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -1537,7 +1534,7 @@ module TypeScript {
 
         public append(ast: AST) {
 >append : (ast: AST) => this
->       : ^^^^^^   ^^^^^^^^^
+>       : ^   ^^   ^^^^^^^^^
 >ast : AST
 >    : ^^^
 
@@ -1572,7 +1569,7 @@ module TypeScript {
 
         public appendAll(ast: AST) {
 >appendAll : (ast: AST) => this
->          : ^^^^^^   ^^^^^^^^^
+>          : ^   ^^   ^^^^^^^^^
 >ast : AST
 >    : ^^^
 
@@ -1632,11 +1629,11 @@ module TypeScript {
 >this.append(list.members[i]) : this
 >                             : ^^^^
 >this.append : (ast: AST) => this
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >this : this
 >     : ^^^^
 >append : (ast: AST) => this
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^   ^^   ^^^^^^^^^
 >list.members[i] : AST
 >                : ^^^
 >list.members : AST[]
@@ -1654,11 +1651,11 @@ module TypeScript {
 >this.append(ast) : this
 >                 : ^^^^
 >this.append : (ast: AST) => this
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >this : this
 >     : ^^^^
 >append : (ast: AST) => this
->       : ^^^^^^^^^^^^^^^^^^
+>       : ^   ^^   ^^^^^^^^^
 >ast : AST
 >    : ^^^
             }
@@ -1669,7 +1666,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -1728,7 +1725,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -1800,7 +1797,7 @@ module TypeScript {
 >this.members[i].typeCheck(typeFlow) : any
 >                                    : ^^^
 >this.members[i].typeCheck : (typeFlow: TypeFlow) => any
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^        ^^^^^^^^^^^^^^^^^^
 >this.members[i] : AST
 >                : ^^^
 >this.members : AST[]
@@ -1812,7 +1809,7 @@ module TypeScript {
 >i : number
 >  : ^^^^^^
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
                 }
@@ -1889,11 +1886,11 @@ module TypeScript {
 >this.setText(actualText, hasEscapeSequence) : void
 >                                            : ^^^^
 >this.setText : (actualText: string, hasEscapeSequence?: boolean) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^          ^^      ^^                 ^^^       ^^^^^^^^^
 >this : this
 >     : ^^^^
 >setText : (actualText: string, hasEscapeSequence?: boolean) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^      ^^                 ^^^       ^^^^^^^^^
 >actualText : string
 >           : ^^^^^^
 >hasEscapeSequence : boolean
@@ -1902,7 +1899,7 @@ module TypeScript {
 
         public setText(actualText: string, hasEscapeSequence?: boolean) {
 >setText : (actualText: string, hasEscapeSequence?: boolean) => void
->        : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>        : ^          ^^      ^^                 ^^^       ^^^^^^^^^
 >actualText : string
 >           : ^^^^^^
 >hasEscapeSequence : boolean
@@ -1936,11 +1933,11 @@ module TypeScript {
 >AST.getResolvedIdentifierName(actualText) : string
 >                                          : ^^^^^^
 >AST.getResolvedIdentifierName : (name: string) => string
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^    ^^      ^^^^^^^^^^^
 >AST : typeof AST
 >    : ^^^^^^^^^^
 >getResolvedIdentifierName : (name: string) => string
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^    ^^      ^^^^^^^^^^^
 >actualText : string
 >           : ^^^^^^
             }
@@ -2021,7 +2018,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -2040,7 +2037,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -2065,7 +2062,7 @@ module TypeScript {
 
         public static fromToken(token: Token): Identifier {
 >fromToken : (token: Token) => Identifier
->          : ^^^^^^^^^^^^^^^^^^          
+>          : ^     ^^^^^^^^^^^^          
 >token : Token
 >      : ^^^^^
 
@@ -2122,7 +2119,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -2177,7 +2174,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -2204,7 +2201,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -2393,7 +2390,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -2401,11 +2398,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >super : Expression
 >      : ^^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -2440,7 +2437,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -2995,7 +2992,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -3838,7 +3835,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -3887,7 +3884,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -4038,7 +4035,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -4780,7 +4777,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -5450,7 +5447,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -5469,7 +5466,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -5660,7 +5657,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -5706,7 +5703,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -5773,7 +5770,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^^^^^^^
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5781,7 +5778,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
             if (this.hasEmptyFraction)
 >this.hasEmptyFraction : boolean
@@ -5840,11 +5837,11 @@ module TypeScript {
 >Math.floor(this.value) : number
 >                       : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5866,7 +5863,7 @@ module TypeScript {
 >this.value.toFixed(2) : string
 >                      : ^^^^^^
 >this.value.toFixed : (fractionDigits?: number) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^              ^^^      ^^^^^^^^^^^
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5874,7 +5871,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 >toString : () => string
@@ -5894,7 +5891,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^^^^^^^
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5902,7 +5899,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >".0" : ".0"
 >     : ^^^^
             }
@@ -5911,7 +5908,7 @@ module TypeScript {
 >this.value.toString() : string
 >                      : ^^^^^^
 >this.value.toString : (radix?: number) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^      ^^^^^^^^^^^
 >this.value : number
 >           : ^^^^^^
 >this : this
@@ -5919,7 +5916,7 @@ module TypeScript {
 >value : number
 >      : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
             }
         }
     }
@@ -5949,7 +5946,7 @@ module TypeScript {
         
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -5976,7 +5973,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -6085,7 +6082,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -6164,7 +6161,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -6289,7 +6286,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -6574,7 +6571,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -6593,7 +6590,7 @@ module TypeScript {
 
         public getAliasName(aliasAST?: AST = this.alias) : string {
 >getAliasName : (aliasAST?: AST) => string
->             : ^^^^^^^^^^^^   ^^^^^      
+>             : ^        ^^^   ^^^^^      
 >aliasAST : AST
 >         : ^^^
 >this.alias : AST
@@ -6648,11 +6645,11 @@ module TypeScript {
 >this.getAliasName(dotExpr.operand1) : string
 >                                    : ^^^^^^
 >this.getAliasName : (aliasAST?: AST) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^        ^^^   ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getAliasName : (aliasAST?: AST) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^        ^^^   ^^^^^^^^^^^
 >dotExpr.operand1 : AST
 >                 : ^^^
 >dotExpr : BinaryExpression
@@ -6664,11 +6661,11 @@ module TypeScript {
 >this.getAliasName(dotExpr.operand2) : string
 >                                    : ^^^^^^
 >this.getAliasName : (aliasAST?: AST) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^        ^^^   ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getAliasName : (aliasAST?: AST) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^        ^^^   ^^^^^^^^^^^
 >dotExpr.operand2 : AST
 >                 : ^^^
 >dotExpr : BinaryExpression
@@ -6867,7 +6864,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -6991,7 +6988,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -7114,7 +7111,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -7484,7 +7481,7 @@ module TypeScript {
 
         public addCloRef(id: Identifier, sym: Symbol): number {
 >addCloRef : (id: Identifier, sym: Symbol) => number
->          : ^^^^^          ^^^^^^^      ^^^^^      
+>          : ^  ^^          ^^   ^^      ^^^^^      
 >id : Identifier
 >   : ^^^^^^^^^^
 >sym : Symbol
@@ -7586,11 +7583,11 @@ module TypeScript {
 >outerFnc.addJumpRef(sym) : void
 >                         : ^^^^
 >outerFnc.addJumpRef : (sym: Symbol) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^      ^^^^^^^^^
 >outerFnc : FuncDecl
 >         : ^^^^^^^^
 >addJumpRef : (sym: Symbol) => void
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^
 >sym : Symbol
 >    : ^^^^^^
 
@@ -7626,7 +7623,7 @@ module TypeScript {
 
         public addJumpRef(sym: Symbol): void {
 >addJumpRef : (sym: Symbol) => void
->           : ^^^^^^      ^^^^^    
+>           : ^   ^^      ^^^^^    
 >sym : Symbol
 >    : ^^^^^^
 
@@ -7720,11 +7717,11 @@ module TypeScript {
 >this.addCloRef(id, null) : number
 >                         : ^^^^^^
 >this.addCloRef : (id: Identifier, sym: Symbol) => number
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^  ^^          ^^   ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >addCloRef : (id: Identifier, sym: Symbol) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^          ^^   ^^      ^^^^^^^^^^^
 >id : Identifier
 >   : ^^^^^^^^^^
         }
@@ -7763,9 +7760,9 @@ module TypeScript {
 
             var controlFlowPrefix = (ast: AST, parent: AST, walker: IAstWalker) => {
 >controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                  : ^^^^^^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^   ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                                                                                                                                            : ^^^^^^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            :                                                   
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7777,11 +7774,11 @@ module TypeScript {
 >ast.addToControlFlow(walker.state) : void
 >                                   : ^^^^
 >ast.addToControlFlow : (context: ControlFlowContext) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >walker.state : any
 >             : ^^^
 >walker : IAstWalker
@@ -7808,7 +7805,7 @@ module TypeScript {
 >getWalker : any
 >          : ^^^
 >controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^   ^^   ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >context : any
 >        : ^^^
 
@@ -7849,7 +7846,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -7868,7 +7865,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -8543,7 +8540,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -8876,7 +8873,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9234,7 +9231,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9253,7 +9250,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9509,7 +9506,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9528,7 +9525,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9595,7 +9592,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9614,7 +9611,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9685,7 +9682,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9738,7 +9735,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9818,7 +9815,7 @@ module TypeScript {
 >this.labels.members[i].emit(emitter, tokenId, startLine) : void
 >                                                         : ^^^^
 >this.labels.members[i].emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >this.labels.members[i] : AST
 >                       : ^^^
 >this.labels.members : AST[]
@@ -9834,7 +9831,7 @@ module TypeScript {
 >i : number
 >  : ^^^^^^
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9847,7 +9844,7 @@ module TypeScript {
 >this.stmt.emit(emitter, tokenId, true) : void
 >                                       : ^^^^
 >this.stmt.emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >this.stmt : AST
 >          : ^^^
 >this : this
@@ -9855,7 +9852,7 @@ module TypeScript {
 >stmt : AST
 >     : ^^^
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -9892,7 +9889,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9924,7 +9921,7 @@ module TypeScript {
 >this.stmt.typeCheck(typeFlow) : any
 >                              : ^^^
 >this.stmt.typeCheck : (typeFlow: TypeFlow) => any
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^        ^^^^^^^^^^^^^^^^^^
 >this.stmt : AST
 >          : ^^^
 >this : this
@@ -9932,7 +9929,7 @@ module TypeScript {
 >stmt : AST
 >     : ^^^
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -9943,7 +9940,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -10020,7 +10017,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -10248,7 +10245,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -10384,7 +10381,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -10527,7 +10524,7 @@ module TypeScript {
 
         public setResolvedTarget(parser: Parser, stmt: Statement): boolean {
 >setResolvedTarget : (parser: Parser, stmt: Statement) => boolean
->                  : ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^       
+>                  : ^      ^^^^^^^^^^    ^^         ^^^^^       
 >parser : Parser
 >       : ^^^^^^
 >stmt : Statement
@@ -10658,7 +10655,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -10666,11 +10663,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -10709,7 +10706,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -10889,7 +10886,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -11046,7 +11043,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -11065,7 +11062,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -11368,7 +11365,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -11581,7 +11578,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -11600,7 +11597,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -11875,7 +11872,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -12104,7 +12101,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -12123,7 +12120,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12131,7 +12128,7 @@ module TypeScript {
 >this.cond.addToControlFlow(context) : void
 >                                    : ^^^^
 >this.cond.addToControlFlow : (context: ControlFlowContext) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.cond : AST
 >          : ^^^
 >this : this
@@ -12139,7 +12136,7 @@ module TypeScript {
 >cond : AST
 >     : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12533,7 +12530,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -12679,7 +12676,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12687,11 +12684,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12708,7 +12705,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -13360,7 +13357,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -13585,7 +13582,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -13655,7 +13652,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -13945,7 +13942,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -14260,7 +14257,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -14279,7 +14276,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext): void {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -14782,7 +14779,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -14922,7 +14919,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => any
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -14987,7 +14984,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -15302,7 +15299,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -15454,7 +15451,7 @@ module TypeScript {
         // if there are break statements that match this switch, then just link cond block with block after switch
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -15733,7 +15730,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -15885,7 +15882,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -15954,7 +15951,7 @@ module TypeScript {
         // for now, assume all cases are reachable, regardless of whether some cases fall through
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -16173,7 +16170,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -16192,7 +16189,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -16400,7 +16397,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -16483,7 +16480,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -16560,7 +16557,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -16806,7 +16803,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -16917,7 +16914,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -17166,7 +17163,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -17269,7 +17266,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -17368,7 +17365,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -17403,7 +17400,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -17534,7 +17531,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -17713,7 +17710,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -17838,7 +17835,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -18291,7 +18288,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID
@@ -18390,7 +18387,7 @@ module TypeScript {
 
         public addToControlFlow(context: ControlFlowContext) {
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -18455,7 +18452,7 @@ module TypeScript {
 
         public typeCheck(typeFlow: TypeFlow) {
 >typeCheck : (typeFlow: TypeFlow) => this
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^^^^^^^^^^^^^^^^^^
 >typeFlow : TypeFlow
 >         : ^^^^^^^^
 
@@ -18554,7 +18551,7 @@ module TypeScript {
 >this.content.split("\n") : string[]
 >                         : ^^^^^^^^
 >this.content.split : (separator: string | RegExp, limit?: number) => string[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -18562,7 +18559,7 @@ module TypeScript {
 >content : string
 >        : ^^^^^^
 >split : (separator: string | RegExp, limit?: number) => string[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^         ^^               ^^     ^^^      ^^^^^^^^^^^^^
 >"\n" : "\n"
 >     : ^^^^
 
@@ -18606,7 +18603,7 @@ module TypeScript {
 >this.text[i].replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
 >this.text[i].replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >this.text[i] : string
 >             : ^^^^^^
 >this.text : string[]
@@ -18618,7 +18615,7 @@ module TypeScript {
 >i : number
 >  : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""
@@ -18642,7 +18639,7 @@ module TypeScript {
 >this.content.replace(/^\s+|\s+$/g, '') : string
 >                                       : ^^^^^^
 >this.content.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >this.content : string
 >             : ^^^^^^
 >this : this
@@ -18650,7 +18647,7 @@ module TypeScript {
 >content : string
 >        : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >/^\s+|\s+$/g : RegExp
 >             : ^^^^^^
 >'' : ""
@@ -18690,7 +18687,7 @@ module TypeScript {
 
         public emit(emitter: Emitter, tokenId: TokenID, startLine: boolean) {
 >emit : (emitter: Emitter, tokenId: TokenID, startLine: boolean) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>     : ^       ^^^^^^^^^^^       ^^^^^^^^^^^         ^^       ^^^^^^^^^
 >emitter : Emitter
 >        : ^^^^^^^
 >tokenId : TokenID

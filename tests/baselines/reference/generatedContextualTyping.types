@@ -1,9 +1,7 @@
 //// [tests/cases/conformance/expressions/contextualTyping/generatedContextualTyping.ts] ////
 
 === Performance Stats ===
-Assignability cache: 400 / 400 (nearest 100)
-Type Count: 1,300 / 1,500 (nearest 100)
-Symbol count: 27,500 / 27,500 (nearest 500)
+Type Count: 1,000
 
 === generatedContextualTyping.ts ===
 class Base { private p; }
@@ -27,7 +25,7 @@ class Derived2 extends Base { private n; }
 
 interface Genric<T> { func(n: T[]); }
 >func : (n: T[]) => any
->     : ^^^^   ^^^^^^^^
+>     : ^ ^^   ^^^^^^^^
 >n : T[]
 >  : ^^^
 
@@ -177,11 +175,11 @@ var x10: {n: Base[]; }  = { n: [d1, d2] };
 
 var x11: (s: Base[]) => any = n => { var n: Base[]; return null; };
 >x11 : (s: Base[]) => any
->    : ^^^^      ^^^^^   
+>    : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -191,11 +189,11 @@ var x12: Genric<Base> = { func: n => { return [d1, d2]; } };
 >x12 : Genric<Base>
 >    : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -353,11 +351,11 @@ class x23 { member: (s: Base[]) => any = n => { var n: Base[]; return null; } }
 >x23 : x23
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -369,11 +367,11 @@ class x24 { member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -531,11 +529,11 @@ class x35 { private member: (s: Base[]) => any = n => { var n: Base[]; return nu
 >x35 : x35
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -547,11 +545,11 @@ class x36 { private member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -709,11 +707,11 @@ class x47 { public member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >x47 : x47
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -725,11 +723,11 @@ class x48 { public member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -887,11 +885,11 @@ class x59 { static member: (s: Base[]) => any = n => { var n: Base[]; return nul
 >x59 : x59
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -903,11 +901,11 @@ class x60 { static member: Genric<Base> = { func: n => { return [d1, d2]; } } }
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1065,11 +1063,11 @@ class x71 { private static member: (s: Base[]) => any = n => { var n: Base[]; re
 >x71 : x71
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1081,11 +1079,11 @@ class x72 { private static member: Genric<Base> = { func: n => { return [d1, d2]
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1243,11 +1241,11 @@ class x83 { public static member: (s: Base[]) => any = n => { var n: Base[]; ret
 >x83 : x83
 >    : ^^^
 >member : (s: Base[]) => any
->       : ^^^^      ^^^^^   
+>       : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1259,11 +1257,11 @@ class x84 { public static member: Genric<Base> = { func: n => { return [d1, d2];
 >member : Genric<Base>
 >       : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1421,11 +1419,11 @@ class x95 { constructor(parm: (s: Base[]) => any = n => { var n: Base[]; return 
 >x95 : x95
 >    : ^^^
 >parm : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1437,11 +1435,11 @@ class x96 { constructor(parm: Genric<Base> = { func: n => { return [d1, d2]; } }
 >parm : Genric<Base>
 >     : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1599,11 +1597,11 @@ class x107 { constructor(public parm: (s: Base[]) => any = n => { var n: Base[];
 >x107 : x107
 >     : ^^^^
 >parm : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1615,11 +1613,11 @@ class x108 { constructor(public parm: Genric<Base> = { func: n => { return [d1, 
 >parm : Genric<Base>
 >     : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1777,11 +1775,11 @@ class x119 { constructor(private parm: (s: Base[]) => any = n => { var n: Base[]
 >x119 : x119
 >     : ^^^^
 >parm : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1793,11 +1791,11 @@ class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1,
 >parm : Genric<Base>
 >     : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1809,7 +1807,7 @@ class x120 { constructor(private parm: Genric<Base> = { func: n => { return [d1,
 
 function x121(parm: () => Base[] = () => [d1, d2]) { }
 >x121 : (parm?: () => Base[]) => void
->     : ^^^^^^^^            ^^^^^^^^^
+>     : ^    ^^^            ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
@@ -1823,7 +1821,7 @@ function x121(parm: () => Base[] = () => [d1, d2]) { }
 
 function x122(parm: () => Base[] = function() { return [d1, d2] }) { }
 >x122 : (parm?: () => Base[]) => void
->     : ^^^^^^^^            ^^^^^^^^^
+>     : ^    ^^^            ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
@@ -1837,7 +1835,7 @@ function x122(parm: () => Base[] = function() { return [d1, d2] }) { }
 
 function x123(parm: () => Base[] = function named() { return [d1, d2] }) { }
 >x123 : (parm?: () => Base[]) => void
->     : ^^^^^^^^            ^^^^^^^^^
+>     : ^    ^^^            ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
@@ -1853,7 +1851,7 @@ function x123(parm: () => Base[] = function named() { return [d1, d2] }) { }
 
 function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
 >x124 : (parm?: { (): Base[]; }) => void
->     : ^^^^^^^^               ^^^^^^^^^
+>     : ^    ^^^               ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
@@ -1867,7 +1865,7 @@ function x124(parm: { (): Base[]; } = () => [d1, d2]) { }
 
 function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
 >x125 : (parm?: { (): Base[]; }) => void
->     : ^^^^^^^^               ^^^^^^^^^
+>     : ^    ^^^               ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
@@ -1881,7 +1879,7 @@ function x125(parm: { (): Base[]; } = function() { return [d1, d2] }) { }
 
 function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
 >x126 : (parm?: { (): Base[]; }) => void
->     : ^^^^^^^^               ^^^^^^^^^
+>     : ^    ^^^               ^^^^^^^^^
 >parm : () => Base[]
 >     : ^^^^^^      
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
@@ -1897,7 +1895,7 @@ function x126(parm: { (): Base[]; } = function named() { return [d1, d2] }) { }
 
 function x127(parm: Base[] = [d1, d2]) { }
 >x127 : (parm?: Base[]) => void
->     : ^^^^^^^^      ^^^^^^^^^
+>     : ^    ^^^      ^^^^^^^^^
 >parm : Base[]
 >     : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1909,7 +1907,7 @@ function x127(parm: Base[] = [d1, d2]) { }
 
 function x128(parm: Array<Base> = [d1, d2]) { }
 >x128 : (parm?: Array<Base>) => void
->     : ^^^^^^^^           ^^^^^^^^^
+>     : ^    ^^^           ^^^^^^^^^
 >parm : Base[]
 >     : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -1921,7 +1919,7 @@ function x128(parm: Array<Base> = [d1, d2]) { }
 
 function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
 >x129 : (parm?: { [n: number]: Base; }) => void
->     : ^^^^^^^^                      ^^^^^^^^^
+>     : ^    ^^^                      ^^^^^^^^^
 >parm : { [n: number]: Base; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -1935,7 +1933,7 @@ function x129(parm: { [n: number]: Base; } = [d1, d2]) { }
 
 function x130(parm: {n: Base[]; }  = { n: [d1, d2] }) { }
 >x130 : (parm?: { n: Base[]; }) => void
->     : ^^^^^^^^              ^^^^^^^^^
+>     : ^    ^^^              ^^^^^^^^^
 >parm : { n: Base[]; }
 >     : ^^^^^      ^^^
 >n : Base[]
@@ -1953,13 +1951,13 @@ function x130(parm: {n: Base[]; }  = { n: [d1, d2] }) { }
 
 function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) { }
 >x131 : (parm?: (s: Base[]) => any) => void
->     : ^^^^^^^^                  ^^^^^^^^^
+>     : ^    ^^^                  ^^^^^^^^^
 >parm : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -1967,15 +1965,15 @@ function x131(parm: (s: Base[]) => any = n => { var n: Base[]; return null; }) {
 
 function x132(parm: Genric<Base> = { func: n => { return [d1, d2]; } }) { }
 >x132 : (parm?: Genric<Base>) => void
->     : ^^^^^^^^            ^^^^^^^^^
+>     : ^    ^^^            ^^^^^^^^^
 >parm : Genric<Base>
 >     : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2115,7 +2113,7 @@ function x143(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2125,11 +2123,11 @@ function x144(): Genric<Base> { return { func: n => { return [d1, d2]; } }; }
 >x144 : () => Genric<Base>
 >     : ^^^^^^            
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2349,13 +2347,13 @@ function x155(): (s: Base[]) => any { return n => { var n: Base[]; return null; 
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2365,11 +2363,11 @@ function x156(): Genric<Base> { return { func: n => { return [d1, d2]; } }; retu
 >x156 : () => Genric<Base>
 >     : ^^^^^^            
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2379,11 +2377,11 @@ function x156(): Genric<Base> { return { func: n => { return [d1, d2]; } }; retu
 >d2 : Derived2
 >   : ^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2543,9 +2541,9 @@ var x167: () => (s: Base[]) => any = () => { return n => { var n: Base[]; return
 >s : Base[]
 >  : ^^^^^^
 >() => { return n => { var n: Base[]; return null; }; } : () => (n: Base[]) => any
->                                                       : ^^^^^^^^^^      ^^^^^^^^
+>                                                       : ^^^^^^^ ^^      ^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2555,13 +2553,13 @@ var x168: () => Genric<Base> = () => { return { func: n => { return [d1, d2]; } 
 >x168 : () => Genric<Base>
 >     : ^^^^^^            
 >() => { return { func: n => { return [d1, d2]; } }; } : () => { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2721,9 +2719,9 @@ var x179: () => (s: Base[]) => any = function() { return n => { var n: Base[]; r
 >s : Base[]
 >  : ^^^^^^
 >function() { return n => { var n: Base[]; return null; }; } : () => (n: Base[]) => any
->                                                            : ^^^^^^^^^^      ^^^^^^^^
+>                                                            : ^^^^^^^ ^^      ^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2733,13 +2731,13 @@ var x180: () => Genric<Base> = function() { return { func: n => { return [d1, d2
 >x180 : () => Genric<Base>
 >     : ^^^^^^            
 >function() { return { func: n => { return [d1, d2]; } }; } : () => { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                           : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -2897,11 +2895,11 @@ module x191 { var t: (s: Base[]) => any = n => { var n: Base[]; return null; }; 
 >x191 : typeof x191
 >     : ^^^^^^^^^^^
 >t : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -2913,11 +2911,11 @@ module x192 { var t: Genric<Base> = { func: n => { return [d1, d2]; } }; }
 >t : Genric<Base>
 >  : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3075,11 +3073,11 @@ module x203 { export var t: (s: Base[]) => any = n => { var n: Base[]; return nu
 >x203 : typeof x203
 >     : ^^^^^^^^^^^
 >t : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3091,11 +3089,11 @@ module x204 { export var t: Genric<Base> = { func: n => { return [d1, d2]; } }; 
 >t : Genric<Base>
 >  : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3109,7 +3107,7 @@ var x206 = <() => Base[]>function() { return [d1, d2] };
 >x206 : () => Base[]
 >     : ^^^^^^      
 ><() => Base[]>function() { return [d1, d2] } : () => Base[]
->                                             : ^^^^^^      
+>                                             :             
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3123,7 +3121,7 @@ var x207 = <() => Base[]>function named() { return [d1, d2] };
 >x207 : () => Base[]
 >     : ^^^^^^      
 ><() => Base[]>function named() { return [d1, d2] } : () => Base[]
->                                                   : ^^^^^^      
+>                                                   :             
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -3139,7 +3137,7 @@ var x209 = <{ (): Base[]; }>function() { return [d1, d2] };
 >x209 : () => Base[]
 >     : ^^^^^^      
 ><{ (): Base[]; }>function() { return [d1, d2] } : () => Base[]
->                                                : ^^^^^^      
+>                                                :             
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3153,7 +3151,7 @@ var x210 = <{ (): Base[]; }>function named() { return [d1, d2] };
 >x210 : () => Base[]
 >     : ^^^^^^      
 ><{ (): Base[]; }>function named() { return [d1, d2] } : () => Base[]
->                                                      : ^^^^^^      
+>                                                      :             
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -3193,7 +3191,7 @@ var x213 = <{ [n: number]: Base; }>[d1, d2];
 >x213 : { [n: number]: Base; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 ><{ [n: number]: Base; }>[d1, d2] : { [n: number]: Base; }
->                                 : ^^^^^^^^^^^^^^^^^^^^^^
+>                                 :                       
 >n : number
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3207,7 +3205,7 @@ var x214 = <{n: Base[]; } >{ n: [d1, d2] };
 >x214 : { n: Base[]; }
 >     : ^^^^^      ^^^
 ><{n: Base[]; } >{ n: [d1, d2] } : { n: Base[]; }
->                                : ^^^^^      ^^^
+>                                :               
 >n : Base[]
 >  : ^^^^^^
 >{ n: [d1, d2] } : { n: (Derived1 | Derived2)[]; }
@@ -3227,11 +3225,11 @@ var x216 = <Genric<Base>>{ func: n => { return [d1, d2]; } };
 ><Genric<Base>>{ func: n => { return [d1, d2]; } } : Genric<Base>
 >                                                  : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3245,7 +3243,7 @@ var x217 = (<() => Base[]>undefined) || function() { return [d1, d2] };
 >x217 : () => Base[]
 >     : ^^^^^^      
 >(<() => Base[]>undefined) || function() { return [d1, d2] } : () => Base[]
->                                                            : ^^^^^^      
+>                                                            :             
 >(<() => Base[]>undefined) : () => Base[]
 >                          : ^^^^^^      
 ><() => Base[]>undefined : () => Base[]
@@ -3265,7 +3263,7 @@ var x218 = (<() => Base[]>undefined) || function named() { return [d1, d2] };
 >x218 : () => Base[]
 >     : ^^^^^^      
 >(<() => Base[]>undefined) || function named() { return [d1, d2] } : () => Base[]
->                                                                  : ^^^^^^      
+>                                                                  :             
 >(<() => Base[]>undefined) : () => Base[]
 >                          : ^^^^^^      
 ><() => Base[]>undefined : () => Base[]
@@ -3287,7 +3285,7 @@ var x219 = (<{ (): Base[]; }>undefined) || function() { return [d1, d2] };
 >x219 : () => Base[]
 >     : ^^^^^^      
 >(<{ (): Base[]; }>undefined) || function() { return [d1, d2] } : () => Base[]
->                                                               : ^^^^^^      
+>                                                               :             
 >(<{ (): Base[]; }>undefined) : () => Base[]
 >                             : ^^^^^^      
 ><{ (): Base[]; }>undefined : () => Base[]
@@ -3307,7 +3305,7 @@ var x220 = (<{ (): Base[]; }>undefined) || function named() { return [d1, d2] };
 >x220 : () => Base[]
 >     : ^^^^^^      
 >(<{ (): Base[]; }>undefined) || function named() { return [d1, d2] } : () => Base[]
->                                                                     : ^^^^^^      
+>                                                                     :             
 >(<{ (): Base[]; }>undefined) : () => Base[]
 >                             : ^^^^^^      
 ><{ (): Base[]; }>undefined : () => Base[]
@@ -3365,7 +3363,7 @@ var x223 = (<{ [n: number]: Base; }>undefined) || [d1, d2];
 >x223 : { [n: number]: Base; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 >(<{ [n: number]: Base; }>undefined) || [d1, d2] : { [n: number]: Base; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                :                       
 >(<{ [n: number]: Base; }>undefined) : { [n: number]: Base; }
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^
 ><{ [n: number]: Base; }>undefined : { [n: number]: Base; }
@@ -3385,7 +3383,7 @@ var x224 = (<{n: Base[]; } >undefined) || { n: [d1, d2] };
 >x224 : { n: Base[]; }
 >     : ^^^^^      ^^^
 >(<{n: Base[]; } >undefined) || { n: [d1, d2] } : { n: Base[]; }
->                                               : ^^^^^      ^^^
+>                                               :               
 >(<{n: Base[]; } >undefined) : { n: Base[]; }
 >                            : ^^^^^      ^^^
 ><{n: Base[]; } >undefined : { n: Base[]; }
@@ -3571,15 +3569,15 @@ var x234: {n: Base[]; } ; x234 = { n: [d1, d2] };
 
 var x235: (s: Base[]) => any; x235 = n => { var n: Base[]; return null; };
 >x235 : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >x235 = n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                            : ^^^^      ^^^^^^^^
+>                                            : ^ ^^      ^^^^^^^^
 >x235 : (s: Base[]) => any
->     : ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3589,15 +3587,15 @@ var x236: Genric<Base>; x236 = { func: n => { return [d1, d2]; } };
 >x236 : Genric<Base>
 >     : ^^^^^^^^^^^^
 >x236 = { func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x236 : Genric<Base>
 >     : ^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3617,7 +3615,7 @@ var x237: { n: () => Base[]; } = { n: () => [d1, d2] };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                              
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -3635,7 +3633,7 @@ var x238: { n: () => Base[]; } = { n: function() { return [d1, d2] } };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               :                              
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -3653,7 +3651,7 @@ var x239: { n: () => Base[]; } = { n: function named() { return [d1, d2] } };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     :                              
 >named : () => (Derived1 | Derived2)[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3673,7 +3671,7 @@ var x240: { n: { (): Base[]; }; } = { n: () => [d1, d2] };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                              
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -3691,7 +3689,7 @@ var x241: { n: { (): Base[]; }; } = { n: function() { return [d1, d2] } };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               :                              
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -3709,7 +3707,7 @@ var x242: { n: { (): Base[]; }; } = { n: function named() { return [d1, d2] } };
 >n : () => (Derived1 | Derived2)[]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     :                              
 >named : () => (Derived1 | Derived2)[]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3795,15 +3793,15 @@ var x247: { n: (s: Base[]) => any; } = { n: n => { var n: Base[]; return null; }
 >x247 : { n: (s: Base[]) => any; }
 >     : ^^^^^                  ^^^
 >n : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >{ n: n => { var n: Base[]; return null; } } : { n: (n: Base[]) => any; }
->                                            : ^^^^^^^^^      ^^^^^^^^^^^
+>                                            : ^^^^^^ ^^      ^^^^^^^^^^^
 >n : (n: Base[]) => any
->  : ^^^^      ^^^^^^^^
+>  : ^ ^^      ^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     :                   
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -3815,15 +3813,15 @@ var x248: { n: Genric<Base>; } = { n: { func: n => { return [d1, d2]; } } };
 >n : Genric<Base>
 >  : ^^^^^^^^^^^^
 >{ n: { func: n => { return [d1, d2]; } } } : { n: { func: (n: Base[]) => (Derived1 | Derived2)[]; }; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^                                      ^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -3937,13 +3935,13 @@ var x260: Genric<Base>[] = [{ func: n => { return [d1, d2]; } }];
 >x260 : Genric<Base>[]
 >     : ^^^^^^^^^^^^^^
 >[{ func: n => { return [d1, d2]; } }] : { func: (n: Base[]) => (Derived1 | Derived2)[]; }[]
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -4643,21 +4641,21 @@ var x294: {n: Base[]; }  = true ? { n: [d1, d2] } : { n: [d1, d2] };
 
 var x295: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : n => { var n: Base[]; return null; };
 >x295 : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >true ? n => { var n: Base[]; return null; } : n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                                                                   : ^^^^      ^^^^^^^^
+>                                                                                   : ^ ^^      ^^^^^^^^
 >true : true
 >     : ^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -4667,15 +4665,15 @@ var x296: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : { func: n 
 >x296 : Genric<Base>
 >     : ^^^^^^^^^^^^
 >true ? { func: n => { return [d1, d2]; } } : { func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                 : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -4685,11 +4683,11 @@ var x296: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : { func: n 
 >d2 : Derived2
 >   : ^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -4885,17 +4883,17 @@ var x306: {n: Base[]; }  = true ? undefined : { n: [d1, d2] };
 
 var x307: (s: Base[]) => any = true ? undefined : n => { var n: Base[]; return null; };
 >x307 : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >true ? undefined : n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                                        : ^^^^      ^^^^^^^^
+>                                                        : ^ ^^      ^^^^^^^^
 >true : true
 >     : ^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -4905,17 +4903,17 @@ var x308: Genric<Base> = true ? undefined : { func: n => { return [d1, d2]; } };
 >x308 : Genric<Base>
 >     : ^^^^^^^^^^^^
 >true ? undefined : { func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5111,15 +5109,15 @@ var x318: {n: Base[]; }  = true ? { n: [d1, d2] } : undefined;
 
 var x319: (s: Base[]) => any = true ? n => { var n: Base[]; return null; } : undefined;
 >x319 : (s: Base[]) => any
->     : ^^^^      ^^^^^   
+>     : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >true ? n => { var n: Base[]; return null; } : undefined : (n: Base[]) => any
->                                                        : ^^^^      ^^^^^^^^
+>                                                        : ^ ^^      ^^^^^^^^
 >true : true
 >     : ^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5131,15 +5129,15 @@ var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
 >x320 : Genric<Base>
 >     : ^^^^^^^^^^^^
 >true ? { func: n => { return [d1, d2]; } } : undefined : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5153,13 +5151,13 @@ var x320: Genric<Base> = true ? { func: n => { return [d1, d2]; } } : undefined;
 
 function x321(n: () => Base[]) { }; x321(() => [d1, d2]);
 >x321 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x321(() => [d1, d2]) : void
 >                     : ^^^^
 >x321 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5171,13 +5169,13 @@ function x321(n: () => Base[]) { }; x321(() => [d1, d2]);
 
 function x322(n: () => Base[]) { }; x322(function() { return [d1, d2] });
 >x322 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x322(function() { return [d1, d2] }) : void
 >                                     : ^^^^
 >x322 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5189,13 +5187,13 @@ function x322(n: () => Base[]) { }; x322(function() { return [d1, d2] });
 
 function x323(n: () => Base[]) { }; x323(function named() { return [d1, d2] });
 >x323 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x323(function named() { return [d1, d2] }) : void
 >                                           : ^^^^
 >x323 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5209,13 +5207,13 @@ function x323(n: () => Base[]) { }; x323(function named() { return [d1, d2] });
 
 function x324(n: { (): Base[]; }) { }; x324(() => [d1, d2]);
 >x324 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x324(() => [d1, d2]) : void
 >                     : ^^^^
->x324 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x324 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5227,13 +5225,13 @@ function x324(n: { (): Base[]; }) { }; x324(() => [d1, d2]);
 
 function x325(n: { (): Base[]; }) { }; x325(function() { return [d1, d2] });
 >x325 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x325(function() { return [d1, d2] }) : void
 >                                     : ^^^^
->x325 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x325 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5245,13 +5243,13 @@ function x325(n: { (): Base[]; }) { }; x325(function() { return [d1, d2] });
 
 function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] });
 >x326 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >n : () => Base[]
 >  : ^^^^^^      
 >x326(function named() { return [d1, d2] }) : void
 >                                           : ^^^^
->x326 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x326 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5265,13 +5263,13 @@ function x326(n: { (): Base[]; }) { }; x326(function named() { return [d1, d2] }
 
 function x327(n: Base[]) { }; x327([d1, d2]);
 >x327 : (n: Base[]) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >x327([d1, d2]) : void
 >               : ^^^^
 >x327 : (n: Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5281,13 +5279,13 @@ function x327(n: Base[]) { }; x327([d1, d2]);
 
 function x328(n: Array<Base>) { }; x328([d1, d2]);
 >x328 : (n: Array<Base>) => void
->     : ^^^^           ^^^^^^^^^
+>     : ^ ^^           ^^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >x328([d1, d2]) : void
 >               : ^^^^
->x328 : (n: Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>x328 : (n: Array<Base>) => void
+>     : ^ ^^           ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5297,7 +5295,7 @@ function x328(n: Array<Base>) { }; x328([d1, d2]);
 
 function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
 >x329 : (n: { [n: number]: Base; }) => void
->     : ^^^^                      ^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^
 >n : { [n: number]: Base; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -5305,7 +5303,7 @@ function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
 >x329([d1, d2]) : void
 >               : ^^^^
 >x329 : (n: { [n: number]: Base; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5315,7 +5313,7 @@ function x329(n: { [n: number]: Base; }) { }; x329([d1, d2]);
 
 function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
 >x330 : (n: { n: Base[]; }) => void
->     : ^^^^              ^^^^^^^^^
+>     : ^ ^^              ^^^^^^^^^
 >n : { n: Base[]; }
 >  : ^^^^^      ^^^
 >n : Base[]
@@ -5323,7 +5321,7 @@ function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
 >x330({ n: [d1, d2] }) : void
 >                      : ^^^^
 >x330 : (n: { n: Base[]; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^              ^^^^^^^^^
 >{ n: [d1, d2] } : { n: (Derived1 | Derived2)[]; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : (Derived1 | Derived2)[]
@@ -5337,17 +5335,17 @@ function x330(n: {n: Base[]; } ) { }; x330({ n: [d1, d2] });
 
 function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null; });
 >x331 : (n: (s: Base[]) => any) => void
->     : ^^^^                  ^^^^^^^^^
+>     : ^ ^^                  ^^^^^^^^^
 >n : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >x331(n => { var n: Base[]; return null; }) : void
 >                                           : ^^^^
 >x331 : (n: (s: Base[]) => any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                  ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5355,19 +5353,19 @@ function x331(n: (s: Base[]) => any) { }; x331(n => { var n: Base[]; return null
 
 function x332(n: Genric<Base>) { }; x332({ func: n => { return [d1, d2]; } });
 >x332 : (n: Genric<Base>) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >n : Genric<Base>
 >  : ^^^^^^^^^^^^
 >x332({ func: n => { return [d1, d2]; } }) : void
 >                                          : ^^^^
 >x332 : (n: Genric<Base>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5379,9 +5377,9 @@ function x332(n: Genric<Base>) { }; x332({ func: n => { return [d1, d2]; } });
 
 var x333 = (n: () => Base[]) => n; x333(() => [d1, d2]);
 >x333 : (n: () => Base[]) => () => Base[]
->     : ^^^^            ^^^^^^^^^^^      
+>     : ^ ^^            ^^^^^^^^^^^      
 >(n: () => Base[]) => n : (n: () => Base[]) => () => Base[]
->                       : ^^^^            ^^^^^^^^^^^      
+>                       :                                  
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
@@ -5389,7 +5387,7 @@ var x333 = (n: () => Base[]) => n; x333(() => [d1, d2]);
 >x333(() => [d1, d2]) : () => Base[]
 >                     : ^^^^^^^^^^^^
 >x333 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5401,9 +5399,9 @@ var x333 = (n: () => Base[]) => n; x333(() => [d1, d2]);
 
 var x334 = (n: () => Base[]) => n; x334(function() { return [d1, d2] });
 >x334 : (n: () => Base[]) => () => Base[]
->     : ^^^^            ^^^^^^^^^^^      
+>     : ^ ^^            ^^^^^^^^^^^      
 >(n: () => Base[]) => n : (n: () => Base[]) => () => Base[]
->                       : ^^^^            ^^^^^^^^^^^      
+>                       :                                  
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
@@ -5411,7 +5409,7 @@ var x334 = (n: () => Base[]) => n; x334(function() { return [d1, d2] });
 >x334(function() { return [d1, d2] }) : () => Base[]
 >                                     : ^^^^^^^^^^^^
 >x334 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5423,9 +5421,9 @@ var x334 = (n: () => Base[]) => n; x334(function() { return [d1, d2] });
 
 var x335 = (n: () => Base[]) => n; x335(function named() { return [d1, d2] });
 >x335 : (n: () => Base[]) => () => Base[]
->     : ^^^^            ^^^^^^^^^^^      
+>     : ^ ^^            ^^^^^^^^^^^      
 >(n: () => Base[]) => n : (n: () => Base[]) => () => Base[]
->                       : ^^^^            ^^^^^^^^^^^      
+>                       :                                  
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
@@ -5433,7 +5431,7 @@ var x335 = (n: () => Base[]) => n; x335(function named() { return [d1, d2] });
 >x335(function named() { return [d1, d2] }) : () => Base[]
 >                                           : ^^^^^^^^^^^^
 >x335 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5447,17 +5445,17 @@ var x335 = (n: () => Base[]) => n; x335(function named() { return [d1, d2] });
 
 var x336 = (n: { (): Base[]; }) => n; x336(() => [d1, d2]);
 >x336 : (n: { (): Base[]; }) => () => Base[]
->     : ^^^^               ^^^^^^^^^^^      
+>     : ^ ^^               ^^^^^^^^^^^      
 >(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
->                          : ^^^^               ^^^^^^^^^^^      
+>                          :                                     
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
 >  : ^^^^^^      
 >x336(() => [d1, d2]) : () => Base[]
 >                     : ^^^^^^^^^^^^
->x336 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x336 : (n: { (): Base[]; }) => () => Base[]
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5469,17 +5467,17 @@ var x336 = (n: { (): Base[]; }) => n; x336(() => [d1, d2]);
 
 var x337 = (n: { (): Base[]; }) => n; x337(function() { return [d1, d2] });
 >x337 : (n: { (): Base[]; }) => () => Base[]
->     : ^^^^               ^^^^^^^^^^^      
+>     : ^ ^^               ^^^^^^^^^^^      
 >(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
->                          : ^^^^               ^^^^^^^^^^^      
+>                          :                                     
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
 >  : ^^^^^^      
 >x337(function() { return [d1, d2] }) : () => Base[]
 >                                     : ^^^^^^^^^^^^
->x337 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x337 : (n: { (): Base[]; }) => () => Base[]
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5491,17 +5489,17 @@ var x337 = (n: { (): Base[]; }) => n; x337(function() { return [d1, d2] });
 
 var x338 = (n: { (): Base[]; }) => n; x338(function named() { return [d1, d2] });
 >x338 : (n: { (): Base[]; }) => () => Base[]
->     : ^^^^               ^^^^^^^^^^^      
+>     : ^ ^^               ^^^^^^^^^^^      
 >(n: { (): Base[]; }) => n : (n: { (): Base[]; }) => () => Base[]
->                          : ^^^^               ^^^^^^^^^^^      
+>                          :                                     
 >n : () => Base[]
 >  : ^^^^^^      
 >n : () => Base[]
 >  : ^^^^^^      
 >x338(function named() { return [d1, d2] }) : () => Base[]
 >                                           : ^^^^^^^^^^^^
->x338 : (n: () => Base[]) => () => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x338 : (n: { (): Base[]; }) => () => Base[]
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5515,9 +5513,9 @@ var x338 = (n: { (): Base[]; }) => n; x338(function named() { return [d1, d2] })
 
 var x339 = (n: Base[]) => n; x339([d1, d2]);
 >x339 : (n: Base[]) => Base[]
->     : ^^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >(n: Base[]) => n : (n: Base[]) => Base[]
->                 : ^^^^      ^^^^^^^^^^^
+>                 :                      
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5525,7 +5523,7 @@ var x339 = (n: Base[]) => n; x339([d1, d2]);
 >x339([d1, d2]) : Base[]
 >               : ^^^^^^
 >x339 : (n: Base[]) => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5535,17 +5533,17 @@ var x339 = (n: Base[]) => n; x339([d1, d2]);
 
 var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 >x340 : (n: Array<Base>) => Base[]
->     : ^^^^           ^^^^^^^^^^^
+>     : ^ ^^           ^^^^^^^^^^^
 >(n: Array<Base>) => n : (n: Array<Base>) => Base[]
->                      : ^^^^           ^^^^^^^^^^^
+>                      :                           
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >x340([d1, d2]) : Base[]
 >               : ^^^^^^
->x340 : (n: Base[]) => Base[]
->     : ^^^^^^^^^^^^^^^^^^^^^
+>x340 : (n: Array<Base>) => Base[]
+>     : ^ ^^           ^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5555,9 +5553,9 @@ var x340 = (n: Array<Base>) => n; x340([d1, d2]);
 
 var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
 >x341 : (n: { [n: number]: Base; }) => { [n: number]: Base; }
->     : ^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(n: { [n: number]: Base; }) => n : (n: { [n: number]: Base; }) => { [n: number]: Base; }
->                                 : ^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 :                                                      
 >n : { [n: number]: Base; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -5567,7 +5565,7 @@ var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
 >x341([d1, d2]) : { [n: number]: Base; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^
 >x341 : (n: { [n: number]: Base; }) => { [n: number]: Base; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5577,9 +5575,9 @@ var x341 = (n: { [n: number]: Base; }) => n; x341([d1, d2]);
 
 var x342 = (n: {n: Base[]; } ) => n; x342({ n: [d1, d2] });
 >x342 : (n: { n: Base[]; }) => { n: Base[]; }
->     : ^^^^              ^^^^^^^^^^      ^^^
+>     : ^ ^^              ^^^^^^^^^^      ^^^
 >(n: {n: Base[]; } ) => n : (n: { n: Base[]; }) => { n: Base[]; }
->                         : ^^^^              ^^^^^^^^^^      ^^^
+>                         :                                      
 >n : { n: Base[]; }
 >  : ^^^^^      ^^^
 >n : Base[]
@@ -5589,7 +5587,7 @@ var x342 = (n: {n: Base[]; } ) => n; x342({ n: [d1, d2] });
 >x342({ n: [d1, d2] }) : { n: Base[]; }
 >                      : ^^^^^^^^^^^^^^
 >x342 : (n: { n: Base[]; }) => { n: Base[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >{ n: [d1, d2] } : { n: (Derived1 | Derived2)[]; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : (Derived1 | Derived2)[]
@@ -5603,21 +5601,21 @@ var x342 = (n: {n: Base[]; } ) => n; x342({ n: [d1, d2] });
 
 var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null; });
 >x343 : (n: (s: Base[]) => any) => (s: Base[]) => any
->     : ^^^^                  ^^^^^^^^^      ^^^^^   
+>     : ^ ^^                  ^^^^^^ ^^      ^^^^^   
 >(n: (s: Base[]) => any) => n : (n: (s: Base[]) => any) => (s: Base[]) => any
->                             : ^^^^                  ^^^^^^^^^      ^^^^^   
+>                             :                                              
 >n : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >n : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >x343(n => { var n: Base[]; return null; }) : (s: Base[]) => any
->                                           : ^^^^^^^^^^^^^^^^^^
+>                                           : ^ ^^      ^^^^^^^^
 >x343 : (n: (s: Base[]) => any) => (s: Base[]) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                  ^^^^^^ ^^      ^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5625,9 +5623,9 @@ var x343 = (n: (s: Base[]) => any) => n; x343(n => { var n: Base[]; return null;
 
 var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
 >x344 : (n: Genric<Base>) => Genric<Base>
->     : ^^^^            ^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^
 >(n: Genric<Base>) => n : (n: Genric<Base>) => Genric<Base>
->                       : ^^^^            ^^^^^^^^^^^^^^^^^
+>                       :                                  
 >n : Genric<Base>
 >  : ^^^^^^^^^^^^
 >n : Genric<Base>
@@ -5635,13 +5633,13 @@ var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
 >x344({ func: n => { return [d1, d2]; } }) : Genric<Base>
 >                                          : ^^^^^^^^^^^^
 >x344 : (n: Genric<Base>) => Genric<Base>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5653,15 +5651,15 @@ var x344 = (n: Genric<Base>) => n; x344({ func: n => { return [d1, d2]; } });
 
 var x345 = function(n: () => Base[]) { }; x345(() => [d1, d2]);
 >x345 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function(n: () => Base[]) { } : (n: () => Base[]) => void
->                              : ^^^^            ^^^^^^^^^
+>                              :                          
 >n : () => Base[]
 >  : ^^^^^^      
 >x345(() => [d1, d2]) : void
 >                     : ^^^^
 >x345 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5673,15 +5671,15 @@ var x345 = function(n: () => Base[]) { }; x345(() => [d1, d2]);
 
 var x346 = function(n: () => Base[]) { }; x346(function() { return [d1, d2] });
 >x346 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function(n: () => Base[]) { } : (n: () => Base[]) => void
->                              : ^^^^            ^^^^^^^^^
+>                              :                          
 >n : () => Base[]
 >  : ^^^^^^      
 >x346(function() { return [d1, d2] }) : void
 >                                     : ^^^^
 >x346 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5693,15 +5691,15 @@ var x346 = function(n: () => Base[]) { }; x346(function() { return [d1, d2] });
 
 var x347 = function(n: () => Base[]) { }; x347(function named() { return [d1, d2] });
 >x347 : (n: () => Base[]) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function(n: () => Base[]) { } : (n: () => Base[]) => void
->                              : ^^^^            ^^^^^^^^^
+>                              :                          
 >n : () => Base[]
 >  : ^^^^^^      
 >x347(function named() { return [d1, d2] }) : void
 >                                           : ^^^^
 >x347 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5715,15 +5713,15 @@ var x347 = function(n: () => Base[]) { }; x347(function named() { return [d1, d2
 
 var x348 = function(n: { (): Base[]; }) { }; x348(() => [d1, d2]);
 >x348 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
->                                 : ^^^^               ^^^^^^^^^
+>                                 :                             
 >n : () => Base[]
 >  : ^^^^^^      
 >x348(() => [d1, d2]) : void
 >                     : ^^^^
->x348 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x348 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >() => [d1, d2] : () => (Derived1 | Derived2)[]
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5735,15 +5733,15 @@ var x348 = function(n: { (): Base[]; }) { }; x348(() => [d1, d2]);
 
 var x349 = function(n: { (): Base[]; }) { }; x349(function() { return [d1, d2] });
 >x349 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
->                                 : ^^^^               ^^^^^^^^^
+>                                 :                             
 >n : () => Base[]
 >  : ^^^^^^      
 >x349(function() { return [d1, d2] }) : void
 >                                     : ^^^^
->x349 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x349 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >function() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
@@ -5755,15 +5753,15 @@ var x349 = function(n: { (): Base[]; }) { }; x349(function() { return [d1, d2] }
 
 var x350 = function(n: { (): Base[]; }) { }; x350(function named() { return [d1, d2] });
 >x350 : (n: { (): Base[]; }) => void
->     : ^^^^               ^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^
 >function(n: { (): Base[]; }) { } : (n: { (): Base[]; }) => void
->                                 : ^^^^               ^^^^^^^^^
+>                                 :                             
 >n : () => Base[]
 >  : ^^^^^^      
 >x350(function named() { return [d1, d2] }) : void
 >                                           : ^^^^
->x350 : (n: () => Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x350 : (n: { (): Base[]; }) => void
+>     : ^ ^^               ^^^^^^^^^
 >function named() { return [d1, d2] } : () => (Derived1 | Derived2)[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >named : () => (Derived1 | Derived2)[]
@@ -5777,15 +5775,15 @@ var x350 = function(n: { (): Base[]; }) { }; x350(function named() { return [d1,
 
 var x351 = function(n: Base[]) { }; x351([d1, d2]);
 >x351 : (n: Base[]) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >function(n: Base[]) { } : (n: Base[]) => void
->                        : ^^^^      ^^^^^^^^^
+>                        :                    
 >n : Base[]
 >  : ^^^^^^
 >x351([d1, d2]) : void
 >               : ^^^^
 >x351 : (n: Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5795,15 +5793,15 @@ var x351 = function(n: Base[]) { }; x351([d1, d2]);
 
 var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 >x352 : (n: Array<Base>) => void
->     : ^^^^           ^^^^^^^^^
+>     : ^ ^^           ^^^^^^^^^
 >function(n: Array<Base>) { } : (n: Array<Base>) => void
->                             : ^^^^           ^^^^^^^^^
+>                             :                         
 >n : Base[]
 >  : ^^^^^^
 >x352([d1, d2]) : void
 >               : ^^^^
->x352 : (n: Base[]) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>x352 : (n: Array<Base>) => void
+>     : ^ ^^           ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5813,9 +5811,9 @@ var x352 = function(n: Array<Base>) { }; x352([d1, d2]);
 
 var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
 >x353 : (n: { [n: number]: Base; }) => void
->     : ^^^^                      ^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^
 >function(n: { [n: number]: Base; }) { } : (n: { [n: number]: Base; }) => void
->                                        : ^^^^                      ^^^^^^^^^
+>                                        :                                    
 >n : { [n: number]: Base; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -5823,7 +5821,7 @@ var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
 >x353([d1, d2]) : void
 >               : ^^^^
 >x353 : (n: { [n: number]: Base; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                      ^^^^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >d1 : Derived1
@@ -5833,9 +5831,9 @@ var x353 = function(n: { [n: number]: Base; }) { }; x353([d1, d2]);
 
 var x354 = function(n: {n: Base[]; } ) { }; x354({ n: [d1, d2] });
 >x354 : (n: { n: Base[]; }) => void
->     : ^^^^              ^^^^^^^^^
+>     : ^ ^^              ^^^^^^^^^
 >function(n: {n: Base[]; } ) { } : (n: { n: Base[]; }) => void
->                                : ^^^^              ^^^^^^^^^
+>                                :                            
 >n : { n: Base[]; }
 >  : ^^^^^      ^^^
 >n : Base[]
@@ -5843,7 +5841,7 @@ var x354 = function(n: {n: Base[]; } ) { }; x354({ n: [d1, d2] });
 >x354({ n: [d1, d2] }) : void
 >                      : ^^^^
 >x354 : (n: { n: Base[]; }) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^              ^^^^^^^^^
 >{ n: [d1, d2] } : { n: (Derived1 | Derived2)[]; }
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : (Derived1 | Derived2)[]
@@ -5857,19 +5855,19 @@ var x354 = function(n: {n: Base[]; } ) { }; x354({ n: [d1, d2] });
 
 var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; return null; });
 >x355 : (n: (s: Base[]) => any) => void
->     : ^^^^                  ^^^^^^^^^
+>     : ^ ^^                  ^^^^^^^^^
 >function(n: (s: Base[]) => any) { } : (n: (s: Base[]) => any) => void
->                                    : ^^^^                  ^^^^^^^^^
+>                                    :                                
 >n : (s: Base[]) => any
->  : ^^^^      ^^^^^   
+>  : ^ ^^      ^^^^^   
 >s : Base[]
 >  : ^^^^^^
 >x355(n => { var n: Base[]; return null; }) : void
 >                                           : ^^^^
 >x355 : (n: (s: Base[]) => any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                  ^^^^^^^^^
 >n => { var n: Base[]; return null; } : (n: Base[]) => any
->                                     : ^^^^      ^^^^^^^^
+>                                     : ^ ^^      ^^^^^^^^
 >n : Base[]
 >  : ^^^^^^
 >n : Base[]
@@ -5877,21 +5875,21 @@ var x355 = function(n: (s: Base[]) => any) { }; x355(n => { var n: Base[]; retur
 
 var x356 = function(n: Genric<Base>) { }; x356({ func: n => { return [d1, d2]; } });
 >x356 : (n: Genric<Base>) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >function(n: Genric<Base>) { } : (n: Genric<Base>) => void
->                              : ^^^^            ^^^^^^^^^
+>                              :                          
 >n : Genric<Base>
 >  : ^^^^^^^^^^^^
 >x356({ func: n => { return [d1, d2]; } }) : void
 >                                          : ^^^^
 >x356 : (n: Genric<Base>) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >{ func: n => { return [d1, d2]; } } : { func: (n: Base[]) => (Derived1 | Derived2)[]; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : (n: Base[]) => (Derived1 | Derived2)[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n => { return [d1, d2]; } : (n: Base[]) => (Derived1 | Derived2)[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          :                                       
 >n : Base[]
 >  : ^^^^^^
 >[d1, d2] : (Derived1 | Derived2)[]

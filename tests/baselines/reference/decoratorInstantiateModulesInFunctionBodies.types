@@ -15,12 +15,12 @@ import { test } from './a';
 
 function filter(handler: any) {
 >filter : (handler: any) => (target: any, propertyKey: string) => void
->       : ^^^^^^^^^^   ^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^
+>       : ^       ^^   ^^^^^^      ^^   ^^           ^^      ^^^^^^^^^
 >handler : any
 
     return function (target: any, propertyKey: string) {
 >function (target: any, propertyKey: string) {        // ...    } : (target: any, propertyKey: string) => void
->                                                                 : ^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^
+>                                                                 : ^      ^^   ^^           ^^      ^^^^^^^^^
 >target : any
 >propertyKey : string
 >            : ^^^^^^
@@ -35,9 +35,9 @@ class Wat {
 
     @filter(() => test == 'abc')
 >filter(() => test == 'abc') : (target: any, propertyKey: string) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^      ^^   ^^           ^^      ^^^^^^^^^
 >filter : (handler: any) => (target: any, propertyKey: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^       ^^   ^^^^^^      ^^   ^^           ^^      ^^^^^^^^^
 >() => test == 'abc' : () => boolean
 >                    : ^^^^^^^^^^^^^
 >test == 'abc' : boolean

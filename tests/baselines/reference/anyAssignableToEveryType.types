@@ -86,7 +86,7 @@ var k: Function = a;
 
 var l: (x: number) => string = a;
 >l : (x: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >a : any
@@ -123,7 +123,7 @@ var n: { foo: string } = a;
 
 var o: <T>(x: T) => T = a;
 >o : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >a : any
@@ -140,7 +140,7 @@ var q: String = a;
 
 function foo<T, U /*extends T*/, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

@@ -9,7 +9,7 @@ var a = 1;
 
 function strange(x = a, y = b) { 
 >strange : (x?: number, y?: string) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >a : number

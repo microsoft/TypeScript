@@ -4,13 +4,13 @@
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }
 >fn1 : <T>(t: T) => void
->    : ^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
 function fn2(t: any) { }
 >fn2 : (t: any) => void
->    : ^^^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >t : any
 >  : ^^^
 
@@ -18,11 +18,11 @@ fn1(fn2<string>(4)); // Error
 >fn1(fn2<string>(4)) : void
 >                    : ^^^^
 >fn1 : <T>(t: T) => void
->    : ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^
 >fn2<string>(4) : void
 >               : ^^^^
 >fn2 : (t: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >4 : 4
 >  : ^
 

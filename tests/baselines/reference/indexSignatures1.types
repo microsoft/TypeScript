@@ -13,7 +13,7 @@ const sym = Symbol();
 
 function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [sym]: number }) {
 >gg3 : (x: { [key: string]: string; }, y: { [key: symbol]: string; }, z: { [sym]: number; }) => void
->    : ^^^^                          ^^^^^                          ^^^^^                  ^^^^^^^^^
+>    : ^ ^^                          ^^ ^^                          ^^ ^^                  ^^^^^^^^^
 >x : { [key: string]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -50,7 +50,7 @@ function gg3(x: { [key: string]: string }, y: { [key: symbol]: string }, z: { [s
 
 function gg1(x: { [key: `a${string}`]: string, [key: `${string}a`]: string }, y: { [key: `a${string}a`]: string }) {
 >gg1 : (x: { [key: `a${string}`]: string; [key: `${string}a`]: string; }, y: { [key: `a${string}a`]: string; }) => void
->    : ^^^^                                                             ^^^^^                                 ^^^^^^^^^
+>    : ^ ^^                                                             ^^ ^^                                 ^^^^^^^^^
 >x : { [key: `a${string}`]: string; [key: `${string}a`]: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : `a${string}`
@@ -91,7 +91,7 @@ interface IY { [key: `a${string}a`]: string }
 
 function gg2(x: IX, y: IY) {
 >gg2 : (x: IX, y: IY) => void
->    : ^^^^  ^^^^^  ^^^^^^^^^
+>    : ^ ^^  ^^ ^^  ^^^^^^^^^
 >x : IX
 >  : ^^
 >y : IY
@@ -307,13 +307,13 @@ const funcs: Funcs = {
 >funcs : Funcs
 >      : ^^^^^
 >{    sfoo: x => x.length,  // x: string    nfoo: x => x * 2,     // n: number} : { sfoo: (x: string) => number; nfoo: (x: number) => number; }
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                               : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
     sfoo: x => x.length,  // x: string
 >sfoo : (x: string) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              :                      
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -325,9 +325,9 @@ const funcs: Funcs = {
 
     nfoo: x => x * 2,     // n: number
 >nfoo : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           :                      
 >x : number
 >  : ^^^^^^
 >x * 2 : number
@@ -1247,7 +1247,7 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >plugins[system][SomeSytePlugin] = () => console.log('awsome') : () => void
 >                                                              : ^^^^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^    ^^   ^^^^^^^^^^^^
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
@@ -1261,11 +1261,11 @@ plugins[system][SomeSytePlugin] = () => console.log('awsome');
 >console.log('awsome') : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'awsome' : "awsome"
 >         : ^^^^^^^^
 
@@ -1273,7 +1273,7 @@ plugins[system][SomeSytePlugin]();
 >plugins[system][SomeSytePlugin]() : unknown
 >                                  : ^^^^^^^
 >plugins[system][SomeSytePlugin] : (...args: any) => unknown
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^^^^    ^^   ^^^^^^^^^^^^
 >plugins[system] : Plugs
 >                : ^^^^^
 >plugins : { user: Plugs; [system]: Plugs; }
@@ -1327,9 +1327,9 @@ const directive = Symbol('directive');
 
 declare function foo<TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet } & { [directive]?: TDir }): void;
 >foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
->    : ^    ^^    ^^    ^^^^^^^^^^^                                                                 ^^^^^    
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^    
 >options : { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }
->        : ^^^^^^^^^^^^^^^^^^^^^    ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>        : ^^^^^^^^^^^^^^^^   ^^    ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^    ^^^
 >arg : TArg
 >    : ^^^^
 >[directive] : TDir | undefined
@@ -1342,18 +1342,18 @@ let case1 = foo({
 >      : ^^^^
 >foo({    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                                : ^^^^
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
 >{    [directive]: (x: string) => 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: (x: string) => "str"; addOne: (x: number) => number; double: (x: number) => number; }
->                                                                                                           : ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                                                                                           : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
     [directive]: (x: string) => 'str',
 >[directive] : (x: string) => "str"
->            : ^^^^      ^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^
 >directive : unique symbol
 >          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
->                     : ^^^^      ^^^^^^^^^^
+>                     :                     
 >x : string
 >  : ^^^^^^
 >'str' : "str"
@@ -1361,9 +1361,9 @@ let case1 = foo({
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1375,9 +1375,9 @@ let case1 = foo({
 
     double: (x: number) => x + x,
 >double : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + x : number
@@ -1394,16 +1394,16 @@ let case2 = foo({
 >      : ^^^^
 >foo({    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',}) : void
 >                                                                                                                : ^^^^
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
 >{    addOne: (x: number) => x + 1,    double: (x: number) => x + x,    [directive]: (x: string) => 'str',} : { addOne: (x: number) => number; double: (x: number) => number; [directive]: (x: string) => "str"; }
->                                                                                                           : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                           : ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1415,9 +1415,9 @@ let case2 = foo({
 
     double: (x: number) => x + x,
 >double : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + x : number
@@ -1429,11 +1429,11 @@ let case2 = foo({
 
     [directive]: (x: string) => 'str',
 >[directive] : (x: string) => "str"
->            : ^^^^      ^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^
 >directive : unique symbol
 >          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
->                     : ^^^^      ^^^^^^^^^^
+>                     :                     
 >x : string
 >  : ^^^^^^
 >'str' : "str"
@@ -1446,10 +1446,10 @@ let case3 = foo({
 >      : ^^^^
 >foo({    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,}) : void
 >                                                                                                 : ^^^^
->foo : <TArg, TRet, TDir>(options: { [x: string]: (arg: TArg) => TRet; } & { [directive]?: TDir | undefined; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : <TArg, TRet, TDir>(options: { [x in string]: (arg: TArg) => TRet; } & { [directive]?: TDir; }) => void
+>    : ^    ^^    ^^    ^^       ^^                                                                 ^^^^^^^^^
 >{    [directive]: 'str',    addOne: (x: number) => x + 1,    double: (x: number) => x + x,} : { [directive]: string; addOne: (x: number) => number; double: (x: number) => number; }
->                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 
     [directive]: 'str',
 >[directive] : string
@@ -1461,9 +1461,9 @@ let case3 = foo({
 
     addOne: (x: number) => x + 1,
 >addOne : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1475,9 +1475,9 @@ let case3 = foo({
 
     double: (x: number) => x + x,
 >double : (x: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     : ^^^^      ^^^^^^^^^^^
+>                     :                      
 >x : number
 >  : ^^^^^^
 >x + x : number

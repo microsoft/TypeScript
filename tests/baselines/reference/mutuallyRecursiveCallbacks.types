@@ -15,7 +15,7 @@ type Bar<T> = (foo: Foo<T>) => Foo<T>;
 
 declare function foo<T>(bar: Bar<T>): void;
 >foo : <T>(bar: Bar<T>) => void
->    : ^ ^^^^^^^      ^^^^^    
+>    : ^ ^^   ^^      ^^^^^    
 >bar : Bar<T>
 >    : ^^^^^^
 
@@ -25,9 +25,9 @@ declare var bar: Bar<{}>;
 
 bar = foo;
 >bar = foo : <T>(bar: Bar<T>) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^   ^^      ^^^^^^^^^
 >bar : Bar<{}>
 >    : ^^^^^^^
 >foo : <T>(bar: Bar<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^      ^^^^^^^^^
 

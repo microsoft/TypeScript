@@ -3,7 +3,7 @@
 === declarationEmitIdentifierPredicates01.ts ===
 export function f(x: any): x is number {
 >f : (x: any) => x is number
->  : ^^^^   ^^^^^           
+>  : ^ ^^   ^^^^^           
 >x : any
 
     return typeof x === "number";

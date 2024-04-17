@@ -17,19 +17,19 @@ class B<T> {
 
 function acceptA<T>(a: A<T>) { }
 >acceptA : <T>(a: A<T>) => void
->        : ^ ^^^^^    ^^^^^^^^^
+>        : ^ ^^ ^^    ^^^^^^^^^
 >a : A<T>
 >  : ^^^^
 
 function acceptB<T>(b: B<T>) { }
 >acceptB : <T>(b: B<T>) => void
->        : ^ ^^^^^    ^^^^^^^^^
+>        : ^ ^^ ^^    ^^^^^^^^^
 >b : B<T>
 >  : ^^^^
 
 function test<T>(x: A<T> | B<T>) {
 >test : <T>(x: A<T> | B<T>) => void
->     : ^ ^^^^^           ^^^^^^^^^
+>     : ^ ^^ ^^           ^^^^^^^^^
 >x : A<T> | B<T>
 >  : ^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ function test<T>(x: A<T> | B<T>) {
 >acceptA(x) : void
 >           : ^^^^
 >acceptA : <T_1>(a: A<T_1>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^      ^^^^^^^^^
 >x : B<T>
 >  : ^^^^
     }
@@ -62,7 +62,7 @@ function test<T>(x: A<T> | B<T>) {
 >acceptA(x) : void
 >           : ^^^^
 >acceptA : <T_1>(a: A<T_1>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^      ^^^^^^^^^
 >x : A<T>
 >  : ^^^^
     }
@@ -79,7 +79,7 @@ function test<T>(x: A<T> | B<T>) {
 >acceptB(x) : void
 >           : ^^^^
 >acceptB : <T_1>(b: B<T_1>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^      ^^^^^^^^^
 >x : B<T>
 >  : ^^^^
     }
@@ -96,7 +96,7 @@ function test<T>(x: A<T> | B<T>) {
 >acceptB(x) : void
 >           : ^^^^
 >acceptB : <T_1>(b: B<T_1>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^      ^^^^^^^^^
 >x : B<T>
 >  : ^^^^
     }

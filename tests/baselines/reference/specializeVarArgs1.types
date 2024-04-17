@@ -11,7 +11,7 @@ interface ObservableArray<T> extends Observable<T[]>
 
     push(...values: T[]);
 >push : (...values: T[]) => any
->     : ^^^^^^^^^^^^   ^^^^^^^^
+>     : ^^^^      ^^   ^^^^^^^^
 >values : T[]
 >       : ^^^
 
@@ -36,11 +36,11 @@ var a =  observableArray<string>();
 a.push('Some Value');
 >a.push('Some Value') : any
 >a.push : (...values: string[]) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^      ^^^^^^^^^^^^^^^^^^
 >a : ObservableArray<string>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >push : (...values: string[]) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^      ^^^^^^^^^^^^^^^^^^
 >'Some Value' : "Some Value"
 >             : ^^^^^^^^^^^^
 

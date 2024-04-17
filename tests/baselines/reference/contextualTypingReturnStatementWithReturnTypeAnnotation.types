@@ -7,13 +7,13 @@ type PropOfRaw<T> = readonly T[] | "not-array" | "no-prop";
 
 declare function isString(text: unknown): text is string;
 >isString : (text: unknown) => text is string
->         : ^^^^^^^       ^^^^^              
+>         : ^    ^^       ^^^^^              
 >text : unknown
 >     : ^^^^^^^
 
 declare function getPropFromRaw<T>(
 >getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
->               : ^ ^^^^^^^^                                              ^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^      ^^^^^            
+>               : ^ ^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^            
 
   prop: "files" | "include" | "exclude" | "references",
 >prop : "files" | "include" | "exclude" | "references"
@@ -21,7 +21,7 @@ declare function getPropFromRaw<T>(
 
   validateElement: (value: unknown) => boolean,
 >validateElement : (value: unknown) => boolean
->                : ^^^^^^^^       ^^^^^       
+>                : ^     ^^       ^^^^^       
 >value : unknown
 >      : ^^^^^^^
 
@@ -33,7 +33,7 @@ declare function getPropFromRaw<T>(
 
 function getSpecsFromRaw(
 >getSpecsFromRaw : (prop: "files" | "include" | "exclude") => PropOfRaw<string>
->                : ^^^^^^^                               ^^^^^                 
+>                : ^    ^^                               ^^^^^                 
 
   prop: "files" | "include" | "exclude"
 >prop : "files" | "include" | "exclude"
@@ -44,11 +44,11 @@ function getSpecsFromRaw(
 >getPropFromRaw(prop, isString, "string") : PropOfRaw<string>
 >                                         : ^^^^^^^^^^^^^^^^^
 >getPropFromRaw : <T>(prop: "files" | "include" | "exclude" | "references", validateElement: (value: unknown) => boolean, elementTypeName: string) => PropOfRaw<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^    ^^                                              ^^               ^^                           ^^               ^^      ^^^^^^^^^^^^^^^^^
 >prop : "files" | "include" | "exclude"
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isString : (text: unknown) => text is string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^       ^^^^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 }

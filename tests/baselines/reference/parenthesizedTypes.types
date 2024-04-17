@@ -19,13 +19,13 @@ var a: ((((((((((((((((((((((((((((((((((((((((string)))))))))))))))))))))))))))
 
 var b: (x: string) => string;
 >b : (x: string) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 
 var b: ((x: (string)) => (string));
 >b : (x: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -43,7 +43,7 @@ var c: ((string)[]) | ((number)[]);
 
 var d: (((x: string) => string) | ((x: number) => number))[];
 >d : (((x: string) => string) | ((x: number) => number))[]
->  : ^^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^      ^^^^
+>  : ^^^ ^^      ^^^^^      ^^^^^^ ^^      ^^^^^      ^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -51,7 +51,7 @@ var d: (((x: string) => string) | ((x: number) => number))[];
 
 var d: ({ (x: string): string } | { (x: number): number })[];
 >d : (((x: string) => string) | ((x: number) => number))[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -59,7 +59,7 @@ var d: ({ (x: string): string } | { (x: number): number })[];
 
 var d: Array<((x: string) => string) | ((x: number) => number)>;
 >d : (((x: string) => string) | ((x: number) => number))[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -67,7 +67,7 @@ var d: Array<((x: string) => string) | ((x: number) => number)>;
 
 var d: Array<{ (x: string): string } | { (x: number): number }>;
 >d : (((x: string) => string) | ((x: number) => number))[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -75,7 +75,7 @@ var d: Array<{ (x: string): string } | { (x: number): number }>;
 
 var d: (Array<{ (x: string): string } | { (x: number): number }>);
 >d : (((x: string) => string) | ((x: number) => number))[]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : number
@@ -95,12 +95,12 @@ var e: (typeof a)[];
 
 var f: (string) => string;
 >f : (string: any) => string
->  : ^^^^^^^^^^^^^^^^^      
+>  : ^      ^^^^^^^^^^      
 >string : any
 
 var f: (string: any) => string;
 >f : (string: any) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^      ^^^^^^^^^^^^^^^^
 >string : any
 
 var g: [string, string];

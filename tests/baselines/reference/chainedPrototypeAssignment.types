@@ -8,7 +8,7 @@ var mod = require('./mod');
 >require('./mod') : typeof mod
 >                 : ^^^^^^^^^^
 >require : (name: string) => any
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^
 >'./mod' : "./mod"
 >        : ^^^^^^^
 
@@ -40,11 +40,11 @@ a.m('nope')
 >a.m('nope') : number
 >            : ^^^^^^
 >a.m : (n: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >a : A
 >  : ^
 >m : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'nope' : "nope"
 >       : ^^^^^^
 
@@ -52,18 +52,18 @@ b.m('not really')
 >b.m('not really') : number
 >                  : ^^^^^^
 >b.m : (n: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >b : B
 >  : ^
 >m : (n: number) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'not really' : "not really"
 >             : ^^^^^^^^^^^^
 
 === types.d.ts ===
 declare function require(name: string): any;
 >require : (name: string) => any
->        : ^^^^^^^      ^^^^^   
+>        : ^    ^^      ^^^^^   
 >name : string
 >     : ^^^^^^
 
@@ -139,28 +139,28 @@ exports.B = B
 
 A.prototype = B.prototype = {
 >A.prototype = B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
->                                                                                              : ^^^^^^^      ^^^^^^^^^^^^
+>                                                                                              : ^^^^ ^^      ^^^^^^^^^^^^
 >A.prototype : { m(n: number): number; }
->            : ^^^^^^^      ^^^^^^^^^^^^
+>            : ^^^^ ^^      ^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >prototype : { m(n: number): number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^ ^^      ^^^^^^^^^^^^
 >B.prototype = {    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
->                                                                                : ^^^^^^^      ^^^^^^^^^^^^
+>                                                                                : ^^^^ ^^      ^^^^^^^^^^^^
 >B.prototype : { m(n: number): number; }
->            : ^^^^^^^      ^^^^^^^^^^^^
+>            : ^^^^ ^^      ^^^^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 >prototype : { m(n: number): number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^ ^^      ^^^^^^^^^^^^
 >{    /** @param {number} n */    m(n) {        return n + 1    }} : { m(n: number): number; }
->                                                                  : ^^^^^^^      ^^^^^^^^^^^^
+>                                                                  : ^^^^ ^^      ^^^^^^^^^^^^
 
     /** @param {number} n */
     m(n) {
 >m : (n: number) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 

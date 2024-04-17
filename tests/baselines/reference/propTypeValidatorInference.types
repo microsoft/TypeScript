@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/propTypeValidatorInference.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 400 / 400 (nearest 100)
-Instantiation count: 3,000 / 3,500 (nearest 500)
-Symbol count: 25,500 / 25,500 (nearest 500)
+Instantiation count: 2,500
 
 === node_modules/prop-types/index.d.ts ===
 export const nominalTypeHack: unique symbol;
@@ -100,13 +97,13 @@ export const number: Requireable<number>;
 
 export function shape<P extends ValidationMap<any>>(type: P): Requireable<InferProps<P>>;
 >shape : <P extends ValidationMap<any>>(type: P) => Requireable<InferProps<P>>
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                          
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^                          
 >type : P
 >     : ^
 
 export function oneOfType<T extends Validator<any>>(types: T[]): Requireable<NonNullable<InferType<T>>>;
 >oneOfType : <T extends Validator<any>>(types: T[]) => Requireable<NonNullable<InferType<T>>>
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^                                      
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^                                      
 >types : T[]
 >      : ^^^
 
@@ -211,7 +208,7 @@ const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
 >arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[PropTypes.string, PropTypes.bool, PropTypes.shape({    foo: PropTypes.string,    bar: PropTypes.number.isRequired})] : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
->                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^^
 >PropTypes.string : PropTypes.Requireable<string>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
@@ -227,11 +224,11 @@ const arrayOfTypes = [PropTypes.string, PropTypes.bool, PropTypes.shape({
 >PropTypes.shape({    foo: PropTypes.string,    bar: PropTypes.number.isRequired}) : PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>
 >                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
 >          : ^^^^^^^^^^^^^^^^
 >shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    foo: PropTypes.string,    bar: PropTypes.number.isRequired} : { foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }
 >                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -310,37 +307,37 @@ const propTypes: PropTypesMap = {
 >shape : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.shape(innerProps).isRequired : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                           ^^^
 >PropTypes.shape(innerProps) : PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
 >          : ^^^^^^^^^^^^^^^^
 >shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >innerProps : { foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isRequired : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                           ^^^
 
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 >oneOfType : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.oneOfType(arrayOfTypes).isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^
 >PropTypes.oneOfType(arrayOfTypes) : PropTypes.Requireable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
 >          : ^^^^^^^^^^^^^^^^
 >oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^
 
 };
 
@@ -349,7 +346,7 @@ const propTypesWithoutAnnotation = {
 >propTypesWithoutAnnotation : { any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>; oneOfType: PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    any: PropTypes.any,    array: PropTypes.array.isRequired,    bool: PropTypes.bool.isRequired,    shape: PropTypes.shape(innerProps).isRequired,    oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,} : { any: PropTypes.Requireable<any>; array: PropTypes.Validator<any[]>; bool: PropTypes.Validator<boolean>; shape: PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>; oneOfType: PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>; }
->                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^^^^
 
     any: PropTypes.any,
 >any : PropTypes.Requireable<any>
@@ -393,37 +390,37 @@ const propTypesWithoutAnnotation = {
 >shape : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.shape(innerProps).isRequired : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                           ^^^
 >PropTypes.shape(innerProps) : PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
 >          : ^^^^^^^^^^^^^^^^
 >shape : <P extends PropTypes.ValidationMap<any>>(type: P) => PropTypes.Requireable<PropTypes.InferProps<P>>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >innerProps : { foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isRequired : PropTypes.Validator<NonNullable<PropTypes.InferProps<{ foo: PropTypes.Validator<string>; bar: PropTypes.Requireable<boolean>; baz: PropTypes.Requireable<any>; }>>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                                                           ^^^
 
     oneOfType: PropTypes.oneOfType(arrayOfTypes).isRequired,
 >oneOfType : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.oneOfType(arrayOfTypes).isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^
 >PropTypes.oneOfType(arrayOfTypes) : PropTypes.Requireable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes.oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PropTypes : typeof PropTypes
 >          : ^^^^^^^^^^^^^^^^
 >oneOfType : <T extends PropTypes.Validator<any>>(types: T[]) => PropTypes.Requireable<NonNullable<PropTypes.InferType<T>>>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arrayOfTypes : (PropTypes.Requireable<boolean> | PropTypes.Requireable<string> | PropTypes.Requireable<PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>)[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isRequired : PropTypes.Validator<NonNullable<NonNullable<string | boolean | PropTypes.InferProps<{ foo: PropTypes.Requireable<string>; bar: PropTypes.Validator<number>; }>>>>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                         ^^^^
 
 };
 

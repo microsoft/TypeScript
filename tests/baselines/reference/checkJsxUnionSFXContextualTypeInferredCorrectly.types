@@ -1,10 +1,10 @@
 //// [tests/cases/conformance/jsx/checkJsxUnionSFXContextualTypeInferredCorrectly.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,600 / 7,600 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,500 / 66,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === checkJsxUnionSFXContextualTypeInferredCorrectly.tsx ===
 /// <reference path="react16.d.ts" />
@@ -26,7 +26,7 @@ interface PS {
 
     onChange: (selection: string | undefined) => void
 >onChange : (selection: string | undefined) => void
->         : ^^^^^^^^^^^^                  ^^^^^    
+>         : ^         ^^                  ^^^^^    
 >selection : string | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 }
@@ -44,14 +44,14 @@ interface PM {
 
     onChange: (selection: string[]) => void
 >onChange : (selection: string[]) => void
->         : ^^^^^^^^^^^^        ^^^^^    
+>         : ^         ^^        ^^^^^    
 >selection : string[]
 >          : ^^^^^^^^
 }
 
 export function ComponentWithUnion(props: PM | PS) {
 >ComponentWithUnion : (props: PM | PS) => JSX.Element
->                   : ^^^^^^^^       ^^^^^^^^^^^^^^^^
+>                   : ^     ^^       ^^^^^^^^^^^^^^^^
 >props : PS | PM
 >      : ^^^^^^^
 
@@ -76,8 +76,8 @@ export function HereIsTheError() {
         <ComponentWithUnion
 ><ComponentWithUnion            multi={false}            value={'s'}            onChange={val => console.log(val)} // <- this throws an error        /> : JSX.Element
 >                                                                                                                                                       : ^^^^^^^^^^^
->ComponentWithUnion : (props: PS | PM) => JSX.Element
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
+>                   : ^     ^^       ^^^^^^^^^^^^^^^^
 
             multi={false}
 >multi : false
@@ -93,19 +93,19 @@ export function HereIsTheError() {
 
             onChange={val => console.log(val)} // <- this throws an error
 >onChange : (val: string | undefined) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val => console.log(val) : (val: string | undefined) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -117,10 +117,10 @@ export function HereIsTheError() {
 ComponentWithUnion({
 >ComponentWithUnion({    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine}) : JSX.Element
 >                                                                                                                  : ^^^^^^^^^^^
->ComponentWithUnion : (props: PS | PM) => JSX.Element
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ComponentWithUnion : (props: PM | PS) => JSX.Element
+>                   : ^     ^^       ^^^^^^^^^^^^^^^^
 >{    multi: false,    value: 's',    onChange: val => console.log(val) // <- this works fine} : { multi: false; value: string; onChange: (val: string | undefined) => void; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     multi: false,
 >multi : false
@@ -136,19 +136,19 @@ ComponentWithUnion({
 
     onChange: val => console.log(val) // <- this works fine
 >onChange : (val: string | undefined) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >val => console.log(val) : (val: string | undefined) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        :                                  
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >console.log(val) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >val : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 

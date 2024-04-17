@@ -1,8 +1,6 @@
 import * as fs from "fs";
 
-import {
-    IO,
-} from "../../_namespaces/Harness";
+import { IO } from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     defer,
@@ -11,6 +9,7 @@ import {
 import {
     createWatchedSystem,
     FileOrFolderOrSymLinkMap,
+    osFlavorToString,
     TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch";
 describe("unittests:: sys:: symlinkWatching::", () => {
@@ -148,19 +147,6 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         return !!expected &&
             actual.fileName === expected.fileName &&
             (ts.isString(expected.event) ? actual.event === expected.event : ts.contains(expected.event, actual.event));
-    }
-
-    function osFlavorToString(osFlavor: TestServerHostOsFlavor) {
-        switch (osFlavor) {
-            case TestServerHostOsFlavor.Windows:
-                return "Windows";
-            case TestServerHostOsFlavor.MacOs:
-                return "MacOs";
-            case TestServerHostOsFlavor.Linux:
-                return "Linux";
-            default:
-                ts.Debug.assertNever(osFlavor);
-        }
     }
 
     interface FsEventsForWatchDirectory extends Record<string, readonly ExpectedEventAndFileName[] | undefined> {

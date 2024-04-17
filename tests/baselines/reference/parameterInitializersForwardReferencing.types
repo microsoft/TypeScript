@@ -3,7 +3,7 @@
 === parameterInitializersForwardReferencing.ts ===
 function left(a, b = a, c = b) {
 >left : (a: any, b?: any, c?: any) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -26,7 +26,7 @@ function left(a, b = a, c = b) {
 
 function right(a = b, b = a) {
 >right : (a?: any, b?: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -47,7 +47,7 @@ function right(a = b, b = a) {
 
 function right2(a = b, b = c, c = a) {
 >right2 : (a?: any, b?: any, c?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -76,7 +76,7 @@ function right2(a = b, b = c, c = a) {
 
 function inside(a = b) {
 >inside : (a?: any) => void
->       : ^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -97,7 +97,7 @@ function outside() {
 
     function inside(a = b) { // Still an error because b is declared inside the function
 >inside : (a?: any) => void
->       : ^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -111,11 +111,11 @@ function outside() {
 
 function defaultArgFunction(a = function () { return b; }, b = 1) { }
 >defaultArgFunction : (a?: () => number, b?: number) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : () => number
 >  : ^^^^^^^^^^^^
 >function () { return b; } : () => number
->                          : ^^^^^^^^^^^^
+>                          :             
 >b : number
 >  : ^^^^^^
 >b : number
@@ -125,11 +125,11 @@ function defaultArgFunction(a = function () { return b; }, b = 1) { }
 
 function defaultArgArrow(a = () => () => b, b = 3) { }
 >defaultArgArrow : (a?: () => () => number, b?: number) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : () => () => number
 >  : ^^^^^^^^^^^^^^^^^^
 >() => () => b : () => () => number
->              : ^^^^^^^^^^^^^^^^^^
+>              :                   
 >() => b : () => number
 >        : ^^^^^^^^^^^^
 >b : number
@@ -155,7 +155,7 @@ class C {
 
     method(a = b, b = 1) { }
 >method : (a?: number, b?: number) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -169,9 +169,9 @@ class C {
 // Function expressions
 var x = (a = b, b = c, c = d) => { var d; };
 >x : (a?: any, b?: any, c?: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >(a = b, b = c, c = d) => { var d; } : (a?: any, b?: any, c?: any) => void
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    :   ^        ^        ^              
 >a : any
 >  : ^^^
 >b : any
@@ -190,13 +190,13 @@ var x = (a = b, b = c, c = d) => { var d; };
 // Should not produce errors - can reference later parameters if they occur within a function expression initializer.
 function f(a, b = function () { return c; }, c = b()) {
 >f : (a: any, b?: () => any, c?: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : () => any
 >  : ^^^^^^^^^
 >function () { return c; } : () => any
->                          : ^^^^^^^^^
+>                          :          
 >c : any
 >  : ^^^
 >c : any

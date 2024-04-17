@@ -3,12 +3,12 @@
 === overloadOnConstInObjectLiteralImplementingAnInterface.ts ===
 interface I {
     x1(a: number, callback: (x: 'hi') => number);
->x1 : (a: number, callback: (x: 'hi') => number) => any
->   : ^^^^      ^^^^^^^^^^^^                   ^^^^^^^^
+>x1 : (a: number, callback: (x: "hi") => number) => any
+>   : ^ ^^      ^^        ^^                   ^^^^^^^^
 >a : number
 >  : ^^^^^^
->callback : (x: 'hi') => number
->         : ^^^^    ^^^^^      
+>callback : (x: "hi") => number
+>         : ^ ^^    ^^^^^      
 >x : "hi"
 >  : ^^^^
 }
@@ -16,16 +16,16 @@ interface I {
 var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
 >i2 : I
 >   : ^
->{ x1: (a: number, cb: (x: 'hi') => number) => { } } : { x1: (a: number, cb: (x: 'hi') => number) => void; }
->                                                    : ^^^^^^^^^^      ^^^^^^                   ^^^^^^^^^^^^
->x1 : (a: number, cb: (x: 'hi') => number) => void
->   : ^^^^      ^^^^^^                   ^^^^^^^^^
->(a: number, cb: (x: 'hi') => number) => { } : (a: number, cb: (x: 'hi') => number) => void
->                                            : ^^^^      ^^^^^^                   ^^^^^^^^^
+>{ x1: (a: number, cb: (x: 'hi') => number) => { } } : { x1: (a: number, cb: (x: "hi") => number) => void; }
+>                                                    : ^^^^^^^ ^^      ^^  ^^                   ^^^^^^^^^^^^
+>x1 : (a: number, cb: (x: "hi") => number) => void
+>   : ^ ^^      ^^  ^^                   ^^^^^^^^^
+>(a: number, cb: (x: 'hi') => number) => { } : (a: number, cb: (x: "hi") => number) => void
+>                                            :                                             
 >a : number
 >  : ^^^^^^
->cb : (x: 'hi') => number
->   : ^^^^    ^^^^^      
+>cb : (x: "hi") => number
+>   : ^ ^^    ^^^^^      
 >x : "hi"
 >  : ^^^^
 

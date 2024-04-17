@@ -5,7 +5,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -24,15 +24,15 @@ var r = foo(a);
 >r : { [x: string]: Date; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo(a) : { [x: string]: Date; }
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       :                       
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 >a : { [x: string]: Date; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
->      : ^ ^^^^^^^ ^^^^^^^^^
+>      : ^ ^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -46,16 +46,16 @@ function other<T>(arg: T) {
 >r2 : { [x: string]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->       : ^^^^^^^^^^^^^^^^^^^
+>       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 }
 
 function other2<T extends Date>(arg: T) {
 >other2 : <T extends Date>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -69,9 +69,9 @@ function other2<T extends Date>(arg: T) {
 >r2 : { [x: string]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->       : ^^^^^^^^^^^^^^^^^^^
+>       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -88,7 +88,7 @@ function other2<T extends Date>(arg: T) {
 
 function other3<T extends Date, U extends Date>(arg: T) {
 >other3 : <T extends Date, U extends Date>(arg: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -102,9 +102,9 @@ function other3<T extends Date, U extends Date>(arg: T) {
 >r2 : { [x: string]: T; }
 >   : ^^^^^^^^^^^^^^^^^^^
 >foo(b) : { [x: string]: T; }
->       : ^^^^^^^^^^^^^^^^^^^
+>       :                    
 >foo : <T_1>(x: T_1) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^ ^^   ^^^^^^^^
 >b : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 

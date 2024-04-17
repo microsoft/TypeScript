@@ -9,7 +9,7 @@ class A {
 
     static one<T>(source:T, value: number): T {
 >one : <T>(source: T, value: number) => T
->    : ^ ^^^^^^^^^^ ^^^^^^^^^      ^^^^^ 
+>    : ^ ^^      ^^ ^^     ^^      ^^^^^ 
 >source : T
 >       : ^
 >value : number
@@ -22,7 +22,7 @@ class A {
 
     static two<T>(source: T): T {
 >two : <T>(source: T) => T
->    : ^ ^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^      ^^ ^^^^^ 
 >source : T
 >       : ^
 
@@ -30,11 +30,11 @@ class A {
 >this.one<T>(source, 42) : T
 >                        : ^
 >this.one : <T_1>(source: T_1, value: number) => T_1
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^      ^^   ^^     ^^      ^^^^^^^^
 >this : typeof A
 >     : ^^^^^^^^
 >one : <T_1>(source: T_1, value: number) => T_1
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^   ^^     ^^      ^^^^^^^^
 >source : T
 >       : ^
 >42 : 42
@@ -48,7 +48,7 @@ class B {
 
     static one(source: B, value: number): B {
 >one : (source: B, value: number) => B
->    : ^^^^^^^^^ ^^^^^^^^^      ^^^^^ 
+>    : ^      ^^ ^^     ^^      ^^^^^ 
 >source : B
 >       : ^
 >value : number
@@ -61,7 +61,7 @@ class B {
 
     static two(source: B): B {
 >two : (source: B) => B
->    : ^^^^^^^^^ ^^^^^ 
+>    : ^      ^^ ^^^^^ 
 >source : B
 >       : ^
 
@@ -69,11 +69,11 @@ class B {
 >this.one(source, 42) : B
 >                     : ^
 >this.one : (source: B, value: number) => B
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^ ^^     ^^      ^^^^^^
 >this : typeof B
 >     : ^^^^^^^^
 >one : (source: B, value: number) => B
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^ ^^     ^^      ^^^^^^
 >source : B
 >       : ^
 >42 : 42

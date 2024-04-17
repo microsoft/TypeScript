@@ -17,9 +17,9 @@ module M
 
       public setName = function(value: string): void {
 >setName : (value: string) => void
->        : ^^^^^^^^      ^^^^^    
+>        : ^     ^^      ^^^^^    
 >function(value: string): void {	  (function () {	      name=value;	  })();      } : (value: string) => void
->                                                                                  : ^^^^^^^^      ^^^^^    
+>                                                                                  :                        
 >value : string
 >      : ^^^^^^
 
@@ -45,7 +45,7 @@ module M
 >getName : () => string
 >        : ^^^^^^      
 >function(): string {          return name;      } : () => string
->                                                  : ^^^^^^      
+>                                                  :             
 
           return name;
 >name : any

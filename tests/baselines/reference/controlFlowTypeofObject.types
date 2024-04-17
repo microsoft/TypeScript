@@ -3,13 +3,13 @@
 === controlFlowTypeofObject.ts ===
 declare function obj(x: object): void;
 >obj : (x: object) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >x : object
 >  : ^^^^^^
 
 function f1(x: unknown) {
 >f1 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -35,7 +35,7 @@ function f1(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
     }
@@ -43,7 +43,7 @@ function f1(x: unknown) {
 
 function f2(x: unknown) {
 >f2 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -69,7 +69,7 @@ function f2(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
     }
@@ -77,7 +77,7 @@ function f2(x: unknown) {
 
 function f3(x: unknown) {
 >f3 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -103,7 +103,7 @@ function f3(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
     }
@@ -111,7 +111,7 @@ function f3(x: unknown) {
 
 function f4(x: unknown) {
 >f4 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -139,7 +139,7 @@ function f4(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
     }
@@ -147,7 +147,7 @@ function f4(x: unknown) {
 
 function f5(x: unknown) {
 >f5 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -192,7 +192,7 @@ function f5(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
     }
@@ -200,7 +200,7 @@ function f5(x: unknown) {
 
 function f6(x: unknown) {
 >f6 : (x: unknown) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -233,7 +233,7 @@ function f6(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object
 >  : ^^^^^^
         }
@@ -252,7 +252,7 @@ function f6(x: unknown) {
 >obj(x) : void
 >       : ^^^^
 >obj : (x: object) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : object | null
 >  : ^^^^^^^^^^^^^
     }

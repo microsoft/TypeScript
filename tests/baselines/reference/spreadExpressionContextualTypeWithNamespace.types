@@ -78,7 +78,7 @@ function getStuff<T>() {
 >thing : { exportedDirectly(): void; func: () => void; klass: typeof stuff.klass; obj: { x: boolean; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...stuff } : { exportedDirectly(): void; func: () => void; klass: typeof stuff.klass; obj: { x: boolean; }; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^
 >stuff : typeof stuff
 >      : ^^^^^^^^^^^^
 

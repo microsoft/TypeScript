@@ -14,7 +14,7 @@ class c1 {
     /** sum with property*/
     public p2(/** number to add*/b: number) {
 >p2 : (b: number) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -40,11 +40,11 @@ class c1 {
 >this.p2(this.p1) : number
 >                 : ^^^^^^
 >this.p2 : (b: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >p2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >this.p1 : number
 >        : ^^^^^^
 >this : this
@@ -72,11 +72,11 @@ class c1 {
 >this.p2(value) : number
 >               : ^^^^^^
 >this.p2 : (b: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >p2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -89,7 +89,7 @@ class c1 {
     /** sum with property*/
     private pp2(/** number to add*/b: number) {
 >pp2 : (b: number) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -115,11 +115,11 @@ class c1 {
 >this.pp2(this.pp1) : number
 >                   : ^^^^^^
 >this.pp2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >pp2 : (b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >this.pp1 : number
 >         : ^^^^^^
 >this : this
@@ -146,11 +146,11 @@ class c1 {
 >this.pp2(value) : number
 >                : ^^^^^^
 >this.pp2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >pp2 : (b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -165,7 +165,7 @@ class c1 {
     /** static sum with property*/
     static s2(/** number to add*/b: number) {
 >s2 : (b: number) => number
->   : ^^^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -190,11 +190,11 @@ class c1 {
 >c1.s2(c1.s1) : number
 >             : ^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >c1.s1 : number
 >      : ^^^^^^
 >c1 : typeof c1
@@ -222,11 +222,11 @@ class c1 {
 >c1.s2(value) : number
 >             : ^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -237,7 +237,7 @@ class c1 {
 
     public nc_p2(b: number) {
 >nc_p2 : (b: number) => number
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -261,11 +261,11 @@ class c1 {
 >this.nc_p2(this.nc_p1) : number
 >                       : ^^^^^^
 >this.nc_p2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >nc_p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >this.nc_p1 : number
 >           : ^^^^^^
 >this : this
@@ -291,11 +291,11 @@ class c1 {
 >this.nc_p2(value) : number
 >                  : ^^^^^^
 >this.nc_p2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >nc_p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -305,7 +305,7 @@ class c1 {
 
     private nc_pp2(b: number) {
 >nc_pp2 : (b: number) => number
->       : ^^^^      ^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -329,11 +329,11 @@ class c1 {
 >this.nc_pp2(this.nc_pp1) : number
 >                         : ^^^^^^
 >this.nc_pp2 : (b: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >nc_pp2 : (b: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >this.nc_pp1 : number
 >            : ^^^^^^
 >this : this
@@ -359,11 +359,11 @@ class c1 {
 >this.nc_pp2(value) : number
 >                   : ^^^^^^
 >this.nc_pp2 : (b: number) => number
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >nc_pp2 : (b: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -373,7 +373,7 @@ class c1 {
 
     static nc_s2(b: number) {
 >nc_s2 : (b: number) => number
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -397,11 +397,11 @@ class c1 {
 >c1.nc_s2(c1.nc_s1) : number
 >                   : ^^^^^^
 >c1.nc_s2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >nc_s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1.nc_s1 : number
 >         : ^^^^^^
 >c1 : typeof c1
@@ -427,11 +427,11 @@ class c1 {
 >c1.nc_s2(value) : number
 >                : ^^^^^^
 >c1.nc_s2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >nc_s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -444,7 +444,7 @@ class c1 {
     // sum with property
     public a_p2(b: number) {
 >a_p2 : (b: number) => number
->     : ^^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -469,11 +469,11 @@ class c1 {
 >this.a_p2(this.a_p1) : number
 >                     : ^^^^^^
 >this.a_p2 : (b: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >a_p2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >this.a_p1 : number
 >          : ^^^^^^
 >this : this
@@ -500,11 +500,11 @@ class c1 {
 >this.a_p2(value) : number
 >                 : ^^^^^^
 >this.a_p2 : (b: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >a_p2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -516,7 +516,7 @@ class c1 {
     // sum with property
     private a_pp2(b: number) {
 >a_pp2 : (b: number) => number
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -541,11 +541,11 @@ class c1 {
 >this.a_pp2(this.a_pp1) : number
 >                       : ^^^^^^
 >this.a_pp2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >a_pp2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >this.a_pp1 : number
 >           : ^^^^^^
 >this : this
@@ -572,11 +572,11 @@ class c1 {
 >this.a_pp2(value) : number
 >                  : ^^^^^^
 >this.a_pp2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >a_pp2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -589,7 +589,7 @@ class c1 {
     // static sum with property
     static a_s2(b: number) {
 >a_s2 : (b: number) => number
->     : ^^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -614,11 +614,11 @@ class c1 {
 >c1.s2(c1.s1) : number
 >             : ^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >c1.s1 : number
 >      : ^^^^^^
 >c1 : typeof c1
@@ -646,11 +646,11 @@ class c1 {
 >c1.a_s2(value) : number
 >               : ^^^^^^
 >c1.a_s2 : (b: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >a_s2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -663,7 +663,7 @@ class c1 {
     /** sum with property */
     public b_p2(b: number) {
 >b_p2 : (b: number) => number
->     : ^^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -688,11 +688,11 @@ class c1 {
 >this.b_p2(this.b_p1) : number
 >                     : ^^^^^^
 >this.b_p2 : (b: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >b_p2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >this.b_p1 : number
 >          : ^^^^^^
 >this : this
@@ -719,11 +719,11 @@ class c1 {
 >this.b_p2(value) : number
 >                 : ^^^^^^
 >this.b_p2 : (b: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >b_p2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -735,7 +735,7 @@ class c1 {
     /** sum with property */
     private b_pp2(b: number) {
 >b_pp2 : (b: number) => number
->      : ^^^^      ^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -760,11 +760,11 @@ class c1 {
 >this.b_pp2(this.b_pp1) : number
 >                       : ^^^^^^
 >this.b_pp2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >b_pp2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >this.b_pp1 : number
 >           : ^^^^^^
 >this : this
@@ -791,11 +791,11 @@ class c1 {
 >this.b_pp2(value) : number
 >                  : ^^^^^^
 >this.b_pp2 : (b: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >b_pp2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -808,7 +808,7 @@ class c1 {
     /** static sum with property */
     static b_s2(b: number) {
 >b_s2 : (b: number) => number
->     : ^^^^      ^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -834,11 +834,11 @@ class c1 {
 >c1.s2(c1.s1) : number
 >             : ^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >c1.s1 : number
 >      : ^^^^^^
 >c1 : typeof c1
@@ -868,11 +868,11 @@ class c1 {
 >c1.b_s2(value) : number
 >               : ^^^^^^
 >c1.b_s2 : (b: number) => number
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >b_s2 : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
     }
@@ -897,13 +897,13 @@ var i1_p = i1.p1;
 
 var i1_f = i1.p2;
 >i1_f : (b: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >i1.p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      :                      
 >i1 : c1
 >   : ^^
 >p2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
 var i1_r = i1.p2(20);
 >i1_r : number
@@ -911,11 +911,11 @@ var i1_r = i1.p2(20);
 >i1.p2(20) : number
 >          : ^^^^^^
 >i1.p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >i1 : c1
 >   : ^^
 >p2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >20 : 20
 >   : ^^
 
@@ -953,13 +953,13 @@ var i1_nc_p = i1.nc_p1;
 
 var i1_ncf = i1.nc_p2;
 >i1_ncf : (b: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >i1.nc_p2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         :                      
 >i1 : c1
 >   : ^^
 >nc_p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 
 var i1_ncr = i1.nc_p2(20);
 >i1_ncr : number
@@ -967,11 +967,11 @@ var i1_ncr = i1.nc_p2(20);
 >i1.nc_p2(20) : number
 >             : ^^^^^^
 >i1.nc_p2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >i1 : c1
 >   : ^^
 >nc_p2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >20 : 20
 >   : ^^
 
@@ -1009,13 +1009,13 @@ var i1_s_p = c1.s1;
 
 var i1_s_f = c1.s2;
 >i1_s_f : (b: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      :                      
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
 var i1_s_r = c1.s2(20);
 >i1_s_r : number
@@ -1023,11 +1023,11 @@ var i1_s_r = c1.s2(20);
 >c1.s2(20) : number
 >          : ^^^^^^
 >c1.s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >20 : 20
 >   : ^^
 
@@ -1065,13 +1065,13 @@ var i1_s_nc_p = c1.nc_s1;
 
 var i1_s_ncf = c1.nc_s2;
 >i1_s_ncf : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >c1.nc_s2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         :                      
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >nc_s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 
 var i1_s_ncr = c1.nc_s2(20);
 >i1_s_ncr : number
@@ -1079,11 +1079,11 @@ var i1_s_ncr = c1.nc_s2(20);
 >c1.nc_s2(20) : number
 >             : ^^^^^^
 >c1.nc_s2 : (b: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >nc_s2 : (b: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >20 : 20
 >   : ^^
 

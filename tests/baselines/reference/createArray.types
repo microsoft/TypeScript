@@ -54,7 +54,7 @@ var sa=new string[];
 
 function f(s:string):number { return 0;
 >f : (s: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >0 : 0
@@ -80,7 +80,7 @@ if (ba[14]) {
 >f(sa[3]) : number
 >         : ^^^^^^
 >f : (s: string) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >sa[3] : any
 >      : ^^^
 >sa : any

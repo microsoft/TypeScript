@@ -3,7 +3,7 @@
 === fatarrowfunctionsInFunctions.ts ===
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^      ^^^^^^^^^^^^^   ^^^      ^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
 >msec : number
 >     : ^^^^^^
@@ -13,7 +13,7 @@ var messenger = {
 >messenger : { message: string; start: () => void; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     }} : { message: string; start: () => void; }
->                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^
 
     message: "Hello World",
 >message : string
@@ -25,7 +25,7 @@ var messenger = {
 >start : () => void
 >      : ^^^^^^^^^^
 >function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : () => void
->                                                                                                                                  : ^^^^^^^^^^
+>                                                                                                                                  :           
 
         var _self = this;
 >_self : any
@@ -35,7 +35,7 @@ var messenger = {
 >setTimeout(function() {            _self.message.toString();         }, 3000) : number
 >                                                                              : ^^^^^^
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^^^^^^^^^^
 >function() {            _self.message.toString();         } : () => void
 >                                                            : ^^^^^^^^^^
 

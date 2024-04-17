@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/declarationEmitRecursiveConditionalAliasPreserved.ts] ////
 
 === Performance Stats ===
-Assignability cache: 1,900 / 1,900 (nearest 100)
-Type Count: 14,200 / 14,200 (nearest 100)
-Instantiation count: 57,000 / 57,000 (nearest 500)
-Symbol count: 49,000 / 49,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 50,000
+Symbol count: 50,000
 
 === input.d.ts ===
 type _BuildPowersOf2LengthArrays<
@@ -138,9 +138,9 @@ import { Power } from "./input";
 
 export const power = <Num extends number, PowerOf extends number>(
 >power : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
->      : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^       ^^^^^                   
+>      : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^   ^^   ^^       ^^       ^^^^^                   
 ><Num extends number, PowerOf extends number>(    num: Num,    powerOf: PowerOf): Power<Num, PowerOf> => (num ** powerOf) as never : <Num extends number, PowerOf extends number>(num: Num, powerOf: PowerOf) => Power<Num, PowerOf>
->                                                                                                                                  : ^   ^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^       ^^^^^                   
+>                                                                                                                                  :                                                                                                
 
     num: Num,
 >num : Num

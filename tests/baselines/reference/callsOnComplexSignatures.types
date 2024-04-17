@@ -1,11 +1,10 @@
 //// [tests/cases/compiler/callsOnComplexSignatures.tsx] ////
 
 === Performance Stats ===
-Subtype cache: 100 / 100 (nearest 100)
-Assignability cache: 2,400 / 2,400 (nearest 100)
-Type Count: 8,200 / 8,200 (nearest 100)
-Instantiation count: 92,500 / 92,500 (nearest 500)
-Symbol count: 68,000 / 68,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === callsOnComplexSignatures.tsx ===
 /// <reference path="react16.d.ts" />
@@ -29,7 +28,7 @@ function test1() {
     interface Temp1 {
         getValue(name: stringType1): number;
 >getValue : (name: "foo" | "bar") => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>         : ^    ^^^^^^^^^^^^^^^^^^^^      
 >name : "foo" | "bar"
 >     : ^^^^^^^^^^^^^
     }
@@ -37,14 +36,14 @@ function test1() {
     interface Temp2 {
         getValue(name: stringType2): string;
 >getValue : (name: "bar" | "baz") => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>         : ^    ^^^^^^^^^^^^^^^^^^^^      
 >name : "bar" | "baz"
 >     : ^^^^^^^^^^^^^
     }
 
     function test(t: Temp1 | Temp2) {
 >test : (t: Temp1 | Temp2) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Temp1 | Temp2
 >  : ^^^^^^^^^^^^^
 
@@ -54,11 +53,11 @@ function test1() {
 >t.getValue("bar") : string | number
 >                  : ^^^^^^^^^^^^^^^
 >t.getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t : Temp1 | Temp2
 >  : ^^^^^^^^^^^^^
 >getValue : ((name: "foo" | "bar") => number) | ((name: "bar" | "baz") => string)
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
     }
@@ -71,7 +70,7 @@ function test2() {
     interface Messages {
         readonly foo: (options: { [key: string]: any, b: number }) => string;
 >foo : (options: { [key: string]: any; b: number; }) => string
->    : ^^^^^^^^^^                                  ^^^^^      
+>    : ^       ^^                                  ^^^^^      
 >options : { [key: string]: any; b: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >key : string
@@ -81,7 +80,7 @@ function test2() {
 
         readonly bar: (options: { [key: string]: any, a: string }) => string;
 >bar : (options: { [key: string]: any; a: string; }) => string
->    : ^^^^^^^^^^                                  ^^^^^      
+>    : ^       ^^                                  ^^^^^      
 >options : { [key: string]: any; a: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >key : string
@@ -94,13 +93,13 @@ function test2() {
 >messages : Messages
 >         : ^^^^^^^^
 >{        foo: (options) => "Foo",        bar: (options) => "Bar",    } : { foo: (options: { [key: string]: any; b: number; }) => string; bar: (options: { [key: string]: any; a: string; }) => string; }
->                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         foo: (options) => "Foo",
 >foo : (options: { [key: string]: any; b: number; }) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(options) => "Foo" : (options: { [key: string]: any; b: number; }) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   :                                                        
 >options : { [key: string]: any; b: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Foo" : "Foo"
@@ -108,9 +107,9 @@ function test2() {
 
         bar: (options) => "Bar",
 >bar : (options: { [key: string]: any; a: string; }) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(options) => "Bar" : (options: { [key: string]: any; a: string; }) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   :                                                        
 >options : { [key: string]: any; a: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Bar" : "Bar"
@@ -120,9 +119,9 @@ function test2() {
 
     const test1 = (type: "foo" | "bar") =>
 >test1 : (type: "foo" | "bar") => string
->      : ^^^^^^^             ^^^^^^^^^^^
+>      : ^    ^^             ^^^^^^^^^^^
 >(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "foo" | "bar") => string
->                                                                 : ^^^^^^^             ^^^^^^^^^^^
+>                                                                 :                                
 >type : "foo" | "bar"
 >     : ^^^^^^^^^^^^^
 
@@ -130,7 +129,7 @@ function test2() {
 >messages[type]({ a: "A", b: 0 }) : string
 >                                 : ^^^^^^
 >messages[type] : ((options: { [key: string]: any; b: number; }) => string) | ((options: { [key: string]: any; a: string; }) => string)
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^       ^^                                  ^^^^^^^^^^^^^^^^^       ^^                                  ^^^^^^^^^^^^
 >messages : Messages
 >         : ^^^^^^^^
 >type : "foo" | "bar"
@@ -149,7 +148,7 @@ function test2() {
 
 function test3(items: string[] | number[]) {
 >test3 : (items: string[] | number[]) => void
->      : ^^^^^^^^                   ^^^^^^^^^
+>      : ^     ^^                   ^^^^^^^^^
 >items : string[] | number[]
 >      : ^^^^^^^^^^^^^^^^^^^
 
@@ -157,34 +156,34 @@ function test3(items: string[] | number[]) {
 >items.forEach(item => console.log(item)) : void
 >                                         : ^^^^
 >items.forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
 >items : string[] | number[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >forEach : ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void) | ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void)
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
 >item => console.log(item) : (item: string | number) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : string | number
 >     : ^^^^^^^^^^^^^^^
 >console.log(item) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >item : string | number
 >     : ^^^^^^^^^^^^^^^
 }
 
 function test4(
 >test4 : (arg1: ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number), arg2: ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number), arg3: ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number), arg4: ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number), arg5: ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number), arg6: ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)) => void
->      : ^^^^^^^                                                                                 ^^^^^^^^                                                                                       ^^^^^^^^                                                                                                    ^^^^^^^^                                                                                       ^^^^^^^^                                                                                           ^^^^^^^^                                                                                           ^^^^^^^^^
+>      : ^    ^^                                                                                 ^^    ^^                                                                                       ^^    ^^                                                                                                    ^^    ^^                                                                                       ^^    ^^                                                                                           ^^    ^^                                                                                           ^^^^^^^^^
 
     arg1: ((...objs: {x: number}[]) => number) | ((...objs: {y: number}[]) => number),
 >arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
->     : ^^^^^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^                ^^^^^      ^
+>     : ^^^^^    ^^                ^^^^^      ^^^^^^^^^    ^^                ^^^^^      ^
 >objs : { x: number; }[]
 >     : ^^^^^      ^^^^^
 >x : number
@@ -196,7 +195,7 @@ function test4(
 
     arg2: ((a: {x: number}, b: object) => number) | ((a: object, b: {x: number}) => number),
 >arg2 : ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number)
->     : ^^^^^              ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^              ^^^^^      ^
+>     : ^^ ^^              ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^              ^^^^^      ^
 >a : { x: number; }
 >  : ^^^^^      ^^^
 >x : number
@@ -212,7 +211,7 @@ function test4(
 
     arg3: ((a: {x: number}, ...objs: {y: number}[]) => number) | ((...objs: {x: number}[]) => number),
 >arg3 : ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number)
->     : ^^^^^              ^^^^^^^^^^^                ^^^^^      ^^^^^^^^^^^^^^^                ^^^^^      ^
+>     : ^^ ^^              ^^^^^    ^^                ^^^^^      ^^^^^^^^^    ^^                ^^^^^      ^
 >a : { x: number; }
 >  : ^^^^^      ^^^
 >x : number
@@ -228,7 +227,7 @@ function test4(
 
     arg4: ((a?: {x: number}, b?: {x: number}) => number) | ((a?: {y: number}) => number),
 >arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
->     : ^^^^^^              ^^^^^^              ^^^^^      ^^^^^^^^^^              ^^^^^      ^
+>     : ^^ ^^^              ^^ ^^^              ^^^^^      ^^^^^^ ^^^              ^^^^^      ^
 >a : { x: number; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >x : number
@@ -244,7 +243,7 @@ function test4(
 
     arg5: ((a?: {x: number}, ...b: {x: number}[]) => number) | ((a?: {y: number}) => number),
 >arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
->     : ^^^^^^              ^^^^^^^^                ^^^^^      ^^^^^^^^^^              ^^^^^      ^
+>     : ^^ ^^^              ^^^^^ ^^                ^^^^^      ^^^^^^ ^^^              ^^^^^      ^
 >a : { x: number; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >x : number
@@ -260,7 +259,7 @@ function test4(
 
     arg6: ((a?: {x: number}, b?: {x: number}) => number) | ((...a: {y: number}[]) => number),
 >arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
->     : ^^^^^^              ^^^^^^              ^^^^^      ^^^^^^^^^^^^                ^^^^^      ^
+>     : ^^ ^^^              ^^ ^^^              ^^^^^      ^^^^^^^^^ ^^                ^^^^^      ^
 >a : { x: number; } | undefined
 >  : ^^^^^      ^^^^^^^^^^^^^^^
 >x : number
@@ -279,13 +278,13 @@ function test4(
 >arg1() : number
 >       : ^^^^^^
 >arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 
     arg1({x: 0, y: 0});
 >arg1({x: 0, y: 0}) : number
 >                   : ^^^^^^
 >arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -301,7 +300,7 @@ function test4(
 >arg1({x: 0, y: 0}, {x: 1, y: 1}) : number
 >                                 : ^^^^^^
 >arg1 : ((...objs: { x: number; }[]) => number) | ((...objs: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -327,7 +326,7 @@ function test4(
 >arg2({x: 0}, {x: 0}) : number
 >                     : ^^^^^^
 >arg2 : ((a: { x: number; }, b: object) => number) | ((a: object, b: { x: number; }) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^ ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^              ^^^^^^^^^^^^
 >{x: 0} : { x: number; }
 >       : ^^^^^^^^^^^^^^
 >x : number
@@ -345,7 +344,7 @@ function test4(
 >arg3({x: 0}) : number
 >             : ^^^^^^
 >arg3 : ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^ ^^              ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 >{x: 0} : { x: number; }
 >       : ^^^^^^^^^^^^^^
 >x : number
@@ -357,7 +356,7 @@ function test4(
 >arg3({x: 0}, {x: 0, y: 0}) : number
 >                           : ^^^^^^
 >arg3 : ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^ ^^              ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 >{x: 0} : { x: number; }
 >       : ^^^^^^^^^^^^^^
 >x : number
@@ -379,7 +378,7 @@ function test4(
 >arg3({x: 0}, {x: 0, y: 0}, {x: 0, y: 0}) : number
 >                                         : ^^^^^^
 >arg3 : ((a: { x: number; }, ...objs: { y: number; }[]) => number) | ((...objs: { x: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^ ^^              ^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^
 >{x: 0} : { x: number; }
 >       : ^^^^^^^^^^^^^^
 >x : number
@@ -410,14 +409,14 @@ function test4(
     arg4();
 >arg4() : number
 >       : ^^^^^^
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 
     arg4({x: 0, y: 0});
 >arg4({x: 0, y: 0}) : number
 >                   : ^^^^^^
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -432,8 +431,8 @@ function test4(
     arg4({x: 0, y: 0}, {x: 0});
 >arg4({x: 0, y: 0}, {x: 0}) : number
 >                           : ^^^^^^
->arg4 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg4 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -454,14 +453,14 @@ function test4(
     arg5();
 >arg5() : number
 >       : ^^^^^^
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^^^^ ^^                ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 
     arg5({x: 0, y: 0});
 >arg5({x: 0, y: 0}) : number
 >                   : ^^^^^^
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^^^^ ^^                ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -476,8 +475,8 @@ function test4(
     arg5({x: 0, y: 0}, {x: 0});
 >arg5({x: 0, y: 0}, {x: 0}) : number
 >                           : ^^^^^^
->arg5 : ((a?: { x: number; } | undefined, ...b: { x: number; }[]) => number) | ((a?: { y: number; } | undefined) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg5 : ((a?: { x: number; }, ...b: { x: number; }[]) => number) | ((a?: { y: number; }) => number)
+>     : ^^ ^^^              ^^^^^ ^^                ^^^^^^^^^^^^^^^^^ ^^^              ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -498,14 +497,14 @@ function test4(
     arg6();
 >arg6() : number
 >       : ^^^^^^
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^
 
     arg6({x: 0, y: 0});
 >arg6({x: 0, y: 0}) : number
 >                   : ^^^^^^
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -520,8 +519,8 @@ function test4(
     arg6({x: 0, y: 0}, {x: 0, y: 0});
 >arg6({x: 0, y: 0}, {x: 0, y: 0}) : number
 >                                 : ^^^^^^
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -546,8 +545,8 @@ function test4(
     arg6({x: 0, y: 0}, {x: 0, y: 0}, {y: 0});
 >arg6({x: 0, y: 0}, {x: 0, y: 0}, {y: 0}) : number
 >                                         : ^^^^^^
->arg6 : ((a?: { x: number; } | undefined, b?: { x: number; } | undefined) => number) | ((...a: { y: number; }[]) => number)
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg6 : ((a?: { x: number; }, b?: { x: number; }) => number) | ((...a: { y: number; }[]) => number)
+>     : ^^ ^^^              ^^ ^^^              ^^^^^^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^^^
 >{x: 0, y: 0} : { x: number; y: number; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -584,7 +583,7 @@ function test5() {
     // Pair of non-like intrinsics
     function render(url?: string): React.ReactNode {
 >render : (url?: string) => React.ReactNode
->       : ^^^^^^^      ^^^^^               
+>       : ^   ^^^      ^^^^^               
 >url : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 >React : any
@@ -614,7 +613,7 @@ function test5() {
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
 >App : (props: { component: React.ReactType; }) => JSX.Element
->    : ^^^^^^^^                               ^^^^^^^^^^^^^^^^
+>    : ^     ^^                               ^^^^^^^^^^^^^^^^
 >props : { component: React.ReactType; }
 >      : ^^^^^^^^^^^^^               ^^^
 >component : React.ReactType<any>

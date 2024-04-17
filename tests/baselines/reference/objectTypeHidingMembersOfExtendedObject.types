@@ -1,10 +1,9 @@
 //// [tests/cases/conformance/types/members/objectTypeHidingMembersOfExtendedObject.ts] ////
 
 === Performance Stats ===
-Assignability cache: 3,600 / 3,600 (nearest 100)
-Type Count: 12,600 / 12,600 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 29,000 / 29,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
 
 === objectTypeHidingMembersOfExtendedObject.ts ===
 class A {
@@ -164,13 +163,13 @@ var a = {
 >a : { valueOf: () => void; data: B; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    valueOf: () => { },    data: new B()} : { valueOf: () => void; data: B; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^^^^^^^^^^^          ^^^^^^^^^^^^
 
     valueOf: () => { },
 >valueOf : () => void
 >        : ^^^^^^^^^^
 >() => { } : () => void
->          : ^^^^^^^^^^
+>          :           
 
     data: new B()
 >data : B

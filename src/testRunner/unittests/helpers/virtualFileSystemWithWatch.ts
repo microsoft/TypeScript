@@ -44,12 +44,8 @@ import {
     sys,
     toPath,
 } from "../../_namespaces/ts";
-import {
-    typingsInstaller,
-} from "../../_namespaces/ts.server";
-import {
-    timeIncrements,
-} from "../../_namespaces/vfs";
+import { typingsInstaller } from "../../_namespaces/ts.server";
+import { timeIncrements } from "../../_namespaces/vfs";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",
@@ -1206,4 +1202,17 @@ export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
         host.writtenFiles.set(path, (host.writtenFiles.get(path) || 0) + 1);
     };
     return host;
+}
+
+export function osFlavorToString(osFlavor: TestServerHostOsFlavor) {
+    switch (osFlavor) {
+        case TestServerHostOsFlavor.Windows:
+            return "Windows";
+        case TestServerHostOsFlavor.MacOs:
+            return "MacOs";
+        case TestServerHostOsFlavor.Linux:
+            return "Linux";
+        default:
+            Debug.assertNever(osFlavor);
+    }
 }

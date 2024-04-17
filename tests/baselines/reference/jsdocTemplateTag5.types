@@ -28,15 +28,15 @@ function Multimap() {
 
 Multimap.prototype = {
 >Multimap.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
->                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                            : ^^^^^^   ^^ ^^^ ^^^
 >Multimap.prototype : { get(key: K): V; }
->                   : ^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^   ^^ ^^^ ^^^
 >Multimap : typeof Multimap
 >         : ^^^^^^^^^^^^^^^
 >prototype : { get(key: K): V; }
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^   ^^ ^^^^^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
->                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                       : ^^^^^^   ^^ ^^^ ^^^
 
     /**
      * @param {K} key the key ok
@@ -44,7 +44,7 @@ Multimap.prototype = {
      */
     get(key) {
 >get : (key: K) => V
->    : ^^^^^^^^^^^^^
+>    : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 
@@ -95,15 +95,15 @@ var Multimap2 = function() {
 
 Multimap2.prototype = {
 >Multimap2.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get: function(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
->                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                       : ^^^^^^^^   ^^ ^^^^^ ^^^
 >Multimap2.prototype : { get: (key: K) => V; }
->                    : ^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^^^^^   ^^ ^^^^^ ^^^
 >Multimap2 : typeof Multimap2
 >          : ^^^^^^^^^^^^^^^^
 >prototype : { get: (key: K) => V; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^   ^^ ^^^^^^^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get: function(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
->                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                 : ^^^^^^^             ^^^
 
     /**
      * @param {K} key the key ok
@@ -111,9 +111,9 @@ Multimap2.prototype = {
      */
     get: function(key) {
 >get : (key: K) => V
->    : ^^^^^^^^^^^^^
+>    : ^   ^^ ^^^^^ 
 >function(key) {        return this._map[key + ''];    } : (key: K) => V
->                                                        : ^^^^^^^^^^^^^
+>                                                        :              
 >key : K
 >    : ^
 
@@ -176,9 +176,9 @@ Ns.Multimap3 = function() {
 
 Ns.Multimap3.prototype = {
 >Ns.Multimap3.prototype = {    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
->                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                : ^^^^^^   ^^ ^^^ ^^^
 >Ns.Multimap3.prototype : { get(key: K): V; }
->                       : ^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^   ^^ ^^^ ^^^
 >Ns.Multimap3 : typeof Multimap3
 >             : ^^^^^^^^^^^^^^^^
 >Ns : typeof Ns
@@ -186,9 +186,9 @@ Ns.Multimap3.prototype = {
 >Multimap3 : typeof Multimap3
 >          : ^^^^^^^^^^^^^^^^
 >prototype : { get(key: K): V; }
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^   ^^ ^^^^^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: K): V; }
->                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                       : ^^^^^^   ^^ ^^^ ^^^
 
     /**
      * @param {K} key the key ok
@@ -196,7 +196,7 @@ Ns.Multimap3.prototype = {
      */
     get(key) {
 >get : (key: K) => V
->    : ^^^^^^^^^^^^^
+>    : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 

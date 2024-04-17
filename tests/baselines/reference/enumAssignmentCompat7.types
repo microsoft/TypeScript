@@ -33,7 +33,7 @@ class Base {
 
     method(param: first.E) {
 >method : (param: first.E) => void
->       : ^^^^^^^^       ^^^^^^^^^
+>       : ^     ^^       ^^^^^^^^^
 >param : first.E
 >      : ^^^^^^^
 >first : any
@@ -50,7 +50,7 @@ class Derived extends Base {
 
     override method(param: second.E) {
 >method : (param: second.E) => void
->       : ^^^^^^^^        ^^^^^^^^^
+>       : ^     ^^        ^^^^^^^^^
 >param : second.E
 >      : ^^^^^^^^
 >second : any

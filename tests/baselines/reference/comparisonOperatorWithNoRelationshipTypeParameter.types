@@ -43,7 +43,7 @@ var g: any[];
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->    : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

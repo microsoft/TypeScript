@@ -8,20 +8,20 @@ type CanvasDirection = "RIGHT" | "LEFT";
 interface GraphActions {
   setDirection: (direction: CanvasDirection) => void;
 >setDirection : (direction: CanvasDirection) => void
->             : ^^^^^^^^^^^^               ^^^^^    
+>             : ^         ^^               ^^^^^    
 >direction : CanvasDirection
 >          : ^^^^^^^^^^^^^^^
 }
 
 export declare function create<T>(config: T): void;
 >create : <T>(config: T) => void
->       : ^ ^^^^^^^^^^ ^^^^^    
+>       : ^ ^^      ^^ ^^^^^    
 >config : T
 >       : ^
 
 declare function takesDirection(direction: CanvasDirection): void;
 >takesDirection : (direction: CanvasDirection) => void
->               : ^^^^^^^^^^^^               ^^^^^    
+>               : ^         ^^               ^^^^^    
 >direction : CanvasDirection
 >          : ^^^^^^^^^^^^^^^
 
@@ -29,15 +29,15 @@ create<GraphActions>({
 >create<GraphActions>({  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },}) : void
 >                                                                                                     : ^^^^
 >create : <T>(config: T) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^^^^^^^^
 >{  setDirection: (direction = "RIGHT") => {    takesDirection(direction);  },} : { setDirection: (direction?: CanvasDirection) => void; }
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                               : ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   setDirection: (direction = "RIGHT") => {
 >setDirection : (direction?: CanvasDirection) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(direction = "RIGHT") => {    takesDirection(direction);  } : (direction?: CanvasDirection) => void
->                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                            :           ^                          
 >direction : CanvasDirection
 >          : ^^^^^^^^^^^^^^^
 >"RIGHT" : "RIGHT"
@@ -47,7 +47,7 @@ create<GraphActions>({
 >takesDirection(direction) : void
 >                          : ^^^^
 >takesDirection : (direction: CanvasDirection) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^         ^^               ^^^^^^^^^
 >direction : CanvasDirection
 >          : ^^^^^^^^^^^^^^^
 

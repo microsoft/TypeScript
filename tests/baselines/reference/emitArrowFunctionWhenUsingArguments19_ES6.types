@@ -23,7 +23,7 @@ function f() {
 >capture : () => IArguments
 >        : ^^^^^^^^^^^^^^^^
 >() => arguments : () => IArguments
->                : ^^^^^^^^^^^^^^^^
+>                :                 
 >arguments : IArguments
 >          : ^^^^^^^^^^
 
@@ -31,7 +31,7 @@ function f() {
 >foo(_arguments) : number
 >                : ^^^^^^
 >foo : (x: any) => number
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^
 >_arguments : number
 >           : ^^^^^^
         }
@@ -39,7 +39,7 @@ function f() {
 
     function foo(x: any) {
 >foo : (x: any) => number
->    : ^^^^   ^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^
 >x : any
 
         return 100;

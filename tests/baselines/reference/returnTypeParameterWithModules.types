@@ -7,7 +7,7 @@ module M1 {
 
     export function reduce<A>(ar, f, e?): Array<A> {
 >reduce : <A>(ar: any, f: any, e?: any) => Array<A>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        
+>       : ^ ^^  ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^        
 >ar : any
 >f : any
 >e : any
@@ -15,9 +15,9 @@ module M1 {
         return Array.prototype.reduce.apply(ar, e ? [f, e] : [f]);
 >Array.prototype.reduce.apply(ar, e ? [f, e] : [f]) : any
 >Array.prototype.reduce.apply : (this: Function, thisArg: any, argArray?: any) => any
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >Array.prototype.reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >Array.prototype : any[]
 >                : ^^^^^
 >Array : ArrayConstructor
@@ -25,9 +25,9 @@ module M1 {
 >prototype : any[]
 >          : ^^^^^
 >reduce : { (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any): any; (callbackfn: (previousValue: any, currentValue: any, currentIndex: number, array: any[]) => any, initialValue: any): any; <U>(callbackfn: (previousValue: U, currentValue: any, currentIndex: number, array: any[]) => U, initialValue: U): U; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^          ^^^             ^^^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^          ^^^             ^^^^^            ^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >ar : any
 >e ? [f, e] : [f] : any[]
 >                 : ^^^^^
@@ -60,26 +60,26 @@ module M2 {
 >A.reduce(arguments, compose2) : unknown[]
 >                              : ^^^^^^^^^
 >A.reduce : <A>(ar: any, f: any, e?: any) => A[]
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^  ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >reduce : <A>(ar: any, f: any, e?: any) => A[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^  ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^^
 
     };
     export function compose2<B, C, D>(g: (x: B) => C, f: (x: D) => B): (x: D) => C {
 >compose2 : <B, C, D>(g: (x: B) => C, f: (x: D) => B) => (x: D) => C
->         : ^ ^^ ^^ ^^^^^           ^^^^^           ^^^^^           
+>         : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^           
 >g : (x: B) => C
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >x : B
 >  : ^
 >f : (x: D) => B
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >x : D
 >  : ^
 >x : D
@@ -87,17 +87,17 @@ module M2 {
 
     return function (x) { return g(f(x)); }
 >function (x) { return g(f(x)); } : (x: D) => C
->                                 : ^^^^^^^^^^^
+>                                 : ^ ^^^^^^^^^
 >x : D
 >  : ^
 >g(f(x)) : C
 >        : ^
 >g : (x: B) => C
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >f(x) : B
 >     : ^
 >f : (x: D) => B
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >x : D
 >  : ^
 

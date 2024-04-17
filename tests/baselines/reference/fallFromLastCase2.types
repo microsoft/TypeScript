@@ -3,13 +3,13 @@
 === fallFromLastCase2.ts ===
 declare function use(a: string);
 >use : (a: string) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 function foo1(a: number) {
 >foo1 : (a: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ function foo1(a: number) {
 >use("1") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"1" : "1"
 >    : ^^^
 
@@ -38,7 +38,7 @@ function foo1(a: number) {
 >use("2") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"2" : "2"
 >    : ^^^
 
@@ -50,7 +50,7 @@ function foo1(a: number) {
 >use("3") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"3" : "3"
 >    : ^^^
     }
@@ -59,7 +59,7 @@ function foo1(a: number) {
 
 function foo2(a: number) {
 >foo2 : (a: number) => void
->     : ^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -75,7 +75,7 @@ function foo2(a: number) {
 >use("1") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"1" : "1"
 >    : ^^^
 
@@ -85,7 +85,7 @@ function foo2(a: number) {
 >use("2") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"2" : "2"
 >    : ^^^
 
@@ -97,7 +97,7 @@ function foo2(a: number) {
 >use("3") : any
 >         : ^^^
 >use : (a: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"3" : "3"
 >    : ^^^
     }

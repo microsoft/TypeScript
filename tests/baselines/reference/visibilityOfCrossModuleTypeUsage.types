@@ -7,7 +7,7 @@ import commands = require('./visibilityOfCrossModuleTypeUsage_commands');
 
 function run(configuration: commands.IConfiguration) {
 >run : (configuration: commands.IConfiguration) => void
->    : ^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>    : ^             ^^                       ^^^^^^^^^
 >configuration : commands.IConfiguration
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >commands : any
@@ -18,16 +18,16 @@ function run(configuration: commands.IConfiguration) {
 >                      : ^^^^^^
 >configuration.workspace.toAbsolutePath(configuration.server) : string
 >                                                             : ^^^^^^
->configuration.workspace.toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>configuration.workspace.toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
+>                                       : ^      ^^       ^^                     ^^^      ^^^^^^^^^^^
 >configuration.workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >configuration : commands.IConfiguration
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
+>               : ^      ^^       ^^                     ^^^      ^^^^^^^^^^^
 >configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >configuration : commands.IConfiguration
@@ -65,7 +65,7 @@ export interface IServer {
 export interface IWorkspace {
     toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
 >toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->               : ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
+>               : ^      ^^       ^^                     ^^^      ^^^^^      
 >server : IServer
 >       : ^^^^^^^
 >workspaceRelativePath : string

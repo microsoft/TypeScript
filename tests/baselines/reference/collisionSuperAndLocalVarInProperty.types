@@ -15,13 +15,13 @@ class Foo {
 >prop1 : { doStuff: () => void; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: () => {            var _super = 10; // No error        }    } : { doStuff: () => void; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                : ^^^^^^^^^^^          ^^^
 
         doStuff: () => {
 >doStuff : () => void
 >        : ^^^^^^^^^^
 >() => {            var _super = 10; // No error        } : () => void
->                                                         : ^^^^^^^^^^
+>                                                         :           
 
             var _super = 10; // No error
 >_super : number
@@ -46,13 +46,13 @@ class b extends Foo {
 >prop2 : { doStuff: () => void; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{        doStuff: () => {            var _super = 10; // Should be error         }    } : { doStuff: () => void; }
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                        : ^^^^^^^^^^^          ^^^
 
         doStuff: () => {
 >doStuff : () => void
 >        : ^^^^^^^^^^
 >() => {            var _super = 10; // Should be error         } : () => void
->                                                                 : ^^^^^^^^^^
+>                                                                 :           
 
             var _super = 10; // Should be error 
 >_super : number

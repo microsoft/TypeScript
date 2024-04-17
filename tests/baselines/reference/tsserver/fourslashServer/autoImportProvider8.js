@@ -90,6 +90,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/index.ts 500 unde
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir/package.json 2000 undefined Project: /tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -171,6 +172,7 @@ Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 depe
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/mylib/mySubDir/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (4)
@@ -223,6 +225,9 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts: *new*
   {"pollingInterval":500}
+/packages/mylib/mySubDir/package.json: *new*
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /src/index.ts: *new*
   {"pollingInterval":500}
 /tsconfig.json: *new*
@@ -340,6 +345,9 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts:
   {"pollingInterval":500}
+/packages/mylib/mySubDir/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 
@@ -1243,6 +1251,9 @@ watchedFiles::
   {"pollingInterval":500}
 /packages/mylib/mySubDir/myClass2.ts:
   {"pollingInterval":500}
+/packages/mylib/mySubDir/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000}
 /tsconfig.json:
   {"pollingInterval":2000}
 

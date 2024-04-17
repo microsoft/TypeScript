@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/tsxUnionMemberChecksFilterDataProps.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,100 / 2,100 (nearest 100)
-Type Count: 6,700 / 6,700 (nearest 100)
-Instantiation count: 73,000 / 73,000 (nearest 500)
-Symbol count: 66,000 / 66,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
 
 === tsxUnionMemberChecksFilterDataProps.tsx ===
 /// <reference path="react16.d.ts" />
@@ -16,7 +16,7 @@ import React, { ReactElement } from "react";
 
 declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): ReactElement<any>;
 >NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => ReactElement<any>
->         : ^^^^^^^^                                            ^^^^^                 
+>         : ^     ^^                                            ^^^^^                 
 >props : { fixed?: boolean; } | { value?: number; }
 >      : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^      ^^^
 >fixed : boolean
@@ -26,7 +26,7 @@ declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): Re
 
 declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
 >Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
->      : ^^^^^^^^                                    ^^^^^                 
+>      : ^     ^^                                    ^^^^^                 
 >props : { fixed?: boolean; value?: number; }
 >      : ^^^^^^^^^^       ^^^^^^^^^^      ^^^
 >fixed : boolean
@@ -38,13 +38,13 @@ const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
 >RootNotHappy : () => JSX.Element
 >             : ^^^^^^^^^^^^^^^^^
 >() => (<NotHappy data-testid="my-test-id" />) : () => JSX.Element
->                                              : ^^^^^^^^^^^^^^^^^
+>                                              :                  
 >(<NotHappy data-testid="my-test-id" />) : JSX.Element
 >                                        : ^^^^^^^^^^^
 ><NotHappy data-testid="my-test-id" /> : JSX.Element
 >                                      : ^^^^^^^^^^^
->NotHappy : (props: { fixed?: boolean; } | { value?: number; }) => React.ReactElement<any>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>NotHappy : (props: ({ fixed?: boolean; } | { value?: number; })) => React.ReactElement<any>
+>         : ^     ^^                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data-testid : string
 >            : ^^^^^^
 
@@ -52,13 +52,13 @@ const RootHappy = () => (<Happy data-testid="my-test-id" />);
 >RootHappy : () => JSX.Element
 >          : ^^^^^^^^^^^^^^^^^
 >() => (<Happy data-testid="my-test-id" />) : () => JSX.Element
->                                           : ^^^^^^^^^^^^^^^^^
+>                                           :                  
 >(<Happy data-testid="my-test-id" />) : JSX.Element
 >                                     : ^^^^^^^^^^^
 ><Happy data-testid="my-test-id" /> : JSX.Element
 >                                   : ^^^^^^^^^^^
 >Happy : (props: { fixed?: boolean; value?: number; }) => React.ReactElement<any>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >data-testid : string
 >            : ^^^^^^
 

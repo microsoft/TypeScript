@@ -28,7 +28,7 @@ type Meta<TContext> = {
 
   action: (ctx: TContext) => void
 >action : (ctx: TContext) => void
->       : ^^^^^^        ^^^^^    
+>       : ^   ^^        ^^^^^    
 >ctx : TContext
 >    : ^^^^^^^^
 }
@@ -47,7 +47,7 @@ interface AssignAction<TContext> {
 
 declare function assign<TContext>(
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
->       : ^        ^^^^^^^^^^^^^^                                    ^^^^^                      
+>       : ^        ^^          ^^                                    ^^^^^                      
 
   assignment: PropertyAssigner<LowInfer<TContext>>
 >assignment : PropertyAssigner<LowInfer<TContext>>
@@ -71,7 +71,7 @@ type Config<TContext> = {
 
 declare function createMachine<TContext>(config: Config<TContext>): void;
 >createMachine : <TContext>(config: Config<TContext>) => void
->              : ^        ^^^^^^^^^^                ^^^^^    
+>              : ^        ^^      ^^                ^^^^^    
 >config : Config<TContext>
 >       : ^^^^^^^^^^^^^^^^
 
@@ -79,7 +79,7 @@ createMachine<{ count: number }>({
 >createMachine<{ count: number }>({  context: {    count: 0,  },  entry: assign({    count: (ctx: { count: number }) => ++ctx.count,  }),}) : void
 >                                                                                                                                           : ^^^^
 >createMachine : <TContext>(config: Config<TContext>) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^        ^^      ^^                ^^^^^^^^^
 >count : number
 >      : ^^^^^^
 >{  context: {    count: 0,  },  entry: assign({    count: (ctx: { count: number }) => ++ctx.count,  }),} : { context: { count: number; }; entry: AssignAction<{ count: number; }>; }
@@ -102,17 +102,17 @@ createMachine<{ count: number }>({
 >entry : AssignAction<{ count: number; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign({    count: (ctx: { count: number }) => ++ctx.count,  }) : AssignAction<{ count: number; }>
->                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                : ^^^^^^^^^^^^^                  ^
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^        ^^          ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    count: (ctx: { count: number }) => ++ctx.count,  } : { count: (ctx: { count: number; }) => number; }
->                                                        : ^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^
 
     count: (ctx: { count: number }) => ++ctx.count,
 >count : (ctx: { count: number; }) => number
->      : ^^^^^^                  ^^^^^^^^^^^
+>      : ^   ^^                  ^^^^^^^^^^^
 >(ctx: { count: number }) => ++ctx.count : (ctx: { count: number; }) => number
->                                        : ^^^^^^                  ^^^^^^^^^^^
+>                                        :                                    
 >ctx : { count: number; }
 >    : ^^^^^^^^^      ^^^
 >count : number

@@ -3,13 +3,13 @@
 === genericCallbackInvokedInsideItsContainingFunction1.ts ===
 function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >foo : <T, U>(x: T, y: U, f: (v: T) => U) => void
->    : ^ ^^ ^^^^^ ^^^^^ ^^^^^           ^^^^^^^^^
+>    : ^ ^^ ^^ ^^ ^^ ^^ ^^ ^^           ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
 >  : ^
 >f : (v: T) => U
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >v : T
 >  : ^
 
@@ -19,7 +19,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<number>(1) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >1 : 1
 >  : ^
 
@@ -29,7 +29,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(1) : U
 >     : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >1 : 1
 >  : ^
 
@@ -39,7 +39,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<any>(null) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 
     var r4 = f(null);
 >r4 : U
@@ -47,7 +47,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(null) : U
 >        : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 
     var r11 = f(x);
 >r11 : U
@@ -55,7 +55,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(x) : U
 >     : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -65,7 +65,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<number>(x) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -75,7 +75,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<any>(null) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 
     var r41 = f(null);
 >r41 : U
@@ -83,7 +83,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(null) : U
 >        : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 
     var r12 = f(y);
 >r12 : U
@@ -91,7 +91,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(y) : U
 >     : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >y : U
 >  : ^
 
@@ -101,7 +101,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<number>(y) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >y : U
 >  : ^
 
@@ -111,7 +111,7 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f<any>(null) : U
 >             : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 
     var r42 = f(null);
 >r42 : U
@@ -119,5 +119,5 @@ function foo<T, U>(x:T, y:U, f: (v: T) => U) {
 >f(null) : U
 >        : ^
 >f : (v: T) => U
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 }

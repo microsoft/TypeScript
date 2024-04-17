@@ -7,7 +7,7 @@ someFunction(function(BaseClass) {
 >someFunction : any
 >             : ^^^
 >function(BaseClass) {    'use strict';    const DEFAULT_MESSAGE = "nop!";    class Hello extends BaseClass {        constructor() {            super();            this.foo = "bar";        }        _render(error) {            const message = error.message || DEFAULT_MESSAGE;        }    }} : (BaseClass: any) => void
->                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                  : ^         ^^^^^^^^^^^^^^
 >BaseClass : any
 >          : ^^^
 
@@ -48,7 +48,7 @@ someFunction(function(BaseClass) {
         }
         _render(error) {
 >_render : (error: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^
 >error : any
 >      : ^^^
 

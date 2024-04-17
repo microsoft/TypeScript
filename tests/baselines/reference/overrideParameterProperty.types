@@ -89,7 +89,7 @@ class C3 extends Base {
 
   m(override p1: "hello") {}
 >m : (p1: "hello") => void
->  : ^^^^^       ^^^^^^^^^
+>  : ^  ^^       ^^^^^^^^^
 >p1 : "hello"
 >   : ^^^^^^^
 }

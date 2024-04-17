@@ -3,11 +3,11 @@
 === thisTypeOptionalCall.ts ===
 function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
 >maybeBind : <T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined) => ((...args: A) => R) | undefined
->          : ^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^                                        ^^^^^                               
+>          : ^ ^^ ^^^^^^^^^^^^^^^^ ^^   ^^ ^^  ^^                                        ^^^^^                               
 >obj : T
 >    : ^
 >fn : ((this: T, ...args: A) => R) | undefined
->   : ^^^^^^^^ ^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^
+>   : ^^    ^^ ^^^^^    ^^ ^^^^^ ^^^^^^^^^^^^^
 >this : T
 >     : ^
 >args : A
@@ -18,11 +18,11 @@ function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => 
     return fn?.bind(obj);
 >fn?.bind(obj) : any
 >fn?.bind : ((this: Function, thisArg: any, ...argArray: any[]) => any) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^^^^^^^^^^^^^^
 >fn : ((this: T, ...args: A) => R) | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^    ^^ ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^
 >bind : ((this: Function, thisArg: any, ...argArray: any[]) => any) | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 }

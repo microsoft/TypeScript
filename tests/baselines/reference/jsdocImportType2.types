@@ -22,7 +22,7 @@ const D = require("./mod1");
 >require("./mod1") : typeof D
 >                  : ^^^^^^^^
 >require : (name: string) => any
->        : ^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^^^^^^^
 >"./mod1" : "./mod1"
 >         : ^^^^^^^^
 
@@ -42,7 +42,7 @@ d.chunk;
 === types.d.ts ===
 declare function require(name: string): any;
 >require : (name: string) => any
->        : ^^^^^^^      ^^^^^   
+>        : ^    ^^      ^^^^^   
 >name : string
 >     : ^^^^^^
 

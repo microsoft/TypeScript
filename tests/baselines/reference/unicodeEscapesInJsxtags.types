@@ -23,9 +23,9 @@ declare global {
 }
 const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >Compa : (x: { x: number; }) => JSX.Element
->      : ^^^^              ^^^^^^^^^^^^^^^^
+>      : ^ ^^              ^^^^^^^^^^^^^^^^
 >(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
->                                        : ^^^^              ^^^^^^^^^^^^^^^^
+>                                        :                                   
 >x : { x: number; }
 >  : ^^^^^      ^^^
 >x : number
@@ -47,11 +47,11 @@ const x = { video: () => null }
 >x : { video: () => any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >{ video: () => null } : { video: () => any; }
->                      : ^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^         ^^^
 >video : () => any
 >      : ^^^^^^^^^
 >() => null : () => any
->           : ^^^^^^^^^
+>           :          
 
 // unicode escape sequence is not allowed in tag name or JSX attribute name.
 // tag name:
@@ -83,7 +83,7 @@ const x = { video: () => null }
 ><Comp\u0061 x={12} /> : JSX.Element
 >                      : ^^^^^^^^^^^
 >Comp\u0061 : (x: { x: number; }) => JSX.Element
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >12 : 12
@@ -127,7 +127,7 @@ const x = { video: () => null }
 ><Comp\u{0061} x={12} /> : JSX.Element
 >                        : ^^^^^^^^^^^
 >Comp\u{0061} : (x: { x: number; }) => JSX.Element
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >12 : 12

@@ -1,8 +1,7 @@
 //// [tests/cases/compiler/truthinessCallExpressionCoercion2.ts] ////
 
 === Performance Stats ===
-Type Count: 1,100 / 1,100 (nearest 100)
-Symbol count: 29,000 / 29,000 (nearest 500)
+Type Count: 1,000
 
 === truthinessCallExpressionCoercion2.ts ===
 declare class A {
@@ -25,7 +24,7 @@ declare class B {
 
 function test(required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) {
 >test : (required1: () => boolean, required2: () => boolean, b: boolean, optional?: () => boolean) => void
->     : ^^^^^^^^^^^^             ^^^^^^^^^^^^^             ^^^^^       ^^^^^^^^^^^^^             ^^^^^^^^^
+>     : ^         ^^             ^^         ^^             ^^ ^^       ^^        ^^^             ^^^^^^^^^
 >required1 : () => boolean
 >          : ^^^^^^       
 >required2 : () => boolean
@@ -44,11 +43,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -65,11 +64,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -108,11 +107,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'optional' : "optional"
 >           : ^^^^^^^^^^
 
@@ -129,11 +128,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'optional' : "optional"
 >           : ^^^^^^^^^^
 
@@ -150,11 +149,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('not required') : void
 >                            : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'not required' : "not required"
 >               : ^^^^^^^^^^^^^^
 
@@ -169,11 +168,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('required call') : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'required call' : "required call"
 >                : ^^^^^^^^^^^^^^^
 
@@ -203,13 +202,13 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >[].forEach((f: () => void) => f && f.apply(parent, [])) : void
 >                                                        : ^^^^
 >[].forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[] : never[]
 >   : ^^^^^^^
 >forEach : (callbackfn: (value: never, index: number, array: never[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(f: () => void) => f && f.apply(parent, []) : (f: () => void) => any
->                                            : ^^^^          ^^^^^^^^
+>                                            : ^ ^^          ^^^^^^^^
 >f : () => void
 >  : ^^^^^^    
 >f && f.apply(parent, []) : any
@@ -219,11 +218,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >f.apply(parent, []) : any
 >                    : ^^^
 >f.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >f : () => void
 >  : ^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >parent : Window
 >       : ^^^^^^
 >[] : never[]
@@ -248,11 +247,11 @@ function test(required1: () => boolean, required2: () => boolean, b: boolean, op
 >console.log('foo') : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -521,12 +520,12 @@ function checksConsole() {
 >        : ^^^^^^^
 >firebug : any
 >        : ^^^
->(window.console.error && window.console.table) : (tabularData?: any, properties?: string[] | undefined) => void
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->window.console.error && window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(window.console.error && window.console.table) : (tabularData?: any, properties?: string[]) => void
+>                                               : ^           ^^^   ^^          ^^^        ^^^^^^^^^
+>window.console.error && window.console.table : (tabularData?: any, properties?: string[]) => void
+>                                             : ^           ^^^   ^^          ^^^        ^^^^^^^^^
 >window.console.error : (...data: any[]) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^    ^^     ^^^^^^^^^
 >window.console : Console
 >               : ^^^^^^^
 >window : Window & typeof globalThis
@@ -534,17 +533,17 @@ function checksConsole() {
 >console : Console
 >        : ^^^^^^^
 >error : (...data: any[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
->window.console.table : (tabularData?: any, properties?: string[] | undefined) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^     ^^^^^^^^^
+>window.console.table : (tabularData?: any, properties?: string[]) => void
+>                     : ^           ^^^   ^^          ^^^        ^^^^^^^^^
 >window.console : Console
 >               : ^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
->table : (tabularData?: any, properties?: string[] | undefined) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>table : (tabularData?: any, properties?: string[]) => void
+>      : ^           ^^^   ^^          ^^^        ^^^^^^^^^
 }
 
 function checksPropertyAccess() {
@@ -588,11 +587,11 @@ function checksPropertyAccess() {
 >console.log('x.foo.bar') : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'x.foo.bar' : "x.foo.bar"
 >            : ^^^^^^^^^^^
 
@@ -617,11 +616,11 @@ function checksPropertyAccess() {
 >console.log('x.foo.bar') : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'x.foo.bar' : "x.foo.bar"
 >            : ^^^^^^^^^^^
 
@@ -728,41 +727,41 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 
         a: { b: { c: () => {} } }
 >a : { b: { c: () => void; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: { c: () => {} } } : { b: { c: () => void; }; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^          ^^^^^^
 >b : { c: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{ c: () => {} } : { c: () => void; }
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
     }
     const x2 = {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        a: { b: { c: () => {} } }    } : { a: { b: { c: () => void; }; }; }
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^^^^^^^^^^^^^^          ^^^^^^^^^
 
         a: { b: { c: () => {} } }
 >a : { b: { c: () => void; }; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ b: { c: () => {} } } : { b: { c: () => void; }; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^          ^^^^^^
 >b : { c: () => void; }
 >  : ^^^^^^^^^^^^^^^^^^
 >{ c: () => {} } : { c: () => void; }
->                : ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         : ^^^^^^^^^^
+>         :           
     }
 
     // error
@@ -778,9 +777,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >x2.a.b.c() : void
@@ -794,9 +793,9 @@ function checksPropertyAccess() {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 
@@ -813,9 +812,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
     }
@@ -839,9 +838,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >x2.a.b.c : () => void
@@ -853,9 +852,9 @@ function checksPropertyAccess() {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
     }
@@ -877,9 +876,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >x2.a.b.c : () => void
@@ -891,9 +890,9 @@ function checksPropertyAccess() {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >1 : 1
@@ -919,9 +918,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >x2.a.b.c : () => void
@@ -933,9 +932,9 @@ function checksPropertyAccess() {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
     }
@@ -957,9 +956,9 @@ function checksPropertyAccess() {
 >x1 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >x2.a.b.c : () => void
@@ -971,9 +970,9 @@ function checksPropertyAccess() {
 >x2 : { a: { b: { c: () => void; }; }; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { b: { c: () => void; }; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^                  ^^^
 >b : { c: () => void; }
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^^^^^          ^^^
 >c : () => void
 >  : ^^^^^^^^^^
 >1 : 1
@@ -1014,11 +1013,11 @@ class Foo {
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -1039,11 +1038,11 @@ class Foo {
 >console.log('required') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'required' : "required"
 >           : ^^^^^^^^^^
 
@@ -1106,11 +1105,11 @@ class Foo {
 >console.log('optional') : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'optional' : "optional"
 >           : ^^^^^^^^^^
     }

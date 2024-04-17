@@ -9,7 +9,7 @@ declare class SomeBaseClass {
 
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^       ^^^^^       
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]
@@ -24,18 +24,18 @@ abstract class SomeAbstractClass<C, M, R> extends SomeBaseClass {
 
     foo!: (r?: R) => void;
 >foo : (r?: R) => void
->    : ^^^^^ ^^^^^    
+>    : ^ ^^^ ^^^^^    
 >r : R | undefined
 >  : ^^^^^^^^^^^^^
 
     bar!: (r?: any) => void;
 >bar : (r?: any) => void
->    : ^^^^^   ^^^^^    
+>    : ^ ^^^   ^^^^^    
 >r : any
 
     abstract baz(c: C): Promise<M>;
 >baz : (c: C) => Promise<M>
->    : ^^^^ ^^^^^          
+>    : ^ ^^ ^^^^^          
 >c : C
 >  : ^
 }
@@ -48,7 +48,7 @@ class SomeClass extends SomeAbstractClass<number, string, boolean> {
 
     async baz(context: number): Promise<string> {
 >baz : (context: number) => Promise<string>
->    : ^^^^^^^^^^      ^^^^^               
+>    : ^       ^^      ^^^^^               
 >context : number
 >        : ^^^^^^
 
@@ -89,7 +89,7 @@ type SomeClassR = RType<SomeClass>; // boolean
 interface BaseType<T1, T2>  {
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^       ^^^^^       
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]
@@ -97,19 +97,19 @@ interface BaseType<T1, T2>  {
 
     useT1(c: T1): void;
 >useT1 : (c: T1) => void
->      : ^^^^  ^^^^^    
+>      : ^ ^^  ^^^^^    
 >c : T1
 >  : ^^
 
     useT2(r?: T2): void;
 >useT2 : (r?: T2) => void
->      : ^^^^^  ^^^^^    
+>      : ^ ^^^  ^^^^^    
 >r : T2 | undefined
 >  : ^^^^^^^^^^^^^^
 
     unrelatedButSomehowRelevant(r?: any): void;
 >unrelatedButSomehowRelevant : (r?: any) => void
->                            : ^^^^^   ^^^^^    
+>                            : ^ ^^^   ^^^^^    
 >r : any
 }
 
@@ -117,7 +117,7 @@ interface InheritedType extends BaseType<number, boolean> {
     // This declaration shouldn't do anything...
     useT1(_: number): void
 >useT1 : (_: number) => void
->      : ^^^^      ^^^^^    
+>      : ^ ^^      ^^^^^    
 >_ : number
 >  : ^^^^^^
 }
@@ -126,7 +126,7 @@ interface InheritedType extends BaseType<number, boolean> {
 interface StructuralVersion  {
     set<K extends keyof this>(key: K, value: this[K]): this[K];
 >set : <K extends keyof this>(key: K, value: this[K]) => this[K]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^       ^^^^^       
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^       ^^^^^       
 >key : K
 >    : ^
 >value : this[K]
@@ -134,19 +134,19 @@ interface StructuralVersion  {
 
     useT1(c: number): void;
 >useT1 : (c: number) => void
->      : ^^^^      ^^^^^    
+>      : ^ ^^      ^^^^^    
 >c : number
 >  : ^^^^^^
 
     useT2(r?: boolean): void;
 >useT2 : (r?: boolean) => void
->      : ^^^^^       ^^^^^    
+>      : ^ ^^^       ^^^^^    
 >r : boolean | undefined
 >  : ^^^^^^^^^^^^^^^^^^^
 
     unrelatedButSomehowRelevant(r?: any): void;
 >unrelatedButSomehowRelevant : (r?: any) => void
->                            : ^^^^^   ^^^^^    
+>                            : ^ ^^^   ^^^^^    
 >r : any
 }
 

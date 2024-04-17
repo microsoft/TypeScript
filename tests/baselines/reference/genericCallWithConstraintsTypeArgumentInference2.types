@@ -5,7 +5,7 @@
 
 function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
->    : ^ ^^^^^^^^^^^^^^^^^^ ^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >t : T
 >  : ^
 
@@ -24,7 +24,7 @@ var r = foo(1); // ok
 >foo(1) : number
 >       : ^^^^^^
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >1 : 1
 >  : ^
 
@@ -34,7 +34,7 @@ var r2 = foo(null); // {}
 >foo(null) : any
 >          : ^^^
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 
 var r3 = foo(new Object()); // {}
 >r3 : Object
@@ -42,7 +42,7 @@ var r3 = foo(new Object()); // {}
 >foo(new Object()) : Object
 >                  : ^^^^^^
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >new Object() : Object
 >             : ^^^^^^
 >Object : ObjectConstructor
@@ -54,7 +54,7 @@ var r4 = foo<Date, Date>(1); // error
 >foo<Date, Date>(1) : Date
 >                   : ^^^^
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >1 : 1
 >  : ^
 
@@ -64,7 +64,7 @@ var r5 = foo<Date, Date>(new Date()); // no error
 >foo<Date, Date>(new Date()) : Date
 >                            : ^^^^
 >foo : <T, U extends T>(t: T) => U
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor

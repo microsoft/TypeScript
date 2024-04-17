@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 5,800 / 5,800 (nearest 100)
-Instantiation count: 17,000 / 17,000 (nearest 500)
-Symbol count: 28,500 / 28,500 (nearest 500)
+Type Count: 5,000
+Instantiation count: 10,000
 
 === performanceComparisonOfStructurallyIdenticalInterfacesWithGenericSignatures.ts ===
 export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<infer U> ? U : T;
@@ -14,9 +12,9 @@ export declare type ThenArg<T> = T extends any ? any : T extends PromiseLike<inf
 export interface InterfaceA<T> {
     filter(callback: (newValue: T, oldValue: T) => boolean): InterfaceA<T>;
 >filter : (callback: (newValue: T, oldValue: T) => boolean) => InterfaceA<T>
->       : ^^^^^^^^^^^                                     ^^^^^             
+>       : ^        ^^                                     ^^^^^             
 >callback : (newValue: T, oldValue: T) => boolean
->         : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^       
+>         : ^        ^^ ^^        ^^ ^^^^^       
 >newValue : T
 >         : ^
 >oldValue : T
@@ -24,9 +22,9 @@ export interface InterfaceA<T> {
 
     map<D>(callback: (value: T) => D): InterfaceA<D>;
 >map : <D>(callback: (value: T) => D) => InterfaceA<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^             
+>    : ^ ^^        ^^               ^^^^^             
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -78,9 +76,9 @@ export interface InterfaceA<T> {
 export interface InterfaceB<T> extends InterfaceA<T> {
     map<D>(callback: (value: T) => D): InterfaceB<D>;
 >map : <D>(callback: (value: T) => D) => InterfaceB<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^             
+>    : ^ ^^        ^^               ^^^^^             
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -135,9 +133,9 @@ export class A<T> implements InterfaceB<T> {
 
     public filter(callback: (newValue: T, oldValue: T) => boolean): B<T> {
 >filter : (callback: (newValue: T, oldValue: T) => boolean) => B<T>
->       : ^^^^^^^^^^^                                     ^^^^^    
+>       : ^        ^^                                     ^^^^^    
 >callback : (newValue: T, oldValue: T) => boolean
->         : ^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^       
+>         : ^        ^^ ^^        ^^ ^^^^^       
 >newValue : T
 >         : ^
 >oldValue : T
@@ -151,9 +149,9 @@ export class A<T> implements InterfaceB<T> {
 
     public map<D>(callback: (value: T) => D): B<D> {
 >map : <D>(callback: (value: T) => D) => B<D>
->    : ^ ^^^^^^^^^^^^               ^^^^^    
+>    : ^ ^^        ^^               ^^^^^    
 >callback : (value: T) => D
->         : ^^^^^^^^ ^^^^^ 
+>         : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 

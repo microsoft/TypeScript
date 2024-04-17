@@ -15,7 +15,7 @@ module.exports.a = function a() {}
 >a : () => void
 >  : ^^^^^^^^^^
 >function a() {} : () => void
->                : ^^^^^^^^^^
+>                :           
 >a : () => void
 >  : ^^^^^^^^^^
 
@@ -33,7 +33,7 @@ module.exports.b = function b() {}
 >b : { (): void; cat: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function b() {} : { (): void; cat: string; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :                           
 >b : { (): void; cat: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -71,7 +71,7 @@ module.exports.c = function c() {}
 >c : { (): void; Cls: typeof Cls; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function c() {} : { (): void; Cls: typeof Cls; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                :                               
 >c : { (): void; Cls: typeof Cls; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -102,9 +102,9 @@ module.exports.c.Cls = class {}
  */
 module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >module.exports.d = function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
->                                                                       : ^^^^      ^^^^^      ^^^^^      
+>                                                                       : ^ ^^      ^^ ^^      ^^^^^      
 >module.exports.d : (a: number, b: number) => string
->                 : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -112,11 +112,11 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >d : (a: number, b: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >function d(a, b) { return /** @type {*} */(null); } : (a: number, b: number) => string
->                                                    : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                                                    :                                 
 >d : (a: number, b: number) => string
->  : ^^^^      ^^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -131,9 +131,9 @@ module.exports.d = function d(a, b) { return /** @type {*} */(null); }
  */
 module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >module.exports.e = function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
->                                                                       : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^     
 >module.exports.e : <T, U>(a: T, b: U) => T & U
->                 : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -141,11 +141,11 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >e : <T, U>(a: T, b: U) => T & U
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >function e(a, b) { return /** @type {*} */(null); } : <T, U>(a: T, b: U) => T & U
->                                                    : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                                                    :                            
 >e : <T, U>(a: T, b: U) => T & U
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >a : T
 >  : ^
 >b : U
@@ -158,9 +158,9 @@ module.exports.e = function e(a, b) { return /** @type {*} */(null); }
  */
 module.exports.f = function f(a) {
 >module.exports.f = function f(a) {    return a;} : { <T>(a: T): T; self: any; }
->                                                 : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                 : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >module.exports.f : { <T>(a: T): T; self: any; }
->                 : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -168,11 +168,11 @@ module.exports.f = function f(a) {
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >f : { <T>(a: T): T; self: any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >function f(a) {    return a;} : { <T>(a: T): T; self: any; }
->                              : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>                              :                             
 >f : { <T>(a: T): T; self: any; }
->  : ^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -182,11 +182,11 @@ module.exports.f = function f(a) {
 }
 module.exports.f.self = module.exports.f;
 >module.exports.f.self = module.exports.f : { <T>(a: T): T; self: any; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >module.exports.f.self : { <T>(a: T): T; self: any; }
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >module.exports.f : { <T>(a: T): T; self: any; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -194,11 +194,11 @@ module.exports.f.self = module.exports.f;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >f : { <T>(a: T): T; self: any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >self : { <T>(a: T): T; self: any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     :                             
 >module.exports.f : { <T>(a: T): T; self: any; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 :                             
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -206,7 +206,7 @@ module.exports.f.self = module.exports.f;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >f : { <T>(a: T): T; self: any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 
 /**
  * @param {{x: string}} a
@@ -214,7 +214,7 @@ module.exports.f.self = module.exports.f;
  */
 function g(a, b) {
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: { (): void; cat: string; }; }
@@ -241,9 +241,9 @@ function g(a, b) {
 
 module.exports.g = g;
 >module.exports.g = g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports.g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -251,9 +251,9 @@ module.exports.g = g;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  :                                                                   
 
 /**
  * @param {{x: string}} a
@@ -261,7 +261,7 @@ module.exports.g = g;
  */
 function hh(a, b) {
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->   : ^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: { (): void; cat: string; }; }
@@ -288,9 +288,9 @@ function hh(a, b) {
 
 module.exports.h = hh;
 >module.exports.h = hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports.h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -298,9 +298,9 @@ module.exports.h = hh;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   :                                                                   
 
 module.exports.i = function i() {}
 >module.exports.i = function i() {} : () => void
@@ -316,7 +316,7 @@ module.exports.i = function i() {}
 >i : () => void
 >  : ^^^^^^^^^^
 >function i() {} : () => void
->                : ^^^^^^^^^^
+>                :           
 >i : () => void
 >  : ^^^^^^^^^^
 
@@ -334,7 +334,7 @@ module.exports.ii = module.exports.i;
 >ii : () => void
 >   : ^^^^^^^^^^
 >module.exports.i : () => void
->                 : ^^^^^^^^^^
+>                 :           
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -359,7 +359,7 @@ module.exports.jj = module.exports.j;
 >jj : () => void
 >   : ^^^^^^^^^^
 >module.exports.j : () => void
->                 : ^^^^^^^^^^
+>                 :           
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -383,7 +383,7 @@ module.exports.j = function j() {}
 >j : () => void
 >  : ^^^^^^^^^^
 >function j() {} : () => void
->                : ^^^^^^^^^^
+>                :           
 >j : () => void
 >  : ^^^^^^^^^^
 

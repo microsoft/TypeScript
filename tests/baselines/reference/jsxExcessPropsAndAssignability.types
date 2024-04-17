@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxExcessPropsAndAssignability.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,700 / 7,700 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,000 / 66,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxExcessPropsAndAssignability.tsx ===
 /// <reference path="react16.d.ts" />
@@ -15,9 +15,9 @@ import * as React from 'react';
 
 const myHoc = <ComposedComponentProps extends any>(
 >myHoc : <ComposedComponentProps extends unknown>(ComposedComponent: React.ComponentClass<ComposedComponentProps>) => void
->      : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^
+>      : ^                      ^^^^^^^^^^^^^^^^^^                 ^^                                            ^^^^^^^^^
 ><ComposedComponentProps extends any>(    ComposedComponent: React.ComponentClass<ComposedComponentProps>,) => {    type WrapperComponentProps = ComposedComponentProps & { myProp: string };    const WrapperComponent: React.ComponentClass<WrapperComponentProps> = null as any;    const props: ComposedComponentProps = null as any;    <WrapperComponent {...props} myProp={'1000000'} />;    <WrapperComponent {...props} myProp={1000000} />;} : <ComposedComponentProps extends unknown>(ComposedComponent: React.ComponentClass<ComposedComponentProps>) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                      : ^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                            ^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                      :                                                                                                                  
 
     ComposedComponent: React.ComponentClass<ComposedComponentProps>,
 >ComposedComponent : React.ComponentClass<ComposedComponentProps, any>

@@ -38,9 +38,9 @@ module.exports = {
 >module : { exports: { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    Thing,    AnotherThing,    foo,    qux: bar,    baz() { return 5 },    literal: "",} : { Thing: typeof Thing; AnotherThing: typeof AnotherThing; foo: () => number; qux: () => number; baz(): number; literal: string; }
->                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     Thing,
 >Thing : typeof Thing
@@ -58,7 +58,7 @@ module.exports = {
 >qux : () => number
 >    : ^^^^^^^^^^^^
 >bar : () => number
->    : ^^^^^^^^^^^^
+>    :             
 
     baz() { return 5 },
 >baz : () => number
@@ -84,7 +84,7 @@ module.exports = {
  */
 function jstypes(a, b, c, d, e, f, g) {
 >jstypes : (a: Thing, b: AnotherThing, c: () => number, d: () => number, e: () => number, f: import("./mod").buz, g: string) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^ ^^      ^^^^^^^^ ^^      ^^^^^^^^ ^^                   ^^ ^^      ^^^^^^^^^^^
 >a : Thing
 >  : ^^^^^
 >b : AnotherThing
@@ -160,7 +160,7 @@ function jstypes(a, b, c, d, e, f, g) {
  */
 function jsvalues(a, b, c, d, e, f, g) {
 >jsvalues : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any, g: typeof import("./mod").literal) => any
->         : ^^^^                            ^^^^^                                   ^^^^^                          ^^^^^                          ^^^^^                          ^^^^^^^^^^^^^                              ^^^^^^^^
+>         : ^ ^^                            ^^ ^^                                   ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^^^^^^ ^^                              ^^^^^^^^
 >a : typeof Thing
 >  : ^^^^^^^^^^^^
 >b : typeof AnotherThing
@@ -227,8 +227,8 @@ function jsvalues(a, b, c, d, e, f, g) {
 
 === index.ts ===
 function types(
->types : (a: any, b: any, c: any, d: any, e: any, f: import('./mod').buz, g: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^^^
+>types : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
+>      : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^^^^^^ ^^                   ^^ ^^^^^^^^^^^^^
 
     a: import('./mod').Thing,
 >a : any
@@ -309,8 +309,8 @@ function types(
 }
 
 function values(
->values : (a: typeof import('./mod').Thing, b: typeof import('./mod').AnotherThing, c: typeof import('./mod').foo, d: typeof import('./mod').qux, e: typeof import('./mod').baz, f: any, g: typeof import('./mod').literal) => any
->       : ^^^^                            ^^^^^                                   ^^^^^                          ^^^^^                          ^^^^^                          ^^^^^^^^^^^^^                              ^^^^^^^^
+>values : (a: typeof import("./mod").Thing, b: typeof import("./mod").AnotherThing, c: typeof import("./mod").foo, d: typeof import("./mod").qux, e: typeof import("./mod").baz, f: any, g: typeof import("./mod").literal) => any
+>       : ^ ^^                            ^^ ^^                                   ^^ ^^                          ^^ ^^                          ^^ ^^                          ^^ ^^^^^^^ ^^                              ^^^^^^^^
 
     a: typeof import('./mod').Thing,
 >a : typeof Thing

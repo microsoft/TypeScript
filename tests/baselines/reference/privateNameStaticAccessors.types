@@ -51,11 +51,11 @@ class A1 {
 >console.log(A1.#prop) : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >A1.#prop : string
 >         : ^^^^^^
 >A1 : typeof A1
@@ -65,11 +65,11 @@ class A1 {
 >console.log(A1.#roProp) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >A1.#roProp : string
 >           : ^^^^^^
 >A1 : typeof A1

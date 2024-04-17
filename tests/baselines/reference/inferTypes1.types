@@ -43,7 +43,7 @@ type T06 = Unpacked<never>;  // never
 
 function f1(s: string) {
 >f1 : (s: string) => { a: number; b: string; }
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -116,7 +116,7 @@ type T14 = ReturnType<typeof f1>;  // { a: number, b: string }
 >T14 : { a: number; b: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : (s: string) => { a: number; b: string; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type T15 = ReturnType<any>;  // any
 >T15 : any
@@ -322,11 +322,11 @@ type X3<T> = T extends { a: (x: infer U) => void, b: (x: infer U) => void } ? U 
 >X3 : X3<T>
 >   : ^^^^^
 >a : (x: infer U) => void
->  : ^^^^       ^^^^^    
+>  : ^ ^^       ^^^^^    
 >x : U
 >  : ^
 >b : (x: infer U) => void
->  : ^^^^       ^^^^^    
+>  : ^ ^^       ^^^^^    
 >x : U
 >  : ^
 
@@ -338,7 +338,7 @@ type T51 = X3<{ a: (x: string) => void }>;  // never
 >T51 : never
 >    : ^^^^^
 >a : (x: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -346,11 +346,11 @@ type T52 = X3<{ a: (x: string) => void, b: (x: string) => void }>;  // string
 >T52 : string
 >    : ^^^^^^
 >a : (x: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 >b : (x: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -358,11 +358,11 @@ type T53 = X3<{ a: (x: number) => void, b: (x: string) => void }>;  // never
 >T53 : never
 >    : ^^^^^
 >a : (x: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >b : (x: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -370,7 +370,7 @@ type T54 = X3<{ a: (x: number) => void, b: () => void }>;  // number
 >T54 : number
 >    : ^^^^^^
 >a : (x: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >b : () => void
@@ -657,7 +657,7 @@ type Test2 = EnsureIsString<42>;  // never
 
 function invoker <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
 >invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^   ^^^^^^^^ ^^^^^                
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^    ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^   ^^^   ^^ ^^^^^                
 >key : K
 >    : ^
 >args : A
@@ -665,7 +665,7 @@ function invoker <K extends string | number | symbol, A extends any[]> (key: K, 
 
     return <T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args)
 ><T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args) : <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->                                                                                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^   ^^^^^^^^ ^^^^^                
+>                                                                                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^   ^^^   ^^ ^^^^^                
 >args : A
 >     : ^
 >obj : T
@@ -690,19 +690,19 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >invoker('test', true)({ test: (a: boolean) => 123 }) : number
 >                                                     : ^^^^^^
 >invoker('test', true) : <T extends Record<"test", (args_0: boolean) => any>>(obj: T) => ReturnType<T["test"]>
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^    ^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^^^^^^^
 >'test' : "test"
 >       : ^^^^^^
 >true : true
 >     : ^^^^
 >{ test: (a: boolean) => 123 } : { test: (a: boolean) => number; }
->                              : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>                              : ^^^^^^^^^ ^^       ^^^^^^^^^^^^^^
 >test : (a: boolean) => number
->     : ^^^^       ^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^
 >(a: boolean) => 123 : (a: boolean) => number
->                    : ^^^^       ^^^^^^^^^^^
+>                    :                       
 >a : boolean
 >  : ^^^^^^^
 >123 : 123

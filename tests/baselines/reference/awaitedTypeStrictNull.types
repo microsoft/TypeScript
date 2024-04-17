@@ -1,11 +1,7 @@
 //// [tests/cases/compiler/awaitedTypeStrictNull.ts] ////
 
 === Performance Stats ===
-Identity cache: 100 / 100 (nearest 100)
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 700 / 700 (nearest 100)
-Instantiation count: 25,500 / 25,500 (nearest 500)
-Symbol count: 30,500 / 30,500 (nearest 500)
+Instantiation count: 25,000
 
 === awaitedTypeStrictNull.ts ===
 type T1 = Awaited<number>;
@@ -40,7 +36,7 @@ type T7 = Awaited<{ then(x: number): void }>; // never (non-promise "thenable")
 >T7 : never
 >   : ^^^^^
 >then : (x: number) => void
->     : ^^^^      ^^^^^    
+>     : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 
@@ -48,7 +44,7 @@ type T8 = Awaited<{ then(x: () => void): void }>; // unknown
 >T8 : unknown
 >   : ^^^^^^^
 >then : (x: () => void) => void
->     : ^^^^          ^^^^^    
+>     : ^ ^^          ^^^^^    
 >x : () => void
 >  : ^^^^^^    
 
@@ -94,9 +90,9 @@ type TNullOrUndefined = Awaited<null | undefined>;
 
 interface BadPromise { then(cb: (value: BadPromise) => void): void; }
 >then : (cb: (value: BadPromise) => void) => void
->     : ^^^^^                           ^^^^^    
+>     : ^  ^^                           ^^^^^    
 >cb : (value: BadPromise) => void
->   : ^^^^^^^^          ^^^^^    
+>   : ^     ^^          ^^^^^    
 >value : BadPromise
 >      : ^^^^^^^^^^
 
@@ -106,17 +102,17 @@ type T16 = Awaited<BadPromise>; // error
 
 interface BadPromise1 { then(cb: (value: BadPromise2) => void): void; }
 >then : (cb: (value: BadPromise2) => void) => void
->     : ^^^^^                            ^^^^^    
+>     : ^  ^^                            ^^^^^    
 >cb : (value: BadPromise2) => void
->   : ^^^^^^^^           ^^^^^    
+>   : ^     ^^           ^^^^^    
 >value : BadPromise2
 >      : ^^^^^^^^^^^
 
 interface BadPromise2 { then(cb: (value: BadPromise1) => void): void; }
 >then : (cb: (value: BadPromise1) => void) => void
->     : ^^^^^                            ^^^^^    
+>     : ^  ^^                            ^^^^^    
 >cb : (value: BadPromise1) => void
->   : ^^^^^^^^           ^^^^^    
+>   : ^     ^^           ^^^^^    
 >value : BadPromise1
 >      : ^^^^^^^^^^^
 
@@ -129,9 +125,9 @@ type T18 = Awaited<{ then(cb: (value: number, other: { }) => void)}>; // number
 >T18 : number
 >    : ^^^^^^
 >then : (cb: (value: number, other: {}) => void) => any
->     : ^^^^^                                  ^^^^^^^^
+>     : ^  ^^                                  ^^^^^^^^
 >cb : (value: number, other: {}) => void
->   : ^^^^^^^^      ^^^^^^^^^  ^^^^^    
+>   : ^     ^^      ^^     ^^  ^^^^^    
 >value : number
 >      : ^^^^^^
 >other : {}
@@ -144,7 +140,7 @@ type MaybePromise<T> = T | Promise<T> | PromiseLike<T>
 
 declare function MaybePromise<T>(value: T): MaybePromise<T>;
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->             : ^ ^^^^^^^^^ ^^^^^               
+>             : ^ ^^     ^^ ^^^^^               
 >value : T
 >      : ^
 
@@ -180,11 +176,11 @@ async function main() {
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
 >                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T_1 extends [] | readonly unknown[]>(values: T_1): Promise<{ -readonly [P in keyof T_1]: Awaited<T_1[P]>; }>; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -192,7 +188,7 @@ async function main() {
 >MaybePromise(1) : 1 | Promise<1> | PromiseLike<1>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -200,7 +196,7 @@ async function main() {
 >MaybePromise('2') : "2" | Promise<"2"> | PromiseLike<"2">
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^
 >'2' : "2"
 >    : ^^^
 
@@ -208,7 +204,7 @@ async function main() {
 >MaybePromise(true) : true | Promise<true> | PromiseLike<true>
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MaybePromise : <T>(value: T) => MaybePromise<T>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -264,7 +260,7 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 >api : Api<{}>
 >    : ^^^^^^^
 >post : <T_1 = {}>() => Promise<T_1>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^
 }
 
 // helps with tests where '.types' just prints out the type alias name

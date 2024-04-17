@@ -7,14 +7,14 @@ class Foo<Elements extends readonly unknown[]> {
 
   public readonly elements: { [P in keyof Elements]: { bar: Elements[P] } };
 >elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
->         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
 >bar : Elements[P]
 >    : ^^^^^^^^^^^
 
   public constructor(
     ...elements: { [P in keyof Elements]: { bar: Elements[P] } }
 >elements : { [P in keyof Elements]: { bar: Elements[P]; }; }
->         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^
 >bar : Elements[P]
 >    : ^^^^^^^^^^^
 

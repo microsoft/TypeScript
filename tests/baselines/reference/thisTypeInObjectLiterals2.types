@@ -123,7 +123,7 @@ type Point = {
 
     moveBy(dx: number, dy: number, dz?: number): void;
 >moveBy : (dx: number, dy: number, dz?: number) => void
->       : ^^^^^      ^^^^^^      ^^^^^^^      ^^^^^    
+>       : ^  ^^      ^^  ^^      ^^  ^^^      ^^^^^    
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -136,7 +136,7 @@ let p1: Point = {
 >p1 : Point
 >   : ^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -152,7 +152,7 @@ let p1: Point = {
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -215,7 +215,7 @@ let p2: Point | null = {
 >p2 : Point | null
 >   : ^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -231,7 +231,7 @@ let p2: Point | null = {
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -294,7 +294,7 @@ let p3: Point | undefined = {
 >p3 : Point | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -310,7 +310,7 @@ let p3: Point | undefined = {
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -373,7 +373,7 @@ let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -389,7 +389,7 @@ let p4: Point | null | undefined = {
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -450,7 +450,7 @@ let p4: Point | null | undefined = {
 
 declare function f1(p: Point): void;
 >f1 : (p: Point) => void
->   : ^^^^     ^^^^^    
+>   : ^ ^^     ^^^^^    
 >p : Point
 >  : ^^^^^
 
@@ -458,9 +458,9 @@ f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >                                                                                                                                                               : ^^^^
 >f1 : (p: Point) => void
->   : ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -476,7 +476,7 @@ f1({
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -537,7 +537,7 @@ f1({
 
 declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
->   : ^^^^                        ^^^^^    
+>   : ^ ^^                        ^^^^^    
 >p : Point | null | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -545,9 +545,9 @@ f2({
 >f2({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
 >                                                                                                                                                               : ^^^^
 >f2 : (p: Point | null | undefined) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                        ^^^^^^^^^
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
->                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 10,
 >x : number
@@ -563,7 +563,7 @@ f2({
 
     moveBy(dx, dy, dz) {
 >moveBy : (dx: number, dy: number, dz: number | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^^^^^^^^^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -640,19 +640,19 @@ type ObjectDescriptor<D, M> = {
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->           : ^ ^^ ^^^^^^^^                      ^^^^^     
+>           : ^ ^^ ^^    ^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 let x1 = makeObject({
 >x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                                                                              :                          ^^^                                         
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^    ^^                      ^^^^^^^^^^
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
->                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
@@ -670,13 +670,13 @@ let x1 = makeObject({
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
->        : ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>        : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                          : ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                          : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
->       : ^^^^^      ^^^^^^      ^^^^^^^^^
+>       : ^  ^^      ^^  ^^      ^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -688,7 +688,7 @@ let x1 = makeObject({
 >this.x : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >dx : number
@@ -700,7 +700,7 @@ let x1 = makeObject({
 >this.y : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >dy : number
@@ -727,19 +727,19 @@ type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->            : ^ ^^ ^^^^^^^^                      ^^^^^     
+>            : ^ ^^ ^^    ^^                      ^^^^^     
 >desc : ObjectDescriptor<D, M>
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 
 let x2 = makeObject2({
 >x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                                                                               :                          ^^^                                         
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^ ^^    ^^                      ^^^^^^^^^^
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
->                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 
     data: { x: 0, y: 0 },
 >data : { x: number; y: number; }
@@ -757,13 +757,13 @@ let x2 = makeObject2({
 
     methods: {
 >methods : { moveBy(dx: number, dy: number): void; }
->        : ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>        : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >{        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    } : { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                          : ^^^^^^^^^^^^^      ^^^^^^      ^^^^^^^^^^
+>                                                                                                                                                          : ^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 
         moveBy(dx: number, dy: number) {
 >moveBy : (dx: number, dy: number) => void
->       : ^^^^^      ^^^^^^      ^^^^^^^^^
+>       : ^  ^^      ^^  ^^      ^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -775,7 +775,7 @@ let x2 = makeObject2({
 >this.x : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >dx : number
@@ -787,7 +787,7 @@ let x2 = makeObject2({
 >this.y : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >dy : number
@@ -812,7 +812,7 @@ type PropDesc<T> = {
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
->    : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
+>    : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -826,7 +826,7 @@ type PropDescMap<T> = {
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^ ^^^^^^^^ ^^^^^^^^                         ^^^^^                
+>           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
 >obj : T
 >    : ^
 >name : K
@@ -836,7 +836,7 @@ declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropD
 
 declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
->            : ^ ^^ ^^^^^^^ ^^^^^^^^^                            ^^^^^     
+>            : ^ ^^ ^^   ^^ ^^     ^^                            ^^^^^     
 >obj : T
 >    : ^
 >descs : PropDescMap<U> & ThisType<T>
@@ -848,7 +848,7 @@ let p10 = defineProp(p1, "foo", { value: 42 });
 >defineProp(p1, "foo", { value: 42 }) : Point & Record<"foo", number>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >"foo" : "foo"
@@ -886,13 +886,13 @@ let p11 = defineProp(p1, "bar", {
 >defineProp(p1, "bar", {    get() {        return this.x;    },    set(value: number) {        this.x = value;    }}) : Point & Record<"bar", number>
 >                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >"bar" : "bar"
 >      : ^^^^^
 >{    get() {        return this.x;    },    set(value: number) {        this.x = value;    }} : { get(): number; set(value: number): void; }
->                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                              : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 
     get() {
 >get : () => number
@@ -909,7 +909,7 @@ let p11 = defineProp(p1, "bar", {
     },
     set(value: number) {
 >set : (value: number) => void
->    : ^^^^^^^^      ^^^^^^^^^
+>    : ^     ^^      ^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -952,11 +952,11 @@ let p12 = defineProps(p1, {
 >defineProps(p1, {    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }}) : Point & { foo: number; bar: number; }
 >                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^ ^^   ^^ ^^     ^^                            ^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >{    foo: {        value: 42    },    bar: {        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    }} : { foo: { value: number; }; bar: { get(): number; set(value: number): void; }; }
->                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^^^^
 
     foo: {
 >foo : { value: number; }
@@ -973,9 +973,9 @@ let p12 = defineProps(p1, {
     },
     bar: {
 >bar : { get(): number; set(value: number): void; }
->    : ^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^
+>    : ^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^
 >{        get(): number {            return this.x;        },        set(value: number) {            this.x = value;        }    } : { get(): number; set(value: number): void; }
->                                                                                                                                  : ^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                                                                  : ^^^^^^^^^      ^^^^^^     ^^      ^^^^^^^^^^
 
         get(): number {
 >get : () => number
@@ -992,7 +992,7 @@ let p12 = defineProps(p1, {
         },
         set(value: number) {
 >set : (value: number) => void
->    : ^^^^^^^^      ^^^^^^^^^
+>    : ^     ^^      ^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
@@ -1072,7 +1072,7 @@ type Computed<T> = {
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
->    : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
+>    : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 }
@@ -1096,25 +1096,25 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->    : ^^^^^ ^^ ^^ ^^^^^^^^^^^                   ^^^^^         
+>    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^         
 >options : VueOptions<D, M, P>
 >        : ^^^^^^^^^^^^^^^^^^^
 
 let vue = new Vue({
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                             :                          ^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^^^^^^^^^^
 >{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
->                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
 
     data: () => ({ x: 1, y: 2 }),
 >data : () => { x: number; y: number; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({ x: 1, y: 2 }) : () => { x: number; y: number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       :                                
 >({ x: 1, y: 2 }) : { x: number; y: number; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }
@@ -1130,13 +1130,13 @@ let vue = new Vue({
 
     methods: {
 >methods : { f(x: string): number; }
->        : ^^^^^^^      ^^^^^^^^^^^^
+>        : ^^^^ ^^      ^^^^^^^^^^^^
 >{        f(x: string) {            return this.x;        }    } : { f(x: string): number; }
->                                                                : ^^^^^^^      ^^^^^^^^^^^^
+>                                                                : ^^^^ ^^      ^^^^^^^^^^^^
 
         f(x: string) {
 >f : (x: string) => number
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -1144,16 +1144,16 @@ let vue = new Vue({
 >this.x : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
         }
     },
     computed: {
 >computed : { test(): number; hello: { get(): string; set(value: string): void; }; }
->         : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>         : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^
 >{        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    } : { test(): number; hello: { get(): string; set(value: string): void; }; }
->                                                                                                                                                                                                      : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                                                                                      : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^
 
         test(): number {
 >test : () => number
@@ -1163,16 +1163,16 @@ let vue = new Vue({
 >this.x : number
 >       : ^^^^^^
 >this : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
         },
         hello: {
 >hello : { get(): string; set(value: string): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 >{            get() {                return "hi";            },            set(value: string) {            }        } : { get(): string; set(value: string): void; }
->                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^
 
             get() {
 >get : () => string
@@ -1185,7 +1185,7 @@ let vue = new Vue({
             },
             set(value: string) {
 >set : (value: string) => void
->    : ^^^^^^^^      ^^^^^^^^^
+>    : ^     ^^      ^^^^^^^^^
 >value : string
 >      : ^^^^^^
             }
@@ -1195,13 +1195,13 @@ let vue = new Vue({
 
 vue;
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 vue.x;
 >vue.x : number
 >      : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1209,11 +1209,11 @@ vue.f("abc");
 >vue.f("abc") : number
 >             : ^^^^^^
 >vue.f : (x: string) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : (x: string) => number
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 
@@ -1221,7 +1221,7 @@ vue.test;
 >vue.test : number
 >         : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : number
 >     : ^^^^^^
 
@@ -1229,7 +1229,7 @@ vue.hello;
 >vue.hello : string
 >          : ^^^^^^
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hello : string
 >      : ^^^^^^
 

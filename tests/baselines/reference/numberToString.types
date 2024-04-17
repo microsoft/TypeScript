@@ -3,7 +3,7 @@
 === numberToString.ts ===
 function f1(n:number):string {
 >f1 : (n: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 
@@ -14,7 +14,7 @@ function f1(n:number):string {
 
 function f2(s:string):void {
 >f2 : (s: string) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 }
@@ -23,7 +23,7 @@ f1(3);
 >f1(3) : string
 >      : ^^^^^^
 >f1 : (n: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -31,7 +31,7 @@ f2(3); // error no coercion to string
 >f2(3) : void
 >      : ^^^^
 >f2 : (s: string) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -39,7 +39,7 @@ f2(3+""); // ok + operator promotes
 >f2(3+"") : void
 >         : ^^^^
 >f2 : (s: string) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >3+"" : string
 >     : ^^^^^^
 >3 : 3

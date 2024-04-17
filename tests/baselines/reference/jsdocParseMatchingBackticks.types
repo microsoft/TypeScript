@@ -14,7 +14,7 @@
  */
 export function f(x, y, z, alpha, beta, gamma) {
 >f : (x: string, y: string, z: string, alpha: string, beta: string, gamma: string) => string
->  : ^^^^      ^^^^^      ^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : string

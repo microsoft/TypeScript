@@ -4,13 +4,13 @@
 // compose :: (b->c) -> (a->b) -> (a->c)
 function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >compose : <A, B, C>(f: (b: B) => C, g: (a: A) => B) => (a: A) => C
->        : ^ ^^ ^^ ^^^^^           ^^^^^           ^^^^^           
+>        : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^           
 >f : (b: B) => C
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >b : B
 >  : ^
 >g : (a: A) => B
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 >a : A
@@ -18,7 +18,7 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 
     return function (a:A) : C {
 >function (a:A) : C {        return f(g.apply(null, a));    } : (a: A) => C
->                                                             : ^^^^ ^^^^^ 
+>                                                             : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -26,14 +26,14 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 >f(g.apply(null, a)) : C
 >                    : ^
 >f : (b: B) => C
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >g.apply(null, a) : any
 >g.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >g : (a: A) => B
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >a : A
 >  : ^
 
@@ -43,11 +43,11 @@ function compose<A, B, C>(f: (b: B) => C, g: (a:A) => B): (a:A) => C {
 // forEach :: [a] -> (a -> ()) -> ()
 function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 >forEach : <A>(list: A[], f: (a: A, n?: number) => void) => void
->        : ^ ^^^^^^^^   ^^^^^                          ^^^^^    
+>        : ^ ^^    ^^   ^^ ^^                          ^^^^^    
 >list : A[]
 >     : ^^^
 >f : (a: A, n?: number) => void
->  : ^^^^ ^^^^^^      ^^^^^    
+>  : ^ ^^ ^^ ^^^      ^^^^^    
 >a : A
 >  : ^
 >n : number
@@ -77,7 +77,7 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 >f(list[i], i) : void
 >              : ^^^^
 >f : (a: A, n?: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^      ^^^^^^^^^
 >list[i] : A
 >        : ^
 >list : A[]
@@ -92,9 +92,9 @@ function forEach<A>(list: A[], f: (a: A, n?: number) => void ): void {
 // filter :: (a->bool) -> [a] -> [a]
 function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
->       : ^ ^^^^^                 ^^^^^^   ^^^^^   
+>       : ^ ^^ ^^                 ^^  ^^   ^^^^^   
 >f : (a: A) => boolean
->  : ^^^^ ^^^^^       
+>  : ^ ^^ ^^^^^       
 >a : A
 >  : ^
 >ar : A[]
@@ -110,11 +110,11 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >forEach(ar, (el) => {        if (f(el)) {            ret.push(el);        }    } ) : void
 >                                                                                   : ^^^^
 >forEach : <A_1>(list: A_1[], f: (a: A_1, n?: number) => void) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^    ^^     ^^ ^^                            ^^^^^^^^^
 >ar : A[]
 >   : ^^^
 >(el) => {        if (f(el)) {            ret.push(el);        }    } : (el: A) => void
->                                                                     : ^^^^^^^^^^^^^^^
+>                                                                     : ^  ^^^^^^^^^^^^
 >el : A
 >   : ^
 
@@ -122,7 +122,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >f(el) : boolean
 >      : ^^^^^^^
 >f : (a: A) => boolean
->  : ^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^^^^
 >el : A
 >   : ^
 
@@ -130,11 +130,11 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 >ret.push(el) : number
 >             : ^^^^^^
 >ret.push : (...items: any[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^^^
 >ret : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >el : A
 >   : ^
         }
@@ -148,7 +148,7 @@ function filter<A>(f: (a: A) => boolean, ar: A[]): A[] {
 // length :: [a] -> Num
 function length2<A>(ar: A[]): number {
 >length2 : <A>(ar: A[]) => number
->        : ^ ^^^^^^   ^^^^^      
+>        : ^ ^^  ^^   ^^^^^      
 >ar : A[]
 >   : ^^^
 
@@ -164,9 +164,9 @@ function length2<A>(ar: A[]): number {
 // curry1 :: ((a,b)->c) -> (a->(b->c))
 function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
->       : ^ ^^ ^^ ^^^^^                 ^^^^^                       
+>       : ^ ^^ ^^ ^^ ^^                 ^^^^^                       
 >f : (a: A, b: B) => C
->  : ^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >a : A
 >  : ^
 >b : B
@@ -178,13 +178,13 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 
     return function (ay: A) {
 >function (ay: A) {        return function (by: B) {            return f(ay, by);        };    } : (ay: A) => (by: B) => C
->                                                                                                : ^^^^^ ^^^^^^^^^^ ^^^^^^
+>                                                                                                : ^  ^^ ^^^^^^  ^^ ^^^^^^
 >ay : A
 >   : ^
 
         return function (by: B) {
 >function (by: B) {            return f(ay, by);        } : (by: B) => C
->                                                         : ^^^^^ ^^^^^^
+>                                                         : ^  ^^ ^^^^^^
 >by : B
 >   : ^
 
@@ -192,7 +192,7 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 >f(ay, by) : C
 >          : ^
 >f : (a: A, b: B) => C
->  : ^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^^^^^
 >ay : A
 >   : ^
 >by : B
@@ -204,13 +204,13 @@ function curry1<A, B, C>(f: (a: A, b: B) => C): (ax: A) => (bx: B) => C {
 
 var cfilter = curry1(filter);
 >cfilter : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^  ^^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
 >curry1(filter) : <A>(ax: (a: A) => boolean) => (bx: A[]) => A[]
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                                               
 >curry1 : <A, B, C>(f: (a: A, b: B) => C) => (ax: A) => (bx: B) => C
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^ ^^                 ^^^^^^  ^^ ^^^^^^  ^^ ^^^^^^
 >filter : <A>(f: (a: A) => boolean, ar: A[]) => A[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^ ^^                 ^^  ^^   ^^^^^^^^
 
 // compose :: (b->c) -> (a->b) -> (a->c)
 // length :: [a] -> Num
@@ -222,9 +222,9 @@ var cfilter = curry1(filter);
 
 function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >countWhere_1 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->             : ^ ^^^^^^^^                 ^^^^^                  
+>             : ^ ^^    ^^                 ^^^^^                  
 >pred : (a: A) => boolean
->     : ^^^^ ^^^^^       
+>     : ^ ^^ ^^^^^       
 >a : A
 >  : ^
 >a : A[]
@@ -232,24 +232,24 @@ function countWhere_1<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
     return compose(length2, cfilter(pred));
 >compose(length2, cfilter(pred)) : (a: A[]) => number
->                                : ^^^^^^^^^^^^^^^^^^
+>                                : ^ ^^^^^^^^^^^^^^^^
 >compose : <A_1, B, C>(f: (b: B) => C, g: (a: A_1) => B) => (a: A_1) => C
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^ ^^ ^^           ^^ ^^             ^^^^^^ ^^   ^^^^^^
 >length2 : <A_1>(ar: A_1[]) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^  ^^     ^^^^^^^^^^^
 >cfilter(pred) : (bx: A[]) => A[]
->              : ^^^^^^^^^^^^^^^^
+>              : ^  ^^^^^^^^^^^^^
 >cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^  ^^^ ^^   ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >pred : (a: A) => boolean
->     : ^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^^
 }
 
 function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 >countWhere_2 : <A>(pred: (a: A) => boolean) => (a: A[]) => number
->             : ^ ^^^^^^^^                 ^^^^^                  
+>             : ^ ^^    ^^                 ^^^^^                  
 >pred : (a: A) => boolean
->     : ^^^^ ^^^^^       
+>     : ^ ^^ ^^^^^       
 >a : A
 >  : ^
 >a : A[]
@@ -257,21 +257,21 @@ function countWhere_2<A>(pred: (a: A) => boolean): (a: A[]) => number {
 
     var where = cfilter(pred);
 >where : (bx: A[]) => A[]
->      : ^^^^^^^^^^^^^^^^
+>      : ^  ^^^^^^^^^^^^^
 >cfilter(pred) : (bx: A[]) => A[]
->              : ^^^^^^^^^^^^^^^^
+>              :                 
 >cfilter : <A_1>(ax: (a: A_1) => boolean) => (bx: A_1[]) => A_1[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^  ^^^ ^^   ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
 >pred : (a: A) => boolean
->     : ^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^^
 
     return compose(length2, where);
 >compose(length2, where) : (a: A[]) => number
->                        : ^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^
 >compose : <A_1, B, C>(f: (b: B) => C, g: (a: A_1) => B) => (a: A_1) => C
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^ ^^ ^^ ^^           ^^ ^^             ^^^^^^ ^^   ^^^^^^
 >length2 : <A_1>(ar: A_1[]) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^  ^^     ^^^^^^^^^^^
 >where : (bx: A[]) => A[]
->      : ^^^^^^^^^^^^^^^^
+>      : ^  ^^^^^^^^^^^^^
 }

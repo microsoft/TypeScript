@@ -3,7 +3,7 @@
 === typeofTypeParameter.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 

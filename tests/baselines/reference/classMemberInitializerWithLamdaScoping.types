@@ -3,11 +3,11 @@
 === classMemberInitializerWithLamdaScoping.ts ===
 declare var console: {
 >console : { log(msg?: any): void; }
->        : ^^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^^^^   ^^^   ^^^    ^^^
 
     log(msg?: any): void;
 >log : (msg?: any) => void
->    : ^^^^^^^   ^^^^^    
+>    : ^   ^^^   ^^^^^    
 >msg : any
 >    : ^^^
 
@@ -24,7 +24,7 @@ class Test {
 >messageHandler : () => void
 >               : ^^^^^^^^^^
 >() => {        var field = this.field;        console.log(field); // Using field here shouldnt be error    } : () => void
->                                                                                                             : ^^^^^^^^^^
+>                                                                                                             :           
 
         var field = this.field;
 >field : string
@@ -40,11 +40,11 @@ class Test {
 >console.log(field) : void
 >                   : ^^^^
 >console.log : (msg?: any) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^   ^^^^^^^^^
 >console : { log(msg?: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^^^^^^^^
 >log : (msg?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^   ^^^^^^^^^
 >field : string
 >      : ^^^^^^
 
@@ -57,7 +57,7 @@ class Test {
 >staticMessageHandler : () => void
 >                     : ^^^^^^^^^^
 >() => {        var field = Test.field;        console.log(field); // Using field here shouldnt be error    } : () => void
->                                                                                                             : ^^^^^^^^^^
+>                                                                                                             :           
 
         var field = Test.field;
 >field : number
@@ -73,11 +73,11 @@ class Test {
 >console.log(field) : void
 >                   : ^^^^
 >console.log : (msg?: any) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^   ^^^^^^^^^
 >console : { log(msg?: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^^^^^^^^
 >log : (msg?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^   ^^^^^^^^^
 >field : number
 >      : ^^^^^^
 
@@ -100,17 +100,17 @@ class Test1 {
 >messageHandler : () => void
 >               : ^^^^^^^^^^
 >() => {        console.log(field1); // But this should be error as the field1 will resolve to var field1                              // but since this code would be generated inside constructor, in generated js                             // it would resolve to private field1 and thats not what user intended here.     } : () => void
->                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                   :           
 
         console.log(field1); // But this should be error as the field1 will resolve to var field1 
 >console.log(field1) : void
 >                    : ^^^^
 >console.log : (msg?: any) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^   ^^^^^^^^^
 >console : { log(msg?: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^^^^^^^^
 >log : (msg?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^   ^^^^^^^^^
 >field1 : any
 >       : ^^^
 
@@ -121,17 +121,17 @@ class Test1 {
 >staticMessageHandler : () => void
 >                     : ^^^^^^^^^^
 >() => {        console.log(field1); // This shouldnt be error as its a static property    } : () => void
->                                                                                            : ^^^^^^^^^^
+>                                                                                            :           
 
         console.log(field1); // This shouldnt be error as its a static property
 >console.log(field1) : void
 >                    : ^^^^
 >console.log : (msg?: any) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^   ^^^^^^^^^
 >console : { log(msg?: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^^   ^^^^^^^^^^
 >log : (msg?: any) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^   ^^^^^^^^^
 >field1 : string
 >       : ^^^^^^
 

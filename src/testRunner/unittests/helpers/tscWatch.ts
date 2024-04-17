@@ -2,12 +2,8 @@ import {
     verifyProgramStructure,
     verifyResolutionCache,
 } from "../../../harness/incrementalUtils";
-import {
-    patchHostForBuildInfoReadWrite,
-} from "../../_namespaces/fakes";
-import {
-    Baseline,
-} from "../../_namespaces/Harness";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
+import { Baseline } from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import {
     baselinePrograms,

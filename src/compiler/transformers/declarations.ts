@@ -638,7 +638,7 @@ export function transformDeclarations(context: TransformationContext) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.BindingElement:
             case SyntaxKind.VariableDeclaration:
-                typeNode = resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker, shouldAddImplicitUndefined);
+                typeNode = resolver.createTypeOfDeclaration(node, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
                 break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.ConstructSignature:

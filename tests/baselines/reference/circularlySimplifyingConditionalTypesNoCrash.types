@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 600 / 600 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 25,500 / 25,500 (nearest 500)
+Instantiation count: 2,500
 
 === circularlySimplifyingConditionalTypesNoCrash.ts ===
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -75,7 +72,7 @@ const myStoreConnect: Connect = function(
 >myStoreConnect : Connect
 >               : ^^^^^^^
 >function(    mapStateToProps?: any,    mapDispatchToProps?: any,    mergeProps?: any,    options: unknown = {},) {    return connect(        mapStateToProps,        mapDispatchToProps,        mergeProps,        options,    );} : <TStateProps, TOwnProps>(mapStateToProps?: any, mapDispatchToProps?: any, mergeProps?: any, options?: unknown) => InferableComponentEnhancerWithProps<TStateProps, Omit<P, Extract<keyof TStateProps, keyof P>> & TOwnProps>
->                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^               ^^^   ^^                  ^^^   ^^          ^^^   ^^       ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     mapStateToProps?: any,
 >mapStateToProps : any

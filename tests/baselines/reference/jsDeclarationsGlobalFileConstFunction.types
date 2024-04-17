@@ -24,7 +24,7 @@ const SomeConstructor2 = function () {
 >SomeConstructor2 : { (): void; staticMember: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {} : { (): void; staticMember: string; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               :                                    
 
 };
 SomeConstructor2.staticMember = "str";

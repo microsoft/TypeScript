@@ -3,7 +3,7 @@
 === narrowingByTypeofInSwitch.ts ===
 function assertNever(x: never) {
 >assertNever : (x: never) => never
->            : ^^^^     ^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -14,7 +14,7 @@ function assertNever(x: never) {
 
 function assertNumber(x: number) {
 >assertNumber : (x: number) => number
->             : ^^^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -25,7 +25,7 @@ function assertNumber(x: number) {
 
 function assertBoolean(x: boolean) {
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^       ^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -36,7 +36,7 @@ function assertBoolean(x: boolean) {
 
 function assertString(x: string) {
 >assertString : (x: string) => string
->             : ^^^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -47,7 +47,7 @@ function assertString(x: string) {
 
 function assertSymbol(x: symbol) {
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -58,7 +58,7 @@ function assertSymbol(x: symbol) {
 
 function assertFunction(x: Function) {
 >assertFunction : (x: Function) => Function
->               : ^^^^        ^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -69,7 +69,7 @@ function assertFunction(x: Function) {
 
 function assertObject(x: object) {
 >assertObject : (x: object) => object
->             : ^^^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -80,7 +80,7 @@ function assertObject(x: object) {
 
 function assertObjectOrNull(x: object | null) {
 >assertObjectOrNull : (x: object | null) => object | null
->                   : ^^^^             ^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^             ^^^^^^^^^^^^^^^^^^
 >x : object | null
 >  : ^^^^^^^^^^^^^
 
@@ -91,7 +91,7 @@ function assertObjectOrNull(x: object | null) {
 
 function assertUndefined(x: undefined) {
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^         ^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
 
@@ -102,7 +102,7 @@ function assertUndefined(x: undefined) {
 
 function assertAll(x: Basic) {
 >assertAll : (x: Basic) => Basic
->          : ^^^^     ^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
 
@@ -113,7 +113,7 @@ function assertAll(x: Basic) {
 
 function assertStringOrNumber(x: string | number) {
 >assertStringOrNumber : (x: string | number) => string | number
->                     : ^^^^               ^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -124,7 +124,7 @@ function assertStringOrNumber(x: string | number) {
 
 function assertBooleanOrObject(x: boolean | object) {
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
->                      : ^^^^                ^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
 >  : ^^^^^^^^^^^^^^^^
 
@@ -139,7 +139,7 @@ type Basic = number | boolean | string | symbol | object | Function | undefined;
 
 function testUnion(x: Basic) {
 >testUnion : (x: Basic) => void
->          : ^^^^     ^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^
 >x : Basic
 >  : ^^^^^
 
@@ -155,7 +155,7 @@ function testUnion(x: Basic) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -165,7 +165,7 @@ function testUnion(x: Basic) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -175,7 +175,7 @@ function testUnion(x: Basic) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -185,7 +185,7 @@ function testUnion(x: Basic) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -195,7 +195,7 @@ function testUnion(x: Basic) {
 >assertObject(x) : object
 >                : ^^^^^^
 >assertObject : (x: object) => object
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -205,7 +205,7 @@ function testUnion(x: Basic) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -215,7 +215,7 @@ function testUnion(x: Basic) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
     }
@@ -223,14 +223,14 @@ function testUnion(x: Basic) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 }
 
 function testExtendsUnion<T extends Basic>(x: T) {
 >testExtendsUnion : <T extends Basic>(x: T) => void
->                 : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -246,7 +246,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -256,7 +256,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -266,7 +266,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -276,7 +276,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -286,7 +286,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -296,7 +296,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -306,7 +306,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
     }
@@ -314,14 +314,14 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 }
 
 function testAny(x: any) {
 >testAny : (x: any) => void
->        : ^^^^   ^^^^^^^^^
+>        : ^ ^^   ^^^^^^^^^
 >x : any
 
     switch (typeof x) {
@@ -335,7 +335,7 @@ function testAny(x: any) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -345,7 +345,7 @@ function testAny(x: any) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -355,7 +355,7 @@ function testAny(x: any) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : any
 
         case 'symbol': assertSymbol(x); return;
@@ -364,7 +364,7 @@ function testAny(x: any) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -374,7 +374,7 @@ function testAny(x: any) {
 >assertObject(x) : object
 >                : ^^^^^^
 >assertObject : (x: object) => object
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : any
 
         case 'string': assertString(x); return;
@@ -383,7 +383,7 @@ function testAny(x: any) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -393,7 +393,7 @@ function testAny(x: any) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
     }
@@ -401,13 +401,13 @@ function testAny(x: any) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : any
 }
 
 function a1(x: string | object | undefined) {
 >a1 : (x: string | object | undefined) => string | object | undefined
->   : ^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -418,7 +418,7 @@ function a1(x: string | object | undefined) {
 
 function testUnionExplicitDefault(x: Basic) {
 >testUnionExplicitDefault : (x: Basic) => void
->                         : ^^^^     ^^^^^^^^^
+>                         : ^ ^^     ^^^^^^^^^
 >x : Basic
 >  : ^^^^^
 
@@ -434,7 +434,7 @@ function testUnionExplicitDefault(x: Basic) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -444,7 +444,7 @@ function testUnionExplicitDefault(x: Basic) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -454,7 +454,7 @@ function testUnionExplicitDefault(x: Basic) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -464,7 +464,7 @@ function testUnionExplicitDefault(x: Basic) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -472,7 +472,7 @@ function testUnionExplicitDefault(x: Basic) {
 >a1(x) : string | object | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : (x: string | object | undefined) => string | object | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
@@ -480,7 +480,7 @@ function testUnionExplicitDefault(x: Basic) {
 
 function testUnionImplicitDefault(x: Basic) {
 >testUnionImplicitDefault : (x: Basic) => string | object | undefined
->                         : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : Basic
 >  : ^^^^^
 
@@ -496,7 +496,7 @@ function testUnionImplicitDefault(x: Basic) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -506,7 +506,7 @@ function testUnionImplicitDefault(x: Basic) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -516,7 +516,7 @@ function testUnionImplicitDefault(x: Basic) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -526,7 +526,7 @@ function testUnionImplicitDefault(x: Basic) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
     }
@@ -534,14 +534,14 @@ function testUnionImplicitDefault(x: Basic) {
 >a1(x) : string | object | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a1 : (x: string | object | undefined) => string | object | undefined
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | object | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
->                           : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -557,7 +557,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -567,7 +567,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -577,7 +577,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -587,7 +587,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -595,7 +595,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : string | object | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -604,7 +604,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
->                           : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -620,7 +620,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -630,7 +630,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -640,7 +640,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -650,7 +650,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
     }
@@ -658,7 +658,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >assertAll(x) : Basic
 >             : ^^^^^
 >assertAll : (x: Basic) => Basic
->          : ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^
 >x : string | object | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -679,7 +679,7 @@ type R = { x: string, y: number }
 
 function exhaustiveChecks(x: number | string | L | R): string {
 >exhaustiveChecks : (x: number | string | L | R) => string
->                 : ^^^^                       ^^^^^      
+>                 : ^ ^^                       ^^^^^      
 >x : string | number | R | L
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -694,12 +694,12 @@ function exhaustiveChecks(x: number | string | L | R): string {
 >         : ^^^^^^^^
 >x.toString(2) : string
 >              : ^^^^^^
->x.toString : (radix?: number | undefined) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -733,7 +733,7 @@ function exhaustiveChecks(x: number | string | L | R): string {
 
 function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
 >exhaustiveChecksGenerics : <T extends string | number | R | L>(x: T) => string
->                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^      
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^      
 >x : T
 >  : ^
 
@@ -748,12 +748,12 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 >         : ^^^^^^^^
 >x.toString(2) : string
 >              : ^^^^^^
->x.toString : (radix?: number | undefined) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.toString : (radix?: number) => string
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->toString : (radix?: number | undefined) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -795,7 +795,7 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 
 function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^     ^^^^^                         
+>                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^     ^^^^^                         
 >xy : X | Y
 >   : ^^^^^
 
@@ -837,7 +837,7 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 >assertNever(xy) : never
 >                : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >xy : never
 >   : ^^^^^
     }
@@ -845,7 +845,7 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 >multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^                                     
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^     ^^^^^                                     
 >xy : X | Y
 >   : ^^^^^
 
@@ -887,7 +887,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
 function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->                          : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^     ^^^^^                         
+>                          : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^     ^^^^^                         
 >xy : X | Y
 >   : ^^^^^
 
@@ -929,7 +929,7 @@ function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, str
 
 function switchOrdering(x: string | number | boolean) {
 >switchOrdering : (x: string | number | boolean) => string | number | boolean
->               : ^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -945,7 +945,7 @@ function switchOrdering(x: string | number | boolean) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -955,7 +955,7 @@ function switchOrdering(x: string | number | boolean) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -965,7 +965,7 @@ function switchOrdering(x: string | number | boolean) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -975,7 +975,7 @@ function switchOrdering(x: string | number | boolean) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
     }
@@ -983,13 +983,13 @@ function switchOrdering(x: string | number | boolean) {
 
 function switchOrderingWithDefault(x: string | number | boolean) {
 >switchOrderingWithDefault : (x: string | number | boolean) => string | number | boolean
->                          : ^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function local(y: string | number | boolean) {
 >local : (y: string | number | boolean) => string | number | boolean
->      : ^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1015,7 +1015,7 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 >local(x) : string | number | boolean
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >local : (y: string | number | boolean) => string | number | boolean
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1025,7 +1025,7 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1035,7 +1035,7 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
     }
@@ -1043,7 +1043,7 @@ function switchOrderingWithDefault(x: string | number | boolean) {
 
 function fallThroughTest(x: string | number | boolean | object) {
 >fallThroughTest : (x: string | number | boolean | object) => void
->                : ^^^^                                  ^^^^^^^^^
+>                : ^ ^^                                  ^^^^^^^^^
 >x : string | number | boolean | object
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1061,7 +1061,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1073,7 +1073,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 >assertStringOrNumber(x) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >assertStringOrNumber : (x: string | number) => string | number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -1083,7 +1083,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 >assertObject(x) : object
 >                : ^^^^^^
 >assertObject : (x: object) => object
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -1099,7 +1099,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 >assertBooleanOrObject(x) : boolean | object
 >                         : ^^^^^^^^^^^^^^^^
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1109,7 +1109,7 @@ function fallThroughTest(x: string | number | boolean | object) {
 
 function unknownNarrowing(x: unknown) {
 >unknownNarrowing : (x: unknown) => void
->                 : ^^^^       ^^^^^^^^^
+>                 : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -1125,7 +1125,7 @@ function unknownNarrowing(x: unknown) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1135,7 +1135,7 @@ function unknownNarrowing(x: unknown) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -1145,7 +1145,7 @@ function unknownNarrowing(x: unknown) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -1155,7 +1155,7 @@ function unknownNarrowing(x: unknown) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -1165,7 +1165,7 @@ function unknownNarrowing(x: unknown) {
 >assertObjectOrNull(x) : object | null
 >                      : ^^^^^^^^^^^^^
 >assertObjectOrNull : (x: object | null) => object | null
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^             ^^^^^^^^^^^^^^^^^^
 >x : object | null
 >  : ^^^^^^^^^^^^^
 
@@ -1175,7 +1175,7 @@ function unknownNarrowing(x: unknown) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -1185,7 +1185,7 @@ function unknownNarrowing(x: unknown) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
     }
@@ -1193,13 +1193,13 @@ function unknownNarrowing(x: unknown) {
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
 
     function assertKeyofS(k1: keyof S) { }
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^       ^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k1 : keyof S
 >   : ^^^^^^^
 
@@ -1215,13 +1215,13 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >assertNumber(k) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & number
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1231,13 +1231,13 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >assertSymbol(k) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : symbol
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & symbol
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1247,13 +1247,13 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >assertString(k) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & string
 >  : ^^^^^^^^^^^^^^^^
     }
@@ -1261,7 +1261,7 @@ function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 
 function narrowingNarrows(x: {} | undefined) {
 >narrowingNarrows : (x: {} | undefined) => void
->                 : ^^^^              ^^^^^^^^^
+>                 : ^ ^^              ^^^^^^^^^
 >x : {} | undefined
 >  : ^^^^^^^^^^^^^^
 
@@ -1277,7 +1277,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1287,7 +1287,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -1297,7 +1297,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -1307,7 +1307,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -1325,7 +1325,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -1335,7 +1335,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
 
@@ -1345,7 +1345,7 @@ function narrowingNarrows(x: {} | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1353,13 +1353,13 @@ function narrowingNarrows(x: {} | undefined) {
 >_y : {}
 >   : ^^
 >x : {}
->  : ^^
+>  :   
     }
 }
 
 function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
->narrowingNarrows2 : (x: true | 3 | 'hello' | undefined) => void
->                  : ^^^^                              ^^^^^^^^^
+>narrowingNarrows2 : (x: true | 3 | "hello" | undefined) => void
+>                  : ^ ^^                              ^^^^^^^^^
 >x : true | 3 | "hello" | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -1377,7 +1377,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : 3
 >  : ^
 
@@ -1387,7 +1387,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : true
 >  : ^^^^
 
@@ -1397,7 +1397,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1407,7 +1407,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1419,7 +1419,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1429,7 +1429,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : "hello"
 >  : ^^^^^^^
 
@@ -1439,7 +1439,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
 
@@ -1449,7 +1449,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -1459,7 +1459,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
     }
@@ -1469,7 +1469,7 @@ function narrowingNarrows2(x: true | 3 | 'hello' | undefined) {
 
 function testUnionWithTempalte(x: Basic) {
 >testUnionWithTempalte : (x: Basic) => void
->                      : ^^^^     ^^^^^^^^^
+>                      : ^ ^^     ^^^^^^^^^
 >x : Basic
 >  : ^^^^^
 
@@ -1485,7 +1485,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1495,7 +1495,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertBoolean(x) : boolean
 >                 : ^^^^^^^
 >assertBoolean : (x: boolean) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 
@@ -1505,7 +1505,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertFunction(x) : Function
 >                  : ^^^^^^^^
 >assertFunction : (x: Function) => Function
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^        ^^^^^^^^^^^^^
 >x : Function
 >  : ^^^^^^^^
 
@@ -1515,7 +1515,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertSymbol(x) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : symbol
 >  : ^^^^^^
 
@@ -1525,7 +1525,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertObject(x) : object
 >                : ^^^^^^
 >assertObject : (x: object) => object
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -1535,7 +1535,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertString(x) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -1545,7 +1545,7 @@ function testUnionWithTempalte(x: Basic) {
 >assertUndefined(x) : undefined
 >                   : ^^^^^^^^^
 >assertUndefined : (x: undefined) => undefined
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^         ^^^^^^^^^^^^^^
 >x : undefined
 >  : ^^^^^^^^^
     }
@@ -1553,14 +1553,14 @@ function testUnionWithTempalte(x: Basic) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 }
 
 function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >fallThroughTestWithTempalte : (x: string | number | boolean | object) => void
->                            : ^^^^                                  ^^^^^^^^^
+>                            : ^ ^^                                  ^^^^^^^^^
 >x : string | number | boolean | object
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1578,7 +1578,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >assertNumber(x) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -1590,7 +1590,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >assertStringOrNumber(x) : string | number
 >                        : ^^^^^^^^^^^^^^^
 >assertStringOrNumber : (x: string | number) => string | number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^               ^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -1600,7 +1600,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >assertObject(x) : object
 >                : ^^^^^^
 >assertObject : (x: object) => object
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 
@@ -1616,7 +1616,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 >assertBooleanOrObject(x) : boolean | object
 >                         : ^^^^^^^^^^^^^^^^
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^
 >x : boolean | object
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1626,13 +1626,13 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
->                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
 
     function assertKeyofS(k1: keyof S) { }
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^       ^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k1 : keyof S
 >   : ^^^^^^^
 
@@ -1648,13 +1648,13 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >assertNumber(k) : number
 >                : ^^^^^^
 >assertNumber : (x: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & number
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1664,13 +1664,13 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >assertSymbol(k) : symbol
 >                : ^^^^^^
 >assertSymbol : (x: symbol) => symbol
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : symbol
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & symbol
 >  : ^^^^^^^^^^^^^^^^
 
@@ -1680,13 +1680,13 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 >assertString(k) : string
 >                : ^^^^^^
 >assertString : (x: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >assertKeyofS(k) : void
 >                : ^^^^
 >assertKeyofS : (k1: keyof S) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^  ^^       ^^^^^^^^^
 >k : keyof S & string
 >  : ^^^^^^^^^^^^^^^^
     }
@@ -1696,7 +1696,7 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
 >multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
->                            : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^                                     
+>                            : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^     ^^^^^                                     
 >xy : X | Y
 >   : ^^^^^
 

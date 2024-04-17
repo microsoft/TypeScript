@@ -368,13 +368,13 @@ class fn5 {
 
     constructor(f: (n: string) => void);
 >f : (n: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >n : string
 >  : ^^^^^^
 
     constructor(f: (n: number) => void);
 >f : (n: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >n : number
 >  : ^^^^^^
 
@@ -388,7 +388,7 @@ new fn5((n) => n.toFixed());
 >fn5 : typeof fn5
 >    : ^^^^^^^^^^
 >(n) => n.toFixed() : (n: string) => any
->                   : ^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.toFixed() : any
@@ -406,17 +406,17 @@ new fn5((n) => n.substr(0));
 >fn5 : typeof fn5
 >    : ^^^^^^^^^^
 >(n) => n.substr(0) : (n: string) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -426,7 +426,7 @@ new fn5((n) => n.blah); // Error
 >fn5 : typeof fn5
 >    : ^^^^^^^^^^
 >(n) => n.blah : (n: string) => any
->              : ^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.blah : any
