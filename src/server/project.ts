@@ -7,6 +7,7 @@ import {
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
+    changeExtension,
     changesAffectModuleResolution,
     clearMap,
     cloneCompilerOptions,
@@ -49,6 +50,7 @@ import {
     getAutomaticTypeDirectiveNames,
     getBaseFileName,
     GetCanonicalFileName,
+    getCommonSourceDirectoryOfConfig,
     getDeclarationEmitOutputFilePathWorker,
     getDefaultCompilerOptions,
     getDefaultLibFileName,
@@ -59,6 +61,7 @@ import {
     getEntrypointsFromPackageJsonInfo,
     getNormalizedAbsolutePath,
     getOrUpdate,
+    getOutputDeclarationFileName,
     GetPackageJsonEntrypointsHost,
     getStringComparer,
     HasInvalidatedLibResolutions,
@@ -78,6 +81,7 @@ import {
     map,
     mapDefined,
     maybeBind,
+    memoize,
     ModuleResolutionCache,
     ModuleResolutionHost,
     noop,
@@ -2513,9 +2517,36 @@ export class AutoImportProviderProject extends Project {
 
         const references = program.getResolvedProjectReferences();
         let referencesAddded = 0;
-        if (references?.length && program.getCompilerOptions().paths) {
+        if (references?.length && hostProject.projectService.getHostPreferences().includeCompletionsForModuleExports) {
             // Add direct referenced projects to rootFiles names
-            references.forEach(ref => referencesAddded += addRootNames(filterEntrypoints(ref?.commandLine.fileNames)));
+            references.forEach(ref => {
+                if (ref?.commandLine.options.outFile) {
+                    referencesAddded += addRootNames(filterEntrypoints([
+                        changeExtension(ref.commandLine.options.outFile, ".d.ts"),
+                    ]));
+                }
+                else if (ref) {
+                    const getCommonSourceDirectory = memoize(() =>
+                        getCommonSourceDirectoryOfConfig(
+                            ref.commandLine,
+                            !hostProject.useCaseSensitiveFileNames(),
+                        )
+                    );
+                    referencesAddded += addRootNames(filterEntrypoints(mapDefined(
+                        ref.commandLine.fileNames,
+                        fileName =>
+                            !isDeclarationFileName(fileName) &&
+                                !fileExtensionIs(fileName, Extension.Json) &&
+                                !program.getSourceFile(fileName) ?
+                                getOutputDeclarationFileName(
+                                    fileName,
+                                    ref.commandLine,
+                                    !hostProject.useCaseSensitiveFileNames(),
+                                    getCommonSourceDirectory,
+                                ) : undefined,
+                    )));
+                }
+            });
         }
 
         if (rootNames?.size) {

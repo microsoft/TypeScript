@@ -186,8 +186,6 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
                 line: 4,
                 offset: 23,
                 prefix: "render",
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
 
@@ -227,8 +225,6 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
                 line: 4,
                 offset: 22,
                 prefix: "rende",
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
 
@@ -352,6 +348,15 @@ function createSetup(files: readonly File[], openFiles: readonly File[], complet
     return () => {
         const host = createServerHost(files);
         const session = new TestSession(host);
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includePackageJsonAutoImports: "auto",
+                    includeCompletionsForModuleExports: true,
+                },
+            },
+        });
         openFilesForSession(openFiles, session);
         const project = ts.firstIterator(session.getProjectService().configuredProjects.values());
         triggerCompletions();
@@ -363,7 +368,6 @@ function createSetup(files: readonly File[], openFiles: readonly File[], complet
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: {
                     ...completionRequestLocation,
-                    includeExternalModuleExports: true,
                     prefix: "foo",
                 },
             });

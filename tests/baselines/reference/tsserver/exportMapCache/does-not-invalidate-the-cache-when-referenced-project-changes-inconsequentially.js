@@ -49,11 +49,39 @@ interface Array<T> { length: number; [n: number]: T; }
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/packages/app/index.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Search path: /packages/app
@@ -123,8 +151,8 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 0 dependencies 1 referenced projects in * ms
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -266,7 +294,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/packages/lib/index.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
@@ -442,10 +470,9 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/packages/app/index.ts",
         "line": 1,
         "offset": 1,
-        "includeExternalModuleExports": true,
         "prefix": "foo"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -523,7 +550,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] response:
@@ -594,10 +621,9 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/packages/app/index.ts",
         "line": 1,
         "offset": 1,
-        "includeExternalModuleExports": true,
         "prefix": "foo"
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *

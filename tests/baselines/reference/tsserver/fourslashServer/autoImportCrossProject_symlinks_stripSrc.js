@@ -586,7 +586,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 3 root files in 1 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
@@ -602,9 +602,7 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 	../dep/src/sub/folder/index.ts
 	  Imported via "./sub/folder" from file '../dep/src/index.ts'
-	  Root file specified for compilation
 	../dep/src/index.ts
-	  Root file specified for compilation
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------

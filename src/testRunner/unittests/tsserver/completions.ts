@@ -28,6 +28,15 @@ describe("unittests:: tsserver:: completions", () => {
 
         const host = createServerHost([aTs, bTs, tsconfig]);
         const session = new TestSession(host);
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includePackageJsonAutoImports: "auto",
+                    includeCompletionsForModuleExports: true,
+                },
+            },
+        });
         openFilesForSession([aTs, bTs], session);
 
         const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
@@ -40,7 +49,6 @@ describe("unittests:: tsserver:: completions", () => {
             command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
                 ...requestLocation,
-                includeExternalModuleExports: true,
                 prefix: "foo",
             },
         }).response as ts.server.protocol.CompletionInfo;
@@ -181,6 +189,16 @@ export interface BrowserRouterProps {
 
         const host = createServerHost(files, { windowsStyleRoot: "c:/" });
         const session = new TestSession({ host, globalTypingsCacheLocation });
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includePackageJsonAutoImports: "auto",
+                    includeCompletionsForModuleExports: true,
+                    includeCompletionsWithInsertText: true,
+                },
+            },
+        });
         openFilesForSession([appFile], session);
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,
@@ -188,8 +206,6 @@ export interface BrowserRouterProps {
                 file: appFile.path,
                 line: 5,
                 offset: 1,
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
         baselineTsserverLogs(
@@ -251,6 +267,8 @@ export interface BrowserRouterProps {
             arguments: {
                 preferences: {
                     includePackageJsonAutoImports: "auto",
+                    includeCompletionsForModuleExports: true,
+                    includeCompletionsWithInsertText: true,
                 },
             },
         });
@@ -261,14 +279,12 @@ export interface BrowserRouterProps {
                 file: "/user/username/projects/app/src/index.ts",
                 line: 1,
                 offset: 1,
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
         baselineTsserverLogs("completions", "in project where there are no imports but has project references setup", session);
     });
 
-    describe("in project reference setup with path mapping sheetal", () => {
+    describe("in project reference setup with path mapping", () => {
         function completions(session: TestSession) {
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
@@ -276,8 +292,6 @@ export interface BrowserRouterProps {
                     file: "/user/username/projects/app/src/index.ts",
                     line: 1,
                     offset: 1,
-                    includeExternalModuleExports: true,
-                    includeInsertTextCompletions: true,
                 },
             });
         }
@@ -365,6 +379,8 @@ ${withExistingImport ? "import { MyClass } from 'shared';" : ""}`,
                     arguments: {
                         preferences: {
                             includePackageJsonAutoImports: "auto",
+                            includeCompletionsForModuleExports: true,
+                            includeCompletionsWithInsertText: true,
                         },
                     },
                 });

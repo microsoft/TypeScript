@@ -59,7 +59,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "configure",
       "arguments": {
         "preferences": {
-          "includePackageJsonAutoImports": "auto"
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
         }
       },
       "seq": 1,
@@ -153,7 +155,7 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 1 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
@@ -350,9 +352,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/user/username/projects/app/src/index.ts",
         "line": 1,
-        "offset": 1,
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "offset": 1
       },
       "seq": 3,
       "type": "request"

@@ -1698,7 +1698,10 @@ export class ProjectService {
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
                     if (!project) return;
 
-                    if (configuredProjectForConfig !== project) {
+                    if (
+                        configuredProjectForConfig !== project &&
+                        this.getHostPreferences().includeCompletionsForModuleExports
+                    ) {
                         const path = this.toPath(configFileName);
                         if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
                             project.markAutoImportProviderAsDirty();
@@ -1777,7 +1780,10 @@ export class ProjectService {
                 const path = this.toPath(canonicalConfigFilePath);
                 project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
                 this.delayUpdateProjectGraph(project);
-                if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                if (
+                    this.getHostPreferences().includeCompletionsForModuleExports &&
+                    find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)
+                ) {
                     project.markAutoImportProviderAsDirty();
                 }
             }

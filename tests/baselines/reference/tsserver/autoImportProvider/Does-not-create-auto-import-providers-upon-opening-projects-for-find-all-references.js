@@ -34,11 +34,39 @@ export class B {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/packages/b/index.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Search path: /packages/b
@@ -287,7 +315,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 1,
         "offset": 13
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 12 in project /packages/b/tsconfig.json

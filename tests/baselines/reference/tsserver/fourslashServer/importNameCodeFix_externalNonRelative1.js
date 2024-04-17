@@ -266,27 +266,21 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-1/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 4 root files in 1 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/utils.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/blah/foo/data.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 	/packages/pkg-2/src/utils.ts Text-1 "export const Pkg2 = {};"
 	/packages/pkg-2/src/index.ts Text-1 "import \"./utils\";"
-	/packages/pkg-2/src/blah/foo/data.ts Text-1 "Pkg2"
 
 
 	../pkg-2/src/utils.ts
 	  Imported via "./utils" from file '../pkg-2/src/index.ts'
-	  Root file specified for compilation
 	../pkg-2/src/index.ts
-	  Root file specified for compilation
-	  Root file specified for compilation
-	../pkg-2/src/blah/foo/data.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -315,7 +309,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -339,8 +333,6 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/pkg-1/tsconfig.json: *new*
   {"pollingInterval":2000}
-/packages/pkg-2/src/blah/foo/data.ts: *new*
-  {"pollingInterval":500}
 /packages/pkg-2/src/index.ts: *new*
   {"pollingInterval":500}
 /packages/pkg-2/src/package.json: *new*
@@ -390,10 +382,6 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
-/packages/pkg-2/src/blah/foo/data.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /packages/pkg-2/src/index.ts *new*
     version: Text-1
     containingProjects: 1
@@ -581,8 +569,6 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/pkg-1/tsconfig.json:
   {"pollingInterval":2000}
-/packages/pkg-2/src/blah/foo/data.ts:
-  {"pollingInterval":500}
 /packages/pkg-2/src/index.ts:
   {"pollingInterval":500}
 /packages/pkg-2/src/package.json:
@@ -650,10 +636,6 @@ ScriptInfos::
     version: SVC-1-1 *changed*
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
-/packages/pkg-2/src/blah/foo/data.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /packages/pkg-2/src/index.ts
     version: Text-1
     containingProjects: 1
@@ -702,10 +684,6 @@ ScriptInfos::
     version: SVC-1-2 *changed*
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
-/packages/pkg-2/src/blah/foo/data.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
 /packages/pkg-2/src/index.ts
     version: Text-1
     containingProjects: 1
@@ -728,7 +706,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/pkg-2/src/blah/foo/data.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Search path: /packages/pkg-2/src/blah/foo
 Info seq  [hh:mm:ss:mss] For info: /packages/pkg-2/src/blah/foo/data.ts :: Config file name: /packages/pkg-2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/pkg-2/tsconfig.json
@@ -752,7 +729,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/packages/pkg-2/src/utils.ts Text-1 "export const Pkg2 = {};"
 	/packages/pkg-2/src/index.ts Text-1 "import \"./utils\";"
-	/packages/pkg-2/src/blah/foo/data.ts Text-1 "Pkg2"
+	/packages/pkg-2/src/blah/foo/data.ts SVC-1-0 "Pkg2"
 
 
 	../../lib.d.ts
@@ -798,7 +775,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (3)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/packages/pkg-2/tsconfig.json' (Configured)
@@ -815,7 +792,7 @@ Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-1/src/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-1/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /packages/pkg-2/src/blah/foo/data.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/autoImportProviderProject1*,/packages/pkg-2/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /packages/pkg-2/tsconfig.json
 After Request
 watchedFiles::
 /lib.d.ts:
@@ -841,10 +818,6 @@ watchedFiles::
   {"pollingInterval":2000}
 /tsconfig.base.json:
   {"pollingInterval":2000}
-
-watchedFiles *deleted*::
-/packages/pkg-2/src/blah/foo/data.ts:
-  {"pollingInterval":500}
 
 watchedDirectoriesRecursive::
 /packages/pkg-1:
@@ -893,12 +866,10 @@ ScriptInfos::
     version: SVC-1-2
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
-/packages/pkg-2/src/blah/foo/data.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 2 *changed*
-        /dev/null/autoImportProviderProject1*
-        /packages/pkg-2/tsconfig.json *default* *new*
+/packages/pkg-2/src/blah/foo/data.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /packages/pkg-2/tsconfig.json *default*
 /packages/pkg-2/src/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -1089,10 +1060,9 @@ Info seq  [hh:mm:ss:mss] request:
     }
 After Request
 Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
     projectProgramVersion: 1
-    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1130,9 +1100,8 @@ ScriptInfos::
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
 /packages/pkg-2/src/blah/foo/data.ts (Open) *changed*
-    version: SVC-2-1 *changed*
-    containingProjects: 2
-        /dev/null/autoImportProviderProject1*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
         /packages/pkg-2/tsconfig.json *default*
 /packages/pkg-2/src/index.ts
     version: Text-1
@@ -1188,9 +1157,8 @@ ScriptInfos::
     containingProjects: 1
         /packages/pkg-1/tsconfig.json *default*
 /packages/pkg-2/src/blah/foo/data.ts (Open) *changed*
-    version: SVC-2-2 *changed*
-    containingProjects: 2
-        /dev/null/autoImportProviderProject1*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
         /packages/pkg-2/tsconfig.json *default*
 /packages/pkg-2/src/index.ts
     version: Text-1
