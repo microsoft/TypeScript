@@ -1506,7 +1506,7 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
         }
     }
 
-    if (cache) {
+    if (cache && !pathContainsNodeModules(containingFile)) {
         // Pre-cache resolutions for all `dependencies` of the `package.json` context of the input file.
         // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
         // should get (re)used.

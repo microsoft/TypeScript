@@ -47,8 +47,6 @@
     "File '/.src/node_modules/ext/other.d.ts' exists - use it as a name resolution result.",
     "File '/.src/node_modules/ext/package.json' exists according to earlier cached lookups.",
     "======== Module name '../other' was successfully resolved to '/.src/node_modules/ext/other.d.ts' with Package ID 'ext/other.d.ts@1.0.0'. ========",
-    "File '/.src/node_modules/ext/ts3.1/package.json' does not exist according to earlier cached lookups.",
-    "File '/.src/node_modules/ext/package.json' exists according to earlier cached lookups.",
     "File '/.src/node_modules/ext/package.json' exists according to earlier cached lookups.",
     "File '/.ts/package.json' does not exist.",
     "File '/package.json' does not exist according to earlier cached lookups.",

@@ -25,8 +25,6 @@
     "Exiting conditional exports.",
     "Resolving real path for '/node_modules/acorn-walk/dist/walk.d.ts', result '/node_modules/acorn-walk/dist/walk.d.ts'.",
     "======== Module name 'acorn-walk' was successfully resolved to '/node_modules/acorn-walk/dist/walk.d.ts' with Package ID 'acorn-walk/dist/walk.d.ts@8.2.0'. ========",
-    "File '/node_modules/acorn-walk/dist/package.json' does not exist according to earlier cached lookups.",
-    "File '/node_modules/acorn-walk/package.json' exists according to earlier cached lookups.",
     "File '/package.json' does not exist.",
     "======== Resolving module 'acorn-walk' from '/index.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
