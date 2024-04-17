@@ -1,4 +1,7 @@
-import { Node, isToken } from "../_namespaces/ts";
+import {
+    isToken,
+    Node,
+} from "../_namespaces/ts";
 
 const nodeChildren = new WeakMap<Node, readonly Node[] | undefined>();
 
