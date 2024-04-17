@@ -50,6 +50,7 @@ export * from "../codefixes/fixUnreachableCode";
 export * from "../codefixes/fixUnusedLabel";
 export * from "../codefixes/fixJSDocTypes";
 export * from "../codefixes/fixMissingCallParentheses";
+export * from "../codefixes/fixMissingTypeAnnotationOnExports";
 export * from "../codefixes/fixAwaitInSyncFunction";
 export * from "../codefixes/fixPropertyOverrideAccessor";
 export * from "../codefixes/inferFromUsage";
