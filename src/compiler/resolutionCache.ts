@@ -32,7 +32,6 @@ import {
     getPathFromPathComponents,
     HasInvalidatedLibResolutions,
     HasInvalidatedResolutions,
-    hasTrailingDirectorySeparator,
     ignoredPaths,
     inferredTypesContainingFile,
     isDiskPathRoot,
@@ -489,11 +488,6 @@ export function getRootDirectoryOfResolutionCache(rootDirForResolution: string, 
     return !isDiskPathRoot(normalized) ?
         removeTrailingDirectorySeparator(normalized) :
         normalized;
-}
-
-/** @internal */
-export function getRootPathSplitLength(rootPath: Path) {
-    return rootPath.split(directorySeparator).length - (hasTrailingDirectorySeparator(rootPath) ? 1 : 0);
 }
 
 function getModuleResolutionHost(resolutionHost: ResolutionCacheHost) {

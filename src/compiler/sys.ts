@@ -564,7 +564,7 @@ export const ignoredPaths = ["/node_modules/.", "/.git", "/.#"];
 
 let curSysLog: (s: string) => void = noop;
 
-/** @internal */
+/** @internal @knipignore */
 export function sysLog(s: string) {
     return curSysLog(s);
 }
@@ -2004,7 +2004,7 @@ export let sys: System = (() => {
     return sys!;
 })();
 
-/** @internal */
+/** @internal @knipignore */
 export function setSys(s: System) {
     sys = s;
 }

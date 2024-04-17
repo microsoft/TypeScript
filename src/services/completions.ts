@@ -395,7 +395,7 @@ import { StringCompletions } from "./_namespaces/ts.Completions";
 // Exported only for tests
 /** @internal */
 export const moduleSpecifierResolutionLimit = 100;
-/** @internal */
+/** @internal @knipignore */
 export const moduleSpecifierResolutionCacheAttemptLimit = 1000;
 
 /** @internal */

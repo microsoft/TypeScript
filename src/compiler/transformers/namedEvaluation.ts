@@ -52,9 +52,8 @@ import {
 
 /**
  * Gets a string literal to use as the assigned name of an anonymous class or function declaration.
- * @internal
  */
-export function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
+function getAssignedNameOfIdentifier(factory: NodeFactory, name: Identifier, expression: WrappedExpression<AnonymousFunctionDefinition>): StringLiteral {
     const original = getOriginalNode(skipOuterExpressions(expression));
     if (
         (isClassDeclaration(original) || isFunctionDeclaration(original)) &&
@@ -98,9 +97,8 @@ function getAssignedNameOfPropertyName(context: TransformationContext, name: Pro
  * side effects.
  * @param thisExpression Overrides the expression to use for the actual `this` reference. This can be used to provide an
  * expression that has already had its `EmitFlags` set or may have been tracked to prevent substitution.
- * @internal
  */
-export function createClassNamedEvaluationHelperBlock(context: TransformationContext, assignedName: Expression, thisExpression: Expression = context.factory.createThis()): ClassNamedEvaluationHelperBlock {
+function createClassNamedEvaluationHelperBlock(context: TransformationContext, assignedName: Expression, thisExpression: Expression = context.factory.createThis()): ClassNamedEvaluationHelperBlock {
     // produces:
     //
     //  static { __setFunctionName(this, "C"); }

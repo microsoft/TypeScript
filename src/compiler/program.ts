@@ -865,7 +865,7 @@ export function getModeForFileReference(ref: FileReference | string, containingF
  * should be the options of the referenced project, not the referencing project.
  */
 export function getModeForResolutionAtIndex(file: SourceFile, index: number, compilerOptions: CompilerOptions): ResolutionMode;
-/** @internal */
+/** @internal @knipignore */
 // eslint-disable-next-line @typescript-eslint/unified-signatures
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions: CompilerOptions): ResolutionMode;
 export function getModeForResolutionAtIndex(file: SourceFileImportsList, index: number, compilerOptions?: CompilerOptions): ResolutionMode {
@@ -1401,8 +1401,7 @@ export function getImpliedNodeFormatForFileWorker(
     }
 }
 
-/** @internal */
-export const plainJSErrors = new Set<number>([
+const plainJSErrors = new Set<number>([
     // binder errors
     Diagnostics.Cannot_redeclare_block_scoped_variable_0.code,
     Diagnostics.A_module_cannot_have_multiple_default_exports.code,

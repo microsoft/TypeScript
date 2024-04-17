@@ -497,8 +497,7 @@ export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
     return buildInfoExtensionLess + Extension.TsBuildInfo;
 }
 
-/** @internal */
-export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
     const outPath = options.outFile!;
     const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
     const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);

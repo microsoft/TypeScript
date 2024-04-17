@@ -1408,8 +1408,7 @@ export function computeSignatureWithDiagnostics(
     }
 }
 
-/** @internal */
-export function computeSignature(text: string, host: HostForComputeHash, data?: WriteFileCallbackData) {
+function computeSignature(text: string, host: HostForComputeHash, data?: WriteFileCallbackData) {
     return (host.createHash ?? generateDjb2Hash)(getTextHandlingSourceMapForSignature(text, data));
 }
 
