@@ -42,10 +42,10 @@ module.exports = createRule({
                     isExportedCache.set(node, true);
                     return true;
                 }
+                isExportedCache.set(current, false);
                 current = current.parent;
             }
 
-            isExportedCache.set(node, false);
             return false;
         }
 
