@@ -116,6 +116,11 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, Declaration.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/myproject/types/package.json' does not exist.
 File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
@@ -149,6 +154,12 @@ File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not 
 File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
+File '/home/src/projects/myproject/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/myproject/root2/other/sometype2/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/myproject/root2/other/package.json' does not exist.
 File '/home/src/projects/myproject/root2/package.json' does not exist.
