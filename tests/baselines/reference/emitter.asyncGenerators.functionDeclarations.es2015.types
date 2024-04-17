@@ -31,8 +31,10 @@ async function * f4() {
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* [1];
->x : any
->yield* [1] : any
+>x : void
+>  : ^^^^
+>yield* [1] : void
+>           : ^^^^
 >[1] : number[]
 >    : ^^^^^^^^
 >1 : 1
