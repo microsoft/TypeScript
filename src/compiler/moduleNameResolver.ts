@@ -1516,11 +1516,12 @@ export function resolveModuleName(moduleName: string, containingFile: string, co
             packageJson.dependenciesPrecached = true;
             const deps = packageJson.contents.packageJsonContent.dependencies;
             if (deps && typeof deps === "object") {
+                const jsonDir = packageJson.packageDirectory;
                 const toResolve = getOwnKeys(deps as MapLike<unknown>);
                 for (const depName of toResolve) {
-                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, resolutionMode, redirectedReference).get(containingDirectory);
+                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, resolutionMode, redirectedReference).get(jsonDir);
                     if (cached) continue;
-                    void resolveModuleName(depName, containingFile, compilerOptions, host, cache, redirectedReference, resolutionMode);
+                    void resolveModuleName(depName, combinePaths(jsonDir, "package.json"), compilerOptions, host, cache, redirectedReference, resolutionMode);
                 }
             }
         }
