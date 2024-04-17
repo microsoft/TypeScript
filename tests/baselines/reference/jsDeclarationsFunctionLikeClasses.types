@@ -68,7 +68,7 @@ import {Point} from "./source";
  */
 export function magnitude(p) {
 >magnitude : (p: Point) => number
->          : ^^^^     ^^^^^^^^^^^
+>          : ^ ^^     ^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 
@@ -76,11 +76,11 @@ export function magnitude(p) {
 >Math.sqrt(p.x ** 2 + p.y ** 2) : number
 >                               : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >p.x ** 2 + p.y ** 2 : number
 >                    : ^^^^^^
 >p.x ** 2 : number

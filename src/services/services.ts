@@ -329,7 +329,11 @@ class ServicesSymbolObjectInternals extends SymbolObjectInternals {
 
     override getJsDocTags(symbol: SymbolObject, checker?: TypeChecker): JSDocTagInfo[] {
         const extra = ensureSymbolExtraFields(symbol);
-        return extra.tags ??= getJsDocTagsOfDeclarations(symbol.declarations, checker);
+        if (!extra.tags) {
+            extra.tags = emptyArray; // Set temporarily to avoid an infinite loop finding inherited tags
+            extra.tags = getJsDocTagsOfDeclarations(symbol.declarations, checker);
+        }
+        return extra.tags;
     }
 
     override getContextualJsDocTags(symbol: SymbolObject, context: Node | undefined, checker: TypeChecker | undefined): JSDocTagInfo[] {
@@ -402,7 +406,7 @@ function getJsDocTagsOfDeclarations(declarations: Declaration[] | undefined, che
                     if (declaration.kind === SyntaxKind.GetAccessor || declaration.kind === SyntaxKind.SetAccessor) {
                         return symbol.getContextualJsDocTags(declaration, checker);
                     }
-                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags() : undefined;
+                    return symbol.declarations?.length === 1 ? symbol.getJsDocTags(checker) : undefined;
                 }
             });
             if (inheritedTags) {

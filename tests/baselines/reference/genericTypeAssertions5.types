@@ -33,7 +33,7 @@ var c: C;
 
 function foo2<T extends A>(x: T) {
 >foo2 : <T extends A>(x: T) => void
->     : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

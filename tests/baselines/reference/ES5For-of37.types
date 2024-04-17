@@ -54,11 +54,11 @@ for (const i of [0, 1, 2, 3, 4]) {
 >console.log(i) : void
 >               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >i : number
 >  : ^^^^^^
 
@@ -69,11 +69,11 @@ for (const i of [0, 1, 2, 3, 4]) {
 >console.log('E %s %s', i, err) : void
 >                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'E %s %s' : "E %s %s"
 >          : ^^^^^^^^^
 >i : number

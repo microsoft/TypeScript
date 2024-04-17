@@ -67,11 +67,11 @@ type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 
 type TM1 = Methods<{ foo(): number, bar(x: string): boolean, baz: string | number }>;
 >TM1 : Methods<{ foo(): number; bar(x: string): boolean; baz: string | number; }>
->    : ^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^       ^^^^^^^               ^^^^
+>    : ^^^^^^^^^^^^^^^^^      ^^^^^^ ^^      ^^^       ^^^^^^^               ^^^^
 >foo : () => number
 >    : ^^^^^^      
 >bar : (x: string) => boolean
->    : ^^^^      ^^^^^       
+>    : ^ ^^      ^^^^^       
 >x : string
 >  : ^^^^^^
 >baz : string | number
@@ -334,7 +334,7 @@ interface M {
 
 function f(x: KeysExtendedBy<M, number>) {
 >f : (x: KeysExtendedBy<M, number>) => "b"
->  : ^^^^                         ^^^^^^^^
+>  : ^ ^^                         ^^^^^^^^
 >x : "b"
 >  : ^^^
 
@@ -346,8 +346,8 @@ function f(x: KeysExtendedBy<M, number>) {
 f("a");  // Error, should allow only "b"
 >f("a") : "b"
 >       : ^^^
->f : (x: "b") => "b"
->  : ^^^^^^^^^^^^^^^
+>f : (x: KeysExtendedBy<M, number>) => "b"
+>  : ^ ^^                         ^^^^^^^^
 >"a" : "a"
 >    : ^^^
 

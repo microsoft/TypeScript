@@ -5,7 +5,7 @@
 
 function foo<T>(x: T): T { return x }
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -21,89 +21,89 @@ class Bar<T> { constructor(public x: T) { } }
 
 const WhatFoo = foo<?>;
 >WhatFoo : (x: any) => any
->        : ^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^
 >foo<?> : (x: any) => any
->       : ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 const HuhFoo = foo<string?>;
 >HuhFoo : (x: string | null) => string | null
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<string?> : (x: string | null) => string | null
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 const NopeFoo = foo<?string>;
 >NopeFoo : (x: string | null) => string | null
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<?string> : (x: string | null) => string | null
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 const ComeOnFoo = foo<?string?>;
 >ComeOnFoo : (x: string | null) => string | null
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo<?string?> : (x: string | null) => string | null
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 type TWhatFoo = typeof foo<?>;
 >TWhatFoo : typeof foo<unknown>
 >         :            ^^^^^^^ 
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 type THuhFoo = typeof foo<string?>;
 >THuhFoo : typeof foo<string | null>
 >        :                  ^^^^^^^ 
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 type TNopeFoo = typeof foo<?string>;
 >TNopeFoo : typeof foo<string | null>
 >         :                  ^^^^^^^ 
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 type TComeOnFoo = typeof foo<?string?>;
 >TComeOnFoo : typeof foo<(string | null) | null>
 >           :            ^      ^^^^^^^^^^^^^^^ 
 >foo : <T>(x: T) => T
->    : ^^^^^^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^
 
 const WhatBar = Bar<?>;
 >WhatBar : { new (x: any): Bar<any>; prototype: Bar<any>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar<?> : { new (x: any): Bar<any>; prototype: Bar<any>; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 const HuhBar = Bar<string?>;
 >HuhBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar<string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 const NopeBar = Bar<?string>;
 >NopeBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar<?string> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 
 const ComeOnBar = Bar<?string?>;
 >ComeOnBar : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar<?string?> : { new (x: string | null): Bar<string | null>; prototype: Bar<any>; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : typeof Bar
 >    : ^^^^^^^^^^
 

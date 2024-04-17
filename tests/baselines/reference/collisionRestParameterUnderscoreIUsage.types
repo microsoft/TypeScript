@@ -3,9 +3,9 @@
 === collisionRestParameterUnderscoreIUsage.ts ===
 declare var console: { log(msg?: string): void; };
 >console : { log(msg?: string): void; }
->        : ^^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^   ^^^      ^^^    ^^^
 >log : (msg?: string) => void
->    : ^^^^^^^      ^^^^^    
+>    : ^   ^^^      ^^^^^    
 >msg : string
 >    : ^^^^^^
 
@@ -27,11 +27,11 @@ class Foo {
 >console.log(_i) : void
 >                : ^^^^
 >console.log : (msg?: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^^      ^^^^^^^^^
 >console : { log(msg?: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^^      ^^^^^^^^^^
 >log : (msg?: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^^      ^^^^^^^^^
 >_i : string
 >   : ^^^^^^
     }

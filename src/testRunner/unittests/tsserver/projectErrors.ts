@@ -17,6 +17,7 @@ import {
     File,
     Folder,
     libFile,
+    TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: projectErrors::", () => {
@@ -806,5 +807,29 @@ describe("unittests:: tsserver:: projectErrors:: with npm install when", () => {
 
     it("timeout occurs after installation", () => {
         verifyNpmInstall(/*timeoutDuringPartialInstallation*/ false);
+    });
+});
+
+describe("unittests:: tsserver:: projectErrors:: with file rename on wsl2::", () => {
+    it("rename a file", () => {
+        const host = createServerHost({
+            "/home/username/project/src/a.ts": `export const a = 10;`,
+            "/home/username/project/src/b.ts": `export const b = 10;`,
+            "/home/username/project/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    strictNullChecks: true,
+                },
+                include: ["src/**/*.ts"],
+            }),
+            [libFile.path]: libFile.content,
+        }, { osFlavor: TestServerHostOsFlavor.Linux });
+        const session = new TestSession(host);
+        openFilesForSession([{ file: "/home/username/project/src/a.ts", projectRootPath: "/home/username/project" }], session);
+        host.renameFile("/home/username/project/src/b.ts", "/home/username/project/src/c.ts");
+        openFilesForSession([{ file: "/home/username/project/src/c.ts", content: `export const b = 10;`, projectRootPath: "/home/username/project" }], session);
+        host.runQueuedTimeoutCallbacks(); // Updates the project that c.ts now exists on the disk and schedules one more update
+        host.runQueuedTimeoutCallbacks();
+        closeFilesForSession(["/home/username/project/src/c.ts"], session);
+        baselineTsserverLogs("projectErrors", "file rename on wsl2", session);
     });
 });

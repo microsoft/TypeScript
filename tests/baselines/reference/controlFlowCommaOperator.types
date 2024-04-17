@@ -3,7 +3,7 @@
 === controlFlowCommaOperator.ts ===
 function f(x: string | number | boolean) {
 >f : (x: string | number | boolean) => void
->  : ^^^^                         ^^^^^^^^^
+>  : ^ ^^                         ^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

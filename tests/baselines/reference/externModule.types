@@ -99,13 +99,13 @@ declare module {
 	    
 	    static parse(string: string): number;
 >parse : (string: string) => number
->      : ^^^^^^^^^      ^^^^^      
+>      : ^      ^^      ^^^^^      
 >string : string
 >       : ^^^^^^
 
 	    static UTC(year: number, month: number): number;
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^      ^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^      ^^     ^^      ^^^      ^^^    ^^      ^^     ^^      ^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^^^^^^^^^^
 >year : number
 >     : ^^^^^^
 >month : number
@@ -113,7 +113,7 @@ declare module {
 
 	    static UTC(year: number, month: number, date: number): number;
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^^^^^^^^^^
 >year : number
 >     : ^^^^^^
 >month : number
@@ -123,7 +123,7 @@ declare module {
 
 	    static UTC(year: number, month: number, date: number, hours: number): number;
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^      ^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^^^^^^^^^^
 >year : number
 >     : ^^^^^^
 >month : number
@@ -135,7 +135,7 @@ declare module {
 
 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number): number;
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^      ^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^^^^^^^^^^
 >year : number
 >     : ^^^^^^
 >month : number
@@ -149,7 +149,7 @@ declare module {
 
 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number;
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^      ^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^^^^^^^^^^
 >year : number
 >     : ^^^^^^
 >month : number
@@ -165,7 +165,7 @@ declare module {
 
 	    static UTC(year: number, month: number, date: number, hours: number, minutes: number, seconds: number,
 >UTC : { (year: number, month: number): number; (year: number, month: number, date: number): number; (year: number, month: number, date: number, hours: number): number; (year: number, month: number, date: number, hours: number, minutes: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number): number; (year: number, month: number, date: number, hours: number, minutes: number, seconds: number, ms: number): number; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^      ^^^      ^^^
+>    : ^^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^    ^^      ^^     ^^      ^^       ^^      ^^       ^^      ^^  ^^      ^^^      ^^^
 >year : number
 >     : ^^^^^^
 >month : number

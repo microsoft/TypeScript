@@ -7,7 +7,7 @@ class X {
 
     public f(a: Array) { }
 >f : (a: any) => void
->  : ^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 }

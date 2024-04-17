@@ -20,8 +20,8 @@ export const kSymbol = Symbol("my-symbol");
  * @param {import('./a').WithSymbol} value 
  */
 export function b(value) {
->b : (value: import('./a').WithSymbol) => import('./a').WithSymbol
->  : ^^^^^^^^                        ^^^^^                        
+>b : (value: import("./a").WithSymbol) => import("./a").WithSymbol
+>  : ^     ^^                        ^^^^^                        
 >value : import("a").WithSymbol
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 

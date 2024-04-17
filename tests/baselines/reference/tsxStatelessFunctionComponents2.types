@@ -7,7 +7,7 @@ import React = require('react');
 
 function Greet(x: {name?: string}) {
 >Greet : (x: { name?: string; }) => JSX.Element
->      : ^^^^                  ^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^^^^^^
 >x : { name?: string; }
 >  : ^^^^^^^^^      ^^^
 >name : string
@@ -60,7 +60,7 @@ let a = <Greet />;
 ><Greet /> : JSX.Element
 >          : ^^^^^^^^^^^
 >Greet : (x: { name?: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^^^^^^
 
 // OK - always valid to specify 'key'
 let b = <Greet key="k" />;
@@ -69,7 +69,7 @@ let b = <Greet key="k" />;
 ><Greet key="k" /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >Greet : (x: { name?: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^^^^^^
 >key : string
 >    : ^^^^^^
 
@@ -80,7 +80,7 @@ let c = <Greet ref="myRef" />;
 ><Greet ref="myRef" /> : JSX.Element
 >                      : ^^^^^^^^^^^
 >Greet : (x: { name?: string; }) => JSX.Element
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^                  ^^^^^^^^^^^^^^^^
 >ref : string
 >    : ^^^^^^
 
@@ -94,15 +94,15 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >BigGreeter : typeof BigGreeter
 >           : ^^^^^^^^^^^^^^^^^
 >ref : (x: BigGreeter) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x => x.greeting.substr(10) : (x: BigGreeter) => string
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^
 >x : BigGreeter
 >  : ^^^^^^^^^^
 >x.greeting.substr(10) : string
 >                      : ^^^^^^
 >x.greeting.substr : (from: number, length?: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >x.greeting : string
 >           : ^^^^^^
 >x : BigGreeter
@@ -110,7 +110,7 @@ let d = <BigGreeter ref={x => x.greeting.substr(10)} />;
 >greeting : string
 >         : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 
@@ -123,9 +123,9 @@ let e = <BigGreeter ref={x => x.greeting.subtr(10)} />;
 >BigGreeter : typeof BigGreeter
 >           : ^^^^^^^^^^^^^^^^^
 >ref : (x: BigGreeter) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^
 >x => x.greeting.subtr(10) : (x: BigGreeter) => any
->                          : ^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : BigGreeter
 >  : ^^^^^^^^^^
 >x.greeting.subtr(10) : any
@@ -152,9 +152,9 @@ let f = <BigGreeter ref={x => x.notARealProperty} />;
 >BigGreeter : typeof BigGreeter
 >           : ^^^^^^^^^^^^^^^^^
 >ref : (x: BigGreeter) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^
 >x => x.notARealProperty : (x: BigGreeter) => any
->                        : ^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : BigGreeter
 >  : ^^^^^^^^^^
 >x.notARealProperty : any
@@ -186,9 +186,9 @@ let h = <div ref={x => x.innerText} />;
 >div : any
 >    : ^^^
 >ref : (x: HTMLDivElement) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => x.innerText : (x: HTMLDivElement) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : HTMLDivElement
 >  : ^^^^^^^^^^^^^^
 >x.innerText : string
@@ -207,9 +207,9 @@ let i = <div ref={x => x.propertyNotOnHtmlDivElement} />;
 >div : any
 >    : ^^^
 >ref : (x: HTMLDivElement) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x => x.propertyNotOnHtmlDivElement : (x: HTMLDivElement) => any
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : HTMLDivElement
 >  : ^^^^^^^^^^^^^^
 >x.propertyNotOnHtmlDivElement : any

@@ -33,7 +33,7 @@ type P = {
 
 function f1({ enum: _enum, ...rest }: P) {
 >f1 : ({ enum: _enum, ...rest }: P) => { function: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^                        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enum : any
 >     : ^^^
 >_enum : boolean
@@ -48,7 +48,7 @@ function f1({ enum: _enum, ...rest }: P) {
 
 function f2({ function: _function, ...rest }: P) {
 >f2 : ({ function: _function, ...rest }: P) => { enum: boolean; abstract: boolean; async: boolean; await: boolean; one: boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^                                ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function : any
 >         : ^^^
 >_function : boolean
@@ -63,7 +63,7 @@ function f2({ function: _function, ...rest }: P) {
 
 function f3({ abstract: _abstract, ...rest }: P) {
 >f3 : ({ abstract: _abstract, ...rest }: P) => { enum: boolean; function: boolean; async: boolean; await: boolean; one: boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^                                ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >abstract : any
 >         : ^^^
 >_abstract : boolean
@@ -78,7 +78,7 @@ function f3({ abstract: _abstract, ...rest }: P) {
 
 function f4({ async: _async, ...rest }: P) {
 >f4 : ({ async: _async, ...rest }: P) => { enum: boolean; function: boolean; abstract: boolean; await: boolean; one: boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^                          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async : any
 >      : ^^^
 >_async : boolean
@@ -93,7 +93,7 @@ function f4({ async: _async, ...rest }: P) {
 
 function f5({ await: _await, ...rest }: P) {
 >f5 : ({ await: _await, ...rest }: P) => { enum: boolean; function: boolean; abstract: boolean; async: boolean; one: boolean; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^                          ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
 >      : ^^^
 >_await : boolean

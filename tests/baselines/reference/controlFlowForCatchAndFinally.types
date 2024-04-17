@@ -21,7 +21,7 @@ declare function test1(): Promise<Browser>;
 
 declare function test2(obj: Browser): Promise<Page>;
 >test2 : (obj: Browser) => Promise<Page>
->      : ^^^^^^       ^^^^^             
+>      : ^   ^^       ^^^^^             
 >obj : Browser
 >    : ^^^^^^^
 
@@ -64,7 +64,7 @@ async function test(): Promise<string> {
 >test2(browser) : Promise<Page>
 >               : ^^^^^^^^^^^^^
 >test2 : (obj: Browser) => Promise<Page>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^       ^^^^^^^^^^^^^^^^^^
 >browser : Browser
 >        : ^^^^^^^
 

@@ -1768,18 +1768,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             const ch = codePointAt(text, pos);
             if (pos === 0) {
-                // If a file isn't valid text at all, it will usually be apparent
-                // in the first few characters because UTF-8 decode will fail and produce U+FFFD.
-                // If that happens, just issue one error and refuse to try to scan further;
-                // this is likely a binary file that cannot be parsed.
-                //
-                // It's safe to slice the text; U+FFFD can only be produced by an invalid decode,
-                // so even if we cut a surrogate pair in half, they wouldn't be U+FFFD.
-                if (text.slice(0, 256).includes("\uFFFD")) {
-                    error(Diagnostics.File_appears_to_be_binary);
-                    pos = end;
-                    return token = SyntaxKind.NonTextFileMarkerTrivia;
-                }
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
                     pos = scanShebangTrivia(text, pos);
@@ -2242,6 +2230,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         error(Diagnostics.Invalid_character, pos++, charSize(ch));
                     }
                     return token = SyntaxKind.PrivateIdentifier;
+                case CharacterCodes.replacementCharacter:
+                    error(Diagnostics.File_appears_to_be_binary, 0, 0);
+                    pos = end;
+                    return token = SyntaxKind.NonTextFileMarkerTrivia;
                 default:
                     const identifierKind = scanIdentifier(ch, languageVersion);
                     if (identifierKind) {
@@ -2656,6 +2648,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return token = SyntaxKind.OpenBracketToken;
             case CharacterCodes.closeBracket:
                 return token = SyntaxKind.CloseBracketToken;
+            case CharacterCodes.openParen:
+                return token = SyntaxKind.OpenParenToken;
+            case CharacterCodes.closeParen:
+                return token = SyntaxKind.CloseParenToken;
             case CharacterCodes.lessThan:
                 return token = SyntaxKind.LessThanToken;
             case CharacterCodes.greaterThan:
@@ -2809,13 +2805,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 }
 
-/** @internal */
 function codePointAt(s: string, i: number): number {
     // TODO(jakebailey): this is wrong and should have ?? 0; but all users are okay with it
     return s.codePointAt(i)!;
 }
 
-/** @internal */
 function charSize(ch: number) {
     if (ch >= 0x10000) {
         return 2;

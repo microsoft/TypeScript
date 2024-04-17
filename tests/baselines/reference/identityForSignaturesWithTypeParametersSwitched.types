@@ -3,7 +3,7 @@
 === identityForSignaturesWithTypeParametersSwitched.ts ===
 var f: <T, U>(x: T, y: U) => T;
 >f : <T, U>(x: T, y: U) => T
->  : ^ ^^ ^^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -11,7 +11,7 @@ var f: <T, U>(x: T, y: U) => T;
 
 var f: <T, U>(x: U, y: T) => U;
 >f : <T, U>(x: T, y: U) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : U
 >  : ^
 >y : T

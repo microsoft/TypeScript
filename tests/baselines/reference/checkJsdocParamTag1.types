@@ -8,7 +8,7 @@
  */
 function foo(n, s) {}
 >foo : (n?: number | undefined, s?: string) => void
->    : ^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^ ^^^      ^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >s : string
@@ -17,22 +17,22 @@ function foo(n, s) {}
 foo();
 >foo() : void
 >      : ^^^^
->foo : (n?: number, s?: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (n?: number | undefined, s?: string) => void
+>    : ^ ^^^      ^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^
 
 foo(1);
 >foo(1) : void
 >       : ^^^^
->foo : (n?: number, s?: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (n?: number | undefined, s?: string) => void
+>    : ^ ^^^      ^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 
 foo(1, "hi");
 >foo(1, "hi") : void
 >             : ^^^^
->foo : (n?: number, s?: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (n?: number | undefined, s?: string) => void
+>    : ^ ^^^      ^^^^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 >"hi" : "hi"

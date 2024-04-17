@@ -21,13 +21,13 @@ interface Interface<T extends Enum> {
 
 function foo<T extends Enum>(x: Interface<T>) { }
 >foo : <T extends Enum>(x: Interface<T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^            ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^            ^^^^^^^^^
 >x : Interface<T>
 >  : ^^^^^^^^^^^^
 
 function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 >bar : (x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) => void
->    : ^^^^                                              ^^^^^^^^^
+>    : ^ ^^                                              ^^^^^^^^^
 >x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Enum : any
@@ -41,7 +41,7 @@ function bar(x: Interface<Enum.A | Enum.B> | Interface<Enum.C>) {
 >foo(x) : void
 >       : ^^^^
 >foo : <T extends Enum>(x: Interface<T>) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^            ^^^^^^^^^
 >x : Interface<Enum.A | Enum.B> | Interface<Enum.C>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

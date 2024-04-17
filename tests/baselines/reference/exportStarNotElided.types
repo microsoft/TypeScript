@@ -9,30 +9,30 @@ const r: any[] = [];
 
 export function register(data: any) {
 >register : (data: any) => void
->         : ^^^^^^^   ^^^^^^^^^
+>         : ^    ^^   ^^^^^^^^^
 >data : any
 
   r.push(data);
 >r.push(data) : number
 >             : ^^^^^^
 >r.push : (...items: any[]) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^     ^^^^^^^^^^^^^^^^^^
 >r : any[]
 >  : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >data : any
 }
 === data1.ts ===
 import { register } from "./";
 >register : (data: any) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^   ^^^^^^^^^
 
 register("ok");
 >register("ok") : void
 >               : ^^^^
 >register : (data: any) => void
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^   ^^^^^^^^^
 >"ok" : "ok"
 >     : ^^^^
 

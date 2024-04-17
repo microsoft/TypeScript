@@ -39,7 +39,7 @@ export {}; // flag file as module
  */
 function doTheThing(x) {
 >doTheThing : (x: number) => SomeType
->           : ^^^^      ^^^^^        
+>           : ^ ^^      ^^^^^        
 >x : number
 >  : ^^^^^^
 
@@ -75,11 +75,11 @@ module.exports = {
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >{    doTheThing,    ExportedThing,} : { doTheThing: (x: number) => SomeType; ExportedThing: typeof ExportedThing; }
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     doTheThing,
 >doTheThing : (x: number) => SomeType
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^^^
 
     ExportedThing,
 >ExportedThing : typeof ExportedThing

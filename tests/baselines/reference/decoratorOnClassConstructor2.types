@@ -7,7 +7,7 @@ export class base { }
 
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^      ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propertyKey : string | symbol
@@ -22,7 +22,7 @@ import {base} from "./0.ts"
 
 import {foo} from "./0.ts"
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
 
 export class C  extends base{
 >C : C
@@ -32,7 +32,7 @@ export class C  extends base{
 
     constructor(@foo prop: any) {
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^      ^^           ^^               ^^              ^^      ^^^^^^^^^
 >prop : any
 >     : ^^^
 

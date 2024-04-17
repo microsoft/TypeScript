@@ -26,7 +26,7 @@ class GenericClass<T extends MyTuple> {
 
 function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> {
 >createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
->            : ^ ^^^^^^^^^^^^^^^^^^^^^                  ^^^^^               
+>            : ^ ^^^^^^^^^^^^^^^^^^ ^^                  ^^^^^               
 >f : GenericFunction<T>
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -39,7 +39,7 @@ function createClass<T extends MyTuple>(f: GenericFunction<T>): GenericClass<T> 
 
 function consumeClass(c: GenericClass<[string, boolean]>) { }
 >consumeClass : (c: GenericClass<[string, boolean]>) => void
->             : ^^^^                               ^^^^^^^^^
+>             : ^ ^^                               ^^^^^^^^^
 >c : GenericClass<[string, boolean]>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -48,23 +48,23 @@ consumeClass(createClass(str => console.log(str.length)));
 >consumeClass(createClass(str => console.log(str.length))) : void
 >                                                          : ^^^^
 >consumeClass : (c: GenericClass<[string, boolean]>) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                               ^^^^^^^^^
 >createClass(str => console.log(str.length)) : GenericClass<[str: string]>
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^ ^^                  ^^^^^^^^^^^^^^^^^^^^
 >str => console.log(str.length) : (str: string) => void
->                               : ^^^^^^^^^^^^^^^^^^^^^
+>                               : ^   ^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 >console.log(str.length) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >str.length : number
 >           : ^^^^^^
 >str : string
@@ -77,13 +77,13 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 >consumeClass(createClass((str, _unused_num) => console.log(str.length))) : void
 >                                                                         : ^^^^
 >consumeClass : (c: GenericClass<[string, boolean]>) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^                               ^^^^^^^^^
 >createClass((str, _unused_num) => console.log(str.length)) : GenericClass<[str: string, _unused_num: boolean]>
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createClass : <T extends MyTuple>(f: GenericFunction<T>) => GenericClass<T>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^ ^^                  ^^^^^^^^^^^^^^^^^^^^
 >(str, _unused_num) => console.log(str.length) : (str: string, _unused_num: boolean) => void
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^   ^^^^^^^^^^           ^^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 >_unused_num : boolean
@@ -91,11 +91,11 @@ consumeClass(createClass((str, _unused_num) => console.log(str.length)));
 >console.log(str.length) : void
 >                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >str.length : number
 >           : ^^^^^^
 >str : string

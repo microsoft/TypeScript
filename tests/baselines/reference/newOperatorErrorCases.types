@@ -35,7 +35,7 @@ var anyCtor: {
 
 var anyCtor1: {
 >anyCtor1 : new (n: any) => any
->         : ^^^^^^^^^^^^^^^^   
+>         : ^^^^^ ^^^^^^^^^^   
 
     new (n): any;
 >n : any

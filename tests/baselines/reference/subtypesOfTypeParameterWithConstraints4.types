@@ -11,7 +11,7 @@ class Foo { foo: number; }
 
 function f<T extends Foo, U extends Foo, V>(t: T, u: U, v: V) {
 >f : <T extends Foo, U extends Foo, V>(t: T, u: U, v: V) => void
->  : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U

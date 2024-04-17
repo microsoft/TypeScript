@@ -591,7 +591,7 @@ export class LineNode implements LineCollection {
         if (children.length) this.updateCounts();
     }
 
-    isLeaf() {
+    isLeaf(): this is LineLeaf {
         return false;
     }
 
@@ -839,7 +839,7 @@ export class LineLeaf implements LineCollection {
     constructor(public text: string) {
     }
 
-    isLeaf() {
+    isLeaf(): this is LineLeaf {
         return true;
     }
 

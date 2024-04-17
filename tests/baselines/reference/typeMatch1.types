@@ -11,15 +11,15 @@ interface I2 { z; }
 
 var x1: { z: number; f(n: number): string; f(s: string): number; }
 >x1 : { z: number; f(n: number): string; f(s: string): number; }
->   : ^^^^^      ^^^^^^^      ^^^      ^^^^^^^      ^^^      ^^^
+>   : ^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 
@@ -29,13 +29,13 @@ var x2: { z:number;f:{(n:number):string;(s:string):number;}; } = x1;
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 >s : string
 >  : ^^^^^^
 >x1 : { z: number; f(n: number): string; f(s: string): number; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 var i:I;
 >i : I

@@ -15,7 +15,7 @@ interface Parsers {
 
     readline(delimiter?: string): ParserFunc;
 >readline : (delimiter?: string) => ParserFunc
->         : ^^^^^^^^^^^^^      ^^^^^          
+>         : ^         ^^^      ^^^^^          
 >delimiter : string
 >          : ^^^^^^
 }
@@ -37,11 +37,11 @@ var d: ParserFunc = parsers.readline; // not ok
 >d : ParserFunc
 >  : ^^^^^^^^^^
 >parsers.readline : (delimiter?: string) => ParserFunc
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^^      ^^^^^^^^^^^^^^^
 >parsers : Parsers
 >        : ^^^^^^^
 >readline : (delimiter?: string) => ParserFunc
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^         ^^^      ^^^^^^^^^^^^^^^
 
 var e: ParserFunc = parsers.readline(); // ok
 >e : ParserFunc
@@ -49,9 +49,9 @@ var e: ParserFunc = parsers.readline(); // ok
 >parsers.readline() : ParserFunc
 >                   : ^^^^^^^^^^
 >parsers.readline : (delimiter?: string) => ParserFunc
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^^      ^^^^^^^^^^^^^^^
 >parsers : Parsers
 >        : ^^^^^^^
 >readline : (delimiter?: string) => ParserFunc
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^         ^^^      ^^^^^^^^^^^^^^^
 

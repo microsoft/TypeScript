@@ -18,7 +18,7 @@ import {foo} from './missingModule';
 
 declare function use(a: any): void;
 >use : (a: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >a : any
 >  : ^^^
 
@@ -36,7 +36,7 @@ use(x);
 >use(x) : void
 >       : ^^^^
 >use : (a: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -44,7 +44,7 @@ use(foo);
 >use(foo) : void
 >         : ^^^^
 >use : (a: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >foo : any
 >    : ^^^
 

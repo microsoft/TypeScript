@@ -313,7 +313,7 @@ type Foo = { prop: number, [x: string]: number };
 
 function f1(x: Partial<Foo>) {
 >f1 : (x: Partial<Foo>) => void
->   : ^^^^            ^^^^^^^^^
+>   : ^ ^^            ^^^^^^^^^
 >x : Partial<Foo>
 >  : ^^^^^^^^^^^^
 
@@ -328,8 +328,8 @@ function f1(x: Partial<Foo>) {
     (x["other"] || 0).toFixed();
 >(x["other"] || 0).toFixed() : string
 >                            : ^^^^^^
->(x["other"] || 0).toFixed : (fractionDigits?: number | undefined) => string
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x["other"] || 0).toFixed : (fractionDigits?: number) => string
+>                          : ^              ^^^      ^^^^^^^^^^^
 >(x["other"] || 0) : number
 >                  : ^^^^^^
 >x["other"] || 0 : number
@@ -342,13 +342,13 @@ function f1(x: Partial<Foo>) {
 >        : ^^^^^^^
 >0 : 0
 >  : ^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 }
 
 function f2(x: Readonly<Foo>) {
 >f2 : (x: Readonly<Foo>) => void
->   : ^^^^             ^^^^^^^^^
+>   : ^ ^^             ^^^^^^^^^
 >x : Readonly<Foo>
 >  : ^^^^^^^^^^^^^
 
@@ -363,21 +363,21 @@ function f2(x: Readonly<Foo>) {
     x["other"].toFixed();
 >x["other"].toFixed() : string
 >                     : ^^^^^^
->x["other"].toFixed : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x["other"].toFixed : (fractionDigits?: number) => string
+>                   : ^              ^^^      ^^^^^^^^^^^
 >x["other"] : number
 >           : ^^^^^^
 >x : Readonly<Foo>
 >  : ^^^^^^^^^^^^^
 >"other" : "other"
 >        : ^^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 }
 
 function f3(x: Boxified<Foo>) {
 >f3 : (x: Boxified<Foo>) => void
->   : ^^^^             ^^^^^^^^^
+>   : ^ ^^             ^^^^^^^^^
 >x : Boxified<Foo>
 >  : ^^^^^^^^^^^^^
 
@@ -392,8 +392,8 @@ function f3(x: Boxified<Foo>) {
     x["other"].x.toFixed();
 >x["other"].x.toFixed() : string
 >                       : ^^^^^^
->x["other"].x.toFixed : (fractionDigits?: number | undefined) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x["other"].x.toFixed : (fractionDigits?: number) => string
+>                     : ^              ^^^      ^^^^^^^^^^^
 >x["other"].x : number
 >             : ^^^^^^
 >x["other"] : { x: number; }
@@ -404,13 +404,13 @@ function f3(x: Boxified<Foo>) {
 >        : ^^^^^^^
 >x : number
 >  : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 }
 
 function f4(x: { [P in keyof Foo]: Foo[P] }) {
 >f4 : (x: { [P in keyof Foo]: Foo[P]; }) => void
->   : ^^^^                             ^^^^^^^^^
+>   : ^ ^^                             ^^^^^^^^^
 >x : { [x: string]: number; prop: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -425,15 +425,15 @@ function f4(x: { [P in keyof Foo]: Foo[P] }) {
     x["other"].toFixed();
 >x["other"].toFixed() : string
 >                     : ^^^^^^
->x["other"].toFixed : (fractionDigits?: number | undefined) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x["other"].toFixed : (fractionDigits?: number) => string
+>                   : ^              ^^^      ^^^^^^^^^^^
 >x["other"] : number
 >           : ^^^^^^
 >x : { [x: string]: number; prop: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"other" : "other"
 >        : ^^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 }
 

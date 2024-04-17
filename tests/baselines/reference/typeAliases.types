@@ -164,7 +164,7 @@ var x13_2: T13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 >foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
->      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^   ^^^^^    
+>      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^    
 >t1 : T1
 >   : ^^
 >t2 : I13
@@ -173,8 +173,8 @@ declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 foo13(x13_1, x13_2);
 >foo13(x13_1, x13_2) : void
 >                    : ^^^^
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
+>      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^^^^^
 >x13_1 : I13
 >      : ^^^
 >x13_2 : I13
@@ -183,8 +183,8 @@ foo13(x13_1, x13_2);
 foo13(x13_2, x13_1);
 >foo13(x13_2, x13_1) : void
 >                    : ^^^^
->foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: T13) => void
+>      : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^  ^^  ^^   ^^^^^^^^^
 >x13_2 : I13
 >      : ^^^
 >x13_1 : I13
@@ -200,19 +200,19 @@ var x14: T14;
 
 declare function foo14_1(x: T14): void;
 >foo14_1 : (x: T14) => void
->        : ^^^^   ^^^^^    
+>        : ^ ^^   ^^^^^    
 >x : string
 >  : ^^^^^^
 
 declare function foo14_2(x: "click"): void;
->foo14_2 : { (x: "click"): void; (x: string): void; }
->        : ^^^^^^       ^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>foo14_2 : { (x: "click"): void; (x: T14): void; }
+>        : ^^^ ^^       ^^^    ^^^ ^^   ^^^^^^^^^^
 >x : "click"
 >  : ^^^^^^^
 
 declare function foo14_2(x: T14): void;
 >foo14_2 : { (x: "click"): void; (x: T14): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^ ^^       ^^^^^^^^^^ ^^   ^^^    ^^^
 >x : string
 >  : ^^^^^^
 
@@ -229,14 +229,14 @@ enum E { x = 10 }
 >   : ^^
 
 declare function f15(a: string): boolean;
->f15 : { (a: string): boolean; (a: number): string; }
->    : ^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>f15 : { (a: string): boolean; (a: Meters): string; }
+>    : ^^^ ^^      ^^^       ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
 declare function f15(a: Meters): string;
 >f15 : { (a: string): boolean; (a: Meters): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
@@ -247,8 +247,8 @@ f15(E.x).toLowerCase();
 >                     : ^^^^^^^^^^^^
 >f15(E.x) : string
 >         : ^^^^^^
->f15 : { (a: string): boolean; (a: number): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f15 : { (a: string): boolean; (a: Meters): string; }
+>    : ^^^ ^^      ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >E.x : E
 >    : ^
 >E : typeof E
@@ -264,7 +264,7 @@ type StringAndBoolean = [string, boolean]
 
 declare function f16(s: StringAndBoolean): string;
 >f16 : (s: StringAndBoolean) => string
->    : ^^^^                ^^^^^      
+>    : ^ ^^                ^^^^^      
 >s : StringAndBoolean
 >  : ^^^^^^^^^^^^^^^^
 
@@ -276,7 +276,7 @@ f16(x);
 >f16(x) : string
 >       : ^^^^^^
 >f16 : (s: StringAndBoolean) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                ^^^^^^^^^^^
 >x : [string, boolean]
 >  : ^^^^^^^^^^^^^^^^^
 

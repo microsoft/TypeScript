@@ -3,7 +3,7 @@
 === systemModuleConstEnums.ts ===
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 const enum TopLevelConstEnum { X }
@@ -19,7 +19,7 @@ export function foo() {
     use(TopLevelConstEnum.X);
 >use(TopLevelConstEnum.X) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >TopLevelConstEnum.X : TopLevelConstEnum
 >                    : ^^^^^^^^^^^^^^^^^
 >TopLevelConstEnum : typeof TopLevelConstEnum
@@ -30,7 +30,7 @@ export function foo() {
     use(M.NonTopLevelConstEnum.X);
 >use(M.NonTopLevelConstEnum.X) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >M.NonTopLevelConstEnum.X : M.NonTopLevelConstEnum
 >                         : ^^^^^^^^^^^^^^^^^^^^^^
 >M.NonTopLevelConstEnum : typeof M.NonTopLevelConstEnum

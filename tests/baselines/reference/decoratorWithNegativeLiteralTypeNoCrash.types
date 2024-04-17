@@ -7,7 +7,7 @@ class A {
 
     @decorator
 >decorator : (target: any, field: any) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^   ^^     ^^   ^^^^^^^^^
 
     public field1: -1 = -1;
 >field1 : -1
@@ -23,7 +23,7 @@ class A {
 }
 function decorator(target: any, field: any) {}
 >decorator : (target: any, field: any) => void
->          : ^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^
+>          : ^      ^^   ^^     ^^   ^^^^^^^^^
 >target : any
 >field : any
 

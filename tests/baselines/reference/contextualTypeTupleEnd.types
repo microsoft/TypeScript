@@ -11,19 +11,19 @@ type Funcs = [...((arg: number) => void)[], (arg: string) => void];
 
 declare function num(x: number): void;
 >num : (x: number) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 
 declare function str(x: string): void;
 >str : (x: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >x : string
 >  : ^^^^^^
 
 declare function f1(...args: Funcs): void;
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^     ^^^^^    
+>   : ^^^^    ^^     ^^^^^    
 >args : Funcs
 >     : ^^^^^
 
@@ -31,21 +31,21 @@ f1();  // Error
 >f1() : void
 >     : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^^
 
 f1(x => str(x));
 >f1(x => str(x)) : void
 >                : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -53,25 +53,25 @@ f1(x => num(x), x => str(x));
 >f1(x => num(x), x => str(x)) : void
 >                             : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -79,35 +79,35 @@ f1(x => num(x), x => num(x), x => str(x));
 >f1(x => num(x), x => num(x), x => str(x)) : void
 >                                          : ^^^^
 >f1 : (...args: Funcs) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^    ^^     ^^^^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -121,15 +121,15 @@ const a1: Funcs = [x => str(x)];
 >a1 : Funcs
 >   : ^^^^^
 >[x => str(x)] : [(x: string) => void]
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^^ ^^^^^^^^^^^^^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -137,25 +137,25 @@ const a2: Funcs = [x => num(x), x => str(x)];
 >a2 : Funcs
 >   : ^^^^^
 >[x => num(x), x => str(x)] : [(x: number) => void, (x: string) => void]
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -163,35 +163,35 @@ const a3: Funcs = [x => num(x), x => num(x), x => str(x)];
 >a3 : Funcs
 >   : ^^^^^
 >[x => num(x), x => num(x), x => str(x)] : [(x: number) => void, (x: number) => void, (x: string) => void]
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => num(x) : (x: number) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >num(x) : void
 >       : ^^^^
 >num : (x: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x => str(x) : (x: string) => void
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >str(x) : void
 >       : ^^^^
 >str : (x: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -223,9 +223,9 @@ export type ExampleState = {
 
 export function createSelector<S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) {
 >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                     ^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^^^^^^^^
 >selectors : [...selectors: S, f: (x: any) => any]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^   ^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^   ^
 >x : any
 >  : ^^^
 
@@ -233,24 +233,24 @@ export function createSelector<S extends SelectorTuple<ExampleState>>(...selecto
 >console.log(selectors) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >selectors : [...selectors: S, f: (x: any) => any]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 }
 
 createSelector(
 >createSelector(    x => x.foo,    x => x.bar,    () => 42) : void
 >                                                           : ^^^^
 >createSelector : <S extends SelectorTuple<ExampleState>>(...selectors: [...selectors: S, f: (x: any) => any]) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^^^^^^^^
 
     x => x.foo,
 >x => x.foo : (x: ExampleState) => "foo"
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : ExampleState
 >  : ^^^^^^^^^^^^
 >x.foo : "foo"
@@ -262,7 +262,7 @@ createSelector(
 
     x => x.bar,
 >x => x.bar : (x: ExampleState) => 42
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^
 >x : ExampleState
 >  : ^^^^^^^^^^^^
 >x.bar : 42
@@ -284,9 +284,9 @@ createSelector(
 
 declare function example(...args: [...((n: number) => void)[], (x: any) => void]): void
 >example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
->        : ^^^^^^^^^^                                              ^^^^^    
+>        : ^^^^    ^^                                              ^^^^^    
 >args : [...((n: number) => void)[], (x: any) => void]
->     : ^^^^^^^^^      ^^^^^    ^^^^^^^^^   ^^^^^    ^
+>     : ^^^^^^ ^^      ^^^^^    ^^^^^^ ^^   ^^^^^    ^
 >n : number
 >  : ^^^^^^
 >x : any
@@ -296,11 +296,11 @@ example(
 >example(    x => x.foo,  // Error    x => x.bar,  // Error    x => x.baz,) : void
 >                                                                           : ^^^^
 >example : (...args: [...((n: number) => void)[], (x: any) => void]) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^                                              ^^^^^^^^^
 
     x => x.foo,  // Error
 >x => x.foo : (x: number) => any
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x.foo : any
@@ -312,7 +312,7 @@ example(
 
     x => x.bar,  // Error
 >x => x.bar : (x: number) => any
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x.bar : any
@@ -324,7 +324,7 @@ example(
 
     x => x.baz,
 >x => x.baz : (x: any) => any
->           : ^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x.baz : any
@@ -340,9 +340,9 @@ example(
 
 declare function test(...args: [...((arg: number) => void)[], (arg: string) => void]): void;
 >test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
->     : ^^^^^^^^^^                                                     ^^^^^    
+>     : ^^^^    ^^                                                     ^^^^^    
 >args : [...((arg: number) => void)[], (arg: string) => void]
->     : ^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^      ^^^^^    ^
+>     : ^^^^^^   ^^      ^^^^^    ^^^^^^   ^^      ^^^^^    ^
 >arg : number
 >    : ^^^^^^
 >arg : string
@@ -352,21 +352,21 @@ test(a => a, b => b, c => c);
 >test(a => a, b => b, c => c) : void
 >                             : ^^^^
 >test : (...args: [...((arg: number) => void)[], (arg: string) => void]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^    ^^                                                     ^^^^^^^^^
 >a => a : (a: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
 >  : ^^^^^^
 >b => b : (b: number) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >b : number
 >  : ^^^^^^
 >c => c : (c: string) => string
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >c : string
 >  : ^^^^^^
 >c : string

@@ -55,7 +55,7 @@ module m1 {
     // shouldn't appear
     export function foo2Export(/**hm*/ a: string) {
 >foo2Export : (a: string) => void
->           : ^^^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
     }

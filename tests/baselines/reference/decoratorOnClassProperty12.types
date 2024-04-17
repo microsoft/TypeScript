@@ -14,9 +14,9 @@ class A {
 
     @dec()
 >dec() : <T>(target: any, propertyKey: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^      ^^   ^^           ^^      ^^^^^^^^^
 >dec : () => <T>(target: any, propertyKey: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^      ^^   ^^           ^^      ^^^^^^^^^
 
     foo: `${string}`
 >foo : string

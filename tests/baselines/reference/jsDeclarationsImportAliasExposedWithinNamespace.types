@@ -58,7 +58,7 @@ const testFnTypes = {
  */
 function testFn(input) {
 >testFn : (input: testFnTypes.input) => number | null
->       : ^^^^^^^^                 ^^^^^             
+>       : ^     ^^                 ^^^^^             
 >input : import("file2").testFnTypes.input
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -87,7 +87,7 @@ function testFn(input) {
 
 export {testFn, testFnTypes};
 >testFn : (input: testFnTypes.input) => number
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >testFnTypes : { [x: string]: any; }
 >            : ^^^^^^^^^^^^^^^^^^^^^
 

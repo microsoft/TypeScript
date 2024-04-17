@@ -36,7 +36,7 @@ module M {
 
     export function CompareEyes(a:IEye,b:IEye):number {
 >CompareEyes : (a: IEye, b: IEye) => number
->            : ^^^^    ^^^^^    ^^^^^      
+>            : ^ ^^    ^^ ^^    ^^^^^      
 >a : IEye
 >  : ^^^^
 >b : IEye
@@ -61,7 +61,7 @@ module M {
 
     export function CompareYeux(a:IFrenchEye,b:IFrenchEye):number {
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
->            : ^^^^          ^^^^^          ^^^^^      
+>            : ^ ^^          ^^ ^^          ^^^^^      
 >a : IFrenchEye
 >  : ^^^^^^^^^^
 >b : IFrenchEye
@@ -168,13 +168,13 @@ module M {
 >x.sort(CompareYeux) : IEye[]
 >                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^          ^^ ^^          ^^^^^^^^^^^
 
         // type of z inferred from specialized array type
         var z=x.sort(CompareEyes); // ok
@@ -183,13 +183,13 @@ module M {
 >x.sort(CompareEyes) : IEye[]
 >                    : ^^^^^^
 >x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
 >sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >CompareEyes : (a: IEye, b: IEye) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^    ^^ ^^    ^^^^^^^^^^^
 
         for (var i=0,len=z.length;i<len;i++) {
 >i : number

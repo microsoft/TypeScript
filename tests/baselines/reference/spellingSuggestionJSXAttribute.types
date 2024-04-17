@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/spellingSuggestionJSXAttribute.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,100 / 2,200 (nearest 100)
-Type Count: 6,900 / 6,900 (nearest 100)
-Instantiation count: 73,500 / 73,500 (nearest 500)
-Symbol count: 67,000 / 67,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 50,000
+Symbol count: 50,000
 
 === spellingSuggestionJSXAttribute.tsx ===
 /// <reference path="react16.d.ts" />
@@ -14,7 +14,7 @@ import * as React from "react";
 
 function MyComp2(props: { className?: string, htmlFor?: string }) {
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^^^^^^^^                                         ^^^^^^^^
+>        : ^     ^^                                         ^^^^^^^^
 >props : { className?: string; htmlFor?: string; }
 >      : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 >className : string
@@ -86,7 +86,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 ><MyComp2 class="" /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                                         ^^^^^^^^
 >class : string
 >      : ^^^^^^
 
@@ -102,7 +102,7 @@ class MyComp extends React.Component<{ className?: string, htmlFor?: string }> {
 ><MyComp2 for="" /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >MyComp2 : (props: { className?: string; htmlFor?: string; }) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^                                         ^^^^^^^^
 >for : string
 >    : ^^^^^^
 

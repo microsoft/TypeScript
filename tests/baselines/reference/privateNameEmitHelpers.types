@@ -42,7 +42,7 @@ export class C {
 // these are pre-TS4.3 versions of emit helpers, which only supported private instance fields
 export declare function __classPrivateFieldGet<T extends object, V>(receiver: T, state: any): V;
 >__classPrivateFieldGet : <T extends object, V>(receiver: T, state: any) => V
->                       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^   ^^^^^ 
+>                       : ^ ^^^^^^^^^^^^^^^^^ ^^        ^^ ^^     ^^   ^^^^^ 
 >receiver : T
 >         : ^
 >state : any
@@ -50,7 +50,7 @@ export declare function __classPrivateFieldGet<T extends object, V>(receiver: T,
 
 export declare function __classPrivateFieldSet<T extends object, V>(receiver: T, state: any, value: V): V;
 >__classPrivateFieldSet : <T extends object, V>(receiver: T, state: any, value: V) => V
->                       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^   ^^^^^^^^^ ^^^^^ 
+>                       : ^ ^^^^^^^^^^^^^^^^^ ^^        ^^ ^^     ^^   ^^     ^^ ^^^^^ 
 >receiver : T
 >         : ^
 >state : any

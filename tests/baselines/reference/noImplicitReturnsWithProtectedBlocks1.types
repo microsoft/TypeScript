@@ -3,7 +3,7 @@
 === noImplicitReturnsWithProtectedBlocks1.ts ===
 declare function log(s: string): void;
 >log : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -27,7 +27,7 @@ function main1() : number {
 >log("in finally") : void
 >                  : ^^^^
 >log : (s: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >"in finally" : "in finally"
 >             : ^^^^^^^^^^^^
     }

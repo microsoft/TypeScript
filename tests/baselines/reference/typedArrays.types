@@ -117,7 +117,7 @@ function CreateTypedArrayTypes() {
 
 function CreateTypedArrayInstancesFromLength(obj: number) {
 >CreateTypedArrayInstancesFromLength : (obj: number) => any[]
->                                    : ^^^^^^      ^^^^^^^^^^
+>                                    : ^   ^^      ^^^^^^^^^^
 >obj : number
 >    : ^^^^^^
 
@@ -269,7 +269,7 @@ function CreateTypedArrayInstancesFromLength(obj: number) {
 
 function CreateTypedArrayInstancesFromArray(obj: number[]) {
 >CreateTypedArrayInstancesFromArray : (obj: number[]) => any[]
->                                   : ^^^^^^        ^^^^^^^^^^
+>                                   : ^   ^^        ^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -421,7 +421,7 @@ function CreateTypedArrayInstancesFromArray(obj: number[]) {
 
 function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >CreateIntegerTypedArraysFromArray2 : (obj: number[]) => any[]
->                                   : ^^^^^^        ^^^^^^^^^^
+>                                   : ^   ^^        ^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -442,11 +442,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Int8Array.from(obj) : Int8Array
 >                    : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -461,11 +461,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Uint8Array.from(obj) : Uint8Array
 >                     : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -480,11 +480,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Int16Array.from(obj) : Int16Array
 >                     : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -499,11 +499,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Uint16Array.from(obj) : Uint16Array
 >                      : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -518,11 +518,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Int32Array.from(obj) : Int32Array
 >                     : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -537,11 +537,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Uint32Array.from(obj) : Uint32Array
 >                      : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -556,11 +556,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Float32Array.from(obj) : Float32Array
 >                       : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -575,11 +575,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Float64Array.from(obj) : Float64Array
 >                       : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -594,11 +594,11 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 >Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >                            : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : number[]
 >    : ^^^^^^^^
 
@@ -609,7 +609,7 @@ function CreateIntegerTypedArraysFromArray2(obj:number[]) {
 
 function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >CreateIntegerTypedArraysFromArrayLike : (obj: ArrayLike<number>) => any[]
->                                      : ^^^^^^                 ^^^^^^^^^^
+>                                      : ^   ^^                 ^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -630,11 +630,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Int8Array.from(obj) : Int8Array
 >                    : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -649,11 +649,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Uint8Array.from(obj) : Uint8Array
 >                     : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -668,11 +668,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Int16Array.from(obj) : Int16Array
 >                     : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -687,11 +687,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Uint16Array.from(obj) : Uint16Array
 >                      : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -706,11 +706,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Int32Array.from(obj) : Int32Array
 >                     : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -725,11 +725,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Uint32Array.from(obj) : Uint32Array
 >                      : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -744,11 +744,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Float32Array.from(obj) : Float32Array
 >                       : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -763,11 +763,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Float64Array.from(obj) : Float64Array
 >                       : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -782,11 +782,11 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 >Uint8ClampedArray.from(obj) : Uint8ClampedArray
 >                            : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 
@@ -797,7 +797,7 @@ function CreateIntegerTypedArraysFromArrayLike(obj:ArrayLike<number>) {
 
 function CreateTypedArraysOf(obj) {
 >CreateTypedArraysOf : (obj: any) => any[]
->                    : ^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^^^^^^^^^^^^^^
 >obj : any
 
     var typedArrays = [];
@@ -817,11 +817,11 @@ function CreateTypedArraysOf(obj) {
 >Int8Array.of(...obj) : Int8Array
 >                     : ^^^^^^^^^
 >Int8Array.of : (...items: number[]) => Int8Array
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int8Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -836,11 +836,11 @@ function CreateTypedArraysOf(obj) {
 >Uint8Array.of(...obj) : Uint8Array
 >                      : ^^^^^^^^^^
 >Uint8Array.of : (...items: number[]) => Uint8Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -855,11 +855,11 @@ function CreateTypedArraysOf(obj) {
 >Int16Array.of(...obj) : Int16Array
 >                      : ^^^^^^^^^^
 >Int16Array.of : (...items: number[]) => Int16Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int16Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -874,11 +874,11 @@ function CreateTypedArraysOf(obj) {
 >Uint16Array.of(...obj) : Uint16Array
 >                       : ^^^^^^^^^^^
 >Uint16Array.of : (...items: number[]) => Uint16Array
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint16Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -893,11 +893,11 @@ function CreateTypedArraysOf(obj) {
 >Int32Array.of(...obj) : Int32Array
 >                      : ^^^^^^^^^^
 >Int32Array.of : (...items: number[]) => Int32Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -912,11 +912,11 @@ function CreateTypedArraysOf(obj) {
 >Uint32Array.of(...obj) : Uint32Array
 >                       : ^^^^^^^^^^^
 >Uint32Array.of : (...items: number[]) => Uint32Array
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -931,11 +931,11 @@ function CreateTypedArraysOf(obj) {
 >Float32Array.of(...obj) : Float32Array
 >                        : ^^^^^^^^^^^^
 >Float32Array.of : (...items: number[]) => Float32Array
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -950,11 +950,11 @@ function CreateTypedArraysOf(obj) {
 >Float64Array.of(...obj) : Float64Array
 >                        : ^^^^^^^^^^^^
 >Float64Array.of : (...items: number[]) => Float64Array
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float64Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -969,11 +969,11 @@ function CreateTypedArraysOf(obj) {
 >Uint8ClampedArray.of(...obj) : Uint8ClampedArray
 >                             : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8ClampedArray
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^
 >...obj : any
 >obj : any
 
@@ -1003,11 +1003,11 @@ function CreateTypedArraysOf2() {
 >Int8Array.of(1,2,3,4) : Int8Array
 >                      : ^^^^^^^^^
 >Int8Array.of : (...items: number[]) => Int8Array
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^        ^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int8Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1028,11 +1028,11 @@ function CreateTypedArraysOf2() {
 >Uint8Array.of(1,2,3,4) : Uint8Array
 >                       : ^^^^^^^^^^
 >Uint8Array.of : (...items: number[]) => Uint8Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1053,11 +1053,11 @@ function CreateTypedArraysOf2() {
 >Int16Array.of(1,2,3,4) : Int16Array
 >                       : ^^^^^^^^^^
 >Int16Array.of : (...items: number[]) => Int16Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int16Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1078,11 +1078,11 @@ function CreateTypedArraysOf2() {
 >Uint16Array.of(1,2,3,4) : Uint16Array
 >                        : ^^^^^^^^^^^
 >Uint16Array.of : (...items: number[]) => Uint16Array
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint16Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1103,11 +1103,11 @@ function CreateTypedArraysOf2() {
 >Int32Array.of(1,2,3,4) : Int32Array
 >                       : ^^^^^^^^^^
 >Int32Array.of : (...items: number[]) => Int32Array
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Int32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1128,11 +1128,11 @@ function CreateTypedArraysOf2() {
 >Uint32Array.of(1,2,3,4) : Uint32Array
 >                        : ^^^^^^^^^^^
 >Uint32Array.of : (...items: number[]) => Uint32Array
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1153,11 +1153,11 @@ function CreateTypedArraysOf2() {
 >Float32Array.of(1,2,3,4) : Float32Array
 >                         : ^^^^^^^^^^^^
 >Float32Array.of : (...items: number[]) => Float32Array
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float32Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1178,11 +1178,11 @@ function CreateTypedArraysOf2() {
 >Float64Array.of(1,2,3,4) : Float64Array
 >                         : ^^^^^^^^^^^^
 >Float64Array.of : (...items: number[]) => Float64Array
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Float64Array
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1203,11 +1203,11 @@ function CreateTypedArraysOf2() {
 >Uint8ClampedArray.of(1,2,3,4) : Uint8ClampedArray
 >                              : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.of : (...items: number[]) => Uint8ClampedArray
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >of : (...items: number[]) => Uint8ClampedArray
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^     ^^        ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -1224,11 +1224,11 @@ function CreateTypedArraysOf2() {
 
 function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number) {
 >CreateTypedArraysFromMapFn2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number) => any[]
->                            : ^ ^^^^^^^            ^^^^^^^^^                           ^^^^^^^^^^
+>                            : ^ ^^   ^^            ^^     ^^                           ^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^ ^^^^^      ^^^^^      
+>      : ^ ^^ ^^ ^^      ^^^^^      
 >n : T
 >  : ^
 >v : number
@@ -1251,15 +1251,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Int8Array.from(obj, mapFn) : Int8Array
 >                           : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[1] = Uint8Array.from(obj, mapFn);
 >typedArrays[1] = Uint8Array.from(obj, mapFn) : Uint8Array
@@ -1272,15 +1272,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Uint8Array.from(obj, mapFn) : Uint8Array
 >                            : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[2] = Int16Array.from(obj, mapFn);
 >typedArrays[2] = Int16Array.from(obj, mapFn) : Int16Array
@@ -1293,15 +1293,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Int16Array.from(obj, mapFn) : Int16Array
 >                            : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[3] = Uint16Array.from(obj, mapFn);
 >typedArrays[3] = Uint16Array.from(obj, mapFn) : Uint16Array
@@ -1314,15 +1314,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Uint16Array.from(obj, mapFn) : Uint16Array
 >                             : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[4] = Int32Array.from(obj, mapFn);
 >typedArrays[4] = Int32Array.from(obj, mapFn) : Int32Array
@@ -1335,15 +1335,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Int32Array.from(obj, mapFn) : Int32Array
 >                            : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[5] = Uint32Array.from(obj, mapFn);
 >typedArrays[5] = Uint32Array.from(obj, mapFn) : Uint32Array
@@ -1356,15 +1356,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Uint32Array.from(obj, mapFn) : Uint32Array
 >                             : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[6] = Float32Array.from(obj, mapFn);
 >typedArrays[6] = Float32Array.from(obj, mapFn) : Float32Array
@@ -1377,15 +1377,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Float32Array.from(obj, mapFn) : Float32Array
 >                              : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[7] = Float64Array.from(obj, mapFn);
 >typedArrays[7] = Float64Array.from(obj, mapFn) : Float64Array
@@ -1398,15 +1398,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Float64Array.from(obj, mapFn) : Float64Array
 >                              : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
 >typedArrays[8] = Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
@@ -1419,15 +1419,15 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 >Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
 >                                   : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 
     return typedArrays;
 >typedArrays : any[]
@@ -1436,11 +1436,11 @@ function CreateTypedArraysFromMapFn2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)
 
 function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number) {
 >CreateTypedArraysFromMapFn : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number) => any[]
->                           : ^^^^^^                 ^^^^^^^^^                                ^^^^^^^^^^
+>                           : ^   ^^                 ^^     ^^                                ^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^      ^^^^^      ^^^^^      
+>      : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >v : number
@@ -1463,15 +1463,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Int8Array.from(obj, mapFn) : Int8Array
 >                           : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[1] = Uint8Array.from(obj, mapFn);
 >typedArrays[1] = Uint8Array.from(obj, mapFn) : Uint8Array
@@ -1484,15 +1484,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Uint8Array.from(obj, mapFn) : Uint8Array
 >                            : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[2] = Int16Array.from(obj, mapFn);
 >typedArrays[2] = Int16Array.from(obj, mapFn) : Int16Array
@@ -1505,15 +1505,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Int16Array.from(obj, mapFn) : Int16Array
 >                            : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[3] = Uint16Array.from(obj, mapFn);
 >typedArrays[3] = Uint16Array.from(obj, mapFn) : Uint16Array
@@ -1526,15 +1526,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Uint16Array.from(obj, mapFn) : Uint16Array
 >                             : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[4] = Int32Array.from(obj, mapFn);
 >typedArrays[4] = Int32Array.from(obj, mapFn) : Int32Array
@@ -1547,15 +1547,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Int32Array.from(obj, mapFn) : Int32Array
 >                            : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[5] = Uint32Array.from(obj, mapFn);
 >typedArrays[5] = Uint32Array.from(obj, mapFn) : Uint32Array
@@ -1568,15 +1568,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Uint32Array.from(obj, mapFn) : Uint32Array
 >                             : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[6] = Float32Array.from(obj, mapFn);
 >typedArrays[6] = Float32Array.from(obj, mapFn) : Float32Array
@@ -1589,15 +1589,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Float32Array.from(obj, mapFn) : Float32Array
 >                              : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[7] = Float64Array.from(obj, mapFn);
 >typedArrays[7] = Float64Array.from(obj, mapFn) : Float64Array
@@ -1610,15 +1610,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Float64Array.from(obj, mapFn) : Float64Array
 >                              : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
 >typedArrays[8] = Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
@@ -1631,15 +1631,15 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 >Uint8ClampedArray.from(obj, mapFn) : Uint8ClampedArray
 >                                   : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
     return typedArrays;
 >typedArrays : any[]
@@ -1648,11 +1648,11 @@ function CreateTypedArraysFromMapFn(obj:ArrayLike<number>, mapFn: (n:number, v:n
 
 function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v:number)=> number, thisArg: {}) {
 >CreateTypedArraysFromThisObj : (obj: ArrayLike<number>, mapFn: (n: number, v: number) => number, thisArg: {}) => any[]
->                             : ^^^^^^                 ^^^^^^^^^                                ^^^^^^^^^^^  ^^^^^^^^^^
+>                             : ^   ^^                 ^^     ^^                                ^^       ^^  ^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^      ^^^^^      ^^^^^      
+>      : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >v : number
@@ -1677,15 +1677,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Int8Array.from(obj, mapFn, thisArg) : Int8Array
 >                                    : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1700,15 +1700,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
 >                                     : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1723,15 +1723,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Int16Array.from(obj, mapFn, thisArg) : Int16Array
 >                                     : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1746,15 +1746,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
 >                                      : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1769,15 +1769,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Int32Array.from(obj, mapFn, thisArg) : Int32Array
 >                                     : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1792,15 +1792,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
 >                                      : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1815,15 +1815,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Float32Array.from(obj, mapFn, thisArg) : Float32Array
 >                                       : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1838,15 +1838,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Float64Array.from(obj, mapFn, thisArg) : Float64Array
 >                                       : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1861,15 +1861,15 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 >Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
 >                                            : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^     ^^                           ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<number>
 >    : ^^^^^^^^^^^^^^^^^
 >mapFn : (n: number, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1880,11 +1880,11 @@ function CreateTypedArraysFromThisObj(obj:ArrayLike<number>, mapFn: (n:number, v
 
 function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:number)=> number, thisArg: {}) {
 >CreateTypedArraysFromThisObj2 : <T>(obj: ArrayLike<T>, mapFn: (n: T, v: number) => number, thisArg: {}) => any[]
->                              : ^ ^^^^^^^            ^^^^^^^^^                           ^^^^^^^^^^^  ^^^^^^^^^^
+>                              : ^ ^^   ^^            ^^     ^^                           ^^       ^^  ^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^ ^^^^^      ^^^^^      
+>      : ^ ^^ ^^ ^^      ^^^^^      
 >n : T
 >  : ^
 >v : number
@@ -1909,15 +1909,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Int8Array.from(obj, mapFn, thisArg) : Int8Array
 >                                    : ^^^^^^^^^
 >Int8Array.from : { (arrayLike: ArrayLike<number>): Int8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^         ^^                 ^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >Int8Array : Int8ArrayConstructor
 >          : ^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1932,15 +1932,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Uint8Array.from(obj, mapFn, thisArg) : Uint8Array
 >                                     : ^^^^^^^^^^
 >Uint8Array.from : { (arrayLike: ArrayLike<number>): Uint8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1955,15 +1955,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Int16Array.from(obj, mapFn, thisArg) : Int16Array
 >                                     : ^^^^^^^^^^
 >Int16Array.from : { (arrayLike: ArrayLike<number>): Int16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int16Array : Int16ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -1978,15 +1978,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Uint16Array.from(obj, mapFn, thisArg) : Uint16Array
 >                                      : ^^^^^^^^^^^
 >Uint16Array.from : { (arrayLike: ArrayLike<number>): Uint16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint16Array : Uint16ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint16Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint16Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint16Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -2001,15 +2001,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Int32Array.from(obj, mapFn, thisArg) : Int32Array
 >                                     : ^^^^^^^^^^
 >Int32Array.from : { (arrayLike: ArrayLike<number>): Int32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >Int32Array : Int32ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Int32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Int32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Int32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -2024,15 +2024,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Uint32Array.from(obj, mapFn, thisArg) : Uint32Array
 >                                      : ^^^^^^^^^^^
 >Uint32Array.from : { (arrayLike: ArrayLike<number>): Uint32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >Uint32Array : Uint32ArrayConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -2047,15 +2047,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Float32Array.from(obj, mapFn, thisArg) : Float32Array
 >                                       : ^^^^^^^^^^^^
 >Float32Array.from : { (arrayLike: ArrayLike<number>): Float32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float32Array : Float32ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float32Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float32Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float32Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -2070,15 +2070,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Float64Array.from(obj, mapFn, thisArg) : Float64Array
 >                                       : ^^^^^^^^^^^^
 >Float64Array.from : { (arrayLike: ArrayLike<number>): Float64Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >Float64Array : Float64ArrayConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Float64Array; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Float64Array; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Float64Array; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 
@@ -2093,15 +2093,15 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
 >Uint8ClampedArray.from(obj, mapFn, thisArg) : Uint8ClampedArray
 >                                            : ^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray.from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8ClampedArray : Uint8ClampedArrayConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >from : { (arrayLike: ArrayLike<number>): Uint8ClampedArray; <T_1>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => number, thisArg?: any): Uint8ClampedArray; (arrayLike: Iterable<number>, mapfn?: (v: number, k: number) => number, thisArg?: any): Uint8ClampedArray; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^   ^^         ^^              ^^     ^^                             ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^         ^^                ^^     ^^^                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >obj : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 >mapFn : (n: T, v: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^      ^^^^^^^^^^^
 >thisArg : {}
 >        : ^^
 

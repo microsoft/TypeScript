@@ -3,7 +3,7 @@
 === example.ts ===
 export default function add(a: number, b: number) {
 >add : (a: number, b: number) => number
->    : ^^^^      ^^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -25,7 +25,7 @@ import * as example from './example';
 
 declare function test<T>(object: T, method: keyof T): void;
 >test : <T>(object: T, method: keyof T) => void
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^       ^^^^^    
+>     : ^ ^^      ^^ ^^      ^^       ^^^^^    
 >object : T
 >       : ^
 >method : keyof T
@@ -35,7 +35,7 @@ test(example, "default");
 >test(example, "default") : void
 >                         : ^^^^
 >test : <T>(object: T, method: keyof T) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^ ^^      ^^       ^^^^^^^^^
 >example : typeof example
 >        : ^^^^^^^^^^^^^^
 >"default" : "default"

@@ -10,13 +10,13 @@ interface connectmodule {
 interface connectexport {
     use: (mod: connectmodule) => connectexport;
 >use : (mod: connectmodule) => connectexport
->    : ^^^^^^             ^^^^^             
+>    : ^   ^^             ^^^^^             
 >mod : connectmodule
 >    : ^^^^^^^^^^^^^
 
     listen: (port: number) => void;
 >listen : (port: number) => void
->       : ^^^^^^^      ^^^^^    
+>       : ^    ^^      ^^^^^    
 >port : number
 >     : ^^^^^^
 }

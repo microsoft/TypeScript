@@ -10,7 +10,7 @@ interface I {
 
 function f(result: unknown) {
 >f : (result: unknown) => unknown
->  : ^^^^^^^^^       ^^^^^^^^^^^^
+>  : ^      ^^       ^^^^^^^^^^^^
 >result : unknown
 >       : ^^^^^^^
 
@@ -33,7 +33,7 @@ function f(result: unknown) {
 }
 function g(result: unknown) {
 >g : (result: unknown) => unknown
->  : ^^^^^^^^^       ^^^^^^^^^^^^
+>  : ^      ^^       ^^^^^^^^^^^^
 >result : unknown
 >       : ^^^^^^^
 

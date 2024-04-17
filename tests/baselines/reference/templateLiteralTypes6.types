@@ -27,7 +27,7 @@ type Keyof<T> = keyof T & string;
 
 declare function f1<
 >f1 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(eventPath: `${Scope}:${Event}`) => void
->   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^    
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                   ^^^^^    
 
   Scope extends Keyof<Registry>,
   Event extends Keyof<Registry[Scope]>,
@@ -37,7 +37,7 @@ declare function f1<
 
 function f2<
 >f2 : <Scope extends Keyof<Registry>, Event extends Keyof<Registry[Scope]>>(scope: Scope, event: Event) => void
->   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^     ^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^     ^^     ^^^^^^^^^
 
   Scope extends Keyof<Registry>,
   Event extends Keyof<Registry[Scope]>,
@@ -51,7 +51,7 @@ function f2<
 >f1(`${scope}:${event}`) : void
 >                        : ^^^^
 >f1 : <Scope_1 extends Keyof<Registry>, Event_1 extends Keyof<Registry[Scope_1]>>(eventPath: `${Scope_1}:${Event_1}`) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                       ^^^^^^^^^
 >`${scope}:${event}` : `${Scope}:${Event}`
 >                    : ^^^^^^^^^^^^^^^^^^^
 >scope : Scope

@@ -5,7 +5,7 @@ interface AConstructor {
     new (): A;
     [Symbol.hasInstance](value: unknown): value is A;
 >[Symbol.hasInstance] : (value: unknown) => value is A
->                     : ^^^^^^^^       ^^^^^          
+>                     : ^     ^^       ^^^^^          
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -87,7 +87,7 @@ interface BConstructor {
     new <T>(): B<T>;
     [Symbol.hasInstance](value: unknown): value is B<any>;
 >[Symbol.hasInstance] : (value: unknown) => value is B<any>
->                     : ^^^^^^^^       ^^^^^               
+>                     : ^     ^^       ^^^^^               
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -216,7 +216,7 @@ interface CConstructor {
 
     [Symbol.hasInstance](value: unknown): value is C1 | C2;
 >[Symbol.hasInstance] : (value: unknown) => value is C1 | C2
->                     : ^^^^^^^^       ^^^^^                
+>                     : ^     ^^       ^^^^^                
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -346,12 +346,12 @@ interface D {
 }
 declare var D: {
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^          ^^^
+>  : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^          ^^^
 
     new (): D;
     [Symbol.hasInstance](value: unknown): value is D;
 >[Symbol.hasInstance] : (value: unknown) => value is D
->                     : ^^^^^^^^       ^^^^^          
+>                     : ^     ^^       ^^^^^          
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -373,7 +373,7 @@ if (obj7 instanceof D) { // narrowed to D.
 >obj7 : string | D
 >     : ^^^^^^^^^^
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^^^^^^^^
 
     obj7.foo;
 >obj7.foo : string
@@ -402,7 +402,7 @@ if (obj8 instanceof D) {
 >obj8 : any
 >     : ^^^
 >D : { new (): D; [Symbol.hasInstance](value: unknown): value is D; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^^^^^^^^
 
     obj8.foo;
 >obj8.foo : string
@@ -426,7 +426,7 @@ interface EConstructor {
     new (): E1 | E2;
     [Symbol.hasInstance](value: unknown): value is E1 | E2;
 >[Symbol.hasInstance] : (value: unknown) => value is E1 | E2
->                     : ^^^^^^^^       ^^^^^                
+>                     : ^     ^^       ^^^^^                
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -537,7 +537,7 @@ interface FConstructor {
     new (): any;
     [Symbol.hasInstance](value: unknown): value is any;
 >[Symbol.hasInstance] : (value: unknown) => value is any
->                     : ^^^^^^^^       ^^^^^            
+>                     : ^     ^^       ^^^^^            
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -627,7 +627,7 @@ interface GConstructor {
     new (): G2;    // low priority
     [Symbol.hasInstance](value: unknown): value is G1; // overrides priority
 >[Symbol.hasInstance] : (value: unknown) => value is G1
->                     : ^^^^^^^^       ^^^^^           
+>                     : ^     ^^       ^^^^^           
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
@@ -718,7 +718,7 @@ interface HConstructor {
     new (): H;      // low priority
     [Symbol.hasInstance](value: unknown): value is H; // overrides priority
 >[Symbol.hasInstance] : (value: unknown) => value is H
->                     : ^^^^^^^^       ^^^^^          
+>                     : ^     ^^       ^^^^^          
 >Symbol.hasInstance : unique symbol
 >                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

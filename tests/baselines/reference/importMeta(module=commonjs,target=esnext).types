@@ -18,7 +18,7 @@
 >fetch(new URL("../hamsters.jpg", import.meta.url).toString()) : Promise<Response>
 >                                                              : ^^^^^^^^^^^^^^^^^
 >fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^                 ^^    ^^^           ^^^^^^^^^^^^^^^^^^^^^^
 >new URL("../hamsters.jpg", import.meta.url).toString() : string
 >                                                       : ^^^^^^
 >new URL("../hamsters.jpg", import.meta.url).toString : () => string
@@ -26,7 +26,7 @@
 >new URL("../hamsters.jpg", import.meta.url) : URL
 >                                            : ^^^
 >URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string): boolean; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^   ^^            ^^    ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^            ^^    ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^
 >"../hamsters.jpg" : "../hamsters.jpg"
 >                  : ^^^^^^^^^^^^^^^^^
 >import.meta.url : string
@@ -84,7 +84,7 @@
 >new Image() : HTMLImageElement
 >            : ^^^^^^^^^^^^^^^^
 >Image : new (width?: number, height?: number) => HTMLImageElement
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^     ^^^      ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
   image.src = URL.createObjectURL(blob);
 >image.src = URL.createObjectURL(blob) : string
@@ -98,11 +98,11 @@
 >URL.createObjectURL(blob) : string
 >                          : ^^^^^^
 >URL.createObjectURL : (obj: Blob | MediaSource) => string
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^                  ^^^^^^^^^^^
 >URL : { new (url: string | URL, base?: string | URL): URL; prototype: URL; canParse(url: string | URL, base?: string): boolean; createObjectURL(obj: Blob | MediaSource): string; revokeObjectURL(url: string): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^   ^^            ^^    ^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^            ^^    ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^
 >createObjectURL : (obj: Blob | MediaSource) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^                  ^^^^^^^^^^^
 >blob : Blob
 >     : ^^^^
 
@@ -130,7 +130,7 @@
 >document.body.appendChild(image) : HTMLImageElement
 >                                 : ^^^^^^^^^^^^^^^^
 >document.body.appendChild : <T extends Node>(node: T) => T
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
 >document.body : HTMLElement
 >              : ^^^^^^^^^^^
 >document : Document
@@ -138,7 +138,7 @@
 >body : HTMLElement
 >     : ^^^^^^^^^^^
 >appendChild : <T extends Node>(node: T) => T
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
 >image : HTMLImageElement
 >      : ^^^^^^^^^^^^^^^^
 

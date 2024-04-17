@@ -3,13 +3,13 @@
 === multiSignatureTypeInference.ts ===
 declare function f1(arg: boolean): string;
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
->   : ^^^^^^^^       ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^       ^^^      ^^^    ^^      ^^    ^^      ^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^^^
 >arg : boolean
 >    : ^^^^^^^
 
 declare function f1(arg1: number, arg2: number): number;
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^       ^^^^^^^^^^^^    ^^      ^^    ^^      ^^^      ^^^^^^    ^^        ^^^^^^^^^^^^^^
 >arg1 : number
 >     : ^^^^^^
 >arg2 : number
@@ -17,13 +17,13 @@ declare function f1(arg1: number, arg2: number): number;
 
 declare function f1(...args: string[]): string[];
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^        ^^^
+>   : ^^^   ^^       ^^^^^^^^^^^^    ^^      ^^    ^^      ^^^^^^^^^^^^^^^    ^^        ^^^        ^^^
 >args : string[]
 >     : ^^^^^^^^
 
 declare function f2(arg: unknown): unknown;
 >f2 : (arg: unknown) => unknown
->   : ^^^^^^       ^^^^^       
+>   : ^   ^^       ^^^^^       
 >arg : unknown
 >    : ^^^^^^^
 
@@ -63,13 +63,13 @@ type Params1 = AllParams<typeof f1>;  // string[] | [arg: boolean] | [arg1: numb
 >Params1 : string[] | [arg: boolean] | [arg1: number, arg2: number]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^       ^^^^^^^^^^^^    ^^      ^^    ^^      ^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^^^
 
 type Params2 = AllParams<typeof f2>;  // [arg: unknown]
 >Params2 : [arg: unknown]
 >        : ^^^^^^^^^^^^^^
 >f2 : (arg: unknown) => unknown
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^       ^^^^^^^^^^^^
 
 type Params3 = AllParams<typeof f3>;  // []
 >Params3 : []
@@ -81,13 +81,13 @@ type Returns1 = AllReturns<typeof f1>  // string | number | string[]
 >Returns1 : string | number | string[]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1 : { (arg: boolean): string; (arg1: number, arg2: number): number; (...args: string[]): string[]; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^   ^^       ^^^^^^^^^^^^    ^^      ^^    ^^      ^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^^^^^^
 
 type Returns2 = AllReturns<typeof f2>;  // unknown
 >Returns2 : unknown
 >         : ^^^^^^^
 >f2 : (arg: unknown) => unknown
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^       ^^^^^^^^^^^^
 
 type Returns3 = AllReturns<typeof f3>;  // string
 >Returns3 : string

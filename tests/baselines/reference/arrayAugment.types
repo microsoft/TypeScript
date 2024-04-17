@@ -4,7 +4,7 @@
 interface Array<T> {
     split: (parts: number) => T[][];
 >split : (parts: number) => T[][]
->      : ^^^^^^^^      ^^^^^     
+>      : ^     ^^      ^^^^^     
 >parts : number
 >      : ^^^^^^
 }
@@ -23,11 +23,11 @@ var y = x.split(4);
 >x.split(4) : string[][]
 >           : ^^^^^^^^^^
 >x.split : (parts: number) => string[][]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^      ^^^^^^^^^^^^^^^
 >x : string[]
 >  : ^^^^^^^^
 >split : (parts: number) => string[][]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^^^^^^^
 >4 : 4
 >  : ^
 

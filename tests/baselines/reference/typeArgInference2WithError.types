@@ -9,7 +9,7 @@ interface Item {
 
 declare function foo<T extends Item>(x?: T, y?: T): T;
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^ ^^^^^ 
+>    : ^ ^^^^^^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -21,7 +21,7 @@ var z7 = foo("abc", 5); // Error
 >foo("abc", 5) : Item
 >              : ^^^^
 >foo : <T extends Item>(x?: T, y?: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^ ^^^ ^^ ^^^ ^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 >5 : 5

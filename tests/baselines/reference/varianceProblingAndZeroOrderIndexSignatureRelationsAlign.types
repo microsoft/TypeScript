@@ -30,9 +30,9 @@ class Left<L, A> {
     /** The given function is applied if this is a `Right` */
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
->    : ^ ^^^^^           ^^^^^            
+>    : ^ ^^ ^^           ^^^^^            
 >f : (a: A) => B
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -43,9 +43,9 @@ class Left<L, A> {
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
->   : ^ ^^^^^^^                      ^^^^^            
+>   : ^ ^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
->    : ^^^^^^^^^^^^^^ ^^^^^ ^
+>    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
 >  : ^
 
@@ -78,9 +78,9 @@ class Right<L, A> {
 
     map<B>(f: (a: A) => B): Either<L, B> {
 >map : <B>(f: (a: A) => B) => Either<L, B>
->    : ^ ^^^^^           ^^^^^            
+>    : ^ ^^ ^^           ^^^^^            
 >f : (a: A) => B
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -92,7 +92,7 @@ class Right<L, A> {
 >f(this.value) : B
 >              : ^
 >f : (a: A) => B
->  : ^^^^^^^^^^^
+>  : ^ ^^ ^^^^^^
 >this.value : A
 >           : ^
 >this : this
@@ -102,9 +102,9 @@ class Right<L, A> {
     }
     ap<B>(fab: Either<L, (a: A) => B>): Either<L, B> {
 >ap : <B>(fab: Either<L, (a: A) => B>) => Either<L, B>
->   : ^ ^^^^^^^                      ^^^^^            
+>   : ^ ^^   ^^                      ^^^^^            
 >fab : Either<L, (a: A) => B>
->    : ^^^^^^^^^^^^^^ ^^^^^ ^
+>    : ^^^^^^^^^^^ ^^ ^^^^^ ^
 >a : A
 >  : ^
 
@@ -138,14 +138,14 @@ class Type<A, O = A, I = unknown> {
     /** a custom type guard */
     readonly is: (u: unknown) => u is A,
 >is : (u: unknown) => u is A
->   : ^^^^       ^^^^^      
+>   : ^ ^^       ^^^^^      
 >u : unknown
 >  : ^^^^^^^
 
     /** succeeds if a value of type I can be decoded to a value of type A */
     readonly validate: (input: I, context: {}[]) => Either<{}[], A>,
 >validate : (input: I, context: {}[]) => Either<{}[], A>
->         : ^^^^^^^^ ^^^^^^^^^^^    ^^^^^               
+>         : ^     ^^ ^^       ^^    ^^^^^               
 >input : I
 >      : ^
 >context : {}[]
@@ -154,7 +154,7 @@ class Type<A, O = A, I = unknown> {
     /** converts a value of type A to a value of type O */
     readonly encode: (a: A) => O
 >encode : (a: A) => O
->       : ^^^^ ^^^^^ 
+>       : ^ ^^ ^^^^^ 
 >a : A
 >  : ^
 
@@ -162,7 +162,7 @@ class Type<A, O = A, I = unknown> {
   /** a version of `validate` with a default context */
   decode(i: I): Either<{}[], A> { return null as any; }
 >decode : (i: I) => Either<{}[], A>
->       : ^^^^ ^^^^^               
+>       : ^ ^^ ^^^^^               
 >i : I
 >  : ^
 >null as any : any
@@ -205,7 +205,7 @@ const tmp1: MyInfo = null!;
 
 function tmp2<N extends NeededInfo>(n: N) {}
 >tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >n : N
 >  : ^
 
@@ -213,7 +213,7 @@ tmp2(tmp1); // uncommenting this line removes a type error from a completely unr
 >tmp2(tmp1) : void
 >           : ^^^^
 >tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >tmp1 : MyInfo
 >     : ^^^^^^
 

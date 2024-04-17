@@ -22,7 +22,7 @@ interface StrList {
 
 export function foo<T extends NumList | StrList>(arr: T & (NumList | StrList)) {
 >foo : <T extends NumList | StrList>(arr: T & (NumList | StrList)) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                       ^^^^^^^^^
 >arr : T & (NumList | StrList)
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ export type TypedArray = Int32Array | Uint8Array;
 
 export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
->             : ^^^^  ^^^^^                            
+>             : ^ ^^  ^^^^^                            
 >a : {}
 >  : ^^
 
@@ -68,7 +68,7 @@ export function isTypedArray(a: {}): a is Int32Array | Uint8Array {
 
 export function flatten<T extends number|TypedArray>(arr: T) {
 >flatten : <T extends number | TypedArray>(arr: T) => void
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arr : T
 >    : ^
 
@@ -76,7 +76,7 @@ export function flatten<T extends number|TypedArray>(arr: T) {
 >isTypedArray(arr) : boolean
 >                  : ^^^^^^^
 >isTypedArray : (a: {}) => a is Int32Array | Uint8Array
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arr : number | TypedArray
 >    : ^^^^^^^^^^^^^^^^^^^
 

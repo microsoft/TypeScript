@@ -56,6 +56,7 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
@@ -243,6 +244,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
@@ -785,7 +789,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
                     return visitImportCallExpression(node);
                 }
                 break;

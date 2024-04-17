@@ -118,7 +118,7 @@ var y = [E2];
 
 function foo(t: any): void {
 >foo : (t: any) => void
->    : ^^^^   ^^^^^    
+>    : ^ ^^   ^^^^^    
 >t : any
 >  : ^^^
 }
@@ -127,7 +127,7 @@ foo(E2);
 >foo(E2) : void
 >        : ^^^^
 >foo : (t: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >E2 : typeof E2
 >   : ^^^^^^^^^
 

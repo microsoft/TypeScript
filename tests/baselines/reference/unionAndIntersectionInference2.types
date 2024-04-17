@@ -3,7 +3,7 @@
 === unionAndIntersectionInference2.ts ===
 declare function f1<T>(x: T | string): T;
 >f1 : <T>(x: T | string) => T
->   : ^ ^^^^^          ^^^^^ 
+>   : ^ ^^ ^^          ^^^^^ 
 >x : string | T
 >  : ^^^^^^^^^^
 
@@ -32,46 +32,46 @@ var e1: number | string | boolean;
 f1(a1); // string
 >f1(a1) : string
 >       : ^^^^^^
->f1 : <T>(x: string | T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T | string) => T
+>   : ^ ^^ ^^          ^^^^^^
 >a1 : string
 >   : ^^^^^^
 
 f1(b1); // string[]
 >f1(b1) : string[]
 >       : ^^^^^^^^
->f1 : <T>(x: string | T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T | string) => T
+>   : ^ ^^ ^^          ^^^^^^
 >b1 : string | string[]
 >   : ^^^^^^^^^^^^^^^^^
 
 f1(c1); // string[]
 >f1(c1) : string[]
 >       : ^^^^^^^^
->f1 : <T>(x: string | T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T | string) => T
+>   : ^ ^^ ^^          ^^^^^^
 >c1 : string | string[]
 >   : ^^^^^^^^^^^^^^^^^
 
 f1(d1); // { name: string }
 >f1(d1) : { name: string; }
 >       : ^^^^^^^^^^^^^^^^^
->f1 : <T>(x: string | T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T | string) => T
+>   : ^ ^^ ^^          ^^^^^^
 >d1 : string | { name: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f1(e1); // number | boolean
 >f1(e1) : number | boolean
 >       : ^^^^^^^^^^^^^^^^
->f1 : <T>(x: string | T) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : <T>(x: T | string) => T
+>   : ^ ^^ ^^          ^^^^^^
 >e1 : string | number | boolean
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f2<T>(x: T & { name: string }): T;
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^ ^^^^^                     ^^^^^ 
+>   : ^ ^^ ^^                     ^^^^^ 
 >x : T & { name: string; }
 >  : ^^^^^^^^^^^^      ^^^
 >name : string
@@ -107,7 +107,7 @@ f2(a2); // string
 >f2(a2) : string
 >       : ^^^^^^
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^                     ^^^^^^
 >a2 : string & { name: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -115,7 +115,7 @@ f2(b2); // string[]
 >f2(b2) : string[]
 >       : ^^^^^^^^
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^                     ^^^^^^
 >b2 : { name: string; } & string[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -123,7 +123,7 @@ f2(c2); // never
 >f2(c2) : never
 >       : ^^^^^
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^                     ^^^^^^
 >c2 : never
 >   : ^^^^^
 
@@ -131,7 +131,7 @@ f2(d2); // never
 >f2(d2) : never
 >       : ^^^^^
 >f2 : <T>(x: T & { name: string; }) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^                     ^^^^^^
 >d2 : never
 >   : ^^^^^
 

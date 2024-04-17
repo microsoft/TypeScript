@@ -516,10 +516,10 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/a/tsconfig.json (Configured)
+/a/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
+    noOpenRef: false *changed*
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -639,7 +639,6 @@ Projects::
 /a/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1

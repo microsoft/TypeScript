@@ -25,7 +25,7 @@
        } 
        export function observable<T>(value: T): Observable<T>; 
 >observable : <T>(value: T) => Observable<T>
->           : ^ ^^^^^^^^^ ^^^^^             
+>           : ^ ^^     ^^ ^^^^^             
 >value : T
 >      : ^
     } 
@@ -41,11 +41,11 @@
 >ko.observable("Bob") : ko.Observable<string>
 >                     : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
 >ko : typeof ko
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
 >"Bob" : "Bob"
 >      : ^^^^^
 
@@ -55,11 +55,11 @@
 >ko.observable(37) : ko.Observable<number>
 >                  : ^^^^^^^^^^^^^^^^^^^^^
 >ko.observable : <T>(value: T) => ko.Observable<T>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
 >ko : typeof ko
 >   : ^^^^^^^^^
 >observable : <T>(value: T) => ko.Observable<T>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^
 >37 : 37
 >   : ^^
 

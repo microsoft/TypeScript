@@ -33,7 +33,7 @@ interface CtorOnly {
 
 function doSomething(settings: Settings) { /* ... */ }
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^        ^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >settings : Settings
 >         : ^^^^^^^^
 
@@ -42,7 +42,7 @@ doSomething(getDefaultSettings);
 >doSomething(getDefaultSettings) : void
 >                                : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >getDefaultSettings : () => { timeout: number; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -50,7 +50,7 @@ doSomething(() => ({ timeout: 1000 }));
 >doSomething(() => ({ timeout: 1000 })) : void
 >                                       : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >() => ({ timeout: 1000 }) : () => { timeout: number; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ timeout: 1000 }) : { timeout: number; }
@@ -66,7 +66,7 @@ doSomething(null as CtorOnly);
 >doSomething(null as CtorOnly) : void
 >                              : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >null as CtorOnly : CtorOnly
 >                 : ^^^^^^^^
 
@@ -74,7 +74,7 @@ doSomething(12);
 >doSomething(12) : void
 >                : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >12 : 12
 >   : ^^
 
@@ -82,7 +82,7 @@ doSomething('completely wrong');
 >doSomething('completely wrong') : void
 >                                : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >'completely wrong' : "completely wrong"
 >                   : ^^^^^^^^^^^^^^^^^^
 
@@ -90,7 +90,7 @@ doSomething(false);
 >doSomething(false) : void
 >                   : ^^^^
 >doSomething : (settings: Settings) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^        ^^        ^^^^^^^^^
 >false : false
 >      : ^^^^^
 
@@ -127,7 +127,7 @@ type ChangeOptions = ConfigurableStartEnd & InsertOptions;
 
 function del(options: ConfigurableStartEnd = {},
 >del : (options?: ConfigurableStartEnd, error?: { error?: number; }) => void
->    : ^^^^^^^^^^^                    ^^^^^^^^^^                   ^^^^^^^^^
+>    : ^       ^^^                    ^^     ^^^                   ^^^^^^^^^
 >options : ConfigurableStartEnd
 >        : ^^^^^^^^^^^^^^^^^^^^
 >{} : {}
@@ -149,11 +149,11 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push(options) : number
 >                      : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >changes : ChangeOptions[]
 >        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : ConfigurableStartEnd
 >        : ^^^^^^^^^^^^^^^^^^^^
 
@@ -161,11 +161,11 @@ function del(options: ConfigurableStartEnd = {},
 >changes.push(error) : number
 >                    : ^^^^^^
 >changes.push : (...items: ChangeOptions[]) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >changes : ChangeOptions[]
 >        : ^^^^^^^^^^^^^^^
 >push : (...items: ChangeOptions[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >error : { error?: number; }
 >      : ^^^^^^^^^^^^^^^^^^^
 }

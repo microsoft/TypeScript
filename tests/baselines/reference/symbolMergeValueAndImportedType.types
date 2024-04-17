@@ -15,11 +15,11 @@ console.log('X is ' + X);
 >console.log('X is ' + X) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'X is ' + X : string
 >            : ^^^^^^
 >'X is ' : "X is "

@@ -3,11 +3,11 @@
 === sourceMapValidationDestructuringParametertArrayBindingPattern2.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
->    : ^^^^^^   ^^^^^    
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 type Robot = [string, [string, string]];
@@ -30,7 +30,7 @@ var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 
 function foo1([, skillA]: Robot) {
 >foo1 : ([, skillA]: Robot) => void
->     : ^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^          ^^     ^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >skillA : [string, string]
@@ -40,18 +40,18 @@ function foo1([, skillA]: Robot) {
 >console.log(skillA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >skillA : [string, string]
 >       : ^^^^^^^^^^^^^^^^
 }
 
 function foo2([nameMB]: Robot) {
 >foo2 : ([nameMB]: Robot) => void
->     : ^^^^^^^^^^^     ^^^^^^^^^
+>     : ^        ^^     ^^^^^^^^^
 >nameMB : string
 >       : ^^^^^^
 
@@ -59,18 +59,18 @@ function foo2([nameMB]: Robot) {
 >console.log(nameMB) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameMB : string
 >       : ^^^^^^
 }
 
 function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                                          ^^     ^^^^^^^^^
 >nameMA : string
 >       : ^^^^^^
 >primarySkillA : string
@@ -82,18 +82,18 @@ function foo3([nameMA, [primarySkillA, secondarySkillA]]: Robot) {
 >console.log(nameMA) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameMA : string
 >       : ^^^^^^
 }
 
 function foo4([...multiRobotAInfo]: Robot) {
 >foo4 : ([...multiRobotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                    ^^     ^^^^^^^^^
 >multiRobotAInfo : [string, [string, string]]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -101,11 +101,11 @@ function foo4([...multiRobotAInfo]: Robot) {
 >console.log(multiRobotAInfo) : void
 >                             : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >multiRobotAInfo : [string, [string, string]]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -114,7 +114,7 @@ foo1(robotA);
 >foo1(robotA) : void
 >             : ^^^^
 >foo1 : ([, skillA]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^          ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -122,7 +122,7 @@ foo1(["roomba", ["vacuum", "mopping"]]);
 >foo1(["roomba", ["vacuum", "mopping"]]) : void
 >                                        : ^^^^
 >foo1 : ([, skillA]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
@@ -138,7 +138,7 @@ foo2(robotA);
 >foo2(robotA) : void
 >             : ^^^^
 >foo2 : ([nameMB]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -146,7 +146,7 @@ foo2(["roomba", ["vacuum", "mopping"]]);
 >foo2(["roomba", ["vacuum", "mopping"]]) : void
 >                                        : ^^^^
 >foo2 : ([nameMB]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
@@ -162,7 +162,7 @@ foo3(robotA);
 >foo3(robotA) : void
 >             : ^^^^
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                          ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -170,7 +170,7 @@ foo3(["roomba", ["vacuum", "mopping"]]);
 >foo3(["roomba", ["vacuum", "mopping"]]) : void
 >                                        : ^^^^
 >foo3 : ([nameMA, [primarySkillA, secondarySkillA]]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                          ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"
@@ -186,7 +186,7 @@ foo4(robotA);
 >foo4(robotA) : void
 >             : ^^^^
 >foo4 : ([...multiRobotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                    ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -194,7 +194,7 @@ foo4(["roomba", ["vacuum", "mopping"]]);
 >foo4(["roomba", ["vacuum", "mopping"]]) : void
 >                                        : ^^^^
 >foo4 : ([...multiRobotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                    ^^     ^^^^^^^^^
 >["roomba", ["vacuum", "mopping"]] : [string, [string, string]]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"roomba" : "roomba"

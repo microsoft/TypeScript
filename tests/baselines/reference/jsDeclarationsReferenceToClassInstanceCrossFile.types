@@ -32,11 +32,11 @@ console.log("Objects", render.objects);
 >console.log("Objects", render.objects) : void
 >                                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Objects" : "Objects"
 >          : ^^^^^^^^^
 >render.objects : import("rectangle").Rectangle[]
@@ -56,11 +56,11 @@ class Rectangle {
 >console.log("I'm a rectangle!") : void
 >                                : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"I'm a rectangle!" : "I'm a rectangle!"
 >                   : ^^^^^^^^^^^^^^^^^^
     }
@@ -132,7 +132,7 @@ class Render {
 >this.objects.push(obj) : number
 >                       : ^^^^^^
 >this.objects.push : (...items: Rectangle[]) => number
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.objects : Rectangle[]
 >             : ^^^^^^^^^^^
 >this : this
@@ -140,7 +140,7 @@ class Render {
 >objects : Rectangle[]
 >        : ^^^^^^^^^^^
 >push : (...items: Rectangle[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : Rectangle
 >    : ^^^^^^^^^
 

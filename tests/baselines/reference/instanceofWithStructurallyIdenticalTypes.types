@@ -23,7 +23,7 @@ class C3 { item: string }
 
 function foo1(x: C1 | C2 | C3): string {
 >foo1 : (x: C1 | C2 | C3) => string
->     : ^^^^            ^^^^^      
+>     : ^ ^^            ^^^^^      
 >x : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 
@@ -86,7 +86,7 @@ function foo1(x: C1 | C2 | C3): string {
 
 function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
 >isC1 : (c: C1 | C2 | C3) => c is C1
->     : ^^^^            ^^^^^       
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 >c instanceof C1 : boolean
@@ -98,7 +98,7 @@ function isC1(c: C1 | C2 | C3): c is C1 { return c instanceof C1 }
 
 function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
 >isC2 : (c: C1 | C2 | C3) => c is C2
->     : ^^^^            ^^^^^       
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 >c instanceof C2 : boolean
@@ -110,7 +110,7 @@ function isC2(c: C1 | C2 | C3): c is C2 { return c instanceof C2 }
 
 function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
 >isC3 : (c: C1 | C2 | C3) => c is C3
->     : ^^^^            ^^^^^       
+>     : ^ ^^            ^^^^^       
 >c : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 >c instanceof C3 : boolean
@@ -122,7 +122,7 @@ function isC3(c: C1 | C2 | C3): c is C3 { return c instanceof C3 }
 
 function foo2(x: C1 | C2 | C3): string {
 >foo2 : (x: C1 | C2 | C3) => string
->     : ^^^^            ^^^^^      
+>     : ^ ^^            ^^^^^      
 >x : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 
@@ -130,7 +130,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC1(x) : boolean
 >        : ^^^^^^^
 >isC1 : (c: C1 | C2 | C3) => c is C1
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^
 >x : C1 | C2 | C3
 >  : ^^^^^^^^^^^^
 
@@ -146,7 +146,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC2(x) : boolean
 >        : ^^^^^^^
 >isC2 : (c: C1 | C2 | C3) => c is C2
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^
 >x : C2
 >  : ^^
 
@@ -166,7 +166,7 @@ function foo2(x: C1 | C2 | C3): string {
 >isC3(x) : boolean
 >        : ^^^^^^^
 >isC3 : (c: C1 | C2 | C3) => c is C3
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^^^^
 >x : never
 >  : ^^^^^
 
@@ -213,7 +213,7 @@ class B extends A { b: string }
 
 function goo(x: A) {
 >goo : (x: A) => void
->    : ^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^
 >x : A
 >  : ^
 

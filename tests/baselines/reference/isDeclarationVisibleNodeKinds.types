@@ -8,7 +8,7 @@ module schema {
 
     export function createValidator1(schema: any): <T>(data: T) => T {
 >createValidator1 : (schema: any) => <T>(data: T) => T
->                 : ^^^^^^^^^   ^^^^^                 
+>                 : ^      ^^   ^^^^^                 
 >schema : any
 >data : T
 >     : ^
@@ -26,7 +26,7 @@ module schema {
 
     export function createValidator2(schema: any): new <T>(data: T) => T {
 >createValidator2 : (schema: any) => new <T>(data: T) => T
->                 : ^^^^^^^^^   ^^^^^                     
+>                 : ^      ^^   ^^^^^                     
 >schema : any
 >data : T
 >     : ^
@@ -44,7 +44,7 @@ module schema {
 
      export function createValidator3(schema: any): number | { new <T>(data: T): T; }  {
 >createValidator3 : (schema: any) => number | { new <T>(data: T): T; }
->                 : ^^^^^^^^^   ^^^^^                                 
+>                 : ^      ^^   ^^^^^                                 
 >schema : any
 >data : T
 >     : ^
@@ -62,7 +62,7 @@ module schema {
 
      export function createValidator4(schema: any): { new <T>(data: T): T; }[] {
 >createValidator4 : (schema: any) => { new <T>(data: T): T; }[]
->                 : ^^^^^^^^^   ^^^^^                          
+>                 : ^      ^^   ^^^^^                          
 >schema : any
 >data : T
 >     : ^
@@ -81,7 +81,7 @@ module schema {
 
     export function createValidator5(schema: any): { new <T>(data: T): T } {
 >createValidator5 : (schema: any) => { new <T>(data: T): T; }
->                 : ^^^^^^^^^   ^^^^^                        
+>                 : ^      ^^   ^^^^^                        
 >schema : any
 >data : T
 >     : ^
@@ -99,7 +99,7 @@ module schema {
 
     export function createValidator6(schema: any): [ new <T>(data: T) => T, number] {
 >createValidator6 : (schema: any) => [new <T>(data: T) => T, number]
->                 : ^^^^^^^^^   ^^^^^                               
+>                 : ^      ^^   ^^^^^                               
 >schema : any
 >data : T
 >     : ^
@@ -117,7 +117,7 @@ module schema {
 
     export function createValidator7(schema: any): (new <T>(data: T)=>T )[] {
 >createValidator7 : (schema: any) => (new <T>(data: T) => T)[]
->                 : ^^^^^^^^^   ^^^^^                         
+>                 : ^      ^^   ^^^^^                         
 >schema : any
 >data : T
 >     : ^
@@ -135,7 +135,7 @@ module schema {
 
     export function createValidator8(schema: any): Array<{ <T>(data: T) : T}> {
 >createValidator8 : (schema: any) => Array<{ <T>(data: T): T; }>
->                 : ^^^^^^^^^   ^^^^^                           
+>                 : ^      ^^   ^^^^^                           
 >schema : any
 >data : T
 >     : ^
@@ -157,7 +157,7 @@ module schema {
 
         get createValidator9(): <T>(data: T) => T {
 >createValidator9 : <T>(data: T) => T
->                 : ^ ^^^^^^^^ ^^^^^ 
+>                 : ^ ^^    ^^ ^^^^^ 
 >data : T
 >     : ^
 
@@ -168,9 +168,9 @@ module schema {
         
         set createValidator10(v: <T>(data: T) => T) {
 >createValidator10 : <T>(data: T) => T
->                  : ^ ^^^^^^^^ ^^^^^ 
+>                  : ^ ^^    ^^ ^^^^^ 
 >v : <T>(data: T) => T
->  : ^ ^^^^^^^^ ^^^^^ 
+>  : ^ ^^    ^^ ^^^^^ 
 >data : T
 >     : ^
         }

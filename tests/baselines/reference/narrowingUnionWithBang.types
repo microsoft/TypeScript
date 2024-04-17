@@ -6,7 +6,7 @@ type WorkingType = {
 >            : ^^^^^^^^^^^
 
     thing?:
->thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Error9'; message: string; } | { name: 'Correct'; id: string; } | undefined
+>thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Error9"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
 
     { name: 'Error1', message: string } |
@@ -100,11 +100,11 @@ if (working.thing!.name !== "Correct") {
 >console.log(working.thing!.message) : void
 >                                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >working.thing!.message : string
 >                       : ^^^^^^
 >working.thing! : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Error9"; message: string; }
@@ -123,11 +123,11 @@ if (working.thing!.name !== "Correct") {
 >console.log(working.thing!.id) : void
 >                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >working.thing!.id : string
 >                  : ^^^^^^
 >working.thing! : { name: "Correct"; id: string; }
@@ -147,7 +147,7 @@ type BorkedType = {
 >           : ^^^^^^^^^^
 
     thing?:
->thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Correct'; id: string; } | undefined
+>thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
 
     { name: 'Error1', message: string } |
@@ -235,11 +235,11 @@ if (borked.thing!.name !== "Correct") {
 >console.log(borked.thing!.message) : void
 >                                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >borked.thing!.message : string
 >                      : ^^^^^^
 >borked.thing! : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; }
@@ -258,11 +258,11 @@ if (borked.thing!.name !== "Correct") {
 >console.log(borked.thing!.id) : void
 >                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >borked.thing!.id : string
 >                 : ^^^^^^
 >borked.thing! : { name: "Correct"; id: string; }
@@ -282,7 +282,7 @@ export type FixedType = {
 >          : ^^^^^^^^^
 
     thing?:
->thing : { name: 'Error1'; message: string; } | { name: 'Error2'; message: string; } | { name: 'Error3'; message: string; } | { name: 'Error4'; message: string; } | { name: 'Error5'; message: string; } | { name: 'Error6'; message: string; } | { name: 'Error7'; message: string; } | { name: 'Error8'; message: string; } | { name: 'Correct'; id: string; } | undefined
+>thing : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; } | { name: "Correct"; id: string; } | undefined
 >      : ^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^      ^^^^^^^^^^^^^^         ^^^^^^      ^^^^^^^^^^^^^^^
 
     { name: 'Error1', message: string } |
@@ -368,11 +368,11 @@ if (fixed.thing?.name !== "Correct") {
 >console.log(fixed.thing!.message) : void
 >                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >fixed.thing!.message : string
 >                     : ^^^^^^
 >fixed.thing! : { name: "Error1"; message: string; } | { name: "Error2"; message: string; } | { name: "Error3"; message: string; } | { name: "Error4"; message: string; } | { name: "Error5"; message: string; } | { name: "Error6"; message: string; } | { name: "Error7"; message: string; } | { name: "Error8"; message: string; }
@@ -391,11 +391,11 @@ if (fixed.thing?.name !== "Correct") {
 >console.log(fixed.thing.id) : void
 >                            : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >fixed.thing.id : string
 >               : ^^^^^^
 >fixed.thing : { name: "Correct"; id: string; }

@@ -3,7 +3,7 @@
 === nonPrimitiveInFunction.ts ===
 function takeObject(o: object) {}
 >takeObject : (o: object) => void
->           : ^^^^      ^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >o : object
 >  : ^^^^^^
 
@@ -28,7 +28,7 @@ takeObject(nonPrimitive);
 >takeObject(nonPrimitive) : void
 >                         : ^^^^
 >takeObject : (o: object) => void
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >nonPrimitive : object
 >             : ^^^^^^
 
@@ -46,7 +46,7 @@ takeObject(primitive); // expect error
 >takeObject(primitive) : void
 >                      : ^^^^
 >takeObject : (o: object) => void
->           : ^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^
 >primitive : boolean
 >          : ^^^^^^^
 

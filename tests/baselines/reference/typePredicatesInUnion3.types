@@ -38,7 +38,7 @@ type F3 = (x: unknown) => string;
 
 function f1(x: unknown, p: P1 | P2) {
 >f1 : (x: unknown, p: P1 | P2) => void
->   : ^^^^       ^^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >p : P1 | P2
@@ -60,7 +60,7 @@ function f1(x: unknown, p: P1 | P2) {
 
 function f2(x: unknown, p: P1 | P2 | F1) {
 >f2 : (x: unknown, p: P1 | P2 | F1) => void
->   : ^^^^       ^^^^^            ^^^^^^^^^
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >p : P1 | P2 | F1
@@ -82,7 +82,7 @@ function f2(x: unknown, p: P1 | P2 | F1) {
 
 function f3(x: unknown, p: P1 | P2 | F2) {
 >f3 : (x: unknown, p: P1 | P2 | F2) => void
->   : ^^^^       ^^^^^            ^^^^^^^^^
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >p : P1 | P2 | F2
@@ -104,7 +104,7 @@ function f3(x: unknown, p: P1 | P2 | F2) {
 
 function f4(x: unknown, p: P1 | P2 | F3) {
 >f4 : (x: unknown, p: P1 | P2 | F3) => void
->   : ^^^^       ^^^^^            ^^^^^^^^^
+>   : ^ ^^       ^^ ^^            ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >p : P1 | P2 | F3
@@ -170,7 +170,7 @@ class Type2 {
 
 function assertType<T>(_val: T) {
 >assertType : <T>(_val: T) => void
->           : ^ ^^^^^^^^ ^^^^^^^^^
+>           : ^ ^^    ^^ ^^^^^^^^^
 >_val : T
 >     : ^
 }
@@ -193,7 +193,7 @@ if (val.predicate()) {
 >assertType<number>(val.attribute) : void
 >                                  : ^^^^
 >assertType : <T>(_val: T) => void
->           : ^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^    ^^ ^^^^^^^^^
 >val.attribute : number | null
 >              : ^^^^^^^^^^^^^
 >val : Type1 | Type2

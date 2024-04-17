@@ -37,11 +37,11 @@ foo1 = [...Array.isArray(foo2) ? foo2 : [foo2]];
 >Array.isArray(foo2) : boolean
 >                    : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >foo2 : Foo
 >     : ^^^
 >foo2 : FooArray

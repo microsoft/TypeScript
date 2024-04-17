@@ -145,11 +145,11 @@ module Formatting {
 >this.ApplyScriptBlockIndentation(this.languageHostIndentation, this.tree) : void
 >                                                                          : ^^^^
 >this.ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: ParseTree) => void
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^                       ^^      ^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: ParseTree) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^                       ^^      ^^    ^^^^^^^^^^^^^^^^^^^^
 >this.languageHostIndentation : string
 >                             : ^^^^^^
 >this : this
@@ -167,11 +167,11 @@ module Formatting {
 >this.FillInheritedIndentation(this.tree) : void
 >                                         : ^^^^
 >this.FillInheritedIndentation : (tree: ParseTree) => void
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >FillInheritedIndentation : (tree: ParseTree) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^    ^^^^^^^^^^^^^^^^^^^^
 >this.tree : ParseTree
 >          : ^^^^^^^^^
 >this : this
@@ -183,7 +183,7 @@ module Formatting {
 
         public GetIndentationEdits(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEdits : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^     ^^^^^^^^^^^^^         ^^^^^^^^^^^^^    ^^^^^^^^^^^^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >nextToken : TokenSpan
@@ -332,11 +332,11 @@ module Formatting {
 >this.GetIndentationEditsWorker(token, nextToken, node, sameLineIndent) : List_TextEditInfo
 >                                                                       : ^^^^^^^^^^^^^^^^^
 >this.GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^     ^^^^^^^^^^^^^         ^^^^^^^^^^^^^    ^^^^^^^^^^^^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^         ^^^^^^^^^^^^^    ^^^^^^^^^^^^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >nextToken : TokenSpan
@@ -477,7 +477,7 @@ module Formatting {
 
         public GetIndentationEditsWorker(token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean): List_TextEditInfo {
 >GetIndentationEditsWorker : (token: TokenSpan, nextToken: TokenSpan, node: ParseNode, sameLineIndent: boolean) => List_TextEditInfo
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^         ^^^^^^^^^^^^^    ^^^^^^^^^^^^^              ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >nextToken : TokenSpan
@@ -513,11 +513,11 @@ module Formatting {
 >this.AdjustStartOffsetIfNeeded(token, node) : void
 >                                            : ^^^^
 >this.AdjustStartOffsetIfNeeded : (token: TokenSpan, node: ParseNode) => void
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >AdjustStartOffsetIfNeeded : (token: TokenSpan, node: ParseNode) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -558,11 +558,11 @@ module Formatting {
 >this.IsMultiLineString(token) : boolean
 >                              : ^^^^^^^
 >this.IsMultiLineString : (token: TokenSpan) => boolean
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >IsMultiLineString : (token: TokenSpan) => boolean
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 
@@ -580,11 +580,11 @@ module Formatting {
 >this.GetSpecialCaseIndentation(token, node) : IndentationInfo
 >                                            : ^^^^^^^^^^^^^^^
 >this.GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -811,11 +811,11 @@ module Formatting {
 >this.ApplyIndentationDeltaFromParent(token, node) : IndentationInfo
 >                                                  : ^^^^^^^^^^^^^^^
 >this.ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -837,11 +837,11 @@ module Formatting {
 >this.GetIndentEdit(indentationInfo, token.Span.startPosition(), sameLineIndent) : TextEditInfo
 >                                                                                : ^^^^^^^^^^^^
 >this.GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^          ^^^^^^^^^^^^^^^^^^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^          ^^^^^^^^^^^^^^^^^^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
 >indentationInfo : IndentationInfo
 >                : ^^^^^^^^^^^^^^^
 >token.Span.startPosition() : any
@@ -869,11 +869,11 @@ module Formatting {
 >this.RegisterIndentation(edit, sameLineIndent) : void
 >                                               : ^^^^
 >this.RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^      ^^^^^^^^^^^^^^^^              ^^       ^^^^^^^^^
 >this : this
 >     : ^^^^
 >RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^      ^^^^^^^^^^^^^^^^              ^^       ^^^^^^^^^
 >edit : TextEditInfo
 >     : ^^^^^^^^^^^^
 >sameLineIndent : boolean
@@ -914,11 +914,11 @@ module Formatting {
 >this.GetCommentIndentationEdits(token) : List_TextEditInfo
 >                                       : ^^^^^^^^^^^^^^^^^
 >this.GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 
@@ -932,7 +932,7 @@ module Formatting {
 >foreach : any
 >        : ^^^
 >(item) => {                            result.add(item);                        } : (item: any) => void
->                                                                                  : ^^^^^^^^^^^^^^^^^^^
+>                                                                                  : ^    ^^^^^^^^^^^^^^
 >item : any
 >     : ^^^
 
@@ -960,7 +960,7 @@ module Formatting {
 
         private GetCommentIndentationEdits(token: TokenSpan): List_TextEditInfo {
 >GetCommentIndentationEdits : (token: TokenSpan) => List_TextEditInfo
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 
@@ -1044,11 +1044,11 @@ module Formatting {
 >this.GetIndentationDelta(token.Span.startPosition(), null) : number
 >                                                           : ^^^^^^
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
 >token.Span.startPosition() : any
 >                           : ^^^
 >token.Span.startPosition : any
@@ -1126,11 +1126,11 @@ module Formatting {
 >this.GetLineIndentationForOffset(lineStartPosition) : string
 >                                                    : ^^^^^^
 >this.GetLineIndentationForOffset : (offset: number) => string
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^      ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetLineIndentationForOffset : (offset: number) => string
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^      ^^      ^^^^^^^^^^^
 >lineStartPosition : any
 >                  : ^^^
 
@@ -1140,11 +1140,11 @@ module Formatting {
 >this.ApplyIndentationDelta2(lineIndent, commentFirstLineIndentationDelta) : IndentationInfo
 >                                                                          : ^^^^^^^^^^^^^^^
 >this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >lineIndent : string
 >           : ^^^^^^
 >commentFirstLineIndentationDelta : number
@@ -1176,11 +1176,11 @@ module Formatting {
 >this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false) : TextEditInfo
 >                                                                      : ^^^^^^^^^^^^
 >this.GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^          ^^^^^^^^^^^^^^^^^^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^          ^^^^^^^^^^^^^^^^^^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
 >commentIndentationInfo : IndentationInfo
 >                       : ^^^^^^^^^^^^^^^
 >tokenStartPosition : any
@@ -1217,7 +1217,7 @@ module Formatting {
 
         static GetIndentSizeFromIndentText(indentText: string, editorOptions: Services.EditorOptions): number {
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                            : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>                            : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
 >indentText : string
 >           : ^^^^^^
 >editorOptions : Services.EditorOptions
@@ -1240,7 +1240,7 @@ module Formatting {
 
         static GetIndentSizeFromText(text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean): number {
 >GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
->                      : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^      
+>                      : ^    ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^       ^^^^^      
 >text : string
 >     : ^^^^^^
 >editorOptions : Services.EditorOptions
@@ -1282,11 +1282,11 @@ module Formatting {
 >text.charAt(i) : string
 >               : ^^^^^^
 >text.charAt : (pos: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^   ^^      ^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 
@@ -1371,7 +1371,7 @@ module Formatting {
 
         private GetSpecialCaseIndentation(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentation : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1405,11 +1405,11 @@ module Formatting {
 >this.GetSpecialCaseIndentationForLCurly(node) : IndentationInfo
 >                                              : ^^^^^^^^^^^^^^^
 >this.GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >node : ParseNode
 >     : ^^^^^^^^^
 
@@ -1605,11 +1605,11 @@ module Formatting {
 >this.GetSpecialCaseIndentationForSemicolon(token, node) : IndentationInfo
 >                                                        : ^^^^^^^^^^^^^^^
 >this.GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                           : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1627,11 +1627,11 @@ module Formatting {
 >this.GetSpecialCaseIndentationForComment(token, node) : IndentationInfo
 >                                                      : ^^^^^^^^^^^^^^^
 >this.GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1646,7 +1646,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForLCurly(node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForLCurly : (node: ParseNode) => IndentationInfo
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >node : ParseNode
 >     : ^^^^^^^^^
 
@@ -1805,7 +1805,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForSemicolon(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForSemicolon : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -1941,7 +1941,7 @@ module Formatting {
 
         private GetSpecialCaseIndentationForComment(token: TokenSpan, node: ParseNode): IndentationInfo {
 >GetSpecialCaseIndentationForComment : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -2058,11 +2058,11 @@ module Formatting {
 >this.CanIndentComment(token, node) : boolean
 >                                   : ^^^^^^^
 >this.CanIndentComment : (token: TokenSpan, node: ParseNode) => boolean
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >CanIndentComment : (token: TokenSpan, node: ParseNode) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -2093,11 +2093,11 @@ module Formatting {
 >this.ApplyIndentationDeltaFromParent(token, node) : IndentationInfo
 >                                                  : ^^^^^^^^^^^^^^^
 >this.ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -2112,7 +2112,7 @@ module Formatting {
 
         private CanIndentComment(token: TokenSpan, node: ParseNode): boolean {
 >CanIndentComment : (token: TokenSpan, node: ParseNode) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                 : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^       
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -2283,7 +2283,7 @@ module Formatting {
 >foreach : any
 >        : ^^^
 >(argumentNode) => {                        if (token.Span.startPosition() < argumentNode.AuthorNode.Details.StartOffset)                            result = false;                    } : (argumentNode: any) => void
->                                                                                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                         : ^            ^^^^^^^^^^^^^^
 >argumentNode : any
 >             : ^^^
 
@@ -2339,7 +2339,7 @@ module Formatting {
 
         private ApplyScriptBlockIndentation(languageHostIndentation: string, tree: ParseTree): void
 >ApplyScriptBlockIndentation : (languageHostIndentation: string, tree: ParseTree) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^    
+>                            : ^                       ^^      ^^    ^^^^^^^^^^^^^^^^    
 >languageHostIndentation : string
 >                        : ^^^^^^
 >tree : ParseTree
@@ -2369,11 +2369,11 @@ module Formatting {
 >this.ApplyIndentationLevel(languageHostIndentation, 1) : string
 >                                                       : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >languageHostIndentation : string
 >                        : ^^^^^^
 >1 : 1
@@ -2441,7 +2441,7 @@ module Formatting {
 
         private GetIndentEdit(indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean): TextEditInfo {
 >GetIndentEdit : (indentInfo: IndentationInfo, tokenStartPosition: number, sameLineIndent: boolean) => TextEditInfo
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^
+>              : ^          ^^^^^^^^^^^^^^^^^^^                  ^^      ^^              ^^       ^^^^^^^^^^^^^^^^^
 >indentInfo : IndentationInfo
 >           : ^^^^^^^^^^^^^^^
 >tokenStartPosition : number
@@ -2455,11 +2455,11 @@ module Formatting {
 >this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level) : string
 >                                                                : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >indentInfo.Prefix : any
 >                  : ^^^
 >indentInfo : IndentationInfo
@@ -2686,7 +2686,7 @@ module Formatting {
 
         private ApplyIndentationLevel(existingIndentation: string, level: number): string {
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^      
+>                      : ^                   ^^      ^^     ^^      ^^^^^      
 >existingIndentation : string
 >                    : ^^^^^^
 >level : number
@@ -2776,7 +2776,7 @@ module Formatting {
 >existingIndentation : string
 >                    : ^^^^^^
 >(c) => {                    if (c == '\t')                        totalIndent += tabSize;                    else                        totalIndent++;                } : (c: any) => void
->                                                                                                                                                                         : ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^
 >c : any
 >  : ^^^
 
@@ -2834,11 +2834,11 @@ module Formatting {
 >this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces) : string
 >                                                                      : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >totalIndent : number
 >            : ^^^^^^
 >tabSize : any
@@ -2861,11 +2861,11 @@ module Formatting {
 >this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces) : string
 >                                                                                         : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >existingIndentation : string
 >                    : ^^^^^^
 >totalIndentSize : number
@@ -2878,7 +2878,7 @@ module Formatting {
 
         private GetIndentString(prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean): string {
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^      
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >prefix : string
 >       : ^^^^^^
 >totalIndentSize : number
@@ -3005,7 +3005,7 @@ module Formatting {
 
         private  ApplyIndentationDeltaFromParent(token: TokenSpan, node: ParseNode): IndentationInfo {
 >ApplyIndentationDeltaFromParent : (token: TokenSpan, node: ParseNode) => IndentationInfo
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -3087,11 +3087,11 @@ module Formatting {
 >this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition()) : number
 >                                                                                                      : ^^^^^^
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
 >indentableParent.AuthorNode.Details.StartOffset : any
 >                                                : ^^^
 >indentableParent.AuthorNode.Details : any
@@ -3135,11 +3135,11 @@ module Formatting {
 >this.ApplyIndentationDelta1(token.Span.startPosition(), parentIndentationDeltaSize) : IndentationInfo
 >                                                                                    : ^^^^^^^^^^^^^^^
 >this.ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^                  ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^                  ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >token.Span.startPosition() : any
 >                           : ^^^
 >token.Span.startPosition : any
@@ -3164,7 +3164,7 @@ module Formatting {
 
         private ApplyIndentationDelta1(tokenStartPosition: number, delta: number): IndentationInfo {
 >ApplyIndentationDelta1 : (tokenStartPosition: number, delta: number) => IndentationInfo
->                       : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                       : ^                  ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >tokenStartPosition : number
 >                   : ^^^^^^
 >delta : number
@@ -3240,11 +3240,11 @@ module Formatting {
 >this.ApplyIndentationDelta2(currentIndent, delta) : IndentationInfo
 >                                                  : ^^^^^^^^^^^^^^^
 >this.ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >currentIndent : any
 >              : ^^^
 >delta : number
@@ -3253,7 +3253,7 @@ module Formatting {
 
         private ApplyIndentationDelta2(currentIndent: string, delta: number): IndentationInfo {
 >ApplyIndentationDelta2 : (currentIndent: string, delta: number) => IndentationInfo
->                       : ^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                       : ^             ^^      ^^     ^^      ^^^^^^^^^^^^^^^^^^^^
 >currentIndent : string
 >              : ^^^^^^
 >delta : number
@@ -3275,11 +3275,11 @@ module Formatting {
 >Indenter.GetIndentSizeFromIndentText(currentIndent, this.editorOptions) : number
 >                                                                        : ^^^^^^
 >Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Indenter : typeof Indenter
 >         : ^^^^^^^^^^^^^^^
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >currentIndent : string
 >              : ^^^^^^
 >this.editorOptions : Services.EditorOptions
@@ -3322,11 +3322,11 @@ module Formatting {
 >this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces) : string
 >                                                                                                              : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
 >newIndentSize : number
 >              : ^^^^^^
 >this.editorOptions.TabSize : any
@@ -3372,7 +3372,7 @@ module Formatting {
 
         private GetIndentationDelta(tokenStartPosition: number, childTokenStartPosition: number/*?*/): number/*?*/ {
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                    : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^      
+>                    : ^                  ^^      ^^                       ^^      ^^^^^      
 >tokenStartPosition : number
 >                   : ^^^^^^
 >childTokenStartPosition : number
@@ -3499,11 +3499,11 @@ module Formatting {
 >Indenter.GetIndentSizeFromText(origIndentText, this.editorOptions, /*includeNonIndentChars*/true) : number
 >                                                                                                  : ^^^^^^
 >Indenter.GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
->                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^    ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^       ^^^^^^^^^^^
 >Indenter : typeof Indenter
 >         : ^^^^^^^^^^^^^^^
 >GetIndentSizeFromText : (text: string, editorOptions: Services.EditorOptions, includeNonIndentChars: boolean) => number
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^    ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^       ^^^^^^^^^^^
 >origIndentText : any
 >               : ^^^
 >this.editorOptions : Services.EditorOptions
@@ -3521,11 +3521,11 @@ module Formatting {
 >Indenter.GetIndentSizeFromIndentText(newIndentText, this.editorOptions) : number
 >                                                                        : ^^^^^^
 >Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Indenter : typeof Indenter
 >         : ^^^^^^^^^^^^^^^
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >newIndentText : any
 >              : ^^^
 >this.editorOptions : Services.EditorOptions
@@ -3613,11 +3613,11 @@ module Formatting {
 >Indenter.GetIndentSizeFromIndentText(childIndentText, this.editorOptions) : number
 >                                                                          : ^^^^^^
 >Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Indenter : typeof Indenter
 >         : ^^^^^^^^^^^^^^^
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >childIndentText : any
 >                : ^^^
 >this.editorOptions : Services.EditorOptions
@@ -3643,11 +3643,11 @@ module Formatting {
 >Indenter.GetIndentSizeFromIndentText(origIndentText, this.editorOptions) : number
 >                                                                         : ^^^^^^
 >Indenter.GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                     : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Indenter : typeof Indenter
 >         : ^^^^^^^^^^^^^^^
 >GetIndentSizeFromIndentText : (indentText: string, editorOptions: Services.EditorOptions) => number
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^          ^^      ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >origIndentText : any
 >               : ^^^
 >this.editorOptions : Services.EditorOptions
@@ -3696,7 +3696,7 @@ module Formatting {
 
         private FillInheritedIndentation(tree: ParseTree): void
 >FillInheritedIndentation : (tree: ParseTree) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^    
+>                         : ^    ^^^^^^^^^^^^^^^^    
 >tree : ParseTree
 >     : ^^^^^^^^^
         {
@@ -4220,11 +4220,11 @@ module Formatting {
 >this.GetLineIndentationForOffset(offset) : string
 >                                         : ^^^^^^
 >this.GetLineIndentationForOffset : (offset: number) => string
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                 : ^      ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >GetLineIndentationForOffset : (offset: number) => string
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^      ^^      ^^^^^^^^^^^
 >offset : number
 >       : ^^^^^^
 
@@ -4281,7 +4281,7 @@ module Formatting {
 >foreach : any
 >        : ^^^
 >(sibling) => {                        if (sibling !== indentNode) {                            if (sibling.CanIndent())                                sibling.SetIndentationOverride(indentOverride);                        }                    } : (sibling: any) => void
->                                                                                                                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                     : ^       ^^^^^^^^^^^^^^
 >sibling : any
 >        : ^^^
 
@@ -4410,11 +4410,11 @@ module Formatting {
 >this.ApplyIndentationLevel(indentOverride, -lastDelta) : string
 >                                                       : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
 >indentOverride : string
 >               : ^^^^^^
 >-lastDelta : number
@@ -4488,7 +4488,7 @@ module Formatting {
 
         public GetLineIndentationForOffset(offset: number): string {
 >GetLineIndentationForOffset : (offset: number) => string
->                            : ^^^^^^^^^      ^^^^^      
+>                            : ^      ^^      ^^^^^      
 >offset : number
 >       : ^^^^^^
 
@@ -4642,7 +4642,7 @@ module Formatting {
 
         private RegisterIndentation(indent: TextEditInfo, sameLineIndent: boolean): void
 >RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    
+>                    : ^      ^^^^^^^^^^^^^^^^              ^^       ^^^^^    
 >indent : TextEditInfo
 >       : ^^^^^^^^^^^^
 >sameLineIndent : boolean
@@ -4762,7 +4762,7 @@ module Formatting {
 
         public RegisterIndentation2(position: number, indent: string): void
 >RegisterIndentation2 : (position: number, indent: string) => void
->                     : ^^^^^^^^^^^      ^^^^^^^^^^      ^^^^^    
+>                     : ^        ^^      ^^      ^^      ^^^^^    
 >position : number
 >         : ^^^^^^
 >indent : string
@@ -4772,11 +4772,11 @@ module Formatting {
 >this.RegisterIndentation(new TextEditInfo(position, 0, indent), false) : void
 >                                                                       : ^^^^
 >this.RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^      ^^^^^^^^^^^^^^^^              ^^       ^^^^^^^^^
 >this : this
 >     : ^^^^
 >RegisterIndentation : (indent: TextEditInfo, sameLineIndent: boolean) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^      ^^^^^^^^^^^^^^^^              ^^       ^^^^^^^^^
 >new TextEditInfo(position, 0, indent) : any
 >                                      : ^^^
 >TextEditInfo : any
@@ -4793,7 +4793,7 @@ module Formatting {
 
         private AdjustStartOffsetIfNeeded(token: TokenSpan, node: ParseNode): void
 >AdjustStartOffsetIfNeeded : (token: TokenSpan, node: ParseNode) => void
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                          : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^    
 >token : TokenSpan
 >      : ^^^^^^^^^
 >node : ParseNode
@@ -4982,7 +4982,7 @@ module Formatting {
 
         private IsMultiLineString(token: TokenSpan): boolean {
 >IsMultiLineString : (token: TokenSpan) => boolean
->                  : ^^^^^^^^^^^^^^^^^^^^^^       
+>                  : ^     ^^^^^^^^^^^^^^^^       
 >token : TokenSpan
 >      : ^^^^^^^^^
 
