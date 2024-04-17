@@ -62,7 +62,7 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
 
     class extends superClass {
 >class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
->                                                                                                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                            : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >superClass : Base
 >           : ^^^^
 
@@ -150,7 +150,7 @@ function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> &
     }
     return C;
 >C : { new (...args: any[]): C; prototype: Tagged<any>.C; } & T
->  : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^       ^^^ ^^^^^^^^^
+>  : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 const Thing1 = Tagged(Derived);
