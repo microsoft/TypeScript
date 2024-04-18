@@ -237,7 +237,7 @@ export class Metadata {
 
     constructor(parent?: Metadata) {
         this._parent = parent;
-        this._map = Object.create(parent ? parent._map : null); // eslint-disable-line no-null/no-null
+        this._map = Object.create(parent ? parent._map : null); // eslint-disable-line no-restricted-syntax
     }
 
     public get size(): number {
@@ -284,7 +284,7 @@ export class Metadata {
     }
 
     public clear(): void {
-        this._map = Object.create(this._parent ? this._parent._map : null); // eslint-disable-line no-null/no-null
+        this._map = Object.create(this._parent ? this._parent._map : null); // eslint-disable-line no-restricted-syntax
         this._size = -1;
         this._version++;
     }

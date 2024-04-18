@@ -964,7 +964,7 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
     else if (Array.isArray(exports)) {
         return forEach(exports, e => tryGetModuleNameFromExportsOrImports(options, host, targetFilePath, packageDirectory, packageName, e, conditions, mode, isImports));
     }
-    else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-null/no-null
+    else if (typeof exports === "object" && exports !== null) { // eslint-disable-line no-restricted-syntax
         // conditional mapping
         for (const key of getOwnKeys(exports as MapLike<unknown>)) {
             if (key === "default" || conditions.indexOf(key) >= 0 || isApplicableVersionedTypesKey(conditions, key)) {
@@ -980,7 +980,7 @@ function tryGetModuleNameFromExportsOrImports(options: CompilerOptions, host: Mo
 }
 
 function tryGetModuleNameFromExports(options: CompilerOptions, host: ModuleSpecifierResolutionHost, targetFilePath: string, packageDirectory: string, packageName: string, exports: unknown, conditions: string[]): { moduleFileToTry: string; } | undefined {
-    if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-null/no-null
+    if (typeof exports === "object" && exports !== null && !Array.isArray(exports) && allKeysStartWithDot(exports as MapLike<unknown>)) { // eslint-disable-line no-restricted-syntax
         // sub-mappings
         // 3 cases:
         // * directory mappings (legacyish, key ends with / (technically allows index/extension resolution under cjs mode))

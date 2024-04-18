@@ -372,7 +372,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
