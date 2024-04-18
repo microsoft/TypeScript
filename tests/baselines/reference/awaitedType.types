@@ -867,7 +867,7 @@ async function test40330() {
 >promiseVoid : () => Promise<void>
 >            : ^^^^^^^^^^^^^^^^^^^
 >async () => {} : () => Promise<void>
->               :                    
+>               : ^^^^^^^^^^^^^^^^^^^
 
     const res = await Promise.all([
 >res : [number, ...void[]]

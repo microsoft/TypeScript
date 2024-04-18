@@ -27,7 +27,7 @@ var r = f({ s: new Object() }); // ok
 >r : { s?: number; }
 >  : ^^^^^^^^^^^^^^^
 >f({ s: new Object() }) : { s?: number; }
->                       :    ^           
+>                       : ^^^^^^^^^^^^^^^
 >f : <T>(a: T) => { s?: number; }
 >  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^
 >{ s: new Object() } : { s: Object; }

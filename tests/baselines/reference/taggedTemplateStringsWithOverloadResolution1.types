@@ -180,7 +180,7 @@ var y = foo `${1}${"2"}`;    // {}
 >y : {}
 >  : ^^
 >foo `${1}${"2"}` : {}
->                 :   
+>                 : ^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^
 >`${1}${"2"}` : string

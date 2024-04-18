@@ -648,7 +648,7 @@ let x1 = makeObject({
 >x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                                                                              :                          ^^^                                         
+>                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
 >           : ^ ^^ ^^    ^^                      ^^^^^^^^^^
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
@@ -735,7 +735,7 @@ let x2 = makeObject2({
 >x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject2({    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }}) : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
->                                                                                                                                                                                                               :                          ^^^                                         
+>                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^  ^^      ^^^^^^^^^^
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
 >            : ^ ^^ ^^    ^^                      ^^^^^^^^^^
 >{    data: { x: 0, y: 0 },    methods: {        moveBy(dx: number, dy: number) {            this.x += dx;  // Strongly typed this            this.y += dy;  // Strongly typed this        }    }} : { data: { x: number; y: number; }; methods: { moveBy(dx: number, dy: number): void; }; }
@@ -1104,7 +1104,7 @@ let vue = new Vue({
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Vue({    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }}) : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }
->                                                                                                                                                                                                                                                                                                                                             :                          ^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
 >    : ^^^^^ ^^ ^^ ^^       ^^                   ^^^^^^^^^^^^^^
 >{    data: () => ({ x: 1, y: 2 }),    methods: {        f(x: string) {            return this.x;        }    },    computed: {        test(): number {            return this.x;        },        hello: {            get() {                return "hi";            },            set(value: string) {            }        }    }} : { data: () => { x: number; y: number; }; methods: { f(x: string): number; }; computed: { test(): number; hello: { get(): string; set(value: string): void; }; }; }
@@ -1114,7 +1114,7 @@ let vue = new Vue({
 >data : () => { x: number; y: number; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({ x: 1, y: 2 }) : () => { x: number; y: number; }
->                       :                                
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ x: 1, y: 2 }) : { x: number; y: number; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 1, y: 2 } : { x: number; y: number; }

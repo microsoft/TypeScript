@@ -5,7 +5,7 @@ const b = ({ [`key`]: renamed }) => renamed;
 >b : ({ [`key`]: renamed }: { key: any; }) => any
 >  : ^                    ^^^^^^^^^^^^^^^^^^^^^^^
 >({ [`key`]: renamed }) => renamed : ({ [`key`]: renamed }: { key: any; }) => any
->                                  :                                             
+>                                  : ^                    ^^^^^^^^^^^^^^^^^^^^^^^
 >`key` : "key"
 >      : ^^^^^
 >renamed : any

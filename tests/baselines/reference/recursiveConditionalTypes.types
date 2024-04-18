@@ -341,11 +341,11 @@ unbox({ value: { value: { get value() { return this; } }}});  // { readonly valu
 >value : { value: { readonly value: { readonly value: any; }; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ value: { get value() { return this; } }} : { value: { readonly value: { readonly value: any; }; }; }
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^                        ^^^^^^
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { readonly value: { readonly value: any; }; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ get value() { return this; } } : { readonly value: { readonly value: any; }; }
->                                 : ^^^^^^^^^^^^^^^^^^                        ^^^
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { readonly value: any; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : { readonly value: any; } | RecBox<{ readonly value: { readonly value: any; }; }>

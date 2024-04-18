@@ -48,7 +48,7 @@ var fexp = function (a) {
 >fexp : (a: any) => void
 >     : ^ ^^^^^^^^^^^^^^
 >function (a) {    defered(() => {        a;    });} : (a: any) => void
->                                                    :                 
+>                                                    : ^ ^^^^^^^^^^^^^^
 >a : any
 
     defered(() => {
@@ -77,7 +77,7 @@ var farrow = (a) => {
 >farrow : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >(a) => {    defered(() => {        a;    });} : (a: any) => void
->                                              :                 
+>                                              : ^ ^^^^^^^^^^^^^^
 >a : any
 
     defered(() => {

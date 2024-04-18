@@ -11,7 +11,7 @@ var f = function foo(x) { return x; }
 >f : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >function foo(x) { return x; } : (x: any) => any
->                              :                
+>                              : ^ ^^^^^^^^^^^^^
 >foo : (x: any) => any
 >    : ^ ^^^^^^^^^^^^^
 >x : any
@@ -21,7 +21,7 @@ var f2 = (x) => x;
 >f2 : (x: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >(x) => x : (x: any) => any
->         :                
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 
@@ -29,7 +29,7 @@ var f3 = <T>(x) => x;
 >f3 : <T>(x: any) => any
 >   : ^^^^ ^^^^^^^^^^^^^
 ><T>(x) => x : <T>(x: any) => any
->            :                   
+>            : ^^^^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 
@@ -74,7 +74,7 @@ var b = {
 >b : { foo(x: any): any; a: (x: any) => any; b: (x: any) => any; }
 >  : ^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >{    foo(x) {        return x;    },    a: function foo(x) {        return x;    },    b: (x) => x} : { foo(x: any): any; a: (x: any) => any; b: (x: any) => any; }
->                                                                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^               ^^^^^               ^^^
+>                                                                                                    : ^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 
     foo(x) {
 >foo : (x: any) => any
@@ -89,7 +89,7 @@ var b = {
 >a : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >function foo(x) {        return x;    } : (x: any) => any
->                                        :                
+>                                        : ^ ^^^^^^^^^^^^^
 >foo : (x: any) => any
 >    : ^ ^^^^^^^^^^^^^
 >x : any
@@ -102,7 +102,7 @@ var b = {
 >b : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(x) => x : (x: any) => any
->         :                
+>         : ^ ^^^^^^^^^^^^^
 >x : any
 >x : any
 }

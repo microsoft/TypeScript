@@ -74,7 +74,7 @@ Foo.propTypes = propTypes;
 >propTypes : { bar: PropTypes.Requireable<boolean>; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >propTypes : { bar: PropTypes.Requireable<boolean>; }
->          :                                         
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Foo.defaultProps = defaultProps;
 >Foo.defaultProps = defaultProps : { bar: boolean; }
@@ -86,7 +86,7 @@ Foo.defaultProps = defaultProps;
 >defaultProps : { bar: boolean; }
 >             : ^^^^^^^^^^^^^^^^^
 >defaultProps : { bar: boolean; }
->             :                  
+>             : ^^^^^^^^^^^^^^^^^
 
 export default Foo;
 >Foo : typeof Foo

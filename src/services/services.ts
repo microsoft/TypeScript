@@ -787,7 +787,7 @@ class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> im
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
-    /** @internal */ typeArguments!: NodeArray<TypeNode>;
+    typeArguments!: NodeArray<TypeNode>;
     constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(kind, pos, end);
     }

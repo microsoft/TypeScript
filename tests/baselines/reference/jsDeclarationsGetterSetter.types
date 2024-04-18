@@ -260,7 +260,7 @@ Object.defineProperty(I.prototype, "x", {
 >set : (v: number) => void
 >    : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: number) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 
@@ -273,7 +273,7 @@ const jSetter = (v) => {}
 >jSetter : (v: number) => void
 >        : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: number) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 
@@ -305,7 +305,7 @@ Object.defineProperty(J.prototype, "x", {
 >set : (v: number) => void
 >    : ^ ^^      ^^^^^^^^^
 >jSetter : (v: number) => void
->        :                    
+>        : ^ ^^      ^^^^^^^^^
 
 });
 
@@ -316,7 +316,7 @@ const kSetter1 = (v) => {}
 >kSetter1 : (v: number) => void
 >         : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: number) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 
@@ -327,7 +327,7 @@ const kSetter2 = (v) => {}
 >kSetter2 : (v: number) => void
 >         : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: number) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 
@@ -359,7 +359,7 @@ Object.defineProperty(K.prototype, "x", {
 >set : (v: number) => void
 >    : ^ ^^      ^^^^^^^^^
 >Math.random() ? kSetter1 : kSetter2 : (v: number) => void
->                                    :                    
+>                                    : ^ ^^      ^^^^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
@@ -382,7 +382,7 @@ const lSetter1 = (v) => {}
 >lSetter1 : (v: number) => void
 >         : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: number) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : number
 >  : ^^^^^^
 
@@ -393,7 +393,7 @@ const lSetter2 = (v) => {}
 >lSetter2 : (v: string) => void
 >         : ^ ^^      ^^^^^^^^^
 >(v) => {} : (v: string) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
@@ -425,7 +425,7 @@ Object.defineProperty(L.prototype, "x", {
 >set : ((v: number) => void) | ((v: string) => void)
 >    : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >Math.random() ? lSetter1 : lSetter2 : ((v: number) => void) | ((v: string) => void)
->                                    : ^                   ^^^^^                   ^
+>                                    : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
@@ -448,7 +448,7 @@ const mSetter1 = (v) => {}
 >mSetter1 : (v: number | boolean) => void
 >         : ^ ^^                ^^^^^^^^^
 >(v) => {} : (v: number | boolean) => void
->          :                              
+>          : ^ ^^                ^^^^^^^^^
 >v : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 
@@ -459,7 +459,7 @@ const mSetter2 = (v) => {}
 >mSetter2 : (v: string | boolean) => void
 >         : ^ ^^                ^^^^^^^^^
 >(v) => {} : (v: string | boolean) => void
->          :                              
+>          : ^ ^^                ^^^^^^^^^
 >v : string | boolean
 >  : ^^^^^^^^^^^^^^^^
 
@@ -491,7 +491,7 @@ Object.defineProperty(M.prototype, "x", {
 >set : ((v: number | boolean) => void) | ((v: string | boolean) => void)
 >    : ^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^
 >Math.random() ? mSetter1 : mSetter2 : ((v: number | boolean) => void) | ((v: string | boolean) => void)
->                                    : ^                             ^^^^^                             ^
+>                                    : ^^ ^^                ^^^^^^^^^^^^^^^ ^^                ^^^^^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number

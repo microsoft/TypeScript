@@ -1593,7 +1593,7 @@ define(function () {
 >hasOwnProp : (v: PropertyKey) => boolean
 >           : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
->                                :                            
+>                                : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype : Object
 >                 : ^^^^^^
 >Object : ObjectConstructor
@@ -4566,7 +4566,7 @@ define(function () {
 >constructor : { (userAgent: any, maxPhoneWidth: any): void; isPhoneSized(maxPhoneWidth: any): any; _impl: {}; version: string; }
 >            : ^^^         ^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MobileDetect : { (userAgent: any, maxPhoneWidth: any): void; isPhoneSized(maxPhoneWidth: any): any; _impl: {}; version: string; }
->             :                                                                                                                   
+>             : ^^^         ^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         /**
          * Returns the detected phone or tablet type or <tt>null</tt> if it is not a mobile device.
@@ -4594,7 +4594,7 @@ define(function () {
 >mobile : () => any
 >       : ^^^^^^^^^
 >function () {            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);            return this._cache.mobile;        } : () => any
->                                                                                                                                              :          
+>                                                                                                                                              : ^^^^^^^^^
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth) : any
@@ -4667,7 +4667,7 @@ define(function () {
 >phone : () => any
 >      : ^^^^^^^^^
 >function () {            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);            return this._cache.phone;        } : () => any
->                                                                                                                                             :          
+>                                                                                                                                             : ^^^^^^^^^
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth) : any
@@ -4759,7 +4759,7 @@ define(function () {
 >tablet : () => any
 >       : ^^^^^^^^^
 >function () {            impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);            return this._cache.tablet;        } : () => any
->                                                                                                                                              :          
+>                                                                                                                                              : ^^^^^^^^^
 
             impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth);
 >impl.prepareDetectionCache(this._cache, this.ua, this.maxPhoneWidth) : any
@@ -4823,7 +4823,7 @@ define(function () {
 >userAgent : () => any
 >          : ^^^^^^^^^
 >function () {            if (this._cache.userAgent === undefined) {                this._cache.userAgent = impl.findMatch(impl.mobileDetectRules.uas, this.ua);            }            return this._cache.userAgent;        } : () => any
->                                                                                                                                                                                                                               :          
+>                                                                                                                                                                                                                               : ^^^^^^^^^
 
             if (this._cache.userAgent === undefined) {
 >this._cache.userAgent === undefined : boolean
@@ -4913,7 +4913,7 @@ define(function () {
 >userAgents : () => any
 >           : ^^^^^^^^^
 >function () {            if (this._cache.userAgents === undefined) {                this._cache.userAgents = impl.findMatches(impl.mobileDetectRules.uas, this.ua);            }            return this._cache.userAgents;        } : () => any
->                                                                                                                                                                                                                                    :          
+>                                                                                                                                                                                                                                    : ^^^^^^^^^
 
             if (this._cache.userAgents === undefined) {
 >this._cache.userAgents === undefined : boolean
@@ -4997,7 +4997,7 @@ define(function () {
 >os : () => any
 >   : ^^^^^^^^^
 >function () {            if (this._cache.os === undefined) {                this._cache.os = impl.detectOS(this.ua);            }            return this._cache.os;        } : () => any
->                                                                                                                                                                             :          
+>                                                                                                                                                                             : ^^^^^^^^^
 
             if (this._cache.os === undefined) {
 >this._cache.os === undefined : boolean
@@ -5079,7 +5079,7 @@ define(function () {
 >version : (key: any) => any
 >        : ^   ^^^^^^^^^^^^^
 >function (key) {            return impl.getVersion(key, this.ua);        } : (key: any) => any
->                                                                           :                  
+>                                                                           : ^   ^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -5124,7 +5124,7 @@ define(function () {
 >versionStr : (key: any) => any
 >           : ^   ^^^^^^^^^^^^^
 >function (key) {            return impl.getVersionStr(key, this.ua);        } : (key: any) => any
->                                                                              :                  
+>                                                                              : ^   ^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -5166,7 +5166,7 @@ define(function () {
 >is : (key: any) => boolean
 >   : ^   ^^^^^^^^^^^^^^^^^
 >function (key) {            return containsIC(this.userAgents(), key) ||                   equalIC(key, this.os()) ||                   equalIC(key, this.phone()) ||                   equalIC(key, this.tablet()) ||                   containsIC(impl.findMatches(impl.mobileDetectRules.utils, this.ua), key);        } : (key: any) => boolean
->                                                                                                                                                                                                                                                                                                                            :                      
+>                                                                                                                                                                                                                                                                                                                            : ^   ^^^^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 
@@ -5288,7 +5288,7 @@ define(function () {
 >match : (pattern: any) => any
 >      : ^       ^^^^^^^^^^^^^
 >function (pattern) {            if (!(pattern instanceof RegExp)) {                pattern = new RegExp(pattern, 'i');            }            return pattern.test(this.ua);        } : (pattern: any) => any
->                                                                                                                                                                                      :                      
+>                                                                                                                                                                                      : ^       ^^^^^^^^^^^^^
 >pattern : any
 >        : ^^^
 
@@ -5350,7 +5350,7 @@ define(function () {
 >isPhoneSized : (maxPhoneWidth: any) => any
 >             : ^             ^^^^^^^^^^^^^
 >function (maxPhoneWidth) {            return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);        } : (maxPhoneWidth: any) => any
->                                                                                                                      :                            
+>                                                                                                                      : ^             ^^^^^^^^^^^^^
 >maxPhoneWidth : any
 >              : ^^^
 
@@ -5386,7 +5386,7 @@ define(function () {
 >mobileGrade : () => any
 >            : ^^^^^^^^^
 >function () {            if (this._cache.grade === undefined) {                this._cache.grade = impl.mobileGrade(this);            }            return this._cache.grade;        } : () => any
->                                                                                                                                                                                      :          
+>                                                                                                                                                                                      : ^^^^^^^^^
 
             if (this._cache.grade === undefined) {
 >this._cache.grade === undefined : boolean
@@ -5471,7 +5471,7 @@ define(function () {
 >isPhoneSized : (maxPhoneWidth: any) => any
 >             : ^             ^^^^^^^^^^^^^
 >function (maxPhoneWidth) {            return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;        } : (maxPhoneWidth: any) => any
->                                                                                                                                    :                            
+>                                                                                                                                    : ^             ^^^^^^^^^^^^^
 >maxPhoneWidth : any
 >              : ^^^
 
@@ -5525,7 +5525,7 @@ define(function () {
 >_impl : {}
 >      : ^^
 >impl : {}
->     :   
+>     : ^^
 
     MobileDetect.version = '1.3.3 2016-07-31';
 >MobileDetect.version = '1.3.3 2016-07-31' : "1.3.3 2016-07-31"

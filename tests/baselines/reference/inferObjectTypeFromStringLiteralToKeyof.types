@@ -33,7 +33,7 @@ const y = inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two);
 >y : { a: number; b: number; c: number; d(n: any): any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >inference2({ a: 1, b: 2, c: 3, d(n) { return n } }, two) : { a: number; b: number; c: number; d(n: any): any; }
->                                                         :                                                     
+>                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
 >inference2 : <T>(target: T, name: keyof T) => T
 >           : ^ ^^      ^^ ^^    ^^       ^^^^^^
 >{ a: 1, b: 2, c: 3, d(n) { return n } } : { a: number; b: number; c: number; d(n: any): any; }

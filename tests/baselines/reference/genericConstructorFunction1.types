@@ -19,7 +19,7 @@ function f1<T>(args: T) {
 >v2 : new (arg: T) => Date
 >   : ^^^^^   ^^ ^^^^^^^^^
 >v1['test'] : new (arg: T) => Date
->           :                     
+>           : ^^^^^   ^^ ^^^^^^^^^
 >v1 : { [index: string]: new (arg: T) => Date; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^
 >'test' : "test"

@@ -45,13 +45,13 @@ let a = f;
 >a : { (x: "foo"): number; (x: string): number; }
 >  : ^^^ ^^     ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >f : { (x: "foo"): number; (x: string): number; }
->  :                                             
+>  : ^^^ ^^     ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 let b = g;
 >b : (x: "foo") => number
 >  : ^ ^^     ^^^^^^^^^^^
 >g : (x: "foo") => number
->  :                     
+>  : ^ ^^     ^^^^^^^^^^^
 
 a = b;
 >a = b : (x: "foo") => number

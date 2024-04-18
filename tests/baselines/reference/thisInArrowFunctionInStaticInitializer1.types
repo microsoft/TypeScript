@@ -14,7 +14,7 @@ class Vector {
 >foo : () => void
 >    : ^^^^^^^^^^
 >() => {  // 'this' should be allowed in a static initializer.  log(this); } : () => void
->                                                                            :           
+>                                                                            : ^^^^^^^^^^
 
   // 'this' should be allowed in a static initializer.
   log(this);

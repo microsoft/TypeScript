@@ -175,7 +175,7 @@ const get = <T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`];  // Type
 >get : <T extends string>(t: T, foo: Foo<T>) => T
 >    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^   ^^      ^^^^^ 
 ><T extends string>(t: T, foo: Foo<T>): T => foo[`get${t}`] : <T extends string>(t: T, foo: Foo<T>) => T
->                                                           :                                           
+>                                                           : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^   ^^      ^^^^^ 
 >t : T
 >  : ^
 >foo : Foo<T>

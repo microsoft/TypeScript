@@ -134,7 +134,7 @@ for (var fn = function (s: string) { return 42; }; ;) { }
 >fn : (s: string) => number
 >   : ^ ^^      ^^^^^^^^^^^
 >function (s: string) { return 42; } : (s: string) => number
->                                    :                      
+>                                    : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >42 : 42

@@ -104,7 +104,7 @@ const g2 = (): undefined => { };
 >g2 : () => undefined
 >   : ^^^^^^         
 >(): undefined => { } : () => undefined
->                     :                
+>                     : ^^^^^^         
 
 function h1() {
 >h1 : () => void

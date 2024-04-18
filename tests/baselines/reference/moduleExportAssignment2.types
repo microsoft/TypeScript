@@ -5,13 +5,13 @@ var npm = module.exports = function (tree) {
 >npm : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 >    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >module.exports = function (tree) {} : { (tree: any): void; asReadInstalled: (tree: any) => void; }
->                                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^
+>                                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >module.exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
 >               : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >module : { exports: { (tree: any): void; asReadInstalled: (tree: any) => void; }; }
 >       : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
->        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^
+>        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >function (tree) {} : (tree: any) => void
 >                   : ^    ^^^^^^^^^^^^^^
 >tree : any
@@ -26,11 +26,11 @@ module.exports.asReadInstalled = function (tree) {
 >module : { exports: { (tree: any): void; asReadInstalled: (tree: any) => void; }; }
 >       : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
->        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^
+>        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >asReadInstalled : (tree: any) => void
 >                : ^    ^^^^^^^^^^^^^^
 >function (tree) {    npm(tree) // both references should be callable    module.exports(tree)} : (tree: any) => void
->                                                                                              :                    
+>                                                                                              : ^    ^^^^^^^^^^^^^^
 >tree : any
 
     npm(tree) // both references should be callable
@@ -48,7 +48,7 @@ module.exports.asReadInstalled = function (tree) {
 >module : { exports: { (tree: any): void; asReadInstalled: (tree: any) => void; }; }
 >       : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >exports : { (tree: any): void; asReadInstalled: (tree: any) => void; }
->        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                   ^^^
+>        : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^
 >tree : any
 }
 

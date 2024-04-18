@@ -48,7 +48,7 @@ class AA {
 >func : () => void
 >     : ^^^^^^^^^^
 >AA.#method : () => void
->           :           
+>           : ^^^^^^^^^^
 >AA : typeof AA
 >   : ^^^^^^^^^
 

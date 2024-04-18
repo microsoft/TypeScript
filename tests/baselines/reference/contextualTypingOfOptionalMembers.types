@@ -51,13 +51,13 @@ app({
 >actions : { foo: (s: number) => number; }
 >        : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{        foo: s => s // Should be typed number => number    } : { foo: (s: number) => number; }
->                                                              : ^^^^^^^                     ^^^
+>                                                              : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
         foo: s => s // Should be typed number => number
 >foo : (s: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s : (s: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : number
 >  : ^^^^^^
 >s : number
@@ -68,7 +68,7 @@ app({
 >view : (s: number, a: { foo: (s: number) => number; }) => any
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >(s, a) => undefined as any : (s: number, a: { foo: (s: number) => number; }) => any
->                           :                                                       
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >s : number
 >  : ^^^^^^
 >a : { foo: (s: number) => number; }
@@ -98,7 +98,7 @@ const y = foo({
 >y : { bar(x: number): void; }
 >  : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >foo({    bar(x) { // Should be typed number => void    }}) : { bar(x: number): void; }
->                                                           :                          
+>                                                           : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >foo : <T extends Bar>(x: string | T) => T
 >    : ^ ^^^^^^^^^^^^^^ ^^          ^^^^^^
 >{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
@@ -154,13 +154,13 @@ app2({
 >actions : { foo: (s: number) => number; }
 >        : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{        foo: s => s // Should be typed number => number    } : { foo: (s: number) => number; }
->                                                              : ^^^^^^^                     ^^^
+>                                                              : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 
         foo: s => s // Should be typed number => number
 >foo : (s: number) => number
 >    : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s : (s: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : number
 >  : ^^^^^^
 >s : number
@@ -171,7 +171,7 @@ app2({
 >view : (s: number, a: { foo: (s: number) => number; }) => any
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >(s, a) => undefined as any : (s: number, a: { foo: (s: number) => number; }) => any
->                           :                                                       
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >s : number
 >  : ^^^^^^
 >a : { foo: (s: number) => number; }
@@ -213,7 +213,7 @@ app3({
 >actions : ((s: number) => number)[]
 >        : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >[        s => s // Should be typed number => number    ] : ((s: number) => number)[]
->                                                         : ^                     ^^^
+>                                                         : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 
         s => s // Should be typed number => number
 >s => s : (s: number) => number
@@ -228,7 +228,7 @@ app3({
 >view : (s: number, a: ((s: number) => number)[]) => any
 >     : ^ ^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >(s, a) => undefined as any : (s: number, a: ((s: number) => number)[]) => any
->                           :                                                 
+>                           : ^ ^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >s : number
 >  : ^^^^^^
 >a : ((s: number) => number)[]

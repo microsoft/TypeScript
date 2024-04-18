@@ -14,7 +14,7 @@ var genericObject = new GenericClass<{ greeting: string }>();
 >genericObject : GenericClass<{ greeting: string; }>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >new GenericClass<{ greeting: string }>() : GenericClass<{ greeting: string; }>
->                                         : ^^^^^^^^^^^^^                     ^
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >GenericClass : typeof GenericClass
 >             : ^^^^^^^^^^^^^^^^^^^
 >greeting : string

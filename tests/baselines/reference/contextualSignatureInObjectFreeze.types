@@ -19,7 +19,7 @@ Object.freeze({
 >f : () => void
 >  : ^^^^^^^^^^
 >function () { } : () => void
->                :           
+>                : ^^^^^^^^^^
 
 })
 

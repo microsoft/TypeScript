@@ -29,13 +29,13 @@ class TestComponent extends React.Component<{ isAny: <T>(obj: any) => obj is T }
 >defaultProps : { isAny: <T>(obj: any) => obj is T; }
 >             : ^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^^^
 >{        isAny: TestComponent.isAny    } : { isAny: <T>(obj: any) => obj is T; }
->                                         : ^^^^^^^^^                         ^^^
+>                                         : ^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^^^
 
         isAny: TestComponent.isAny
 >isAny : <T>(obj: any) => obj is T
 >      : ^^^^   ^^   ^^^^^^^^^^^^^
 >TestComponent.isAny : <T>(obj: any) => obj is T
->                    :                          
+>                    : ^^^^   ^^   ^^^^^^^^^^^^^
 >TestComponent : typeof TestComponent
 >              : ^^^^^^^^^^^^^^^^^^^^
 >isAny : <T>(obj: any) => obj is T
@@ -58,7 +58,7 @@ const TestRender = () => <TestComponent />;
 >TestRender : () => JSX.Element
 >           : ^^^^^^^^^^^^^^^^^
 >() => <TestComponent /> : () => JSX.Element
->                        :                  
+>                        : ^^^^^^^^^^^^^^^^^
 ><TestComponent /> : JSX.Element
 >                  : ^^^^^^^^^^^
 >TestComponent : typeof TestComponent

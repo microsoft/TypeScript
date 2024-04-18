@@ -34,7 +34,7 @@ const f1 = async str => {
 >f1 : (str: string) => string
 >   : ^   ^^      ^^^^^^^^^^^
 >async str => {    return str;} : (str: string) => string
->                               :                        
+>                               : ^   ^^      ^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -65,7 +65,7 @@ const f3 = async str => {
 >f3 : (str: string) => Promise<string>
 >   : ^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >async str => {    return str;} : (str: string) => Promise<string>
->                               :                                 
+>                               : ^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 

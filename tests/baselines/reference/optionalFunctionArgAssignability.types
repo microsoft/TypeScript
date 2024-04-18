@@ -19,7 +19,7 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >a : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
 >  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
->                                                                                                              :              ^                                ^                                   
+>                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>
 >     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >onFulfill : (value: string) => U
@@ -35,7 +35,7 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >b : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
 >  : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null } : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
->                                                                                                              :              ^                                ^                                   
+>                                                                                                              : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >then : <U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>
 >     : ^ ^^         ^^^                    ^^        ^^^                  ^^^^^          
 >onFulFill : (value: number) => U

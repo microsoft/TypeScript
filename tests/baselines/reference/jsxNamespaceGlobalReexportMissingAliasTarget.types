@@ -122,7 +122,7 @@ export function jsx(
 
     props: JSXInternal.HTMLAttributes &
 >props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -169,7 +169,7 @@ export function jsxs(
 
     props: JSXInternal.HTMLAttributes &
 >props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChild[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -216,7 +216,7 @@ export function jsxDEV(
 
     props: JSXInternal.HTMLAttributes &
 >props : JSXInternal.HTMLAttributes<{}> & JSXInternal.SVGAttributes<{}> & Record<string, any> & { children?: ComponentChildren; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
 >JSXInternal : any
 >            : ^^^
 
@@ -269,7 +269,7 @@ export const Comp = () => <div></div>;
 >Comp : () => any
 >     : ^^^^^^^^^
 >() => <div></div> : () => any
->                  :          
+>                  : ^^^^^^^^^
 ><div></div> : any
 >            : ^^^
 >div : any
