@@ -104,6 +104,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/proj
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1 1 undefined Config: c:/temp/test/project1/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/temp/test/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/project1/package.json 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project1/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules/@types 1 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Type roots
@@ -221,7 +222,7 @@ c:/temp/test/project1/node_modules/@types: *new*
 FsWatches::
 C:/a/lib/lib.d.ts: *new*
   {}
-c:/temp/test/project1/package.json: *new*
+C:/temp/test/project1/package.json: *new*
   {}
 c:/temp/test/project1/tsconfig.json: *new*
   {}
@@ -240,7 +241,6 @@ c:/temp/test/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *new*
@@ -399,6 +399,9 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/project1/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/project2/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/test/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: C:/temp/package.json 2000 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/project2/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/temp/test/node_modules/@types 1 undefined Project: c:/temp/test/project2/tsconfig.json WatchType: Type roots
@@ -558,6 +561,12 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+C:/temp/package.json: *new*
+  {"pollingInterval":2000}
+C:/temp/test/package.json: *new*
+  {"pollingInterval":2000}
+C:/temp/test/project2/package.json: *new*
+  {"pollingInterval":2000}
 c:/temp/node_modules/@types:
   {"pollingInterval":500}
 c:/temp/test/node_modules/@types:
@@ -574,7 +583,7 @@ c:/temp/test/project2/node_modules/@types: *new*
 FsWatches::
 C:/a/lib/lib.d.ts:
   {}
-c:/temp/test/project1/package.json:
+C:/temp/test/project1/package.json:
   {}
 c:/temp/test/project1/tsconfig.json:
   {}
@@ -602,7 +611,6 @@ c:/temp/test/project1/tsconfig.json (Configured) *changed*
 c:/temp/test/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 2
         c:/temp/test/project1/tsconfig.json
         c:/temp/test/project2/tsconfig.json
@@ -610,7 +618,6 @@ c:/temp/test/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 ScriptInfos::
 C:/a/lib/lib.d.ts *changed*

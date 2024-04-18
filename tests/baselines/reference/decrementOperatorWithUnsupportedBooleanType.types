@@ -99,7 +99,7 @@ var ResultIsNumber5 = --{ x: true, y: (n: boolean) => { return n; } };
 >y : (n: boolean) => boolean
 >  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              :                        
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
 >  : ^^^^^^^
 >n : boolean
@@ -143,7 +143,7 @@ var ResultIsNumber8 = { x: true, y: (n: boolean) => { return n; } }--;
 >y : (n: boolean) => boolean
 >  : ^ ^^       ^^^^^^^^^^^^
 >(n: boolean) => { return n; } : (n: boolean) => boolean
->                              :                        
+>                              : ^ ^^       ^^^^^^^^^^^^
 >n : boolean
 >  : ^^^^^^^
 >n : boolean

@@ -26,11 +26,11 @@ function dec(): Function {
 >console.log(target[propKey]) : void
 >                             : ^^^^
 >console.log : (arg: string) => void
->            : ^   ^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(arg: string): void; }
->        : ^^^^^^   ^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (arg: string) => void
->    : ^   ^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >target[propKey] : any
 >target : any
 >propKey : string

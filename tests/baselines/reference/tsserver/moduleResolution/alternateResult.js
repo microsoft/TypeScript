@@ -395,10 +395,8 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2151,13 +2149,10 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2475,16 +2470,12 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	node_modules/@types/bar2/index.d.ts
 	  Imported via "bar2" from file 'index.mts' with packageId '@types/bar2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -2870,13 +2861,10 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	node_modules/foo2/index.d.ts
 	  Imported via "foo2" from file 'index.mts' with packageId 'foo2/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo2/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -3250,10 +3238,8 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/foo/index.d.ts
 	  Imported via "foo" from file 'index.mts' with packageId 'foo/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/foo/package.json' does not have field "type"
 	node_modules/@types/bar/index.d.ts
 	  Imported via "bar" from file 'index.mts' with packageId '@types/bar/index.d.ts@1.0.0'
-	  File is CommonJS module because 'node_modules/@types/bar/package.json' does not have field "type"
 	index.mts
 	  Part of 'files' list in tsconfig.json
 
@@ -3484,8 +3470,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/@types/bar2/index.d.ts *deleted*
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
@@ -3851,12 +3839,19 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /home/src/projects/project/node_modules/foo/index.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/projects/project/node_modules/foo2/index.d.ts *deleted*
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
     version: Text-1
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
@@ -4183,6 +4178,34 @@ export declare const bar2: number;
 
 Timeout callback:: count: 1
 42: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json
@@ -4516,6 +4539,33 @@ export declare const foo2: number;
 
 Timeout callback:: count: 1
 46: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation *new*
+
+ScriptInfos::
+/a/lib/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/index.mts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/projects/project/node_modules/@types/bar/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/@types/bar2/index.d.ts
+    version: Text-1
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/home/src/projects/project/node_modules/foo/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/node_modules/foo2/index.d.ts *changed*
+    version: Text-1
+    pendingReloadFromDisk: true
+    deferredDelete: undefined *changed*
+    containingProjects: 0
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/tsconfig.json

@@ -21,4 +21,4 @@ export const g = f;
 //// [a.d.ts]
 export declare const f: <T>(x: T, y: NoInfer<T>) => T;
 //// [b.d.ts]
-export declare const g: <T>(x: T, y: globalThis.NoInfer<T>) => T;
+export declare const g: <T>(x: T, y: NoInfer<T>) => T;

@@ -14,11 +14,11 @@ z.bar("hello"); // This should be ok
 >z.bar("hello") : foo.A
 >               : ^^^^^
 >z.bar : (name: string) => foo.A
->      : ^    ^^^^^^^^^^^^^^^^^^
+>      : ^    ^^      ^^^^^^^^^^
 >z : foo
 >  : ^^^
 >bar : (name: string) => foo.A
->    : ^    ^^^^^^^^^^^^^^^^^^
+>    : ^    ^^      ^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 

@@ -8,7 +8,7 @@ export function bar(func = () => foo) {
 >func : () => string
 >     : ^^^^^^^^^^^^
 >() => foo : () => string
->          :             
+>          : ^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 
@@ -45,7 +45,7 @@ export function baz2(func = function () { return foo }) {
 >func : () => string
 >     : ^^^^^^^^^^^^
 >function () { return foo } : () => string
->                           :             
+>                           : ^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 

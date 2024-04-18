@@ -1,10 +1,7 @@
 //// [tests/cases/conformance/types/conditional/conditionalTypes1.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 900 / 900 (nearest 100)
-Instantiation count: 1,500 / 1,500 (nearest 500)
-Symbol count: 26,000 / 26,500 (nearest 500)
+Instantiation count: 1,000
 
 === conditionalTypes1.ts ===
 type T00 = Exclude<"a" | "b" | "c" | "d", "a" | "c" | "f">;  // "b" | "d"
@@ -225,9 +222,9 @@ let x0 = f5("a");  // { k: "a", a: number }
 >x0 : { k: "a"; a: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^
 >f5("a") : { k: "a"; a: number; }
->        :                       
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 
@@ -676,7 +673,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(5) : 0
 >          : ^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >5 : 5
 >  : ^
 
@@ -684,7 +681,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf("hello") : ""
 >                : ^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >"hello" : "hello"
 >        : ^^^^^^^
 
@@ -692,7 +689,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(true) : false
 >             : ^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >true : true
 >     : ^^^^
 
@@ -700,7 +697,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(n) : 0
 >          : ^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >n : number
 >  : ^^^^^^
 
@@ -708,7 +705,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(b) : false
 >          : ^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >b : boolean
 >  : ^^^^^^^
 
@@ -716,7 +713,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(x) : false | 0
 >          : ^^^^^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 
@@ -724,7 +721,7 @@ function f20<T extends string>(n: number, b: boolean, x: number | boolean, y: T)
 >zeroOf(y) : ZeroOf<T>
 >          : ^^^^^^^^^
 >zeroOf : <T_1 extends string | number | boolean>(value: T_1) => ZeroOf<T_1>
->       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^           
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^           
 >y : T
 >  : ^
 }
@@ -1208,7 +1205,7 @@ const convert = <U>(value: Foo<U>): Bar<U> => value;
 >convert : <U>(value: Foo<U>) => Bar<U>
 >        : ^ ^^     ^^      ^^^^^      
 ><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Bar<U>
->                                    :                             
+>                                    : ^ ^^     ^^      ^^^^^      
 >value : Foo<U>
 >      : ^^^^^^
 >value : Foo<U>
@@ -1222,7 +1219,7 @@ const convert2 = <T>(value: Foo<T>): Baz<T> => value;
 >convert2 : <T>(value: Foo<T>) => Baz<T>
 >         : ^ ^^     ^^      ^^^^^      
 ><T>(value: Foo<T>): Baz<T> => value : <T>(value: Foo<T>) => Baz<T>
->                                    :                             
+>                                    : ^ ^^     ^^      ^^^^^      
 >value : Foo<T>
 >      : ^^^^^^
 >value : Foo<T>
@@ -1305,7 +1302,7 @@ const f40 = <U>(a: T90<U>): T91<U> => a;
 >f40 : <U>(a: T90<U>) => T91<U>
 >    : ^ ^^ ^^      ^^^^^      
 ><U>(a: T90<U>): T91<U> => a : <U>(a: T90<U>) => T91<U>
->                            :                         
+>                            : ^ ^^ ^^      ^^^^^      
 >a : T90<U>
 >  : ^^^^^^
 >a : T90<U>
@@ -1315,7 +1312,7 @@ const f41 = <U>(a: T91<U>): T90<U> => a;
 >f41 : <U>(a: T91<U>) => T90<U>
 >    : ^ ^^ ^^      ^^^^^      
 ><U>(a: T91<U>): T90<U> => a : <U>(a: T91<U>) => T90<U>
->                            :                         
+>                            : ^ ^^ ^^      ^^^^^      
 >a : T91<U>
 >  : ^^^^^^
 >a : T91<U>
@@ -1333,7 +1330,7 @@ const f42 = <U>(a: T92<U>): T93<U> => a;
 >f42 : <U>(a: T92<U>) => T93<U>
 >    : ^ ^^ ^^      ^^^^^      
 ><U>(a: T92<U>): T93<U> => a : <U>(a: T92<U>) => T93<U>
->                            :                         
+>                            : ^ ^^ ^^      ^^^^^      
 >a : T92<U>
 >  : ^^^^^^
 >a : T92<U>
@@ -1343,7 +1340,7 @@ const f43 = <U>(a: T93<U>): T92<U> => a;
 >f43 : <U>(a: T93<U>) => T92<U>
 >    : ^ ^^ ^^      ^^^^^      
 ><U>(a: T93<U>): T92<U> => a : <U>(a: T93<U>) => T92<U>
->                            :                         
+>                            : ^ ^^ ^^      ^^^^^      
 >a : T93<U>
 >  : ^^^^^^
 >a : T93<U>
@@ -1363,7 +1360,7 @@ const f44 = <U>(value: T94<U>): T95<U> => value;
 >f44 : <U>(value: T94<U>) => T95<U>
 >    : ^ ^^     ^^      ^^^^^      
 ><U>(value: T94<U>): T95<U> => value : <U>(value: T94<U>) => T95<U>
->                                    :                             
+>                                    : ^ ^^     ^^      ^^^^^      
 >value : T94<U>
 >      : ^^^^^^
 >value : T94<U>
@@ -1373,7 +1370,7 @@ const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
 >f45 : <U>(value: T95<U>) => T94<U>
 >    : ^ ^^     ^^      ^^^^^      
 ><U>(value: T95<U>): T94<U> => value : <U>(value: T95<U>) => T94<U>
->                                    :                             
+>                                    : ^ ^^     ^^      ^^^^^      
 >value : T95<U>
 >      : ^^^^^^
 >value : T95<U>
@@ -1403,11 +1400,11 @@ function f50() {
 
     type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
 >Omit : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends never ? never : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
 >Omit2 : { [P in keyof T]: (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) extends infer T_2 ? T_2 extends (T[P] extends infer T_1 ? T_1 extends T[P] ? T_1 extends U ? U extends T_1 ? true : false : false : never : never) ? T_2 extends false ? P : never : never : never; }[keyof T]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^   ^^^^^^^^^^                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type A = Omit<{ a: void; b: never; }>;  // 'a'
 >A : "a"
@@ -1580,7 +1577,7 @@ assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
 >assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}}) : void
 >                                               : ^^^^
 >assign : <T>(o: T, a: RecursivePartial<T>) => void
->       : ^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^ ^^                   ^^^^^^^^^
 >a : { o: number; b: number; c: { a: number; c: string; }[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{o: 2, c: {0: {a: 2, c: '213123'}}} : { o: number; c: { 0: { a: number; c: string; }; }; }

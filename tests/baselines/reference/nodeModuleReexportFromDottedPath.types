@@ -35,9 +35,9 @@ const EnhancedPrisma = enhancePrisma(PrismaClient);
 >EnhancedPrisma : typeof PrismaClient & { enhanced: unknown; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enhancePrisma(PrismaClient) : typeof PrismaClient & { enhanced: unknown; }
->                            : ^^^^^^^^^^^^^^^^^^^^^^                      
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enhancePrisma : <TPrismaClientCtor>(client: TPrismaClientCtor) => TPrismaClientCtor & { enhanced: unknown; }
->              : ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^                 ^^      ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PrismaClient : typeof PrismaClient
 >             : ^^^^^^^^^^^^^^^^^^^
 

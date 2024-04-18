@@ -13,6 +13,6 @@ while (true)
 >a : () => any
 >  : ^^^^^^^^^
 >() => local : () => any
->            :          
+>            : ^^^^^^^^^
 >local : any
 }

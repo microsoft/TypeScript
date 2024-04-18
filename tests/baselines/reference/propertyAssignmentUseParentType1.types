@@ -53,7 +53,7 @@ export const ignoreJsdoc = () => true;
 >ignoreJsdoc : { (): boolean; extra: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => true : { (): boolean; extra: number; }
->           :                                
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

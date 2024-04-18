@@ -53,6 +53,7 @@ import {
     getFileMatcherPatterns,
     getLocaleSpecificMessage,
     getNormalizedAbsolutePath,
+    getOwnKeys,
     getRegexFromPattern,
     getRegularExpressionForWildcard,
     getRegularExpressionsForWildcards,
@@ -313,6 +314,7 @@ export const optionsForWatch: CommandLineOption[] = [
             isFilePath: true,
             extraValidation: specToDiagnostic,
         },
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_directories_from_the_watch_process,
     },
@@ -325,6 +327,7 @@ export const optionsForWatch: CommandLineOption[] = [
             isFilePath: true,
             extraValidation: specToDiagnostic,
         },
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Watch_and_Build_Modes,
         description: Diagnostics.Remove_a_list_of_files_from_the_watch_mode_s_processing,
     },
@@ -534,6 +537,7 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2020: ScriptTarget.ES2020,
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
+        es2023: ScriptTarget.ES2023,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
@@ -1033,6 +1037,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "paths",
         type: "object",
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         isTSConfigOnly: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_a_set_of_entries_that_re_map_imports_to_additional_lookup_locations,
@@ -1050,6 +1055,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             isFilePath: true,
         },
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Allow_multiple_folders_to_be_treated_as_one_when_resolving_modules,
         transpileOptionValue: undefined,
@@ -1064,6 +1070,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             isFilePath: true,
         },
         affectsModuleResolution: true,
+        allowConfigDirTemplateSubstitution: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_multiple_folders_that_act_like_Slashnode_modules_Slash_types,
     },
@@ -1598,6 +1605,15 @@ export const optionsAffectingProgramStructure: readonly CommandLineOption[] = op
 
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));
+
+/** @internal */
+export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] = optionDeclarations.filter(
+    option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
+);
+/** @internal */
+export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
+    option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
+);
 
 // Build related options
 /** @internal */
@@ -2627,6 +2643,9 @@ function serializeOptionBaseObject(
                     if (pathOptions && optionDefinition.isFilePath) {
                         result.set(name, getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!));
                     }
+                    else if (pathOptions && optionDefinition.type === "list" && optionDefinition.element.isFilePath) {
+                        result.set(name, (value as string[]).map(v => getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(v, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!)));
+                    }
                     else {
                         result.set(name, value);
                     }
@@ -2889,17 +2908,23 @@ function parseJsonConfigFileContentWorker(
 
     const parsedConfig = parseConfig(json, sourceFile, host, basePath, configFileName, resolutionStack, errors, extendedConfigCache);
     const { raw } = parsedConfig;
-    const options = extend(existingOptions, parsedConfig.options || {});
-    const watchOptions = existingWatchOptions && parsedConfig.watchOptions ?
-        extend(existingWatchOptions, parsedConfig.watchOptions) :
-        parsedConfig.watchOptions || existingWatchOptions;
-
+    const options = handleOptionConfigDirTemplateSubstitution(
+        extend(existingOptions, parsedConfig.options || {}),
+        configDirTemplateSubstitutionOptions,
+        basePath,
+    ) as CompilerOptions;
+    const watchOptions = handleWatchOptionsConfigDirTemplateSubstitution(
+        existingWatchOptions && parsedConfig.watchOptions ?
+            extend(existingWatchOptions, parsedConfig.watchOptions) :
+            parsedConfig.watchOptions || existingWatchOptions,
+        basePath,
+    );
     options.configFilePath = configFileName && normalizeSlashes(configFileName);
+    const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
     const configFileSpecs = getConfigFileSpecs();
     if (sourceFile) sourceFile.configFileSpecs = configFileSpecs;
     setConfigFileInOptions(options, sourceFile);
 
-    const basePathForFileNames = normalizePath(configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath);
     return {
         options,
         watchOptions,
@@ -2954,6 +2979,7 @@ function parseJsonConfigFileContentWorker(
             includeSpecs = [defaultIncludeSpec];
             isDefaultIncludeSpec = true;
         }
+        let validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined, validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
         let validatedIncludeSpecs: readonly string[] | undefined, validatedExcludeSpecs: readonly string[] | undefined;
 
         // The exclude spec list is converted into a regular expression, which allows us to quickly
@@ -2961,20 +2987,37 @@ function parseJsonConfigFileContentWorker(
         // file system.
 
         if (includeSpecs) {
-            validatedIncludeSpecs = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, sourceFile, "include");
+            validatedIncludeSpecsBeforeSubstitution = validateSpecs(includeSpecs, errors, /*disallowTrailingRecursion*/ true, sourceFile, "include");
+            validatedIncludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
+                validatedIncludeSpecsBeforeSubstitution,
+                basePathForFileNames,
+            ) || validatedIncludeSpecsBeforeSubstitution;
         }
 
         if (excludeSpecs) {
-            validatedExcludeSpecs = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, sourceFile, "exclude");
+            validatedExcludeSpecsBeforeSubstitution = validateSpecs(excludeSpecs, errors, /*disallowTrailingRecursion*/ false, sourceFile, "exclude");
+            validatedExcludeSpecs = getSubstitutedStringArrayWithConfigDirTemplate(
+                validatedExcludeSpecsBeforeSubstitution,
+                basePathForFileNames,
+            ) || validatedExcludeSpecsBeforeSubstitution;
         }
+
+        const validatedFilesSpecBeforeSubstitution = filter(filesSpecs, isString);
+        const validatedFilesSpec = getSubstitutedStringArrayWithConfigDirTemplate(
+            validatedFilesSpecBeforeSubstitution,
+            basePathForFileNames,
+        ) || validatedFilesSpecBeforeSubstitution;
 
         return {
             filesSpecs,
             includeSpecs,
             excludeSpecs,
-            validatedFilesSpec: filter(filesSpecs, isString),
+            validatedFilesSpec,
             validatedIncludeSpecs,
             validatedExcludeSpecs,
+            validatedFilesSpecBeforeSubstitution,
+            validatedIncludeSpecsBeforeSubstitution,
+            validatedExcludeSpecsBeforeSubstitution,
             pathPatterns: undefined, // Initialized on first use
             isDefaultIncludeSpec,
         };
@@ -3040,6 +3083,84 @@ function parseJsonConfigFileContentWorker(
             errors.push(createCompilerDiagnostic(message, ...args));
         }
     }
+}
+
+/** @internal */
+export function handleWatchOptionsConfigDirTemplateSubstitution(
+    watchOptions: WatchOptions | undefined,
+    basePath: string,
+) {
+    return handleOptionConfigDirTemplateSubstitution(watchOptions, configDirTemplateSubstitutionWatchOptions, basePath) as WatchOptions | undefined;
+}
+
+function handleOptionConfigDirTemplateSubstitution(
+    options: OptionsBase | undefined,
+    optionDeclarations: readonly CommandLineOption[],
+    basePath: string,
+) {
+    if (!options) return options;
+    let result: OptionsBase | undefined;
+    for (const option of optionDeclarations) {
+        if (options[option.name] !== undefined) {
+            const value = options[option.name];
+            switch (option.type) {
+                case "string":
+                    Debug.assert(option.isFilePath);
+                    if (startsWithConfigDirTemplate(value)) {
+                        setOptionValue(option, getSubstitutedPathWithConfigDirTemplate(value, basePath));
+                    }
+                    break;
+                case "list":
+                    Debug.assert(option.element.isFilePath);
+                    const listResult = getSubstitutedStringArrayWithConfigDirTemplate(value as string[], basePath);
+                    if (listResult) setOptionValue(option, listResult);
+                    break;
+                case "object":
+                    Debug.assert(option.name === "paths");
+                    const objectResult = getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(value as MapLike<string[]>, basePath);
+                    if (objectResult) setOptionValue(option, objectResult);
+                    break;
+                default:
+                    Debug.fail("option type not supported");
+            }
+        }
+    }
+    return result || options;
+
+    function setOptionValue(option: CommandLineOption, value: CompilerOptionsValue) {
+        (result ??= assign({}, options))[option.name] = value;
+    }
+}
+
+const configDirTemplate = `\${configDir}`;
+function startsWithConfigDirTemplate(value: any): value is string {
+    return isString(value) && startsWith(value, configDirTemplate, /*ignoreCase*/ true);
+}
+
+function getSubstitutedPathWithConfigDirTemplate(value: string, basePath: string) {
+    return getNormalizedAbsolutePath(value.replace(configDirTemplate, "./"), basePath);
+}
+
+function getSubstitutedStringArrayWithConfigDirTemplate(list: readonly string[] | undefined, basePath: string) {
+    if (!list) return list;
+    let result: string[] | undefined;
+    list.forEach((element, index) => {
+        if (!startsWithConfigDirTemplate(element)) return;
+        (result ??= list.slice())[index] = getSubstitutedPathWithConfigDirTemplate(element, basePath);
+    });
+    return result;
+}
+
+function getSubstitutedMapLikeOfStringArrayWithConfigDirTemplate(mapLike: MapLike<string[]>, basePath: string) {
+    let result: MapLike<string[]> | undefined;
+    const ownKeys = getOwnKeys(mapLike);
+    ownKeys.forEach(key => {
+        if (!isArray(mapLike[key])) return;
+        const subStitution = getSubstitutedStringArrayWithConfigDirTemplate(mapLike[key], basePath);
+        if (!subStitution) return;
+        (result ??= assign({}, mapLike))[key] = subStitution;
+    });
+    return result;
 }
 
 function isErrorNoInputFiles(error: Diagnostic) {
@@ -3143,9 +3264,10 @@ function parseConfig(
         else {
             ownConfig.extendedConfigPath.forEach(extendedConfigPath => applyExtendedConfig(result, extendedConfigPath));
         }
-        if (!ownConfig.raw.include && result.include) ownConfig.raw.include = result.include;
-        if (!ownConfig.raw.exclude && result.exclude) ownConfig.raw.exclude = result.exclude;
-        if (!ownConfig.raw.files && result.files) ownConfig.raw.files = result.files;
+        if (result.include) ownConfig.raw.include = result.include;
+        if (result.exclude) ownConfig.raw.exclude = result.exclude;
+        if (result.files) ownConfig.raw.files = result.files;
+
         if (ownConfig.raw.compileOnSave === undefined && result.compileOnSave) ownConfig.raw.compileOnSave = result.compileOnSave;
         if (sourceFile && result.extendedSourceFiles) sourceFile.extendedSourceFiles = arrayFrom(result.extendedSourceFiles.keys());
 
@@ -3162,12 +3284,15 @@ function parseConfig(
             const extendsRaw = extendedConfig.raw;
             let relativeDifference: string | undefined;
             const setPropertyInResultIfNotUndefined = (propertyName: "include" | "exclude" | "files") => {
+                if (ownConfig.raw[propertyName]) return; // No need to calculate if already set in own config
                 if (extendsRaw[propertyName]) {
                     result[propertyName] = map(extendsRaw[propertyName], (path: string) =>
-                        isRootedDiskPath(path) ? path : combinePaths(
-                            relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
-                            path,
-                        ));
+                        startsWithConfigDirTemplate(path) || isRootedDiskPath(path) ?
+                            path :
+                            combinePaths(
+                                relativeDifference ||= convertToRelativePath(getDirectoryPath(extendedConfigPath), basePath, createGetCanonicalFileName(host.useCaseSensitiveFileNames)),
+                                path,
+                            ));
                 }
             };
             setPropertyInResultIfNotUndefined("include");
@@ -3526,7 +3651,8 @@ export function convertJsonOption(
 
 function normalizeNonListOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
     if (option.isFilePath) {
-        value = getNormalizedAbsolutePath(value, basePath);
+        value = normalizeSlashes(value);
+        value = !startsWithConfigDirTemplate(value) ? getNormalizedAbsolutePath(value, basePath) : value;
         if (value === "") {
             value = ".";
         }

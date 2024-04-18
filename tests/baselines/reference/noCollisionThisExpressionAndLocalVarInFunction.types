@@ -26,11 +26,11 @@ function x() {
 >x : any
 >console.log(_this) : any
 >console.log : (val: any) => any
->            : ^   ^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^
 >console : { log(val: any): any; }
->        : ^^^^^^   ^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^
 >log : (val: any) => any
->    : ^   ^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^
 >_this : number
 >      : ^^^^^^
 }

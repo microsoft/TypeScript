@@ -17,7 +17,7 @@ takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
 >takeFirstTwoEntries(...new Map([["", 0], ["hello", true]])) : void
 >                                                            : ^^^^
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
->                    : ^^^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^                    ^^                  ^^^^^^^^^
 >...new Map([["", 0], ["hello", true]]) : [string, number]
 >                                       : ^^^^^^^^^^^^^^^^
 >new Map([["", 0], ["hello", true]]) : Map<string, number>

@@ -28,7 +28,7 @@ function foo(set: any) {
 >baz(set.values) : any[][]
 >                : ^^^^^^^
 >baz : (x: any) => any[][]
->    : ^ ^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^^
 >set.values : any
 >set : any
 >    : ^^^

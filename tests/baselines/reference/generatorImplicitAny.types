@@ -121,7 +121,7 @@ function* g5() {
 >f(yield) : void
 >         : ^^^^
 >f : <T>(value: T) => void
->  : ^^^^     ^^^^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^^^^^
 >yield : any
 >      : ^^^
 }
@@ -134,7 +134,7 @@ function* g6() {
 >f<string>(yield) : void
 >                 : ^^^^
 >f : <T>(value: T) => void
->  : ^^^^     ^^^^^^^^^^^^
+>  : ^ ^^     ^^ ^^^^^^^^^
 >yield : any
 >      : ^^^
 }

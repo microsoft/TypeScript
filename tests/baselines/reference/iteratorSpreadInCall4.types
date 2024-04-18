@@ -58,7 +58,7 @@ foo(...new SymbolIterator);
 >foo(...new SymbolIterator) : void
 >                           : ^^^^
 >foo : (s1: symbol, ...s: symbol[]) => void
->    : ^  ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^ ^^        ^^^^^^^^^
 >...new SymbolIterator : symbol
 >                      : ^^^^^^
 >new SymbolIterator : SymbolIterator

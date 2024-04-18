@@ -37,7 +37,7 @@ const fn1 =
 >acceptNum(b) : void
 >             : ^^^^
 >acceptNum : (num: number) => void
->          : ^   ^^^^^^^^^^^^^^^^^
+>          : ^   ^^      ^^^^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -83,7 +83,7 @@ const fn2 =
 >acceptNum(b) : void
 >             : ^^^^
 >acceptNum : (num: number) => void
->          : ^   ^^^^^^^^^^^^^^^^^
+>          : ^   ^^      ^^^^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

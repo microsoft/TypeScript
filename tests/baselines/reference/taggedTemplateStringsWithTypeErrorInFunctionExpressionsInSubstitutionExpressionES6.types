@@ -12,7 +12,7 @@ foo `${function (x: number) { x = "bad"; } }`;
 >foo `${function (x: number) { x = "bad"; } }` : void
 >                                              : ^^^^
 >foo : (...rest: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >`${function (x: number) { x = "bad"; } }` : string
 >                                          : ^^^^^^
 >function (x: number) { x = "bad"; } : (x: number) => void

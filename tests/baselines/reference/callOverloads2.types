@@ -31,7 +31,7 @@ function F1(s:string) {return s;} // error
 
 function F1(a:any) { return a;} // error
 >F1 : (s: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >a : any
 >  : ^^^
 >a : any

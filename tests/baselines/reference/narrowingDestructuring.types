@@ -191,7 +191,7 @@ function func3<T extends { kind: "a", a: string } | { kind: "b", b: number }>(t:
 >r2 : { a: string; }
 >   : ^^^^^^^^^^^^^^
 >(({ kind, ...rest }) => rest)(t) : { a: string; }
->                                 :               
+>                                 : ^^^^^^^^^^^^^^
 >(({ kind, ...rest }) => rest) : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }
 >                              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ kind, ...rest }) => rest : ({ kind, ...rest }: { kind: "a"; a: string; }) => { a: string; }

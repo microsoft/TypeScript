@@ -150,7 +150,7 @@ abstract class G {
 
     abstract qux() : number;
 >qux : { (x: number): string; (): number; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^^^^      ^^^
 
     y : number;
 >y : number
@@ -166,7 +166,7 @@ abstract class G {
 
     abstract nom(): boolean;
 >nom : { (): boolean; (x: number): boolean; }
->    : ^^^^^^       ^^^ ^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^       ^^^ ^^      ^^^^^^^^^^^^^
 
     nom(x : number): boolean; // error -- use of modifier abstract must match on all overloads.
 >nom : { (): boolean; (x: number): boolean; }

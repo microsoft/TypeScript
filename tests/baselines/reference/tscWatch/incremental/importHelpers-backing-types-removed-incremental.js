@@ -48,7 +48,7 @@ exports.x = tslib_1.__assign({});
 
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/tslib/index.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"1620578607-export function __assign(...args: any[]): any;","-14168389096-export const x = {...{}};"],"root":[3],"options":{"importHelpers":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./node_modules/tslib/index.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"1620578607-export function __assign(...args: any[]): any;","impliedFormat":1},{"version":"-14168389096-export const x = {...{}};","impliedFormat":1}],"root":[3],"options":{"importHelpers":true},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -67,19 +67,31 @@ exports.x = tslib_1.__assign({});
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./node_modules/tslib/index.d.ts": {
+        "original": {
+          "version": "1620578607-export function __assign(...args: any[]): any;",
+          "impliedFormat": 1
+        },
         "version": "1620578607-export function __assign(...args: any[]): any;",
-        "signature": "1620578607-export function __assign(...args: any[]): any;"
+        "signature": "1620578607-export function __assign(...args: any[]): any;",
+        "impliedFormat": "commonjs"
       },
       "./index.tsx": {
+        "original": {
+          "version": "-14168389096-export const x = {...{}};",
+          "impliedFormat": 1
+        },
         "version": "-14168389096-export const x = {...{}};",
-        "signature": "-14168389096-export const x = {...{}};"
+        "signature": "-14168389096-export const x = {...{}};",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -103,7 +115,7 @@ exports.x = tslib_1.__assign({});
     ]
   },
   "version": "FakeTSVersion",
-  "size": 849
+  "size": 927
 }
 
 
@@ -152,7 +164,7 @@ Found 1 error in index.tsx[90m:1[0m
 
 //// [/users/username/projects/project/index.js] file written with same contents
 //// [/users/username/projects/project/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14168389096-export const x = {...{}};","signature":"-6508651827-export declare const x: {};\n"}],"root":[2],"options":{"importHelpers":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./index.tsx","start":18,"length":5,"messageText":"This syntax requires an imported helper but module 'tslib' cannot be found.","category":1,"code":2354}]]]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./index.tsx"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14168389096-export const x = {...{}};","signature":"-6508651827-export declare const x: {};\n","impliedFormat":1}],"root":[2],"options":{"importHelpers":true},"referencedMap":[],"semanticDiagnosticsPerFile":[1,[2,[{"file":"./index.tsx","start":18,"length":5,"messageText":"This syntax requires an imported helper but module 'tslib' cannot be found.","category":1,"code":2354}]]]},"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -165,19 +177,23 @@ Found 1 error in index.tsx[90m:1[0m
       "../../../../a/lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "./index.tsx": {
         "original": {
           "version": "-14168389096-export const x = {...{}};",
-          "signature": "-6508651827-export declare const x: {};\n"
+          "signature": "-6508651827-export declare const x: {};\n",
+          "impliedFormat": 1
         },
         "version": "-14168389096-export const x = {...{}};",
-        "signature": "-6508651827-export declare const x: {};\n"
+        "signature": "-6508651827-export declare const x: {};\n",
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -208,7 +224,7 @@ Found 1 error in index.tsx[90m:1[0m
     ]
   },
   "version": "FakeTSVersion",
-  "size": 962
+  "size": 998
 }
 
 

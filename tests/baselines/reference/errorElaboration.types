@@ -31,7 +31,7 @@ foo(a);
 >foo(a) : void
 >       : ^^^^
 >foo : (x: () => Container<Ref<number>>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                            ^^^^^^^^^
 >a : () => Container<Ref<string>>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -66,11 +66,11 @@ const x = ({ [foo.bar]: c }) => undefined;
 >x : ({ [foo.bar]: c }: {}) => any
 >  : ^                ^^^^^^^^^^^^
 >({ [foo.bar]: c }) => undefined : ({ [foo.bar]: c }: {}) => any
->                                :                              
+>                                : ^                ^^^^^^^^^^^^
 >foo.bar : any
 >        : ^^^
 >foo : (x: () => Container<Ref<number>>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                            ^^^^^^^^^
 >bar : any
 >    : ^^^
 >c : any
