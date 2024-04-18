@@ -834,7 +834,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         name: "isolatedDeclarations",
         type: "boolean",
         category: Diagnostics.Interop_Constraints,
-        description: Diagnostics.Report_errors_for_missing_type_annotations_whose_creation_requires_information_from_other_files,
+        description: Diagnostics.Require_sufficient_annotation_on_exports_so_other_tools_can_trivially_generate_declaration_files,
         defaultValueDescription: false,
         affectsBuildInfo: true,
         affectsSemanticDiagnostics: true,

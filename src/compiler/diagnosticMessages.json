@@ -6227,7 +6227,7 @@
         "category": "Message",
         "code": 6718
     },
-    "Report errors for missing type annotations whose creation requires information from other files.": {
+    "Require sufficient annotation on exports so other tools can trivially generate declaration files.": {
         "category": "Message",
         "code": 6719
     },
@@ -6854,7 +6854,7 @@
         "category": "Error",
         "code": 9034
     },
-    "Add a type assertion to this expression to make type type explicit.": {
+    "Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.": {
         "category": "Error",
         "code": 9035
     },
