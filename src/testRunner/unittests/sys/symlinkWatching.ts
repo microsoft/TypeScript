@@ -71,12 +71,12 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     }
 
     interface EventAndFileName {
-        event: string;
+        event: "rename" | "change";
         // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
     interface ExpectedEventAndFileName {
-        event: string | readonly string[]; // Its expected event name or any of the event names
+        event: "rename" | "change" | readonly ["rename", "change"]; // Its expected event name or any of the event names
         // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
@@ -126,23 +126,32 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         return deferred.promise;
     }
 
+    function compareEventFileName(a: EventAndFileName["fileName"], b: EventAndFileName["fileName"]) {
+        return ts.compareStringsCaseSensitive(a ?? undefined, b ?? undefined);
+    }
+
+    function compareEventAndFileName(a: EventAndFileName, b: EventAndFileName): ts.Comparison {
+        return compareEventFileName(b.fileName, a.fileName) || // Also longer string to be before shorter string
+            ts.compareStringsCaseSensitive(b.event, a.event); // We want rename to be before change
+    }
+
     function verifyEventAndFileNames(
         prefix: string,
         actual: readonly EventAndFileName[],
         expected: readonly ExpectedEventAndFileName[] | undefined,
     ) {
         assert(actual.length >= (expected?.length ?? 0), `${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+        const sortedActual = ts.sortAndDeduplicate(actual, compareEventAndFileName);
+
         let expectedIndex = 0;
-        for (const a of actual) {
+        for (const a of sortedActual) {
             if (isExpectedEventAndFileName(a, expected![expectedIndex])) {
                 expectedIndex++;
                 continue;
             }
-            // Previous event repeated?
-            if (isExpectedEventAndFileName(a, expected![expectedIndex - 1])) continue;
-            ts.Debug.fail(`${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+            ts.Debug.fail(`${prefix}:: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
         }
-        assert(expectedIndex >= (expected?.length ?? 0), `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)}`);
+        assert(expectedIndex >= (expected?.length ?? 0), `${prefix}:: Should get all events: Expected ${JSON.stringify(expected)} events, got ${JSON.stringify(actual)} Sorted: ${JSON.stringify(sortedActual)}`);
     }
 
     function isExpectedEventAndFileName(actual: EventAndFileName, expected: ExpectedEventAndFileName | undefined) {
