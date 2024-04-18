@@ -1,5 +1,9 @@
 //// [tests/cases/compiler/esNextWeakRefs_IterableWeakMap.ts] ////
 
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 1,000
+
 === esNextWeakRefs_IterableWeakMap.ts ===
 /** `static #cleanup` */
 const IterableWeakMap_cleanup = ({ ref, set }: {
