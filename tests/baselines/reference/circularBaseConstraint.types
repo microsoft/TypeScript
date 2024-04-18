@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/circularBaseConstraint.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 600 / 600 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 25,500 / 25,500 (nearest 500)
+Instantiation count: 2,500
 
 === circularBaseConstraint.ts ===
 // Repro from #54610

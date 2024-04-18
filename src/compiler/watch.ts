@@ -44,6 +44,7 @@ import {
     FileWatcher,
     filter,
     find,
+    findIndex,
     flattenDiagnosticMessageText,
     forEach,
     forEachEntry,
@@ -418,7 +419,8 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 
     const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    const index = findIndex(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return index !== -1 ? configFile.configFileSpecs.validatedFilesSpecBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */
@@ -432,11 +434,12 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
     const isJsonFile = fileExtensionIs(fileName, Extension.Json);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
     const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
-    return find(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
+    const index = findIndex(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
         if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
         return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
+    return index !== -1 ? configFile.configFileSpecs.validatedIncludeSpecsBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */

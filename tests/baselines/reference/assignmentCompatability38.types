@@ -39,7 +39,7 @@ module __test2__ {
 >__val__aa : new <Tstring>(param: Tstring) => any
 >          : ^^^^^       ^^     ^^       ^^^^^^^^
 >aa : new <Tstring>(param: Tstring) => any
->   :                                     
+>   : ^^^^^       ^^     ^^       ^^^^^^^^
 }
 __test2__.__val__aa = __test1__.__val__obj4
 >__test2__.__val__aa = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>

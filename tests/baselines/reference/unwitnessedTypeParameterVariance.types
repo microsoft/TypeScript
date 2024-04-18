@@ -27,7 +27,7 @@ function foo<O>() {
 >read : (origin: unknown) => CalcObj<unknown>
 >     : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^
 >(origin: unknown) => unk : (origin: unknown) => CalcObj<unknown>
->                         :                                      
+>                         : ^      ^^       ^^^^^^^^^^^^^^^^^^^^^
 >origin : unknown
 >       : ^^^^^^^
 >unk : CalcObj<unknown>

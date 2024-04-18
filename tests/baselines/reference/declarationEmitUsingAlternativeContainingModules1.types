@@ -373,12 +373,12 @@ export { UseQueryReturnType, useQuery } from './useQuery-CPqkvEsh.js';
 >UseQueryReturnType : any
 >                   : ^^^
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === src/index.mts ===
 import { useQuery } from '@tanstack/vue-query'
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const baseUrl = 'https://api.publicapis.org/'
 >baseUrl : "https://api.publicapis.org/"
@@ -420,13 +420,13 @@ const testApi = {
 >testApi : { getEntries: () => Promise<IEntry[]>; }
 >        : ^^^^^^^^^^^^^^^^^^^^                 ^^^
 >{  getEntries: (): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  }} : { getEntries: () => Promise<IEntry[]>; }
->                                                                                                                                                                                             : ^^^^^^^^^^^^^^                       ^^^
+>                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^                 ^^^
 
   getEntries: (): Promise<IEntry[]> => {
 >getEntries : () => Promise<IEntry[]>
 >           : ^^^^^^                 
 >(): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  } : () => Promise<IEntry[]>
->                                                                                                                                                                             :                        
+>                                                                                                                                                                             : ^^^^^^                 
 
     return fetch(baseUrl + 'entries')
 >fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>
@@ -502,7 +502,7 @@ const entryKeys = {
 >entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
->                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                  ^^^
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   all: ['entries'] as const,
 >all : readonly ["entries"]
@@ -518,7 +518,7 @@ const entryKeys = {
 >list : () => readonly ["entries", "list"]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => [...entryKeys.all, 'list'] as const : () => readonly ["entries", "list"]
->                                          :                                   
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[...entryKeys.all, 'list'] as const : readonly ["entries", "list"]
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[...entryKeys.all, 'list'] : readonly ["entries", "list"]
@@ -539,13 +539,13 @@ export const useEntries = () => {
 >useEntries : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<IEntry[], Error>
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {  return useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  })} : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<IEntry[], Error>
->                                                                                                                                      :                                                                                                                    
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return useQuery({
 >useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<IEntry[], Error>
 >                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: IEntry[]) => IEntry[]; }
 >                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -565,7 +565,7 @@ export const useEntries = () => {
 >queryFn : () => Promise<IEntry[]>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^
 >testApi.getEntries : () => Promise<IEntry[]>
->                   :                        
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^
 >testApi : { getEntries: () => Promise<IEntry[]>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getEntries : () => Promise<IEntry[]>
@@ -575,7 +575,7 @@ export const useEntries = () => {
 >select : (data: IEntry[]) => IEntry[]
 >       : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >(data) => data.slice(0, 10) : (data: IEntry[]) => IEntry[]
->                            :                             
+>                            : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >data : IEntry[]
 >     : ^^^^^^^^
 >data.slice(0, 10) : IEntry[]

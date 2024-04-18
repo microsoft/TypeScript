@@ -85,7 +85,7 @@ var rf1 = (x: number) => { return x.toFixed() };
 >rf1 : (x: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >(x: number) => { return x.toFixed() } : (x: number) => string
->                                      :                      
+>                                      : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x.toFixed() : string

@@ -36,7 +36,7 @@ class B {
 >CScriptIO : { readFile: (path: string) => string; }
 >          : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            })() : { readFile: (path: string) => string; }
->                                                                                                                                                                                                                                   :                                        
+>                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >(function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            }) : () => { readFile: (path: string) => string; }
 >                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^      ^^^
 >function() {                var fso = 0                return {                    readFile: function(path: string): string {                        return fso.toString();                    }                }            } : () => { readFile: (path: string) => string; }
@@ -56,7 +56,7 @@ class B {
 >readFile : (path: string) => string
 >         : ^    ^^      ^^^^^      
 >function(path: string): string {                        return fso.toString();                    } : (path: string) => string
->                                                                                                    :                         
+>                                                                                                    : ^    ^^      ^^^^^      
 >path : string
 >     : ^^^^^^
 

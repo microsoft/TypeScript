@@ -185,7 +185,7 @@ let f1 = (p1: A): p1 is C => false;
 >f1 : (p1: A) => p1 is C
 >   : ^  ^^ ^^^^^       
 >(p1: A): p1 is C => false : (p1: A) => p1 is C
->                          :                   
+>                          : ^  ^^ ^^^^^       
 >p1 : A
 >   : ^
 >false : false

@@ -17,7 +17,7 @@ class C {
 >fn : () => Promise<any>
 >   : ^^^^^^^^^^^^^^^^^^
 >async () => await other.apply(this, arguments) : () => Promise<any>
->                                               :                   
+>                                               : ^^^^^^^^^^^^^^^^^^
 >await other.apply(this, arguments) : any
 >                                   : ^^^
 >other.apply(this, arguments) : any

@@ -147,11 +147,11 @@ var callSig2 = { num: function (n: number) { return '' } };
 >callSig2 : { num: (n: number) => string; }
 >         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >{ num: function (n: number) { return '' } } : { num: (n: number) => string; }
->                                            : ^^^^^^^                     ^^^
+>                                            : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >function (n: number) { return '' } : (n: number) => string
->                                   :                      
+>                                   : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -169,11 +169,11 @@ var callSig3 = { num: (n: number) => '' };
 >callSig3 : { num: (n: number) => string; }
 >         : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >{ num: (n: number) => '' } : { num: (n: number) => string; }
->                           : ^^^^^^^                     ^^^
+>                           : ^^^^^^^^ ^^      ^^^^^^^^^^^^^^
 >num : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  :                      
+>                  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -315,7 +315,7 @@ var setParamType1 = {
 >setParamType1 : { n: (t: string) => void; }
 >              : ^^^^^^ ^^      ^^^^^    ^^^
 >{    set n(x: (t: string) => void) { },    get n() { return (t) => {            var p: string;            var p = t;        }    }} : { n: (t: string) => void; }
->                                                                                                                                    : ^^^^^                   ^^^
+>                                                                                                                                    : ^^^^^^ ^^      ^^^^^    ^^^
 
     set n(x: (t: string) => void) { },
 >n : (t: string) => void
@@ -349,7 +349,7 @@ var setParamType2 = {
 >setParamType2 : { n: (t: string) => void; }
 >              : ^^^^^^ ^^      ^^^^^    ^^^
 >{    get n() { return (t) => {            var p: string;            var p = t;        }    },    set n(x: (t: string) => void) { }} : { n: (t: string) => void; }
->                                                                                                                                    : ^^^^^                   ^^^
+>                                                                                                                                    : ^^^^^^ ^^      ^^^^^    ^^^
 
     get n() { return (t) => {
 >n : (t: string) => void

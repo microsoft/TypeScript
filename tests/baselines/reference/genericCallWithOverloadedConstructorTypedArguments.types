@@ -98,7 +98,7 @@ module GenericParameter {
 >r5 : { new (x: boolean): string; new (x: number): boolean; }
 >   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5(a) : { new (x: boolean): string; new (x: number): boolean; }
->        :                                                        
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
 >     : ^ ^^  ^^                                           ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^
 >a : { new (x: boolean): string; new (x: number): boolean; }
@@ -116,7 +116,7 @@ module GenericParameter {
 >r7 : { new (x: unknown): string; new (x: number): unknown; }
 >   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5(b) : { new (x: unknown): string; new (x: number): unknown; }
->        :                                                        
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >foo5 : <T>(cb: { new (x: T): string; new (x: number): T; }) => { new (x: T): string; new (x: number): T; }
 >     : ^ ^^  ^^                                           ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^
 >b : { new <T>(x: T): string; new <T_1>(x: number): T_1; }
@@ -143,7 +143,7 @@ module GenericParameter {
 >r8 : { new (x: boolean): string; new (x: boolean, y?: boolean): string; }
 >   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo6(a) : { new (x: boolean): string; new (x: boolean, y?: boolean): string; }
->        :                                               ^                     
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >a : { new (x: boolean): string; new (x: number): boolean; }
@@ -153,7 +153,7 @@ module GenericParameter {
 >r9 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
 >   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo6(b) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->        :                                               ^                     
+>        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo6 : <T>(cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >b : { new <T>(x: T): string; new <T_1>(x: number): T_1; }
@@ -182,7 +182,7 @@ module GenericParameter {
 >r13 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
 >    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7(1, b) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->           :                                               ^                     
+>           : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >1 : 1
@@ -210,7 +210,7 @@ module GenericParameter {
 >r14 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
 >    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7(1, c) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->           :                                               ^                     
+>           : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >1 : 1
@@ -222,7 +222,7 @@ module GenericParameter {
 >r15 : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
 >    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7(1, c2) : { new (x: unknown): string; new (x: unknown, y?: unknown): string; }
->            :                                               ^                     
+>            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >foo7 : <T>(x: T, cb: { new (x: T): string; new (x: T, y?: T): string; }) => { new (x: T): string; new (x: T, y?: T): string; }
 >     : ^ ^^ ^^ ^^  ^^                                                  ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >1 : 1

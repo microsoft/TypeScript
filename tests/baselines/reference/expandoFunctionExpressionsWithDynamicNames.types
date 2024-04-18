@@ -13,7 +13,7 @@ export const expr = () => {}
 >expr : { (): void; X: number; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {} : { (): void; X: number; }
->         :                         
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 expr[s] = 0
 >expr[s] = 0 : 0
@@ -31,7 +31,7 @@ export const expr2 = function () {}
 >expr2 : { (): void; X: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {} : { (): void; X: number; }
->               :                         
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 expr2[s] = 0
 >expr2[s] = 0 : 0

@@ -68,7 +68,7 @@ Test({
 >callback : (value: string) => void
 >         : ^     ^^^^^^^^^^^^^^^^^
 >(value) => {} : (value: string) => void
->              :                        
+>              : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 

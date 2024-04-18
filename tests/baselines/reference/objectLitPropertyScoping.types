@@ -37,7 +37,7 @@ function makePoint(x: number, y: number) {
 >dist : () => number
 >     : ^^^^^^^^^^^^
 >function () {            return Math.sqrt(x * x + y * y);        } : () => number
->                                                                   :             
+>                                                                   : ^^^^^^^^^^^^
 
             return Math.sqrt(x * x + y * y);
 >Math.sqrt(x * x + y * y) : number

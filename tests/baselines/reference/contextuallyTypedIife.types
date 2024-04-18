@@ -432,7 +432,7 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >a : (n: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >function(n) { return n; } : (n: any) => any
->                          :                
+>                          : ^ ^^^^^^^^^^^^^
 >n : any
 >n : any
 

@@ -109,7 +109,7 @@ var ResultIsString5 = typeof { x: "", y: (s: string) => { return s; } };
 >y : (s: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string

@@ -13,7 +13,7 @@ const flowtypes = <A>(b: B) => {
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
 >          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 ><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->                                                                                                                                                                                       :                                                                                                                  
+>                                                                                                                                                                                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >b : B
 >  : ^
 
@@ -25,7 +25,7 @@ const flowtypes = <A>(b: B) => {
 >combined : (fn: (combined: A & B) => void) => any
 >         : ^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^
 >(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
->                                           :                                       
+>                                           : ^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^
 >fn : (combined: A & B) => void
 >   : ^        ^^^^^^^^^^^^    
 >combined : A & B
@@ -35,7 +35,7 @@ const flowtypes = <A>(b: B) => {
 >literal : (fn: (aPlusB: A & B) => void) => any
 >        : ^  ^^                       ^^^^^^^^
 >(fn: (aPlusB: A & B) => void) => null : (fn: (aPlusB: A & B) => void) => any
->                                      :                                     
+>                                      : ^  ^^                       ^^^^^^^^
 >fn : (aPlusB: A & B) => void
 >   : ^      ^^     ^^^^^    
 >aPlusB : A & B

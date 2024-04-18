@@ -136,7 +136,7 @@ export const t1 = Foo[k1];
 >t1 : () => number
 >   : ^^^^^^^^^^^^
 >Foo[k1] : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >k1 : unique symbol
@@ -146,7 +146,7 @@ export const t2 = new Foo()[k1];
 >t2 : () => string
 >   : ^^^^^^^^^^^^
 >new Foo()[k1] : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo
@@ -158,7 +158,7 @@ export const t3 = Foo[k2];
 >t3 : () => number
 >   : ^^^^^^^^^^^^
 >Foo[k2] : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >k2 : "foo"
@@ -168,7 +168,7 @@ export const t4 = new Foo()[k2];
 >t4 : () => string
 >   : ^^^^^^^^^^^^
 >new Foo()[k2] : () => string
->              :             
+>              : ^^^^^^^^^^^^
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo
@@ -180,7 +180,7 @@ export const t5 = Foo.m1;
 >t5 : () => void
 >   : ^^^^^^^^^^
 >Foo.m1 : () => void
->       :           
+>       : ^^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 >m1 : () => void
@@ -190,7 +190,7 @@ export const t6 = new Foo().m1;
 >t6 : () => void
 >   : ^^^^^^^^^^
 >new Foo().m1 : () => void
->             :           
+>             : ^^^^^^^^^^
 >new Foo() : Foo
 >          : ^^^
 >Foo : typeof Foo

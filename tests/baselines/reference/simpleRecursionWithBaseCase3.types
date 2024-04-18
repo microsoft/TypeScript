@@ -5,7 +5,7 @@ const fn1 = () => {
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >() => {  if (Math.random() > 0.5) {    return fn1()  }  return 0} : () => number
->                                                                  :             
+>                                                                  : ^^^^^^^^^^^^
 
   if (Math.random() > 0.5) {
 >Math.random() > 0.5 : boolean

@@ -74,7 +74,7 @@ a = new Foo({doer: Foo.Bar});
 >doer : (x: string, y?: number) => void
 >     : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >Foo.Bar : (x: string, y?: number) => void
->        :              ^                 
+>        : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >Foo : typeof import("externs")
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Bar : (x: string, y?: number) => void
@@ -90,7 +90,7 @@ const q = /** @type {import("./externs").Bar} */({ doer: q => q });
 >doer : (q: string) => string
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >q => q : (q: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >q : string
 >  : ^^^^^^
 >q : string
@@ -100,7 +100,7 @@ const r = /** @type {typeof import("./externs").Bar} */(r => r);
 >r : (x: string, y?: number) => void
 >  : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >(r => r) : (x: string, y?: number) => void
->         :              ^                 
+>         : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >r => r : (r: string) => string
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >r : string

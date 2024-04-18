@@ -21,7 +21,7 @@ var Person = makeClass(
 >initialize : (name: any) => void
 >           : ^    ^^^^^^^^^^^^^^
 >function(name) {            this.name = name;        } : (name: any) => void
->                                                       :                    
+>                                                       : ^    ^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 

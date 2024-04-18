@@ -5,7 +5,7 @@ const json0 = require("./json.json");
 >json0 : { a: number; }
 >      : ^^^^^^^^^^^^^^
 >require("./json.json") : { a: number; }
->                       :               
+>                       : ^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >"./json.json" : "./json.json"
@@ -42,7 +42,7 @@ const js0 = require("./js.js");
 >js0 : { a: number; }
 >    : ^^^^^^^^^^^^^^
 >require("./js.js") : { a: number; }
->                   :               
+>                   : ^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >"./js.js" : "./js.js"

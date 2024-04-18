@@ -574,7 +574,7 @@ function f23(obj: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->    :                              ^^^                             
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if (isFoo) {
 >isFoo : boolean
@@ -617,7 +617,7 @@ function f24(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->    :                              ^^^                             
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
@@ -674,7 +674,7 @@ function f25(arg: { kind: 'foo', foo: string } | { kind: 'bar', bar: number }) {
 >obj : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { kind: "foo"; foo: string; } | { kind: "bar"; bar: number; }
->    :                              ^^^                             
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const isFoo = obj.kind === 'foo';
 >isFoo : boolean
@@ -1427,13 +1427,13 @@ const obj = {
 >obj : { fn: () => boolean; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 >{    fn: () => true} : { fn: () => boolean; }
->                     : ^^^^^^             ^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
 
     fn: () => true
 >fn : () => boolean
 >   : ^^^^^^^^^^^^^
 >() => true : () => boolean
->           :              
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

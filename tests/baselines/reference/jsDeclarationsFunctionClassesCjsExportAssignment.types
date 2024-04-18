@@ -190,7 +190,7 @@ module.exports = Context;
 >module : { exports: { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }; }
 >       : ^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (input: Input): Context; new (input: Input): Context; prototype: { construct(input: Input, handle?: HookHandler | undefined): State; }; }
->        : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^                                ^                                    ^^^
+>        : ^^^     ^^     ^^^^^^^^^^^^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^     ^^      ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Context : typeof Context
 >        : ^^^^^^^^^^^^^^
 
