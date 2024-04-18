@@ -1,112 +1,249 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
-//// [/src/a.ts]
-export const foo = 0;
+//// [/user/username/projects/app/src/index.ts]
 
-//// [/src/b.ts]
-foo
 
-//// [/src/c.ts]
-import 
+import { MyClass } from 'shared';
 
-//// [/src/b-link.ts] symlink(/src/b.ts)
-//// [/src/ambient.d.ts]
-declare module 'ambient' {}
-
-//// [/tsconfig.json]
-{ "include": ["src"] }
-
-//// [/package.json]
-{ "dependencies": { "mobx": "*" } }
-
-//// [/node_modules/mobx/package.json]
+//// [/user/username/projects/app/tsconfig.json]
 {
-  "name": "mobx",
-  "version": "1.0.0"
+ "compilerOptions": {
+  "outDir": "dist",
+  "rootDir": "src",
+  "paths": {
+   "shared": [
+    "./../shared/src/index.ts"
+   ],
+   "shared/*": [
+    "./../shared/src/*.ts"
+   ]
+  }
+ },
+ "include": [
+  "./src/**/*"
+ ],
+ "references": [
+  {
+   "path": "../shared"
+  }
+ ]
 }
 
-//// [/node_modules/mobx/index.d.ts]
-export declare function observable(): unknown;
+//// [/user/username/projects/app/package.json]
+{
+ "name": "app",
+ "version": "1.0.0",
+ "main": "dist/index.js",
+ "dependencies": {
+  "shared": "1.0.0"
+ }
+}
 
+//// [/user/username/projects/shared/src/index.ts]
+export class MyClass { }
+
+//// [/user/username/projects/shared/src/helper.ts]
+export class MyHelper { }
+
+//// [/user/username/projects/shared/tsconfig.json]
+{
+ "compilerOptions": {
+  "composite": true,
+  "outDir": "dist",
+  "rootDir": "src"
+ },
+ "include": [
+  "./src/**/*"
+ ],
+ "references": [
+  {
+   "path": "../mylib"
+  }
+ ]
+}
+
+//// [/user/username/projects/shared/package.json]
+{
+ "name": "shared",
+ "version": "1.0.0",
+ "main": "dist/index.js"
+}
+
+//// [/user/username/projects/mylib/src/index.ts]
+export class MyLibClass { }
+
+//// [/user/username/projects/mylib/tsconfig.json]
+{
+ "compilerOptions": {
+  "composite": true,
+  "outDir": "dist",
+  "rootDir": "src"
+ },
+ "include": [
+  "./src/**/*"
+ ]
+}
+
+//// [/user/username/projects/mylib/package.json]
+{
+ "name": "mylib",
+ "version": "1.0.0",
+ "main": "dist/index.js"
+}
+
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/src/a.ts"
+        "file": "/user/username/projects/app/src/index.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/a.ts :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/app/src
+Info seq  [hh:mm:ss:mss] For info: /user/username/projects/app/src/index.ts :: Config file name: /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/tsconfig.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /src/a.ts to open"
+        "projectName": "/user/username/projects/app/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/app/src/index.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/app/tsconfig.json : {
  "rootNames": [
-  "/src/a.ts",
-  "/src/ambient.d.ts",
-  "/src/b-link.ts",
-  "/src/b.ts",
-  "/src/c.ts"
+  "/user/username/projects/app/src/index.ts"
  ],
  "options": {
-  "configFilePath": "/tsconfig.json"
+  "outDir": "/user/username/projects/app/dist",
+  "rootDir": "/user/username/projects/app/src",
+  "paths": {
+   "shared": [
+    "./../shared/src/index.ts"
+   ],
+   "shared/*": [
+    "./../shared/src/*.ts"
+   ]
+  },
+  "pathsBasePath": "/user/username/projects/app",
+  "configFilePath": "/user/username/projects/app/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/user/username/projects/shared",
+   "originalPath": "../shared"
+  }
+ ]
+}
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/src 1 undefined Config: /user/username/projects/app/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/src 1 undefined Config: /user/username/projects/app/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/shared/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/shared/src/helper.ts",
+  "/user/username/projects/shared/src/index.ts"
+ ],
+ "options": {
+  "composite": true,
+  "outDir": "/user/username/projects/shared/dist",
+  "rootDir": "/user/username/projects/shared/src",
+  "configFilePath": "/user/username/projects/shared/tsconfig.json"
+ },
+ "projectReferences": [
+  {
+   "path": "/user/username/projects/mylib",
+   "originalPath": "../mylib"
+  }
+ ]
+}
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/tsconfig.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/shared/src 1 undefined Config: /user/username/projects/shared/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/shared/src 1 undefined Config: /user/username/projects/shared/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Config: /user/username/projects/mylib/tsconfig.json : {
+ "rootNames": [
+  "/user/username/projects/mylib/src/index.ts"
+ ],
+ "options": {
+  "composite": true,
+  "outDir": "/user/username/projects/mylib/dist",
+  "rootDir": "/user/username/projects/mylib/src",
+  "configFilePath": "/user/username/projects/mylib/tsconfig.json"
  }
 }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /src 1 undefined Config: /tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/ambient.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b-link.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-	/src/a.ts SVC-1-0 "export const foo = 0;"
-	/src/ambient.d.ts Text-1 "declare module 'ambient' {}"
-	/src/b-link.ts Text-1 "foo"
-	/src/b.ts Text-1 "foo"
-	/src/c.ts Text-1 "import "
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/mylib/tsconfig.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/src/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 2000 undefined Project: /user/username/projects/app/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/app/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/app/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
+	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
 
 
-	src/a.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
-	src/ambient.d.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
-	src/b-link.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
-	src/b.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
-	src/c.ts
-	  Matched by include pattern 'src' in 'tsconfig.json'
+	../shared/src/index.ts
+	  Imported via 'shared' from file 'src/index.ts'
+	src/index.ts
+	  Matched by include pattern './src/**/*' in 'tsconfig.json'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/app/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 0 dependencies 1 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/helper.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/node_modules/mobx/index.d.ts Text-1 "export declare function observable(): unknown;"
+	/user/username/projects/shared/src/helper.ts Text-1 "export class MyHelper { }"
 
 
-	node_modules/mobx/index.d.ts
+	../shared/src/helper.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -116,7 +253,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/tsconfig.json"
+        "projectName": "/user/username/projects/app/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -127,22 +264,26 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "projectId": "0333346acdfbcfde2103d83f912052f0beb5f13f46ae44827e03843ee2a5fb41",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
             "jsx": 0,
             "jsxSize": 0,
-            "ts": 4,
-            "tsSize": 34,
+            "ts": 2,
+            "tsSize": 59,
             "tsx": 0,
             "tsxSize": 0,
-            "dts": 1,
-            "dtsSize": 27,
+            "dts": 0,
+            "dtsSize": 0,
             "deferred": 0,
             "deferredSize": 0
           },
-          "compilerOptions": {},
+          "compilerOptions": {
+            "outDir": "",
+            "rootDir": "",
+            "paths": ""
+          },
           "typeAcquisition": {
             "enable": false,
             "include": false,
@@ -166,8 +307,8 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/src/a.ts",
-        "configFile": "/tsconfig.json",
+        "triggerFile": "/user/username/projects/app/src/index.ts",
+        "configFile": "/user/username/projects/app/tsconfig.json",
         "diagnostics": [
           {
             "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
@@ -217,8 +358,8 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -226,8 +367,8 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/app/src/index.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "responseRequired": false
@@ -237,277 +378,61 @@ After request
 PolledWatches::
 /a/lib/lib.d.ts: *new*
   {"pollingInterval":500}
+/user/username/projects/app/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/app/src/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/shared/src/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/package.json: *new*
+/user/username/projects/app/package.json: *new*
   {}
-/src/ambient.d.ts: *new*
+/user/username/projects/app/tsconfig.json: *new*
   {}
-/src/b-link.ts: *new*
+/user/username/projects/mylib/tsconfig.json: *new*
   {}
-/src/b.ts: *new*
+/user/username/projects/shared/package.json: *new*
   {}
-/src/c.ts: *new*
+/user/username/projects/shared/src/helper.ts: *new*
   {}
-/tsconfig.json: *new*
+/user/username/projects/shared/src/index.ts: *new*
+  {}
+/user/username/projects/shared/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/node_modules: *new*
+/user/username/projects/app/src: *new*
   {}
-/src: *new*
+/user/username/projects/mylib/src: *new*
+  {}
+/user/username/projects/shared/src: *new*
   {}
 
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-/tsconfig.json (Configured) *new*
+/user/username/projects/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
-/node_modules/mobx/index.d.ts *new*
+/user/username/projects/app/src/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json *default*
+/user/username/projects/shared/src/helper.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/autoImportProviderProject1*
-/src/a.ts (Open) *new*
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json *default*
-/src/ambient.d.ts *new*
+/user/username/projects/shared/src/index.ts *new*
     version: Text-1
     containingProjects: 1
-        /tsconfig.json
-/src/b-link.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/b.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/c.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/b.ts"
-      },
-      "seq": 2,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/b.ts :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/package.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/src/c.ts:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/src/b.ts:
-  {}
-
-FsWatchesRecursive::
-/node_modules:
-  {}
-/src:
-  {}
-
-ScriptInfos::
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/src/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json *default*
-/src/ambient.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/b-link.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/b.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json *default*
-/src/c.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "open",
-      "arguments": {
-        "file": "/src/c.ts"
-      },
-      "seq": 3,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /src/c.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/c.ts :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
-Info seq  [hh:mm:ss:mss] 	Files (1)
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /src/a.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /src/b.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] 	FileName: /src/c.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/package.json:
-  {}
-/src/ambient.d.ts:
-  {}
-/src/b-link.ts:
-  {}
-/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/src/c.ts:
-  {}
-
-FsWatchesRecursive::
-/node_modules:
-  {}
-/src:
-  {}
-
-ScriptInfos::
-/node_modules/mobx/index.d.ts
-    version: Text-1
-    containingProjects: 1
-        /dev/null/autoImportProviderProject1*
-/src/a.ts (Open)
-    version: SVC-1-0
-    containingProjects: 1
-        /tsconfig.json *default*
-/src/ambient.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/b-link.ts
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json
-/src/b.ts (Open)
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json *default*
-/src/c.ts (Open) *changed*
-    open: true *changed*
-    version: Text-1
-    containingProjects: 1
-        /tsconfig.json *default*
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "preferences": {
-          "includeCompletionsForImportStatements": true,
-          "includeCompletionsForModuleExports": true,
-          "includeCompletionsWithInsertText": true,
-          "includeCompletionsWithSnippetText": true
-        }
-      },
-      "seq": 4,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "configure",
-      "request_seq": 4,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *,
-        "createAutoImportProviderProgramDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+        /user/username/projects/app/tsconfig.json
 
 Before request
 
@@ -515,24 +440,20 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/src/b.ts",
+        "file": "/user/username/projects/app/src/index.ts",
         "line": 1,
-        "offset": 3
+        "offset": 1
       },
-      "seq": 5,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 2 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
@@ -544,16 +465,6 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
-        "optionalReplacementSpan": {
-          "start": {
-            "line": 1,
-            "offset": 1
-          },
-          "end": {
-            "line": 1,
-            "offset": 4
-          }
-        },
         "entries": [
           {
             "name": "abstract",
@@ -958,16 +869,1149 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "foo",
-            "kind": "const",
+            "name": "MyClass",
+            "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
             "hasAction": true,
-            "source": "/src/a",
+            "source": "/user/username/projects/shared/src/index",
             "data": {
-              "exportName": "foo",
-              "exportMapKey": "3 * foo ",
-              "fileName": "/src/a.ts"
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts"
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+After request
+
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/shared/src/other.ts :: WatchInfo: /user/username/projects/shared/src 1 undefined Config: /user/username/projects/shared/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/shared/src/other.ts :: WatchInfo: /user/username/projects/shared/src 1 undefined Config: /user/username/projects/shared/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/shared/src/other.ts]
+export class OtherClass { }
+
+
+Timeout callback:: count: 2
+1: /user/username/projects/app/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/user/username/projects/app/src/index.ts",
+        "line": 1,
+        "offset": 1
+      },
+      "seq": 4,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
+	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 0 dependencies 1 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/shared/src/other.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/user/username/projects/shared/src/helper.ts Text-1 "export class MyHelper { }"
+	/user/username/projects/shared/src/other.ts Text-1 "export class OtherClass { }"
+
+
+	../shared/src/helper.ts
+	  Root file specified for compilation
+	../shared/src/other.ts
+	  Root file specified for compilation
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "flags": 1,
+        "isGlobalCompletion": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "entries": [
+          {
+            "name": "abstract",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "any",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "bigint",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "boolean",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "declare",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "enum",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "implements",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "infer",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "interface",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "keyof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "module",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "namespace",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "never",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "number",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "object",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readonly",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "string",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "symbol",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "type",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unique",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "MyClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/index",
+            "data": {
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts"
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "OtherClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/other",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "OtherClass",
+              "exportMapKey": "10 * OtherClass ",
+              "fileName": "/user/username/projects/shared/src/other.ts",
+              "isPackageJsonImport": true
+            }
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/app/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/shared/src/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/app/package.json:
+  {}
+/user/username/projects/app/tsconfig.json:
+  {}
+/user/username/projects/mylib/tsconfig.json:
+  {}
+/user/username/projects/shared/package.json:
+  {}
+/user/username/projects/shared/src/helper.ts:
+  {}
+/user/username/projects/shared/src/index.ts:
+  {}
+/user/username/projects/shared/src/other.ts: *new*
+  {}
+/user/username/projects/shared/tsconfig.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/app/src:
+  {}
+/user/username/projects/mylib/src:
+  {}
+/user/username/projects/shared/src:
+  {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2 *changed*
+    dirty: false *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/user/username/projects/app/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json *default*
+/user/username/projects/shared/src/helper.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/user/username/projects/shared/src/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json
+/user/username/projects/shared/src/other.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /user/username/projects/mylib/src/otherlib.ts :: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/app/tsconfig.json, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*, Cancelled earlier one
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/mylib/src/otherlib.ts :: WatchInfo: /user/username/projects/mylib/src 1 undefined Config: /user/username/projects/mylib/tsconfig.json WatchType: Wild card directory
+Before request
+//// [/user/username/projects/mylib/src/otherlib.ts]
+export class OtherLibClass { }
+
+
+Timeout callback:: count: 2
+1: /user/username/projects/app/tsconfig.json *deleted*
+2: *ensureProjectForOpenFiles* *deleted*
+3: /user/username/projects/app/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/user/username/projects/app/src/index.ts",
+        "line": 1,
+        "offset": 1
+      },
+      "seq": 5,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/app/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/user/username/projects/app/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/user/username/projects/shared/src/index.ts Text-1 "export class MyClass { }"
+	/user/username/projects/app/src/index.ts SVC-1-0 "\n\nimport { MyClass } from 'shared';"
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 3 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "flags": 1,
+        "isGlobalCompletion": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "entries": [
+          {
+            "name": "abstract",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "any",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "bigint",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "boolean",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "declare",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "enum",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "implements",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "infer",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "interface",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "keyof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "module",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "namespace",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "never",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "number",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "object",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readonly",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "string",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "symbol",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "type",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unique",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "MyClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/index",
+            "data": {
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts"
+            }
+          },
+          {
+            "name": "MyHelper",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/helper",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "MyHelper",
+              "exportMapKey": "8 * MyHelper ",
+              "fileName": "/user/username/projects/shared/src/helper.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "OtherClass",
+            "kind": "class",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/user/username/projects/shared/src/other",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "OtherClass",
+              "exportMapKey": "10 * OtherClass ",
+              "fileName": "/user/username/projects/shared/src/other.ts",
+              "isPackageJsonImport": true
             }
           }
         ]
@@ -977,18 +2021,15 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
     projectStateVersion: 2
-    projectProgramVersion: 1
+    projectProgramVersion: 2
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
     dirty: false *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
-  "isBlockedByPackageJsonDependencies": false
-}
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -996,7 +2037,8 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "configure",
       "arguments": {
         "preferences": {
-          "importModuleSpecifierPreference": "project-relative"
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsWithInsertText": true
         }
       },
       "seq": 6,
@@ -1023,28 +2065,23 @@ After request
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
     projectStateVersion: 3 *changed*
-    projectProgramVersion: 1
+    projectProgramVersion: 2
     dirty: true *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
+/user/username/projects/app/tsconfig.json (Configured)
+    projectStateVersion: 3
+    projectProgramVersion: 3
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) {
-  "isBlockedByPackageJsonDependencies": false
-}
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
-  "importModuleSpecifierPreference": "project-relative"
-} (/src/b.ts -> /src/a.ts) undefined
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "completionInfo",
       "arguments": {
-        "file": "/src/b.ts",
+        "file": "/user/username/projects/app/src/index.ts",
         "line": 1,
-        "offset": 3
+        "offset": 1,
+        "includeExternalModuleExports": true
       },
       "seq": 7,
       "type": "request"
@@ -1052,11 +2089,18 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
 Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
 Info seq  [hh:mm:ss:mss] collectAutoImports: *
@@ -1069,16 +2113,6 @@ Info seq  [hh:mm:ss:mss] response:
         "isGlobalCompletion": true,
         "isMemberCompletion": false,
         "isNewIdentifierLocation": false,
-        "optionalReplacementSpan": {
-          "start": {
-            "line": 1,
-            "offset": 1
-          },
-          "end": {
-            "line": 1,
-            "offset": 4
-          }
-        },
         "entries": [
           {
             "name": "abstract",
@@ -1483,16 +2517,16 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "foo",
-            "kind": "const",
+            "name": "MyClass",
+            "kind": "class",
             "kindModifiers": "export",
             "sortText": "16",
             "hasAction": true,
-            "source": "/src/a",
+            "source": "/user/username/projects/shared/src/index",
             "data": {
-              "exportName": "foo",
-              "exportMapKey": "3 * foo ",
-              "fileName": "/src/a.ts"
+              "exportName": "MyClass",
+              "exportMapKey": "7 * MyClass ",
+              "fileName": "/user/username/projects/shared/src/index.ts"
             }
           }
         ]
@@ -1502,537 +2536,30 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
     projectStateVersion: 3
-    projectProgramVersion: 1
+    projectProgramVersion: 3 *changed*
     dirty: false *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+    isClosed: true *changed*
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3
+    autoImportProviderHost: undefined *changed*
 
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {} (/src/b.ts -> /src/a.ts) undefined
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
-  "importModuleSpecifierPreference": "project-relative"
-} (/src/b.ts -> /src/a.ts) {
-  "isBlockedByPackageJsonDependencies": false
-}
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "configure",
-      "arguments": {
-        "preferences": {
-          "importModuleSpecifierEnding": "js"
-        }
-      },
-      "seq": 8,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "configure",
-      "request_seq": 8,
-      "success": true,
-      "performanceData": {
-        "updateGraphDurationMs": *,
-        "createAutoImportProviderProgramDurationMs": *
-      }
-    }
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "responseRequired": false
-    }
-After request
-
-Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 4 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: /dev/null/autoImportProviderProject1*
-
-Before request
-
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "command": "completionInfo",
-      "arguments": {
-        "file": "/src/b.ts",
-        "line": 1,
-        "offset": 3
-      },
-      "seq": 9,
-      "type": "request"
-    }
-Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 4 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 1 from cache
-Info seq  [hh:mm:ss:mss] collectAutoImports: response is incomplete
-Info seq  [hh:mm:ss:mss] collectAutoImports: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
-Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "response": {
-        "flags": 1,
-        "isGlobalCompletion": true,
-        "isMemberCompletion": false,
-        "isNewIdentifierLocation": false,
-        "optionalReplacementSpan": {
-          "start": {
-            "line": 1,
-            "offset": 1
-          },
-          "end": {
-            "line": 1,
-            "offset": 4
-          }
-        },
-        "entries": [
-          {
-            "name": "abstract",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "any",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "as",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "asserts",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "async",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "await",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "bigint",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "boolean",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "break",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "case",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "catch",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "class",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "const",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "continue",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "debugger",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "declare",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "default",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "delete",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "do",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "else",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "enum",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "export",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "extends",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "false",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "finally",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "for",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "function",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "globalThis",
-            "kind": "module",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "if",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "implements",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "import",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "in",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "infer",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "instanceof",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "interface",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "keyof",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "let",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "module",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "namespace",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "never",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "new",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "null",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "number",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "object",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "package",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "readonly",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "return",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "satisfies",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "string",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "super",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "switch",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "symbol",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "this",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "throw",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "true",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "try",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "type",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "typeof",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "undefined",
-            "kind": "var",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "unique",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "unknown",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "using",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "var",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "void",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "while",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "with",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "yield",
-            "kind": "keyword",
-            "kindModifiers": "",
-            "sortText": "15"
-          },
-          {
-            "name": "foo",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/src/a",
-            "data": {
-              "exportName": "foo",
-              "exportMapKey": "3 * foo ",
-              "fileName": "/src/a.ts"
-            }
-          }
-        ]
-      },
-      "responseRequired": true
-    }
-After request
-
-Projects::
-/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
-    projectStateVersion: 4
-    projectProgramVersion: 1
-    dirty: false *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    autoImportProviderHost: /dev/null/autoImportProviderProject1*
-
-Info seq  [hh:mm:ss:mss] moduleSpecifierCache for {
-  "importModuleSpecifierPreference": "project-relative"
-} (/src/b.ts -> /src/a.ts) undefined
+ScriptInfos::
+/user/username/projects/app/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json *default*
+/user/username/projects/shared/src/helper.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/autoImportProviderProject1* *deleted*
+/user/username/projects/shared/src/index.ts
+    version: Text-1
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json
+/user/username/projects/shared/src/other.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/autoImportProviderProject1* *deleted*
