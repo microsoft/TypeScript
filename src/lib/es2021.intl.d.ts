@@ -60,7 +60,7 @@ declare namespace Intl {
     type DisplayNamesOptionsFallback = "code" | "none";
 
     interface DisplayNamesOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         style?: DisplayNamesOptionsStyle | undefined;
         type: DisplayNamesOptionsType;
         fallback?: DisplayNamesOptionsFallback | undefined;
@@ -103,7 +103,7 @@ declare namespace Intl {
     type ListFormatOptionsStyle = "long" | "short" | "narrow";
 
     interface ListFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         type?: ListFormatOptionsType | undefined;
         style?: ListFormatOptionsStyle | undefined;
     }

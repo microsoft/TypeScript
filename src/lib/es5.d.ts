@@ -4384,8 +4384,10 @@ declare var Float64Array: Float64ArrayConstructor;
 /////////////////////////////
 
 declare namespace Intl {
+    type LocaleMatcherAlgorithm = "lookup" | "best fit";
+
     interface SupportedLocalesOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
     }
 
     type CollatorOptionsUsage = "sort" | "search";
@@ -4394,7 +4396,7 @@ declare namespace Intl {
 
     interface CollatorOptions {
         usage?: CollatorOptionsUsage | undefined;
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         numeric?: boolean | undefined;
         caseFirst?: CollatorOptionsCaseFirst | undefined;
         sensitivity?: CollatorOptionsSensitivity | undefined;
@@ -4459,7 +4461,7 @@ declare namespace Intl {
     type ResolvedNumberFormatOptionsUseGrouping = {} extends NumberFormatOptionsUseGroupingRegistry ? boolean : keyof NumberFormatOptionsUseGroupingRegistry | false;
 
     interface NumberFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         style?: NumberFormatOptionsStyle | undefined;
         currency?: string | undefined;
         currencyDisplay?: NumberFormatOptionsCurrencyDisplay | undefined;
@@ -4528,7 +4530,7 @@ declare namespace Intl {
     type DateTimeFormatOptionsTimeZoneName = keyof DateTimeFormatOptionsTimeZoneNameRegistry;
 
     interface DateTimeFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         weekday?: DateTimeFormatOptionsWeekday | undefined;
         era?: DateTimeFormatOptionsEra | undefined;
         year?: DateTimeFormatOptionsYear | undefined;

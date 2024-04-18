@@ -3,7 +3,7 @@ declare namespace Intl {
     type PluralRuleType = "cardinal" | "ordinal";
 
     interface PluralRulesOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         type?: PluralRuleType | undefined;
         minimumIntegerDigits?: number | undefined;
         minimumFractionDigits?: number | undefined;

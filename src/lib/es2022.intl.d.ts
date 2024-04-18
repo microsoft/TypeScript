@@ -24,7 +24,7 @@ declare namespace Intl {
     type SegmenterOptionsGranularity = "grapheme" | "word" | "sentence";
 
     interface SegmenterOptions {
-        localeMatcher?: "best fit" | "lookup" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         granularity?: SegmenterOptionsGranularity | undefined;
     }
 

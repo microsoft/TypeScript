@@ -55,7 +55,7 @@ declare namespace Intl {
     type RelativeTimeFormatOptionsNumeric = "always" | "auto";
 
     interface RelativeTimeFormatOptions {
-        localeMatcher?: "lookup" | "best fit" | undefined;
+        localeMatcher?: LocaleMatcherAlgorithm | undefined;
         numberingSystem?: string | undefined;
         style?: RelativeTimeFormatOptionsStyle | undefined;
         numeric?: RelativeTimeFormatOptionsNumeric | undefined;
