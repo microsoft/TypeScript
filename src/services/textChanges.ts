@@ -1834,11 +1834,10 @@ namespace deleteDeclaration {
 }
 
 // Exported for tests only! (TODO: improve tests to not need this)
-// TODO: knip thinks that this is unused, but it's used in unit tests via `const { deleteNode } = ts.textChanges;`
 /**
  * Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`.
  *
- * @internal @knipignore
+ * @internal
  */
 export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
     const startPosition = getAdjustedStartPosition(sourceFile, node, options);
