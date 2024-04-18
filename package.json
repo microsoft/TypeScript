@@ -50,7 +50,7 @@
         "@types/node": "latest",
         "@types/source-map-support": "^0.5.10",
         "@types/which": "^3.0.3",
-        "@typescript-eslint/utils": "^7.5.0",
+        "@typescript-eslint/utils": "^7.7.0",
         "azure-devops-node-api": "^12.5.0",
         "c8": "^9.1.0",
         "chai": "^4.4.1",
@@ -76,7 +76,7 @@
         "source-map-support": "^0.5.21",
         "tslib": "^2.6.2",
         "typescript": "^5.4.3",
-        "typescript-eslint": "^7.5.0",
+        "typescript-eslint": "^7.7.0",
         "which": "^3.0.1"
     },
     "overrides": {
