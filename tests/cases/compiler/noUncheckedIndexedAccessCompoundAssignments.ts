@@ -19,4 +19,4 @@ numberMap[n] += 1;
 declare const stringMap: { [s: string]: number };
 declare const s: string;
 declare const numberMap: { [n: number]: number };
-declare const n: string;
+declare const n: number;
