@@ -9708,6 +9708,7 @@ export interface ModuleSpecifierResolutionHost {
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
 
     getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    trace?(s: string): void;
 }
 
 /** @internal */

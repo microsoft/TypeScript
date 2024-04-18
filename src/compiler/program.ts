@@ -2706,6 +2706,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             getFileIncludeReasons: program.getFileIncludeReasons,
             createHash: maybeBind(host, host.createHash),
             getModuleResolutionCache: () => program.getModuleResolutionCache(),
+            trace: maybeBind(host, host.trace),
         };
     }
 
