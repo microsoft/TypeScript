@@ -32994,7 +32994,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
             }
 
-            propType = (compilerOptions.noUncheckedIndexedAccess && !isAssignmentTarget(node)) ? getUnionType([indexInfo.type, missingType]) : indexInfo.type;
+            propType = indexInfo.type;
+            if (compilerOptions.noUncheckedIndexedAccess && getAssignmentTargetKind(node) !== AssignmentKind.Definite) {
+                propType = getUnionType([propType, missingType]);
+            }
             if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
                 error(right, Diagnostics.Property_0_comes_from_an_index_signature_so_it_must_be_accessed_with_0, unescapeLeadingUnderscores(right.escapedText));
             }
@@ -33589,9 +33592,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         const effectiveIndexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType;
-        const accessFlags = isAssignmentTarget(node) ?
-            AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0) :
-            AccessFlags.ExpressionPosition;
+        const assignmentTargetKind = getAssignmentTargetKind(node);
+        let accessFlags: AccessFlags;
+        if (assignmentTargetKind === AssignmentKind.None) {
+            accessFlags = AccessFlags.ExpressionPosition;
+        } else {
+            accessFlags = AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0);
+            if (assignmentTargetKind === AssignmentKind.Compound) {
+                accessFlags |= AccessFlags.ExpressionPosition;
+            }
+        }
         const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, accessFlags, node) || errorType;
         return checkIndexedAccessIndexType(getFlowTypeOfAccessExpression(node, getNodeLinks(node).resolvedSymbol, indexedAccessType, indexExpression, checkMode), node);
     }
