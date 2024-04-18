@@ -33596,7 +33596,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         let accessFlags: AccessFlags;
         if (assignmentTargetKind === AssignmentKind.None) {
             accessFlags = AccessFlags.ExpressionPosition;
-        } else {
+        }
+        else {
             accessFlags = AccessFlags.Writing | (isGenericObjectType(objectType) && !isThisTypeParameter(objectType) ? AccessFlags.NoIndexSignatures : 0);
             if (assignmentTargetKind === AssignmentKind.Compound) {
                 accessFlags |= AccessFlags.ExpressionPosition;
