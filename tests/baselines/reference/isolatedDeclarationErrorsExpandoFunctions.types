@@ -15,7 +15,7 @@ foo.apply = () => {}
 >apply : () => void
 >      : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 foo.call = ()=> {}
 >foo.call = ()=> {} : () => void
@@ -27,7 +27,7 @@ foo.call = ()=> {}
 >call : () => void
 >     : ^^^^^^^^^^
 >()=> {} : () => void
->        :           
+>        : ^^^^^^^^^^
 
 foo.bind = ()=> {}
 >foo.bind = ()=> {} : () => void
@@ -39,7 +39,7 @@ foo.bind = ()=> {}
 >bind : () => void
 >     : ^^^^^^^^^^
 >()=> {} : () => void
->        :           
+>        : ^^^^^^^^^^
 
 foo.caller = ()=> {}
 >foo.caller = ()=> {} : () => void
@@ -51,7 +51,7 @@ foo.caller = ()=> {}
 >caller : () => void
 >       : ^^^^^^^^^^
 >()=> {} : () => void
->        :           
+>        : ^^^^^^^^^^
 
 foo.toString = ()=> {}
 >foo.toString = ()=> {} : () => void
@@ -63,7 +63,7 @@ foo.toString = ()=> {}
 >toString : () => void
 >         : ^^^^^^^^^^
 >()=> {} : () => void
->        :           
+>        : ^^^^^^^^^^
 
 foo.length = 10
 >foo.length = 10 : 10

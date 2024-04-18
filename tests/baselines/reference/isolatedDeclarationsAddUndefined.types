@@ -49,7 +49,7 @@ export function foo(p = (ip = 10, v: number): void => {}): void{
 >p : (ip: number | undefined, v: number) => void
 >  : ^  ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    
 >(ip = 10, v: number): void => {} : (ip: number | undefined, v: number) => void
->                                 :                                            
+>                                 : ^  ^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^    
 >ip : number
 >   : ^^^^^^
 >10 : 10

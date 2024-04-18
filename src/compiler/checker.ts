@@ -6634,7 +6634,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
 
                 const links = context.enclosingDeclaration && getNodeLinks(context.enclosingDeclaration);
-                const key = `${getTypeId(type)}|${context.flags & ~NodeBuilderFlags.NoSyntacticPrinter}`; // Temporary workaround fix in #58221
+                const key = `${getTypeId(type)}|${context.flags}`;
                 if (links) {
                     links.serializedTypes ||= new Map();
                 }

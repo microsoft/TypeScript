@@ -21,7 +21,7 @@ const errorOnAssignmentBelow = (): void => {}
 >errorOnAssignmentBelow : { (): void; a: string; }
 >                       : ^^^^^^    ^^^^^^^^^^^^^^
 >(): void => {} : { (): void; a: string; }
->               :                         
+>               : ^^^^^^    ^^^^^^^^^^^^^^
 
 errorOnAssignmentBelow.a = "";
 >errorOnAssignmentBelow.a = "" : ""
@@ -39,7 +39,7 @@ const errorOnMissingReturn = () => {}
 >errorOnMissingReturn : { (): void; a: string; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {} : { (): void; a: string; }
->         :                         
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 errorOnMissingReturn.a = "";
 >errorOnMissingReturn.a = "" : ""

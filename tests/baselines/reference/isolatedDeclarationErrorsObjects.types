@@ -333,7 +333,7 @@ export const oWithSpread = {
 >oWithSpread : { c: number; part: { a: number; }; a: number; b: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    b: 1,    ...part,    c: 1,    part,} : { c: number; part: { a: number; }; a: number; b: number; }
->                                          : ^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b: 1,
 >b : number

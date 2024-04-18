@@ -767,7 +767,7 @@ export function numberParamBad3(p = numberParam): void { }
 >p : (p?: number) => void
 >  : ^ ^^^^^^^^^^^^^^^^^^
 >numberParam : (p?: number) => void
->            :   ^                 
+>            : ^ ^^^^^^^^^^^^^^^^^^
 
 export function bigIntParam(p = 1n): void { }
 >bigIntParam : (p?: bigint) => void
@@ -805,7 +805,7 @@ export function bigIntParamBad3(p = bigIntParam): void { }
 >p : (p?: bigint) => void
 >  : ^ ^^^^^^^^^^^^^^^^^^
 >bigIntParam : (p?: bigint) => void
->            :   ^                 
+>            : ^ ^^^^^^^^^^^^^^^^^^
 
 export function stringParam(p = "s"): void { }
 >stringParam : (p?: string) => void
