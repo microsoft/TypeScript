@@ -260,7 +260,7 @@ export function getNodeModulesPackageName(
     options: ModuleSpecifierOptions = {},
 ): string | undefined {
     const info = getInfo(importingSourceFile.fileName, host);
-    const modulePaths = getAllModulePaths(info, nodeModulesFileName, host, preferences, options);
+    const modulePaths = getAllModulePaths(info, nodeModulesFileName, host, preferences, compilerOptions, options);
     return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, preferences, /*packageNameOnly*/ true, options.overrideImportMode));
 }
 
@@ -275,7 +275,7 @@ function getModuleSpecifierWorker(
     options: ModuleSpecifierOptions = {},
 ): string {
     const info = getInfo(importingSourceFileName, host);
-    const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, options);
+    const modulePaths = getAllModulePaths(info, toFileName, host, userPreferences, compilerOptions, options);
     return firstDefined(modulePaths, modulePath => tryGetModuleNameAsNodeModule(modulePath, info, importingSourceFile, host, compilerOptions, userPreferences, /*packageNameOnly*/ undefined, options.overrideImportMode)) ||
         getLocalModuleSpecifier(toFileName, info, compilerOptions, host, options.overrideImportMode || getDefaultResolutionModeForFile(importingSourceFile, host, compilerOptions), preferences);
 }
@@ -367,7 +367,7 @@ export function getModuleSpecifiersWithCacheInfo(
     if (!moduleSourceFile) return { moduleSpecifiers: emptyArray, computedWithoutCache };
 
     computedWithoutCache = true;
-    modulePaths ||= getAllModulePathsWorker(getInfo(importingSourceFile.fileName, host), moduleSourceFile.originalFileName, host);
+    modulePaths ||= getAllModulePathsWorker(getInfo(importingSourceFile.fileName, host), moduleSourceFile.originalFileName, host, compilerOptions, options);
     const result = computeModuleSpecifiers(
         modulePaths,
         compilerOptions,
@@ -697,6 +697,7 @@ function getAllModulePaths(
     importedFileName: string,
     host: ModuleSpecifierResolutionHost,
     preferences: UserPreferences,
+    compilerOptions: CompilerOptions,
     options: ModuleSpecifierOptions = {},
 ) {
     const importingFilePath = toPath(info.importingSourceFileName, host.getCurrentDirectory(), hostGetCanonicalFileName(host));
@@ -706,7 +707,7 @@ function getAllModulePaths(
         const cached = cache.get(importingFilePath, importedFilePath, preferences, options);
         if (cached?.modulePaths) return cached.modulePaths;
     }
-    const modulePaths = getAllModulePathsWorker(info, importedFileName, host);
+    const modulePaths = getAllModulePathsWorker(info, importedFileName, host, compilerOptions, options);
     if (cache) {
         cache.setModulePaths(importingFilePath, importedFilePath, preferences, options, modulePaths);
     }
@@ -726,7 +727,7 @@ function getAllRuntimeDependencies(packageJson: PackageJsonPathFields) {
     return result;
 }
 
-function getAllModulePathsWorker(info: Info, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+function getAllModulePathsWorker(info: Info, importedFileName: string, host: ModuleSpecifierResolutionHost, compilerOptions: CompilerOptions, options: ModuleSpecifierOptions): readonly ModulePath[] {
     const cache = host.getModuleResolutionCache?.();
     const links = host.getSymlinkCache?.();
     if (cache && links && host.readFile && !pathContainsNodeModules(info.importingSourceFileName)) {
@@ -739,7 +740,7 @@ function getAllModulePathsWorker(info: Info, importedFileName: string, host: Mod
         if (packageJson) {
             const toResolve = getAllRuntimeDependencies(packageJson.contents.packageJsonContent);
             for (const depName of (toResolve || emptyArray)) {
-                const resolved = resolveModuleName(depName, info.importingSourceFileName, {}, host, cache);
+                const resolved = resolveModuleName(depName, combinePaths(packageJson.packageDirectory, "package.json"), compilerOptions, host, cache, /*redirectedReference*/ undefined, options.overrideImportMode);
                 links.setSymlinksFromResolution(resolved.resolvedModule);
             }
         }
