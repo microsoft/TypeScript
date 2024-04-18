@@ -12,7 +12,7 @@
         "src/watchGuard/watchGuard.ts",
 
         "src/testRunner/tests.ts",
-        "./src/testRunner/_namespaces/Harness.ts",
+        "src/testRunner/_namespaces/Harness.ts",
 
         // The rest of the entry files, mostly to track used dependencies:
         ".eslint-plugin-local.cjs",
