@@ -12,7 +12,7 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export const emptyArray: never[] = [] as never[];
+export const emptyArray: never[] = Object.freeze([]) as never[];
 /** @internal */
 export const emptyMap: ReadonlyMap<never, never> = new Map<never, never>();
 /** @internal */
