@@ -483,6 +483,20 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 3,
       "success": true
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+/tsconfig.json (Configured)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
@@ -1408,8 +1422,9 @@ Info seq  [hh:mm:ss:mss] request:
 After Request
 Projects::
 /dev/null/autoImportProviderProject1* (AutoImportProvider)
-    projectStateVersion: 1
+    projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
