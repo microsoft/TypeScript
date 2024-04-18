@@ -1,7 +1,3 @@
-isolatedDeclarationErrorsEnums.ts(4,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
-isolatedDeclarationErrorsEnums.ts(5,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
-isolatedDeclarationErrorsEnums.ts(6,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
-isolatedDeclarationErrorsEnums.ts(7,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 isolatedDeclarationErrorsEnums.ts(12,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 isolatedDeclarationErrorsEnums.ts(13,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 isolatedDeclarationErrorsEnums.ts(29,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
@@ -11,22 +7,14 @@ isolatedDeclarationErrorsEnums.ts(44,5): error TS9020: Enum member initializers 
 isolatedDeclarationErrorsEnums.ts(45,5): error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsEnums.ts (11 errors) ====
+==== isolatedDeclarationErrorsEnums.ts (7 errors) ====
     declare function computed(x: number): number;
     
     enum E {
         A = computed(0),
-        ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         B = computed(1),
-        ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         C = computed(2),
-        ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
         D = computed(3),
-        ~
-!!! error TS9020: Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.
     }
     
     

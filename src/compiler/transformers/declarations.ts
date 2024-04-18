@@ -1863,7 +1863,7 @@ export function transformDeclarations(context: TransformationContext) {
                         const enumValue = resolver.getEnumMemberValue(m);
                         const constValue = enumValue?.value;
                         if (
-                            isolatedDeclarations && m.initializer && (constValue === undefined || enumValue?.hasExternalReferences) &&
+                            isolatedDeclarations && m.initializer && enumValue?.hasExternalReferences &&
                             // This will be its own compiler error instead, so don't report.
                             !isComputedPropertyName(m.name)
                         ) {
