@@ -72,10 +72,12 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
     interface EventAndFileName {
         event: string;
+        // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
     interface ExpectedEventAndFileName {
         event: string | readonly string[]; // Its expected event name or any of the event names
+        // eslint-disable-next-line no-restricted-syntax
         fileName: string | null | undefined;
     }
     type FsWatch<System extends ts.System> = (dir: string, recursive: boolean, cb: ts.FsWatchCallback, sys: System) => ts.FileWatcher;
