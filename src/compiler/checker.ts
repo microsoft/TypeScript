@@ -37202,7 +37202,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             // The global Generator type doesn't exist, so report an error
-            resolver.getGlobalGeneratorType(/*reportErrors*/ true);
+            resolver.getGlobalIterableIteratorType(/*reportErrors*/ true);
             return emptyObjectType;
         }
 

@@ -11,8 +11,8 @@ Instantiation count: 1,000
 
 interface PropsType {
     children: [string, number?] | Iterable<boolean>;
->children : [string, number?] | Iterable<boolean>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>children : [string, number?] | Iterable<boolean, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare class Foo extends React.Component<PropsType, {}> {}
 >Foo : Foo
