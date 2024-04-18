@@ -9163,7 +9163,6 @@ declare namespace ts {
     function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     function classicNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: NonRelativeModuleNameResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
     interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
-        forEach(cb: (elem: ResolvedTypeReferenceDirectiveWithFailedLookupLocations, key: string, mode?: ResolutionMode) => void): void;
     }
     interface ModeAwareCache<T> {
         get(key: string, mode: ResolutionMode): T | undefined;
@@ -9186,7 +9185,6 @@ declare namespace ts {
          *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
          */
         update(options: CompilerOptions): void;
-        forEach(cb: (elem: T, key: string, mode: ResolutionMode) => void): void;
     }
     interface NonRelativeNameResolutionCache<T> {
         getFromNonRelativeNameCache(nonRelativeName: string, mode: ResolutionMode, directoryName: string, redirectedReference: ResolvedProjectReference | undefined): T | undefined;
@@ -9197,16 +9195,13 @@ declare namespace ts {
          *  This updates the redirects map as well if needed so module resolutions are cached if they can across the projects
          */
         update(options: CompilerOptions): void;
-        forEach(cb: (elem: T, key: string, mode?: ResolutionMode) => void): void;
     }
     interface PerNonRelativeNameCache<T> {
         get(directory: string): T | undefined;
         set(directory: string, result: T): void;
-        forEach(cb: (elem: T, key: string) => void): void;
     }
     interface ModuleResolutionCache extends PerDirectoryResolutionCache<ResolvedModuleWithFailedLookupLocations>, NonRelativeModuleNameResolutionCache, PackageJsonInfoCache {
         getPackageJsonInfoCache(): PackageJsonInfoCache;
-        forEach(cb: (elem: ResolvedModuleWithFailedLookupLocations, key: string, mode?: ResolutionMode) => void): void;
     }
     /**
      * Stored map from non-relative module name to a table: directory -> result of module lookup in this directory

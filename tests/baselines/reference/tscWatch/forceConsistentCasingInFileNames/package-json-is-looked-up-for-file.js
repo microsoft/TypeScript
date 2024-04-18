@@ -59,8 +59,6 @@ File '/Users/name/projects/lib-boilerplate/src/index.ts' exists - use it as a na
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/Users/name/projects/lib-boilerplate/src/index.ts', result '/Users/name/projects/lib-boilerplate/src/index.ts'.
 ======== Module name 'lib-boilerplate' was successfully resolved to '/Users/name/projects/lib-boilerplate/src/index.ts' with Package ID 'lib-boilerplate/src/index.ts@0.0.2'. ========
-File '/Users/name/projects/lib-boilerplate/test/package.json' does not exist according to earlier cached lookups.
-File '/Users/name/projects/lib-boilerplate/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.

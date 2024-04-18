@@ -85,7 +85,6 @@ File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js'
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -115,7 +114,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.js' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -127,8 +125,6 @@ File '/user/username/projects/myproject/packages/pkg2/build/const.ts' does not e
 File '/user/username/projects/myproject/packages/pkg2/build/const.tsx' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.ts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
@@ -398,7 +394,6 @@ File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js'
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -473,7 +468,6 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.ts' exists - use it as a name resolution result.
 ======== Module name './const.js' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.ts'. ========
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.

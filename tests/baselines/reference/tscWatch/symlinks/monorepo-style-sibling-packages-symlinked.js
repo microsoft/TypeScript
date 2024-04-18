@@ -164,8 +164,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -374,8 +372,6 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/packages/package1/dist/package.json' does not exist.
 Found 'package.json' at '/home/src/projects/project/packages/package1/package.json'.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
@@ -592,8 +588,6 @@ Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'package1' was not resolved. ========
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -789,8 +783,6 @@ File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists -
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
 ======== Module name 'package1' was successfully resolved to '/home/src/projects/project/packages/package1/dist/index.d.ts' with Package ID 'package1/dist/index.d.ts@1.0.0'. ========
-File '/home/src/projects/project/packages/package2/src/package.json' does not exist according to earlier cached lookups.
-File '/home/src/projects/project/packages/package2/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/project/packages/package1/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/projects/project/packages/package1/package.json' exists according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file

@@ -48,6 +48,7 @@ import {
     getOwnKeys,
     getPackageJsonTypesVersionsPaths,
     getPackageNameFromTypesPackageName,
+    getPackageScopeForPath,
     getPathsBasePath,
     getRelativePathFromDirectory,
     getRelativePathToDirectoryOrUrl,
@@ -55,6 +56,7 @@ import {
     getResolvePackageJsonImports,
     getSourceFileOfModule,
     getSupportedExtensions,
+    getTemporaryModuleResolutionState,
     getTextOfIdentifierOrLiteral,
     hasJSFileExtension,
     hasTSFileExtension,
@@ -84,6 +86,7 @@ import {
     ModuleDeclaration,
     ModuleKind,
     ModulePath,
+    ModuleResolutionHost,
     ModuleResolutionKind,
     ModuleSpecifierCache,
     ModuleSpecifierEnding,
@@ -102,6 +105,7 @@ import {
     removeTrailingDirectorySeparator,
     replaceFirstStar,
     ResolutionMode,
+    resolveModuleName,
     resolvePath,
     ScriptKind,
     shouldAllowImportingTsExtension,
@@ -708,6 +712,29 @@ function getAllModulePaths(
 }
 
 function getAllModulePathsWorker(info: Info, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
+    const cache = host.getModuleResolutionCache?.();
+    const links = host.getSymlinkCache?.();
+    if (cache && links && host.readFile && !pathContainsNodeModules(info.importingSourceFileName)) {
+        Debug.type<ModuleResolutionHost>(host);
+        // Cache resolutions for all `dependencies` of the `package.json` context of the input file.
+        // This should populate all the relevant symlinks in the symlink cache, and most, if not all, of these resolutions
+        // should get (re)used.
+        const state = getTemporaryModuleResolutionState(cache.getPackageJsonInfoCache(), host, {});
+        const packageJson = getPackageScopeForPath(info.importingSourceFileName, state);
+        if (packageJson) {
+            const deps = packageJson.contents.packageJsonContent.dependencies;
+            if (deps && typeof deps === "object") {
+                const toResolve = getOwnKeys(deps as MapLike<unknown>);
+                for (const depName of toResolve) {
+                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, /*mode*/ undefined, /*redirectedReference*/ undefined).get(info.canonicalSourceDirectory);
+                    if (cached) continue;
+                    const resolved = resolveModuleName(depName, info.importingSourceFileName, {}, host, cache);
+                    links.setSymlinksFromResolution(resolved.resolvedModule);
+                }
+            }
+        }
+    }
+
     const allFileNames = new Map<string, { path: string; isRedirect: boolean; isInNodeModules: boolean; }>();
     let importedFileFromNodeModules = false;
     forEachFileNameOfModule(

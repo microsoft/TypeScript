@@ -419,7 +419,6 @@ import {
     ModuleDeclaration,
     ModuleDetectionKind,
     ModuleKind,
-    ModuleResolutionCache,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
     MultiMap,
@@ -9080,7 +9079,7 @@ export interface SymlinkCache {
         ) => void,
         typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
     ): void;
-    setSymlinksFromResolutionCache(cache: ModuleResolutionCache | undefined): void;
+    setSymlinksFromResolution(resolution: ResolvedModuleFull | undefined): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -9120,8 +9119,8 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
-        setSymlinksFromResolutionCache(cache) {
-            cache?.forEach(elem => processResolution(this, elem.resolvedModule));
+        setSymlinksFromResolution(resolution) {
+            processResolution(this, resolution);
         },
     };
 

@@ -123,8 +123,6 @@ File '/src/projects/node_modules/@types/pg/package.json' exists according to ear
 File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Module name 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts'. ========
-File '/src/projects/b/src/package.json' does not exist according to earlier cached lookups.
-File '/src/projects/b/package.json' exists according to earlier cached lookups.
 File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
 ======== Resolving type reference directive 'pg', containing file '/src/projects/b/__inferred type names__.ts', root directory '/src/projects/b/node_modules/@types,/src/projects/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/src/projects/b/node_modules/@types, /src/projects/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.

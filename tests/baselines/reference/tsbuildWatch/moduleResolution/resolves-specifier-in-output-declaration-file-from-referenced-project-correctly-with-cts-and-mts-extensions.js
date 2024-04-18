@@ -84,7 +84,6 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -113,7 +112,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -125,8 +123,6 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
@@ -378,7 +374,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -390,8 +385,6 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -480,7 +473,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -492,8 +484,6 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -580,7 +570,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exis
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.ts' with Package ID 'pkg2/build/index.d.ts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
 Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'. ========
@@ -592,8 +581,6 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist according to earlier cached lookups.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -672,7 +659,6 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/packages/pkg2/const.cjs' has a '.cjs' extension - stripping it.
 File '/user/username/projects/myproject/packages/pkg2/const.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/const.cts'. ========
-Found 'package.json' at '/user/username/projects/myproject/packages/pkg2/package.json'.
 File '/a/lib/package.json' does not exist.
 File '/a/package.json' does not exist.
 File '/package.json' does not exist.
@@ -839,7 +825,6 @@ File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.cts' exi
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.cts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.cts'.
 ======== Module name 'pkg2' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/index.d.cts' with Package ID 'pkg2/build/index.d.cts@1.0.0'. ========
-File '/user/username/projects/myproject/packages/pkg1/package.json' exists according to earlier cached lookups.
 ======== Resolving module './const.cjs' from '/user/username/projects/myproject/packages/pkg2/build/index.d.cts'. ========
 Using compiler options of project reference redirect '/user/username/projects/myproject/packages/pkg2/tsconfig.json'.
 Module resolution kind is not specified, using 'Node16'.
@@ -849,8 +834,6 @@ File name '/user/username/projects/myproject/packages/pkg2/build/const.cjs' has 
 File '/user/username/projects/myproject/packages/pkg2/build/const.cts' does not exist.
 File '/user/username/projects/myproject/packages/pkg2/build/const.d.cts' exists - use it as a name resolution result.
 ======== Module name './const.cjs' was successfully resolved to '/user/username/projects/myproject/packages/pkg2/build/const.d.cts'. ========
-File '/user/username/projects/myproject/packages/pkg2/build/package.json' does not exist.
-File '/user/username/projects/myproject/packages/pkg2/package.json' exists according to earlier cached lookups.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
