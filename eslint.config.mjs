@@ -113,7 +113,7 @@ export default tseslint.config(
                 { selector: "method", format: ["camelCase", "PascalCase"], leadingUnderscore: "allow", filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false } },
                 { selector: "memberLike", format: ["camelCase"], leadingUnderscore: "allow", filter: { regex: "^([0-9]+|[A-Za-z]+_[A-Za-z]+)$", match: false } },
                 { selector: "enumMember", format: ["camelCase", "PascalCase"], leadingUnderscore: "allow", filter: { regex: "^[A-Za-z]+_[A-Za-z]+$", match: false } },
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 { selector: "property", format: null },
             ],
 
@@ -241,6 +241,7 @@ export default tseslint.config(
             "no-var": "off",
             "no-restricted-globals": "off",
             "no-shadow-restricted-names": "off",
+            "no-restricted-syntax": "off",
         },
     },
     {
