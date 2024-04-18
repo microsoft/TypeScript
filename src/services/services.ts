@@ -1,5 +1,4 @@
 import {
-    SignatureObject,
     SymbolObject,
 } from "../compiler/objectConstructors";
 import { SignatureObjectInternals } from "../compiler/signatureObjectInternals";
@@ -250,7 +249,6 @@ import {
     TodoCommentDescriptor,
     toPath,
     tracing,
-    TransientSymbol,
     Type,
     TypeChecker,
     typeToDisplayParts,

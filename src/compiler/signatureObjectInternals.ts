@@ -1,4 +1,8 @@
-import { JSDocTagInfo, Signature, SymbolDisplayPart } from "./types";
+import {
+    JSDocTagInfo,
+    Signature,
+    SymbolDisplayPart,
+} from "./types";
 
 /** @internal */
 export class SignatureObjectInternals {
@@ -8,7 +12,7 @@ export class SignatureObjectInternals {
     getDocumentationComment(_signature: Signature): SymbolDisplayPart[] {
         throw new TypeError("Not implemented.");
     }
-    
+
     getJsDocTags(signature: Signature): JSDocTagInfo[];
     getJsDocTags(_signature: Signature): JSDocTagInfo[] {
         throw new TypeError("Not implemented.");
