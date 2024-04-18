@@ -65,8 +65,8 @@ const assignability2: () => AsyncIterableIterator<number> = async function * () 
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"
@@ -116,8 +116,8 @@ const assignability5: () => AsyncIterable<number> = async function * () {
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"
@@ -167,8 +167,8 @@ const assignability8: () => AsyncIterator<number> = async function * () {
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"
@@ -213,8 +213,8 @@ async function * explicitReturnType2(): AsyncIterableIterator<number> {
 >                    : ^^^^^^                             
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"
@@ -255,8 +255,8 @@ async function * explicitReturnType5(): AsyncIterable<number> {
 >                    : ^^^^^^                     
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"
@@ -297,8 +297,8 @@ async function * explicitReturnType8(): AsyncIterator<number> {
 >                    : ^^^^^^                     
 
     yield* ["a", "b"];
->yield* ["a", "b"] : any
->                  : ^^^
+>yield* ["a", "b"] : void
+>                  : ^^^^
 >["a", "b"] : string[]
 >           : ^^^^^^^^
 >"a" : "a"

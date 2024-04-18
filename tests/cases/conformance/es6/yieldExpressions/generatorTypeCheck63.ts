@@ -26,18 +26,18 @@ export interface State extends StrategicState {
 }
 
 export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
-    yield 1;
-    return state;
+    yield 1; // number isn't a `State`, so this should error.
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });
 
 export const Nothing1: Strategy<State> = strategy("Nothing", function* (state: State) {
 });
 
 export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
     yield state;
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });

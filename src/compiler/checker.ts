@@ -16373,7 +16373,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGlobalAsyncIterableType(reportErrors: boolean) {
-        return (deferredGlobalAsyncIterableType ||= getGlobalType("AsyncIterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        return (deferredGlobalAsyncIterableType ||= getGlobalType("AsyncIterable" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalAsyncIteratorType(reportErrors: boolean) {
@@ -16381,7 +16381,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-        return (deferredGlobalAsyncIterableIteratorType ||= getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        return (deferredGlobalAsyncIterableIteratorType ||= getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalAsyncGeneratorType(reportErrors: boolean) {
@@ -16389,7 +16389,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGlobalIterableType(reportErrors: boolean) {
-        return (deferredGlobalIterableType ||= getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        return (deferredGlobalIterableType ||= getGlobalType("Iterable" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalIteratorType(reportErrors: boolean) {
@@ -16397,7 +16397,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getGlobalIterableIteratorType(reportErrors: boolean) {
-        return (deferredGlobalIterableIteratorType ||= getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        return (deferredGlobalIterableIteratorType ||= getGlobalType("IterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
     }
 
     function getGlobalGeneratorType(reportErrors: boolean) {
@@ -43788,28 +43788,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      * `getIterationTypesOfIterable` instead.
      */
     function getIterationTypesOfIterableFast(type: Type, resolver: IterationTypesResolver) {
-        // As an optimization, if the type is an instantiation of one of the following global types, then
-        // just grab its related type argument:
-        // - `Iterable<T>` or `AsyncIterable<T>`
-        // - `IterableIterator<T>` or `AsyncIterableIterator<T>`
-        let globalType: Type;
-        if (
-            isReferenceToType(type, globalType = resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
-            isReferenceToType(type, globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false))
-        ) {
-            const [yieldType] = getTypeArguments(type as GenericType);
-            // The "return" and "next" types of `Iterable` and `IterableIterator` are defined by the
-            // iteration types of their `[Symbol.iterator]()` method. The same is true for their async cousins.
-            // While we define these as `any` and `undefined` in our libs by default, a custom lib *could* use
-            // different definitions.
-            const { returnType, nextType } = getIterationTypesOfGlobalIterableType(globalType, resolver);
-            return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
-        }
-
         // As an optimization, if the type is an instantiation of the following global type, then
         // just grab its related type arguments:
+        // - `Iterable<T, TReturn, TNext>` or `AsyncIterable<T, TReturn, TNext>`
+        // - `IterableIterator<T, TReturn, TNext>` or `AsyncIterableIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
-        if (isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
+        if (
+            isReferenceToType(type, resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
+            isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
+            isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
             const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
             return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
         }
@@ -43927,22 +43914,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
      */
     function getIterationTypesOfIteratorFast(type: Type, resolver: IterationTypesResolver) {
         // As an optimization, if the type is an instantiation of one of the following global types,
-        // then just grab its related type argument:
-        // - `IterableIterator<T>` or `AsyncIterableIterator<T>`
+        // then just grab its related type argumenst:
+        // - `IterableIterator<T, TReturn, TNext>` or `AsyncIterableIterator<T, TReturn, TNext>`
         // - `Iterator<T, TReturn, TNext>` or `AsyncIterator<T, TReturn, TNext>`
         // - `Generator<T, TReturn, TNext>` or `AsyncGenerator<T, TReturn, TNext>`
-        const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
-        if (isReferenceToType(type, globalType)) {
-            const [yieldType] = getTypeArguments(type as GenericType);
-            // The "return" and "next" types of `IterableIterator` and `AsyncIterableIterator` are defined by the
-            // iteration types of their `next`, `return`, and `throw` methods. While we define these as `any`
-            // and `undefined` in our libs by default, a custom lib *could* use different definitions.
-            const globalIterationTypes = getIterationTypesOfIteratorCached(globalType, resolver) ||
-                getIterationTypesOfIteratorSlow(globalType, resolver, /*errorNode*/ undefined, /*errorOutputContainer*/ undefined, /*noCache*/ false);
-            const { returnType, nextType } = globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
-            return setCachedIterationTypes(type, resolver.iteratorCacheKey, createIterationTypes(yieldType, returnType, nextType));
-        }
         if (
+            isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIteratorType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))
         ) {

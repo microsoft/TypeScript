@@ -147,8 +147,8 @@ const { x: z3 = undefined } = a;
 
 
 declare const r: Iterator<number>;
->r : Iterator<number, any, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : Iterator<number, void, undefined>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 let done: boolean;
 >done : boolean
@@ -159,10 +159,10 @@ let value;
 >      : ^^^
 
 ({ done = false, value } = r.next());
->({ done = false, value } = r.next()) : IteratorResult<number, any>
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ done = false, value } = r.next() : IteratorResult<number, any>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ done = false, value } = r.next()) : IteratorResult<number, void>
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done = false, value } = r.next() : IteratorResult<number, void>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done = false, value } : { done?: boolean; value: any; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : boolean
@@ -171,20 +171,20 @@ let value;
 >      : ^^^^^
 >value : any
 >      : ^^^
->r.next() : IteratorResult<number, any>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->r : Iterator<number, any, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next() : IteratorResult<number, void>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next : (...args: [] | [undefined]) => IteratorResult<number, void>
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : Iterator<number, void, undefined>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...args: [] | [undefined]) => IteratorResult<number, void>
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ({ done: done = false, value } = r.next());
->({ done: done = false, value } = r.next()) : IteratorResult<number, any>
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{ done: done = false, value } = r.next() : IteratorResult<number, any>
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({ done: done = false, value } = r.next()) : IteratorResult<number, void>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: done = false, value } = r.next() : IteratorResult<number, void>
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ done: done = false, value } : { done?: boolean; value: any; }
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >done : boolean
@@ -197,12 +197,12 @@ let value;
 >      : ^^^^^
 >value : any
 >      : ^^^
->r.next() : IteratorResult<number, any>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->r.next : (...args: [] | [undefined]) => IteratorResult<number, any>
->       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->r : Iterator<number, any, undefined>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [undefined]) => IteratorResult<number, any>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next() : IteratorResult<number, void>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r.next : (...args: [] | [undefined]) => IteratorResult<number, void>
+>       : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>r : Iterator<number, void, undefined>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...args: [] | [undefined]) => IteratorResult<number, void>
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

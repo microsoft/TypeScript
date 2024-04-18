@@ -887,7 +887,7 @@ type Action3 = {
 };
 declare const reducerBroken: (state: number, { type, payload }: Action3) => number;
 declare var it: Iterator<number>;
-declare const value: any, done: boolean | undefined;
+declare const value: number | void, done: boolean | undefined;
 declare function f50(cb: (...args: Args) => void): void;
 declare const f51: (...args: ['A', number] | ['B', string]) => void;
 declare const f52: (...args: ['A', number] | ['B']) => void;

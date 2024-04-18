@@ -1,9 +1,9 @@
 iterableArrayPattern28.ts(2,28): error TS2769: No overload matches this call.
-  Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
-    Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
+  Overload 1 of 4, '(iterable?: Iterable<readonly [string, number], void, undefined>): Map<string, number>', gave the following error.
+    Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number], void, undefined>'.
       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-        Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-          Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+        Type 'IteratorResult<[string, number] | [string, boolean], void>' is not assignable to type 'IteratorResult<readonly [string, number], void>'.
+          Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], void>'.
             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.
@@ -18,11 +18,11 @@ iterableArrayPattern28.ts(2,28): error TS2769: No overload matches this call.
     takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
                                ~~~
 !!! error TS2769: No overload matches this call.
-!!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number]>): Map<string, number>', gave the following error.
-!!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number]>'.
+!!! error TS2769:   Overload 1 of 4, '(iterable?: Iterable<readonly [string, number], void, undefined>): Map<string, number>', gave the following error.
+!!! error TS2769:     Argument of type '([string, number] | [string, boolean])[]' is not assignable to parameter of type 'Iterable<readonly [string, number], void, undefined>'.
 !!! error TS2769:       The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
-!!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], any>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
-!!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], any>'.
+!!! error TS2769:         Type 'IteratorResult<[string, number] | [string, boolean], void>' is not assignable to type 'IteratorResult<readonly [string, number], void>'.
+!!! error TS2769:           Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorResult<readonly [string, number], void>'.
 !!! error TS2769:             Type 'IteratorYieldResult<[string, number] | [string, boolean]>' is not assignable to type 'IteratorYieldResult<readonly [string, number]>'.
 !!! error TS2769:               Type '[string, number] | [string, boolean]' is not assignable to type 'readonly [string, number]'.
 !!! error TS2769:                 Type '[string, boolean]' is not assignable to type 'readonly [string, number]'.

@@ -18,8 +18,8 @@ export async function * f() {
 >  : ^
 
     yield* [3];
->yield* [3] : any
->           : ^^^
+>yield* [3] : void
+>           : ^^^^
 >[3] : number[]
 >    : ^^^^^^^^
 >3 : 3

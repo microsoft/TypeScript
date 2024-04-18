@@ -2,8 +2,8 @@
 
 === generatorReturnTypeInference.ts ===
 declare const iterableIterator: IterableIterator<number>;
->iterableIterator : IterableIterator<number>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableIterator : IterableIterator<number, void, undefined>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const generator: Generator<number, string, boolean>;
 >generator : Generator<number, string, boolean>
@@ -44,8 +44,8 @@ function* g003() { // Generator<never, void, undefined>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [];
->yield* [] : any
->          : ^^^
+>yield* [] : void
+>          : ^^^^
 >[] : never[]
 >   : ^^^^^^^
 }
@@ -55,10 +55,10 @@ function* g004() { // Generator<number, void, undefined>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* iterableIterator;
->yield* iterableIterator : any
->                        : ^^^
->iterableIterator : IterableIterator<number>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>yield* iterableIterator : void
+>                        : ^^^^
+>iterableIterator : IterableIterator<number, void, undefined>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 function* g005() { // Generator<number, void, boolean>

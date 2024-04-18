@@ -1,9 +1,11 @@
 //// [tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck26.ts] ////
 
 === generatorTypeCheck26.ts ===
-function* g(): IterableIterator<(x: string) => number> {
->g : () => IterableIterator<(x: string) => number>
->  : ^^^^^^                                       
+function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
+>g : () => IterableIterator<(x: string) => number, (x: string) => number>
+>  : ^^^^^^                                                              
+>x : string
+>  : ^^^^^^
 >x : string
 >  : ^^^^^^
 
@@ -22,7 +24,8 @@ function* g(): IterableIterator<(x: string) => number> {
 >       : ^^^^^^
 
     yield *[x => x.length];
->yield *[x => x.length] : any
+>yield *[x => x.length] : void
+>                       : ^^^^
 >[x => x.length] : ((x: string) => number)[]
 >                : ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x => x.length : (x: string) => number
@@ -37,12 +40,14 @@ function* g(): IterableIterator<(x: string) => number> {
 >       : ^^^^^^
 
     return x => x.length;
->x => x.length : (x: any) => any
->              : ^ ^^^^^^^^^^^^^
->x : any
->x.length : any
->x : any
->  : ^^^
->length : any
->       : ^^^
+>x => x.length : (x: string) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
 }
