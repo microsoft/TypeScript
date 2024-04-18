@@ -11,7 +11,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: completions", () => {
+describe("unittests:: tsserver:: completions::", () => {
     it("works", () => {
         const aTs: File = {
             path: "/a.ts",
@@ -285,18 +285,31 @@ export interface BrowserRouterProps {
     });
 
     describe("in project reference setup with path mapping", () => {
-        function completions(session: TestSession) {
+        function completions(session: TestSession, includeExternalModuleExports?: boolean) {
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
                 command: ts.server.protocol.CommandTypes.CompletionInfo,
                 arguments: {
                     file: "/user/username/projects/app/src/index.ts",
                     line: 1,
                     offset: 1,
+                    includeExternalModuleExports: includeExternalModuleExports ? true : undefined,
                 },
             });
         }
-        function verify(withExistingImport: boolean) {
-            it(`in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}`, () => {
+        function configure(session: TestSession, includeCompletionsForModuleExports: boolean) {
+            session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+                command: ts.server.protocol.CommandTypes.Configure,
+                arguments: {
+                    preferences: {
+                        includePackageJsonAutoImports: "auto",
+                        includeCompletionsForModuleExports: includeCompletionsForModuleExports ? true : undefined,
+                        includeCompletionsWithInsertText: true,
+                    },
+                },
+            });
+        }
+        function verify(withExistingImport: boolean, includeCompletionsForModuleExports: boolean) {
+            it(`in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}${!includeCompletionsForModuleExports ? " without includeCompletionsForModuleExports" : ""}`, () => {
                 const host = createServerHost({
                     "/user/username/projects/app/src/index.ts": `
 
@@ -374,26 +387,21 @@ ${withExistingImport ? "import { MyClass } from 'shared';" : ""}`,
                     ),
                 });
                 const session = new TestSession(host);
-                session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
-                    command: ts.server.protocol.CommandTypes.Configure,
-                    arguments: {
-                        preferences: {
-                            includePackageJsonAutoImports: "auto",
-                            includeCompletionsForModuleExports: true,
-                            includeCompletionsWithInsertText: true,
-                        },
-                    },
-                });
+                configure(session, includeCompletionsForModuleExports);
                 openFilesForSession(["/user/username/projects/app/src/index.ts"], session);
-                completions(session);
+                completions(session, !includeCompletionsForModuleExports);
                 host.writeFile("/user/username/projects/shared/src/other.ts", "export class OtherClass { }");
-                completions(session);
+                completions(session, !includeCompletionsForModuleExports);
                 host.writeFile("/user/username/projects/mylib/src/otherlib.ts", "export class OtherLibClass { }");
-                completions(session);
-                baselineTsserverLogs("completions", `in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}`, session);
+                completions(session, !includeCompletionsForModuleExports);
+                configure(session, !includeCompletionsForModuleExports);
+                completions(session, includeCompletionsForModuleExports);
+                baselineTsserverLogs("completions", `in project reference setup with path mapping${withExistingImport ? " with existing import" : ""}${!includeCompletionsForModuleExports ? " without includeCompletionsForModuleExports" : ""}`, session);
             });
         }
-        verify(/*withExistingImport*/ true);
-        verify(/*withExistingImport*/ false);
+        verify(/*withExistingImport*/ true, /*includeCompletionsForModuleExports*/ true);
+        verify(/*withExistingImport*/ false, /*includeCompletionsForModuleExports*/ true);
+        verify(/*withExistingImport*/ true, /*includeCompletionsForModuleExports*/ false);
+        verify(/*withExistingImport*/ false, /*includeCompletionsForModuleExports*/ false);
     });
 });

@@ -2028,3 +2028,564 @@ Projects::
     projectProgramVersion: 3 *changed*
     dirty: false *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsWithInsertText": true
+        }
+      },
+      "seq": 6,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 6,
+      "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *,
+        "createAutoImportProviderProgramDurationMs": *
+      }
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+/user/username/projects/app/tsconfig.json (Configured)
+    projectStateVersion: 3
+    projectProgramVersion: 3
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "completionInfo",
+      "arguments": {
+        "file": "/user/username/projects/app/src/index.ts",
+        "line": 1,
+        "offset": 1,
+        "includeExternalModuleExports": true
+      },
+      "seq": 7,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/shared/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (0)
+
+
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
+Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
+Info seq  [hh:mm:ss:mss] collectAutoImports: resolved 0 module specifiers, plus 0 ambient and 0 from cache
+Info seq  [hh:mm:ss:mss] collectAutoImports: response is complete
+Info seq  [hh:mm:ss:mss] collectAutoImports: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: getCompletionEntriesFromSymbols: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "response": {
+        "flags": 1,
+        "isGlobalCompletion": true,
+        "isMemberCompletion": false,
+        "isNewIdentifierLocation": false,
+        "entries": [
+          {
+            "name": "abstract",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "any",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "as",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "asserts",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "async",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "await",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "bigint",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "boolean",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "break",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "case",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "catch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "class",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "const",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "continue",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "debugger",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "declare",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "default",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "delete",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "do",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "else",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "enum",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "export",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "extends",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "false",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "finally",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "for",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "function",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "globalThis",
+            "kind": "module",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "if",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "implements",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "import",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "in",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "infer",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "instanceof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "interface",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "keyof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "let",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "module",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "namespace",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "never",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "new",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "null",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "number",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "object",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "package",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "readonly",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "return",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "satisfies",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "string",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "super",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "switch",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "symbol",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "this",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "throw",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "true",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "try",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "type",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "typeof",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "undefined",
+            "kind": "var",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unique",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "unknown",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "var",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "void",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "while",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "with",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
+            "name": "yield",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          }
+        ]
+      },
+      "responseRequired": true
+    }
+After request
+
+PolledWatches::
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/user/username/projects/app/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+
+PolledWatches *deleted*::
+/user/username/projects/shared/src/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/user/username/projects/app/package.json:
+  {}
+/user/username/projects/app/tsconfig.json:
+  {}
+/user/username/projects/mylib/tsconfig.json:
+  {}
+/user/username/projects/shared/src/helper.ts:
+  {}
+/user/username/projects/shared/src/index.ts:
+  {}
+/user/username/projects/shared/src/other.ts:
+  {}
+/user/username/projects/shared/tsconfig.json:
+  {}
+
+FsWatches *deleted*::
+/user/username/projects/shared/package.json:
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/app/src:
+  {}
+/user/username/projects/mylib/src:
+  {}
+/user/username/projects/shared/src:
+  {}
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *deleted*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    isClosed: true *changed*
+/user/username/projects/app/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3
+    autoImportProviderHost: undefined *changed*
+
+ScriptInfos::
+/user/username/projects/app/src/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /user/username/projects/app/tsconfig.json *default*
+/user/username/projects/shared/src/helper.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/autoImportProviderProject1* *deleted*
+/user/username/projects/shared/src/index.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/autoImportProviderProject1* *deleted*
+/user/username/projects/shared/src/other.ts *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/autoImportProviderProject1* *deleted*

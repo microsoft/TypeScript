@@ -3572,6 +3572,7 @@ export class ProjectService {
                 const {
                     lazyConfiguredProjectsFromExternalProject,
                     includePackageJsonAutoImports,
+                    includeCompletionsForModuleExports,
                 } = this.hostConfiguration.preferences;
 
                 this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
@@ -3591,7 +3592,10 @@ export class ProjectService {
                         })
                     );
                 }
-                if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                if (
+                    includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports ||
+                    !!includeCompletionsForModuleExports !== !!args.preferences.includeCompletionsForModuleExports
+                ) {
                     this.forEachProject(project => {
                         project.onAutoImportProviderSettingsChanged();
                     });
