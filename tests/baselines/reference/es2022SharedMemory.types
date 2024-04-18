@@ -127,7 +127,7 @@ const main = async () => {
 >main : () => Promise<void>
 >     : ^^^^^^^^^^^^^^^^^^^
 >async () => {    if (async) {        await value;    }    if (async64) {        await value64;    }} : () => Promise<void>
->                                                                                                     :                    
+>                                                                                                     : ^^^^^^^^^^^^^^^^^^^
 
     if (async) {
 >async : boolean

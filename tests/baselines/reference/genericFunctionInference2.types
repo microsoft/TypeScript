@@ -101,7 +101,7 @@ const enhancer4 = withH((props: Props) => ({
 >enhancer4 : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
 >          : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >withH((props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},})) : { onChange: (e: any) => void; onSubmit: (e: any) => void; }
->                                                                                                              : ^^^^^^^^^^^^                ^^^^^^^^^^^^                ^^^
+>                                                                                                              : ^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^
 >withH : <T, U>(handlerCreators: HandleCreatorsFactory<T, U>) => U
 >      : ^ ^^ ^^               ^^                           ^^^^^^
 >(props: Props) => ({    onChange: (props) => (e: any) => {},    onSubmit: (props) => (e: any) => {},}) : (props: Props) => { onChange: (props: Props) => (e: any) => void; onSubmit: (props: Props) => (e: any) => void; }
@@ -117,7 +117,7 @@ const enhancer4 = withH((props: Props) => ({
 >onChange : (props: Props) => (e: any) => void
 >         : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >(props) => (e: any) => {} : (props: Props) => (e: any) => void
->                          :                                   
+>                          : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >props : Props
 >      : ^^^^^
 >(e: any) => {} : (e: any) => void
@@ -128,7 +128,7 @@ const enhancer4 = withH((props: Props) => ({
 >onSubmit : (props: Props) => (e: any) => void
 >         : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >(props) => (e: any) => {} : (props: Props) => (e: any) => void
->                          :                                   
+>                          : ^     ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >props : Props
 >      : ^^^^^
 >(e: any) => {} : (e: any) => void

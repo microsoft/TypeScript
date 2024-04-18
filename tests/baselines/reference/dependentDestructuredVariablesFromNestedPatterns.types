@@ -57,7 +57,7 @@ async function myAllSettled<T extends readonly unknown[]>(fn: () => T) {
 >promises : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await Promise.allSettled(fn()) : { -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }
->                               :   ^                                                               
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.allSettled(fn()) : Promise<{ -readonly [P in keyof T]: PromiseSettledResult<Awaited<T[P]>>; }>
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.allSettled : { <T_1 extends readonly unknown[] | []>(values: T_1): Promise<{ -readonly [P in keyof T_1]: PromiseSettledResult<Awaited<T_1[P]>>; }>; <T_2>(values: Iterable<T_2 | PromiseLike<T_2>>): Promise<PromiseSettledResult<Awaited<T_2>>[]>; }

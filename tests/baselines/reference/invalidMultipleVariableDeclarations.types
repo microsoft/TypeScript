@@ -147,7 +147,7 @@ var f = F;
 >f : (x: string) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >F : (x: string) => number
->  :                      
+>  : ^ ^^      ^^^^^^^^^^^
 
 var f = (x: number) => '';
 >f : (x: string) => number

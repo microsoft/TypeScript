@@ -32,7 +32,7 @@ const res2 = fn2()(() => res2);
 >res2 : (a: unknown) => void
 >     : ^ ^^^^^^^^^^^^^^^^^^
 >fn2()(() => res2) : (a: unknown) => void
->                  :                     
+>                  : ^ ^^^^^^^^^^^^^^^^^^
 >fn2() : (cb: () => any) => (a: unknown) => void
 >      : ^  ^^         ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >fn2 : <T>() => (cb: () => any) => (a: T) => void

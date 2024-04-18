@@ -65,7 +65,7 @@ bindAll({} as HTMLButtonElement, [
 >listener : (event: MouseEvent) => void
 >         : ^     ^^^^^^^^^^^^^^^^^^^^^
 >(event) => {} : (event: MouseEvent) => void
->              :                            
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^
 >event : MouseEvent
 >      : ^^^^^^^^^^
 
@@ -84,7 +84,7 @@ bindAll({} as HTMLButtonElement, [
 >listener : (event: KeyboardEvent) => void
 >         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >(event) => {} : (event: KeyboardEvent) => void
->              :                               
+>              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >event : KeyboardEvent
 >      : ^^^^^^^^^^^^^
 

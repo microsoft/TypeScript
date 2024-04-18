@@ -28,7 +28,7 @@ interface Attribs1 {
 >x : (n: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >(n) => 0 : (n: string) => number
->         :                      
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >0 : 0
@@ -45,7 +45,7 @@ interface Attribs1 {
 >x : (n: string) => any
 >  : ^ ^^^^^^^^^^^^^^^^
 >(n) => n.len : (n: string) => any
->             :                   
+>             : ^ ^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >n.len : any

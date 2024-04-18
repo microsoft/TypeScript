@@ -4378,12 +4378,6 @@ declare namespace ts {
     interface Identifier {
         readonly text: string;
     }
-    interface Identifier {
-        /** @deprecated Use `idKeyword(identifier)` instead. */
-        readonly originalKeywordKind?: SyntaxKind;
-        /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
-        readonly isInJSDocNamespace?: boolean;
-    }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
     }

@@ -47,7 +47,7 @@ var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
 >tc2 : testClass2<{ x: V; }>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >new testClass2<{ x: V }>() : testClass2<{ x: V; }>
->                           : ^^^^^^^^^^^         ^
+>                           : ^^^^^^^^^^^^^^^^^^^^^
 >testClass2 : typeof testClass2
 >           : ^^^^^^^^^^^^^^^^^
 >x : V

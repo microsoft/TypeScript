@@ -61,7 +61,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >function() { return deps.foo } : () => number
->                               :             
+>                               : ^^^^^^^^^^^^
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }
@@ -109,7 +109,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >function() { return deps.foo } : () => number
->                               :             
+>                               : ^^^^^^^^^^^^
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }
@@ -155,7 +155,7 @@ test(
 >fn1 : () => number
 >    : ^^^^^^^^^^^^
 >() => deps.foo : () => number
->               :             
+>               : ^^^^^^^^^^^^
 >deps.foo : number
 >         : ^^^^^^
 >deps : { foo: number; }

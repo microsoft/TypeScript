@@ -47,7 +47,7 @@ module __test2__ {
 >__val__obj : { two: any[]; }
 >           : ^^^^^^^     ^^^
 >obj : { two: any[]; }
->    :                
+>    : ^^^^^^^     ^^^
 }
 __test2__.__val__obj = __test1__.__val__obj4
 >__test2__.__val__obj = __test1__.__val__obj4 : __test1__.interfaceWithPublicAndOptional<number, string>

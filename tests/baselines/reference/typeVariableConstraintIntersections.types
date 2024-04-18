@@ -292,7 +292,7 @@ const optionHandlers: OptionHandlers = {
 >"one" : (option: OptionOne & { kind: "one"; }) => string
 >      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option => option.s : (option: OptionOne & { kind: "one"; }) => string
->                   :                                                 
+>                   : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : OptionOne & { kind: "one"; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option.s : string
@@ -306,7 +306,7 @@ const optionHandlers: OptionHandlers = {
 >"two" : (option: OptionTwo & { kind: "two"; }) => string
 >      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option => option.x + "," + option.y : (option: OptionTwo & { kind: "two"; }) => string
->                                    :                                                 
+>                                    : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option : OptionTwo & { kind: "two"; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >option.x + "," + option.y : string

@@ -72,13 +72,13 @@ let obj2 = {
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    onClick: ()=>{}} : { onClick: () => void; }
->                      : ^^^^^^^^^^^          ^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     onClick: ()=>{}
 >onClick : () => void
 >        : ^^^^^^^^^^
 >()=>{} : () => void
->       :           
+>       : ^^^^^^^^^^
 }
 
 let obj3: any;
@@ -230,7 +230,7 @@ const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extr
 >onClick : (k: React.MouseEvent<any>) => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(k) => {} : (k: React.MouseEvent<any>) => void
->          :                                   
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : React.MouseEvent<any>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 

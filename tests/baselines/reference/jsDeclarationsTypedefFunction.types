@@ -21,7 +21,7 @@ const send = handlers => new Promise((resolve, reject) => {
 >send : (handlers: ResolveRejectMap) => Promise<any>
 >     : ^        ^^                ^^^^^^^^^^^^^^^^^
 >handlers => new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : (handlers: ResolveRejectMap) => Promise<any>
->                                                                                     :                                             
+>                                                                                     : ^        ^^                ^^^^^^^^^^^^^^^^^
 >handlers : ResolveRejectMap
 >         : ^^^^^^^^^^^^^^^^
 >new Promise((resolve, reject) => {  handlers[++id] = [resolve, reject]}) : Promise<any>

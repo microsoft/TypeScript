@@ -57,7 +57,7 @@ class Main {
 >".a" : ".a"
 >     : ^^^^
 >() => { this.foo(name); } : () => void
->                          :           
+>                          : ^^^^^^^^^^
 >this.foo(name) : void
 >               : ^^^^
 >this.foo : (name: string) => void

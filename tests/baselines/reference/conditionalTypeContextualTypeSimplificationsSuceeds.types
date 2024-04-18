@@ -44,7 +44,7 @@ bad({ when: value => false });
 >when : (value: string) => false
 >     : ^     ^^^^^^^^^^^^^^^^^^
 >value => false : (value: string) => false
->               :                         
+>               : ^     ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >false : false
@@ -60,7 +60,7 @@ good1({ when: value => false });
 >when : (value: string) => false
 >     : ^     ^^^^^^^^^^^^^^^^^^
 >value => false : (value: string) => false
->               :                         
+>               : ^     ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >false : false
@@ -76,7 +76,7 @@ good2({ when: value => false });
 >when : (value: string) => false
 >     : ^     ^^^^^^^^^^^^^^^^^^
 >value => false : (value: string) => false
->               :                         
+>               : ^     ^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >false : false

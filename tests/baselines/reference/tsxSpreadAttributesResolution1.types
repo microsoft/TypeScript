@@ -9,7 +9,7 @@ class Poisoned extends React.Component<{}, {}> {
 >Poisoned : Poisoned
 >         : ^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

@@ -53,7 +53,7 @@ var n = g;
 >n : (x: number[], y: string) => void
 >  : ^ ^^        ^^ ^^      ^^^^^^^^^
 >g : (x: number[], y: string) => void
->  :                                 
+>  : ^ ^^        ^^ ^^      ^^^^^^^^^
 
 n = f;
 >n = f : (...x: number[]) => void

@@ -18,7 +18,7 @@ var v = f([x => x]);
 >v : [(x: number) => number]
 >  : ^^ ^^^^^^^^^^^^^^^^^^^^
 >f([x => x]) : [(x: number) => number]
->            : ^                     ^
+>            : ^^ ^^^^^^^^^^^^^^^^^^^^
 >f : <T extends [(p1: number) => number]>(p: T) => T
 >  : ^ ^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >[x => x] : [(x: number) => number]
