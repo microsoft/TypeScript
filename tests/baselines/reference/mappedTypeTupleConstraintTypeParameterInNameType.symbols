@@ -129,19 +129,19 @@ const struct2 = structDecoder2.decode(new ArrayBuffer(100));
 >decode : Symbol(Decoder.decode, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 2, 26))
 >ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-const v2_1: number = struct2.a;
+const v2_1: number = struct2.a; // error, rest element expands to index signature access
 >v2_1 : Symbol(v2_1, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 44, 5))
 >struct2.a : Symbol(a)
 >struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
 >a : Symbol(a)
 
-const v2_2: string = struct2.b;
+const v2_2: string = struct2.b; // error, rest element expands to index signature access
 >v2_2 : Symbol(v2_2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 45, 5))
 >struct2.b : Symbol(b)
 >struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))
 >b : Symbol(b)
 
-const v2_3: bigint = struct2.c;
+const v2_3: bigint = struct2.c; // error, rest element expands to index signature access
 >v2_3 : Symbol(v2_3, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 46, 5))
 >struct2.c : Symbol(c)
 >struct2 : Symbol(struct2, Decl(mappedTypeTupleConstraintTypeParameterInNameType.ts, 42, 5))

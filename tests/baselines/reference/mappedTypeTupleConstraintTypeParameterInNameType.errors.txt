@@ -1,0 +1,66 @@
+mappedTypeTupleConstraintTypeParameterInNameType.ts(45,7): error TS2322: Type 'string | number | bigint' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+mappedTypeTupleConstraintTypeParameterInNameType.ts(46,7): error TS2322: Type 'string | number | bigint' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+mappedTypeTupleConstraintTypeParameterInNameType.ts(47,7): error TS2322: Type 'string | number | bigint' is not assignable to type 'bigint'.
+  Type 'string' is not assignable to type 'bigint'.
+
+
+==== mappedTypeTupleConstraintTypeParameterInNameType.ts (3 errors) ====
+    // based on https://github.com/microsoft/TypeScript/issues/55762
+    
+    declare class Decoder<T> {
+      decode(arrayBuffer: ArrayBuffer): T;
+    }
+    
+    type ValueTypeOf<T extends Decoder<any>> = T extends Decoder<infer R>
+      ? R
+      : never;
+    
+    type StructDescriptor = ReadonlyArray<
+      readonly [key: string, type: Decoder<any>]
+    >;
+    
+    type StructTypeFor<Descriptor extends StructDescriptor> = {
+      [K in keyof Descriptor as Descriptor[K][0]]: ValueTypeOf<Descriptor[K][1]>;
+    };
+    
+    class StructDecoder<const Descriptor extends StructDescriptor> extends Decoder<
+      StructTypeFor<Descriptor>
+    > {
+      constructor(descriptor: Descriptor) {
+        super();
+      }
+    }
+    
+    declare const i32Decoder: Decoder<number>;
+    declare const i64Decoder: Decoder<bigint>;
+    
+    const structDecoder1 = new StructDecoder([
+      ["a", i32Decoder],
+      ["b", i64Decoder],
+    ]);
+    
+    const struct1 = structDecoder1.decode(new ArrayBuffer(100));
+    
+    const v1_1: number = struct1.a;
+    const v1_2: bigint = struct1.b;
+    
+    declare const descriptor2: [["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]
+    const structDecoder2 = new StructDecoder(descriptor2);
+    
+    const struct2 = structDecoder2.decode(new ArrayBuffer(100));
+    
+    const v2_1: number = struct2.a; // error, rest element expands to index signature access
+          ~~~~
+!!! error TS2322: Type 'string | number | bigint' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    const v2_2: string = struct2.b; // error, rest element expands to index signature access
+          ~~~~
+!!! error TS2322: Type 'string | number | bigint' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+    const v2_3: bigint = struct2.c; // error, rest element expands to index signature access
+          ~~~~
+!!! error TS2322: Type 'string | number | bigint' is not assignable to type 'bigint'.
+!!! error TS2322:   Type 'string' is not assignable to type 'bigint'.
+    

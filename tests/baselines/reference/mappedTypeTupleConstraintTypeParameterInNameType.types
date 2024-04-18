@@ -161,33 +161,33 @@ const struct2 = structDecoder2.decode(new ArrayBuffer(100));
 >100 : 100
 >    : ^^^
 
-const v2_1: number = struct2.a;
+const v2_1: number = struct2.a; // error, rest element expands to index signature access
 >v2_1 : number
 >     : ^^^^^^
->struct2.a : number
->          : ^^^^^^
+>struct2.a : string | number | bigint
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >struct2 : StructTypeFor<[["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : number
->  : ^^^^^^
+>a : string | number | bigint
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
-const v2_2: string = struct2.b;
+const v2_2: string = struct2.b; // error, rest element expands to index signature access
 >v2_2 : string
 >     : ^^^^^^
->struct2.b : string
->          : ^^^^^^
+>struct2.b : string | number | bigint
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >struct2 : StructTypeFor<[["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->b : string
->  : ^^^^^^
+>b : string | number | bigint
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
-const v2_3: bigint = struct2.c;
+const v2_3: bigint = struct2.c; // error, rest element expands to index signature access
 >v2_3 : bigint
 >     : ^^^^^^
->struct2.c : bigint
->          : ^^^^^^
+>struct2.c : string | number | bigint
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >struct2 : StructTypeFor<[["a", Decoder<number>], ["b", Decoder<string>], ...["c", Decoder<bigint>][]]>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->c : bigint
->  : ^^^^^^
+>c : string | number | bigint
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

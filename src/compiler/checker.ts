@@ -13664,6 +13664,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function forEachMappedTypePropertyKeyTypeAndIndexSignatureKeyType(type: Type, include: TypeFlags, stringsOnly: boolean, cb: (keyType: Type) => void) {
         if (isTupleType(type)) {
+            if (type.target.hasRestElement) {
+                // key of any rest/variadic element is number
+                // it subsumes all potential leading fixed elements
+                cb(numberType);
+                return;
+            }
             forEachType(getUnionType(getElementTypes(type).map((_, i) => getStringLiteralType("" + i))), cb);
             return;
         }

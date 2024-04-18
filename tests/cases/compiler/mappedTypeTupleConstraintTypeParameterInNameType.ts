@@ -45,6 +45,6 @@ const structDecoder2 = new StructDecoder(descriptor2);
 
 const struct2 = structDecoder2.decode(new ArrayBuffer(100));
 
-const v2_1: number = struct2.a;
-const v2_2: string = struct2.b;
-const v2_3: bigint = struct2.c;
+const v2_1: number = struct2.a; // error, rest element expands to index signature access
+const v2_2: string = struct2.b; // error, rest element expands to index signature access
+const v2_3: bigint = struct2.c; // error, rest element expands to index signature access
