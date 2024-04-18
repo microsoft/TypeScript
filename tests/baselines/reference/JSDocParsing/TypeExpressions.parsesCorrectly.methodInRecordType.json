@@ -3,16 +3,16 @@
     "pos": 1,
     "end": 16,
     "flags": "JSDoc",
-    "transformFlags": 1,
     "modifierFlagsCache": 0,
+    "transformFlags": 1,
     "members": {
         "0": {
             "kind": "MethodSignature",
             "pos": 2,
             "end": 15,
             "flags": "JSDoc",
-            "transformFlags": 1,
             "modifierFlagsCache": 0,
+            "transformFlags": 1,
             "name": {
                 "kind": "Identifier",
                 "pos": 2,

@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 34,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 32,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -23,8 +23,8 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 21,
                 "end": 29,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 22,

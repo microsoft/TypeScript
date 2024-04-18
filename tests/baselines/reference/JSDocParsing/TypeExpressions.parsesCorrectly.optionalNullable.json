@@ -3,14 +3,14 @@
     "pos": 1,
     "end": 3,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "type": {
         "kind": "JSDocUnknownType",
         "pos": 1,
         "end": 2,
         "flags": "JSDoc",
-        "transformFlags": 0,
-        "modifierFlagsCache": 0
+        "modifierFlagsCache": 0,
+        "transformFlags": 0
     }
 }

@@ -1,17 +1,17 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -7,9 +7,8 @@
+@@ -8,9 +8,8 @@
          "0": {
              "kind": "FunctionDeclaration",
              "pos": 0,
              "end": 46,
 -            "flags": "Deprecated",
-             "transformFlags": 4194304,
              "modifierFlagsCache": 0,
+             "transformFlags": 4194304,
              "name": {
                  "kind": "Identifier",
-@@ -38,42 +37,9 @@
+@@ -39,42 +38,9 @@
                      "hasTrailingComma": false,
                      "transformFlags": 0
                  },
@@ -23,16 +23,16 @@
 -                    "pos": 1,
 -                    "end": 19,
 -                    "flags": "JSDoc",
--                    "transformFlags": 0,
 -                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
 -                    "tags": {
 -                        "0": {
 -                            "kind": "JSDocDeprecatedTag",
 -                            "pos": 5,
 -                            "end": 17,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 6,
@@ -55,17 +55,17 @@
          "1": {
              "kind": "ExpressionStatement",
              "pos": 46,
-@@ -105,9 +71,8 @@
+@@ -106,9 +72,8 @@
          "2": {
              "kind": "FunctionDeclaration",
              "pos": 61,
              "end": 135,
 -            "flags": "Deprecated",
-             "transformFlags": 4194304,
              "modifierFlagsCache": 0,
+             "transformFlags": 4194304,
              "name": {
                  "kind": "Identifier",
-@@ -136,43 +101,9 @@
+@@ -137,43 +102,9 @@
                      "hasTrailingComma": false,
                      "transformFlags": 0
                  },
@@ -77,8 +77,8 @@
 -                    "pos": 62,
 -                    "end": 107,
 -                    "flags": "JSDoc",
--                    "transformFlags": 0,
 -                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
 -                    "comment": "{@see imDeprecated}",
 -                    "tags": {
 -                        "0": {
@@ -86,8 +86,8 @@
 -                            "pos": 92,
 -                            "end": 105,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 93,
@@ -110,7 +110,7 @@
          "3": {
              "kind": "ExpressionStatement",
              "pos": 135,
-@@ -229,7 +160,6 @@
+@@ -230,7 +161,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

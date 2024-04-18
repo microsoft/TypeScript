@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 43,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocThrowsTag",
             "pos": 8,
             "end": 41,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -24,14 +24,14 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 19,
                 "end": 26,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "TypeReference",
                     "pos": 20,
                     "end": 25,
-                    "transformFlags": 1,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 1,
                     "typeName": {
                         "kind": "Identifier",
                         "pos": 20,

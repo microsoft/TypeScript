@@ -3,16 +3,16 @@
     "pos": 1,
     "end": 26,
     "flags": "JSDoc",
-    "transformFlags": 1,
     "modifierFlagsCache": 0,
+    "transformFlags": 1,
     "parameters": {
         "0": {
             "kind": "Parameter",
             "pos": 10,
             "end": 16,
             "flags": "JSDoc",
-            "transformFlags": 1,
             "modifierFlagsCache": 0,
+            "transformFlags": 1,
             "type": {
                 "kind": "StringKeyword",
                 "pos": 10,
@@ -26,8 +26,8 @@
             "pos": 17,
             "end": 25,
             "flags": "JSDoc",
-            "transformFlags": 1,
             "modifierFlagsCache": 0,
+            "transformFlags": 1,
             "type": {
                 "kind": "BooleanKeyword",
                 "pos": 17,

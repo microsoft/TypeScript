@@ -3,8 +3,8 @@
     "pos": 1,
     "end": 11,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "parameters": {
         "length": 0,
         "pos": 10,

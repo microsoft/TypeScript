@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 739,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocAuthorTag",
             "pos": 7,
             "end": 50,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,
@@ -24,8 +24,8 @@
                     "kind": "JSDocText",
                     "pos": 15,
                     "end": 50,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "John Doe <john.doe@example.com>"
                 },
                 "length": 1,
@@ -39,8 +39,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 50,
             "end": 112,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 51,
@@ -54,8 +54,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 112,
             "end": 170,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 113,
@@ -69,8 +69,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 170,
             "end": 227,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 171,
@@ -83,8 +83,8 @@
                     "kind": "JSDocText",
                     "pos": 178,
                     "end": 227,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Multiple Ats <email@quoting@how@does@it@work>"
                 },
                 "length": 1,
@@ -98,8 +98,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 227,
             "end": 272,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 228,
@@ -112,8 +112,8 @@
                     "kind": "JSDocText",
                     "pos": 235,
                     "end": 272,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Multiple Open Carets <hi<there@<>"
                 },
                 "length": 1,
@@ -127,8 +127,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 272,
             "end": 338,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 273,
@@ -142,8 +142,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 338,
             "end": 381,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 339,
@@ -156,8 +156,8 @@
                     "kind": "JSDocText",
                     "pos": 346,
                     "end": 381,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Unclosed Carets <joe@sloppy.gov"
                 },
                 "length": 1,
@@ -171,8 +171,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 381,
             "end": 398,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 382,
@@ -185,8 +185,8 @@
                     "kind": "JSDocText",
                     "pos": 389,
                     "end": 398,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Multiple "
                 },
                 "length": 1,
@@ -200,8 +200,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 398,
             "end": 429,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 399,
@@ -214,8 +214,8 @@
                     "kind": "JSDocText",
                     "pos": 406,
                     "end": 429,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "On One <one@two.three>"
                 },
                 "length": 1,
@@ -229,8 +229,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 429,
             "end": 445,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 430,
@@ -243,8 +243,8 @@
                     "kind": "JSDocText",
                     "pos": 437,
                     "end": 445,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Line"
                 },
                 "length": 1,
@@ -258,8 +258,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 445,
             "end": 453,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 446,
@@ -272,8 +272,8 @@
                     "kind": "JSDocText",
                     "pos": 453,
                     "end": 453,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": ""
                 },
                 "length": 1,
@@ -287,8 +287,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 453,
             "end": 461,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 454,
@@ -301,8 +301,8 @@
                     "kind": "JSDocText",
                     "pos": 461,
                     "end": 461,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": ""
                 },
                 "length": 1,
@@ -316,8 +316,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 461,
             "end": 486,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 462,
@@ -330,8 +330,8 @@
                     "kind": "JSDocText",
                     "pos": 469,
                     "end": 486,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Empty authors"
                 },
                 "length": 1,
@@ -345,8 +345,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 486,
             "end": 497,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 487,
@@ -359,8 +359,8 @@
                     "kind": "JSDocText",
                     "pos": 497,
                     "end": 497,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": ""
                 },
                 "length": 1,
@@ -374,8 +374,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 497,
             "end": 522,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 498,
@@ -388,8 +388,8 @@
                     "kind": "JSDocText",
                     "pos": 510,
                     "end": 522,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Comments"
                 },
                 "length": 1,
@@ -403,8 +403,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 522,
             "end": 559,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 523,
@@ -417,8 +417,8 @@
                     "kind": "JSDocText",
                     "pos": 530,
                     "end": 559,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "text": "Early Close Caret > <a@b>"
                 },
                 "length": 1,
@@ -432,8 +432,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 559,
             "end": 599,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 560,
@@ -447,8 +447,8 @@
             "kind": "JSDocTag",
             "pos": 599,
             "end": 646,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 600,
@@ -462,8 +462,8 @@
             "kind": "JSDocAuthorTag",
             "pos": 646,
             "end": 737,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 647,

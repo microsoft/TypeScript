@@ -3,15 +3,15 @@
     "pos": 1,
     "end": 11,
     "flags": "JSDoc",
-    "transformFlags": 1,
     "modifierFlagsCache": 0,
+    "transformFlags": 1,
     "typeName": {
         "kind": "QualifiedName",
         "pos": 1,
         "end": 11,
         "flags": "JSDoc",
-        "transformFlags": 0,
         "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "left": {
             "kind": "Identifier",
             "pos": 1,

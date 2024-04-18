@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseForTypeInfo
-@@ -37,235 +37,9 @@
+@@ -38,235 +38,9 @@
                      "end": 108,
                      "hasTrailingComma": false,
                      "transformFlags": 0
@@ -13,16 +13,16 @@
 -                    "pos": 1,
 -                    "end": 28,
 -                    "flags": "JSDoc",
--                    "transformFlags": 0,
 -                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
 -                    "tags": {
 -                        "0": {
 -                            "kind": "JSDocTypedefTag",
 -                            "pos": 8,
 -                            "end": 24,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 9,
@@ -36,8 +36,8 @@
 -                                "pos": 17,
 -                                "end": 22,
 -                                "flags": "JSDoc",
--                                "transformFlags": 0,
 -                                "modifierFlagsCache": 0,
+-                                "transformFlags": 0,
 -                                "type": {
 -                                    "kind": "AnyKeyword",
 -                                    "pos": 18,
@@ -75,16 +75,16 @@
 -                    "pos": 30,
 -                    "end": 100,
 -                    "flags": "JSDoc",
--                    "transformFlags": 0,
 -                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
 -                    "tags": {
 -                        "0": {
 -                            "kind": "JSDocSeeTag",
 -                            "pos": 37,
 -                            "end": 55,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 38,
@@ -99,8 +99,8 @@
 -                                    "pos": 42,
 -                                    "end": 42,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "text": ""
 -                                },
 -                                "1": {
@@ -108,8 +108,8 @@
 -                                    "pos": 42,
 -                                    "end": 51,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "name": {
 -                                        "kind": "Identifier",
 -                                        "pos": 49,
@@ -132,8 +132,8 @@
 -                            "pos": 55,
 -                            "end": 77,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 56,
@@ -148,8 +148,8 @@
 -                                    "pos": 60,
 -                                    "end": 60,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "text": ""
 -                                },
 -                                "1": {
@@ -157,8 +157,8 @@
 -                                    "pos": 60,
 -                                    "end": 73,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "name": {
 -                                        "kind": "Identifier",
 -                                        "pos": 71,
@@ -181,8 +181,8 @@
 -                            "pos": 77,
 -                            "end": 98,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "tagName": {
 -                                "kind": "Identifier",
 -                                "pos": 78,
@@ -197,8 +197,8 @@
 -                                    "pos": 82,
 -                                    "end": 82,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "text": ""
 -                                },
 -                                "1": {
@@ -206,8 +206,8 @@
 -                                    "pos": 82,
 -                                    "end": 96,
 -                                    "flags": "JSDoc",
--                                    "transformFlags": 0,
 -                                    "modifierFlagsCache": 0,
+-                                    "transformFlags": 0,
 -                                    "name": {
 -                                        "kind": "Identifier",
 -                                        "pos": 94,
@@ -238,7 +238,7 @@
          "length": 1,
          "pos": 0,
          "end": 109,
-@@ -294,6 +68,6 @@
+@@ -295,6 +69,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 55,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTag",
             "pos": 7,
             "end": 53,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,

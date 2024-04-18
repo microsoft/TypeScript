@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 15,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTag",
             "pos": 3,
             "end": 6,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 4,
@@ -24,8 +24,8 @@
             "kind": "JSDocTag",
             "pos": 6,
             "end": 9,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
@@ -38,8 +38,8 @@
             "kind": "JSDocTag",
             "pos": 9,
             "end": 11,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 10,
@@ -52,8 +52,8 @@
             "kind": "JSDocTag",
             "pos": 11,
             "end": 13,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 12,

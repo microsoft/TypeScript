@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 66,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 6,
             "end": 64,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
@@ -24,21 +24,21 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 34,
                 "end": 64,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "JSDocTypeLiteral",
                     "pos": 34,
                     "end": 64,
-                    "transformFlags": 0,
                     "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "jsDocPropertyTags": {
                         "0": {
                             "kind": "JSDocParameterTag",
                             "pos": 34,
                             "end": 64,
-                            "transformFlags": 0,
                             "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "tagName": {
                                 "kind": "Identifier",
                                 "pos": 35,
@@ -51,8 +51,8 @@
                                 "kind": "JSDocTypeExpression",
                                 "pos": 41,
                                 "end": 49,
-                                "transformFlags": 0,
                                 "modifierFlagsCache": 0,
+                                "transformFlags": 0,
                                 "type": {
                                     "kind": "StringKeyword",
                                     "pos": 42,
@@ -64,8 +64,8 @@
                                 "kind": "QualifiedName",
                                 "pos": 50,
                                 "end": 53,
-                                "transformFlags": 0,
                                 "modifierFlagsCache": 0,
+                                "transformFlags": 0,
                                 "left": {
                                     "kind": "Identifier",
                                     "pos": 50,

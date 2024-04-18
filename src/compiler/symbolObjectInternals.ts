@@ -1,5 +1,10 @@
 import { SymbolObject } from "./objectConstructors";
-import { JSDocTagInfo, Node, SymbolDisplayPart, TypeChecker } from "./types";
+import {
+    JSDocTagInfo,
+    Node,
+    SymbolDisplayPart,
+    TypeChecker,
+} from "./types";
 
 /** @internal */
 export class SymbolObjectInternals {

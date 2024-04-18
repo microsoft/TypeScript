@@ -3,16 +3,16 @@
     "pos": 1,
     "end": 13,
     "flags": "JSDoc",
-    "transformFlags": 1,
     "modifierFlagsCache": 0,
+    "transformFlags": 1,
     "members": {
         "0": {
             "kind": "CallSignature",
             "pos": 2,
             "end": 12,
             "flags": "JSDoc",
-            "transformFlags": 1,
             "modifierFlagsCache": 0,
+            "transformFlags": 1,
             "parameters": {
                 "length": 0,
                 "pos": 3,

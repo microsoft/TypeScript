@@ -93,7 +93,10 @@ import {
     VarianceFlags,
     zipWith,
 } from "./_namespaces/ts";
-import { NodeObject, TokenOrIdentifierObject } from "./nodeConstructors";
+import {
+    NodeObject,
+    TokenOrIdentifierObject,
+} from "./nodeConstructors";
 import {
     SignatureObject,
     SymbolObject,

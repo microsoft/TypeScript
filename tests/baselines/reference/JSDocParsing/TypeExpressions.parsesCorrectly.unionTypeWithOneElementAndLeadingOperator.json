@@ -3,15 +3,15 @@
     "pos": 1,
     "end": 13,
     "flags": "JSDoc",
-    "transformFlags": 1,
     "modifierFlagsCache": 0,
+    "transformFlags": 1,
     "type": {
         "kind": "UnionType",
         "pos": 2,
         "end": 11,
         "flags": "JSDoc",
-        "transformFlags": 1,
         "modifierFlagsCache": 0,
+        "transformFlags": 1,
         "types": {
             "0": {
                 "kind": "NumberKeyword",

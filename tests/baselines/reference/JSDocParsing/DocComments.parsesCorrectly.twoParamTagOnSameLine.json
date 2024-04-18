@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 56,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 30,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -23,8 +23,8 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
@@ -46,8 +46,8 @@
             "kind": "JSDocParameterTag",
             "pos": 30,
             "end": 54,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 31,
@@ -59,8 +59,8 @@
                 "kind": "JSDocTypeExpression",
                 "pos": 37,
                 "end": 45,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 38,

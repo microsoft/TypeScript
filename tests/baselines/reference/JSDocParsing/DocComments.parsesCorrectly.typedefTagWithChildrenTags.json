@@ -3,15 +3,15 @@
     "pos": 0,
     "end": 102,
     "flags": "JSDoc",
-    "transformFlags": 0,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypedefTag",
             "pos": 8,
             "end": 100,
-            "transformFlags": 0,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -23,15 +23,15 @@
                 "kind": "JSDocTypeLiteral",
                 "pos": 8,
                 "end": 100,
-                "transformFlags": 0,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "jsDocPropertyTags": {
                     "0": {
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
-                        "transformFlags": 0,
                         "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 48,
@@ -43,8 +43,8 @@
                             "kind": "JSDocTypeExpression",
                             "pos": 57,
                             "end": 65,
-                            "transformFlags": 0,
                             "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "type": {
                                 "kind": "NumberKeyword",
                                 "pos": 58,
@@ -66,8 +66,8 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
-                        "transformFlags": 0,
                         "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 75,
@@ -79,8 +79,8 @@
                             "kind": "JSDocTypeExpression",
                             "pos": 84,
                             "end": 92,
-                            "transformFlags": 0,
                             "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "type": {
                                 "kind": "StringKeyword",
                                 "pos": 85,

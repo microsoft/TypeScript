@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseNone
-@@ -87,52 +87,9 @@
+@@ -88,52 +88,9 @@
                  "pos": 69,
                  "end": 69,
                  "hasTrailingComma": false,
@@ -13,16 +13,16 @@
 -                    "pos": 32,
 -                    "end": 48,
 -                    "flags": "JSDoc",
--                    "transformFlags": 0,
 -                    "modifierFlagsCache": 0,
+-                    "transformFlags": 0,
 -                    "comment": {
 -                        "0": {
 -                            "kind": "JSDocText",
 -                            "pos": 32,
 -                            "end": 36,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "text": ""
 -                        },
 -                        "1": {
@@ -30,8 +30,8 @@
 -                            "pos": 36,
 -                            "end": 45,
 -                            "flags": "JSDoc",
--                            "transformFlags": 0,
 -                            "modifierFlagsCache": 0,
+-                            "transformFlags": 0,
 -                            "name": {
 -                                "kind": "Identifier",
 -                                "pos": 43,
@@ -55,7 +55,7 @@
          "length": 2,
          "pos": 0,
          "end": 70,
-@@ -213,7 +170,6 @@
+@@ -214,7 +171,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],
