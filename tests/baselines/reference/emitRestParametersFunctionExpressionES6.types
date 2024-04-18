@@ -5,7 +5,7 @@ var funcExp = (...rest) => { }
 >funcExp : (...rest: any[]) => void
 >        : ^^^^    ^^^^^^^^^^^^^^^^
 >(...rest) => { } : (...rest: any[]) => void
->                 :  ^^^                    
+>                 : ^^^^    ^^^^^^^^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
 
@@ -13,7 +13,7 @@ var funcExp1 = (X: number, ...rest) => { }
 >funcExp1 : (X: number, ...rest: any[]) => void
 >         : ^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >(X: number, ...rest) => { } : (X: number, ...rest: any[]) => void
->                            :             ^^^                    
+>                            : ^ ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >X : number
 >  : ^^^^^^
 >rest : any[]
@@ -23,7 +23,7 @@ var funcExp2 = function (...rest) { }
 >funcExp2 : (...rest: any[]) => void
 >         : ^^^^    ^^^^^^^^^^^^^^^^
 >function (...rest) { } : (...rest: any[]) => void
->                       :  ^^^                    
+>                       : ^^^^    ^^^^^^^^^^^^^^^^
 >rest : any[]
 >     : ^^^^^
 

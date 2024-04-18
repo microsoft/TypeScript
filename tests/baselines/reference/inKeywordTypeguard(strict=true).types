@@ -1,9 +1,7 @@
 //// [tests/cases/compiler/inKeywordTypeguard.ts] ////
 
 === Performance Stats ===
-Assignability cache: 100 / 100 (nearest 100)
-Type Count: 1,200 / 1,300 (nearest 100)
-Symbol count: 27,500 / 27,500 (nearest 500)
+Type Count: 1,000
 
 === inKeywordTypeguard.ts ===
 class A { a: string; }
@@ -618,7 +616,7 @@ if (isAOrB(x)) {
 >isAOrB(x) : boolean
 >          : ^^^^^^^
 >isAOrB : (x: unknown) => x is AOrB
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -685,20 +683,20 @@ function negativeIntersectionTest() {
 
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -1635,7 +1633,7 @@ const checkIsTouchDevice = () =>
 >checkIsTouchDevice : () => boolean
 >                   : ^^^^^^^^^^^^^
 >() =>    "ontouchstart" in window || "msMaxTouchPoints" in window.navigator : () => boolean
->                                                                            :              
+>                                                                            : ^^^^^^^^^^^^^
 
     "ontouchstart" in window || "msMaxTouchPoints" in window.navigator;
 >"ontouchstart" in window || "msMaxTouchPoints" in window.navigator : boolean
@@ -1688,7 +1686,7 @@ const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
 >  : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->                                                   :                                      
+>                                                   : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >a : P
 >  : ^
 
@@ -1716,11 +1714,11 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
@@ -1751,11 +1749,11 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^^^^^^^^^^^^^
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

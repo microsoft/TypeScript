@@ -9,19 +9,19 @@ module missingArrowsWithCurly {
 >a : () => void
 >  : ^^^^^^^^^^
 >() { } : () => void
->       :           
+>       : ^^^^^^^^^^
 
     var b = (): void { }
 >b : () => void
 >  : ^^^^^^    
 >(): void { } : () => void
->             :           
+>             : ^^^^^^    
 
     var c = (x) { };
 >c : (x: any) => void
 >  : ^ ^^^^^^^^^^^^^^
 >(x) { } : (x: any) => void
->        :                 
+>        : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -29,7 +29,7 @@ module missingArrowsWithCurly {
 >d : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) { } : (x: number, y: string) => void
->                           :                               
+>                           : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -39,7 +39,7 @@ module missingArrowsWithCurly {
 >e : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void { } : (x: number, y: string) => void
->                                 :                               
+>                                 : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >y : string
@@ -58,7 +58,7 @@ module missingCurliesWithArrow {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => var k = 10;} : () => void
->                   :           
+>                   : ^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 >10 : 10
@@ -68,7 +68,7 @@ module missingCurliesWithArrow {
 >b : () => void
 >  : ^^^^^^    
 >(): void => var k = 10;} : () => void
->                         :           
+>                         : ^^^^^^    
 >k : number
 >  : ^^^^^^
 >10 : 10
@@ -78,7 +78,7 @@ module missingCurliesWithArrow {
 >c : (x: any) => void
 >  : ^ ^^^^^^^^^^^^^^
 >(x) => var k = 10;} : (x: any) => void
->                    :                 
+>                    : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >k : number
@@ -90,7 +90,7 @@ module missingCurliesWithArrow {
 >d : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) => var k = 10;} : (x: number, y: string) => void
->                                       :                               
+>                                       : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -104,7 +104,7 @@ module missingCurliesWithArrow {
 >e : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => var k = 10;} : (x: number, y: string) => void
->                                             :                               
+>                                             : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >y : string
@@ -118,7 +118,7 @@ module missingCurliesWithArrow {
 >f : () => void
 >  : ^^^^^^^^^^
 >() => var k = 10;} : () => void
->                   :           
+>                   : ^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 >10 : 10
@@ -133,7 +133,7 @@ module missingCurliesWithArrow {
 >a : () => any
 >  : ^^^^^^^^^
 >() => : () => any
->      :          
+>      : ^^^^^^^^^
 > : any
 > : ^^^
 
@@ -141,7 +141,7 @@ module missingCurliesWithArrow {
 >b : () => void
 >  : ^^^^^^    
 >(): void => : () => void
->            :           
+>            : ^^^^^^    
 > : any
 > : ^^^
 
@@ -149,7 +149,7 @@ module missingCurliesWithArrow {
 >c : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(x) => : (x: any) => any
->       :                
+>       : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 > : any
@@ -159,7 +159,7 @@ module missingCurliesWithArrow {
 >d : (x: number, y: string) => any
 >  : ^ ^^      ^^ ^^      ^^^^^^^^
 >(x: number, y: string) => : (x: number, y: string) => any
->                          :                              
+>                          : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -171,7 +171,7 @@ module missingCurliesWithArrow {
 >e : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => : (x: number, y: string) => void
->                                :                               
+>                                : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >y : string
@@ -183,7 +183,7 @@ module missingCurliesWithArrow {
 >f : () => any
 >  : ^^^^^^^^^
 >() => : () => any
->      :          
+>      : ^^^^^^^^^
 > : any
 > : ^^^
     }
@@ -205,7 +205,7 @@ module ce_nEst_pas_une_arrow_function {
 >b : () => void
 >  : ^^^^^^    
 >(): void : () => void
->         :           
+>         : ^^^^^^    
 > : any
 > : ^^^
 
@@ -221,7 +221,7 @@ module ce_nEst_pas_une_arrow_function {
 >d : (x: number, y: string) => any
 >  : ^ ^^      ^^ ^^      ^^^^^^^^
 >(x: number, y: string) : (x: number, y: string) => any
->                       :                              
+>                       : ^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -233,7 +233,7 @@ module ce_nEst_pas_une_arrow_function {
 >e : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void : (x: number, y: string) => void
->                             :                               
+>                             : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >y : string
@@ -250,19 +250,19 @@ module okay {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
     var b = (): void => { }
 >b : () => void
 >  : ^^^^^^    
 >(): void => { } : () => void
->                :           
+>                : ^^^^^^    
 
     var c = (x) => { };
 >c : (x: any) => void
 >  : ^ ^^^^^^^^^^^^^^
 >(x) => { } : (x: any) => void
->           :                 
+>           : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -270,7 +270,7 @@ module okay {
 >d : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >(x: number, y: string) => { } : (x: number, y: string) => void
->                              :                               
+>                              : ^ ^^      ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -280,7 +280,7 @@ module okay {
 >e : (x: number, y: string) => void
 >  : ^ ^^      ^^ ^^      ^^^^^    
 >(x: number, y: string): void => { } : (x: number, y: string) => void
->                                    :                               
+>                                    : ^ ^^      ^^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 >y : string

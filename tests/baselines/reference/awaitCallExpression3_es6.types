@@ -77,7 +77,7 @@ async function func(): Promise<void> {
 >fn(a, await p, a) : void
 >                  : ^^^^
 >fn : (arg0: boolean, arg1: boolean, arg2: boolean) => void
->   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^
+>   : ^    ^^       ^^    ^^       ^^    ^^       ^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >await p : boolean

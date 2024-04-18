@@ -5,14 +5,14 @@ const f1 = async function * () {
 >f1 : () => AsyncGenerator<never, void, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {} : () => AsyncGenerator<never, void, unknown>
->                       :                                           
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 === F2.ts ===
 const f2 = async function * () {
 >f2 : () => AsyncGenerator<any, void, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = yield;} : () => AsyncGenerator<any, void, unknown>
->                                           :                                         
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield;
 >x : any
@@ -23,7 +23,7 @@ const f3 = async function * () {
 >f3 : () => AsyncGenerator<number, void, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = yield 1;} : () => AsyncGenerator<number, void, unknown>
->                                             :                                            
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield 1;
 >x : any
@@ -36,7 +36,7 @@ const f4 = async function * () {
 >f4 : () => AsyncGenerator<number, void, undefined>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = yield* [1];} : () => AsyncGenerator<number, void, undefined>
->                                                :                                              
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* [1];
 >x : any
@@ -51,7 +51,7 @@ const f5 = async function * () {
 >f5 : () => AsyncGenerator<number, void, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = yield* (async function*() { yield 1; })();} : () => AsyncGenerator<number, void, unknown>
->                                                                               :                                            
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = yield* (async function*() { yield 1; })();
 >x : void
@@ -73,7 +73,7 @@ const f6 = async function * () {
 >f6 : () => AsyncGenerator<never, void, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    const x = await 1;} : () => AsyncGenerator<never, void, unknown>
->                                             :                                           
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x = await 1;
 >x : 1
@@ -88,7 +88,7 @@ const f7 = async function * () {
 >f7 : () => AsyncGenerator<never, number, unknown>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * () {    return 1;} : () => AsyncGenerator<never, number, unknown>
->                                    :                                             
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return 1;
 >1 : 1

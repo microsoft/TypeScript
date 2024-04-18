@@ -26,13 +26,13 @@ export function register(data: any) {
 === data1.ts ===
 import { register } from "./";
 >register : (data: any) => void
->         : ^    ^^^^^^^^^^^^^^
+>         : ^    ^^   ^^^^^^^^^
 
 register("ok");
 >register("ok") : void
 >               : ^^^^
 >register : (data: any) => void
->         : ^    ^^^^^^^^^^^^^^
+>         : ^    ^^   ^^^^^^^^^
 >"ok" : "ok"
 >     : ^^^^
 

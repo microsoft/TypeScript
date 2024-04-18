@@ -8,7 +8,7 @@ function decorate(target: any) { }
 
 @decorate
 >decorate : (target: any) => void
->         : ^      ^^^^^^^^^^^^^^
+>         : ^      ^^   ^^^^^^^^^
 
 export default class Decorated { }
 >Decorated : Decorated

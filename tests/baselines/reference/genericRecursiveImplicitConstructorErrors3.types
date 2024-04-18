@@ -62,11 +62,11 @@ module TypeScript {
 >this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
 >                                                       : ^^^
 >this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                     : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^^^^^^^^^^                 ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >this : this
 >     : ^^^^
 >getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^^^^^^^^^^                 ^^^^^^^^^^^^                      ^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
 >useConstraintInName : boolean
@@ -192,11 +192,11 @@ module TypeScript {
 >MemberName.create(elementMemberName, "", "[]") : any
 >                                               : ^^^
 >MemberName.create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
->                  : ^^^^^^^^^^^^^^^^    ^^^^^^^    ^^^^^^^^    ^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
 >MemberName : typeof MemberName
 >           : ^^^^^^^^^^^^^^^^^
 >create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
->       : ^^^^^^^^^^^^^^^^    ^^^^^^^    ^^^^^^^^    ^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
 >elementMemberName : any
 >                  : ^^^
 >"" : ""

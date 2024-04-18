@@ -233,11 +233,11 @@ function f1(x: unknown): any {
 >x.hasOwnProperty('x') : boolean
 >                      : ^^^^^^^
 >x.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >x : object
 >  : ^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >'x' : "x"
 >    : ^^^
 }

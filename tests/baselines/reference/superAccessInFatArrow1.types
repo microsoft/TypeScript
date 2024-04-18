@@ -34,11 +34,11 @@ module test {
 >this.bar(() => {                super.foo();            }) : void
 >                                                           : ^^^^
 >this.bar : (callback: () => void) => void
->         : ^        ^^^^^^^^^^^^^^^^^^^^^
+>         : ^        ^^          ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bar : (callback: () => void) => void
->    : ^        ^^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^          ^^^^^^^^^
 >() => {                super.foo();            } : () => void
 >                                                 : ^^^^^^^^^^
 

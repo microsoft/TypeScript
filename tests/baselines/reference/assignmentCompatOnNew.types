@@ -14,8 +14,8 @@ function bar(x: {new(): Foo;}){}
 bar(Foo); // Error, but should be allowed
 >bar(Foo) : void
 >         : ^^^^
->bar : (x: new () => Foo) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (x: { new (): Foo; }) => void
+>    : ^ ^^                ^^^^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
 

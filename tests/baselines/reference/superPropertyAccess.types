@@ -63,11 +63,11 @@ class MyDerived extends MyBase {
 >super.m1("hi") : string
 >               : ^^^^^^
 >super.m1 : (a: string) => string
->         : ^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >super : MyBase
 >      : ^^^^^^
 >m1 : (a: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 
@@ -77,15 +77,15 @@ class MyDerived extends MyBase {
 >super.m1.bind(this) : any
 >                    : ^^^
 >super.m1.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->              : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>              : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >super.m1 : (a: string) => string
->         : ^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >super : MyBase
 >      : ^^^^^^
 >m1 : (a: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -95,17 +95,17 @@ class MyDerived extends MyBase {
 >a : string
 >  : ^^^^^^
 >super.m1 : (a: string) => string
->         : ^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >super : MyBase
 >      : ^^^^^^
 >m1 : (a: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
         super.m2.bind(this);                                // Should error, instance property, not a public instance member function
 >super.m2.bind(this) : any
 >                    : ^^^
 >super.m2.bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->              : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>              : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >super.m2 : () => void
 >         : ^^^^^^^^^^
 >super : MyBase
@@ -113,7 +113,7 @@ class MyDerived extends MyBase {
 >m2 : () => void
 >   : ^^^^^^^^^^
 >bind : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -151,11 +151,11 @@ class MyDerived extends MyBase {
 >super.m1 = function (a: string) { return ""; } : (a: string) => string
 >                                               : ^ ^^      ^^^^^^^^^^^
 >super.m1 : (a: string) => string
->         : ^ ^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >super : MyBase
 >      : ^^^^^^
 >m1 : (a: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >function (a: string) { return ""; } : (a: string) => string
 >                                    : ^ ^^      ^^^^^^^^^^^
 >a : string

@@ -33,7 +33,7 @@ class EventBase {
 >push : (...items: any[]) => number
 >     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >listener : (...args: any[]) => void
->         : ^^^^    ^^^^^^^^^^^^^^^^
+>         : ^^^^    ^^     ^^^^^^^^^
     }
 }
 
@@ -55,13 +55,13 @@ class StringEvent extends EventBase { // should work
 >super.add(listener) : void
 >                    : ^^^^
 >super.add : (listener: (...args: any[]) => void) => void
->          : ^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^                        ^^^^^^^^^
 >super : EventBase
 >      : ^^^^^^^^^
 >add : (listener: (...args: any[]) => void) => void
->    : ^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^                        ^^^^^^^^^
 >listener : (items: string) => void
->         : ^     ^^^^^^^^^^^^^^^^^
+>         : ^     ^^      ^^^^^^^^^
     }
 }
 

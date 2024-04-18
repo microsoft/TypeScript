@@ -53,7 +53,7 @@ var a: any = function f() {
 >x : () => any
 >  : ^^^^^^^^^
 >f : () => any
->  :          
+>  : ^^^^^^^^^
 
     return x;
 >x : () => any
@@ -388,7 +388,7 @@ function opt2(n = { x: null, y: undefined }) {
 >m : { x: any; y: any; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >n : { x: any; y: any; }
->  :                    
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var m: { x: any; y: any };
 >m : { x: any; y: any; }
@@ -473,11 +473,11 @@ var f7: (x: number) => string | number = x => { // should be (x: number) => numb
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^     ^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 }
 var f8: (x: number) => any = x => { // should be (x: number) => Base
 >f8 : (x: number) => any

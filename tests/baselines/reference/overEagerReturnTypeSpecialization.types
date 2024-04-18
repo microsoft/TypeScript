@@ -39,11 +39,11 @@ var r1: I1<string> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >num.toString() : string
 >               : ^^^^^^
 >num.toString : (radix?: number) => string
->             : ^     ^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
            .func(str => str.length);    // should error
 >func : <U>(callback: (value: string) => U) => I1<U>
@@ -81,11 +81,11 @@ var r2: I1<number> = v1.func(num => num.toString()) // Correctly returns an I1<s
 >num.toString() : string
 >               : ^^^^^^
 >num.toString : (radix?: number) => string
->             : ^     ^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
            .func(str => str.length);    // should be ok 
 >func : <U>(callback: (value: string) => U) => I1<U>

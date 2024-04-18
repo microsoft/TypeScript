@@ -37,7 +37,7 @@ test1(partialObj1, someObj1);
 >test1(partialObj1, someObj1) : void
 >                             : ^^^^
 >test1 : <T>(a: T, b: NoInfer<T> & { prop?: unknown; }) => void
->      : ^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^ ^^ ^^                                ^^^^^^^^^
 >partialObj1 : Partial<{ a: unknown; b: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someObj1 : { x: string; }
@@ -65,7 +65,7 @@ test2(partialObj1, partialObj2, someObj1);
 >test2(partialObj1, partialObj2, someObj1) : void
 >                                          : ^^^^
 >test2 : <T1, T2>(a: T1, b: T2, c: NoInfer<T1> & NoInfer<T2>) => void
->      : ^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^  ^^ ^^  ^^ ^^  ^^ ^^                         ^^^^^^^^^
 >partialObj1 : Partial<{ a: unknown; b: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >partialObj2 : Partial<{ c: unknown; d: unknown; }>
@@ -95,7 +95,7 @@ test3(partialObj1, partialObj2, someObj1);
 >test3(partialObj1, partialObj2, someObj1) : void
 >                                          : ^^^^
 >test3 : <T1, T2>(a: T1, b: T2, c: NoInfer<T1 & T2>) => void
->      : ^^^^^^^^^ ^^^^^^ ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^  ^^  ^^ ^^  ^^ ^^  ^^ ^^                ^^^^^^^^^
 >partialObj1 : Partial<{ a: unknown; b: unknown; }>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >partialObj2 : Partial<{ c: unknown; d: unknown; }>

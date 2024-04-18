@@ -5,7 +5,7 @@ const fInferred = ({ a = 0 } = {}) => a;
 >fInferred : ({ a }?: { a?: number | undefined; }) => number
 >          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a = 0 } = {}) => a : ({ a }?: { a?: number | undefined; }) => number
->                      :       ^     ^                                  
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >0 : 0

@@ -196,7 +196,7 @@ module TypeScript {
 >this.asts.map((value) => { return value; }) : TypeScript.AST[]
 >                                            : ^^^^^^^^^^^^^^^^
 >this.asts.map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -204,7 +204,7 @@ module TypeScript {
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: TypeScript.AST, index: number, array: TypeScript.AST[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(value) => { return value; } : (value: TypeScript.AST) => TypeScript.AST
 >                             : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : TypeScript.AST
@@ -524,11 +524,11 @@ module TypeScript {
 >AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
 >                                                                     : ^^^
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
->                       : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>                       : ^     ^^     ^^     ^^      ^^^^^^^^
 >AstPath : typeof AstPath
 >        : ^^^^^^^^^^^^^^
 >reverseIndexOf : (items: any[], index: number) => any
->               : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>               : ^     ^^     ^^     ^^      ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -573,11 +573,11 @@ module TypeScript {
 >AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
 >                                                               : ^^^
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
->                       : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>                       : ^     ^^     ^^     ^^      ^^^^^^^^
 >AstPath : typeof AstPath
 >        : ^^^^^^^^^^^^^^
 >reverseIndexOf : (items: any[], index: number) => any
->               : ^     ^^^^^^^^^     ^^^^^^^^^^^^^^^^
+>               : ^     ^^     ^^     ^^      ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1402,7 +1402,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1533,7 +1533,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1664,7 +1664,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -1795,7 +1795,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -2144,7 +2144,7 @@ module TypeScript {
 >lastOf(this.asts) : any
 >                  : ^^^
 >lastOf : (items: any[]) => any
->       : ^     ^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
@@ -6969,7 +6969,7 @@ module TypeScript {
 >lookInComments : (comments: TypeScript.Comment[]) => void
 >               : ^        ^^                    ^^^^^^^^^
 >(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: TypeScript.Comment[]) => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             :                                         
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^        ^^                    ^^^^^^^^^
 >comments : TypeScript.Comment[]
 >         : ^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7103,7 +7103,7 @@ module TypeScript {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
 >    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          :                                                                                    
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7324,7 +7324,7 @@ module TypeScript {
 >lookInComments(cur.preComments) : void
 >                                : ^^^^
 >lookInComments : (comments: TypeScript.Comment[]) => void
->               : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^        ^^                    ^^^^^^^^^
 >cur.preComments : any
 >                : ^^^
 >cur : TypeScript.AST
@@ -7344,7 +7344,7 @@ module TypeScript {
 >lookInComments(cur.postComments) : void
 >                                 : ^^^^
 >lookInComments : (comments: TypeScript.Comment[]) => void
->               : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^        ^^                    ^^^^^^^^^
 >cur.postComments : any
 >                 : ^^^
 >cur : TypeScript.AST
@@ -7469,7 +7469,7 @@ module TypeScript {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
 >    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     :                                                                                               
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7518,7 +7518,7 @@ module TypeScript {
 >max(bestOffset, cur.minChar) : number
 >                             : ^^^^^^
 >max : (a: number, b: number) => number
->    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >bestOffset : number
 >           : ^^^^^^
 >cur.minChar : any
@@ -7625,7 +7625,7 @@ module TypeScript {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
 >    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                              :                                                                                               
+>                                                                                                                                                                                                                                              : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7667,7 +7667,7 @@ module TypeScript {
 >callback(path, walker) : void
 >                       : ^^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^    ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker
@@ -7681,7 +7681,7 @@ module TypeScript {
 >post : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
 >     : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                       :                                                                                               
+>                                                                                                                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any

@@ -188,50 +188,74 @@ describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different po
 
         verifyRenamingFileInSubFolder("uses non recursive dynamic polling when renaming file in subfolder", Tsc_WatchDirectory.DynamicPolling);
 
-        verifyTscWatch({
-            scenario,
-            subScenario: "watchDirectories/when there are symlinks to folders in recursive folders",
-            commandLineArgs: ["--w"],
-            sys: () => {
-                const cwd = "/home/user/projects/myproject";
-                const file1: File = {
-                    path: `${cwd}/src/file.ts`,
-                    content: `import * as a from "a"`,
-                };
-                const tsconfig: File = {
-                    path: `${cwd}/tsconfig.json`,
-                    content: `{ "compilerOptions": { "extendedDiagnostics": true, "traceResolution": true }}`,
-                };
-                const realA: File = {
-                    path: `${cwd}/node_modules/reala/index.d.ts`,
-                    content: `export {}`,
-                };
-                const realB: File = {
-                    path: `${cwd}/node_modules/realb/index.d.ts`,
-                    content: `export {}`,
-                };
-                const symLinkA: SymLink = {
-                    path: `${cwd}/node_modules/a`,
-                    symLink: `${cwd}/node_modules/reala`,
-                };
-                const symLinkB: SymLink = {
-                    path: `${cwd}/node_modules/b`,
-                    symLink: `${cwd}/node_modules/realb`,
-                };
-                const symLinkBInA: SymLink = {
-                    path: `${cwd}/node_modules/reala/node_modules/b`,
-                    symLink: `${cwd}/node_modules/b`,
-                };
-                const symLinkAInB: SymLink = {
-                    path: `${cwd}/node_modules/realb/node_modules/a`,
-                    symLink: `${cwd}/node_modules/a`,
-                };
-                const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
-                const environmentVariables = new Map<string, string>();
-                environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-                return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables, currentDirectory: cwd });
-            },
-        });
+        function verifySymlinks(synchronousWatchDirectory: boolean) {
+            verifyTscWatch({
+                scenario,
+                subScenario: `watchDirectories/when there are symlinks to folders in recursive folders${synchronousWatchDirectory ? " with synchronousWatchDirectory" : ""}`,
+                commandLineArgs: ["--w"],
+                sys: () => {
+                    const cwd = "/home/user/projects/myproject";
+                    const file1: File = {
+                        path: `${cwd}/src/file.ts`,
+                        content: `import * as a from "a"`,
+                    };
+                    const tsconfig: File = {
+                        path: `${cwd}/tsconfig.json`,
+                        content: jsonToReadableText({
+                            compilerOptions: { extendedDiagnostics: true, traceResolution: true },
+                            watchOptions: synchronousWatchDirectory ? { synchronousWatchDirectory } : undefined,
+                        }),
+                    };
+                    const realA: File = {
+                        path: `${cwd}/node_modules/reala/index.d.ts`,
+                        content: `export {}`,
+                    };
+                    const realB: File = {
+                        path: `${cwd}/node_modules/realb/index.d.ts`,
+                        content: `export {}`,
+                    };
+                    const symLinkA: SymLink = {
+                        path: `${cwd}/node_modules/a`,
+                        symLink: `${cwd}/node_modules/reala`,
+                    };
+                    const symLinkB: SymLink = {
+                        path: `${cwd}/node_modules/b`,
+                        symLink: `${cwd}/node_modules/realb`,
+                    };
+                    const symLinkBInA: SymLink = {
+                        path: `${cwd}/node_modules/reala/node_modules/b`,
+                        symLink: `${cwd}/node_modules/b`,
+                    };
+                    const symLinkAInB: SymLink = {
+                        path: `${cwd}/node_modules/realb/node_modules/a`,
+                        symLink: `${cwd}/node_modules/a`,
+                    };
+                    const files = [libFile, file1, tsconfig, realA, realB, symLinkA, symLinkB, symLinkBInA, symLinkAInB];
+                    const environmentVariables = new Map<string, string>();
+                    environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+                    return createWatchedSystem(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables, currentDirectory: cwd });
+                },
+                edits: [
+                    {
+                        caption: "delete reala/index.d.ts",
+                        edit: sys => sys.deleteFile("/home/user/projects/myproject/node_modules/reala/index.d.ts"),
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "timeouts if any",
+                        edit: ts.noop,
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                    {
+                        caption: "timeouts if any",
+                        edit: ts.noop,
+                        timeouts: sys => sys.runQueuedTimeoutCallbacks(),
+                    },
+                ],
+            });
+        }
+        verifySymlinks(/*synchronousWatchDirectory*/ true);
+        verifySymlinks(/*synchronousWatchDirectory*/ false);
 
         verifyTscWatch({
             scenario,

@@ -2703,7 +2703,7 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
         const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
-    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.includes("*") || endsWith(k, "/")), comparePatternKeys);
+    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => hasOneAsterisk(k) || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
             const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
@@ -2729,6 +2729,11 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
         if (starPos === -1) return false; // handled by last case in loop
         return startsWith(name, target.substring(0, starPos)) && endsWith(name, target.substring(starPos + 1));
     }
+}
+
+function hasOneAsterisk(patternKey: string): boolean {
+    const firstStar = patternKey.indexOf("*");
+    return firstStar !== -1 && firstStar === patternKey.lastIndexOf("*");
 }
 
 /**

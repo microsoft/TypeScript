@@ -243,7 +243,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -259,7 +259,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],
@@ -432,7 +432,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -448,7 +448,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],
@@ -621,7 +621,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -637,7 +637,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],

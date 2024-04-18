@@ -98,8 +98,8 @@ class _StringIterator {
 foo(...new SymbolIterator, ...new _StringIterator);
 >foo(...new SymbolIterator, ...new _StringIterator) : void
 >                                                   : ^^^^
->foo : (...s: (string | symbol)[]) => void
->    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (...s: (symbol | string)[]) => void
+>    : ^^^^ ^^                   ^^^^^^^^^
 >...new SymbolIterator : symbol
 >                      : ^^^^^^
 >new SymbolIterator : SymbolIterator

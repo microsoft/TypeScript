@@ -13,7 +13,7 @@ declare function g<T = typeof g>(args: T): T;
 >g : <T = typeof g>(args: T) => T
 >  : ^ ^^^^^^^^^^^^^    ^^ ^^^^^ 
 >g : <T = typeof g>(args: T) => T
->  : ^^^^^^^^^^^^^^^    ^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^    ^^ ^^^^^^
 >args : T
 >     : ^
 

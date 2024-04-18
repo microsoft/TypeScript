@@ -96,7 +96,7 @@ const newTextChannel = makeNewChannel('text');
 >makeNewChannel('text') : NewChannel<TextChannel>
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'text' : "text"
 >       : ^^^^^^
 
@@ -119,7 +119,7 @@ const newTextChannel2 : NewChannel<TextChannel> = makeNewChannel('text');
 >makeNewChannel('text') : NewChannel<TextChannel>
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >makeNewChannel : <T extends "text" | "email">(type: T) => NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'text' : "text"
 >       : ^^^^^^
 
