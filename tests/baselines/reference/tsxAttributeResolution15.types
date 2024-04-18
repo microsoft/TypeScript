@@ -9,7 +9,7 @@ class BigGreeter extends React.Component<{ }, {}> {
 >BigGreeter : BigGreeter
 >           : ^^^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component

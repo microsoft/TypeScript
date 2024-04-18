@@ -40,7 +40,7 @@ var f2 = <T, U>(x: T, y: U): T => { return null; }
 >f2 : <T, U>(x: T, y: U) => T
 >   : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 ><T, U>(x: T, y: U): T => { return null; } : <T, U>(x: T, y: U) => T
->                                          :                        
+>                                          : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U

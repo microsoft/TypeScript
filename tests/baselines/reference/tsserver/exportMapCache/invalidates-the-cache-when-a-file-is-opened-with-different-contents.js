@@ -262,9 +262,7 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/classes.ts",
         "line": 4,
         "offset": 23,
-        "prefix": "render",
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "prefix": "render"
       },
       "seq": 3,
       "type": "request"
@@ -525,9 +523,7 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/classes.ts",
         "line": 4,
         "offset": 22,
-        "prefix": "rende",
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "prefix": "rende"
       },
       "seq": 6,
       "type": "request"

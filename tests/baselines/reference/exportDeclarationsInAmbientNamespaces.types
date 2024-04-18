@@ -17,7 +17,7 @@ declare namespace Q {
 >_try : (method: Function, ...args: any[]) => any
 >     : ^      ^^        ^^^^^    ^^     ^^^^^^^^
 >try : (method: Function, ...args: any[]) => any
->    :                    ^^^                   
+>    : ^      ^^        ^^^^^    ^^     ^^^^^^^^
 }
 
 Q.try(() => { });

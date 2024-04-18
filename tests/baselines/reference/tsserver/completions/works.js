@@ -13,11 +13,39 @@ foo
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/a.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Search path: /
@@ -218,7 +246,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "/b.ts"
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b.ts 500 undefined WatchType: Closed Script info
@@ -275,10 +303,9 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/b.ts",
         "line": 1,
         "offset": 3,
-        "includeExternalModuleExports": true,
         "prefix": "foo"
       },
-      "seq": 3,
+      "seq": 4,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
@@ -349,7 +376,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "seq": 4,
+      "seq": 5,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
@@ -450,7 +477,7 @@ Info seq  [hh:mm:ss:mss] request:
           }
         ]
       },
-      "seq": 5,
+      "seq": 6,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit

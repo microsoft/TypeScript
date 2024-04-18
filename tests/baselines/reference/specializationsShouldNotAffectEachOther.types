@@ -20,7 +20,7 @@ function foo() {
 >seriesExtent : (series: any) => any
 >             : ^      ^^^^^^^^^^^^^
 >(series) => null : (series: any) => any
->                 :                     
+>                 : ^      ^^^^^^^^^^^^^
 >series : any
 
     var series2: number[];

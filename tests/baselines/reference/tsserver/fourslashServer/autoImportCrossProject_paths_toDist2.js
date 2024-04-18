@@ -350,10 +350,10 @@ watchedDirectoriesRecursive::
   {}
 
 Projects::
-/common/tsconfig.json (Configured)
+/common/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
+    noOpenRef: false *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

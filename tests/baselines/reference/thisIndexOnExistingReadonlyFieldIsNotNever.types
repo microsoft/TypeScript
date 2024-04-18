@@ -48,7 +48,7 @@ class CoachMarkAnchorDecorator {
 >_onAnchorRef : (anchor: AnchorType<P>) => void
 >             : ^      ^^             ^^^^^^^^^
 >(anchor: AnchorType<P>) => {                const anchorRef = this.props.anchorRef;                if (anchorRef) {                    anchorRef(anchor);                }            } : (anchor: AnchorType<P>) => void
->                                                                                                                                                                                        :                                
+>                                                                                                                                                                                        : ^      ^^             ^^^^^^^^^
 >anchor : AnchorType<P>
 >       : ^^^^^^^^^^^^^
 

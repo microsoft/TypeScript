@@ -162,7 +162,7 @@ export { hh as h };
 >hh : (a: { x: string; }, b: { y: typeof b; }) => void
 >   : ^ ^^              ^^ ^^                ^^^^^^^^^
 >h : (a: { x: string; }, b: { y: typeof b; }) => void
->  :                                                 
+>  : ^ ^^              ^^ ^^                ^^^^^^^^^
 
 export function i() {}
 >i : () => void
@@ -172,13 +172,13 @@ export { i as ii };
 >i : () => void
 >  : ^^^^^^^^^^
 >ii : () => void
->   :           
+>   : ^^^^^^^^^^
 
 export { j as jj };
 >j : () => void
 >  : ^^^^^^^^^^
 >jj : () => void
->   :           
+>   : ^^^^^^^^^^
 
 export function j() {}
 >j : () => void

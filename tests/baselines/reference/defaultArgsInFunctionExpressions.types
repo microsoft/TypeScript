@@ -5,7 +5,7 @@ var f = function (a = 3) { return a; }; // Type should be (a?: number) => number
 >f : (a?: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^^
 >function (a = 3) { return a; } : (a?: number) => number
->                               :   ^                   
+>                               : ^ ^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >3 : 3
@@ -58,7 +58,7 @@ var f2 = function (a: string = 3) { return a; }; // Should error, but be of type
 >f2 : (a?: string) => string
 >   : ^ ^^^      ^^^^^^^^^^^
 >function (a: string = 3) { return a; } : (a?: string) => string
->                                       :   ^                   
+>                                       : ^ ^^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >3 : 3
@@ -103,7 +103,7 @@ var f3 = function (a: (s: string) => any = (s) => <number>s) { };
 >f3 : (a?: (s: string) => any) => void
 >   : ^ ^^^                  ^^^^^^^^^
 >function (a: (s: string) => any = (s) => <number>s) { } : (a?: (s: string) => any) => void
->                                                        :   ^                             
+>                                                        : ^ ^^^                  ^^^^^^^^^
 >a : (s: string) => any
 >  : ^ ^^      ^^^^^   
 >s : string
@@ -166,7 +166,7 @@ var f6 = (t = T) => { };
 >f6 : (t?: any) => void
 >   : ^ ^^^^^^^^^^^^^^^
 >(t = T) => { } : (t?: any) => void
->               :   ^              
+>               : ^ ^^^^^^^^^^^^^^^
 >t : any
 >  : ^^^
 >T : any
@@ -176,7 +176,7 @@ var f7 = (t = U) => { return t; };
 >f7 : (t?: typeof U) => typeof U
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >(t = U) => { return t; } : (t?: typeof U) => typeof U
->                         :   ^                       
+>                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >t : typeof U
 >  : ^^^^^^^^
 >U : typeof U

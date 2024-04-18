@@ -26,7 +26,7 @@ class Greeter {
 >messageHandler : (message: string) => void
 >               : ^       ^^      ^^^^^^^^^
 >(message: string) => {        console.log(message); // This shouldnt be error    } : (message: string) => void
->                                                                                   :                          
+>                                                                                   : ^       ^^      ^^^^^^^^^
 >message : string
 >        : ^^^^^^
 

@@ -83,7 +83,7 @@ const inferredParams2 = createMachine({
 >inferredParams2 : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createMachine({  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,}) : ["foo", { entry: "foo"; states: { a: { entry: "foo"; }; }; }]
->                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createMachine : <TConfig extends StateConfig<TAction>, TAction extends string = TConfig["entry"] extends string ? TConfig["entry"] : string>(config: { [K in keyof TConfig & keyof StateConfig<any>]: TConfig[K]; }) => [TAction, TConfig]
 >              : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                              ^^^^^^^^^^^^^^^^^^^^^^^
 >{  entry: "foo",  states: {    a: {      entry: "foo",    },  },  extra: 12,} : { entry: "foo"; states: { a: { entry: "foo"; }; }; extra: number; }
@@ -130,7 +130,7 @@ const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >          : ^ ^^^^^^^^ ^^^^^^^^^^^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                           :                                                                                                          
+>                                                                           : ^ ^^^^^^^^ ^^^^^^^^^^^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >                                                                  : ^ ^^^^^^^^^^^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
@@ -142,9 +142,9 @@ const checked = checkType<{x: number, y: string}>()({
 >checked : { x: number; y: "y"; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^
 >checkType<{x: number, y: string}>()({  x: 1 as number,  y: "y",  z: "z", // undesirable property z is *not* allowed}) : { x: number; y: "y"; }
->                                                                                                                      :                       
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^
 >checkType<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
->                                    : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       
+>                                    : ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >          : ^ ^^^^^^^^ ^^^^^^^^^^^^     ^^                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -478,7 +478,7 @@ const wnp = withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 });
 >wnp : { prop: "foo"; nested: { prop: string; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >withNestedProp({prop: 'foo', nested: { prop: 'bar' }, extra: 10 }) : { prop: "foo"; nested: { prop: string; }; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^                 ^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >withNestedProp : <T extends WithNestedProp>(props: { [K in keyof T & keyof WithNestedProp]: T[K]; }) => T
 >               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                                                ^^^^^^
 >{prop: 'foo', nested: { prop: 'bar' }, extra: 10 } : { prop: "foo"; nested: { prop: string; }; extra: number; }
@@ -588,7 +588,7 @@ const child = () => Promise.resolve("foo");
 >child : () => any
 >      : ^^^^^^^^^
 >() => Promise.resolve("foo") : () => any
->                             :          
+>                             : ^^^^^^^^^
 >Promise.resolve("foo") : any
 >                       : ^^^
 >Promise.resolve : any
@@ -604,7 +604,7 @@ const config = createXMachine({
 >config : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
 >       : ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine({  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10}) : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { readonly src: "str"; }; }
->                                                                                                                                              : ^^^^^^^^^                                                 ^^^^^^^^^^                        ^^^
+>                                                                                                                                              : ^^^^^^^^^                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 >               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^^^^^^^^
 >{  types: {} as {    actors: {      src: "str";      logic: typeof child;    };  },  invoke: {    src: "str",  },  extra: 10} : { types: { actors: { src: "str"; logic: typeof child; }; }; invoke: { src: "str"; }; extra: number; }
@@ -614,7 +614,7 @@ const config = createXMachine({
 >types : { actors: { src: "str"; logic: typeof child; }; }
 >      : ^^^^^^^^^^                                    ^^^
 >{} as {    actors: {      src: "str";      logic: typeof child;    };  } : { actors: { src: "str"; logic: typeof child; }; }
->                                                                         :                                                  
+>                                                                         : ^^^^^^^^^^                                    ^^^
 >{} : {}
 >   : ^^
 
@@ -659,7 +659,7 @@ const config2 = createXMachine({
 >config2 : { invoke: { readonly src: "whatever"; }; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine({  invoke: {    src: "whatever",  },  extra: 10}) : { invoke: { readonly src: "whatever"; }; }
->                                                                 : ^^^^^^^^^^                             ^^^
+>                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createXMachine : <const TConfig extends MachineConfig<TActor>, TActor extends ProvidedActor = TConfig extends { types: { actors: ProvidedActor; }; } ? TConfig["types"]["actors"] : ProvidedActor>(config: { [K in keyof MachineConfig<any> & keyof TConfig]: TConfig[K]; }) => TConfig
 >               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                                                                ^^^^^^^^^^^^
 >{  invoke: {    src: "whatever",  },  extra: 10} : { invoke: { src: "whatever"; }; extra: number; }

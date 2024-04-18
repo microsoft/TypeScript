@@ -300,7 +300,7 @@ class CompilerTest {
             const record = Utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
             const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
                 // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                ? null // eslint-disable-line no-null/no-null
+                ? null // eslint-disable-line no-restricted-syntax
                 : record;
             Baseline.runBaseline(this.configuredName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }

@@ -11,7 +11,7 @@ function f(_arguments) {
 >a : () => () => IArguments
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => arguments : () => () => IArguments
->                      :                       
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >() => arguments : () => IArguments
 >                : ^^^^^^^^^^^^^^^^
 >arguments : IArguments

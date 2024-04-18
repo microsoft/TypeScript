@@ -54,7 +54,7 @@ class RegisteredUser extends User {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => super.sayHello() : () => void
->                       :           
+>                       : ^^^^^^^^^^
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
@@ -84,7 +84,7 @@ class RegisteredUser extends User {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => super.sayHello() : () => void
->                       :           
+>                       : ^^^^^^^^^^
 >super.sayHello() : void
 >                 : ^^^^
 >super.sayHello : () => void
@@ -119,7 +119,7 @@ class RegisteredUser2 extends User {
 >x : () => () => () => void
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super.sayHello() : () => () => () => void
->                                   :                       
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => super.sayHello() : () => () => void
 >                             : ^^^^^^^^^^^^^^^^
 >() => super.sayHello() : () => void
@@ -142,7 +142,7 @@ class RegisteredUser2 extends User {
 >x : () => () => () => void
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super.sayHello() : () => () => () => void
->                                   :                       
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^
 >() => () => super.sayHello() : () => () => void
 >                             : ^^^^^^^^^^^^^^^^
 >() => super.sayHello() : () => void
@@ -182,7 +182,7 @@ class RegisteredUser3 extends User {
 >superName : () => () => () => string
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super.name : () => () => () => string
->                             :                         
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => super.name : () => () => string
 >                       : ^^^^^^^^^^^^^^^^^^
 >() => super.name : () => string
@@ -203,7 +203,7 @@ class RegisteredUser3 extends User {
 >superName : () => () => () => string
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => () => super.name : () => () => () => string
->                             :                         
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => super.name : () => () => string
 >                       : ^^^^^^^^^^^^^^^^^^
 >() => super.name : () => string
@@ -241,7 +241,7 @@ class RegisteredUser4 extends User {
 >x : () => () => any
 >  : ^^^^^^^^^^^^^^^
 >() => () => super : () => () => any
->                  :                
+>                  : ^^^^^^^^^^^^^^^
 >() => super : () => any
 >            : ^^^^^^^^^
 >super : any
@@ -260,7 +260,7 @@ class RegisteredUser4 extends User {
 >x : () => () => any
 >  : ^^^^^^^^^^^^^^^
 >() => () => super : () => () => any
->                  :                
+>                  : ^^^^^^^^^^^^^^^
 >() => super : () => any
 >            : ^^^^^^^^^
 >super : any

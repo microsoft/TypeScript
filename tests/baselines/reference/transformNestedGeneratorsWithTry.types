@@ -15,7 +15,7 @@ async function a(): Bluebird<void> {
 >b : () => Bluebird<void>
 >  : ^^^^^^              
 >async function b(): Bluebird<void> {      try {        await Bluebird.resolve(); // -- remove this and it compiles      } catch (error) { }    } : () => Bluebird<void>
->                                                                                                                                                 :                     
+>                                                                                                                                                 : ^^^^^^              
 >b : () => Bluebird<void>
 >  : ^^^^^^              
 

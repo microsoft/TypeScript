@@ -11,7 +11,7 @@ let x = async function() {
 >x : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async function() {} : () => Promise<void>
->                    :                    
+>                    : ^^^^^^^^^^^^^^^^^^^
 }
 
 // async function with which promised type is void - return can be omitted
@@ -70,7 +70,7 @@ let x1 = () => { use("Test"); }
 >x1 : () => void
 >   : ^^^^^^^^^^
 >() => { use("Test"); } : () => void
->                       :           
+>                       : ^^^^^^^^^^
 >use("Test") : void
 >            : ^^^^
 >use : (s: string) => void

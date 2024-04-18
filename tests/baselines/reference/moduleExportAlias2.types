@@ -75,7 +75,7 @@ exports.f = n => n + 1
 >f : (n: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >n => n + 1 : (n: any) => any
->           :                
+>           : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any

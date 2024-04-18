@@ -6,7 +6,7 @@ var a = (p: string) => p.length;
 >a : (p: string) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(p: string) => p.length : (p: string) => number
->                        :                      
+>                        : ^ ^^      ^^^^^^^^^^^
 >p : string
 >  : ^^^^^^
 >p.length : number
@@ -35,7 +35,7 @@ var b = j => { return 0; }
 >b : (j: any) => number
 >  : ^ ^^^^^^^^^^^^^^^^
 >j => { return 0; } : (j: any) => number
->                   :                   
+>                   : ^ ^^^^^^^^^^^^^^^^
 >j : any
 >0 : 0
 >  : ^
@@ -58,7 +58,7 @@ var d = n => c = n;
 >d : (n: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >n => c = n : (n: any) => any
->           :                
+>           : ^ ^^^^^^^^^^^^^
 >n : any
 >c = n : any
 >c : number
@@ -86,7 +86,7 @@ var p1 = ([a]) => { };
 >p1 : ([a]: [any]) => void
 >   : ^   ^^^^^^^^^^^^^^^^
 >([a]) => { } : ([a]: [any]) => void
->             :                     
+>             : ^   ^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -94,7 +94,7 @@ var p2 = ([...a]) => { };
 >p2 : ([...a]: any[]) => void
 >   : ^      ^^^^^^^^^^^^^^^^
 >([...a]) => { } : ([...a]: any[]) => void
->                :                        
+>                : ^      ^^^^^^^^^^^^^^^^
 >a : any[]
 >  : ^^^^^
 
@@ -102,7 +102,7 @@ var p3 = ([, a]) => { };
 >p3 : ([, a]: [any, any]) => void
 >   : ^     ^^^^^^^^^^^^^^^^^^^^^
 >([, a]) => { } : ([, a]: [any, any]) => void
->               :                            
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >a : any
@@ -112,7 +112,7 @@ var p4 = ([, ...a]) => { };
 >p4 : ([, ...a]: [any?, ...any[]]) => void
 >   : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
->                  :                                     
+>                  : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >a : any[]
@@ -122,7 +122,7 @@ var p5 = ([a = 1]) => { };
 >p5 : ([a]: [number?]) => void
 >   : ^   ^^^^^^^^^^^^^^^^^^^^
 >([a = 1]) => { } : ([a]: [number?]) => void
->                 :                         
+>                 : ^   ^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -132,7 +132,7 @@ var p6 = ({ a }) => { };
 >p6 : ({ a }: { a: any; }) => void
 >   : ^     ^^^^^^^^^^^^^^^^^^^^^^
 >({ a }) => { } : ({ a }: { a: any; }) => void
->               :                             
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -140,7 +140,7 @@ var p7 = ({ a: { b } }) => { };
 >p7 : ({ a: { b } }: { a: { b: any; }; }) => void
 >   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: { b } }) => { } : ({ a: { b } }: { a: { b: any; }; }) => void
->                      :                                            
+>                      : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -150,7 +150,7 @@ var p8 = ({ a = 1 }) => { };
 >p8 : ({ a }: { a?: number; }) => void
 >   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a = 1 }) => { } : ({ a }: { a?: number; }) => void
->                   :            ^                    
+>                   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >1 : 1
@@ -160,7 +160,7 @@ var p9 = ({ a: { b = 1 } = { b: 1 } }) => { };
 >p9 : ({ a: { b } }: { a?: { b?: number; }; }) => void
 >   : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a: { b = 1 } = { b: 1 } }) => { } : ({ a: { b } }: { a?: { b?: number; }; }) => void
->                                     :                   ^     ^                       
+>                                     : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : number
@@ -178,7 +178,7 @@ var p10 = ([{ value, done }]) => { };
 >p10 : ([{ value, done }]: [{ value: any; done: any; }]) => void
 >    : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >([{ value, done }]) => { } : ([{ value, done }]: [{ value: any; done: any; }]) => void
->                           :                                                          
+>                           : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 >done : any
@@ -194,7 +194,7 @@ class MyClass {
 >m : (n: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(n) => n + 1 : (n: any) => any
->             :                
+>             : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any
@@ -205,7 +205,7 @@ class MyClass {
 >p : (n: any) => this
 >  : ^ ^^^^^^^^^^^^^^
 >(n) => n && this : (n: any) => this
->                 :                 
+>                 : ^ ^^^^^^^^^^^^^^
 >n : any
 >n && this : this
 >          : ^^^^
@@ -221,7 +221,7 @@ class MyClass {
 >m : (n: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(n) => n + 1 : (n: any) => any
->             :                
+>             : ^ ^^^^^^^^^^^^^
 >n : any
 >n + 1 : any
 >n : any
@@ -232,7 +232,7 @@ class MyClass {
 >p : (n: any) => this
 >  : ^ ^^^^^^^^^^^^^^
 >(n) => n && this : (n: any) => this
->                 :                 
+>                 : ^ ^^^^^^^^^^^^^^
 >n : any
 >n && this : this
 >          : ^^^^
@@ -247,7 +247,7 @@ var arrrr = () => (m: number) => () => (n: number) => m + n;
 >arrrr : () => (m: number) => () => (n: number) => number
 >      : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >() => (m: number) => () => (n: number) => m + n : () => (m: number) => () => (n: number) => number
->                                                :                                                 
+>                                                : ^^^^^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >(m: number) => () => (n: number) => m + n : (m: number) => () => (n: number) => number
 >                                          : ^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^
 >m : number
@@ -296,7 +296,7 @@ function someFn() {
 >arr : (n: number) => (p: number) => number
 >    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >(n: number) => (p: number) => p * n : (n: number) => (p: number) => number
->                                    :                                     
+>                                    : ^ ^^      ^^^^^^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >(p: number) => p * n : (p: number) => number
@@ -338,7 +338,7 @@ function someOtherFn() {
 >arr : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' + n : (n: number) => string
->                      :                      
+>                      : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' + n : string
@@ -378,7 +378,7 @@ function outerFn() {
 >arrowFn : () => void
 >        : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
         var p = arrowFn();
 >p : void
@@ -399,7 +399,7 @@ var f = (n: string) => {
 >f : (n: string) => () => string
 >  : ^ ^^      ^^^^^^^^^^^^^^^^^
 >(n: string) => {    function fn(x: number) {        return () => n + x;    }    return fn(4);} : (n: string) => () => string
->                                                                                               :                            
+>                                                                                               : ^ ^^      ^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 
@@ -453,7 +453,7 @@ function someOuterFn() {
 >arr : (n: string) => () => () => number
 >    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >(n: string) => {        function innerFn() {            return () => n.length;        }        return innerFn;    } : (n: string) => () => () => number
->                                                                                                                    :                                  
+>                                                                                                                    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 
@@ -515,7 +515,7 @@ function tryCatchFn() {
 >x : () => any
 >  : ^^^^^^^^^
 >() => this : () => any
->           :          
+>           : ^^^^^^^^^
 >this : any
 
     } catch (e) {
@@ -525,7 +525,7 @@ function tryCatchFn() {
 >t : () => any
 >  : ^^^^^^^^^
 >() => e + this : () => any
->               :          
+>               : ^^^^^^^^^
 >e + this : any
 >e : any
 >this : any
@@ -535,7 +535,7 @@ function tryCatchFn() {
 >m : () => string
 >  : ^^^^^^^^^^^^
 >() => this + '' : () => string
->                :             
+>                : ^^^^^^^^^^^^
 >this + '' : string
 >          : ^^^^^^
 >this : any

@@ -21,7 +21,7 @@ const f = function () {};
 >f : { (): void; prop: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function () {} : { (): void; prop: number; }
->               :                            
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f["prop"] = 3;
 >f["prop"] = 3 : 3

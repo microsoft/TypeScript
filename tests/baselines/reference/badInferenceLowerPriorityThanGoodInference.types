@@ -25,7 +25,7 @@ const result = canYouInferThis(() => ({
 >result : { BLAH: number; }
 >       : ^^^^^^^^^^^^^^^^^
 >canYouInferThis(() => ({    a: { BLAH: 33 },    b: x => { }})) : { BLAH: number; }
->                                                               :                  
+>                                                               : ^^^^^^^^^^^^^^^^^
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
 >                : ^ ^^  ^^            ^^^^^^
 >() => ({    a: { BLAH: 33 },    b: x => { }}) : () => { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
@@ -49,7 +49,7 @@ const result = canYouInferThis(() => ({
 >b : (x: { BLAH: number; }) => void
 >  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x => { } : (x: { BLAH: number; }) => void
->         :                               
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { BLAH: number; }
 >  : ^^^^^^^^^^^^^^^^^
 
@@ -107,7 +107,7 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 >dog : () => string
 >    : ^^^^^^^^^^^^
 >function() { return a; } : () => string
->                         :             
+>                         : ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

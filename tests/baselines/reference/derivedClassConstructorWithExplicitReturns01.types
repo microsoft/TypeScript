@@ -53,7 +53,7 @@ class D extends C {
 >dProp : () => this
 >      : ^^^^^^^^^^
 >() => this : () => this
->           :           
+>           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -103,7 +103,7 @@ class D extends C {
 >dProp : () => this
 >      : ^^^^^^^^^^
 >() => this : () => this
->           :           
+>           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 

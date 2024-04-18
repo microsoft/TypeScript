@@ -43,5 +43,5 @@ self.importScripts = (function (importScripts) {
     };
 })(importScripts);
 >importScripts : (...urls: string[]) => void
->              :  ^^^                       
+>              : ^^^^    ^^        ^^^^^^^^^
 

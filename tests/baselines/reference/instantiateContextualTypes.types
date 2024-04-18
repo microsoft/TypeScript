@@ -90,7 +90,7 @@ new GenericComponent({ initialValues: 12, nextValues: val => 12 });
 >nextValues : (val: number) => number
 >           : ^   ^^^^^^^^^^^^^^^^^^^
 >val => 12 : (val: number) => number
->          :                        
+>          : ^   ^^^^^^^^^^^^^^^^^^^
 >val : number
 >    : ^^^^^^
 >12 : 12
@@ -488,7 +488,7 @@ class Interesting {
 >compiles : () => Promise<DooDad>
 >         : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		});	} : () => Promise<DooDad>
->                                                                                                                                   :                      
+>                                                                                                                                   : ^^^^^^               
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
@@ -530,7 +530,7 @@ class Interesting {
 >doesnt : () => Promise<DooDad>
 >       : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			return 'ELSE';		});	} : () => Promise<DooDad>
->                                                                                         :                      
+>                                                                                         : ^^^^^^               
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			return 'ELSE';		}) : Promise<"SOMETHING" | "ELSE">
@@ -560,7 +560,7 @@ class Interesting {
 >slightlyDifferentErrorMessage : () => Promise<DooDad>
 >                              : ^^^^^^               
 >() : Promise<DooDad> => {		return Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		});	} : () => Promise<DooDad>
->                                                                                                                                        :                      
+>                                                                                                                                        : ^^^^^^               
 
 		return Promise.resolve().then(() => {
 >Promise.resolve().then(() => {			if (1 < 2) {				return 'SOMETHING';			}			return 'SOMETHING';		}) : Promise<"SOMETHING" | "ELSE">

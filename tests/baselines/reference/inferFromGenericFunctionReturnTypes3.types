@@ -405,7 +405,7 @@ function createPerson(): Person {
 >phoneNumbers : { __typename: "PhoneNumber"; }[]
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map(() => ({      __typename: 'PhoneNumber'    })) : { __typename: "PhoneNumber"; }[]
->                                                       :                               ^^
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >        : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1] : number[]

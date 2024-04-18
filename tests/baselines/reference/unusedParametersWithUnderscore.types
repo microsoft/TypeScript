@@ -68,7 +68,7 @@ var f7 = _ => undefined;
 >f7 : (_: any) => any
 >   : ^ ^^^^^^^^^^^^^
 >_ => undefined : (_: any) => any
->               :                
+>               : ^ ^^^^^^^^^^^^^
 >_ : any
 >  : ^^^
 >undefined : undefined
@@ -78,7 +78,7 @@ var f8 = function (_) { };
 >f8 : (_: any) => void
 >   : ^ ^^^^^^^^^^^^^^
 >function (_) { } : (_: any) => void
->                 :                 
+>                 : ^ ^^^^^^^^^^^^^^
 >_ : any
 >  : ^^^
 

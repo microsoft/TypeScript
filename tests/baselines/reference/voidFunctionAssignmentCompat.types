@@ -5,7 +5,7 @@ var fa = function(): any { return 3; }
 >fa : () => any
 >   : ^^^^^^   
 >function(): any { return 3; } : () => any
->                              :          
+>                              : ^^^^^^   
 >3 : 3
 >  : ^
 
@@ -21,7 +21,7 @@ var fv = function(): void {}
 >fv : () => void
 >   : ^^^^^^    
 >function(): void {} : () => void
->                    :           
+>                    : ^^^^^^    
 
 fv = function() { return 0; } // should work
 >fv = function() { return 0; } : () => number
