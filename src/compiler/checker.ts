@@ -5986,7 +5986,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
             typePredicateToTypePredicateNode: (typePredicate: TypePredicate, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typePredicateToTypePredicateNodeHelper(typePredicate, context)),
-            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined)),
+            expressionOrTypeToTypeNode: (expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => expressionOrTypeToTypeNode(context, expr, type, addUndefined)),
             serializeTypeForDeclaration: (declaration: Declaration, type: Type, symbol: Symbol, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeTypeForDeclaration(context, declaration, type, symbol)),
             serializeReturnTypeForSignature: (signature: Signature, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => serializeReturnTypeForSignature(context, signature)),
             indexInfoToIndexSignatureDeclaration: (indexInfo: IndexInfo, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => indexInfoToIndexSignatureDeclarationHelper(indexInfo, context, /*typeNode*/ undefined)),
@@ -6025,17 +6025,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         /**
          * Same as expressionOrTypeToTypeNodeHelper, but also checks if the expression can be syntactically typed.
          */
-        function expressionOrTypeToTypeNodeHelper(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
+        function expressionOrTypeToTypeNode(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
             const oldFlags = context.flags;
             if (expr && !(context.flags & NodeBuilderFlags.NoSyntacticPrinter)) {
                 syntacticNodeBuilder.serializeTypeOfExpression(expr, context, addUndefined);
             }
             context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
-            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
+            const result = expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
         }
-        function expressionOrTypeToTypeNode(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
+        function expressionOrTypeToTypeNodeHelper(context: NodeBuilderContext, expr: Expression | JsxAttributeValue | undefined, type: Type, addUndefined?: boolean) {
             if (expr) {
                 const typeNode = isAssertionExpression(expr) ? expr.type
                     : isJSDocTypeAssertion(expr) ? getJSDocTypeAssertionType(expr)
@@ -8185,7 +8185,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 syntacticNodeBuilder.serializeTypeOfDeclaration(decl, context);
             }
             context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
-            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
+            const result = expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
         }
@@ -8239,7 +8239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return typePredicateToTypePredicateNodeHelper(typePredicate, context);
             }
             const expr = signature.declaration && getPossibleTypeNodeReuseExpression(signature.declaration);
-            return expressionOrTypeToTypeNode(context, expr, type);
+            return expressionOrTypeToTypeNodeHelper(context, expr, type);
         }
 
         function trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(node: T, context: NodeBuilderContext) {
