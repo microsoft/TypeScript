@@ -2,6 +2,7 @@ import {
     SignatureObject,
     SymbolObject,
 } from "../compiler/objectConstructors";
+import { SignatureObjectInternals } from "../compiler/signatureObjectInternals";
 import { SymbolObjectInternals } from "../compiler/symbolObjectInternals";
 import {
     __String,
@@ -374,15 +375,20 @@ function ensureSignatureExtraFields(signature: Signature) {
     return extra;
 }
 
-SignatureObject.prototype.getDocumentationComment = function (this: Signature): SymbolDisplayPart[] {
-    const extra = ensureSignatureExtraFields(this);
-    return extra.documentationComment ??= getDocumentationComment(singleElementArray(this.declaration), this.checker);
-};
+class ServicesSignatureObjectInternals extends SignatureObjectInternals {
+    override getDocumentationComment(signature: Signature): SymbolDisplayPart[] {
+        const extra = ensureSignatureExtraFields(signature);
+        return extra.documentationComment ??= getDocumentationComment(singleElementArray(signature.declaration), signature.checker);
+    }
 
-SignatureObject.prototype.getJsDocTags = function (this: Signature): JSDocTagInfo[] {
-    const extra = ensureSignatureExtraFields(this);
-    return extra.jsDocTags ??= getJsDocTagsOfDeclarations(singleElementArray(this.declaration), this.checker);
-};
+    override getJsDocTags(signature: Signature): JSDocTagInfo[] {
+        const extra = ensureSignatureExtraFields(signature);
+        return extra.jsDocTags ??= getJsDocTagsOfDeclarations(singleElementArray(signature.declaration), signature.checker);
+    }
+}
+
+// Override the internals for signatures
+SignatureObjectInternals.internals = new ServicesSignatureObjectInternals();
 
 /**
  * Returns whether or not the given node has a JSDoc "inheritDoc" tag on it.

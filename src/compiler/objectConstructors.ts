@@ -42,6 +42,7 @@ import {
     UnionOrIntersectionType,
     UnionType,
 } from "./_namespaces/ts";
+import { SignatureObjectInternals } from "./signatureObjectInternals";
 import { SymbolObjectInternals } from "./symbolObjectInternals";
 
 /** @internal */
@@ -316,11 +317,11 @@ export class SignatureObject implements Signature {
     }
 
     getDocumentationComment(): SymbolDisplayPart[] {
-        throw new TypeError("Not implemented");
+        return SignatureObjectInternals.internals.getDocumentationComment(this);
     }
 
     getJsDocTags(): JSDocTagInfo[] {
-        throw new TypeError("Not implemented");
+        return SignatureObjectInternals.internals.getJsDocTags(this);
     }
 }
 
