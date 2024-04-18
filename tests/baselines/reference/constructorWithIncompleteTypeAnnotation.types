@@ -387,7 +387,7 @@ module TypeScriptAllInOne {
 >objLit : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { var: number; equals: (x: any) => boolean; instanceof: () => string; }
->                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^                   ^^^^^^^^^^^^^^            ^^^
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"var" : number
 >      : ^^^^^^
 >number = 42 : 42
@@ -399,7 +399,7 @@ module TypeScriptAllInOne {
 >equals : (x: any) => boolean
 >       : ^ ^^^^^^^^^^^^^^^^^
 >function (x) { return x["var"] === 42; } : (x: any) => boolean
->                                         :                    
+>                                         : ^ ^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >x["var"] === 42 : boolean
@@ -415,7 +415,7 @@ module TypeScriptAllInOne {
 >instanceof : () => string
 >           : ^^^^^^^^^^^^
 >() => 'objLit{42}' : () => string
->                   :             
+>                   : ^^^^^^^^^^^^
 >'objLit{42}' : "objLit{42}"
 >             : ^^^^^^^^^^^^
 
@@ -1301,7 +1301,7 @@ module TypeScriptAllInOne {
 >d : () => void
 >  : ^^^^^^^^^^
 >() => {  yield  0; } : () => void
->                     :           
+>                     : ^^^^^^^^^^
 >yield  0 : any
 >         : ^^^
 >0 : 0
@@ -1329,7 +1329,7 @@ module TypeScriptAllInOne {
 >myEvent : () => number
 >        : ^^^^^^^^^^^^
 >() => { return 1; } : () => number
->                    :             
+>                    : ^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

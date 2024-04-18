@@ -329,7 +329,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts
@@ -397,7 +396,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -893,4 +891,3 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true

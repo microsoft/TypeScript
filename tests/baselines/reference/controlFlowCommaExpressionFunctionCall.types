@@ -5,7 +5,7 @@ const otherValue = () => true;
 >otherValue : () => boolean
 >           : ^^^^^^^^^^^^^
 >() => true : () => boolean
->           :              
+>           : ^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

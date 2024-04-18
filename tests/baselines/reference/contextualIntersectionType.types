@@ -25,7 +25,7 @@ x = {
 >a : (s: string) => string
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s : (s: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -35,7 +35,7 @@ x = {
 >b : (n: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n : (n: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number

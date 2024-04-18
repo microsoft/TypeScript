@@ -29,7 +29,7 @@ const getGreeterBase = (): GreeterConstructor => A;
 >getGreeterBase : () => GreeterConstructor
 >               : ^^^^^^                  
 >(): GreeterConstructor => A : () => GreeterConstructor
->                            :                         
+>                            : ^^^^^^                  
 >A : typeof A
 >  : ^^^^^^^^
 

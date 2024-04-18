@@ -649,7 +649,6 @@ Projects::
 /user/username/projects/myproject/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 ScriptInfos::
 /user/username/projects/myproject/a/index.ts (Open)

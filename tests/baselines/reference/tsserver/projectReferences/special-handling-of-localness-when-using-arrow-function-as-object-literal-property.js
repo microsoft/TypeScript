@@ -311,7 +311,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -534,12 +533,10 @@ Projects::
 /user/username/projects/solution/shared/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/solution/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

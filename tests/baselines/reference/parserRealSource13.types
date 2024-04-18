@@ -882,7 +882,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >pre : (cur: AST, parent: AST) => AST
 >    : ^   ^^^^^^^      ^^^^^^^^^^^^^
 >(cur: AST, parent: AST) => {            walker.options.goChildren = AstWalkerCallback(true, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
->                                                                                                                                            :                               
+>                                                                                                                                            : ^   ^^^^^^^      ^^^^^^^^^^^^^
 >cur : AST
 >    : ^^^
 >parent : AST
@@ -921,7 +921,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >post : (cur: AST, parent: AST) => AST
 >     : ^   ^^^^^^^      ^^^^^^^^^^^^^
 >(cur: AST, parent: AST) => {            AstWalkerCallback(false, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
->                                                                                                                 :                               
+>                                                                                                                 : ^   ^^^^^^^      ^^^^^^^^^^^^^
 >cur : AST
 >    : ^^^
 >parent : AST

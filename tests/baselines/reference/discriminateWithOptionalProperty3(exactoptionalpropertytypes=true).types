@@ -120,7 +120,7 @@ export function buildExecutionContext(
 >variableValues : { [variable: string]: unknown; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coercedVariableValues.coerced : { [variable: string]: unknown; }
->                              :                                 
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coercedVariableValues : { coerced: { [variable: string]: unknown; }; errors?: never; }
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >coerced : { [variable: string]: unknown; }

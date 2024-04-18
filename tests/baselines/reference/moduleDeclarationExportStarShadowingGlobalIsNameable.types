@@ -45,7 +45,7 @@ export const func = (account: model.Account, acc2: model.Acc) => {};
 >func : (account: model.Account, acc2: model.Acc) => void
 >     : ^       ^^             ^^    ^^         ^^^^^^^^^
 >(account: model.Account, acc2: model.Acc) => {} : (account: model.Account, acc2: model.Acc) => void
->                                                :                                                  
+>                                                : ^       ^^             ^^    ^^         ^^^^^^^^^
 >account : model.Account
 >        : ^^^^^^^^^^^^^
 >model : any

@@ -130,7 +130,7 @@ var r3 = f2({ x: new Derived(), y: new Derived2() }); // Derived => Derived2
 >r3 : (x: Derived) => Derived2
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >f2({ x: new Derived(), y: new Derived2() }) : (x: Derived) => Derived2
->                                            :                         
+>                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
 >   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^ ^^ ^^^^^^
 >{ x: new Derived(), y: new Derived2() } : { x: Derived; y: Derived2; }
@@ -166,7 +166,7 @@ var r4 = f2(i); // Base => Derived
 >r4 : (x: Base) => Derived
 >   : ^ ^^^^^^^^^^^^^^^^^^
 >f2(i) : (x: Base) => Derived
->      :                     
+>      : ^ ^^^^^^^^^^^^^^^^^^
 >f2 : <T extends Base, U extends Base>(a: { x: T; y: U; }) => (x: T) => U
 >   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^ ^^ ^^^^^^
 >i : I<Base, Derived>

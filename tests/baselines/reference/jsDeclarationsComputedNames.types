@@ -25,9 +25,9 @@ module.exports = {
 >module : { exports: { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
->        : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^                              ^^^
+>        : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    [TopLevelSym](x = 12) {        return x;    },    items: {        [InnerSym]: (arg = {x: 12}) => arg.x    }} : { [TopLevelSym](x?: number): number; items: { [InnerSym]: (arg?: { x: number; }) => number; }; }
->                                                                                                                  : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^                           ^^^^^^
+>                                                                                                                  : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     [TopLevelSym](x = 12) {
 >[TopLevelSym] : (x?: number) => number
@@ -48,7 +48,7 @@ module.exports = {
 >items : { [InnerSym]: (arg?: { x: number; }) => number; }
 >      : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        [InnerSym]: (arg = {x: 12}) => arg.x    } : { [InnerSym]: (arg?: { x: number; }) => number; }
->                                                   : ^^^^^^^^^^^^^^    ^                           ^^^
+>                                                   : ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         [InnerSym]: (arg = {x: 12}) => arg.x
 >[InnerSym] : (arg?: { x: number; }) => number
@@ -56,7 +56,7 @@ module.exports = {
 >InnerSym : unique symbol
 >         : ^^^^^^^^^^^^^
 >(arg = {x: 12}) => arg.x : (arg?: { x: number; }) => number
->                         :     ^                           
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : { x: number; }
 >    : ^^^^^^^^^^^^^^
 >{x: 12} : { x: number; }

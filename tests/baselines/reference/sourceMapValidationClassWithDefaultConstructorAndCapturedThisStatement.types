@@ -15,7 +15,7 @@ class Greeter {
 >returnA : () => number
 >        : ^^^^^^^^^^^^
 >() => this.a : () => number
->             :             
+>             : ^^^^^^^^^^^^
 >this.a : number
 >       : ^^^^^^
 >this : this

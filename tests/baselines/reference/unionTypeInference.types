@@ -343,9 +343,9 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 
     for (const value of Object.values(deepPromisedWithIndexer)) {
 >value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^                     ^^^  ^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined)[]
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^                     ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
 >              : ^^^   ^^ ^^                                      ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
 >Object : ObjectConstructor
@@ -359,9 +359,9 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->            :   ^^^^                    ^                     ^^^  ^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                    ^                     ^^^  ^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (awaitedValue)
 >awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined

@@ -69,7 +69,7 @@ export let x = c.doThing({a: 12});
 >x : { b: number; }
 >  : ^^^^^^^^^^^^^^
 >c.doThing({a: 12}) : { b: number; }
->                   :               
+>                   : ^^^^^^^^^^^^^^
 >c.doThing : (x: { a: number; }) => { b: number; }
 >          : ^ ^^              ^^^^^^^^^^^^^^^^^^^
 >c : Foo

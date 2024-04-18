@@ -438,10 +438,10 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     noOpenRef: false *changed*
-/packages/dep/tsconfig.json (Configured)
+/packages/dep/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /lib.d.ts
@@ -698,7 +698,6 @@ Projects::
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts
@@ -768,7 +767,6 @@ Projects::
 /packages/dep/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts

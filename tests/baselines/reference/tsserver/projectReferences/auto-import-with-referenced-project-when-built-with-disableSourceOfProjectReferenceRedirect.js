@@ -505,7 +505,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*

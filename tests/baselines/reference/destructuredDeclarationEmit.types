@@ -148,7 +148,7 @@ const getFoo = () => ({
 >getFoo : () => { foo: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    foo: 'foo'}) : () => { foo: string; }
->                         :                       
+>                         : ^^^^^^^^^^^^^^^^^^^^^^
 >({    foo: 'foo'}) : { foo: string; }
 >                   : ^^^^^^^^^^^^^^^^
 >{    foo: 'foo'} : { foo: string; }

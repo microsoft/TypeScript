@@ -96,7 +96,7 @@ var obj = {
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    10: 'ten',    x: 'hello',    y: 32,    z: { n: 'world', m: 15, o: () => false },    'literal property': 100} : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
->                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     10: 'ten',
 >10 : string
@@ -120,7 +120,7 @@ var obj = {
 >z : { n: string; m: number; o: () => boolean; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ n: 'world', m: 15, o: () => false } : { n: string; m: number; o: () => boolean; }
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^             ^^^
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >n : string
 >  : ^^^^^^
 >'world' : "world"
@@ -132,7 +132,7 @@ var obj = {
 >o : () => boolean
 >  : ^^^^^^^^^^^^^
 >() => false : () => boolean
->            :              
+>            : ^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 
@@ -221,7 +221,7 @@ var bb = obj.hasOwnProperty;
 >bb : (v: PropertyKey) => boolean
 >   : ^ ^^           ^^^^^^^^^^^^
 >obj.hasOwnProperty : (v: PropertyKey) => boolean
->                   :                            
+>                   : ^ ^^           ^^^^^^^^^^^^
 >obj : { 10: string; x: string; y: number; z: { n: string; m: number; o: () => boolean; }; 'literal property': number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
