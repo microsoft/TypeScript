@@ -214,26 +214,26 @@ describe("unittests:: tsc:: moduleResolution::", () => {
         commandLineArgs: ["--traceResolution", "--explainFiles"],
     });
 
-    
     verifyTscWatch({
         scenario: "moduleResolution",
         subScenario: "late discovered dependency symlink",
-        sys: () => createWatchedSystem({
-            "/workspace/packageA/index.d.ts": dedent`
+        sys: () =>
+            createWatchedSystem({
+                "/workspace/packageA/index.d.ts": dedent`
             export declare class Foo {
                 private f: any;
             }`,
-            "/workspace/packageB/package.json": dedent`
+                "/workspace/packageB/package.json": dedent`
             {
                 "private": true,
                 "dependencies": {
                     "package-a": "file:../packageA"
                 }
             }`,
-            "/workspace/packageB/index.d.ts": dedent`
+                "/workspace/packageB/index.d.ts": dedent`
             import { Foo } from "package-a";
             export declare function invoke(): Foo;`,
-            "/workspace/packageC/package.json": dedent`
+                "/workspace/packageC/package.json": dedent`
             {
                 "private": true,
                 "dependencies": {
@@ -241,30 +241,34 @@ describe("unittests:: tsc:: moduleResolution::", () => {
                     "package-a": "file:../packageA"
                 }
             }`,
-            "/workspace/packageC/index.ts": dedent`
+                "/workspace/packageC/index.ts": dedent`
             import * as pkg from "package-b";
 
             export const a = pkg.invoke();`,
-            "/workspace/packageC/node_modules/package-a": { symLink: "/workspace/packageA" },
-            "/workspace/packageB/node_modules/package-a": { symLink: "/workspace/packageA" },
-            "/workspace/packageC/node_modules/package-b": { symLink: "/workspace/packageB" },
-            "/a/lib/lib.d.ts": libContent,
-            "/workspace/packageC/tsconfig.json": jsonToReadableText({
-                compilerOptions: {
-                    declaration: true
-                }
-            })
-        }, { currentDirectory: "/workspace/packageC" }),
+                "/workspace/packageC/node_modules/package-a": { symLink: "/workspace/packageA" },
+                "/workspace/packageB/node_modules/package-a": { symLink: "/workspace/packageA" },
+                "/workspace/packageC/node_modules/package-b": { symLink: "/workspace/packageB" },
+                "/a/lib/lib.d.ts": libContent,
+                "/workspace/packageC/tsconfig.json": jsonToReadableText({
+                    compilerOptions: {
+                        declaration: true,
+                    },
+                }),
+            }, { currentDirectory: "/workspace/packageC" }),
         commandLineArgs: ["--traceResolution", "--explainFiles", "--watch"],
         edits: [
             {
                 caption: "change index.ts",
-                edit: fs => fs.writeFile("/workspace/packageC/index.ts", dedent`
+                edit: fs =>
+                    fs.writeFile(
+                        "/workspace/packageC/index.ts",
+                        dedent`
                 import * as pkg from "package-b";
     
-                export const aa = pkg.invoke();`),
+                export const aa = pkg.invoke();`,
+                    ),
                 timeouts: sys => sys.runQueuedTimeoutCallbacks(),
-            }
-        ]
+            },
+        ],
     });
 });
