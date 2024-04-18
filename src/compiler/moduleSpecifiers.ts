@@ -11,6 +11,7 @@ import {
     comparePaths,
     Comparison,
     CompilerOptions,
+    concatenate,
     containsIgnoredPath,
     containsPath,
     createGetCanonicalFileName,
@@ -95,6 +96,7 @@ import {
     NodeFlags,
     NodeModulePathParts,
     normalizePath,
+    PackageJsonPathFields,
     pathContainsNodeModules,
     pathIsBareSpecifier,
     pathIsRelative,
@@ -711,6 +713,19 @@ function getAllModulePaths(
     return modulePaths;
 }
 
+function getAllRuntimeDependencies(packageJson: PackageJsonPathFields) {
+    let result;
+    const deps = packageJson.dependencies;
+    if (deps && typeof deps === "object") {
+        result = getOwnKeys(deps);
+    }
+    const peerDeps = packageJson.peerDependencies;
+    if (peerDeps && typeof peerDeps === "object") {
+        result = concatenate(result, getOwnKeys(peerDeps));
+    }
+    return result;
+}
+
 function getAllModulePathsWorker(info: Info, importedFileName: string, host: ModuleSpecifierResolutionHost): readonly ModulePath[] {
     const cache = host.getModuleResolutionCache?.();
     const links = host.getSymlinkCache?.();
@@ -722,15 +737,10 @@ function getAllModulePathsWorker(info: Info, importedFileName: string, host: Mod
         const state = getTemporaryModuleResolutionState(cache.getPackageJsonInfoCache(), host, {});
         const packageJson = getPackageScopeForPath(info.importingSourceFileName, state);
         if (packageJson) {
-            const deps = packageJson.contents.packageJsonContent.dependencies;
-            if (deps && typeof deps === "object") {
-                const toResolve = getOwnKeys(deps as MapLike<unknown>);
-                for (const depName of toResolve) {
-                    const cached = cache.getOrCreateCacheForNonRelativeName(depName, /*mode*/ undefined, /*redirectedReference*/ undefined).get(info.canonicalSourceDirectory);
-                    if (cached) continue;
-                    const resolved = resolveModuleName(depName, info.importingSourceFileName, {}, host, cache);
-                    links.setSymlinksFromResolution(resolved.resolvedModule);
-                }
+            const toResolve = getAllRuntimeDependencies(packageJson.contents.packageJsonContent);
+            for (const depName of (toResolve || emptyArray)) {
+                const resolved = resolveModuleName(depName, info.importingSourceFileName, {}, host, cache);
+                links.setSymlinksFromResolution(resolved.resolvedModule);
             }
         }
     }
