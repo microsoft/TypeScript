@@ -212,6 +212,20 @@ declare namespace FourSlashInterface {
         start: number;
         end: number;
     }
+    export interface TextChange {
+        span: TextSpan;
+        newText: string;
+    }
+    export interface FileTextChanges {
+        fileName: string;
+        textChanges: readonly TextChange[];
+        isNewFile?: boolean;
+    }
+    export interface MapCodeDocumentMapping {
+        fileName?: string;
+        focusLocations?: TextSpan[][];
+        contents: string[];
+    }
     class test_ {
         markers(): Marker[];
         markerNames(): string[];
@@ -452,6 +466,7 @@ declare namespace FourSlashInterface {
                 copiedFrom?: { file: string, range: { pos: number, end: number }[] };
             }
         }): void;
+        baselineMapCode(range: Range, changesFilename?: string): void;
     }
     class edit {
         caretPosition(): Marker;

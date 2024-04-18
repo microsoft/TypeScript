@@ -33,6 +33,8 @@ export { GoToDefinition };
 import * as InlayHints from "./ts.InlayHints.js";
 export { InlayHints };
 import * as JsDoc from "./ts.JsDoc.js";
+import * as MapCode from "./ts.MapCode.js";
+export { MapCode };
 export { JsDoc };
 import * as NavigateTo from "./ts.NavigateTo.js";
 export { NavigateTo };

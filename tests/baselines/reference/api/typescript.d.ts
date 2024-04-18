@@ -121,6 +121,7 @@ declare namespace ts {
                 ProvideCallHierarchyOutgoingCalls = "provideCallHierarchyOutgoingCalls",
                 ProvideInlayHints = "provideInlayHints",
                 WatchChange = "watchChange",
+                MapCode = "mapCode",
             }
             /**
              * A TypeScript Server message
@@ -1768,6 +1769,46 @@ declare namespace ts {
             }
             export interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
+            }
+            export interface MapCodeRequestArgs {
+                /**
+                 * The files and changes to try and apply/map.
+                 */
+                mappings: MapCodeRequestDocumentMapping[];
+                /**
+                 * Edits to apply before performing the mapping.
+                 */
+                updates?: FileCodeEdits[];
+            }
+            export interface MapCodeRequestDocumentMapping {
+                /**
+                 * The file for the request (absolute pathname required). `undefined`
+                 * if specific file is unknown.
+                 */
+                file?: string;
+                /**
+                 * Optional name of project that contains file
+                 */
+                projectFileName?: string;
+                /**
+                 * The specific code to map/insert/replace in the file.
+                 */
+                contents: string[];
+                /**
+                 * Areas of "focus" to inform the code mapper with. For example, cursor
+                 * location, current selection, viewport, etc. Nested arrays denote
+                 * priority: toplevel arrays are more important than inner arrays, and
+                 * inner array priorities are based on items within that array. Items
+                 * earlier in the arrays have higher priority.
+                 */
+                focusLocations?: FileSpan[][];
+            }
+            export interface MapCodeRequest extends Request {
+                command: CommandTypes.MapCode;
+                arguments: MapCodeRequestArgs;
+            }
+            export interface MapCodeResponse extends Response {
+                body: FileCodeEdits[];
             }
             /**
              * Synchronous request for semantic diagnostics of one file.
@@ -3469,6 +3510,7 @@ declare namespace ts {
             private getLinkedEditingRange;
             private getDocumentHighlights;
             private provideInlayHints;
+            private mapCode;
             private setCompilerOptionsForInferredProjects;
             private getProjectInfo;
             private getProjectInfoWorker;

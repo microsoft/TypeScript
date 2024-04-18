@@ -239,6 +239,10 @@ export class VerifyNegatable {
     public uncommentSelection(newFileContent: string) {
         this.state.uncommentSelection(newFileContent);
     }
+
+    public baselineMapCode(range: FourSlash.Range, changesFilename?: string): void {
+        this.state.baselineMapCode(range, changesFilename);
+    }
 }
 
 export class Verify extends VerifyNegatable {

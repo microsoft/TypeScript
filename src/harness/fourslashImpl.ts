@@ -4510,6 +4510,32 @@ export class TestState {
 
         this.verifyCurrentFileContent(newFileContent);
     }
+
+    public baselineMapCode(
+        { fileName, pos }: Range,
+        changesFilename = "/incomingChanges",
+    ): void {
+        const changes = this.getFileContent(changesFilename);
+        const beforeContents = this.getFileContent(fileName);
+        const before = beforeContents.slice(0, pos) + "[||]" + beforeContents.slice(pos);
+        const edits = this.languageService.mapCode(
+            fileName,
+            [changes],
+            [[{ start: pos, length: 1 }]],
+            this.formatCodeSettings,
+            {},
+        );
+        this.applyChanges(edits);
+        const after = this.getFileContent(fileName);
+        const baseline = `
+// === ORIGINAL ===
+${before}
+// === INCOMING CHANGES ===
+${changes}
+// === MAPPED ===
+${after}`;
+        this.baseline("mapCode", baseline, ".mapCode.ts");
+    }
 }
 
 function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: readonly ts.TextChange[]): ts.TextRange {
