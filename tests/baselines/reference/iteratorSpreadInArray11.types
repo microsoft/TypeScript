@@ -2,8 +2,8 @@
 
 === iteratorSpreadInArray11.ts ===
 var iter: Iterable<number>;
->iter : Iterable<number>
->     : ^^^^^^^^^^^^^^^^
+>iter : Iterable<number, void, undefined>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var array = [...iter];
 >array : number[]
@@ -12,6 +12,6 @@ var array = [...iter];
 >          : ^^^^^^^^
 >...iter : number
 >        : ^^^^^^
->iter : Iterable<number>
->     : ^^^^^^^^^^^^^^^^
+>iter : Iterable<number, void, undefined>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

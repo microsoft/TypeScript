@@ -1793,6 +1793,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (type === emptyGenericType) return undefined;
             return type;
         },
+        createTypeReference: (target, typeArguments) => {
+            if (target !== emptyGenericType && getObjectFlags(target) & ObjectFlags.ClassOrInterface) {
+                const interfaceType = target as InterfaceType;
+                if (some(interfaceType.typeParameters)) {
+                    return createTypeReference(interfaceType as GenericType, typeArguments);
+                }
+            }
+        },
         isSymbolAccessible,
         isArrayType,
         isTupleType,
@@ -16500,7 +16508,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createIterableType(iteratedType: Type): Type {
-        return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
+        return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType, voidType, undefinedType]);
     }
 
     function createArrayType(elementType: Type, readonly?: boolean): ObjectType {
@@ -37188,24 +37196,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         returnType = resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || unknownType;
         nextType = resolver.resolveIterationType(nextType, /*errorNode*/ undefined) || unknownType;
         if (globalGeneratorType === emptyGenericType) {
-            // Fall back to the global IterableIterator if returnType is assignable to the expected return iteration
-            // type of IterableIterator, and the expected next iteration type of IterableIterator is assignable to
-            // nextType.
-            const globalType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
-            const iterationTypes = globalType !== emptyGenericType ? getIterationTypesOfGlobalIterableType(globalType, resolver) : undefined;
-            const iterableIteratorReturnType = iterationTypes ? iterationTypes.returnType : anyType;
-            const iterableIteratorNextType = iterationTypes ? iterationTypes.nextType : undefinedType;
-            if (
-                isTypeAssignableTo(returnType, iterableIteratorReturnType) &&
-                isTypeAssignableTo(iterableIteratorNextType, nextType)
-            ) {
-                if (globalType !== emptyGenericType) {
-                    return createTypeFromGenericGlobalType(globalType, [yieldType]);
-                }
-
-                // The global IterableIterator type doesn't exist, so report an error
-                resolver.getGlobalIterableIteratorType(/*reportErrors*/ true);
-                return emptyObjectType;
+            // Fall back to the global IterableIterator type.
+            const globalIterableIteratorType = resolver.getGlobalIterableIteratorType(/*reportErrors*/ false);
+            if (globalIterableIteratorType !== emptyGenericType) {
+                return createTypeFromGenericGlobalType(globalIterableIteratorType, [yieldType, returnType, nextType]);
             }
 
             // The global Generator type doesn't exist, so report an error
@@ -43848,7 +43842,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 isForOfStatement(errorNode.parent) &&
                 errorNode.parent.expression === errorNode &&
                 getGlobalAsyncIterableType(/*reportErrors*/ false) !== emptyGenericType &&
-                isTypeAssignableTo(type, getGlobalAsyncIterableType(/*reportErrors*/ false))
+                isTypeAssignableTo(type, createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ false), [anyType, anyType, anyType]))
             );
         return errorAndMaybeSuggestAwait(errorNode, suggestAwait, message, typeToString(type));
     }

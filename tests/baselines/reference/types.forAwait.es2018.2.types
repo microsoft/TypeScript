@@ -2,12 +2,12 @@
 
 === types.forAwait.es2018.2.ts ===
 declare const asyncIterable: AsyncIterable<number>;
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const iterable: Iterable<number>;
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 async function f() {
 >f : () => Promise<void>
@@ -36,26 +36,26 @@ async function f() {
     for await (z of asyncIterable) {
 >z : string
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (z of iterable) {
 >z : string
 >  : ^^^^^^
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for (const x of asyncIterable) {
 >x : any
 >  : ^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for (y of asyncIterable) {
 >y : number
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

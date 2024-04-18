@@ -73,8 +73,8 @@ export const Nothing: Strategy<State> = strategy("Nothing", function* (state: St
 >state : Symbol(state, Decl(generatorTypeCheck63.ts, 23, 71))
 >State : Symbol(State, Decl(generatorTypeCheck63.ts, 17, 1))
 
-    yield 1;
-    return state;
+    yield 1; // number isn't a `State`, so this should error.
+    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : Symbol(state, Decl(generatorTypeCheck63.ts, 23, 71))
 
 });
@@ -97,7 +97,7 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: S
 >state : Symbol(state, Decl(generatorTypeCheck63.ts, 31, 72))
 >State : Symbol(State, Decl(generatorTypeCheck63.ts, 17, 1))
 
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });
 
 export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
@@ -111,5 +111,5 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
     yield state;
 >state : Symbol(state, Decl(generatorTypeCheck63.ts, 35, 72))
 
-    return 1;
+    return 1; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 });

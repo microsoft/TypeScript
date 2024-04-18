@@ -6,20 +6,20 @@ class C {
 >  : ^
 
     *f(s: string): Iterable<any>;
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^             ^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>f : { (s: string): Iterable<any>; (s: number): Iterable<any, void, undefined>; }
+>  : ^^^ ^^      ^^^             ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
     *f(s: number): Iterable<any>;
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^             ^^^
+>f : { (s: string): Iterable<any, void, undefined>; (s: number): Iterable<any>; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^             ^^^
 >s : number
 >  : ^^^^^^
 
     *f(s: any): Iterable<any> { }
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>f : { (s: string): Iterable<any, void, undefined>; (s: number): Iterable<any, void, undefined>; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 }

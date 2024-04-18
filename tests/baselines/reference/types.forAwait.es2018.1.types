@@ -2,16 +2,16 @@
 
 === types.forAwait.es2018.1.ts ===
 declare const asyncIterable: AsyncIterable<number>;
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const iterable: Iterable<number>;
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const iterableOfPromise: Iterable<Promise<number>>;
->iterableOfPromise : Iterable<Promise<number>>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableOfPromise : Iterable<Promise<number>, void, undefined>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 async function f1() {
 >f1 : () => Promise<void>
@@ -24,38 +24,38 @@ async function f1() {
     for await (const x of asyncIterable) {
 >x : number
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (const x of iterable) {
 >x : number
 >  : ^^^^^^
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (const x of iterableOfPromise) {
 >x : number
 >  : ^^^^^^
->iterableOfPromise : Iterable<Promise<number>>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableOfPromise : Iterable<Promise<number>, void, undefined>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of asyncIterable) {
 >y : number
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of iterable) {
 >y : number
 >  : ^^^^^^
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of iterableOfPromise) {
 >y : number
 >  : ^^^^^^
->iterableOfPromise : Iterable<Promise<number>>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableOfPromise : Iterable<Promise<number>, void, undefined>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 async function * f2() {
@@ -69,38 +69,38 @@ async function * f2() {
     for await (const x of asyncIterable) {
 >x : number
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (const x of iterable) {
 >x : number
 >  : ^^^^^^
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (const x of iterableOfPromise) {
 >x : number
 >  : ^^^^^^
->iterableOfPromise : Iterable<Promise<number>>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableOfPromise : Iterable<Promise<number>, void, undefined>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of asyncIterable) {
 >y : number
 >  : ^^^^^^
->asyncIterable : AsyncIterable<number>
->              : ^^^^^^^^^^^^^^^^^^^^^
+>asyncIterable : AsyncIterable<number, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of iterable) {
 >y : number
 >  : ^^^^^^
->iterable : Iterable<number>
->         : ^^^^^^^^^^^^^^^^
+>iterable : Iterable<number, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     for await (y of iterableOfPromise) {
 >y : number
 >  : ^^^^^^
->iterableOfPromise : Iterable<Promise<number>>
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableOfPromise : Iterable<Promise<number>, void, undefined>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

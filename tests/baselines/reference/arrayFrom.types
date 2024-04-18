@@ -39,12 +39,12 @@ const inputALike: ArrayLike<A> = { length: 0 };
 >  : ^
 
 const inputARand = getEither(inputA, inputALike);
->inputARand : ArrayLike<A> | Iterable<A>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->getEither(inputA, inputALike) : ArrayLike<A> | Iterable<A>
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
->          : ^ ^^   ^^           ^^   ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputARand : ArrayLike<A> | Iterable<A, void, undefined>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getEither(inputA, inputALike) : ArrayLike<A> | Iterable<A, void, undefined>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T, void, undefined>
+>          : ^ ^^   ^^           ^^   ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputA : A[]
 >       : ^^^
 >inputALike : ArrayLike<A>
@@ -83,14 +83,14 @@ const result2: A[] = Array.from(inputA.values());
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
->inputA.values() : IterableIterator<A>
->                : ^^^^^^^^^^^^^^^^^^^
->inputA.values : () => IterableIterator<A>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputA.values() : IterableIterator<A, void, undefined>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputA.values : () => IterableIterator<A, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputA : A[]
 >       : ^^^
->values : () => IterableIterator<A>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => IterableIterator<A, void, undefined>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const result3: B[] = Array.from(inputA.values()); // expect error
 >result3 : B[]
@@ -103,14 +103,14 @@ const result3: B[] = Array.from(inputA.values()); // expect error
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
->inputA.values() : IterableIterator<A>
->                : ^^^^^^^^^^^^^^^^^^^
->inputA.values : () => IterableIterator<A>
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputA.values() : IterableIterator<A, void, undefined>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputA.values : () => IterableIterator<A, void, undefined>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inputA : A[]
 >       : ^^^
->values : () => IterableIterator<A>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : () => IterableIterator<A, void, undefined>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const result4: A[] = Array.from(inputB, ({ b }): A => ({ a: b }));
 >result4 : A[]
@@ -203,8 +203,8 @@ const result8: A[] = Array.from(inputARand);
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
->inputARand : ArrayLike<A> | Iterable<A>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputARand : ArrayLike<A> | Iterable<A, void, undefined>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >result9 : B[]
@@ -217,8 +217,8 @@ const result9: B[] = Array.from(inputARand, ({ a }): B => ({ b: a }));
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T_1, U>(arrayLike: ArrayLike<T_1>, mapfn: (v: T_1, k: number) => U, thisArg?: any): U[]; <T_2>(iterable: Iterable<T_2> | ArrayLike<T_2>): T_2[]; <T_3, U_1>(iterable: Iterable<T_3> | ArrayLike<T_3>, mapfn: (v: T_3, k: number) => U_1, thisArg?: any): U_1[]; }
 >     : ^^^ ^^         ^^            ^^^^^^^^^   ^^ ^^         ^^              ^^     ^^                        ^^       ^^^   ^^^^^^^^^   ^^        ^^                              ^^^^^^^^^^^   ^^   ^^        ^^                              ^^     ^^                          ^^       ^^^   ^^^^^^^^^^^
->inputARand : ArrayLike<A> | Iterable<A>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inputARand : ArrayLike<A> | Iterable<A, void, undefined>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ a }): B => ({ b: a }) : ({ a }: A) => B
 >                         : ^     ^^^^^^^^ 
 >a : string
@@ -278,16 +278,16 @@ const result11: B[] = Array.from(inputASet, ({ a }): B => ({ b: a }));
 // the ?: as always taking the false branch, narrowing to ArrayLike<T>,
 // even when the type is written as : Iterable<T>|ArrayLike<T>
 function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
->getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T>
->          : ^ ^^   ^^           ^^   ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->in1 : Iterable<T>
->    : ^^^^^^^^^^^
+>getEither : <T>(in1: Iterable<T>, in2: ArrayLike<T>) => ArrayLike<T> | Iterable<T, void, undefined>
+>          : ^ ^^   ^^           ^^   ^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>in1 : Iterable<T, void, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >in2 : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 
   return Math.random() > 0.5 ? in1 : in2;
->Math.random() > 0.5 ? in1 : in2 : ArrayLike<T> | Iterable<T>
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Math.random() > 0.5 ? in1 : in2 : ArrayLike<T> | Iterable<T, void, undefined>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Math.random() > 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -300,8 +300,8 @@ function getEither<T> (in1: Iterable<T>, in2: ArrayLike<T>) {
 >       : ^^^^^^^^^^^^
 >0.5 : 0.5
 >    : ^^^
->in1 : Iterable<T>
->    : ^^^^^^^^^^^
+>in1 : Iterable<T, void, undefined>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >in2 : ArrayLike<T>
 >    : ^^^^^^^^^^^^
 }

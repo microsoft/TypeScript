@@ -4,12 +4,12 @@
 function method<T>(iterable: Iterable<T>): T {
 >method : <T>(iterable: Iterable<T>) => T
 >       : ^ ^^        ^^           ^^^^^ 
->iterable : Iterable<T>
->         : ^^^^^^^^^^^
+>iterable : Iterable<T, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     function inner<U extends Iterable<T>>() {
->inner : <U extends Iterable<T>>() => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : <U extends Iterable<T, void, undefined>>() => void
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         var u: U;
 >u : U

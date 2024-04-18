@@ -2,8 +2,8 @@
 
 === argumentsSpreadRestIterables.tsx ===
 declare const itNum: Iterable<number>
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ;(function(...rest) {})(...itNum)
 >(function(...rest) {})(...itNum) : void
@@ -16,8 +16,8 @@ declare const itNum: Iterable<number>
 >     : ^^^^^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ;(function(a, ...rest) {})('', ...itNum)
 >(function(a, ...rest) {})('', ...itNum) : void
@@ -34,8 +34,8 @@ declare const itNum: Iterable<number>
 >   : ^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ;(function(a, ...rest) {})('', true, ...itNum)
 >(function(a, ...rest) {})('', true, ...itNum) : void
@@ -54,8 +54,8 @@ declare const itNum: Iterable<number>
 >     : ^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function fn1<const T extends readonly unknown[]>(...args: T): T;
 >fn1 : <const T extends readonly unknown[]>(...args: T) => T
@@ -84,8 +84,8 @@ const res2 = fn1(...itNum);
 >    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const res3 = fn1(true, ..."hello");
 >res3 : readonly [true, ...string[]]
@@ -112,8 +112,8 @@ const res4 = fn1(true, ...itNum);
 >     : ^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // repro from #52781
 declare function foo<T extends unknown[]>(...args: T): T;
@@ -143,8 +143,8 @@ const p2 = foo(...itNum);
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const p3 = foo(true, ..."hello");
 >p3 : [boolean, ...string[]]
@@ -171,6 +171,6 @@ const p4 = foo(true, ...itNum);
 >     : ^^^^
 >...itNum : number
 >         : ^^^^^^
->itNum : Iterable<number>
->      : ^^^^^^^^^^^^^^^^
+>itNum : Iterable<number, void, undefined>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

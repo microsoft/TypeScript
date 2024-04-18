@@ -6,19 +6,19 @@ module M {
 >  : ^^^^^^^^
 
     function f(s: string): Iterable<any>;
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^             ^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>f : { (s: string): Iterable<any>; (s: number): Iterable<any, void, undefined>; }
+>  : ^^^ ^^      ^^^             ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
     function f(s: number): Iterable<any>;
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^             ^^^
+>f : { (s: string): Iterable<any, void, undefined>; (s: number): Iterable<any>; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^             ^^^
 >s : number
 >  : ^^^^^^
 
     function* f(s: any): Iterable<any> { }
->f : { (s: string): Iterable<any>; (s: number): Iterable<any>; }
->  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
+>f : { (s: string): Iterable<any, void, undefined>; (s: number): Iterable<any, void, undefined>; }
+>  : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : any
 }

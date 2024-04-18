@@ -4,8 +4,8 @@
 function method<T>(iterable: Iterable<T>): T {
 >method : <T>(iterable: Iterable<T>) => T
 >       : ^ ^^        ^^           ^^^^^ 
->iterable : Iterable<T>
->         : ^^^^^^^^^^^
+>iterable : Iterable<T, void, undefined>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return;
 }

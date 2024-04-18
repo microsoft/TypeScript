@@ -286,7 +286,9 @@ function makeChange(changeTracker: textChanges.ChangeTracker, errorCode: number,
     if (isForOfStatement(insertionSite.parent) && !insertionSite.parent.awaitModifier) {
         const exprType = checker.getTypeAtLocation(insertionSite);
         const asyncIter = checker.getAsyncIterableType();
-        if (asyncIter && checker.isTypeAssignableTo(exprType, asyncIter)) {
+        const anyType = checker.getAnyType();
+        const asyncIterInstantiation = asyncIter && checker.createTypeReference(asyncIter, [anyType, anyType, anyType]);
+        if (asyncIterInstantiation && checker.isTypeAssignableTo(exprType, asyncIterInstantiation)) {
             const forOf = insertionSite.parent;
             changeTracker.replaceNode(sourceFile, forOf, factory.updateForOfStatement(forOf, factory.createToken(SyntaxKind.AwaitKeyword), forOf.initializer, forOf.expression, forOf.statement));
             return;

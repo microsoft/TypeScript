@@ -6,8 +6,8 @@ declare class DMap<K, V>  {
 >     : ^^^^^^^^^^
 
   constructor(iterable: Iterable<[K, V]> | undefined);
->iterable : Iterable<[K, V]> | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : Iterable<[K, V], void, undefined> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 new DMap([["1", 2]]);
 >new DMap([["1", 2]]) : DMap<string, number>
@@ -24,8 +24,8 @@ new DMap([["1", 2]]);
 >  : ^
 
 const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
->i1 : Iterable<{ a: true; }> | undefined
->   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>i1 : Iterable<{ a: true; }, void, undefined> | undefined
+>   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : true
 >  : ^^^^
 >true : true
@@ -40,8 +40,8 @@ const i1: Iterable<{ a: true }> | undefined = [{ a: true }];
 >     : ^^^^
 
 const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
->i2 : Iterable<{ a: true; }> | Iterable<{ b: false; }>
->   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^     ^^^^
+>i2 : Iterable<{ a: true; }, void, undefined> | Iterable<{ b: false; }, void, undefined>
+>   : ^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >a : true
 >  : ^^^^
 >true : true
@@ -60,8 +60,8 @@ const i2: Iterable<{ a: true }> | Iterable<{ b: false }> = [{ b: false }];
 >      : ^^^^^
 
 const i3: Iterable<number> | 1[] = [2];
->i3 : Iterable<number> | 1[]
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>i3 : Iterable<number, void, undefined> | 1[]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[2] : 2[]
 >    : ^^^
 >2 : 2

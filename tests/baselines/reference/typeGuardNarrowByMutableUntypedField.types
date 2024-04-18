@@ -10,16 +10,16 @@ declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P):
 >         : ^
 
 declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;
->arrayLikeOrIterable : ArrayLike<any> | Iterable<any>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayLikeOrIterable : ArrayLike<any> | Iterable<any, void, undefined>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (hasOwnProperty(arrayLikeOrIterable, 'length')) {
 >hasOwnProperty(arrayLikeOrIterable, 'length') : boolean
 >                                              : ^^^^^^^
 >hasOwnProperty : <P extends PropertyKey>(target: {}, property: P) => target is { [K in P]: unknown; }
 >               : ^ ^^^^^^^^^^^^^^^^^^^^^^      ^^  ^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->arrayLikeOrIterable : ArrayLike<any> | Iterable<any>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayLikeOrIterable : ArrayLike<any> | Iterable<any, void, undefined>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' : "length"
 >         : ^^^^^^^^
 
