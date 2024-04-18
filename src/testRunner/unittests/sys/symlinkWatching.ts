@@ -127,13 +127,9 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     }
 
     function compareEventFileName(a: EventAndFileName["fileName"], b: EventAndFileName["fileName"]) {
-        return a === b ? ts.Comparison.EqualTo :
-            // eslint-disable-next-line no-restricted-syntax
-            a === undefined || a === null ? ts.Comparison.LessThan :
-            // eslint-disable-next-line no-restricted-syntax
-            b === undefined || b === null ? ts.Comparison.GreaterThan :
-            a < b ? ts.Comparison.LessThan :
-            ts.Comparison.GreaterThan;
+        if (a === null) a = undefined; // eslint-disable-line no-restricted-syntax
+        if (b === null) b = undefined; // eslint-disable-line no-restricted-syntax
+        return ts.compareStringsCaseSensitive(a, b);
     }
 
     function compareEventAndFileName(a: EventAndFileName, b: EventAndFileName): ts.Comparison {
