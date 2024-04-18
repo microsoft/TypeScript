@@ -989,7 +989,6 @@ export function transformDeclarations(context: TransformationContext) {
                     isolatedDeclarations
                     // Classes usually elide properties with computed names that are not of a literal type
                     // In isolated declarations TSC needs to error on these as we don't know the type in a DTE.
-                    // The
                     && isClassDeclaration(input.parent)
                     && isEntityNameExpression(input.name.expression)
                     // If the symbol is not accessible we get another TS error no need to add to that

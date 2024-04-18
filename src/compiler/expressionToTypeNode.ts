@@ -65,6 +65,7 @@ import {
     VariableDeclaration,
 } from "./_namespaces/ts";
 
+/** @internal */
 export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
     const strictNullChecks = getStrictOptionValue(options, "strictNullChecks");
 
