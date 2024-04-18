@@ -344,6 +344,7 @@ export interface PackageJsonPathFields {
     name?: string;
     dependencies?: MapLike<string>;
     peerDependencies?: MapLike<string>;
+    optionalDependencies?: MapLike<string>;
 }
 
 interface PackageJson extends PackageJsonPathFields {

@@ -713,15 +713,15 @@ function getAllModulePaths(
     return modulePaths;
 }
 
+const runtimeDependencyFields = ["dependencies", "peerDependencies", "optionalDependencies"] as const;
+
 function getAllRuntimeDependencies(packageJson: PackageJsonPathFields) {
     let result;
-    const deps = packageJson.dependencies;
-    if (deps && typeof deps === "object") {
-        result = getOwnKeys(deps);
-    }
-    const peerDeps = packageJson.peerDependencies;
-    if (peerDeps && typeof peerDeps === "object") {
-        result = concatenate(result, getOwnKeys(peerDeps));
+    for (const field of runtimeDependencyFields) {
+        const deps = packageJson[field];
+        if (deps && typeof deps === "object") {
+            result = concatenate(result, getOwnKeys(deps));
+        }
     }
     return result;
 }
