@@ -3119,7 +3119,7 @@ namespace Parser {
         // Can't reuse a node that intersected the change range.
         // Can't reuse a node that contains a parse error.  This is necessary so that we
         // produce the same set of errors again.
-        if (nodeIsMissing(node) || intersectingIncrementalChange(node) || containsParseError(node)) {
+        if (nodeIsMissing(node) || intersectsIncrementalChange(node) || containsParseError(node)) {
             return undefined;
         }
 
@@ -9843,24 +9843,23 @@ namespace Parser {
     }
 }
 
-const incrementalInfo = {
-    incrementallyParsed: new WeakSet<SourceFile>(),
-    intersectsChange: new WeakSet<Node | NodeArray<Node>>(),
-};
+const incrementallyParsedFiles = new WeakSet<SourceFile>();
 
 function markAsIncrementallyParsed(sourceFile: SourceFile) {
-    if (incrementalInfo.incrementallyParsed.has(sourceFile)) {
+    if (incrementallyParsedFiles.has(sourceFile)) {
         Debug.fail("Source file has already been incrementally parsed");
     }
-    incrementalInfo.incrementallyParsed.add(sourceFile);
+    incrementallyParsedFiles.add(sourceFile);
 }
 
-function intersectingIncrementalChange(node: Node | NodeArray<Node>): boolean {
-    return incrementalInfo.intersectsChange.has(node);
+const intersectingChangeSet = new WeakSet<Node | NodeArray<Node>>();
+
+function intersectsIncrementalChange(node: Node | NodeArray<Node>): boolean {
+    return intersectingChangeSet.has(node);
 }
 
 function markAsIntersectingIncrementalChange(node: Node | NodeArray<Node>) {
-    incrementalInfo.intersectsChange.add(node);
+    intersectingChangeSet.add(node);
 }
 
 namespace IncrementalParser {
