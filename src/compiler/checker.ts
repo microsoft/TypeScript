@@ -2123,7 +2123,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
     var anyIterationTypesExceptNext = createIterationTypes(anyType, anyType, unknownType);
-    var defaultIterationTypes = createIterationTypes(neverType, anyType, undefinedType); // default iteration types for `Iterator`.
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -43763,12 +43762,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return getCachedIterationTypes(type, resolver.iterableCacheKey);
     }
 
-    function getIterationTypesOfGlobalIterableType(globalType: Type, resolver: IterationTypesResolver) {
-        const globalIterationTypes = getIterationTypesOfIterableCached(globalType, resolver) ||
-            getIterationTypesOfIterableSlow(globalType, resolver, /*errorNode*/ undefined, /*errorOutputContainer*/ undefined, /*noCache*/ false);
-        return globalIterationTypes === noIterationTypes ? defaultIterationTypes : globalIterationTypes;
-    }
-
     /**
      * Gets the *yield*, *return*, and *next* types of an `Iterable`-like or `AsyncIterable`-like
      * type from from common heuristics.
@@ -43790,7 +43783,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (
             isReferenceToType(type, resolver.getGlobalIterableType(/*reportErrors*/ false)) ||
             isReferenceToType(type, resolver.getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
-            isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))) {
+            isReferenceToType(type, resolver.getGlobalGeneratorType(/*reportErrors*/ false))
+        ) {
             const [yieldType, returnType, nextType] = getTypeArguments(type as GenericType);
             return setCachedIterationTypes(type, resolver.iterableCacheKey, createIterationTypes(resolver.resolveIterationType(yieldType, /*errorNode*/ undefined) || yieldType, resolver.resolveIterationType(returnType, /*errorNode*/ undefined) || returnType, nextType));
         }
