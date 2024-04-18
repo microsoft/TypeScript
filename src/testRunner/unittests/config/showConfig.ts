@@ -33,7 +33,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
             });
         });

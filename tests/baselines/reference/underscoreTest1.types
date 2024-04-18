@@ -1449,7 +1449,7 @@ var func = function (greeting) { return greeting + ': ' + this.name };
 >func : (greeting: any) => string
 >     : ^        ^^^^^^^^^^^^^^^^
 >function (greeting) { return greeting + ': ' + this.name } : (greeting: any) => string
->                                                           :                          
+>                                                           : ^        ^^^^^^^^^^^^^^^^
 >greeting : any
 >         : ^^^
 >greeting + ': ' + this.name : string
@@ -1501,7 +1501,7 @@ var buttonView = {
 >buttonView : { label: string; onClick: () => void; onHover: () => void; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    label: 'underscore',    onClick: function () { alert('clicked: ' + this.label); },    onHover: function () { alert('hovering: ' + this.label); }} : { label: string; onClick: () => void; onHover: () => void; }
->                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^          ^^^
+>                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     label: 'underscore',
 >label : string
@@ -1513,7 +1513,7 @@ var buttonView = {
 >onClick : () => void
 >        : ^^^^^^^^^^
 >function () { alert('clicked: ' + this.label); } : () => void
->                                                 :           
+>                                                 : ^^^^^^^^^^
 >alert('clicked: ' + this.label) : void
 >                                : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1533,7 +1533,7 @@ var buttonView = {
 >onHover : () => void
 >        : ^^^^^^^^^^
 >function () { alert('hovering: ' + this.label); } : () => void
->                                                  :           
+>                                                  : ^^^^^^^^^^
 >alert('hovering: ' + this.label) : void
 >                                 : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1588,7 +1588,7 @@ var fibonacci = _.memoize(function (n) {
 >fibonacci : (n: any) => any
 >          : ^ ^^^^^^^^^^^^^
 >_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
->                                                                                      :                
+>                                                                                      : ^ ^^^^^^^^^^^^^
 >_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
 >          : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^            ^^^        ^^^^^^
 >_ : Underscore.Static
@@ -1640,7 +1640,7 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >log : (message?: string, ...rest: string[]) => void
 >    : ^       ^^^      ^^^^^    ^^        ^^^^^^^^^
 >_.bind((message?: string, ...rest: string[]) => { }, Date) : (message?: string, ...rest: string[]) => void
->                                                           :         ^          ^^^                       
+>                                                           : ^       ^^^      ^^^^^    ^^        ^^^^^^^^^
 >_.bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >_ : Underscore.Static
@@ -1694,7 +1694,7 @@ var updatePosition = () => alert('updating position...');
 >updatePosition : () => void
 >               : ^^^^^^^^^^
 >() => alert('updating position...') : () => void
->                                    :           
+>                                    : ^^^^^^^^^^
 >alert('updating position...') : void
 >                              : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1706,7 +1706,7 @@ var throttled = _.throttle(updatePosition, 100);
 >throttled : () => void
 >          : ^^^^^^^^^^
 >_.throttle(updatePosition, 100) : () => void
->                                :           
+>                                : ^^^^^^^^^^
 >_.throttle : <T extends Function>(func: T, wait: number) => T
 >           : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^^^^^
 >_ : Underscore.Static
@@ -1736,7 +1736,7 @@ var calculateLayout = () => alert('calculating layout...');
 >calculateLayout : () => void
 >                : ^^^^^^^^^^
 >() => alert('calculating layout...') : () => void
->                                     :           
+>                                     : ^^^^^^^^^^
 >alert('calculating layout...') : void
 >                               : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1748,7 +1748,7 @@ var lazyLayout = _.debounce(calculateLayout, 300);
 >lazyLayout : () => void
 >           : ^^^^^^^^^^
 >_.debounce(calculateLayout, 300) : () => void
->                                 :           
+>                                 : ^^^^^^^^^^
 >_.debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
 >           : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^^
 >_ : Underscore.Static
@@ -1778,7 +1778,7 @@ var createApplication = () => alert('creating application...');
 >createApplication : () => void
 >                  : ^^^^^^^^^^
 >() => alert('creating application...') : () => void
->                                       :           
+>                                       : ^^^^^^^^^^
 >alert('creating application...') : void
 >                                 : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1790,7 +1790,7 @@ var initialize = _.once(createApplication);
 >initialize : () => void
 >           : ^^^^^^^^^^
 >_.once(createApplication) : () => void
->                          :           
+>                          : ^^^^^^^^^^
 >_.once : <T extends Function>(func: T) => T
 >       : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
 >_ : Underscore.Static
@@ -1820,7 +1820,7 @@ var render = () => alert("rendering...");
 >render : () => void
 >       : ^^^^^^^^^^
 >() => alert("rendering...") : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >alert("rendering...") : void
 >                      : ^^^^
 >alert : { (message?: any): void; (x: string): void; }
@@ -1832,7 +1832,7 @@ var renderNotes = _.after(notes.length, render);
 >renderNotes : () => void
 >            : ^^^^^^^^^^
 >_.after(notes.length, render) : () => void
->                              :           
+>                              : ^^^^^^^^^^
 >_.after : <T extends Function>(count: number, func: T) => T
 >        : ^ ^^^^^^^^^^^^^^^^^^^     ^^      ^^    ^^ ^^^^^^
 >_ : Underscore.Static
@@ -1876,13 +1876,13 @@ _.each(notes, (note) => note.asyncSave({ success: renderNotes }));
 >success : () => void
 >        : ^^^^^^^^^^
 >renderNotes : () => void
->            :           
+>            : ^^^^^^^^^^
 
 var hello = function (name) { return "hello: " + name; };
 >hello : (name: any) => string
 >      : ^    ^^^^^^^^^^^^^^^^
 >function (name) { return "hello: " + name; } : (name: any) => string
->                                             :                      
+>                                             : ^    ^^^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 >"hello: " + name : string
@@ -1898,7 +1898,7 @@ hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"
 >hello : (name: any) => string
 >      : ^    ^^^^^^^^^^^^^^^^
 >_.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; }) : (name: any) => string
->                                                                             :                      
+>                                                                             : ^    ^^^^^^^^^^^^^^^^
 >_.wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
 >       : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^       ^^                                ^^^^^^
 >_ : Underscore.Static
@@ -1940,7 +1940,7 @@ var greet = function (name) { return "hi: " + name; };
 >greet : (name: any) => string
 >      : ^    ^^^^^^^^^^^^^^^^
 >function (name) { return "hi: " + name; } : (name: any) => string
->                                          :                      
+>                                          : ^    ^^^^^^^^^^^^^^^^
 >name : any
 >     : ^^^
 >"hi: " + name : string
@@ -1954,7 +1954,7 @@ var exclaim = function (statement) { return statement + "!"; };
 >exclaim : (statement: any) => string
 >        : ^         ^^^^^^^^^^^^^^^^
 >function (statement) { return statement + "!"; } : (statement: any) => string
->                                                 :                           
+>                                                 : ^         ^^^^^^^^^^^^^^^^
 >statement : any
 >          : ^^^
 >statement + "!" : string
@@ -2796,7 +2796,7 @@ _.mixin({
 >capitalize : (string: any) => any
 >           : ^      ^^^^^^^^^^^^^
 >function (string) {        return string.charAt(0).toUpperCase() + string.substring(1).toLowerCase();    } : (string: any) => any
->                                                                                                           :                     
+>                                                                                                           : ^      ^^^^^^^^^^^^^
 >string : any
 >       : ^^^
 
@@ -2883,7 +2883,7 @@ var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 >object : { cheese: string; stuff: () => string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ cheese: 'crumpets', stuff: function () { return 'nonsense'; } } : { cheese: string; stuff: () => string; }
->                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >cheese : string
 >       : ^^^^^^
 >'crumpets' : "crumpets"
@@ -2891,7 +2891,7 @@ var object = { cheese: 'crumpets', stuff: function () { return 'nonsense'; } };
 >stuff : () => string
 >      : ^^^^^^^^^^^^
 >function () { return 'nonsense'; } : () => string
->                                   :             
+>                                   : ^^^^^^^^^^^^
 >'nonsense' : "nonsense"
 >           : ^^^^^^^^^^
 
@@ -2927,7 +2927,7 @@ var compiled = _.template("hello: <%= name %>");
 >compiled : (data: any) => string
 >         : ^    ^^   ^^^^^^^^^^^
 >_.template("hello: <%= name %>") : (data: any) => string
->                                 :                      
+>                                 : ^    ^^   ^^^^^^^^^^^
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
 >           : ^^^              ^^      ^^^^    ^^   ^^^^^^^^^^^^^^              ^^      ^^    ^^   ^^        ^^^                ^^^^^^^^^^^^
 >_ : Underscore.Static
@@ -2983,7 +2983,7 @@ var template = _.template("<b><%- value %></b>");
 >template : (data: any) => string
 >         : ^    ^^   ^^^^^^^^^^^
 >_.template("<b><%- value %></b>") : (data: any) => string
->                                  :                      
+>                                  : ^    ^^   ^^^^^^^^^^^
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
 >           : ^^^              ^^      ^^^^    ^^   ^^^^^^^^^^^^^^              ^^      ^^    ^^   ^^        ^^^                ^^^^^^^^^^^^
 >_ : Underscore.Static
@@ -3009,7 +3009,7 @@ var compiled2 = _.template("<% print('Hello ' + epithet); %>");
 >compiled2 : (data: any) => string
 >          : ^    ^^   ^^^^^^^^^^^
 >_.template("<% print('Hello ' + epithet); %>") : (data: any) => string
->                                               :                      
+>                                               : ^    ^^   ^^^^^^^^^^^
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
 >           : ^^^              ^^      ^^^^    ^^   ^^^^^^^^^^^^^^              ^^      ^^    ^^   ^^        ^^^                ^^^^^^^^^^^^
 >_ : Underscore.Static
@@ -3054,7 +3054,7 @@ var template2 = _.template("Hello {{ name }}!");
 >template2 : (data: any) => string
 >          : ^    ^^   ^^^^^^^^^^^
 >_.template("Hello {{ name }}!") : (data: any) => string
->                                :                      
+>                                : ^    ^^   ^^^^^^^^^^^
 >_.template : { (templateString: string): (data: any) => string; (templateString: string, data: any, settings?: TemplateSettings): string; }
 >           : ^^^              ^^      ^^^^    ^^   ^^^^^^^^^^^^^^              ^^      ^^    ^^   ^^        ^^^                ^^^^^^^^^^^^
 >_ : Underscore.Static

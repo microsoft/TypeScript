@@ -899,7 +899,7 @@ var i1_f = i1.p2;
 >i1_f : (b: number) => number
 >     : ^ ^^      ^^^^^^^^^^^
 >i1.p2 : (b: number) => number
->      :                      
+>      : ^ ^^      ^^^^^^^^^^^
 >i1 : c1
 >   : ^^
 >p2 : (b: number) => number
@@ -955,7 +955,7 @@ var i1_ncf = i1.nc_p2;
 >i1_ncf : (b: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >i1.nc_p2 : (b: number) => number
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >i1 : c1
 >   : ^^
 >nc_p2 : (b: number) => number
@@ -1011,7 +1011,7 @@ var i1_s_f = c1.s2;
 >i1_s_f : (b: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >c1.s2 : (b: number) => number
->      :                      
+>      : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >s2 : (b: number) => number
@@ -1067,7 +1067,7 @@ var i1_s_ncf = c1.nc_s2;
 >i1_s_ncf : (b: number) => number
 >         : ^ ^^      ^^^^^^^^^^^
 >c1.nc_s2 : (b: number) => number
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >c1 : typeof c1
 >   : ^^^^^^^^^
 >nc_s2 : (b: number) => number

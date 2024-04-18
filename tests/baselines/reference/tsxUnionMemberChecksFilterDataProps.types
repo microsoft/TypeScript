@@ -38,7 +38,7 @@ const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
 >RootNotHappy : () => JSX.Element
 >             : ^^^^^^^^^^^^^^^^^
 >() => (<NotHappy data-testid="my-test-id" />) : () => JSX.Element
->                                              :                  
+>                                              : ^^^^^^^^^^^^^^^^^
 >(<NotHappy data-testid="my-test-id" />) : JSX.Element
 >                                        : ^^^^^^^^^^^
 ><NotHappy data-testid="my-test-id" /> : JSX.Element
@@ -52,7 +52,7 @@ const RootHappy = () => (<Happy data-testid="my-test-id" />);
 >RootHappy : () => JSX.Element
 >          : ^^^^^^^^^^^^^^^^^
 >() => (<Happy data-testid="my-test-id" />) : () => JSX.Element
->                                           :                  
+>                                           : ^^^^^^^^^^^^^^^^^
 >(<Happy data-testid="my-test-id" />) : JSX.Element
 >                                     : ^^^^^^^^^^^
 ><Happy data-testid="my-test-id" /> : JSX.Element

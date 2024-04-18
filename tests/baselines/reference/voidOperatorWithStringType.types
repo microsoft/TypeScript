@@ -104,7 +104,7 @@ var ResultIsAny5 = void { x: "", y: (s: string) => { return s; } };
 >y : (s: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string

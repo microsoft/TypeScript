@@ -67,7 +67,7 @@ var x3 = f1()
 >x3 : Promise<{ __t3: string; }>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1()    .then(f2, (e: Error) => {    throw e;})    .then((x: T2) => {    return { __t3: x.__t2 + "bar" };}) : Promise<{ __t3: string; }>
->                                                                                                            : ^^^^^^^^                 ^
+>                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1()    .then(f2, (e: Error) => {    throw e;})    .then : <TResult1 = T2, TResult2 = never>(onfulfilled?: (value: T2) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f1()    .then(f2, (e: Error) => {    throw e;}) : Promise<T2>

@@ -1632,7 +1632,7 @@ const fn1 = (a: number, b: string, c: boolean, d: string[]) => 0;
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
 >    : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
 >(a: number, b: string, c: boolean, d: string[]) => 0 : (a: number, b: string, c: boolean, d: string[]) => number
->                                                     :                                                          
+>                                                     : ^ ^^      ^^ ^^      ^^ ^^       ^^ ^^        ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : string
@@ -1648,7 +1648,7 @@ const c0 = curry(fn1);  // (a: number, b: string, c: boolean, d: string[]) => nu
 >c0 : (a: number, b: string, c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1) : (a: number, b: string, c: boolean, d: string[]) => number
->           :                                                          
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
@@ -1658,7 +1658,7 @@ const c1 = curry(fn1, 1);  // (b: string, c: boolean, d: string[]) => number
 >c1 : (b: string, c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1) : (b: string, c: boolean, d: string[]) => number
->              :                                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
@@ -1670,7 +1670,7 @@ const c2 = curry(fn1, 1, 'abc');  // (c: boolean, d: string[]) => number
 >c2 : (c: boolean, d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1, 'abc') : (c: boolean, d: string[]) => number
->                     :                                    
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
@@ -1684,7 +1684,7 @@ const c3 = curry(fn1, 1, 'abc', true);  // (d: string[]) => number
 >c3 : (d: string[]) => number
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn1, 1, 'abc', true) : (d: string[]) => number
->                           :                        
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
@@ -1700,7 +1700,7 @@ const c4 = curry(fn1, 1, 'abc', true, ['x', 'y']);  // () => number
 >c4 : () => number
 >   : ^^^^^^^^^^^^
 >curry(fn1, 1, 'abc', true, ['x', 'y']) : () => number
->                                       :             
+>                                       : ^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn1 : (a: number, b: string, c: boolean, d: string[]) => number
@@ -1722,7 +1722,7 @@ const fn2 = (x: number, b: boolean, ...args: string[]) => 0;
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
 >(x: number, b: boolean, ...args: string[]) => 0 : (x: number, b: boolean, ...args: string[]) => number
->                                                :                         ^^^                         
+>                                                : ^ ^^      ^^ ^^       ^^^^^    ^^        ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >b : boolean
@@ -1736,7 +1736,7 @@ const c10 = curry(fn2);  // (x: number, b: boolean, ...args: string[]) => number
 >c10 : (x: number, b: boolean, ...args: string[]) => number
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2) : (x: number, b: boolean, ...args: string[]) => number
->           :                         ^^^                         
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
@@ -1746,7 +1746,7 @@ const c11 = curry(fn2, 1);  // (b: boolean, ...args: string[]) => number
 >c11 : (b: boolean, ...args: string[]) => number
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1) : (b: boolean, ...args: string[]) => number
->              :              ^^^                         
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
@@ -1758,7 +1758,7 @@ const c12 = curry(fn2, 1, true);  // (...args: string[]) => number
 >c12 : (...b: string[]) => number
 >    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1, true) : (...b: string[]) => number
->                    :  ^^^                      
+>                    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
@@ -1772,7 +1772,7 @@ const c13 = curry(fn2, 1, true, 'abc', 'def');  // (...args: string[]) => number
 >c13 : (...b: string[]) => number
 >    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn2, 1, true, 'abc', 'def') : (...b: string[]) => number
->                                  :  ^^^                      
+>                                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn2 : (x: number, b: boolean, ...args: string[]) => number
@@ -1790,7 +1790,7 @@ const fn3 = (...args: string[]) => 0;
 >fn3 : (...args: string[]) => number
 >    : ^^^^    ^^        ^^^^^^^^^^^
 >(...args: string[]) => 0 : (...args: string[]) => number
->                         :  ^^^                         
+>                         : ^^^^    ^^        ^^^^^^^^^^^
 >args : string[]
 >     : ^^^^^^^^
 >0 : 0
@@ -1800,7 +1800,7 @@ const c20 = curry(fn3);  // (...args: string[]) => number
 >c20 : (...b: string[]) => number
 >    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3) : (...b: string[]) => number
->           :  ^^^                      
+>           : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn3 : (...args: string[]) => number
@@ -1810,7 +1810,7 @@ const c21 = curry(fn3, 'abc', 'def');  // (...args: string[]) => number
 >c21 : (...b: string[]) => number
 >    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3, 'abc', 'def') : (...b: string[]) => number
->                         :  ^^^                      
+>                         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn3 : (...args: string[]) => number
@@ -1824,7 +1824,7 @@ const c22 = curry(fn3, ...sa);  // (...args: string[]) => number
 >c22 : (...b: string[]) => number
 >    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry(fn3, ...sa) : (...b: string[]) => number
->                  :  ^^^                      
+>                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^
 >curry : <T extends unknown[], U extends unknown[], R>(f: (...args: [...T, ...U]) => R, ...a: T) => (...b: U) => R
 >      : ^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^                            ^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^
 >fn3 : (...args: string[]) => number

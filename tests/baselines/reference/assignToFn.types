@@ -21,7 +21,7 @@ module M {
 >f : (n: number) => true
 >  : ^ ^^^^^^^^^^^^^^^^^
 >function(n) { return true; } : (n: number) => true
->                             :                    
+>                             : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >true : true

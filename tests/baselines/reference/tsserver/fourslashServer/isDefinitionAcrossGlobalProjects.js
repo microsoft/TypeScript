@@ -273,7 +273,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/index.ts (Open) *new*
@@ -486,7 +485,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -716,15 +714,12 @@ Projects::
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /c/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 ScriptInfos::
 /a/index.ts (Open)
@@ -941,27 +936,6 @@ watchedFiles *deleted*::
 /b/index.ts:
   {"pollingInterval":500}
 
-Projects::
-/a/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    originalConfiguredProjects: 3
-        /b/tsconfig.json
-        /a/tsconfig.json
-        /c/tsconfig.json
-/b/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: false *changed*
-/c/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
-
 ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
@@ -1145,11 +1119,9 @@ Projects::
 /c/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -1475,26 +1447,6 @@ watchedFiles *deleted*::
 /c/index.ts:
   {"pollingInterval":500}
 
-Projects::
-/a/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    originalConfiguredProjects: 3
-        /b/tsconfig.json
-        /a/tsconfig.json
-        /c/tsconfig.json
-/b/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/c/tsconfig.json (Configured) *changed*
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: false *changed*
-/tsconfig.json (Configured)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-    noOpenRef: true
-
 ScriptInfos::
 /a/index.ts (Open)
     version: SVC-1-0
@@ -1672,7 +1624,6 @@ Projects::
 /tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] request:
     {

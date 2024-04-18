@@ -45,7 +45,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
     var rawSources: string[] = [];
     var sources: string[] = [];
     var sourceToSourceIndexMap = new Map<string, number>();
-    var sourcesContent: (string | null)[] | undefined;
+    var sourcesContent: (string | null)[] | undefined; // eslint-disable-line no-restricted-syntax
 
     var names: string[] = [];
     var nameToNameIndexMap: Map<string, number> | undefined;
@@ -98,7 +98,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         return sourceIndex;
     }
 
-    /* eslint-disable no-null/no-null */
+    /* eslint-disable no-restricted-syntax */
     function setSourceContent(sourceIndex: number, content: string | null) {
         enter();
         if (content !== null) {
@@ -110,7 +110,7 @@ export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoo
         }
         exit();
     }
-    /* eslint-enable no-null/no-null */
+    /* eslint-enable no-restricted-syntax */
 
     function addName(name: string) {
         enter();
@@ -400,7 +400,7 @@ export function tryGetSourceMappingURL(lineInfo: LineInfo) {
     }
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 function isStringOrNull(x: any) {
     return typeof x === "string" || x === null;
 }
@@ -417,7 +417,7 @@ export function isRawSourceMap(x: any): x is RawSourceMap {
         && (x.sourcesContent === undefined || x.sourcesContent === null || isArray(x.sourcesContent) && every(x.sourcesContent, isStringOrNull))
         && (x.names === undefined || x.names === null || isArray(x.names) && every(x.names, isString));
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 /** @internal */
 export function tryParseRawSourceMap(text: string) {

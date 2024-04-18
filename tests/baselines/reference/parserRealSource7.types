@@ -870,7 +870,7 @@ module TypeScript {
 >findSym : (id: string) => any
 >        : ^  ^^      ^^^^^^^^
 >(id: string) => {                    if (context.members) {                        return context.members.lookup(name);                    }                    else {                        return findTypeSymbolInScopeChain(name, context.topLevelScope);                    }                } : (id: string) => any
->                                                                                                                                                                                                                                                                                                    :                    
+>                                                                                                                                                                                                                                                                                                    : ^  ^^      ^^^^^^^^
 >id : string
 >   : ^^^^^^
 

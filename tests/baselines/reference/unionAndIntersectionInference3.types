@@ -203,7 +203,7 @@ let y2 = foo2(sx);  // { extra: number }
 >y2 : { extra: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 >foo2(sx) : { extra: number; }
->         :                   
+>         : ^^^^^^^^^^^^^^^^^^
 >foo2 : <T>(obj: string[] & T) => T
 >     : ^ ^^   ^^            ^^^^^^
 >sx : string[] & { extra: number; }
@@ -291,7 +291,7 @@ let z = foo(ab);  // [AB<string>, string]
 >z : [{ a: string; } | { b: string; }, string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(ab) : [{ a: string; } | { b: string; }, string]
->        : ^              ^^^              ^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
 >    : ^ ^^ ^^   ^^         ^^^^^^^^^^^
 >ab : AB<string>

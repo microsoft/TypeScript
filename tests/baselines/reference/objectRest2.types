@@ -23,7 +23,7 @@ function rootConnection(name: string) {
 >resolve : (context: any, args: any) => Promise<{}>
 >        : ^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >async (context, args) => {        const { objects } = await { objects: 12 };      return {        ...connectionFromArray(objects, args)      };    } : (context: any, args: any) => Promise<{}>
->                                                                                                                                                     :                                         
+>                                                                                                                                                     : ^       ^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^
 >context : any
 >args : any
 

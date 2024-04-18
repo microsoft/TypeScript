@@ -17,7 +17,7 @@ class C {
 >obj : { [x: number]: () => void; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                [this.bar()]() { } // needs capture            } : { [x: number]: () => void; }
->                                                                  : ^^^^^^^^^^^^^^^          ^^^
+>                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 [this.bar()]() { } // needs capture
 >[this.bar()] : () => void

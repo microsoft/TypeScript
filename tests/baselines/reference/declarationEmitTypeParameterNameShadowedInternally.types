@@ -5,7 +5,7 @@ export const foo = <T,>(x: T) => {
 >foo : <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1]
 >    : ^ ^^ ^^ ^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 ><T,>(x: T) => {	const inner = <T,>(y: T) => [x, y] as const;	return inner;} : <T>(x: T) => <T_1>(y: T_1) => readonly [T, T_1]
->                                                                            :                                                
+>                                                                            : ^ ^^ ^^ ^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -13,7 +13,7 @@ export const foo = <T,>(x: T) => {
 >inner : <T_1>(y: T_1) => readonly [T, T_1]
 >      : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 ><T,>(y: T) => [x, y] as const : <T_1>(y: T_1) => readonly [T, T_1]
->                              :                                   
+>                              : ^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >y : T
 >  : ^
 >[x, y] as const : readonly [T_1, T]

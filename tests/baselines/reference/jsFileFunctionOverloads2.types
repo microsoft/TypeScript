@@ -40,7 +40,7 @@ const identity = x => x;
 >identity : <T>(x: T) => T
 >         : ^ ^^ ^^ ^^^^^^
 >x => x : <T>(x: T) => T
->       :               
+>       : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >x : T

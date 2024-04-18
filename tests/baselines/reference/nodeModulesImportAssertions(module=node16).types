@@ -18,7 +18,7 @@ const json2 = import("./package.json", { assert: { type: "json" } }); // should 
 >json2 : Promise<{ default: { name: string; private: boolean; type: string; }; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import("./package.json", { assert: { type: "json" } }) : Promise<{ default: { name: string; private: boolean; type: string; }; }>
->                                                       : ^^^^^^^^^^^^^^^^^^^                                                 ^^^^
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./package.json" : "./package.json"
 >                 : ^^^^^^^^^^^^^^^^
 >{ assert: { type: "json" } } : { assert: { type: string; }; }

@@ -3460,7 +3460,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
             const r = /import|require/g;
-            while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
+            while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
                 const node = getNodeAtPosition(file, r.lastIndex);
                 if (isJavaScriptFile && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here

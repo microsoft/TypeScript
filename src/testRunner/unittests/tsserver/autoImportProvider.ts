@@ -393,6 +393,15 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 function setup(files: File[]) {
     const host = createServerHost(files);
     const session = new TestSession(host);
+    session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+        command: ts.server.protocol.CommandTypes.Configure,
+        arguments: {
+            preferences: {
+                includePackageJsonAutoImports: "auto",
+                includeCompletionsForModuleExports: true,
+            },
+        },
+    });
     return {
         host,
         session,
@@ -427,16 +436,12 @@ function setup(files: File[]) {
     }
 
     function triggerCompletions(file: string, line: number, offset: number) {
-        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
-            file,
-            line,
-            offset,
-        };
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
-                ...requestLocation,
-                includeExternalModuleExports: true,
+                file,
+                line,
+                offset,
             },
         });
     }

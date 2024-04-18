@@ -64,7 +64,7 @@ export const pick = () => pick();
 >pick : () => any
 >     : ^^^^^^^^^
 >() => pick() : () => any
->             :          
+>             : ^^^^^^^^^
 >pick() : any
 >       : ^^^
 >pick : () => any

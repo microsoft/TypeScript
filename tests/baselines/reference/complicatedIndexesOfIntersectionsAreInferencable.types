@@ -55,7 +55,7 @@ Func({
 >validate : (props: { foo: string; }) => void
 >         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props => {        props.foo;    } : (props: { foo: string; }) => void
->                                  :                                  
+>                                  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : { foo: string; }
 >      : ^^^^^^^^^^^^^^^^
 

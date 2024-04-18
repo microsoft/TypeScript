@@ -56,7 +56,7 @@ export const Test = () => {
 >Test : () => JSX.Element
 >     : ^^^^^^^^^^^^^^^^^
 >() => {  return (    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  );} : () => JSX.Element
->                                                                                                                                                                                                          :                  
+>                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^
 
   return (
 >(    <>      <Foo>{(value) => {}}</Foo>      <Foo renderNumber>{(value) => {}}</Foo>      <Foo children={(value) => {}} />      <Foo renderNumber children={(value) => {}} />    </>  ) : JSX.Element

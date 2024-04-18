@@ -166,7 +166,7 @@ const typeHandlers: TypeHandlers = {
 >0 : 0
 >  : ^
 >(p) => console.log(p.foo) : (p: P<0>) => void
->                          :                  
+>                          : ^ ^^^^^^^^^^^^^^^
 >p : P<0>
 >  : ^^^^
 >console.log(p.foo) : void
@@ -190,7 +190,7 @@ const typeHandlers: TypeHandlers = {
 >1 : 1
 >  : ^
 >(p) => console.log(p.a) : (p: P<1>) => void
->                        :                  
+>                        : ^ ^^^^^^^^^^^^^^^
 >p : P<1>
 >  : ^^^^
 >console.log(p.a) : void
@@ -214,7 +214,7 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->                                                                 :                                                        
+>                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 >p : P<T>
 >  : ^^^^
 

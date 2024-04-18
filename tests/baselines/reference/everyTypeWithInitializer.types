@@ -146,13 +146,13 @@ var aFunction = F;
 >aFunction : (x: string) => number
 >          : ^ ^^      ^^^^^^^^^^^
 >F : (x: string) => number
->  :                      
+>  : ^ ^^      ^^^^^^^^^^^
 
 var aLambda = (x) => 2;
 >aLambda : (x: any) => number
 >        : ^ ^^^^^^^^^^^^^^^^
 >(x) => 2 : (x: any) => number
->         :                   
+>         : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >2 : 2
 >  : ^
@@ -179,7 +179,7 @@ var aFunctionInModule = M.F2;
 >aFunctionInModule : (x: number) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >M.F2 : (x: number) => string
->     :                      
+>     : ^ ^^      ^^^^^^^^^^^
 >M : typeof M
 >  : ^^^^^^^^
 >F2 : (x: number) => string

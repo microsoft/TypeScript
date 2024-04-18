@@ -95,11 +95,40 @@ export function foo() {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "e:/myproject/src/app.js"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Search path: e:/myproject/src
@@ -412,11 +441,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "e:/myproject/src/app.js",
         "line": 5,
-        "offset": 1,
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "offset": 1
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *

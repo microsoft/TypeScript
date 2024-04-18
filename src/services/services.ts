@@ -787,7 +787,7 @@ class IdentifierObject extends TokenOrIdentifierObject<SyntaxKind.Identifier> im
     declare _declarationBrand: any;
     declare _jsdocContainerBrand: any;
     declare _flowContainerBrand: any;
-    /** @internal */ typeArguments!: NodeArray<TypeNode>;
+    typeArguments!: NodeArray<TypeNode>;
     constructor(kind: SyntaxKind.Identifier, pos: number, end: number) {
         super(kind, pos, end);
     }
@@ -2907,7 +2907,7 @@ export function createLanguageService(
         if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
             const regExp = getTodoCommentsRegExp();
 
-            let matchArray: RegExpExecArray | null;
+            let matchArray: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             while (matchArray = regExp.exec(fileContents)) {
                 cancellationToken.throwIfCancellationRequested();
 

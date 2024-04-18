@@ -7762,7 +7762,7 @@ module TypeScript {
 >controlFlowPrefix : (ast: AST, parent: AST, walker: IAstWalker) => AST
 >                  : ^   ^^   ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >(ast: AST, parent: AST, walker: IAstWalker) => {                ast.addToControlFlow(walker.state);                return ast;            } : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                                                                                                                                            :                                                   
+>                                                                                                                                            : ^   ^^   ^^      ^^   ^^      ^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST

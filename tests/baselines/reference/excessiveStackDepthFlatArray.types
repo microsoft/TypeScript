@@ -92,7 +92,7 @@ const Component = () => {
 >Component : () => any
 >          : ^^^^^^^^^
 >() => {  const categories = ['Fruit', 'Vegetables'];  return (    <ul>      <li>All</li>      {categories.map((category) => (        <li key={category}>{category}</li> // Error about 'key' only      ))}    </ul>  );} : () => any
->                                                                                                                                                                                                                         :          
+>                                                                                                                                                                                                                         : ^^^^^^^^^
 
   const categories = ['Fruit', 'Vegetables'];
 >categories : string[]

@@ -41,7 +41,7 @@ Common.localize = function (string) {
 >localize : (string: string) => string
 >         : ^      ^^      ^^^^^^^^^^^
 >function (string) {    return string;} : (string: string) => string
->                                       :                           
+>                                       : ^      ^^      ^^^^^^^^^^^
 >string : string
 >       : ^^^^^^
 

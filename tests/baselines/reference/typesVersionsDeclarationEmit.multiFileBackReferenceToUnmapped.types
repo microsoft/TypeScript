@@ -9,7 +9,7 @@ import { fa as fa2 } from "ext/other";
 >fa : () => import("node_modules/ext/other").A2
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa2 : () => import("node_modules/ext/other").A2
->    :                                                
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const va = fa();
 >va : import("node_modules/ext/other").A2

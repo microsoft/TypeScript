@@ -32,13 +32,13 @@ for (var item of items.sort((a, b) => a.name.localeCompare(b.name))) {
 >items.sort((a, b) => a.name.localeCompare(b.name)) : { name: string; }[]
 >                                                   : ^^^^^^^^^^^^^^^^^^^
 >items.sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
->           : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^^^^^^                 ^^
+>           : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >items : { name: string; }[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >sort : (compareFn?: (a: { name: string; }, b: { name: string; }) => number) => { name: string; }[]
->     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^^^^^^                 ^^
+>     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, b) => a.name.localeCompare(b.name) : (a: { name: string; }, b: { name: string; }) => number
->                                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^
+>                                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { name: string; }
 >  : ^^^^^^^^^^^^^^^^^
 >b : { name: string; }
