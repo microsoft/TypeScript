@@ -7166,7 +7166,7 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -9590,11 +9590,11 @@ export interface PrinterOptions {
 export interface RawSourceMap {
     version: 3;
     file: string;
-    sourceRoot?: string | null;
+    sourceRoot?: string | null; // eslint-disable-line no-restricted-syntax
     sources: string[];
-    sourcesContent?: (string | null)[] | null;
+    sourcesContent?: (string | null)[] | null; // eslint-disable-line no-restricted-syntax
     mappings: string;
-    names?: string[] | null;
+    names?: string[] | null; // eslint-disable-line no-restricted-syntax
 }
 
 /**
@@ -9611,7 +9611,7 @@ export interface SourceMapGenerator {
     /**
      * Set the content for a source.
      */
-    setSourceContent(sourceIndex: number, content: string | null): void;
+    setSourceContent(sourceIndex: number, content: string | null): void; // eslint-disable-line no-restricted-syntax
     /**
      * Adds a name.
      */

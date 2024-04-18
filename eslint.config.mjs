@@ -1,6 +1,5 @@
 // @ts-check
 import eslint from "@eslint/js";
-import noNull from "eslint-plugin-no-null";
 import fs from "fs";
 import globals from "globals";
 import { createRequire } from "module";
@@ -39,12 +38,11 @@ export default tseslint.config(
     ...tseslint.configs.stylistic,
     {
         plugins: {
-            "local": {
+            local: {
                 rules: Object.fromEntries(ruleFiles.map(p => {
                     return [p.slice(0, -ext.length), require(path.join(rulesDir, p))];
                 })),
             },
-            "no-null": noNull,
         },
     },
     {
@@ -84,6 +82,18 @@ export default tseslint.config(
             "prefer-const": "error",
             "prefer-object-spread": "error",
             "unicode-bom": ["error", "never"],
+
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector: "Literal[raw=null]",
+                    message: "Avoid using null; use undefined instead.",
+                },
+                {
+                    selector: "TSNullKeyword",
+                    message: "Avoid using null; use undefined instead.",
+                },
+            ],
 
             // Enabled in eslint:recommended, but not applicable here
             "no-extra-boolean-cast": "off",
@@ -159,9 +169,6 @@ export default tseslint.config(
             "local/debug-assert": "error",
             "local/no-keywords": "error",
             "local/jsdoc-format": "error",
-
-            // eslint-plugin-no-null
-            "no-null/no-null": "error",
         },
     },
     {

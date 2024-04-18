@@ -2907,7 +2907,7 @@ export function createLanguageService(
         if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
             const regExp = getTodoCommentsRegExp();
 
-            let matchArray: RegExpExecArray | null;
+            let matchArray: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             while (matchArray = regExp.exec(fileContents)) {
                 cancellationToken.throwIfCancellationRequested();
 
