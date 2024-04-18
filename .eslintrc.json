@@ -59,7 +59,17 @@
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
 
-        "no-restricted-syntax": ["error", "Literal[raw=null]", "TSNullKeyword"],
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "Literal[raw=null]",
+                "message": "Avoid using null; use undefined instead."
+            },
+            {
+                "selector": "TSNullKeyword",
+                "message": "Avoid using null; use undefined instead."
+            }
+        ],
 
         // Enabled in eslint:recommended, but not applicable here
         "no-extra-boolean-cast": "off",
