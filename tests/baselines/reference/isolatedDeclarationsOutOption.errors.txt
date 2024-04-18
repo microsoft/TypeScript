@@ -1,0 +1,12 @@
+error TS5053: Option 'out' cannot be specified with option 'isolatedDeclarations'.
+error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+  Use 'outFile' instead.
+
+
+!!! error TS5053: Option 'out' cannot be specified with option 'isolatedDeclarations'.
+!!! error TS5102: Option 'out' has been removed. Please remove it from your configuration.
+!!! error TS5102:   Use 'outFile' instead.
+==== file1.ts (0 errors) ====
+    export var x;
+==== file2.ts (0 errors) ====
+    export var y;

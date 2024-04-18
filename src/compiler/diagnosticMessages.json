@@ -6227,7 +6227,7 @@
         "category": "Message",
         "code": 6718
     },
-    "Ensure that each file can have declaration emit generated without type information": {
+    "Report errors for missing type annotations whose creation requires information from other files.": {
         "category": "Message",
         "code": 6719
     },

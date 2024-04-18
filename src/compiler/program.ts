@@ -4237,6 +4237,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (options.outFile) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", "isolatedDeclarations");
             }
+
+            if (getAllowJSCompilerOption(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "isolatedDeclarations");
+            }
         }
 
         if (options.inlineSourceMap) {
