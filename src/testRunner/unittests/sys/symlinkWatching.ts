@@ -127,9 +127,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     }
 
     function compareEventFileName(a: EventAndFileName["fileName"], b: EventAndFileName["fileName"]) {
-        if (a === null) a = undefined; // eslint-disable-line no-restricted-syntax
-        if (b === null) b = undefined; // eslint-disable-line no-restricted-syntax
-        return ts.compareStringsCaseSensitive(a, b);
+        return ts.compareStringsCaseSensitive(a ?? undefined, b ?? undefined);
     }
 
     function compareEventAndFileName(a: EventAndFileName, b: EventAndFileName): ts.Comparison {
