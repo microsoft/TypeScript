@@ -24,7 +24,7 @@ class Base {
 
             testBase(x: Base) {
 >testBase : (x: Base) => void
->         : ^^^^    ^^^^^^^^^
+>         : ^ ^^    ^^^^^^^^^
 >x : Base
 >  : ^^^^
 
@@ -32,11 +32,11 @@ class Base {
 >console.log(x.#x) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x.#x : any
 >     : ^^^
 >x : Base
@@ -44,7 +44,7 @@ class Base {
             }
             testDerived(x: Derived) {
 >testDerived : (x: Derived) => void
->            : ^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^
 >x : Derived
 >  : ^^^^^^^
 
@@ -52,11 +52,11 @@ class Base {
 >console.log(x.#x) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >x.#x : number
 >     : ^^^^^^
 >x : Derived

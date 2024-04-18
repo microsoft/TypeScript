@@ -11,7 +11,7 @@ type ADT = {
 
     method(x: string): number;
 >method : (x: string) => number
->       : ^^^^      ^^^^^      
+>       : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 
@@ -22,7 +22,7 @@ type ADT = {
 
     method(x: number): string;
 >method : (x: number) => string
->       : ^^^^      ^^^^^      
+>       : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -31,7 +31,7 @@ type ADT = {
 
 function invoke(item: ADT) {
 >invoke : (item: ADT) => void
->       : ^^^^^^^   ^^^^^^^^^
+>       : ^    ^^   ^^^^^^^^^
 >item : ADT
 >     : ^^^
 
@@ -51,11 +51,11 @@ function invoke(item: ADT) {
 >item.method("") : number
 >                : ^^^^^^
 >item.method : (x: string) => number
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >item : { kind: "a"; method(x: string): number; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >method : (x: string) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
@@ -64,11 +64,11 @@ function invoke(item: ADT) {
 >item.method(42) : string
 >                : ^^^^^^
 >item.method : (x: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^
 >item : { kind: "b"; method(x: number): string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >method : (x: number) => string
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^
 >42 : 42
 >   : ^^
     }
@@ -78,9 +78,9 @@ invoke({
 >invoke({    kind: "a",    method(a) {        return +a;    }}) : void
 >                                                               : ^^^^
 >invoke : (item: ADT) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^   ^^^^^^^^^
 >{    kind: "a",    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
->                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                       : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     kind: "a",
 >kind : "a"
@@ -90,7 +90,7 @@ invoke({
 
     method(a) {
 >method : (a: string) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -112,9 +112,9 @@ invoke({
 >invoke({    kind,    method(a) {        return +a;    }}) : void
 >                                                          : ^^^^
 >invoke : (item: ADT) => void
->       : ^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^   ^^^^^^^^^
 >{    kind,    method(a) {        return +a;    }} : { kind: "a"; method(a: string): number; }
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
     kind,
 >kind : "a"
@@ -122,7 +122,7 @@ invoke({
 
     method(a) {
 >method : (a: string) => number
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

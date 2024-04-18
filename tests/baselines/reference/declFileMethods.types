@@ -13,7 +13,7 @@ export class c1 {
     /** This is comment for function signature*/
     public fooWithParameters(/** this is comment about a*/a: string,
 >fooWithParameters : (a: string, b: number) => void
->                  : ^^^^      ^^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -30,7 +30,7 @@ export class c1 {
     }
     public fooWithRestParameters(a: string, ...rests: string[]) {
 >fooWithRestParameters : (a: string, ...rests: string[]) => string
->                      : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                      : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -44,30 +44,30 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
 
     public fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     public fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     public fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -83,7 +83,7 @@ export class c1 {
     /** This is comment for function signature*/
     private privateFooWithParameters(/** this is comment about a*/a: string,
 >privateFooWithParameters : (a: string, b: number) => void
->                         : ^^^^      ^^^^^      ^^^^^^^^^
+>                         : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -100,7 +100,7 @@ export class c1 {
     }
     private privateFooWithRestParameters(a: string, ...rests: string[]) {
 >privateFooWithRestParameters : (a: string, ...rests: string[]) => string
->                             : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                             : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -114,29 +114,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: number): number;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: any): any {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -152,7 +152,7 @@ export class c1 {
     /** This is comment for function signature*/
     static staticFooWithParameters(/** this is comment about a*/a: string,
 >staticFooWithParameters : (a: string, b: number) => void
->                        : ^^^^      ^^^^^      ^^^^^^^^^
+>                        : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -169,7 +169,7 @@ export class c1 {
     }
     static staticFooWithRestParameters(a: string, ...rests: string[]) {
 >staticFooWithRestParameters : (a: string, ...rests: string[]) => string
->                            : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                            : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -183,29 +183,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: number): number;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: any): any {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -221,7 +221,7 @@ export class c1 {
     /** This is comment for function signature*/
     private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
 >privateStaticFooWithParameters : (a: string, b: number) => void
->                               : ^^^^      ^^^^^      ^^^^^^^^^
+>                               : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -238,7 +238,7 @@ export class c1 {
     }
     private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
 >privateStaticFooWithRestParameters : (a: string, ...rests: string[]) => string
->                                   : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                                   : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -252,29 +252,29 @@ export class c1 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: number): number;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: any): any {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -291,7 +291,7 @@ export interface I1 {
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/a: string,
 >fooWithParameters : (a: string, b: number) => void
->                  : ^^^^      ^^^^^      ^^^^^    
+>                  : ^ ^^      ^^ ^^      ^^^^^    
 >a : string
 >  : ^^^^^^
 
@@ -302,7 +302,7 @@ export interface I1 {
 
     fooWithRestParameters(a: string, ...rests: string[]): string;
 >fooWithRestParameters : (a: string, ...rests: string[]) => string
->                      : ^^^^      ^^^^^^^^^^^^        ^^^^^      
+>                      : ^ ^^      ^^^^^     ^^        ^^^^^      
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -310,13 +310,13 @@ export interface I1 {
 
     fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 }
@@ -334,7 +334,7 @@ class c2 {
     /** This is comment for function signature*/
     public fooWithParameters(/** this is comment about a*/a: string,
 >fooWithParameters : (a: string, b: number) => void
->                  : ^^^^      ^^^^^      ^^^^^^^^^
+>                  : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -351,7 +351,7 @@ class c2 {
     }
     public fooWithRestParameters(a: string, ...rests: string[]) {
 >fooWithRestParameters : (a: string, ...rests: string[]) => string
->                      : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                      : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -365,30 +365,30 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
 
     public fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     public fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     public fooWithOverloads(a: any): any {
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -404,7 +404,7 @@ class c2 {
     /** This is comment for function signature*/
     private privateFooWithParameters(/** this is comment about a*/a: string,
 >privateFooWithParameters : (a: string, b: number) => void
->                         : ^^^^      ^^^^^      ^^^^^^^^^
+>                         : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -421,7 +421,7 @@ class c2 {
     }
     private privateFooWithRestParameters(a: string, ...rests: string[]) {
 >privateFooWithRestParameters : (a: string, ...rests: string[]) => string
->                             : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                             : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -435,29 +435,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     private privateFooWithOverloads(a: string): string;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: number): number;
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private privateFooWithOverloads(a: any): any {
 >privateFooWithOverloads : { (a: string): string; (a: number): number; }
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -473,7 +473,7 @@ class c2 {
     /** This is comment for function signature*/
     static staticFooWithParameters(/** this is comment about a*/a: string,
 >staticFooWithParameters : (a: string, b: number) => void
->                        : ^^^^      ^^^^^      ^^^^^^^^^
+>                        : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -490,7 +490,7 @@ class c2 {
     }
     static staticFooWithRestParameters(a: string, ...rests: string[]) {
 >staticFooWithRestParameters : (a: string, ...rests: string[]) => string
->                            : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                            : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -504,29 +504,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     static staticFooWithOverloads(a: string): string;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: number): number;
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     static staticFooWithOverloads(a: any): any {
 >staticFooWithOverloads : { (a: string): string; (a: number): number; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -542,7 +542,7 @@ class c2 {
     /** This is comment for function signature*/
     private static privateStaticFooWithParameters(/** this is comment about a*/a: string,
 >privateStaticFooWithParameters : (a: string, b: number) => void
->                               : ^^^^      ^^^^^      ^^^^^^^^^
+>                               : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -559,7 +559,7 @@ class c2 {
     }
     private static privateStaticFooWithRestParameters(a: string, ...rests: string[]) {
 >privateStaticFooWithRestParameters : (a: string, ...rests: string[]) => string
->                                   : ^^^^      ^^^^^^^^^^^^        ^^^^^^^^^^^
+>                                   : ^ ^^      ^^^^^     ^^        ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -573,29 +573,29 @@ class c2 {
 >rests.join("") : string
 >               : ^^^^^^
 >rests.join : (separator?: string) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^^      ^^^^^^^^^^^
 >rests : string[]
 >      : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >"" : ""
 >   : ^^
     }
     private static privateStaticFooWithOverloads(a: string): string;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: number): number;
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 
     private static privateStaticFooWithOverloads(a: any): any {
 >privateStaticFooWithOverloads : { (a: string): string; (a: number): number; }
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                              : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : any
 
         return a;
@@ -612,7 +612,7 @@ interface I2 {
     /** This is comment for function signature*/
     fooWithParameters(/** this is comment about a*/a: string,
 >fooWithParameters : (a: string, b: number) => void
->                  : ^^^^      ^^^^^      ^^^^^    
+>                  : ^ ^^      ^^ ^^      ^^^^^    
 >a : string
 >  : ^^^^^^
 
@@ -623,7 +623,7 @@ interface I2 {
 
     fooWithRestParameters(a: string, ...rests: string[]): string;
 >fooWithRestParameters : (a: string, ...rests: string[]) => string
->                      : ^^^^      ^^^^^^^^^^^^        ^^^^^      
+>                      : ^ ^^      ^^^^^     ^^        ^^^^^      
 >a : string
 >  : ^^^^^^
 >rests : string[]
@@ -631,13 +631,13 @@ interface I2 {
 
     fooWithOverloads(a: string): string;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
     fooWithOverloads(a: number): number;
 >fooWithOverloads : { (a: string): string; (a: number): number; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>                 : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >a : number
 >  : ^^^^^^
 }

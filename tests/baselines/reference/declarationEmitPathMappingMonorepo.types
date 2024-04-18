@@ -3,11 +3,11 @@
 === packages/b/src/index.ts ===
 import { a } from "@ts-bug/a";
 >a : (text: string) => import("@ts-bug/a").AText
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function b(text: string) {
 >b : (text: string) => import("@ts-bug/a").AText
->  : ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 
@@ -15,7 +15,7 @@ export function b(text: string) {
 >a(text) : import("@ts-bug/a").AText
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : (text: string) => import("@ts-bug/a").AText
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 }
@@ -35,7 +35,7 @@ declare module "@ts-bug/a" {
     };
     export function a(text: string): AText;
 >a : (text: string) => AText
->  : ^^^^^^^      ^^^^^     
+>  : ^    ^^      ^^^^^     
 >text : string
 >     : ^^^^^^
   }

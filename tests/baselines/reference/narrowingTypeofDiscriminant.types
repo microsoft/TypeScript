@@ -2,9 +2,9 @@
 
 === narrowingTypeofDiscriminant.ts ===
 function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
->f1 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; }) => void
->   : ^^^^^^                                                         ^^^^^^^^^
->obj : { kind: 'a'; data: string; } | { kind: 1; data: number; }
+>f1 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; }) => void
+>   : ^   ^^                                                         ^^^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; }
 >    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^
 >kind : "a"
 >     : ^^^
@@ -41,9 +41,9 @@ function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {
 }
 
 function f2(obj: { kind: 'a', data: string } | { kind: 1, data: number } | undefined) {
->f2 : (obj: { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined) => void
->   : ^^^^^^                                                                     ^^^^^^^^^
->obj : { kind: 'a'; data: string; } | { kind: 1; data: number; } | undefined
+>f2 : (obj: { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined) => void
+>   : ^   ^^                                                                     ^^^^^^^^^
+>obj : { kind: "a"; data: string; } | { kind: 1; data: number; } | undefined
 >    : ^^^^^^^^   ^^^^^^^^      ^^^^^^^^^^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^
 >kind : "a"
 >     : ^^^
@@ -91,7 +91,7 @@ type WrappedStringOr<T> = { value?: string } | { value?: T };
 
 function numberOk(wrapped: WrappedStringOr<number> | null) {
 >numberOk : (wrapped: WrappedStringOr<number> | null) => string | null
->         : ^^^^^^^^^^                              ^^^^^^^^^^^^^^^^^^
+>         : ^       ^^                              ^^^^^^^^^^^^^^^^^^
 >wrapped : WrappedStringOr<number> | null
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -122,7 +122,7 @@ function numberOk(wrapped: WrappedStringOr<number> | null) {
 
 function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
 >booleanBad : (wrapped: WrappedStringOr<boolean> | null) => string | null
->           : ^^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^
+>           : ^       ^^                               ^^^^^^^^^^^^^^^^^^
 >wrapped : WrappedStringOr<boolean> | null
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -153,7 +153,7 @@ function booleanBad(wrapped: WrappedStringOr<boolean> | null) {
 
 function booleanFixed(wrapped: WrappedStringOr<boolean> | null) {
 >booleanFixed : (wrapped: WrappedStringOr<boolean> | null) => string | null
->             : ^^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^
+>             : ^       ^^                               ^^^^^^^^^^^^^^^^^^
 >wrapped : WrappedStringOr<boolean> | null
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

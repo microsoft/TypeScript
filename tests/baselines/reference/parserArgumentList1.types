@@ -3,7 +3,7 @@
 === parserArgumentList1.ts ===
 export function removeClass (node:HTMLElement, className:string) {
 >removeClass : (node: HTMLElement, className: string) => void
->            : ^^^^^^^           ^^^^^^^^^^^^^      ^^^^^^^^^
+>            : ^    ^^           ^^         ^^      ^^^^^^^^^
 >node : HTMLElement
 >     : ^^^^^^^^^^^
 >className : string
@@ -21,7 +21,7 @@ export function removeClass (node:HTMLElement, className:string) {
 >node.className.replace(_classNameRegexp(className), function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	}) : string
 >                                                                                                                                                                                           : ^^^^^^
 >node.className.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >node.className : string
 >               : ^^^^^^
 >node : HTMLElement
@@ -29,7 +29,7 @@ export function removeClass (node:HTMLElement, className:string) {
 >className : string
 >          : ^^^^^^
 >replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^           ^^               ^^            ^^      ^^^^^^^^^^^^           ^^               ^^        ^^                                             ^^^^^^^^^^^^
 >_classNameRegexp(className) : any
 >                            : ^^^
 >_classNameRegexp : any
@@ -37,7 +37,7 @@ export function removeClass (node:HTMLElement, className:string) {
 >className : string
 >          : ^^^^^^
 >function (everything, leftDelimiter, name, rightDelimiter) {		return leftDelimiter.length + rightDelimiter.length === 2 ? ' ' : '';	} : (everything: string, leftDelimiter: any, name: any, rightDelimiter: any) => " " | ""
->                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                      : ^          ^^^^^^^^^^             ^^^^^^^    ^^^^^^^              ^^^^^^^^^^^^^^^^^^
 >everything : string
 >           : ^^^^^^
 >leftDelimiter : any

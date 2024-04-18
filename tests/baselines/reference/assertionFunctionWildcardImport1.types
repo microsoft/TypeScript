@@ -12,7 +12,7 @@ export { Debug };
 === src/core/debug.ts ===
 export declare function assert(expression: unknown): asserts expression;
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^       ^^^^^                  
+>       : ^          ^^       ^^^^^                  
 >expression : unknown
 >           : ^^^^^^^
 
@@ -30,7 +30,7 @@ ts.Debug.assert(true);
 >ts.Debug.assert(true) : void
 >                      : ^^^^
 >ts.Debug.assert : (expression: unknown) => asserts expression
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >ts.Debug : typeof ts.Debug
 >         : ^^^^^^^^^^^^^^^
 >ts : typeof ts
@@ -38,7 +38,7 @@ ts.Debug.assert(true);
 >Debug : typeof ts.Debug
 >      : ^^^^^^^^^^^^^^^
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -46,11 +46,11 @@ Debug.assert(true);
 >Debug.assert(true) : void
 >                   : ^^^^
 >Debug.assert : (expression: unknown) => asserts expression
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Debug : typeof ts.Debug
 >      : ^^^^^^^^^^^^^^^
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -73,7 +73,7 @@ ts.Debug.assert(true);
 >ts.Debug.assert(true) : void
 >                      : ^^^^
 >ts.Debug.assert : (expression: unknown) => asserts expression
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >ts.Debug : typeof ts.Debug
 >         : ^^^^^^^^^^^^^^^
 >ts : typeof ts
@@ -81,7 +81,7 @@ ts.Debug.assert(true);
 >Debug : typeof ts.Debug
 >      : ^^^^^^^^^^^^^^^
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -89,11 +89,11 @@ Debug.assert(true);
 >Debug.assert(true) : void
 >                   : ^^^^
 >Debug.assert : (expression: unknown) => asserts expression
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >Debug : typeof ts.Debug
 >      : ^^^^^^^^^^^^^^^
 >assert : (expression: unknown) => asserts expression
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^          ^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 

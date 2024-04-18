@@ -34,11 +34,11 @@ foo.toExponential(2);
 >foo.toExponential(2) : string
 >                     : ^^^^^^
 >foo.toExponential : (fractionDigits?: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^              ^^^      ^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 

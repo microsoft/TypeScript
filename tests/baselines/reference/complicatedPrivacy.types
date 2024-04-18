@@ -12,13 +12,13 @@ module m1 {
 
         export function f1(c1: C1) {
 >f1 : (c1: C1) => void
->   : ^^^^^  ^^^^^^^^^
+>   : ^  ^^  ^^^^^^^^^
 >c1 : C1
 >   : ^^
         }
         export function f2(c2: C2) {
 >f2 : (c2: C2) => void
->   : ^^^^^  ^^^^^^^^^
+>   : ^  ^^  ^^^^^^^^^
 >c2 : C2
 >   : ^^
         }
@@ -62,7 +62,7 @@ module m1 {
 
     export function f2(arg1: { x?: C1, y: number }) {
 >f2 : (arg1: { x?: C1; y: number; }) => void
->   : ^^^^^^^                      ^^^^^^^^^
+>   : ^    ^^                      ^^^^^^^^^
 >arg1 : { x?: C1; y: number; }
 >     : ^^^^^^  ^^^^^      ^^^
 >x : C1
@@ -85,7 +85,7 @@ module m1 {
 
     export function f4(arg1: 
 >f4 : (arg1: {}) => void
->   : ^^^^^^^  ^^^^^^^^^
+>   : ^    ^^  ^^^^^^^^^
 >arg1 : {}
 >     : ^^
     {
@@ -101,9 +101,9 @@ module m1 {
 
     export function f5(arg2: {
 >f5 : (arg2: { new (arg1: C1): C1; }) => void
->   : ^^^^^^^                       ^^^^^^^^^
+>   : ^    ^^                       ^^^^^^^^^
 >arg2 : new (arg1: C1) => C1
->     : ^^^^^^^^^^^  ^^^^^  
+>     : ^^^^^    ^^  ^^^^^  
 
         new (arg1: C1) : C1
 >arg1 : C1
@@ -117,7 +117,7 @@ module m1 {
 
         function f2(f1: C1) {
 >f2 : (f1: C1) => void
->   : ^^^^^  ^^^^^^^^^
+>   : ^  ^^  ^^^^^^^^^
 >f1 : C1
 >   : ^^
         }

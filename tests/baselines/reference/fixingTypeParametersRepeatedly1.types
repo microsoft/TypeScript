@@ -3,15 +3,15 @@
 === fixingTypeParametersRepeatedly1.ts ===
 declare function f<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 >f : <T>(x: T, y: (p: T) => T, z: (p: T) => T) => T
->  : ^ ^^^^^ ^^^^^           ^^^^^           ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^ 
 >x : T
 >  : ^
 >y : (p: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >p : T
 >  : ^
 >z : (p: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >p : T
 >  : ^
 
@@ -19,15 +19,15 @@ f("", x => null, x => x.toLowerCase());
 >f("", x => null, x => x.toLowerCase()) : string
 >                                       : ^^^^^^
 >f : <T>(x: T, y: (p: T) => T, z: (p: T) => T) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^
 >"" : ""
 >   : ^^
 >x => null : (x: string) => any
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x => x.toLowerCase() : (x: string) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.toLowerCase() : string
@@ -42,34 +42,34 @@ f("", x => null, x => x.toLowerCase());
 // First overload of g should type check just like f
 declare function g<T>(x: T, y: (p: T) => T, z: (p: T) => T): T;
 >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
->  : ^^^ ^^^^^ ^^^^^           ^^^^^           ^^^ ^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^ ^^^^^^^^^^^^
 >x : T
 >  : ^
 >y : (p: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >p : T
 >  : ^
 >z : (p: T) => T
->  : ^^^^ ^^^^^ 
+>  : ^ ^^ ^^^^^ 
 >p : T
 >  : ^
 
 declare function g();
 >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^^^^^^^^^^^
 
 g("", x => null, x => x.toLowerCase());
 >g("", x => null, x => x.toLowerCase()) : any
 >g : { <T>(x: T, y: (p: T) => T, z: (p: T) => T): T; (): any; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >x => null : (x: string) => any
->          : ^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x => x.toLowerCase() : (x: string) => string
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.toLowerCase() : string

@@ -45,7 +45,7 @@ module Microsoft.PeopleAtWork.Model {
 
         public populate(raw: any) {
 >populate : (raw: any) => void
->         : ^^^^^^   ^^^^^^^^^
+>         : ^   ^^   ^^^^^^^^^
 >raw : any
 
             var res = Model.KnockoutExtentions;

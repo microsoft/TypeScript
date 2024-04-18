@@ -5,7 +5,7 @@
 
 function test1(arg: string | undefined) {
 >test1 : (arg: string | undefined) => "A" | "B, C or D" | "Not A, B, C or D"
->      : ^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -95,7 +95,7 @@ function test1(arg: string | undefined) {
 
 function test2(arg: string | undefined) {
 >test2 : (arg: string | undefined) => "Not A, B, C or D" | "D" | "A, B or C"
->      : ^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | undefined
 >    : ^^^^^^^^^^^^^^^^^^
 
@@ -185,7 +185,7 @@ function test2(arg: string | undefined) {
 
 function test3(
 >test3 : (foo: { kind: "a"; prop: string; } | { kind: "b"; prop: number; } | { kind: "c"; prop: boolean; }, bar?: { type: "b"; }) => void
->      : ^^^^^^                                                                                           ^^^^^^^^              ^^^^^^^^^
+>      : ^   ^^                                                                                           ^^   ^^^              ^^^^^^^^^
 
   foo:
 >foo : { kind: "a"; prop: string; } | { kind: "b"; prop: number; } | { kind: "c"; prop: boolean; }

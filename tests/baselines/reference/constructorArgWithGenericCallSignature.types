@@ -21,7 +21,7 @@ module Test {
  
  export function F(func: MyFunc) { }
 >F : (func: MyFunc) => void
->  : ^^^^^^^      ^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^^
 >func : MyFunc
 >     : ^^^^^^
 }
@@ -34,12 +34,12 @@ var func: Test.MyFunc;
 Test.F(func); // OK
 >Test.F(func) : void
 >             : ^^^^
->Test.F : (func: Test.MyFunc) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Test.F : (func: MyFunc) => void
+>       : ^    ^^      ^^^^^^^^^
 >Test : typeof Test
 >     : ^^^^^^^^^^^
->F : (func: Test.MyFunc) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>F : (func: MyFunc) => void
+>  : ^    ^^      ^^^^^^^^^
 >func : Test.MyFunc
 >     : ^^^^^^^^^^^
 

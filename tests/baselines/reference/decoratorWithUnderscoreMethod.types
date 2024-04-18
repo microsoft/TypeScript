@@ -3,9 +3,9 @@
 === decoratorWithUnderscoreMethod.ts ===
 declare var console : { log(arg: string): void };
 >console : { log(arg: string): void; }
->        : ^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 >log : (arg: string) => void
->    : ^^^^^^      ^^^^^    
+>    : ^   ^^      ^^^^^    
 >arg : string
 >    : ^^^^^^
 
@@ -15,7 +15,7 @@ function dec(): Function {
 
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {
 >function (target: any, propKey: string, descr: PropertyDescriptor): void {        console.log(target[propKey]);        //logs undefined        //propKey has three underscores as prefix, but the method has only two underscores    } : (target: any, propKey: string, descr: PropertyDescriptor) => void
->                                                                                                                                                                                                                                       : ^^^^^^^^^   ^^^^^^^^^^^      ^^^^^^^^^                  ^^^^^    
+>                                                                                                                                                                                                                                       : ^      ^^   ^^       ^^      ^^     ^^                  ^^^^^    
 >target : any
 >propKey : string
 >        : ^^^^^^
@@ -26,11 +26,11 @@ function dec(): Function {
 >console.log(target[propKey]) : void
 >                             : ^^^^
 >console.log : (arg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(arg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (arg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >target[propKey] : any
 >target : any
 >propKey : string
@@ -53,7 +53,7 @@ class A {
 
     private __foo(bar: string): void {
 >__foo : (bar: string) => void
->      : ^^^^^^      ^^^^^    
+>      : ^   ^^      ^^^^^    
 >bar : string
 >    : ^^^^^^
 

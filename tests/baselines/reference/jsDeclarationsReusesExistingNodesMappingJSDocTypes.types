@@ -27,12 +27,12 @@ export const e = null;
 /** @type {function(string, number): object} */
 export const f = null;
 >f : (arg0: string, arg1: number) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^      ^^^^^^^^      ^^^^^^^^
 
 /** @type {function(new: object, string, number)} */
 export const g = null;
 >g : new (arg1: string, arg2: number) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^
 
 /** @type {Object.<string, number>} */
 export const h = null;

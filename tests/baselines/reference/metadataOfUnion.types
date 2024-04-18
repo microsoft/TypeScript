@@ -3,7 +3,7 @@
 === metadataOfUnion.ts ===
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^      ^^^^^^^^^^^               ^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 >target : Object
 >       : ^^^^^^
 >propKey : string | symbol
@@ -20,7 +20,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     x: "foo" | A;
 >x : A | "foo"
@@ -28,7 +28,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     y: true | boolean;
 >y : boolean
@@ -38,7 +38,7 @@ class B {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     z: "foo" | boolean;
 >z : boolean | "foo"
@@ -72,7 +72,7 @@ class D {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     a: E.A;
 >a : E.A
@@ -82,7 +82,7 @@ class D {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     b: E.B | E.C;
 >b : E.B | E.C
@@ -94,7 +94,7 @@ class D {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     c: E;
 >c : E
@@ -102,7 +102,7 @@ class D {
 
     @PropDeco
 >PropDeco : (target: Object, propKey: string | symbol) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^       ^^               ^^^^^^^^^
 
     d: E | number;
 >d : number

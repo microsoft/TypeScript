@@ -21,37 +21,37 @@ type stringOrNumArray = Array<String|Number>;
 
 function a1(...x: (number|string)[]) { }
 >a1 : (...x: (number | string)[]) => void
->   : ^^^^^^^                   ^^^^^^^^^
+>   : ^^^^ ^^                   ^^^^^^^^^
 >x : (string | number)[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
 function a2(...a) { }
 >a2 : (...a: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^^^^^^^^^^^^
 >a : any[]
 >  : ^^^^^
 
 function a3(...a: Array<String>) { }
 >a3 : (...a: Array<String>) => void
->   : ^^^^^^^             ^^^^^^^^^
+>   : ^^^^ ^^             ^^^^^^^^^
 >a : String[]
 >  : ^^^^^^^^
 
 function a4(...a: arrayString) { }
 >a4 : (...a: arrayString) => void
->   : ^^^^^^^           ^^^^^^^^^
+>   : ^^^^ ^^           ^^^^^^^^^
 >a : arrayString
 >  : ^^^^^^^^^^^
 
 function a5(...a: stringOrNumArray) { }
 >a5 : (...a: stringOrNumArray) => void
->   : ^^^^^^^                ^^^^^^^^^
+>   : ^^^^ ^^                ^^^^^^^^^
 >a : stringOrNumArray
 >  : ^^^^^^^^^^^^^^^^
 
 function a9([a, b, [[c]]]) { }
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -61,7 +61,7 @@ function a9([a, b, [[c]]]) { }
 
 function a10([a, b, [[c]], ...x]) { }
 >a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -73,7 +73,7 @@ function a10([a, b, [[c]], ...x]) { }
 
 function a11([a, b, c, ...x]: number[]) { }
 >a11 : ([a, b, c, ...x]: number[]) => void
->    : ^^^^^^^^^^^^^^^^^^        ^^^^^^^^^
+>    : ^               ^^        ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -112,7 +112,7 @@ a2([...array]);
 >a2([...array]) : void
 >               : ^^^^
 >a2 : (...a: any[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^^^^^^^^^^^^^^^
 >[...array] : number[]
 >           : ^^^^^^^^
 >...array : number
@@ -123,8 +123,8 @@ a2([...array]);
 a1(...array);
 >a1(...array) : void
 >             : ^^^^
->a1 : (...x: (string | number)[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a1 : (...x: (number | string)[]) => void
+>   : ^^^^ ^^                   ^^^^^^^^^
 >...array : number
 >         : ^^^^^^
 >array : number[]
@@ -134,7 +134,7 @@ a9([1, 2, [["string"]], false, true]);   // Parameter type is [any, any, [[any]]
 >a9([1, 2, [["string"]], false, true]) : void
 >                                      : ^^^^
 >a9 : ([a, b, [[c]]]: [any, any, [[any]]]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -156,7 +156,7 @@ a10([1, 2, [["string"]], false, true]);   // Parameter type is any[]
 >a10([1, 2, [["string"]], false, true]) : void
 >                                       : ^^^^
 >a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, [["string"]], false, true] : [number, number, [[string]], boolean, boolean]
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -178,7 +178,7 @@ a10([1, 2, 3, false, true]);              // Parameter type is any[]
 >a10([1, 2, 3, false, true]) : void
 >                            : ^^^^
 >a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3, false, true] : [number, number, number, boolean, boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -196,7 +196,7 @@ a10([1, 2]);                              // Parameter type is any[]
 >a10([1, 2]) : void
 >            : ^^^^
 >a10 : ([a, b, [[c]], ...x]: [any, any, [[any]], ...any[]]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2] : [number, number]
 >       : ^^^^^^^^^^^^^^^^
 >1 : 1
@@ -208,7 +208,7 @@ a11([1, 2]);                              // Parameter type is number[]
 >a11([1, 2]) : void
 >            : ^^^^
 >a11 : ([a, b, c, ...x]: number[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^               ^^        ^^^^^^^^^
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -219,7 +219,7 @@ a11([1, 2]);                              // Parameter type is number[]
 // Rest parameter with generic
 function foo<T>(...a: T[]) { }
 >foo : <T>(...a: T[]) => void
->    : ^ ^^^^^^^^   ^^^^^^^^^
+>    : ^ ^^^^^ ^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 
@@ -227,7 +227,7 @@ foo<number|string>("hello", 1, 2);
 >foo<number|string>("hello", 1, 2) : void
 >                                  : ^^^^
 >foo : <T>(...a: T[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^ ^^   ^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >1 : 1
@@ -239,7 +239,7 @@ foo("hello", "world");
 >foo("hello", "world") : void
 >                      : ^^^^
 >foo : <T>(...a: T[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^ ^^   ^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >"world" : "world"
@@ -263,7 +263,7 @@ const enum E1 { a, b }
 
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >a : T[]
 >  : ^^^
 
@@ -271,7 +271,7 @@ foo1(1, 2, 3, E.a);
 >foo1(1, 2, 3, E.a) : void
 >                   : ^^^^
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -289,7 +289,7 @@ foo1(1, 2, 3, E1.a, E.b);
 >foo1(1, 2, 3, E1.a, E.b) : void
 >                         : ^^^^
 >foo1 : <T extends Number>(...a: T[]) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

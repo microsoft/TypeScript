@@ -52,7 +52,7 @@ export class XmlElement2 extends Mixin(
 
     (base: AnyConstructor<Base, typeof Base>) => {
 >(base: AnyConstructor<Base, typeof Base>) => {        class XmlElement2 extends base {            num: number = 0        }        return XmlElement2;    } : (base: AnyConstructor<Base, typeof Base>) => typeof XmlElement2
->                                                                                                                                                           : ^^^^^^^                                 ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                           : ^    ^^                                 ^^^^^^^^^^^^^^^^^^^^^^^
 >base : AnyConstructor<Base, typeof Base>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : typeof Base

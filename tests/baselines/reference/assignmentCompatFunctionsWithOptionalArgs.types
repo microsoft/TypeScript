@@ -3,7 +3,7 @@
 === assignmentCompatFunctionsWithOptionalArgs.ts ===
 function foo(x: { id: number; name?: string; }): void;
 >foo : (x: { id: number; name?: string; }) => void
->    : ^^^^                              ^^^^^    
+>    : ^ ^^                              ^^^^^    
 >x : { id: number; name?: string; }
 >  : ^^^^^^      ^^^^^^^^^      ^^^
 >id : number
@@ -15,7 +15,7 @@ foo({ id: 1234 });                 // Ok
 >foo({ id: 1234 }) : void
 >                  : ^^^^
 >foo : (x: { id: number; name?: string; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                              ^^^^^^^^^
 >{ id: 1234 } : { id: number; }
 >             : ^^^^^^^^^^^^^^^
 >id : number
@@ -27,7 +27,7 @@ foo({ id: 1234, name: "hello" });  // Ok
 >foo({ id: 1234, name: "hello" }) : void
 >                                 : ^^^^
 >foo : (x: { id: number; name?: string; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                              ^^^^^^^^^
 >{ id: 1234, name: "hello" } : { id: number; name: string; }
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
@@ -43,7 +43,7 @@ foo({ id: 1234, name: false });    // Error, name of wrong type
 >foo({ id: 1234, name: false }) : void
 >                               : ^^^^
 >foo : (x: { id: number; name?: string; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                              ^^^^^^^^^
 >{ id: 1234, name: false } : { id: number; name: boolean; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id : number
@@ -59,7 +59,7 @@ foo({ name: "hello" });            // Error, id required but missing
 >foo({ name: "hello" }) : void
 >                       : ^^^^
 >foo : (x: { id: number; name?: string; }) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                              ^^^^^^^^^
 >{ name: "hello" } : { name: string; }
 >                  : ^^^^^^^^^^^^^^^^^
 >name : string

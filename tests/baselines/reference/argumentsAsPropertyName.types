@@ -13,12 +13,12 @@ type MyType = {
 
 declare function use(s: any);
 >use : (s: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >s : any
 
 function myFunction(myType: MyType) {
 >myFunction : (myType: MyType) => void
->           : ^^^^^^^^^      ^^^^^^^^^
+>           : ^      ^^      ^^^^^^^^^
 >myType : MyType
 >       : ^^^^^^
 
@@ -41,7 +41,7 @@ function myFunction(myType: MyType) {
         use(myType.arguments[i]);
 >use(myType.arguments[i]) : any
 >use : (s: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >myType.arguments[i] : string
 >                    : ^^^^^^
 >myType.arguments : string[]
@@ -64,7 +64,7 @@ function myFunction(myType: MyType) {
 >[1, 2, 3].forEach(function(j) { use(x); }) : void
 >                                           : ^^^^
 >[1, 2, 3].forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[1, 2, 3] : number[]
 >          : ^^^^^^^^
 >1 : 1
@@ -74,14 +74,14 @@ function myFunction(myType: MyType) {
 >3 : 3
 >  : ^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >function(j) { use(x); } : (j: number) => void
->                        : ^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^
 >j : number
 >  : ^^^^^^
 >use(x) : any
 >use : (s: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x : 5
 >  : ^
     }

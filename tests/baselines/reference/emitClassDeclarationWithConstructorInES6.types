@@ -15,12 +15,12 @@ class A {
     }
     foo(a: any);
 >foo : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
     foo() { }
 >foo : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 }
 
 class B {
@@ -65,13 +65,13 @@ class B {
     }
     baz(...args): string;
 >baz : (...args: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^      
+>    : ^^^^    ^^^^^^^^^^^^      
 >args : any[]
 >     : ^^^^^
 
     baz(z: string, v: number): string {
 >baz : (...args: any[]) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 >v : number

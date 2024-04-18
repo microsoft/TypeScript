@@ -4,14 +4,14 @@
 interface Comparable<T> {
     comparer(other: T): number;
 >comparer : (other: T) => number
->         : ^^^^^^^^ ^^^^^      
+>         : ^     ^^ ^^^^^      
 >other : T
 >      : ^
 }
 
 function compare<T extends Comparable<T>>(x: T, y: T): number {
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^      
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 >y : T
@@ -47,11 +47,11 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 >x.comparer(y) : number
 >              : ^^^^^^
 >x.comparer : (other: T) => number
->           : ^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >comparer : (other: T) => number
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^
 >y : T
 >  : ^
 }
@@ -66,7 +66,7 @@ class ComparableString implements Comparable<string>{
 
     localeCompare(other) {
 >localeCompare : (other: any) => number
->              : ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^^
 >other : any
 >      : ^^^
 
@@ -102,7 +102,7 @@ var c = compare<ComparableString>(a, b);
 >compare<ComparableString>(a, b) : number
 >                                : ^^^^^^
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : ComparableString
 >  : ^^^^^^^^^^^^^^^^
 >b : ComparableString

@@ -11,7 +11,7 @@ var myVariable = 10;
 /** function comments*/
 function foo(/** parameter comment*/p: number) {
 >foo : (p: number) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 }
@@ -25,7 +25,7 @@ foo(50);
 >foo(50) : void
 >        : ^^^^
 >foo : (p: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >50 : 50
 >   : ^^
 
@@ -102,21 +102,21 @@ class c {
     /** overload signature1*/
     public foo1(a: number): string;
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
     /** Overload signature 2*/
     public foo1(b: string): string;
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >b : string
 >  : ^^^^^^
 
     /** overload implementation signature*/
     public foo1(aOrb) {
 >foo1 : { (a: number): string; (b: string): string; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >aOrb : any
 
         return aOrb.toString();
@@ -158,7 +158,7 @@ interface i1 {
     /** function property;*/
     myFoo(/*param prop*/a: number): string;
 >myFoo : (a: number) => string
->      : ^^^^      ^^^^^      
+>      : ^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 

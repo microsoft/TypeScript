@@ -19,13 +19,13 @@ type Boxified<T> = {
 
 declare function boxify<T>(obj: T): Boxified<T>;
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^ ^^^^^^^ ^^^^^           
+>       : ^ ^^   ^^ ^^^^^           
 >obj : T
 >    : ^
 
 declare function unboxify<T>(obj: Boxified<T>): T;
 >unboxify : <T>(obj: Boxified<T>) => T
->         : ^ ^^^^^^^           ^^^^^ 
+>         : ^ ^^   ^^           ^^^^^ 
 >obj : Boxified<T>
 >    : ^^^^^^^^^^^
 
@@ -51,7 +51,7 @@ interface BoxifiedBacon {
 
 function f1(b: Bacon) {
 >f1 : (b: Bacon) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >b : Bacon
 >  : ^^^^^
 
@@ -61,7 +61,7 @@ function f1(b: Bacon) {
 >boxify(b) : Boxified<Bacon>
 >          : ^^^^^^^^^^^^^^^
 >boxify : <T>(obj: T) => Boxified<T>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^   ^^ ^^^^^^^^^^^^^^^^
 >b : Bacon
 >  : ^^^^^
 
@@ -96,7 +96,7 @@ function f1(b: Bacon) {
 
 function f2(bb: Boxified<Bacon>) {
 >f2 : (bb: Boxified<Bacon>) => void
->   : ^^^^^               ^^^^^^^^^
+>   : ^  ^^               ^^^^^^^^^
 >bb : Boxified<Bacon>
 >   : ^^^^^^^^^^^^^^^
 
@@ -106,7 +106,7 @@ function f2(bb: Boxified<Bacon>) {
 >unboxify(bb) : Bacon
 >             : ^^^^^
 >unboxify : <T>(obj: Boxified<T>) => T
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^           ^^^^^^
 >bb : Boxified<Bacon>
 >   : ^^^^^^^^^^^^^^^
 
@@ -133,7 +133,7 @@ function f2(bb: Boxified<Bacon>) {
 
 function f3(bb: BoxifiedBacon) {
 >f3 : (bb: BoxifiedBacon) => void
->   : ^^^^^             ^^^^^^^^^
+>   : ^  ^^             ^^^^^^^^^
 >bb : BoxifiedBacon
 >   : ^^^^^^^^^^^^^
 
@@ -143,7 +143,7 @@ function f3(bb: BoxifiedBacon) {
 >unboxify<Bacon>(bb) : Bacon
 >                    : ^^^^^
 >unboxify : <T>(obj: Boxified<T>) => T
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^           ^^^^^^
 >bb : BoxifiedBacon
 >   : ^^^^^^^^^^^^^
 

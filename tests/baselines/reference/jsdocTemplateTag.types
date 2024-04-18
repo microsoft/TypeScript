@@ -7,7 +7,7 @@
  */
 function f(a) {
 >f : <T>(a: T) => () => T
->  : ^ ^^^^^ ^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^^^^
 >a : T
 >  : ^
 
@@ -25,7 +25,7 @@ let n = f(1)()
 >f(1) : () => number
 >     : ^^^^^^^^^^^^
 >f : <T>(a: T) => () => T
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -36,7 +36,7 @@ let n = f(1)()
  */
 function g(a) {
 >g : <T>(a: T) => () => T
->  : ^ ^^^^^ ^^^^^^^^^^^ 
+>  : ^ ^^ ^^ ^^^^^^^^^^^ 
 >a : T
 >  : ^
 
@@ -54,7 +54,7 @@ let s = g('hi')()
 >g('hi') : () => string
 >        : ^^^^^^^^^^^^
 >g : <T>(a: T) => () => T
->  : ^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 
@@ -63,19 +63,19 @@ let s = g('hi')()
  */
 Element.prototype.animate = function(keyframes) {};
 >Element.prototype.animate = function(keyframes) {} : (keyframes: Array<any>) => void
->                                                   : ^^^^^^^^^^^^      ^^^ ^^^^^^^^^
->Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^         ^^          ^^^^^^^^^
+>Element.prototype.animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions) => Animation
+>                          : ^         ^^                                            ^^       ^^^                                 ^^^^^^^^^^^^^^
 >Element.prototype : Element
 >                  : ^^^^^^^
 >Element : { new (): Element; prototype: Element; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >prototype : Element
 >          : ^^^^^^^
->animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes, options?: number | KeyframeAnimationOptions) => Animation
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>animate : (keyframes: Keyframe[] | PropertyIndexedKeyframes | null, options?: number | KeyframeAnimationOptions) => Animation
+>        : ^         ^^                                            ^^       ^^^                                 ^^^^^^^^^^^^^^
 >function(keyframes) {} : (keyframes: Array<any>) => void
->                       : ^^^^^^^^^^^^      ^^^ ^^^^^^^^^
+>                       : ^         ^^          ^^^^^^^^^
 >keyframes : any[]
 >          : ^^^^^
 

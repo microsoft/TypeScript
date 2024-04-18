@@ -11,7 +11,7 @@ interface Pet {
 
 function isPet(pet: any): pet is Pet {
 >isPet : (pet: any) => pet is Pet
->      : ^^^^^^   ^^^^^          
+>      : ^   ^^   ^^^^^          
 >pet : any
 
     return typeof pet.name === "string";
@@ -30,11 +30,11 @@ function isPet(pet: any): pet is Pet {
 
 export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string): string {
 >speak : <TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string) => string
->      : ^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^                     ^^^^^      
+>      : ^    ^^^^^^^^^^^^^^   ^^    ^^     ^^                     ^^^^^      
 >pet : TPet
 >    : ^^^^
 >voice : (pet: TPet) => string
->      : ^^^^^^    ^^^^^      
+>      : ^   ^^    ^^^^^      
 >pet : TPet
 >    : ^^^^
 
@@ -44,7 +44,7 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 >isPet(pet) : boolean
 >           : ^^^^^^^
 >isPet : (pet: any) => pet is Pet
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^   ^^^^^^^^^^^^^^^
 >pet : TPet
 >    : ^^^^
 
@@ -60,7 +60,7 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 >voice(pet) : string
 >           : ^^^^^^
 >voice : (pet: TPet) => string
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^    ^^^^^^^^^^^
 >pet : TPet
 >    : ^^^^
 }

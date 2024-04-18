@@ -12,7 +12,7 @@ interface Cat extends Animal { cat }
 
 function foo1(bar: { a:number }[]): Cat;
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^                ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^   ^^^   ^^                ^^^^^^^^^
 >bar : { a: number; }[]
 >    : ^^^^^      ^^^^^
 >a : number
@@ -20,7 +20,7 @@ function foo1(bar: { a:number }[]): Cat;
 
 function foo1(bar: { a:string }[]): Dog;
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^   ^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^   ^^^
 >bar : { a: string; }[]
 >    : ^^^^^      ^^^^^
 >a : string
@@ -28,7 +28,7 @@ function foo1(bar: { a:string }[]): Dog;
 
 function foo1([x]: { a:number | string }[]): Animal {
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >x : { a: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
@@ -41,7 +41,7 @@ function foo1([x]: { a:number | string }[]): Animal {
 
 function foo2(bar: { a:number }[]): Cat;
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^                ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^   ^^^   ^^                ^^^^^^^^^
 >bar : { a: number; }[]
 >    : ^^^^^      ^^^^^
 >a : number
@@ -49,7 +49,7 @@ function foo2(bar: { a:number }[]): Cat;
 
 function foo2(bar: { a:string }[]): Dog;
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^   ^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^   ^^^
 >bar : { a: string; }[]
 >    : ^^^^^      ^^^^^
 >a : string
@@ -57,7 +57,7 @@ function foo2(bar: { a:string }[]): Dog;
 
 function foo2([x]: { a:number | string }[]): Cat | Dog {
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >x : { a: string | number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
@@ -75,7 +75,7 @@ var x1 = foo1([{a: "str"}]);
 >foo1([{a: "str"}]) : Dog
 >                   : ^^^
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >[{a: "str"}] : { a: string; }[]
 >             : ^^^^^^^^^^^^^^^^
 >{a: "str"} : { a: string; }
@@ -91,7 +91,7 @@ var y1 = foo1([{a: 100}]);
 >foo1([{a: 100}]) : Cat
 >                 : ^^^
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >[{a: 100}] : { a: number; }[]
 >           : ^^^^^^^^^^^^^^^^
 >{a: 100} : { a: number; }
@@ -107,7 +107,7 @@ var x2 = foo2([{a: "str"}]);
 >foo2([{a: "str"}]) : Dog
 >                   : ^^^
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >[{a: "str"}] : { a: string; }[]
 >             : ^^^^^^^^^^^^^^^^
 >{a: "str"} : { a: string; }
@@ -123,7 +123,7 @@ var y2 = foo2([{a: 100}]);
 >foo2([{a: 100}]) : Cat
 >                 : ^^^
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^   ^^                ^^^^^^^^^   ^^                ^^^^^^^^^
 >[{a: 100}] : { a: number; }[]
 >           : ^^^^^^^^^^^^^^^^
 >{a: 100} : { a: number; }

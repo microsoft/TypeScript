@@ -3,7 +3,7 @@
 === generatorYieldContextualType.ts ===
 declare function f1<T, R, S>(gen: () => Generator<R, T, S>): void;
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
->   : ^ ^^ ^^ ^^^^^^^                        ^^^^^    
+>   : ^ ^^ ^^ ^^   ^^                        ^^^^^    
 >gen : () => Generator<R, T, S>
 >    : ^^^^^^                  
 
@@ -11,7 +11,7 @@ f1<0, 0, 1>(function* () {
 >f1<0, 0, 1>(function* () {	const a = yield 0;	return 0;}) : void
 >                                                          : ^^^^
 >f1 : <T, R, S>(gen: () => Generator<R, T, S>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^   ^^                        ^^^^^^^^^
 >function* () {	const a = yield 0;	return 0;} : () => Generator<0, 0, 1>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -31,7 +31,7 @@ f1<0, 0, 1>(function* () {
 
 declare function f2<T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>): void;
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->   : ^ ^^ ^^ ^^^^^^^                                                  ^^^^^    
+>   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^    
 >gen : () => Generator<R, T, S> | AsyncGenerator<R, T, S>
 >    : ^^^^^^                                            
 
@@ -39,7 +39,7 @@ f2<0, 0, 1>(async function* () {
 >f2<0, 0, 1>(async function* () {	const a = yield 0;	return 0;}) : void
 >                                                                : ^^^^
 >f2 : <T, R, S>(gen: () => Generator<R, T, S> | AsyncGenerator<R, T, S>) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^   ^^                                                  ^^^^^^^^^
 >async function* () {	const a = yield 0;	return 0;} : () => AsyncGenerator<0, 0, 1>
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -85,7 +85,7 @@ namespace Directive {
 
   export function is<T>(value: Directive | T): value is Directive {
 >is : <T>(value: Directive | T) => value is Directive
->   : ^ ^^^^^^^^^             ^^^^^                  
+>   : ^ ^^     ^^             ^^^^^                  
 >value : T | Directive
 >      : ^^^^^^^^^^^^^
 
@@ -259,7 +259,7 @@ type StepState<T = Record<string, unknown>> = T & {
 
 function canPickStepContinue<T extends QuickPickStep>(
 >canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^                ^^^^^^^^^^^^^^                           ^^^^^                             
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^                             
 
   _step: T,
 >_step : T
@@ -281,7 +281,7 @@ function canPickStepContinue<T extends QuickPickStep>(
 
 function createPickStep<T extends QuickPickItem>(
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^^^                
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^                
 
   step: QuickPickStep<T>
 >step : QuickPickStep<T>
@@ -295,7 +295,7 @@ function createPickStep<T extends QuickPickItem>(
 
 function* showStep<
 >showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^   ^^^^^^^^^^^^     ^^^^^^^^^^^^       ^^^^^                                  
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^   ^^^^^     ^^     ^^        ^^       ^^^^^                                  
 
   State extends PartialStepState & { repo: any },
 >repo : any
@@ -319,7 +319,7 @@ function* showStep<
 >createPickStep<QuickPickItem>({    title: "",    placeholder: "",  }) : QuickPickStep<QuickPickItem>
 >                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >createPickStep : <T extends QuickPickItem>(step: QuickPickStep<T>) => QuickPickStep<T>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^    ^^                ^^^^^^^^^^^^^^^^^^^^^
 >{    title: "",    placeholder: "",  } : { title: string; placeholder: string; }
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -350,8 +350,8 @@ function* showStep<
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >canPickStepContinue(step, state, selection) : boolean
 >                                            : ^^^^^^^
->canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState<unknown>, _selection: Directive | StepItemType<T>) => _selection is StepItemType<T>
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>canPickStepContinue : <T extends QuickPickStep<QuickPickItem>>(_step: T, _state: PartialStepState, _selection: StepItemType<T> | Directive) => _selection is StepItemType<T>
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^      ^^                ^^          ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >step : QuickPickStep<QuickPickItem>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State

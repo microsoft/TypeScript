@@ -41,7 +41,7 @@ class C<T> {
     
     bar(x: C<T>) { return x.#foo; }          // OK
 >bar : (x: C<T>) => T
->    : ^^^^    ^^^^^^
+>    : ^ ^^    ^^^^^^
 >x : C<T>
 >  : ^^^^
 >x.#foo : T
@@ -51,7 +51,7 @@ class C<T> {
 
     bar2(x: C<T>) { return x.#method(); }    // OK
 >bar2 : (x: C<T>) => T
->     : ^^^^    ^^^^^^
+>     : ^ ^^    ^^^^^^
 >x : C<T>
 >  : ^^^^
 >x.#method() : T
@@ -63,7 +63,7 @@ class C<T> {
 
     bar3(x: C<T>) { return x.#prop; }        // OK
 >bar3 : (x: C<T>) => T
->     : ^^^^    ^^^^^^
+>     : ^ ^^    ^^^^^^
 >x : C<T>
 >  : ^^^^
 >x.#prop : T
@@ -73,7 +73,7 @@ class C<T> {
 
     baz(x: C<number>) { return x.#foo; }     // OK
 >baz : (x: C<number>) => number
->    : ^^^^         ^^^^^^^^^^^
+>    : ^ ^^         ^^^^^^^^^^^
 >x : C<number>
 >  : ^^^^^^^^^
 >x.#foo : number
@@ -83,7 +83,7 @@ class C<T> {
 
     baz2(x: C<number>) { return x.#method; } // OK
 >baz2 : (x: C<number>) => () => number
->     : ^^^^         ^^^^^^^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^^^^^^^^^
 >x : C<number>
 >  : ^^^^^^^^^
 >x.#method : () => number
@@ -93,7 +93,7 @@ class C<T> {
 
     baz3(x: C<number>) { return x.#prop; }   // OK
 >baz3 : (x: C<number>) => number
->     : ^^^^         ^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^^^
 >x : C<number>
 >  : ^^^^^^^^^
 >x.#prop : number
@@ -103,7 +103,7 @@ class C<T> {
 
     quux(x: C<string>) { return x.#foo; }    // OK
 >quux : (x: C<string>) => string
->     : ^^^^         ^^^^^^^^^^^
+>     : ^ ^^         ^^^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 >x.#foo : string
@@ -113,7 +113,7 @@ class C<T> {
 
     quux2(x: C<string>) { return x.#method; }// OK
 >quux2 : (x: C<string>) => () => string
->      : ^^^^         ^^^^^^^^^^^^^^^^^
+>      : ^ ^^         ^^^^^^^^^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 >x.#method : () => string
@@ -123,7 +123,7 @@ class C<T> {
 
     quux3(x: C<string>) { return x.#prop; }  // OK
 >quux3 : (x: C<string>) => string
->      : ^^^^         ^^^^^^^^^^^
+>      : ^ ^^         ^^^^^^^^^^^
 >x : C<string>
 >  : ^^^^^^^^^
 >x.#prop : string

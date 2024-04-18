@@ -7,12 +7,12 @@ class B {
 
     foo (v) {}
 >foo : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 
     fooo (v) {}
 >fooo : (v: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >v : any
 }
 
@@ -24,19 +24,19 @@ class D extends B {
 
     foo (v) {}
 >foo : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 
     /** @override */
     fooo (v) {}
 >fooo : (v: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >v : any
 
     /** @override */
     bar(v) {}
 >bar : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 }
 
@@ -51,12 +51,12 @@ class C {
     /** @override */
     fooo (v) {}
 >fooo : (v: any) => void
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^
 >v : any
 
     /** @override */
     bar(v) {}
 >bar : (v: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^
 >v : any
 }

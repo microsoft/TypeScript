@@ -3,15 +3,15 @@
 === inferThisType.ts ===
 declare function f<T>(g: (this: T) => void): T
 >f : <T>(g: (this: T) => void) => T
->  : ^ ^^^^^                 ^^^^^ 
+>  : ^ ^^ ^^                 ^^^^^ 
 >g : (this: T) => void
->  : ^^^^^^^ ^^^^^    
+>  : ^    ^^ ^^^^^    
 >this : T
 >     : ^
 
 declare function h(this: number): void;
 >h : (this: number) => void
->  : ^^^^^^^      ^^^^^    
+>  : ^    ^^      ^^^^^    
 >this : number
 >     : ^^^^^^
 
@@ -19,9 +19,9 @@ f(h)
 >f(h) : number
 >     : ^^^^^^
 >f : <T>(g: (this: T) => void) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^                 ^^^^^^
 >h : (this: number) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^      ^^^^^^^^^
 
 // works with infer types as well
 type Check<T> = T extends (this: infer U, ...args: any[]) => any ? string : unknown;

@@ -29,7 +29,7 @@ b;
 
 function test({c, d = c}: Record<string, number>) {}
 >test : ({ c, d }: Record<string, number>) => void
->     : ^^^^^^^^^^^                      ^^^^^^^^^
+>     : ^        ^^                      ^^^^^^^^^
 >c : number
 >  : ^^^^^^
 >d : number

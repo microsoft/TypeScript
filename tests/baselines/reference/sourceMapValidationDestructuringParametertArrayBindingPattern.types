@@ -3,11 +3,11 @@
 === sourceMapValidationDestructuringParametertArrayBindingPattern.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
->    : ^^^^^^   ^^^^^    
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 type Robot = [number, string, string];
@@ -28,7 +28,7 @@ var robotA: Robot = [1, "mower", "mowing"];
 
 function foo1([, nameA]: Robot) {
 >foo1 : ([, nameA]: Robot) => void
->     : ^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 > : undefined
 > : ^^^^^^^^^
 >nameA : string
@@ -38,18 +38,18 @@ function foo1([, nameA]: Robot) {
 >console.log(nameA) : void
 >                   : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA : string
 >      : ^^^^^^
 }
 
 function foo2([numberB]: Robot) {
 >foo2 : ([numberB]: Robot) => void
->     : ^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
 
@@ -57,18 +57,18 @@ function foo2([numberB]: Robot) {
 >console.log(numberB) : void
 >                     : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >numberB : number
 >        : ^^^^^^
 }
 
 function foo3([numberA2, nameA2, skillA2]: Robot) {
 >foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                           ^^     ^^^^^^^^^
 >numberA2 : number
 >         : ^^^^^^
 >nameA2 : string
@@ -80,18 +80,18 @@ function foo3([numberA2, nameA2, skillA2]: Robot) {
 >console.log(nameA2) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >nameA2 : string
 >       : ^^^^^^
 }
 
 function foo4([numberA3, ...robotAInfo]: Robot) {
 >foo4 : ([numberA3, ...robotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                         ^^     ^^^^^^^^^
 >numberA3 : number
 >         : ^^^^^^
 >robotAInfo : [string, string]
@@ -101,11 +101,11 @@ function foo4([numberA3, ...robotAInfo]: Robot) {
 >console.log(robotAInfo) : void
 >                        : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >robotAInfo : [string, string]
 >           : ^^^^^^^^^^^^^^^^
 }
@@ -114,7 +114,7 @@ foo1(robotA);
 >foo1(robotA) : void
 >             : ^^^^
 >foo1 : ([, nameA]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -122,7 +122,7 @@ foo1([2, "trimmer", "trimming"]);
 >foo1([2, "trimmer", "trimming"]) : void
 >                                 : ^^^^
 >foo1 : ([, nameA]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
@@ -136,7 +136,7 @@ foo2(robotA);
 >foo2(robotA) : void
 >             : ^^^^
 >foo2 : ([numberB]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -144,7 +144,7 @@ foo2([2, "trimmer", "trimming"]);
 >foo2([2, "trimmer", "trimming"]) : void
 >                                 : ^^^^
 >foo2 : ([numberB]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
@@ -158,7 +158,7 @@ foo3(robotA);
 >foo3(robotA) : void
 >             : ^^^^
 >foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                           ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -166,7 +166,7 @@ foo3([2, "trimmer", "trimming"]);
 >foo3([2, "trimmer", "trimming"]) : void
 >                                 : ^^^^
 >foo3 : ([numberA2, nameA2, skillA2]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                           ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
@@ -180,7 +180,7 @@ foo4(robotA);
 >foo4(robotA) : void
 >             : ^^^^
 >foo4 : ([numberA3, ...robotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                         ^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -188,7 +188,7 @@ foo4([2, "trimmer", "trimming"]);
 >foo4([2, "trimmer", "trimming"]) : void
 >                                 : ^^^^
 >foo4 : ([numberA3, ...robotAInfo]: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                         ^^     ^^^^^^^^^
 >[2, "trimmer", "trimming"] : [number, string, string]
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2

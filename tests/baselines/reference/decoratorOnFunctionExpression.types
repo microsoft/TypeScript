@@ -3,7 +3,7 @@
 === decoratorOnFunctionExpression.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->    : ^ ^^^^^^^^^^ ^^^^^ 
+>    : ^ ^^      ^^ ^^^^^ 
 >target : T
 >       : ^
 
@@ -11,7 +11,7 @@ var F = @dec function () {
 >F : any
 >  : ^^^
 >dec : <T>(target: T) => T
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^^^^^
 > : () => void
 > : ^^^^^^^^^^
 }

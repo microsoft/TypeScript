@@ -7,9 +7,9 @@ declare class P<R> {
 
     constructor(callback: (resolve: (value: R) => void) => void);
 >callback : (resolve: (value: R) => void) => void
->         : ^^^^^^^^^^                  ^^^^^    
+>         : ^       ^^                  ^^^^^    
 >resolve : (value: R) => void
->        : ^^^^^^^^ ^^^^^    
+>        : ^     ^^ ^^^^^    
 >value : R
 >      : ^
 }
@@ -22,13 +22,13 @@ new P<string>(r => { r('foo') });
 >P : typeof P
 >  : ^^^^^^^^
 >r => { r('foo') } : (r: (value: string) => void) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >r : (value: string) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^^^^
 >r('foo') : void
 >         : ^^^^
 >r : (value: string) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 

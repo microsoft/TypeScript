@@ -39,13 +39,13 @@ class X {
 
    public attr(name:string):string;
 >attr : { (name: string): string; (name: string, value: string): X; }
->     : ^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^      ^^^    ^^      ^^     ^^      ^^^^^^^
 >name : string
 >     : ^^^^^^
 
    public attr(name:string, value:string):X;
 >attr : { (name: string): string; (name: string, value: string): X; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^      ^^^ ^^^
+>     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^ ^^^
 >name : string
 >     : ^^^^^^
 >value : string
@@ -53,7 +53,7 @@ class X {
 
    public attr(first:any, second?:any):any {
 >attr : { (name: string): string; (name: string, value: string): X; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^    ^^      ^^^^^^^^^^^^    ^^      ^^     ^^      ^^^^^^^
 >first : any
 >      : ^^^
 >second : any

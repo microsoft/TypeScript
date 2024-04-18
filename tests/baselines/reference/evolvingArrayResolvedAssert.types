@@ -17,11 +17,11 @@ for (var a in C) {
 >C.hasOwnProperty(a) : boolean
 >                    : ^^^^^^^
 >C.hasOwnProperty : (v: PropertyKey) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^           ^^^^^^^^^^^^
 >C : any[]
 >  : ^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
     }

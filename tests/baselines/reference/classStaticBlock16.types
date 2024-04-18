@@ -3,7 +3,7 @@
 === classStaticBlock16.ts ===
 let getX: (c: C) => number;
 >getX : (c: C) => number
->     : ^^^^ ^^^^^      
+>     : ^ ^^ ^^^^^      
 >c : C
 >  : ^
 
@@ -36,11 +36,11 @@ class C {
     // getX has privileged access to #x
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => number
->                          : ^^^^^^ ^^^^^^^^^^^
+>                          : ^   ^^ ^^^^^^^^^^^
 >getX : (c: C) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >(obj: C) => obj.#x : (obj: C) => number
->                   : ^^^^^^ ^^^^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : C
 >    : ^
 >obj.#x : number
@@ -50,11 +50,11 @@ class C {
 
     getY = (obj: D) => obj.#y;
 >getY = (obj: D) => obj.#y : (obj: D) => any
->                          : ^^^^^^ ^^^^^^^^
+>                          : ^   ^^ ^^^^^^^^
 >getY : (c: D) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >(obj: D) => obj.#y : (obj: D) => any
->                   : ^^^^^^ ^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^
 >obj : D
 >    : ^
 >obj.#y : any
@@ -66,7 +66,7 @@ class C {
 
 let getY: (c: D) => number;
 >getY : (c: D) => number
->     : ^^^^ ^^^^^      
+>     : ^ ^^ ^^^^^      
 >c : D
 >  : ^
 
@@ -84,11 +84,11 @@ class D {
     // getY has privileged access to y
     getX = (obj: C) => obj.#x;
 >getX = (obj: C) => obj.#x : (obj: C) => any
->                          : ^^^^^^ ^^^^^^^^
+>                          : ^   ^^ ^^^^^^^^
 >getX : (c: C) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >(obj: C) => obj.#x : (obj: C) => any
->                   : ^^^^^^ ^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^
 >obj : C
 >    : ^
 >obj.#x : any
@@ -98,11 +98,11 @@ class D {
 
     getY = (obj: D) => obj.#y;
 >getY = (obj: D) => obj.#y : (obj: D) => number
->                          : ^^^^^^ ^^^^^^^^^^^
+>                          : ^   ^^ ^^^^^^^^^^^
 >getY : (c: D) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >(obj: D) => obj.#y : (obj: D) => number
->                   : ^^^^^^ ^^^^^^^^^^^
+>                   : ^   ^^ ^^^^^^^^^^^
 >obj : D
 >    : ^
 >obj.#y : number

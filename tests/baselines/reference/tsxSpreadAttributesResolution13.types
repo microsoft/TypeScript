@@ -17,7 +17,7 @@ interface ComponentProps {
 
 export default function Component(props: ComponentProps) {
 >Component : (props: ComponentProps) => JSX.Element
->          : ^^^^^^^^              ^^^^^^^^^^^^^^^^
+>          : ^     ^^              ^^^^^^^^^^^^^^^^
 >props : ComponentProps
 >      : ^^^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ export default function Component(props: ComponentProps) {
 ><ChildComponent {...props} /> : JSX.Element
 >                              : ^^^^^^^^^^^
 >ChildComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^             ^^                     ^^^^^^^^^^^^^^^^
 >props : ComponentProps
 >      : ^^^^^^^^^^^^^^
 
@@ -50,7 +50,7 @@ export default function Component(props: ComponentProps) {
 ><ChildComponent {...props} property1="NewString" /> : JSX.Element
 >                                                    : ^^^^^^^^^^^
 >ChildComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^             ^^                     ^^^^^^^^^^^^^^^^
 >props : ComponentProps
 >      : ^^^^^^^^^^^^^^
 >property1 : string
@@ -66,7 +66,7 @@ interface AnotherComponentProps {
 
 function ChildComponent({ property1 }: AnotherComponentProps) {
 >ChildComponent : ({ property1 }: AnotherComponentProps) => JSX.Element
->               : ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^^
+>               : ^             ^^                     ^^^^^^^^^^^^^^^^
 >property1 : string
 >          : ^^^^^^
 

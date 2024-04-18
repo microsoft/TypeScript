@@ -41,7 +41,7 @@ interface ConstantMemberType {
 
 function insertInterface(callbackType: InterfaceType) {
 >insertInterface : (callbackType: InterfaceType) => void
->                : ^^^^^^^^^^^^^^^             ^^^^^^^^^
+>                : ^            ^^             ^^^^^^^^^
 >callbackType : InterfaceType
 >             : ^^^^^^^^^^^^^
 
@@ -116,7 +116,7 @@ function insertInterface(callbackType: InterfaceType) {
 
 function insertInterface2(callbackType: InterfaceType) {
 >insertInterface2 : (callbackType: InterfaceType) => void
->                 : ^^^^^^^^^^^^^^^             ^^^^^^^^^
+>                 : ^            ^^             ^^^^^^^^^
 >callbackType : InterfaceType
 >             : ^^^^^^^^^^^^^
 
@@ -159,7 +159,7 @@ function insertInterface2(callbackType: InterfaceType) {
 
 function foo(memberType: IDLMemberTypes) {
 >foo : (memberType: IDLMemberTypes) => void
->    : ^^^^^^^^^^^^^              ^^^^^^^^^
+>    : ^          ^^              ^^^^^^^^^
 >memberType : IDLMemberTypes
 >           : ^^^^^^^^^^^^^^
 
@@ -241,7 +241,7 @@ interface B {
 
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -310,7 +310,7 @@ function f1(x: A | B) {
 
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 

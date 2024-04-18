@@ -26,7 +26,7 @@ declare class ZodEnum<T extends [string, ...string[]]> {
 
 declare function createZodEnum<U extends string, T extends Readonly<[U, ...U[]]>>(values: T): ZodEnum<Writeable<T>>;
 >createZodEnum : <U extends string, T extends readonly [U, ...U[]]>(values: T) => ZodEnum<Writeable<T>>
->              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                     
+>              : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^                     
 >values : T
 >       : ^
 
@@ -84,7 +84,7 @@ declare class TupleSchema<
 
 export function create<T extends AnyTuple>(schemas: {
 >create : <T extends AnyTuple>(schemas: { [K in keyof T]: ISchema<T[K]>; }) => TupleSchema<T | undefined, AnyObject, undefined, "">
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^       ^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >schemas : { [K in keyof T]: ISchema<T[K], any, any, any>; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

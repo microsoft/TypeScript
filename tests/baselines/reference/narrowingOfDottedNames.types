@@ -27,7 +27,7 @@ class B {
 
 function isA(x: any): x is A {
 >isA : (x: any) => x is A
->    : ^^^^   ^^^^^      
+>    : ^ ^^   ^^^^^      
 >x : any
 >  : ^^^
 
@@ -42,7 +42,7 @@ function isA(x: any): x is A {
 
 function isB(x: any): x is B {
 >isB : (x: any) => x is B
->    : ^^^^   ^^^^^      
+>    : ^ ^^   ^^^^^      
 >x : any
 >  : ^^^
 
@@ -57,7 +57,7 @@ function isB(x: any): x is B {
 
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -110,7 +110,7 @@ function f1(x: A | B) {
 
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
->   : ^^^^     ^^^^^^^^^
+>   : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -122,7 +122,7 @@ function f2(x: A | B) {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: any) => x is A
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -142,7 +142,7 @@ function f2(x: A | B) {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: any) => x is B
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^^^
 >x : B
 >  : ^
 

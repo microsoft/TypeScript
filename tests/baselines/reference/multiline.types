@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 700 / 700 (nearest 100)
-Type Count: 2,600 / 2,600 (nearest 100)
-Instantiation count: 2,000 / 2,000 (nearest 500)
-Symbol count: 27,000 / 27,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 2,500
 
 === a.ts ===
 export const texts: string[] = [];
@@ -19,11 +17,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 
@@ -33,11 +31,11 @@ texts.push(100);
 >texts.push(100) : number
 >                : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >100 : 100
 >    : ^^^
 
@@ -47,11 +45,11 @@ texts.push("100");
 >texts.push("100") : number
 >                  : ^^^^^^
 >texts.push : (...items: string[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >texts : string[]
 >      : ^^^^^^^^
 >push : (...items: string[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >"100" : "100"
 >      : ^^^^^
 
@@ -62,7 +60,7 @@ import * as React from "react";
 
 export function MyComponent(props: { foo: string }) {
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^                ^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >props : { foo: string; }
 >      : ^^^^^^^      ^^^
 >foo : string
@@ -93,7 +91,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -104,7 +102,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -116,7 +114,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -128,7 +126,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -140,7 +138,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -151,7 +149,7 @@ let x = (
 ><MyComponent foo={100} /> : JSX.Element
 >                          : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >100 : 100
@@ -163,7 +161,7 @@ let x = (
 ><MyComponent foo={"hooray"} /> : JSX.Element
 >                               : ^^^^^^^^^^^
 >MyComponent : (props: { foo: string; }) => JSX.Element
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^                ^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >"hooray" : "hooray"

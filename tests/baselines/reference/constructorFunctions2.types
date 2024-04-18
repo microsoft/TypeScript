@@ -3,7 +3,7 @@
 === node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any
->        : ^^^^^      ^^^^^   
+>        : ^  ^^      ^^^^^   
 >id : string
 >   : ^^^^^^
 
@@ -18,7 +18,7 @@ const A = require("./other");
 >require("./other") : typeof A
 >                   : ^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./other" : "./other"
 >          : ^^^^^^^^^
 

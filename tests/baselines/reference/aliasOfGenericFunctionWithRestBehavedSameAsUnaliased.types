@@ -66,11 +66,11 @@ let check1: test1 = "y";
 
 type ExtendedMapper2<HandledInputT, OutputT, ArgsT extends any[]> = (
 >ExtendedMapper2 : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT
->                : ^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^     ^^^^^       
+>                : ^    ^^      ^^     ^^             ^^^^^    ^^     ^^^^^       
 
     {x:(name : string, mixed : HandledInputT, ...args : ArgsT) => OutputT}["x"]
 >x : (name: string, mixed: HandledInputT, ...args: ArgsT) => OutputT
->  : ^^^^^^^      ^^^^^^^^^             ^^^^^^^^^^^     ^^^^^       
+>  : ^    ^^      ^^     ^^             ^^^^^    ^^     ^^^^^       
 >name : string
 >     : ^^^^^^
 >mixed : HandledInputT

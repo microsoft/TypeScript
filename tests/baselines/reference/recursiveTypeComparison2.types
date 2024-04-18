@@ -14,11 +14,11 @@ declare module Bacon {
     interface Observable<T> {
         zip<U, V>(other: EventStream<U>, f: (a: T, b: U) => V): EventStream<V>;
 >zip : <U, V>(other: EventStream<U>, f: (a: T, b: U) => V) => EventStream<V>
->    : ^ ^^ ^^^^^^^^^              ^^^^^                 ^^^^^              
+>    : ^ ^^ ^^     ^^              ^^ ^^                 ^^^^^              
 >other : EventStream<U>
 >      : ^^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
->  : ^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >a : T
 >  : ^
 >b : U
@@ -26,7 +26,7 @@ declare module Bacon {
 
         slidingWindow(max: number, min?: number): Property<T[]>;
 >slidingWindow : (max: number, min?: number) => Property<T[]>
->              : ^^^^^^      ^^^^^^^^      ^^^^^             
+>              : ^   ^^      ^^   ^^^      ^^^^^             
 >max : number
 >    : ^^^^^^
 >min : number
@@ -38,11 +38,11 @@ declare module Bacon {
 
         combine<U, V>(other: Observable<U>, f: (a: T, b: U) => V): Property<V>;
 >combine : <U, V>(other: Observable<U>, f: (a: T, b: U) => V) => Property<V>
->        : ^ ^^ ^^^^^^^^^             ^^^^^                 ^^^^^           
+>        : ^ ^^ ^^     ^^             ^^ ^^                 ^^^^^           
 >other : Observable<U>
 >      : ^^^^^^^^^^^^^
 >f : (a: T, b: U) => V
->  : ^^^^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^ ^^^^^ 
 >a : T
 >  : ^
 >b : U
@@ -50,11 +50,11 @@ declare module Bacon {
 
         withStateMachine<U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>): EventStream<V>;
 >withStateMachine : <U, V>(initState: U, f: (state: U, event: Event<T>) => StateValue<U, V>) => EventStream<V>
->                 : ^ ^^ ^^^^^^^^^^^^^ ^^^^^                                               ^^^^^              
+>                 : ^ ^^ ^^         ^^ ^^ ^^                                               ^^^^^              
 >initState : U
 >          : ^
 >f : (state: U, event: Event<T>) => StateValue<U, V>
->  : ^^^^^^^^ ^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^ ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^
 >state : U
 >      : ^
 >event : Event<T>
@@ -62,41 +62,41 @@ declare module Bacon {
 
         decode(mapping: Object): Property<any>;
 >decode : (mapping: Object) => Property<any>
->       : ^^^^^^^^^^      ^^^^^             
+>       : ^       ^^      ^^^^^             
 >mapping : Object
 >        : ^^^^^^
 
         awaiting<U>(other: Observable<U>): Property<boolean>;
 >awaiting : <U>(other: Observable<U>) => Property<boolean>
->         : ^ ^^^^^^^^^             ^^^^^                 
+>         : ^ ^^     ^^             ^^^^^                 
 >other : Observable<U>
 >      : ^^^^^^^^^^^^^
 
         endOnError(f?: (value: T) => boolean): Observable<T>;
 >endOnError : (f?: (value: T) => boolean) => Observable<T>
->           : ^^^^^                     ^^^^^             
+>           : ^ ^^^                     ^^^^^             
 >f : (value: T) => boolean
->  : ^^^^^^^^ ^^^^^       
+>  : ^     ^^ ^^^^^       
 >value : T
 >      : ^
 
         withHandler(f: (event: Event<T>) => any): Observable<T>;
 >withHandler : (f: (event: Event<T>) => any) => Observable<T>
->            : ^^^^                        ^^^^^             
+>            : ^ ^^                        ^^^^^             
 >f : (event: Event<T>) => any
->  : ^^^^^^^^        ^^^^^   
+>  : ^     ^^        ^^^^^   
 >event : Event<T>
 >      : ^^^^^^^^
 
         name(name: string): Observable<T>;
 >name : (name: string) => Observable<T>
->     : ^^^^^^^      ^^^^^             
+>     : ^    ^^      ^^^^^             
 >name : string
 >     : ^^^^^^
 
         withDescription(...args: any[]): Observable<T>;
 >withDescription : (...args: any[]) => Observable<T>
->                : ^^^^^^^^^^     ^^^^^             
+>                : ^^^^    ^^     ^^^^^             
 >args : any[]
 >     : ^^^^^
     }

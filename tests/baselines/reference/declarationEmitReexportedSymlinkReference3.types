@@ -14,11 +14,11 @@ export const ADMIN = MetadataAccessor.create<boolean>('1');
 >MetadataAccessor.create<boolean>('1') : MetadataAccessor<boolean, import("monorepo/pkg1/dist/types").IdType>
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MetadataAccessor.create : <T, D extends import("monorepo/pkg1/dist/types").IdType = import("monorepo/pkg1/dist/types").IdType>(key: string) => MetadataAccessor<T, D>
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MetadataAccessor : typeof MetadataAccessor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T, D extends import("monorepo/pkg1/dist/types").IdType = import("monorepo/pkg1/dist/types").IdType>(key: string) => MetadataAccessor<T, D>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'1' : "1"
 >    : ^^^
 
@@ -63,7 +63,7 @@ export declare class MetadataAccessor<T, D extends IdType = IdType> {
 
     static create<T, D extends IdType = IdType>(key: string): MetadataAccessor<T, D>;
 >create : <T, D extends IdType = IdType>(key: string) => MetadataAccessor<T, D>
->       : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^                      
+>       : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^      ^^^^^                      
 >key : string
 >    : ^^^^^^
 }

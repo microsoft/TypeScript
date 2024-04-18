@@ -3,7 +3,7 @@
 === a.ts ===
 declare function forwardRef(x: any): any;
 >forwardRef : (x: any) => any
->           : ^^^^   ^^^^^   
+>           : ^ ^^   ^^^^^   
 >x : any
 
 declare var Something: any;

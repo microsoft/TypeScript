@@ -3,7 +3,7 @@
 === emitAccessExpressionOfCastedObjectLiteralExpressionInArrowFunctionES5.ts ===
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x];
 >(x) => ({ "1": "one", "2": "two" } as { [key: string]: string })[x] : (x: any) => string
->                                                                    : ^^^^^^^^^^^^^^^^^^
+>                                                                    : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >({ "1": "one", "2": "two" } as { [key: string]: string })[x] : string
 >                                                             : ^^^^^^
@@ -27,7 +27,7 @@
 
 (x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x;
 >(x) => ({ "1": "one", "2": "two" } as { [key: string]: string }).x : (x: any) => string
->                                                                   : ^^^^^^^^^^^^^^^^^^
+>                                                                   : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >({ "1": "one", "2": "two" } as { [key: string]: string }).x : string
 >                                                            : ^^^^^^

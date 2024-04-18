@@ -9,7 +9,7 @@ let cond: boolean;
 
 function foo(x: number): number { return 1; }
 >foo : (x: number) => number
->    : ^^^^      ^^^^^      
+>    : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -43,7 +43,7 @@ function test1() {
 >foo(x) : number
 >       : ^^^^^^
 >foo : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
             }
@@ -92,7 +92,7 @@ function test2() {
 >foo(x) : number
 >       : ^^^^^^
 >foo : (x: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
         }
@@ -103,7 +103,7 @@ function test2() {
 
 function mapUntilCant<a, b>(
 >mapUntilCant : <a, b>(values: a[], canTake: (value: a, index: number) => boolean, mapping: (value: a, index: number) => b) => b[]
->             : ^ ^^ ^^^^^^^^^^   ^^^^^^^^^^^                                    ^^^^^^^^^^^                              ^^^^^   
+>             : ^ ^^ ^^      ^^   ^^       ^^                                    ^^       ^^                              ^^^^^   
 
     values: a[],
 >values : a[]
@@ -111,7 +111,7 @@ function mapUntilCant<a, b>(
 
     canTake: (value: a, index: number) => boolean,
 >canTake : (value: a, index: number) => boolean
->        : ^^^^^^^^ ^^^^^^^^^      ^^^^^       
+>        : ^     ^^ ^^     ^^      ^^^^^       
 >value : a
 >      : ^
 >index : number
@@ -119,7 +119,7 @@ function mapUntilCant<a, b>(
 
     mapping: (value: a, index: number) => b
 >mapping : (value: a, index: number) => b
->        : ^^^^^^^^ ^^^^^^^^^      ^^^^^ 
+>        : ^     ^^ ^^     ^^      ^^^^^ 
 >value : a
 >      : ^
 >index : number
@@ -170,7 +170,7 @@ function mapUntilCant<a, b>(
 >canTake(value, index) : boolean
 >                      : ^^^^^^^
 >canTake : (value: a, index: number) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^ ^^     ^^      ^^^^^^^^^^^^
 >value : a
 >      : ^
 >index : number
@@ -180,15 +180,15 @@ function mapUntilCant<a, b>(
 >result.push(mapping(value, index)) : number
 >                                   : ^^^^^^
 >result.push : (...items: b[]) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^     ^^^^^^^^^^^^^^^^
 >result : b[]
 >       : ^^^
 >push : (...items: b[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^
 >mapping(value, index) : b
 >                      : ^
 >mapping : (value: a, index: number) => b
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^ ^^     ^^      ^^^^^^
 >value : a
 >      : ^
 >index : number

@@ -61,7 +61,7 @@ Object.prototype.hasOwnProperty("string");
 >Object.prototype.hasOwnProperty("string") : boolean
 >                                          : ^^^^^^^
 >Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype : Object
 >                 : ^^^^^^
 >Object : ObjectConstructor
@@ -69,7 +69,7 @@ Object.prototype.hasOwnProperty("string");
 >prototype : Object
 >          : ^^^^^^
 >hasOwnProperty : (v: PropertyKey) => boolean
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^           ^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
@@ -77,7 +77,7 @@ Object.prototype.isPrototypeOf(Object);
 >Object.prototype.isPrototypeOf(Object) : boolean
 >                                       : ^^^^^^^
 >Object.prototype.isPrototypeOf : (v: Object) => boolean
->                               : ^^^^^^^^^^^^^^^^^^^^^^
+>                               : ^ ^^      ^^^^^^^^^^^^
 >Object.prototype : Object
 >                 : ^^^^^^
 >Object : ObjectConstructor
@@ -85,7 +85,7 @@ Object.prototype.isPrototypeOf(Object);
 >prototype : Object
 >          : ^^^^^^
 >isPrototypeOf : (v: Object) => boolean
->              : ^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^      ^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 
@@ -93,7 +93,7 @@ Object.prototype.propertyIsEnumerable("string");
 >Object.prototype.propertyIsEnumerable("string") : boolean
 >                                                : ^^^^^^^
 >Object.prototype.propertyIsEnumerable : (v: PropertyKey) => boolean
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype : Object
 >                 : ^^^^^^
 >Object : ObjectConstructor
@@ -101,7 +101,7 @@ Object.prototype.propertyIsEnumerable("string");
 >prototype : Object
 >          : ^^^^^^
 >propertyIsEnumerable : (v: PropertyKey) => boolean
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^           ^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 

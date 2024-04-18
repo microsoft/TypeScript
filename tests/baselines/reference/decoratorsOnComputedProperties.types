@@ -3,7 +3,7 @@
 === decoratorsOnComputedProperties.ts ===
 function x(o: object, k: PropertyKey) { }
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^      ^^^^^           ^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >o : object
 >  : ^^^^^^
 >k : PropertyKey
@@ -51,7 +51,7 @@ class A {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -59,7 +59,7 @@ class A {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -71,7 +71,7 @@ class A {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -81,7 +81,7 @@ class A {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -135,7 +135,7 @@ class A {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -145,7 +145,7 @@ class A {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -161,7 +161,7 @@ class A {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -169,7 +169,7 @@ class A {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -186,7 +186,7 @@ void class B {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -194,7 +194,7 @@ void class B {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -206,7 +206,7 @@ void class B {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -216,7 +216,7 @@ void class B {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -270,7 +270,7 @@ void class B {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -280,7 +280,7 @@ void class B {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -296,7 +296,7 @@ void class B {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -304,7 +304,7 @@ void class B {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -318,7 +318,7 @@ class C {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -326,7 +326,7 @@ class C {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -338,7 +338,7 @@ class C {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -348,7 +348,7 @@ class C {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -402,7 +402,7 @@ class C {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -412,7 +412,7 @@ class C {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -428,7 +428,7 @@ class C {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -436,7 +436,7 @@ class C {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -463,7 +463,7 @@ void class D {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -471,7 +471,7 @@ void class D {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -483,7 +483,7 @@ void class D {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -493,7 +493,7 @@ void class D {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -547,7 +547,7 @@ void class D {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -557,7 +557,7 @@ void class D {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -573,7 +573,7 @@ void class D {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -581,7 +581,7 @@ void class D {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -605,7 +605,7 @@ class E {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -613,7 +613,7 @@ class E {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -625,7 +625,7 @@ class E {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -635,7 +635,7 @@ class E {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -689,7 +689,7 @@ class E {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -699,7 +699,7 @@ class E {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -725,7 +725,7 @@ class E {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -733,7 +733,7 @@ class E {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -750,7 +750,7 @@ void class F {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -758,7 +758,7 @@ void class F {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -770,7 +770,7 @@ void class F {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -780,7 +780,7 @@ void class F {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -834,7 +834,7 @@ void class F {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -844,7 +844,7 @@ void class F {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -870,7 +870,7 @@ void class F {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -878,7 +878,7 @@ void class F {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -892,7 +892,7 @@ class G {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -900,7 +900,7 @@ class G {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -912,7 +912,7 @@ class G {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -922,7 +922,7 @@ class G {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -976,7 +976,7 @@ class G {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -986,7 +986,7 @@ class G {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1012,7 +1012,7 @@ class G {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -1030,7 +1030,7 @@ class G {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -1047,7 +1047,7 @@ void class H {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -1055,7 +1055,7 @@ void class H {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -1067,7 +1067,7 @@ void class H {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -1077,7 +1077,7 @@ void class H {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -1131,7 +1131,7 @@ void class H {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1141,7 +1141,7 @@ void class H {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1167,7 +1167,7 @@ void class H {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -1185,7 +1185,7 @@ void class H {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -1199,7 +1199,7 @@ class I {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -1207,7 +1207,7 @@ class I {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -1219,7 +1219,7 @@ class I {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -1229,7 +1229,7 @@ class I {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -1283,7 +1283,7 @@ class I {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1293,7 +1293,7 @@ class I {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1303,7 +1303,7 @@ class I {
 
     @x ["some" + "method"]() {}
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["some" + "method"] : () => void
 >                    : ^^^^^^^^^^
 >"some" + "method" : string
@@ -1321,7 +1321,7 @@ class I {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -1339,7 +1339,7 @@ class I {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string
@@ -1356,7 +1356,7 @@ void class J {
 
     @x ["property"]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property"] : any
 >             : ^^^
 >"property" : "property"
@@ -1364,7 +1364,7 @@ void class J {
 
     @x [Symbol.toStringTag]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.toStringTag] : any
 >                     : ^^^
 >Symbol.toStringTag : unique symbol
@@ -1376,7 +1376,7 @@ void class J {
 
     @x ["property2"]: any = 2;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["property2"] : any
 >              : ^^^
 >"property2" : "property2"
@@ -1386,7 +1386,7 @@ void class J {
 
     @x [Symbol.iterator]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[Symbol.iterator] : any
 >                  : ^^^
 >Symbol.iterator : unique symbol
@@ -1440,7 +1440,7 @@ void class J {
 
     @x [foo()]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1450,7 +1450,7 @@ void class J {
 
     @x [foo()]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[foo()] : any
 >        : ^^^
 >foo() : string
@@ -1460,7 +1460,7 @@ void class J {
 
     @x ["some" + "method"]() {}
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >["some" + "method"] : () => void
 >                    : ^^^^^^^^^^
 >"some" + "method" : string
@@ -1478,7 +1478,7 @@ void class J {
 
     @x [fieldNameB]: any;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameB] : any
 >             : ^^^
 >fieldNameB : string
@@ -1496,7 +1496,7 @@ void class J {
 
     @x [fieldNameC]: any = null;
 >x : (o: object, k: PropertyKey) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^           ^^^^^^^^^
 >[fieldNameC] : any
 >             : ^^^
 >fieldNameC : string

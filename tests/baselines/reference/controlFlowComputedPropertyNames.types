@@ -3,7 +3,7 @@
 === controlFlowComputedPropertyNames.ts ===
 function f1(obj: Record<string, unknown>, key: string) {
 >f1 : (obj: Record<string, unknown>, key: string) => void
->   : ^^^^^^                       ^^^^^^^      ^^^^^^^^^
+>   : ^   ^^                       ^^   ^^      ^^^^^^^^^
 >obj : Record<string, unknown>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -41,7 +41,7 @@ function f1(obj: Record<string, unknown>, key: string) {
 
 function f2(obj: Record<string, string | undefined>, key: string) {
 >f2 : (obj: Record<string, string | undefined>, key: string) => void
->   : ^^^^^^                                  ^^^^^^^      ^^^^^^^^^
+>   : ^   ^^                                  ^^   ^^      ^^^^^^^^^
 >obj : Record<string, string | undefined>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -159,7 +159,7 @@ type Thing = { a?: string, b?: number, c?: number };
 
 function f3(obj: Thing, key: keyof Thing) {
 >f3 : (obj: Thing, key: keyof Thing) => void
->   : ^^^^^^     ^^^^^^^           ^^^^^^^^^
+>   : ^   ^^     ^^   ^^           ^^^^^^^^^
 >obj : Thing
 >    : ^^^^^
 >key : keyof Thing
@@ -222,23 +222,23 @@ function f3(obj: Thing, key: keyof Thing) {
             obj[key].toFixed();
 >obj[key].toFixed() : string
 >                   : ^^^^^^
->obj[key].toFixed : (fractionDigits?: number | undefined) => string
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj[key].toFixed : (fractionDigits?: number) => string
+>                 : ^              ^^^      ^^^^^^^^^^^
 >obj[key] : number
 >         : ^^^^^^
 >obj : Thing
 >    : ^^^^^
 >key : keyof Thing
 >    : ^^^^^^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
         }
     }
 }
 
 function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
 >f4 : <K extends string>(obj: Record<K, string | undefined>, key: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^                             ^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^   ^^                             ^^   ^^ ^^^^^^^^^
 >obj : Record<K, string | undefined>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

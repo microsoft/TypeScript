@@ -35,7 +35,7 @@ class Board {
 >this.ships.every(function (val) { return val.isSunk; }) : boolean
 >                                                        : ^^^^^^^
 >this.ships.every : { <S extends Ship>(predicate: (value: Ship, index: number, array: Ship[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Ship, index: number, array: Ship[]) => unknown, thisArg?: any): boolean; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
 >this.ships : Ship[]
 >           : ^^^^^^
 >this : this
@@ -43,9 +43,9 @@ class Board {
 >ships : Ship[]
 >      : ^^^^^^
 >every : { <S extends Ship>(predicate: (value: Ship, index: number, array: Ship[]) => value is S, thisArg?: any): this is S[]; (predicate: (value: Ship, index: number, array: Ship[]) => unknown, thisArg?: any): boolean; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^
 >function (val) { return val.isSunk; } : (val: Ship) => boolean
->                                      : ^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^   ^^^^^^^^^^^^^^^^^^
 >val : Ship
 >    : ^^^^
 >val.isSunk : boolean

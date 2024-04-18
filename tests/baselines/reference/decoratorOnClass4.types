@@ -9,9 +9,9 @@ declare function dec(): <T>(target: T) => T;
 
 @dec()
 >dec() : <T>(target: T) => T
->      : ^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^ ^^^^^^
 >dec : () => <T>(target: T) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^ ^^      ^^ ^^^^^^
 
 class C {
 >C : C

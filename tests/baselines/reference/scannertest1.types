@@ -9,7 +9,7 @@ class CharacterInfo {
 
     public static isDecimalDigit(c: number): boolean {
 >isDecimalDigit : (c: number) => boolean
->               : ^^^^      ^^^^^       
+>               : ^ ^^      ^^^^^       
 >c : number
 >  : ^^^^^^
 
@@ -40,7 +40,7 @@ class CharacterInfo {
 
     public static isHexDigit(c: number): boolean {
 >isHexDigit : (c: number) => boolean
->           : ^^^^      ^^^^^       
+>           : ^ ^^      ^^^^^       
 >c : number
 >  : ^^^^^^
 
@@ -111,7 +111,7 @@ class CharacterInfo {
 
     public static hexValue(c: number): number {
 >hexValue : (c: number) => number
->         : ^^^^      ^^^^^      
+>         : ^ ^^      ^^^^^      
 >c : number
 >  : ^^^^^^
 

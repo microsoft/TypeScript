@@ -30,7 +30,7 @@ module TypeScript {
 
     export function pushAssignScope(scope: SymbolScope,
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 
@@ -117,7 +117,7 @@ module TypeScript {
 
     export function popAssignScope(context: AssignScopeContext) {
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^                  ^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -144,7 +144,7 @@ module TypeScript {
 
     export function instanceCompare(a: Symbol, b: Symbol) {
 >instanceCompare : (a: Symbol, b: Symbol) => Symbol
->                : ^^^^      ^^^^^      ^^^^^^^^^^^
+>                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : Symbol
 >  : ^^^^^^
 >b : Symbol
@@ -187,7 +187,7 @@ module TypeScript {
 
     export function instanceFilterStop(s: Symbol) {
 >instanceFilterStop : (s: Symbol) => any
->                   : ^^^^      ^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^
 >s : Symbol
 >  : ^^^^^^
 
@@ -208,7 +208,7 @@ module TypeScript {
 
         constructor (public select: (a: Symbol, b: Symbol) =>Symbol,
 >select : (a: Symbol, b: Symbol) => Symbol
->       : ^^^^      ^^^^^      ^^^^^      
+>       : ^ ^^      ^^ ^^      ^^^^^      
 >a : Symbol
 >  : ^^^^^^
 >b : Symbol
@@ -216,7 +216,7 @@ module TypeScript {
 
                             public stop: (s: Symbol) =>boolean) { }
 >stop : (s: Symbol) => boolean
->     : ^^^^      ^^^^^       
+>     : ^ ^^      ^^^^^       
 >s : Symbol
 >  : ^^^^^^
 
@@ -241,7 +241,7 @@ module TypeScript {
 
         public update(b: Symbol): boolean {
 >update : (b: Symbol) => boolean
->       : ^^^^      ^^^^^       
+>       : ^ ^^      ^^^^^       
 >b : Symbol
 >  : ^^^^^^
 
@@ -257,11 +257,11 @@ module TypeScript {
 >this.select(this.result, b) : Symbol
 >                            : ^^^^^^
 >this.select : (a: Symbol, b: Symbol) => Symbol
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >select : (a: Symbol, b: Symbol) => Symbol
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >this.result : Symbol
 >            : ^^^^^^
 >this : this
@@ -283,11 +283,11 @@ module TypeScript {
 >this.stop(this.result) : boolean
 >                       : ^^^^^^^
 >this.stop : (s: Symbol) => boolean
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >stop : (s: Symbol) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^
 >this.result : Symbol
 >            : ^^^^^^
 >this : this
@@ -311,13 +311,13 @@ module TypeScript {
 >ScopeSearchFilter : typeof ScopeSearchFilter
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >instanceCompare : (a: Symbol, b: Symbol) => Symbol
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >instanceFilterStop : (s: Symbol) => any
->                   : ^^^^^^^^^^^^^^^^^^
+>                   : ^ ^^      ^^^^^^^^
 
     export function preAssignModuleScopes(ast: AST, context: AssignScopeContext) {
 >preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
->                      : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                      : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -456,7 +456,7 @@ module TypeScript {
 >context.modDeclChain.push(moduleDecl) : number
 >                                      : ^^^^^^
 >context.modDeclChain.push : (...items: ModuleDeclaration[]) => number
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >context.modDeclChain : ModuleDeclaration[]
 >                     : ^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
@@ -464,7 +464,7 @@ module TypeScript {
 >modDeclChain : ModuleDeclaration[]
 >             : ^^^^^^^^^^^^^^^^^^^
 >push : (...items: ModuleDeclaration[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >moduleDecl : ModuleDeclaration
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -540,7 +540,7 @@ module TypeScript {
 >pushAssignScope(aggScope, context, null, null, null) : void
 >                                                     : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >aggScope : SymbolAggregateScope
 >         : ^^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
@@ -614,7 +614,7 @@ module TypeScript {
 
     export function preAssignClassScopes(ast: AST, context: AssignScopeContext) {
 >preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
->                     : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                     : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -887,7 +887,7 @@ module TypeScript {
 >pushAssignScope(aggScope, context, instanceType, classType, null) : void
 >                                                                  : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >aggScope : SymbolAggregateScope
 >         : ^^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
@@ -934,7 +934,7 @@ module TypeScript {
 
     export function preAssignInterfaceScopes(ast: AST, context: AssignScopeContext) {
 >preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
->                         : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                         : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -1097,7 +1097,7 @@ module TypeScript {
 >pushAssignScope(aggScope, context, null, null, null) : void
 >                                                     : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >aggScope : SymbolAggregateScope
 >         : ^^^^^^^^^^^^^^^^^^^^
 >context : AssignScopeContext
@@ -1118,7 +1118,7 @@ module TypeScript {
 
     export function preAssignWithScopes(ast: AST, context: AssignScopeContext) {
 >preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
->                    : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                    : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -1326,7 +1326,7 @@ module TypeScript {
 >pushAssignScope(withScope, context, null, null, null) : void
 >                                                      : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >withScope : any
 >          : ^^^
 >context : AssignScopeContext
@@ -1347,7 +1347,7 @@ module TypeScript {
 
     export function preAssignFuncDeclScopes(ast: AST, context: AssignScopeContext) {
 >preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
->                        : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                        : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3274,7 +3274,7 @@ module TypeScript {
 >pushAssignScope(locals, context, thisType, null, funcDecl) : void
 >                                                           : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >locals : any
 >       : ^^^
 >context : AssignScopeContext
@@ -3288,7 +3288,7 @@ module TypeScript {
 
     export function preAssignCatchScopes(ast: AST, context: AssignScopeContext) {
 >preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
->                     : ^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                     : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3382,7 +3382,7 @@ module TypeScript {
 >pushAssignScope(catchLocals, context, context.scopeChain.thisType, context.scopeChain.classType, context.scopeChain.fnc) : void
 >                                                                                                                         : ^^^^
 >pushAssignScope : (scope: SymbolScope, context: AssignScopeContext, type: Type, classType: Type, fnc: FuncDecl) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^       ^^                  ^^    ^^^^^^^^         ^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >catchLocals : any
 >            : ^^^
 >context : AssignScopeContext
@@ -3422,7 +3422,7 @@ module TypeScript {
 
     export function preAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
 >preAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -3514,7 +3514,7 @@ module TypeScript {
 >preAssignModuleScopes(ast, context) : void
 >                                    : ^^^^
 >preAssignModuleScopes : (ast: AST, context: AssignScopeContext) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3540,7 +3540,7 @@ module TypeScript {
 >preAssignClassScopes(ast, context) : void
 >                                   : ^^^^
 >preAssignClassScopes : (ast: AST, context: AssignScopeContext) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3566,7 +3566,7 @@ module TypeScript {
 >preAssignInterfaceScopes(ast, context) : void
 >                                       : ^^^^
 >preAssignInterfaceScopes : (ast: AST, context: AssignScopeContext) => void
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3592,7 +3592,7 @@ module TypeScript {
 >preAssignWithScopes(ast, context) : void
 >                                  : ^^^^
 >preAssignWithScopes : (ast: AST, context: AssignScopeContext) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3618,7 +3618,7 @@ module TypeScript {
 >preAssignFuncDeclScopes(ast, context) : void
 >                                      : ^^^^
 >preAssignFuncDeclScopes : (ast: AST, context: AssignScopeContext) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3644,7 +3644,7 @@ module TypeScript {
 >preAssignCatchScopes(ast, context) : void
 >                                   : ^^^^
 >preAssignCatchScopes : (ast: AST, context: AssignScopeContext) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^^^^^^       ^^                  ^^^^^^^^^
 >ast : AST
 >    : ^^^
 >context : AssignScopeContext
@@ -3698,7 +3698,7 @@ module TypeScript {
 
     export function postAssignScopes(ast: AST, parent: AST, walker: IAstWalker) {
 >postAssignScopes : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -3754,7 +3754,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -3849,7 +3849,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
             }
@@ -3873,7 +3873,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
             }
@@ -3897,7 +3897,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
             }
@@ -3969,7 +3969,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
                 }
@@ -4010,7 +4010,7 @@ module TypeScript {
 >popAssignScope(context) : void
 >                        : ^^^^
 >popAssignScope : (context: AssignScopeContext) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^       ^^                  ^^^^^^^^^
 >context : AssignScopeContext
 >        : ^^^^^^^^^^^^^^^^^^
                 }

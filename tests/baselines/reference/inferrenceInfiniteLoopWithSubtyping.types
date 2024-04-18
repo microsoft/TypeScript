@@ -21,7 +21,7 @@ export class EnumTypeComposer {
 
   public setFields(fields: { [name: string]: { [key: string]: any } }): this;
 >setFields : (fields: { [name: string]: { [key: string]: any; }; }) => this
->          : ^^^^^^^^^                                            ^^^^^    
+>          : ^      ^^                                            ^^^^^    
 >fields : { [name: string]: { [key: string]: any; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -36,13 +36,13 @@ export class ObjectTypeComposer<TSource, TContext> {
 
   public setFields(fields: ObjMapReadOnly<Resolver>): this;
 >setFields : (fields: ObjMapReadOnly<Resolver>) => this
->          : ^^^^^^^^^                        ^^^^^    
+>          : ^      ^^                        ^^^^^    
 >fields : Readonly<{ [key: string]: Readonly<Resolver>; }>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   public addResolver<TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition> }): this;
 >addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => this
->            : ^^^^^^^^^^^^^^^^^^^^^^^^                                              ^^^^^    
+>            : ^^^^^^^^^^^^^^^^^^    ^^                                              ^^^^^    
 >opts : { type?: Thunk<ComposeOutputTypeDefinition>; }
 >     : ^^^^^^^^^                                  ^^^
 >type : Thunk<ComposeOutputTypeDefinition>
@@ -55,7 +55,7 @@ export class Resolver {
 
   public wrapArgs<NewContext>(
 >wrapArgs : <NewContext>(cb: () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }) => void
->         : ^^^^^^^^^^^^^^^^^                                                               ^^^^^    
+>         : ^^^^^^^^^^^^^  ^^                                                               ^^^^^    
 
     cb: () => {
 >cb : () => { [argName: string]: Thunk<Readonly<EnumTypeComposer>>; }
@@ -69,7 +69,7 @@ export class Resolver {
 
   public wrapType(cb: () => ComposeOutputTypeDefinition): void;
 >wrapType : (cb: () => ComposeOutputTypeDefinition) => void
->         : ^^^^^                                 ^^^^^    
+>         : ^  ^^                                 ^^^^^    
 >cb : () => ComposeOutputTypeDefinition
 >   : ^^^^^^                           
 }
@@ -87,12 +87,12 @@ declare const User: ObjectTypeComposer<any, any>;
 User.addResolver({
 >User.addResolver({  type: User, // `User as any` fix the problem}) : ObjectTypeComposer<any, any>
 >                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->User.addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>User.addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>                 : ^^^^^^^^^^^^^^^^^^    ^^                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >User : ObjectTypeComposer<any, any>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->addResolver : <TResolverSource>(opts: { type?: import("graphql-compose").Thunk<import("graphql-compose").ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>addResolver : <TResolverSource>(opts: { type?: Thunk<ComposeOutputTypeDefinition>; }) => ObjectTypeComposer<any, any>
+>            : ^^^^^^^^^^^^^^^^^^    ^^                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{  type: User, // `User as any` fix the problem} : { type: ObjectTypeComposer<any, any>; }
 >                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

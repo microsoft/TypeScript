@@ -27,18 +27,18 @@ interface B {
 // ok, not considered identical because the steps of contextual signature instantiation create fresh type parameters
 function foo(x: A);
 >foo : { (x: A): any; (x: B): any; }
->    : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : A
 >  : ^
 
 function foo(x: B); // error after constraints above made illegal
 >foo : { (x: A): any; (x: B): any; }
->    : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : B
 >  : ^
 
 function foo(x: any) { }
 >foo : { (x: A): any; (x: B): any; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 

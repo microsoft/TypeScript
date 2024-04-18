@@ -3,7 +3,7 @@
 === decoratorOnClassProperty1.es6.ts ===
 declare function dec(target: any, propertyKey: string): void;
 >dec : (target: any, propertyKey: string) => void
->    : ^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^    
+>    : ^      ^^   ^^           ^^      ^^^^^    
 >target : any
 >propertyKey : string
 >            : ^^^^^^
@@ -11,6 +11,6 @@ declare function dec(target: any, propertyKey: string): void;
 export default class {
     @dec prop;
 >dec : (target: any, propertyKey: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^           ^^      ^^^^^^^^^
 >prop : any
 }

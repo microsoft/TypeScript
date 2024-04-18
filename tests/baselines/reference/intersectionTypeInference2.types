@@ -3,7 +3,7 @@
 === intersectionTypeInference2.ts ===
 declare function f<T>(x: { prop: T }): T;
 >f : <T>(x: { prop: T; }) => T
->  : ^ ^^^^^            ^^^^^ 
+>  : ^ ^^ ^^            ^^^^^ 
 >x : { prop: T; }
 >  : ^^^^^^^^ ^^^
 >prop : T
@@ -27,7 +27,7 @@ f(a);  // never
 >f(a) : never
 >     : ^^^^^
 >f : <T>(x: { prop: T; }) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^            ^^^^^^
 >a : { prop: string; } & { prop: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ f(b);  // never
 >f(b) : never
 >     : ^^^^^
 >f : <T>(x: { prop: T; }) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^            ^^^^^^
 >b : { prop: never; }
 >  : ^^^^^^^^^^^^^^^^
 
@@ -43,7 +43,7 @@ f(b);  // never
 
 declare function f2<T, Key extends keyof T>(obj: {[K in keyof T]: T[K]}, key: Key): T[Key];
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
->   : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^                         ^^^^^^^   ^^^^^      
+>   : ^ ^^   ^^^^^^^^^^^^^^^^^^   ^^                         ^^   ^^   ^^^^^      
 >obj : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : Key
@@ -61,7 +61,7 @@ f2(obj, 'a');
 >f2(obj, 'a') : string
 >             : ^^^^^^
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^^^^^^^^   ^^                         ^^   ^^   ^^^^^^^^^^^
 >obj : { a: string; } & { b: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'a' : "a"
@@ -71,7 +71,7 @@ f2(obj, 'b');
 >f2(obj, 'b') : string
 >             : ^^^^^^
 >f2 : <T, Key extends keyof T>(obj: { [K in keyof T]: T[K]; }, key: Key) => T[Key]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^   ^^^^^^^^^^^^^^^^^^   ^^                         ^^   ^^   ^^^^^^^^^^^
 >obj : { a: string; } & { b: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'b' : "b"

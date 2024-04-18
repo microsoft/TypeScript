@@ -3,7 +3,7 @@
 === autoAccessorExperimentalDecorators.ts ===
 declare var dec: (target: any, key: PropertyKey, desc: PropertyDescriptor) => void;
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^   ^^^^^^^           ^^^^^^^^                  ^^^^^    
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^    
 >target : any
 >       : ^^^
 >key : PropertyKey
@@ -17,7 +17,7 @@ class C1 {
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^^^^^
 
     accessor a: any;
 >a : any
@@ -25,7 +25,7 @@ class C1 {
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^^^^^
 
     static accessor b: any;
 >b : any
@@ -38,7 +38,7 @@ class C2 {
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^^^^^
 
     accessor #a: any;
 >#a : any
@@ -46,7 +46,7 @@ class C2 {
 
     @dec
 >dec : (target: any, key: PropertyKey, desc: PropertyDescriptor) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^   ^^   ^^           ^^    ^^                  ^^^^^^^^^
 
     static accessor #b: any;
 >#b : any

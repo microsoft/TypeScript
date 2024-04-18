@@ -39,7 +39,7 @@ type T5 = [number, string?, boolean];  // Error
 
 function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
 >f1 : (t1: T1, t2: T2, t3: T3, t4: T4) => void
->   : ^^^^^  ^^^^^^  ^^^^^^  ^^^^^^  ^^^^^^^^^
+>   : ^  ^^  ^^  ^^  ^^  ^^  ^^  ^^  ^^^^^^^^^
 >t1 : T1
 >   : ^^
 >t2 : T2

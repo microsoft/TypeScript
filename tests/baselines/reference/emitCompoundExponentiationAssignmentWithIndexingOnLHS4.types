@@ -9,7 +9,7 @@ var globalCounter = 0;
 
 function incrementIdx(max: number) {
 >incrementIdx : (max: number) => number
->             : ^^^^^^      ^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >max : number
 >    : ^^^^^^
 
@@ -27,11 +27,11 @@ function incrementIdx(max: number) {
 >Math.floor(Math.random() * max) : number
 >                                : ^^^^^^
 >Math.floor : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >floor : (x: number) => number
->      : ^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^      ^^^^^^^^^^^
 >Math.random() * max : number
 >                    : ^^^^^^
 >Math.random() : number
@@ -76,7 +76,7 @@ array1[incrementIdx(array1.length)] **= 3;
 >incrementIdx(array1.length) : number
 >                            : ^^^^^^
 >incrementIdx : (max: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
 >              : ^^^^^^
 >array1 : number[]
@@ -96,7 +96,7 @@ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 
 >incrementIdx(array1.length) : number
 >                            : ^^^^^^
 >incrementIdx : (max: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
 >              : ^^^^^^
 >array1 : number[]
@@ -112,7 +112,7 @@ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] **= 
 >incrementIdx(array1.length) : number
 >                            : ^^^^^^
 >incrementIdx : (max: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
 >              : ^^^^^^
 >array1 : number[]
@@ -132,7 +132,7 @@ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2
 >incrementIdx(array1.length) : number
 >                            : ^^^^^^
 >incrementIdx : (max: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
 >              : ^^^^^^
 >array1 : number[]
@@ -148,7 +148,7 @@ array1[incrementIdx(array1.length)] **= array1[incrementIdx(array1.length)] ** 2
 >incrementIdx(array1.length) : number
 >                            : ^^^^^^
 >incrementIdx : (max: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^      ^^^^^^^^^^^
 >array1.length : number
 >              : ^^^^^^
 >array1 : number[]

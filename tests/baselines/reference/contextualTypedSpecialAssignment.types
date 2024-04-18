@@ -16,7 +16,7 @@ var ns = {}
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >ns.x : DoneStatus
 >     : ^^^^^^^^^^
 >ns : typeof ns
@@ -24,7 +24,7 @@ ns.x = {
 >x : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
@@ -34,14 +34,14 @@ ns.x = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
 
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >ns.x : DoneStatus
 >     : ^^^^^^^^^^
 >ns : typeof ns
@@ -49,7 +49,7 @@ ns.x = {
 >x : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
@@ -59,7 +59,7 @@ ns.x = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -81,7 +81,7 @@ class Thing {
         /** @type {DoneStatus} */
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >this.s : DoneStatus
 >       : ^^^^^^^^^^
 >this : this
@@ -89,7 +89,7 @@ class Thing {
 >s : DoneStatus
 >  : ^^^^^^^^^^
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
             status: 'done',
 >status : "done"
@@ -99,7 +99,7 @@ class Thing {
 
             m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
         }
@@ -111,7 +111,7 @@ class Thing {
 
         this.s = {
 >this.s = {            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >this.s : DoneStatus
 >       : ^^^^^^^^^^
 >this : this
@@ -119,7 +119,7 @@ class Thing {
 >s : DoneStatus
 >  : ^^^^^^^^^^
 >{            status: 'done',            m(n) { }        } : { status: "done"; m(n: number): void; }
->                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
             status: 'done',
 >status : "done"
@@ -129,7 +129,7 @@ class Thing {
 
             m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
         }
@@ -141,7 +141,7 @@ class Thing {
 /** @type {DoneStatus} */
 exports.x = {
 >exports.x = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >exports.x : DoneStatus
 >          : ^^^^^^^^^^
 >exports : typeof import("test")
@@ -149,7 +149,7 @@ exports.x = {
 >x : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
@@ -159,7 +159,7 @@ exports.x = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -174,7 +174,7 @@ exports.x
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                     : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >module.exports.y : DoneStatus
 >                 : ^^^^^^^^^^
 >module.exports : typeof module.exports
@@ -186,7 +186,7 @@ module.exports.y = {
 >y : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
@@ -196,7 +196,7 @@ module.exports.y = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -216,7 +216,7 @@ module.exports.y
 /** @type {DoneStatus} */
 Thing.prototype.x = {
 >Thing.prototype.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >Thing.prototype.x : DoneStatus
 >                  : ^^^^^^^^^^
 >Thing.prototype : Thing
@@ -228,7 +228,7 @@ Thing.prototype.x = {
 >x : DoneStatus
 >  : ^^^^^^^^^^
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: 'done',
 >status : "done"
@@ -238,7 +238,7 @@ Thing.prototype.x = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -262,7 +262,7 @@ function F() {
 /** @type {DoneStatus} */
 F.prototype = {
 >F.prototype = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >F.prototype : DoneStatus
 >            : ^^^^^^^^^^
 >F : typeof F
@@ -270,7 +270,7 @@ F.prototype = {
 >prototype : DoneStatus
 >          : ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
@@ -280,7 +280,7 @@ F.prototype = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -289,16 +289,16 @@ F.prototype = {
 // module.exports assignment
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
->module.exports = {    status: "done",    m(n) { }} : { status: 'done'; m(n: number): void; }
->                                                   : ^^^^^^^^^^      ^^^^^^^      ^^^    ^^^
+>module.exports = {    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
+>                                                   : ^^^^^^^^^^      ^^^^ ^^      ^^^    ^^^
 >module.exports : { status: "done"; m(n: number): void; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >module : { exports: { status: "done"; m(n: number): void; }; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >exports : { status: "done"; m(n: number): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 >{    status: "done",    m(n) { }} : { status: "done"; m(n: number): void; }
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
     status: "done",
 >status : "done"
@@ -308,7 +308,7 @@ module.exports = {
 
     m(n) { }
 >m : (n: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }

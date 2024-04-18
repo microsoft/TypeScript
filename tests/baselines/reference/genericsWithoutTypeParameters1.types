@@ -34,7 +34,7 @@ var i2: I<C>;
 
 function foo(x: C, y: I) { }
 >foo : (x: any, y: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -42,7 +42,7 @@ function foo(x: C, y: I) { }
 
 function foo2(x: C<I>, y: I<C>) { }
 >foo2 : (x: C<I>, y: I<C>) => void
->     : ^^^^    ^^^^^    ^^^^^^^^^
+>     : ^ ^^    ^^ ^^    ^^^^^^^^^
 >x : C<any>
 >  : ^^^^^^
 >y : I<any>
@@ -107,7 +107,7 @@ class A<T> { }
 
 function f<T>(x: T): A {
 >f : <T>(x: T) => any
->  : ^ ^^^^^ ^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^
 >x : T
 >  : ^
 

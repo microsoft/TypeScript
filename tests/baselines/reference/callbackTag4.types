@@ -14,7 +14,7 @@ const cb = function (a, b) {
 >cb : C
 >   : ^
 >function (a, b) {    this    return true} : (this: { a: string; b: number; }, a: string, b: number) => boolean
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number

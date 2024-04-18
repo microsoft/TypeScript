@@ -35,11 +35,11 @@ x.toString();
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 var n = 0;
 >n : number
@@ -77,7 +77,7 @@ var f: Function = (x: string) => x.length;
 >f : Function
 >  : ^^^^^^^^
 >(x: string) => x.length : (x: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
