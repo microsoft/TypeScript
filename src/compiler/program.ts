@@ -4234,7 +4234,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "isolatedDeclarations");
             }
             if (!getEmitDeclarations(options)) {
-                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "isolatedDeclarations", "declaration");
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "isolatedDeclarations", "declaration", "composite");
             }
         }
 
