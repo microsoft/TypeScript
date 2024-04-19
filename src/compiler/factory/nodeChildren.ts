@@ -1,6 +1,6 @@
 import {
     emptyArray,
-    isToken,
+    isNodeKind,
     Node,
 } from "../_namespaces/ts";
 
@@ -8,7 +8,8 @@ const nodeChildren = new WeakMap<Node, readonly Node[] | undefined>();
 
 /** @internal */
 export function getNodeChildren(node: Node): readonly Node[] | undefined {
-    if (isToken(node)) return emptyArray;
+    if (!isNodeKind(node.kind)) return emptyArray;
+
     return nodeChildren.get(node);
 }
 
