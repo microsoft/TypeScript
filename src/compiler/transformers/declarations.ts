@@ -619,7 +619,6 @@ export function transformDeclarations(context: TransformationContext) {
 
     function shouldPrintWithInitializer(node: Node): node is CanHaveLiteralInitializer & { initializer: Expression; } {
         return canHaveLiteralInitializer(node)
-            && !node.type
             && !!node.initializer
             && resolver.isLiteralConstDeclaration(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safea
     }
