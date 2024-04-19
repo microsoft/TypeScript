@@ -1380,6 +1380,16 @@ export type HasIllegalModifiers =
     | MissingDeclaration
     | NamespaceExportDeclaration;
 
+/** @internal */
+export type PrimitiveLiteral =
+    | BooleanLiteral
+    | NumericLiteral
+    | StringLiteral
+    | NoSubstitutionTemplateLiteral
+    | BigIntLiteral
+    | PrefixUnaryExpression & { operator: SyntaxKind.PlusToken; operand: NumericLiteral; }
+    | PrefixUnaryExpression & { operator: SyntaxKind.MinusToken; operand: NumericLiteral | BigIntLiteral; };
+
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
  *
@@ -5394,7 +5404,7 @@ export const enum NodeBuilderFlags {
     AllowUniqueESSymbolType                 = 1 << 20,
     AllowEmptyIndexInfoType                 = 1 << 21,
     /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
-
+    /** @internal */ NoSyntacticPrinter     = 1 << 31,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
     /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
@@ -5715,6 +5725,7 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
+    isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
@@ -5729,7 +5740,7 @@ export interface EmitResolver {
     collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
-    isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
+    isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
@@ -6076,6 +6087,7 @@ export interface EvaluatorResult<T extends string | number | undefined = string 
     value: T;
     isSyntacticallyString: boolean;
     resolvedOtherFiles: boolean;
+    hasExternalReferences: boolean;
 }
 
 // dprint-ignore
@@ -7224,6 +7236,7 @@ export interface CompilerOptions {
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     isolatedModules?: boolean;
+    isolatedDeclarations?: boolean;
     jsx?: JsxEmit;
     /** @deprecated */
     keyofStringsOnly?: boolean;
@@ -9759,6 +9772,7 @@ export interface SymbolTracker {
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
+    reportInferenceFallback?(node: Node): void;
 }
 
 export interface TextSpan {
@@ -10212,4 +10226,33 @@ export interface Queue<T> {
 export interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
+}
+
+/** @internal */
+export type HasInferredType =
+    | PropertyAssignment
+    | PropertyAccessExpression
+    | BinaryExpression
+    | ElementAccessExpression
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | PropertyDeclaration
+    | PropertySignature
+    | ExportAssignment;
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderContext {
+    tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
+    enclosingDeclaration: Node | undefined;
+}
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderResolver {
+    isUndefinedIdentifierExpression(name: Identifier): boolean;
+    isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
+    isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
+    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 }

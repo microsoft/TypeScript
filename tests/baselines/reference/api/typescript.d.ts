@@ -6903,6 +6903,7 @@ declare namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
+        isolatedDeclarations?: boolean;
         jsx?: JsxEmit;
         /** @deprecated */
         keyofStringsOnly?: boolean;
