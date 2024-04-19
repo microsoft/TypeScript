@@ -9,7 +9,6 @@ import {
     Symbol,
     TypeChecker,
 } from "../_namespaces/ts";
-import { ImportOrRequireAliasDeclaration } from "../_namespaces/ts.codefix";
 import { addImportsForMovedSymbols } from "./moveToFile";
 /**
  * Returned by refactor functions when some error message needs to be surfaced to users.
@@ -43,7 +42,7 @@ export function refactorKindBeginsWith(known: string, requested: string | undefi
 /** @internal */
 export function addTargetFileImports(
     oldFile: SourceFile,
-    importsToCopy: Map<Symbol, [boolean, ImportOrRequireAliasDeclaration | undefined]>,
+    importsToCopy: Map<Symbol, [boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>,
     targetFileImportsFromOldFile: Map<Symbol, boolean>,
     checker: TypeChecker,
     program: Program,
