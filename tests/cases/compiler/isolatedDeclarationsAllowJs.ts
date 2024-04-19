@@ -1,5 +1,6 @@
 // @isolatedDeclarations: true
 // @allowJS: true
+// @declaration: true
 
 // @filename: file1.ts
 export var x;
