@@ -53,6 +53,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                             }
                             catch (e) {
                                 result.deferred.reject(e);
+                                return;
                             }
                             result.deferred.resolve();
                         },
