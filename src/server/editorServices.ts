@@ -31,6 +31,7 @@ import {
     DocumentRegistry,
     DocumentRegistryBucketKeyWithMode,
     emptyOptions,
+    endsWith,
     ensureTrailingDirectorySeparator,
     ExtendedConfigCacheEntry,
     FileExtensionInfo,
@@ -633,10 +634,37 @@ export interface ProjectServiceOptions {
  */
 export type ConfigFileName = NormalizedPath | false;
 
+/**
+ * Stores cached config file name for info as well as ancestor so is a map
+ * Key is false for Open ScriptInfo
+ * Key is NormalizedPath for Config file name
+ * @internal
+ */
+export type ConfigFileMapForOpenFile = Map<ConfigFileName, ConfigFileName>;
+
+/**
+ * The cache for open script info will have
+ * ConfigFileName or false if ancestors are not looked up
+ * Map if ancestors are looked up
+ * @internal
+ */
+export type ConfigFileForOpenFile = ConfigFileName | ConfigFileMapForOpenFile;
+
 /** Gets cached value of config file name based on open script info or ancestor script info */
-function getConfigFileNameFromCache(info: OpenScriptInfoOrClosedOrConfigFileInfo, cache: Map<Path, ConfigFileName> | undefined): ConfigFileName | undefined {
-    if (!cache || isAncestorConfigFileInfo(info)) return undefined;
-    return cache.get(info.path);
+function getConfigFileNameFromCache(info: OpenScriptInfoOrClosedOrConfigFileInfo, cache: Map<Path, ConfigFileForOpenFile> | undefined): ConfigFileName | undefined {
+    if (!cache) return undefined;
+    const configFileForOpenFile = cache.get(info.path);
+    if (configFileForOpenFile === undefined) return undefined;
+    if (!isAncestorConfigFileInfo(info)) {
+        return isString(configFileForOpenFile) || !configFileForOpenFile ?
+            configFileForOpenFile : // direct result
+            configFileForOpenFile.get(/*key*/ false); // Its a map, use false as the key for the info's config file name
+    }
+    else {
+        return configFileForOpenFile && !isString(configFileForOpenFile) ? // Map with fileName as key
+            configFileForOpenFile.get(info.fileName) :
+            undefined; // No result for the config file name
+    }
 }
 
 /** @internal */
@@ -651,6 +679,7 @@ export interface AncestorConfigFileInfo {
     /** path of open file so we can look at correct root */
     path: Path;
     configFileInfo: true;
+    isForDefaultProject: boolean;
 }
 /** @internal */
 export type OpenScriptInfoOrClosedFileInfo = ScriptInfo | OriginalFileInfo;
@@ -699,6 +728,8 @@ function forEachAncestorProject<T>(
     allowDeferredClosed: boolean | undefined,
     /** Used with ConfiguredProjectLoadKind.Reload to check if this project was already reloaded */
     reloadedProjects: Set<ConfiguredProject> | undefined,
+    /** true means we are looking for solution, so we can stop if found project is not composite to go into parent solution */
+    searchOnlyPotentialSolution: boolean,
     /** Used with ConfiguredProjectLoadKind.Reload to specify delay reload, and also a set of configured projects already marked for delay load */
     delayReloadedConfiguredProjects?: Set<ConfiguredProject>,
 ): T | undefined {
@@ -708,7 +739,8 @@ function forEachAncestorProject<T>(
         if (
             !project.isInitialLoadPending() &&
             (
-                !project.getCompilerOptions().composite ||
+                (searchOnlyPotentialSolution && !project.getCompilerOptions().composite) ||
+                // TODO: Should this flag be shared between trying to load solution for find all references vs trying to find default project
                 project.getCompilerOptions().disableSolutionSearching
             )
         ) return;
@@ -718,6 +750,7 @@ function forEachAncestorProject<T>(
             fileName: project.getConfigFilePath(),
             path: info.path,
             configFileInfo: true,
+            isForDefaultProject: !searchOnlyPotentialSolution,
         }, kind === ConfiguredProjectLoadKind.Find);
         if (!configFileName) return;
 
@@ -727,9 +760,9 @@ function forEachAncestorProject<T>(
             kind,
             reason,
             allowDeferredClosed,
-            /*triggerFile*/ undefined,
+            !searchOnlyPotentialSolution ? info.fileName : undefined, // Config Diag event for project if its for default project
             reloadedProjects,
-            /*delayLoad*/ true,
+            searchOnlyPotentialSolution, // Delay load if we are searching for solution
             delayReloadedConfiguredProjects,
         );
         if (!ancestor) return;
@@ -1195,7 +1228,7 @@ export class ProjectService {
      */
     readonly openFiles: Map<Path, NormalizedPath | undefined> = new Map<Path, NormalizedPath | undefined>();
     /** Config files looked up and cached config files for open script info */
-    private readonly configFileForOpenFiles = new Map<Path, ConfigFileName>();
+    private readonly configFileForOpenFiles = new Map<Path, ConfigFileForOpenFile>();
     /** Set of open script infos that are root of inferred project */
     private rootOfInferredProjects = new Set<ScriptInfo>();
     /**
@@ -1234,7 +1267,7 @@ export class ProjectService {
      * All the open script info that needs recalculation of the default project,
      * this also caches config file info before config file change was detected to use it in case projects are not updated yet
      */
-    private pendingOpenFileProjectUpdates?: Map<Path, ConfigFileName>;
+    private pendingOpenFileProjectUpdates?: Map<Path, ConfigFileForOpenFile>;
     /** @internal */
     pendingEnsureProjectForOpenFiles = false;
 
@@ -2222,7 +2255,7 @@ export class ProjectService {
         const configFileExistenceInfo = this.configFileExistenceInfoCache.get(canonicalConfigFilePath);
 
         let openFilesImpactedByConfigFile: Set<Path> | undefined;
-        if (this.openFiles.has(info.path) && !isAncestorConfigFileInfo(info)) {
+        if (this.openFiles.has(info.path) && (!isAncestorConfigFileInfo(info) || info.isForDefaultProject)) {
             // By default the info would get impacted by presence of config file since its in the detection path
             // Only adding the info as a root to inferred project will need the existence to be watched by file watcher
             if (configFileExistenceInfo) (configFileExistenceInfo.openFilesImpactedByConfigFile ??= new Set()).add(info.path);
@@ -2416,31 +2449,39 @@ export class ProjectService {
 
         // If projectRootPath doesn't contain info.path, then do normal search for config file
         const anySearchPathOk = !projectRootPath || !isSearchPathInProjectRoot();
-        // For ancestor of config file always ignore its own directory since its going to result in itself
-        let searchInDirectory = !isAncestorConfigFileInfo(info);
+
+        let searchTsconfig = true;
+        let searchJsconfig = true;
+        if (isAncestorConfigFileInfo(info)) {
+            // For ancestor of config file always ignore itself
+            if (endsWith(info.fileName, "tsconfig.json")) searchTsconfig = false;
+            else searchTsconfig = searchJsconfig = false;
+        }
         do {
-            if (searchInDirectory) {
-                const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
+            const canonicalSearchPath = normalizedPathToPath(searchPath, this.currentDirectory, this.toCanonicalFileName);
+            if (searchTsconfig) {
                 const tsconfigFileName = asNormalizedPath(combinePaths(searchPath, "tsconfig.json"));
-                let result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
+                const result = action(combinePaths(canonicalSearchPath, "tsconfig.json") as NormalizedPath, tsconfigFileName);
                 if (result) return tsconfigFileName;
+            }
 
+            if (searchJsconfig) {
                 const jsconfigFileName = asNormalizedPath(combinePaths(searchPath, "jsconfig.json"));
-                result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
+                const result = action(combinePaths(canonicalSearchPath, "jsconfig.json") as NormalizedPath, jsconfigFileName);
                 if (result) return jsconfigFileName;
+            }
 
-                // If we started within node_modules, don't look outside node_modules.
-                // Otherwise, we might pick up a very large project and pull in the world,
-                // causing an editor delay.
-                if (isNodeModulesDirectory(canonicalSearchPath)) {
-                    break;
-                }
+            // If we started within node_modules, don't look outside node_modules.
+            // Otherwise, we might pick up a very large project and pull in the world,
+            // causing an editor delay.
+            if (isNodeModulesDirectory(canonicalSearchPath)) {
+                break;
             }
 
             const parentPath = asNormalizedPath(getDirectoryPath(searchPath));
             if (parentPath === searchPath) break;
             searchPath = parentPath;
-            searchInDirectory = true;
+            searchTsconfig = searchJsconfig = true;
         }
         while (anySearchPathOk || isSearchPathInProjectRoot());
 
@@ -2475,8 +2516,24 @@ export class ProjectService {
         configFileName: NormalizedPath | undefined,
     ) {
         if (!this.openFiles.has(info.path)) return; // Dont cache for closed script infos
-        if (isAncestorConfigFileInfo(info)) return; // Dont cache for ancestors
-        this.configFileForOpenFiles.set(info.path, configFileName || false);
+        const config = configFileName || false;
+        if (!isAncestorConfigFileInfo(info)) {
+            // Set value for open script info
+            this.configFileForOpenFiles.set(info.path, config);
+        }
+        else {
+            // Need to set value for ancestor in ConfigFileMapForOpenFile
+            let configFileForOpenFile = this.configFileForOpenFiles.get(info.path)!;
+            if (!configFileForOpenFile || isString(configFileForOpenFile)) {
+                // We have value for open script info in cache, make a map with that as false key and set new vlaue
+                this.configFileForOpenFiles.set(
+                    info.path,
+                    configFileForOpenFile = new Map().set(false, configFileForOpenFile),
+                );
+            }
+            // Set value of for ancestor in the map
+            configFileForOpenFile.set(info.fileName, config);
+        }
     }
 
     /**
@@ -4191,7 +4248,8 @@ export class ProjectService {
         function tryFindDefaultConfiguredProject(project: ConfiguredProject): ConfiguredProject | undefined {
             return isDefaultProject(project) ?
                 defaultProject :
-                tryFindDefaultConfiguredProjectFromReferences(project);
+                (tryFindDefaultConfiguredProjectFromReferences(project) ??
+                    tryFindDefaultConfiguredProjectFromAncestor(project));
         }
 
         function isDefaultProject(project: ConfiguredProject): ConfiguredProject | undefined {
@@ -4219,6 +4277,19 @@ export class ProjectService {
                 allowDeferredClosed,
                 info.fileName,
                 reloadedProjects,
+            );
+        }
+
+        function tryFindDefaultConfiguredProjectFromAncestor(project: ConfiguredProject) {
+            return forEachAncestorProject( // If not in referenced projects, try ancestors and its references
+                info,
+                project,
+                tryFindDefaultConfiguredProject,
+                kind,
+                `Creating possible configured project for ${info.fileName} to open`,
+                allowDeferredClosed,
+                reloadedProjects,
+                /*searchOnlyPotentialSolution*/ false,
             );
         }
     }
@@ -4265,6 +4336,7 @@ export class ProjectService {
                 `Creating project possibly referencing default composite project ${defaultProject.getProjectName()} of open file ${info.fileName}`,
                 allowDeferredClosed,
                 reloadedProjects,
+                /*searchOnlyPotentialSolution*/ true,
                 delayReloadedConfiguredProjects,
             );
         }
