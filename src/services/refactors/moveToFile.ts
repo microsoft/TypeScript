@@ -548,11 +548,6 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
 
 /** @internal */
 export function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
-    forEachAliasDeclarationInImportOrRequire(importDecl, i => {
-        if (i.kind === SyntaxKind.ImportEqualsDeclaration) {
-            changes.delete(sourceFile, i);
-        }
-    })
     switch (importDecl.kind) {
         case SyntaxKind.ImportDeclaration:
             deleteUnusedImportsInDeclaration(sourceFile, importDecl, changes, isUnused);
@@ -585,11 +580,12 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
         }
         if (namedBindings) {
             if (namedBindingsUnused) {
-                changes.replaceNode(
-                    sourceFile,
-                    importDecl.importClause,
-                    factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
-                );
+                // changes.replaceNode(
+                //     sourceFile,
+                //     importDecl.importClause,
+                //     factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
+                // );
+                changes.delete(sourceFile, importDecl.importClause);
             }
             else if (namedBindings.kind === SyntaxKind.NamedImports) {
                 for (const element of namedBindings.elements) {
