@@ -298,7 +298,7 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map([
     [RegularExpressionFlags.Multiline, ScriptTarget.ES3],
     [RegularExpressionFlags.DotAll, ScriptTarget.ES2018],
     [RegularExpressionFlags.Unicode, ScriptTarget.ES2015],
-    [RegularExpressionFlags.UnicodeSets, ScriptTarget.ES2024],
+    [RegularExpressionFlags.UnicodeSets, ScriptTarget.ESNext],
     [RegularExpressionFlags.Sticky, ScriptTarget.ES2015],
 ]);
 
