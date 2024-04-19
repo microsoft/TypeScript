@@ -348,19 +348,19 @@ function fnArg1(x: typeof fnArg1, y: number) {
 >fnArg1 : (x: typeof fnArg1, y: number) => void
 >       : ^ ^^             ^^ ^^      ^^^^^^^^^
 >x : (x: typeof fnArg1, y: number) => void
->  : ^ ^^             ^^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^             ^^ ^^      ^^^^^^^^^
 >fnArg1 : (x: typeof fnArg1, y: number) => void
->       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^             ^^ ^^      ^^^^^^^^^
 >y : number
 >  : ^^^^^^
 
     var x: (n: typeof fnArg1, m: number) => void;
 >x : (x: typeof fnArg1, y: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^             ^^ ^^      ^^^^^^^^^
 >n : (x: typeof fnArg1, y: number) => void
->  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^             ^^ ^^      ^^^^^^^^^
 >fnArg1 : (x: typeof fnArg1, y: number) => void
->       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^             ^^ ^^      ^^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -368,16 +368,16 @@ function fnArg1(x: typeof fnArg1, y: number) {
 >fnArg1(fnArg1, 0) : void
 >                  : ^^^^
 >fnArg1 : (x: typeof fnArg1, y: number) => void
->       : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^             ^^ ^^      ^^^^^^^^^
 >fnArg1 : (x: typeof fnArg1, y: number) => void
->       :                                      
+>       : ^ ^^             ^^ ^^      ^^^^^^^^^
 >0 : 0
 >  : ^
 }
 
 function overload1(x: (n: string) => string): string;
 >overload1 : { (x: (n: string) => string): string; (x: (n: number) => number): number; (x: (n: any) => any): any; }
->          : ^^^ ^^                     ^^^      ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^                     ^^^      ^^^ ^^                     ^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >x : (n: string) => string
 >  : ^ ^^      ^^^^^      
 >n : string
@@ -385,7 +385,7 @@ function overload1(x: (n: string) => string): string;
 
 function overload1(x: (n: number) => number): number;
 >overload1 : { (x: (n: string) => string): string; (x: (n: number) => number): number; (x: (n: any) => any): any; }
->          : ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                     ^^^      ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^                     ^^^^^^^^^^^^ ^^                     ^^^      ^^^ ^^               ^^^^^^^^^
 >x : (n: number) => number
 >  : ^ ^^      ^^^^^      
 >n : number
@@ -393,7 +393,7 @@ function overload1(x: (n: number) => number): number;
 
 function overload1(x: (n: any) => any): any;
 >overload1 : { (x: (n: string) => string): string; (x: (n: number) => number): number; (x: (n: any) => any): any; }
->          : ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^
+>          : ^^^ ^^                     ^^^^^^^^^^^^ ^^                     ^^^^^^^^^^^^ ^^               ^^^   ^^^
 >x : (n: any) => any
 >  : ^ ^^   ^^^^^   
 >n : any
@@ -401,7 +401,7 @@ function overload1(x: (n: any) => any): any;
 
 function overload1() { return undefined; };
 >overload1 : { (x: (n: string) => string): string; (x: (n: number) => number): number; (x: (n: any) => any): any; }
->          : ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^                     ^^^^^^^^^^^^ ^^                     ^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -413,7 +413,7 @@ function fnArg2() {
 >overload1(fnArg2) : any
 >                  : ^^^
 >overload1 : { (x: (n: string) => string): string; (x: (n: number) => number): number; (x: (n: any) => any): any; }
->          : ^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^ ^^                     ^^^^^^^^^^^^ ^^                     ^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >fnArg2 : () => any
 >       : ^^^^^^^^^
 }

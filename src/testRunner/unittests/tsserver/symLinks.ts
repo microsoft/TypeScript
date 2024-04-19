@@ -2,6 +2,11 @@ import * as ts from "../../_namespaces/ts";
 import { dedent } from "../../_namespaces/Utils";
 import { jsonToReadableText } from "../helpers";
 import {
+    buildMonorepoSymlinkedSiblingPackage1,
+    cleanMonorepoSymlinkedSiblingPackage1,
+    getMonorepoSymlinkedSiblingPackagesSys,
+} from "../helpers/monorepoSymlinkedSiblingPackages";
+import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
@@ -13,11 +18,13 @@ import {
     createServerHost,
     File,
     libFile,
+    osFlavorToString,
     SymLink,
     TestServerHost,
+    TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: symLinks", () => {
+describe("unittests:: tsserver:: symLinks::", () => {
     it("rename in common file renames all project", () => {
         const folderA = `/users/username/projects/a`;
         const aFile: File = {
@@ -263,5 +270,43 @@ new C();`,
         // When we open this file, we will update InferredProject2 which contains this file and the follow-redirect will be resolved again
         openFilesForSession(["c:/temp/replay/axios-src/lib/core/settle.js"], session);
         baselineTsserverLogs("symLinks", "when not symlink but differs in casing", session);
+    });
+
+    describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {
+        verify(/*built*/ false);
+        verify(/*built*/ true);
+        verify(/*built*/ false, TestServerHostOsFlavor.Linux);
+        verify(/*built*/ true, TestServerHostOsFlavor.Linux);
+        function verify(built: boolean, osFlavor?: TestServerHostOsFlavor) {
+            it(`monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, () => {
+                const indexFile = "/home/src/projects/project/packages/package2/src/index.ts";
+                const host = getMonorepoSymlinkedSiblingPackagesSys(/*forTsserver*/ true, built, osFlavor);
+                const session = new TestSession(host);
+                openFilesForSession([indexFile], session);
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                if (!built) {
+                    buildMonorepoSymlinkedSiblingPackage1(host);
+                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
+                    host.runQueuedTimeoutCallbacks();
+                    verifyGetErrRequest({ session, files: [indexFile] });
+                }
+
+                cleanMonorepoSymlinkedSiblingPackage1(host);
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                buildMonorepoSymlinkedSiblingPackage1(host);
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                host.runQueuedTimeoutCallbacks();
+                verifyGetErrRequest({ session, files: [indexFile] });
+
+                baselineTsserverLogs("symLinks", `monorepo style sibling packages symlinked${built ? " package1 built" : ""}${osFlavor ? ` ${osFlavorToString(osFlavor)}` : ""}`, session);
+            });
+        }
     });
 });

@@ -39,9 +39,9 @@ Common.localize = function (string) {
 >Common : typeof Common
 >       : ^^^^^^^^^^^^^
 >localize : (string: string) => string
->         : ^      ^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^      ^^^^^^^^^^^
 >function (string) {    return string;} : (string: string) => string
->                                       :                           
+>                                       : ^      ^^      ^^^^^^^^^^^
 >string : string
 >       : ^^^^^^
 

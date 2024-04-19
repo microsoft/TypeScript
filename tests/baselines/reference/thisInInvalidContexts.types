@@ -82,7 +82,7 @@ genericFunc<this>(undefined);  // Should be an error
 >genericFunc<this>(undefined) : void
 >                             : ^^^^
 >genericFunc : <T>(x: T) => void
->            : ^^^^ ^^^^^^^^^^^^
+>            : ^ ^^ ^^ ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

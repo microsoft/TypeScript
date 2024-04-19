@@ -15,5 +15,5 @@ export var b = foo;
 >b : () => void
 >  : ^^^^^^^^^^
 >foo : () => void
->    :           
+>    : ^^^^^^^^^^
 

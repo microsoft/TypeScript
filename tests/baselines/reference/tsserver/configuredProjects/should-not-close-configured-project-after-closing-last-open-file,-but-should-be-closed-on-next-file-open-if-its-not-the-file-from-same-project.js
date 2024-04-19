@@ -6,11 +6,13 @@ let x =1;
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts" ]
-                }
+  "compilerOptions": {
+    "target": "es6"
+  },
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -140,11 +142,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 3,
-                    "offset": 35
+                    "offset": 15
                   },
                   "end": {
                     "line": 3,
-                    "offset": 40
+                    "offset": 20
                   },
                   "file": "/a/b/tsconfig.json"
                 },

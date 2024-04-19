@@ -624,11 +624,11 @@ const promiseForConstCall = Promise.resolve(constCall);
 >Promise.resolve(constCall) : Promise<unique symbol>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >constCall : unique symbol
 >          : ^^^^^^^^^^^^^
 
@@ -674,16 +674,16 @@ declare function f<T>(x: T): T;
 >  : ^
 
 declare function g(x: typeof s): void;
->g : { (x: typeof s): void; (x: unique symbol): void; }
->  : ^^^ ^^        ^^^    ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^    ^^^ ^^          ^^^^^^^^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
 declare function g(x: typeof N.s): void;
->g : { (x: unique symbol): void; (x: typeof N.s): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^    ^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^    ^^^
 >x : unique symbol
 >  : ^^^^^^^^^^^^^
 >N.s : unique symbol
@@ -700,7 +700,7 @@ f(s);
 >f(s) : unique symbol
 >     : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -708,7 +708,7 @@ f(N.s);
 >f(N.s) : unique symbol
 >       : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -720,7 +720,7 @@ f(N["s"]);
 >f(N["s"]) : unique symbol
 >          : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N["s"] : unique symbol
 >       : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1012,7 +1012,7 @@ f<typeof s>(s);
 >f<typeof s>(s) : unique symbol
 >               : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -1022,7 +1022,7 @@ f<typeof N.s>(N.s);
 >f<typeof N.s>(N.s) : unique symbol
 >                   : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1040,7 +1040,7 @@ f<typeof N.s>(N["s"]);
 >f<typeof N.s>(N["s"]) : unique symbol
 >                      : ^^^^^^^^^^^^^
 >f : <T>(x: T) => T
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1057,16 +1057,16 @@ f<typeof N.s>(N["s"]);
 g(s);
 >g(s) : void
 >     : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
 g(N.s);
 >g(N.s) : void
 >       : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >N.s : unique symbol
 >    : ^^^^^^^^^^^^^
 >N : typeof N
@@ -1077,8 +1077,8 @@ g(N.s);
 g(N["s"]);
 >g(N["s"]) : void
 >          : ^^^^
->g : { (x: unique symbol): void; (x: unique symbol): void; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : { (x: typeof s): void; (x: typeof N.s): void; }
+>  : ^^^ ^^        ^^^^^^^^^^ ^^          ^^^^^^^^^^
 >N["s"] : unique symbol
 >       : ^^^^^^^^^^^^^
 >N : typeof N

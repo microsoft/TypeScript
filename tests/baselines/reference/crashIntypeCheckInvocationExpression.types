@@ -57,7 +57,7 @@ export var compileServer = task<number, number, any>(<P0, P1, P2>() => {
 >doCompile<number, number, any>(fileset, moduleType) : any
 >                                                    : ^^^
 >doCompile : <P0_1, P1_1, P2_1>(fileset: P0_1, moduleType: P1_1) => any
->          : ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^          ^^^^^^^^^^^^^^
+>          : ^    ^^    ^^^^^^^^       ^^    ^^          ^^    ^^^^^^^^
 >fileset : any
 >        : ^^^
 >moduleType : any

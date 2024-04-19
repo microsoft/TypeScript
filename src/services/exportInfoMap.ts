@@ -13,6 +13,7 @@ import {
     firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
+    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getDirectoryPath,
@@ -89,6 +90,12 @@ export interface SymbolExportInfo {
     /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
     isFromPackageJson: boolean;
 }
+
+/**
+ * @internal
+ * ExportInfo for an export that does not exist yet, so does not have a symbol.
+ */
+export type FutureSymbolExportInfo = Omit<SymbolExportInfo, "symbol"> & { readonly symbol?: undefined; };
 
 interface CachedSymbolExportInfo {
     // Used to rehydrate `symbol` and `moduleSymbol` when transient
@@ -477,7 +484,7 @@ function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly So
 }
 
 /** @internal */
-export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
     const start = timestamp();
     // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
     // which will invalidate the export map cache if things change, so pull it before

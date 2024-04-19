@@ -342,12 +342,14 @@ export interface PackageJsonPathFields {
     imports?: object;
     exports?: object;
     name?: string;
+    dependencies?: MapLike<string>;
+    peerDependencies?: MapLike<string>;
+    optionalDependencies?: MapLike<string>;
 }
 
 interface PackageJson extends PackageJsonPathFields {
     name?: string;
     version?: string;
-    peerDependencies?: MapLike<string>;
 }
 
 function readPackageJsonField<K extends MatchingKeys<PackageJson, string | undefined>>(jsonContent: PackageJson, fieldName: K, typeOfTag: "string", state: ModuleResolutionState): PackageJson[K] | undefined;
@@ -360,9 +362,9 @@ function readPackageJsonField<K extends keyof PackageJson>(jsonContent: PackageJ
         return;
     }
     const value = jsonContent[fieldName];
-    if (typeof value !== typeOfTag || value === null) { // eslint-disable-line no-null/no-null
+    if (typeof value !== typeOfTag || value === null) { // eslint-disable-line no-restricted-syntax
         if (state.traceEnabled) {
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             trace(state.host, Diagnostics.Expected_type_of_0_field_in_package_json_to_be_1_got_2, fieldName, typeOfTag, value === null ? "null" : typeof value);
         }
         return;
@@ -822,7 +824,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
                         const packageJsonPath = combinePaths(root, normalized, "package.json");
                         // `types-publisher` sometimes creates packages with `"typings": null` for packages that don't provide their own types.
                         // See `createNotNeededPackageJSON` in the types-publisher` repo.
-                        // eslint-disable-next-line no-null/no-null
+                        // eslint-disable-next-line no-restricted-syntax
                         const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                         if (!isNotNeededPackage) {
                             const baseFileName = getBaseFileName(normalized);
@@ -934,7 +936,7 @@ export interface PackageJsonInfoCache {
 export type PerModuleNameCache = PerNonRelativeNameCache<ResolvedModuleWithFailedLookupLocations>;
 
 function compilerOptionValueToString(value: unknown): string {
-    if (value === null || typeof value !== "object") { // eslint-disable-line no-null/no-null
+    if (value === null || typeof value !== "object") { // eslint-disable-line no-restricted-syntax
         return "" + value;
     }
     if (isArray(value)) {
@@ -2276,7 +2278,7 @@ function loadEntrypointsFromExportMap(
             loadEntrypointsFromTargetExports(target);
         }
     }
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     else if (typeof exports === "object" && exports !== null && allKeysStartWithDot(exports as MapLike<unknown>)) {
         for (const key in exports) {
             loadEntrypointsFromTargetExports((exports as MapLike<unknown>)[key]);
@@ -2331,7 +2333,7 @@ function loadEntrypointsFromExportMap(
                 }
             }
         }
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         else if (typeof target === "object" && target !== null) {
             return forEach(getOwnKeys(target as MapLike<unknown>), key => {
                 if (key === "default" || contains(state.conditions, key) || isApplicableVersionedTypesKey(state.conditions, key)) {
@@ -2703,7 +2705,7 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
         const target = (lookupTable as { [idx: string]: unknown; })[moduleName];
         return loadModuleFromTargetImportOrExport(target, /*subpath*/ "", /*pattern*/ false, moduleName);
     }
-    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => k.includes("*") || endsWith(k, "/")), comparePatternKeys);
+    const expandingKeys = sort(filter(getOwnKeys(lookupTable as MapLike<unknown>), k => hasOneAsterisk(k) || endsWith(k, "/")), comparePatternKeys);
     for (const potentialTarget of expandingKeys) {
         if (state.features & NodeResolutionFeatures.ExportsPatternTrailers && matchesPatternWithTrailer(potentialTarget, moduleName)) {
             const target = (lookupTable as { [idx: string]: unknown; })[potentialTarget];
@@ -2729,6 +2731,11 @@ function loadModuleFromImportsOrExports(extensions: Extensions, state: ModuleRes
         if (starPos === -1) return false; // handled by last case in loop
         return startsWith(name, target.substring(0, starPos)) && endsWith(name, target.substring(starPos + 1));
     }
+}
+
+function hasOneAsterisk(patternKey: string): boolean {
+    const firstStar = patternKey.indexOf("*");
+    return firstStar !== -1 && firstStar === patternKey.lastIndexOf("*");
 }
 
 /**
@@ -2792,7 +2799,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
             if (inputLink) return inputLink;
             return toSearchResult(withPackageId(scope, loadFileNameFromPackageJsonField(extensions, finalPath, /*onlyRecordFailures*/ false, state), state));
         }
-        else if (typeof target === "object" && target !== null) { // eslint-disable-line no-null/no-null
+        else if (typeof target === "object" && target !== null) { // eslint-disable-line no-restricted-syntax
             if (!Array.isArray(target)) {
                 traceIfEnabled(state, Diagnostics.Entering_conditional_exports);
                 for (const condition of getOwnKeys(target as MapLike<unknown>)) {
@@ -2831,7 +2838,7 @@ function getLoadModuleFromTargetImportOrExport(extensions: Extensions, state: Mo
                 }
             }
         }
-        else if (target === null) { // eslint-disable-line no-null/no-null
+        else if (target === null) { // eslint-disable-line no-restricted-syntax
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_scope_0_explicitly_maps_specifier_1_to_null, scope.packageDirectory, moduleName);
             }
@@ -3087,7 +3094,7 @@ function loadModuleFromSpecificNodeModulesDirectory(extensions: Extensions, modu
             );
         if (
             !pathAndExtension && packageInfo
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             && (packageInfo.contents.packageJsonContent.exports === undefined || packageInfo.contents.packageJsonContent.exports === null)
             && state.features & NodeResolutionFeatures.EsmMode
         ) {

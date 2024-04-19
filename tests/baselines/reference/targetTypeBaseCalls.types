@@ -25,7 +25,7 @@ foo(function(s) { s = 5 });  // Error, can’t assign number to string
 >foo(function(s) { s = 5 }) : void
 >                           : ^^^^
 >foo : (x: (s: string) => void) => void
->    : ^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^                   ^^^^^^^^^
 >function(s) { s = 5 } : (s: string) => void
 >                      : ^ ^^^^^^^^^^^^^^^^^
 >s : string

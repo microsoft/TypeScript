@@ -5,7 +5,7 @@ const a = () => {
 >a : () => { arguments: any[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return {        arguments: [],    };} : () => { arguments: any[]; }
->                                                 :                            
+>                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        arguments: [],    } : { arguments: undefined[]; }
@@ -24,7 +24,7 @@ const b = () => {
 >b : () => { arguments: any[]; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    const c = {        arguments: [],    }    return c;} : () => { arguments: any[]; }
->                                                                :                            
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const c = {
 >c : { arguments: any[]; }
@@ -48,7 +48,7 @@ const c = () => {
 >c : () => { arguments: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    return {        arguments,    };} : () => { arguments: any; }
->                                             :                          
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return {
 >{        arguments,    } : { arguments: any; }
@@ -65,7 +65,7 @@ const d = () => {
 >d : () => { arguments: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => {    const arguments = undefined;    return {        arguments,    };} : () => { arguments: any; }
->                                                                             :                          
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const arguments = undefined;
 >arguments : any

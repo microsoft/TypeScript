@@ -6,7 +6,7 @@ const webpack = function (){
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (){} : { (): void; WebpackOptionsDefaulter: number; }
->              :                                               
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 exports = module.exports = webpack;
 >exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }

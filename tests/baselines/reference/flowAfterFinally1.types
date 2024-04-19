@@ -30,7 +30,7 @@ try {
 >result : {}
 >       : ^^
 >someOperation() : {}
->                :   
+>                : ^^
 >someOperation : () => {}
 >              : ^^^^^^^^
 

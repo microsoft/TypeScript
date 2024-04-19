@@ -341,11 +341,11 @@ function area(s: Shape): number {
 >Math.sqrt(3) : number
 >             : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -472,11 +472,11 @@ function areaWrapped(s: Shape): number {
 >Math.sqrt(3) : number
 >             : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^ ^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^ ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -668,7 +668,7 @@ const doSomethingWithLevel = (level: Level) => {
 >doSomethingWithLevel : (level: Level) => Level
 >                     : ^     ^^     ^^^^^^^^^^
 >(level: Level) => {  let next: Level;  switch (level) {    case Level.One:      next = Level.Two;      break;    case Level.Two:      next = Level.One;      break;  }  return next;} : (level: Level) => Level
->                                                                                                                                                                                      :                        
+>                                                                                                                                                                                      : ^     ^^     ^^^^^^^^^^
 >level : Level
 >      : ^^^^^
 

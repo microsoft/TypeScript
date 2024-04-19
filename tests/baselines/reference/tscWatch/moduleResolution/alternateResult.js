@@ -372,7 +372,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tscon
 
 //// [/home/src/projects/project/index.mjs]
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]

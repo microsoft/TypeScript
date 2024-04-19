@@ -39,7 +39,7 @@ var e = (x: C) => { var y: C; return y; }
 >e : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(x: C) => { var y: C; return y; } : (x: any) => any
->                                  :                
+>                                  : ^ ^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any
@@ -61,7 +61,7 @@ var g = function f(x: C): C { var y: C; return y; }
 >g : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >function f(x: C): C { var y: C; return y; } : (x: any) => any
->                                            :                
+>                                            : ^ ^^^^^^^^^^^^^
 >f : (x: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >x : any

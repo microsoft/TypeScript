@@ -77,11 +77,11 @@ class ItemSetEvent extends Event {
 >super.add(listener) : void
 >                    : ^^^^
 >super.add : (listener: () => any) => void
->          : ^        ^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^         ^^^^^^^^^
 >super : Event
 >      : ^^^^^
 >add : (listener: () => any) => void
->    : ^        ^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^         ^^^^^^^^^
 >listener : (items: ItemSet) => void
 >         : ^     ^^^^^^^^^^^^^^^^^^
 

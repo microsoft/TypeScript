@@ -16,7 +16,7 @@ declare module "m2" {
 >Y : () => any
 >  : ^^^^^^^^^
 >X : () => any
->  :          
+>  : ^^^^^^^^^
 
     function Z(): X.I;
 >Z : () => X.I

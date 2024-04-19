@@ -136,11 +136,12 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //tsclient/project/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //tsclient/project/node_modules/aws-sdk/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //tsclient/project/node_modules/aws-sdk/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //tsclient/project/node_modules/aws-sdk/clients/s3.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //tsclient/project/node_modules/aws-sdk/clients/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -173,6 +174,8 @@ Info seq  [hh:mm:ss:mss] 	FileName: //tsclient/project/index.ts ProjectRootPath:
 Info seq  [hh:mm:ss:mss] 		Projects: /dev/null/inferredProject2*
 After Request
 watchedFiles::
+//tsclient/project/node_modules/aws-sdk/clients/package.json: *new*
+  {"pollingInterval":2000}
 //tsclient/project/node_modules/aws-sdk/clients/s3.d.ts: *new*
   {"pollingInterval":500}
 //tsclient/project/node_modules/aws-sdk/index.d.ts: *new*
@@ -259,6 +262,20 @@ Info seq  [hh:mm:ss:mss] response:
       "request_seq": 2,
       "success": true
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 3,
@@ -1086,6 +1103,10 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Same program as before
 Info seq  [hh:mm:ss:mss] forEachExternalModuleToImportFrom autoImportProvider: *
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1094,5 +1115,21 @@ Info seq  [hh:mm:ss:mss] response:
       "command": "getCodeFixes",
       "request_seq": 9,
       "success": true,
+      "performanceData": {
+        "updateGraphDurationMs": *
+      },
       "body": []
     }
+After Request
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*

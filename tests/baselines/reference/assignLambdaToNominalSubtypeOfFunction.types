@@ -17,7 +17,7 @@ fn((a, b) => true);
 >fn((a, b) => true) : void
 >                   : ^^^^
 >fn : (cb: IResultCallback) => void
->   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^               ^^^^^^^^^
 >(a, b) => true : (a: any, b: any) => boolean
 >               : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : any
@@ -31,7 +31,7 @@ fn(function (a, b) { return true; })
 >fn(function (a, b) { return true; }) : void
 >                                     : ^^^^
 >fn : (cb: IResultCallback) => void
->   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^  ^^               ^^^^^^^^^
 >function (a, b) { return true; } : (a: any, b: any) => boolean
 >                                 : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : any

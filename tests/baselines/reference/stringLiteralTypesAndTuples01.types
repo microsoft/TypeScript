@@ -46,7 +46,7 @@ rawr(dinosaur);
 >rawr(dinosaur) : "ROAAAAR!" | "yip yip!"
 >               : ^^^^^^^^^^^^^^^^^^^^^^^
 >rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
->     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dinosaur : "t-rex"
 >         : ^^^^^^^
 

@@ -22,7 +22,7 @@ export const CustomSelect1 = <Option,>(x: Props<Option> & {}) => {}
 >CustomSelect1 : <Option>(x: Props<Option> & {}) => void
 >              : ^      ^^ ^^                  ^^^^^^^^^
 ><Option,>(x: Props<Option> & {}) => {} : <Option>(x: Props<Option> & {}) => void
->                                       :                                        
+>                                       : ^      ^^ ^^                  ^^^^^^^^^
 >x : Omit<import("node_modules/react-select/index").Whatever, "y"> & Partial<import("node_modules/react-select/index").Whatever> & Option
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
