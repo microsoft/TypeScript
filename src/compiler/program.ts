@@ -2698,12 +2698,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Before falling back to the host
                 return host.fileExists(f);
             },
+            realpath: maybeBind(host, host.realpath),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getBuildInfo: () => program.getBuildInfo?.(),
             getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             redirectTargetsMap,
             getFileIncludeReasons: program.getFileIncludeReasons,
             createHash: maybeBind(host, host.createHash),
+            getModuleResolutionCache: () => program.getModuleResolutionCache(),
+            trace: maybeBind(host, host.trace),
         };
     }
 
