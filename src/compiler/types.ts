@@ -10250,6 +10250,6 @@ export interface SyntacticTypeNodeBuilderResolver {
     isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
     isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
     getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
-    isEntityNameVisible(enclosingDeclaration: Node, entityName: EntityNameOrEntityNameExpression, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
     requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 }
