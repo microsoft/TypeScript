@@ -73,7 +73,6 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
  * - noResolve = true
  * - declaration = true
  * - emitDeclarationOnly = true
- * - declarationDir = undefined
  * Note that this declaration file may differ from one produced by a full program typecheck,
  * in that only types in the single input file are available to be used in the generated declarations.
  */
@@ -111,7 +110,6 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
 
     if (declaration) {
         options.declaration = true;
-        options.declarationDir = undefined;
         options.emitDeclarationOnly = true;
     }
     else {
@@ -174,7 +172,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
+    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ declaration, transpileOptions.transformers);
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
 
