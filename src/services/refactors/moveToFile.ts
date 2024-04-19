@@ -580,12 +580,11 @@ function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: Im
         }
         if (namedBindings) {
             if (namedBindingsUnused) {
-                // changes.replaceNode(
-                //     sourceFile,
-                //     importDecl.importClause,
-                //     factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
-                // );
-                changes.delete(sourceFile, importDecl.importClause);
+                changes.replaceNode(
+                    sourceFile,
+                    importDecl.importClause,
+                    factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
+                );
             }
             else if (namedBindings.kind === SyntaxKind.NamedImports) {
                 for (const element of namedBindings.elements) {
