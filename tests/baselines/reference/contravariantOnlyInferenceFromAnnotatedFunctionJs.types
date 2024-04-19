@@ -37,7 +37,7 @@ const result = foo({
 >bar : { fn: (a: string) => void; thing: string; }
 >    : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    fn:      /** @param {string} a */      (a) => {},    thing: "asd",  } : { fn: (a: string) => void; thing: string; }
->                                                                           : ^^^^^^                   ^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fn:
 >fn : (a: string) => void
@@ -46,7 +46,7 @@ const result = foo({
       /** @param {string} a */
       (a) => {},
 >(a) => {} : (a: string) => void
->          :                    
+>          : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

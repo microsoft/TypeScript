@@ -677,7 +677,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -735,7 +734,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -874,7 +872,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -946,7 +943,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
@@ -1123,7 +1119,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1370,7 +1365,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1499,7 +1493,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1562,7 +1555,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1721,7 +1713,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -1875,7 +1866,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -2024,7 +2014,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
@@ -2106,7 +2095,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
@@ -2303,7 +2291,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 1
@@ -2461,7 +2448,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 3
     projectProgramVersion: 1
@@ -2592,7 +2578,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 3
     projectProgramVersion: 1
@@ -2667,7 +2652,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
@@ -2775,7 +2759,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -2880,7 +2863,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -3011,7 +2993,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -3073,7 +3054,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -3177,7 +3157,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -3310,7 +3289,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
@@ -3387,7 +3365,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 1
@@ -3497,7 +3474,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -3602,7 +3578,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -3733,7 +3708,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -3795,7 +3769,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
     isOrphan: true *changed*
-    noOpenRef: true
     deferredClose: true *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -3884,7 +3857,6 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: false *changed*
-    noOpenRef: true
     deferredClose: undefined *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -3994,7 +3966,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     dirty: false *changed*
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -4098,7 +4069,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -4229,7 +4199,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -4290,7 +4259,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     isOrphan: true *changed*
-    noOpenRef: true
     deferredClose: true *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -4394,7 +4362,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     isOrphan: true
-    noOpenRef: true
     deferredClose: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -4527,7 +4494,6 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 1
     isOrphan: true
-    noOpenRef: true
     deferredClose: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -4603,7 +4569,6 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: false *changed*
-    noOpenRef: true
     deferredClose: undefined *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -4713,7 +4678,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -4817,7 +4781,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 3
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -4948,7 +4911,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 3
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -5010,7 +4972,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     isOrphan: true *changed*
-    noOpenRef: true
     deferredClose: true *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -5163,7 +5124,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     isOrphan: true
-    noOpenRef: true
     deferredClose: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -5296,7 +5256,6 @@ Projects::
     projectStateVersion: 3
     projectProgramVersion: 1
     isOrphan: true
-    noOpenRef: true
     deferredClose: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -5371,7 +5330,6 @@ Projects::
     projectProgramVersion: 1
     dirty: true *changed*
     isOrphan: false *changed*
-    noOpenRef: true
     deferredClose: undefined *changed*
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
@@ -5481,7 +5439,6 @@ Projects::
     projectStateVersion: 4
     projectProgramVersion: 1
     dirty: false *changed*
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -5585,7 +5542,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -5716,7 +5672,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 4
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -5787,7 +5742,6 @@ Projects::
     projectStateVersion: 5 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -5896,7 +5850,6 @@ Projects::
     projectStateVersion: 5
     projectProgramVersion: 1
     dirty: false *changed*
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -6000,7 +5953,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
@@ -6131,7 +6083,6 @@ Projects::
 /user/username/projects/myproject/dependency/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/myproject/main/tsconfig.json (Configured)
     projectStateVersion: 5
     projectProgramVersion: 1

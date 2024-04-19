@@ -5,7 +5,7 @@ var Outer = function(element, config) {};
 >Outer : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
 >      : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >function(element, config) {} : { (element: any, config: any): void; Pos(line: any, ch: any): void; }
->                             :                                                                      
+>                             : ^^^       ^^^^^^^      ^^^^^^^^^^^^^^^^^^    ^^^^^^^  ^^^^^^^^^^^^^^^
 >element : any
 >config : any
 

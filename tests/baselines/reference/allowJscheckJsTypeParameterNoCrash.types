@@ -22,7 +22,7 @@ export var vextend = extend;
 >vextend : (options: ComponentOptions<{}>) => void
 >        : ^       ^^                    ^^^^^^^^^
 >extend : (options: ComponentOptions<{}>) => void
->       :                                        
+>       : ^       ^^                    ^^^^^^^^^
 
 === app.js ===
 import {vextend} from './func';
@@ -60,7 +60,7 @@ export var a = vextend({
 >this : Record<string, (val: any) => void>
 >     : ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^
 >data2 : (val: any) => void
->      :                   
+>      : ^   ^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

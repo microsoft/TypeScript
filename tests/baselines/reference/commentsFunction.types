@@ -49,7 +49,7 @@ var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b: string)
 >fooFunc : (b: string) => string
 >        : ^ ^^      ^^^^^^^^^^^
 >function FooFunctionValue(/** fooFunctionValue param */ b: string) {    return b;} : (b: string) => string
->                                                                                   :                      
+>                                                                                   : ^ ^^      ^^^^^^^^^^^
 >FooFunctionValue : (b: string) => string
 >                 : ^ ^^      ^^^^^^^^^^^
 >b : string
@@ -65,7 +65,7 @@ var lambdaFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*
 >lambdaFoo : (a: number, b: number) => number
 >          : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >(/**param a*/a: number, /**param b*/b: number) => a + b : (a: number, b: number) => number
->                                                        :                                 
+>                                                        : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number
@@ -81,7 +81,7 @@ var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: nu
 >lambddaNoVarComment : (a: number, b: number) => number
 >                    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >(/**param a*/a: number, /**param b*/b: number) => a * b : (a: number, b: number) => number
->                                                        :                                 
+>                                                        : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : number

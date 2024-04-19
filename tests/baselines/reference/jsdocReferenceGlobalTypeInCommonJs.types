@@ -5,7 +5,7 @@ const other = require('./other');
 >other : () => string
 >      : ^^^^^^^^^^^^
 >require('./other') : () => string
->                   :             
+>                   : ^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >'./other' : "./other"

@@ -11,7 +11,7 @@ var greet = (greeting: string): number => {
 >greet : (greeting: string) => number
 >      : ^        ^^      ^^^^^      
 >(greeting: string): number => {    greetings++;    return greetings;} : (greeting: string) => number
->                                                                      :                             
+>                                                                      : ^        ^^      ^^^^^      
 >greeting : string
 >         : ^^^^^^
 
@@ -37,7 +37,7 @@ var incrGreetings = () => greetings++;
 >incrGreetings : () => number
 >              : ^^^^^^^^^^^^
 >() => greetings++ : () => number
->                  :             
+>                  : ^^^^^^^^^^^^
 >greetings++ : number
 >            : ^^^^^^
 >greetings : number

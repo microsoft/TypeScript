@@ -31,7 +31,7 @@ function f1() {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => x.length : () => number
->               :             
+>               : ^^^^^^^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : string
@@ -69,7 +69,7 @@ function f2() {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => x.length : () => number
->               :             
+>               : ^^^^^^^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : string
@@ -104,7 +104,7 @@ function f3() {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function() { return x.length; } : () => number
->                                :             
+>                                : ^^^^^^^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : string
@@ -142,7 +142,7 @@ function f4() {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function() { return x.length; } : () => number
->                                :             
+>                                : ^^^^^^^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : string
@@ -177,7 +177,7 @@ function f5() {
 >f : () => () => number
 >  : ^^^^^^^^^^^^^^^^^^
 >() => () => x.length : () => () => number
->                     :                   
+>                     : ^^^^^^^^^^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number

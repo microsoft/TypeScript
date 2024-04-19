@@ -107,7 +107,7 @@ const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k h
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(k) => {console.log(k)} : (k: "left" | "right") => void
->                        :                              
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >console.log(k) : void
@@ -199,7 +199,7 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 >onClick : (k: "left" | "right") => void
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(k) => {console.log(k)} : (k: "left" | "right") => void
->                        :                              
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "left" | "right"
 >  : ^^^^^^^^^^^^^^^^
 >console.log(k) : void

@@ -1,4 +1,8 @@
 import * as ts from "../../_namespaces/ts";
+import {
+    protocol,
+    updateProjectIfDirty,
+} from "../../_namespaces/ts.server";
 import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
@@ -9,6 +13,7 @@ import {
 import {
     createServerHost,
     File,
+    libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 const packageJson: File = {
@@ -47,7 +52,9 @@ const exportEqualsMappedType: File = {
             export = exp;`,
 };
 
-describe("unittests:: tsserver:: exportMapCache", () => {
+describe("unittests:: tsserver:: exportMapCache::", () => {
+    const files = [aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType];
+    const setup = createSetup(files, [aTs, bTs], { file: bTs.path, line: 1, offset: 3 });
     it("caches auto-imports in the same file", () => {
         const { exportMapCache, session } = setup();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -128,7 +135,7 @@ describe("unittests:: tsserver:: exportMapCache", () => {
             },
         });
         project.getLanguageService(/*ensureSynchronized*/ true);
-        assert.notEqual(programBefore, project.getCurrentProgram()!);
+        assert.notEqual(programBefore, project.getCurrentProgram());
 
         // Get same info from cache again
         let sigintPropAfter: readonly ts.SymbolExportInfo[] | undefined;
@@ -179,8 +186,6 @@ describe("unittests:: tsserver:: exportMapCache", () => {
                 line: 4,
                 offset: 23,
                 prefix: "render",
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
 
@@ -220,8 +225,6 @@ describe("unittests:: tsserver:: exportMapCache", () => {
                 line: 4,
                 offset: 22,
                 prefix: "rende",
-                includeExternalModuleExports: true,
-                includeInsertTextCompletions: true,
             },
         });
 
@@ -229,28 +232,145 @@ describe("unittests:: tsserver:: exportMapCache", () => {
     });
 });
 
-function setup() {
-    const host = createServerHost([aTs, bTs, ambientDeclaration, tsconfig, packageJson, mobxPackageJson, mobxDts, exportEqualsMappedType]);
-    const session = new TestSession(host);
-    openFilesForSession([aTs, bTs], session);
-    const project = session.getProjectService().configuredProjects.get(tsconfig.path)!;
-    triggerCompletions();
-    const checker = project.getLanguageService().getProgram()!.getTypeChecker();
-    return { host, project, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
-
-    function triggerCompletions() {
-        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
-            file: bTs.path,
-            line: 1,
-            offset: 3,
-        };
-        session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
-            command: ts.server.protocol.CommandTypes.CompletionInfo,
-            arguments: {
-                ...requestLocation,
-                includeExternalModuleExports: true,
-                prefix: "foo",
+describe("unittests:: tsserver:: exportMapCache:: project references", () => {
+    const libTsconfig: File = {
+        path: "/packages/lib/tsconfig.json",
+        content: jsonToReadableText({
+            compilerOptions: {
+                composite: true,
+                module: "commonjs",
             },
+        }),
+    };
+
+    const libIndex: File = {
+        path: "/packages/lib/index.ts",
+        content: `export const foo = 0;`,
+    };
+
+    const appTsconfig: File = {
+        path: "/packages/app/tsconfig.json",
+        content: jsonToReadableText({
+            compilerOptions: {
+                composite: true,
+                module: "commonjs",
+                paths: {
+                    lib: ["../lib/index.ts"],
+                },
+            },
+            references: [
+                { path: "../lib" },
+            ],
+        }),
+    };
+
+    const appIndex: File = {
+        path: "/packages/app/index.ts",
+        content: `foo`,
+    };
+
+    function verifyReferences(includesLib: boolean) {
+        const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
+        if (includesLib) {
+            files.push({
+                path: "/packages/app/other.ts",
+                content: `import { foo } from "../lib";`,
+            });
+        }
+        const setup = createSetup(files, [appIndex, libIndex], { file: appIndex.path, line: 1, offset: 1 });
+        it("does not invalidate the cache when referenced project changes inconsequentially", () => {
+            const { session, project, exportMapCache, triggerCompletions } = setup();
+            assert.ok(exportMapCache.isUsableByFile(appIndex.path as ts.Path));
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: libIndex.path,
+                        textChanges: [{
+                            newText: "\nfoo.toFixed()",
+                            start: { line: 1, offset: 3 },
+                            end: { line: 1, offset: 3 },
+                        }],
+                    }],
+                },
+            });
+
+            // If lib/index.ts were part of the same project, we would recognize that
+            // this change does not modify the shape of the program exports and the cache
+            // would not be cleared. But because this file is part of the AutoImportProvider,
+            // the cache clears unconditionally during its updateGraph.
+            // As shown in the test, currently whether file is part of own program or AutoImportProvider
+            // if its not the file used to create cache, any change in other file invalidates the cache
+            // So in both scenarios: whether referenced project file is part of own program or auto import provider program
+            // the cache will be cleared for any changes
+            updateProjectIfDirty(project);
+            project.getPackageJsonAutoImportProvider();
+            assert.ok(exportMapCache.isEmpty());
+            triggerCompletions();
+            baselineTsserverLogs("exportMapCache", `does not invalidate the cache when referenced project changes inconsequentially${includesLib ? " referencedInProject" : ""}`, session);
+        });
+
+        it("invalidates the cache when referenced project changes signatures", () => {
+            const { session, project, exportMapCache, triggerCompletions } = setup();
+            session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                command: protocol.CommandTypes.UpdateOpen,
+                arguments: {
+                    changedFiles: [{
+                        fileName: libIndex.path,
+                        textChanges: [{
+                            newText: "export const food = 0;",
+                            start: { line: 1, offset: 1 },
+                            end: { line: 1, offset: 3 },
+                        }],
+                    }],
+                },
+            });
+
+            updateProjectIfDirty(project);
+            project.getPackageJsonAutoImportProvider();
+            assert.ok(exportMapCache.isEmpty());
+
+            triggerCompletions();
+            baselineTsserverLogs("exportMapCache", `invalidates the cache when referenced project changes signatures${includesLib ? " referencedInProject" : ""}`, session);
         });
     }
+
+    describe("when referenced project file is not part of project", () => {
+        verifyReferences(/*includesLib*/ false);
+    });
+
+    describe("when referenced project file is part of project", () => {
+        verifyReferences(/*includesLib*/ true);
+    });
+});
+
+function createSetup(files: readonly File[], openFiles: readonly File[], completionRequestLocation: protocol.FileLocationRequestArgs) {
+    return () => {
+        const host = createServerHost(files);
+        const session = new TestSession(host);
+        session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+            command: ts.server.protocol.CommandTypes.Configure,
+            arguments: {
+                preferences: {
+                    includePackageJsonAutoImports: "auto",
+                    includeCompletionsForModuleExports: true,
+                },
+            },
+        });
+        openFilesForSession(openFiles, session);
+        const project = ts.firstIterator(session.getProjectService().configuredProjects.values());
+        triggerCompletions();
+        const checker = project.getLanguageService().getProgram()!.getTypeChecker();
+        return { host, project, session, exportMapCache: project.getCachedExportInfoMap(), checker, triggerCompletions };
+
+        function triggerCompletions() {
+            session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
+                command: ts.server.protocol.CommandTypes.CompletionInfo,
+                arguments: {
+                    ...completionRequestLocation,
+                    prefix: "foo",
+                },
+            });
+        }
+    };
 }

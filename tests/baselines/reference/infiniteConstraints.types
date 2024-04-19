@@ -1,10 +1,7 @@
 //// [tests/cases/compiler/infiniteConstraints.ts] ////
 
 === Performance Stats ===
-Assignability cache: 200 / 200 (nearest 100)
-Type Count: 1,000 / 1,000 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 26,000 / 26,000 (nearest 500)
+Instantiation count: 2,500
 
 === infiniteConstraints.ts ===
 // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
@@ -40,7 +37,7 @@ const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->                           :                          
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }

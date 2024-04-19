@@ -298,7 +298,7 @@ let errorCallback = () => error("Error callback");
 >errorCallback : () => never
 >              : ^^^^^^^^^^^
 >() => error("Error callback") : () => never
->                              :            
+>                              : ^^^^^^^^^^^
 >error("Error callback") : never
 >                        : ^^^^^
 >error : (message: string) => never

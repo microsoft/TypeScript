@@ -86,7 +86,7 @@ function getFoo2(): Foo {
 >method1 : (arg: A) => void
 >        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.numProp = 10;        } : (arg: A) => void
->                                                 :                 
+>                                                 : ^   ^^^^^^^^^^^^
 >arg : A
 >    : ^
 
@@ -106,7 +106,7 @@ function getFoo2(): Foo {
 >method2 : (arg: B) => void
 >        : ^   ^^^^^^^^^^^^
 >(arg) => {            arg.strProp = "hello";        } : (arg: B) => void
->                                                      :                 
+>                                                      : ^   ^^^^^^^^^^^^
 >arg : B
 >    : ^
 
@@ -137,7 +137,7 @@ function getFoo3(): Foo {
 >method1 : (arg: A) => void
 >        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.numProp = 10;        } : (arg: A) => void
->                                                       :                 
+>                                                       : ^   ^^^^^^^^^^^^
 >arg : A
 >    : ^
 
@@ -157,7 +157,7 @@ function getFoo3(): Foo {
 >method2 : (arg: B) => void
 >        : ^   ^^^^^^^^^^^^
 >function (arg) {            arg.strProp = "hello";        } : (arg: B) => void
->                                                            :                 
+>                                                            : ^   ^^^^^^^^^^^^
 >arg : B
 >    : ^
 

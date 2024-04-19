@@ -19,7 +19,7 @@ const guard = (arg: Type): arg is TypeExt => arg.type === 1;
 >guard : (arg: Type) => arg is TypeExt
 >      : ^   ^^    ^^^^^              
 >(arg: Type): arg is TypeExt => arg.type === 1 : (arg: Type) => arg is TypeExt
->                                              :                              
+>                                              : ^   ^^    ^^^^^              
 >arg : Type
 >    : ^^^^
 >arg.type === 1 : boolean
@@ -37,7 +37,7 @@ const otherFunc = (arg1: Type, arg2: TypeExt): void => {};
 >otherFunc : (arg1: Type, arg2: TypeExt) => void
 >          : ^    ^^    ^^    ^^       ^^^^^    
 >(arg1: Type, arg2: TypeExt): void => {} : (arg1: Type, arg2: TypeExt) => void
->                                        :                                    
+>                                        : ^    ^^    ^^    ^^       ^^^^^    
 >arg1 : Type
 >     : ^^^^
 >arg2 : TypeExt

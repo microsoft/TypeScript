@@ -47,7 +47,7 @@ export let a = doSomething_Actual({ prop: "test" });
 >a : { prop?: string; }
 >  : ^^^^^^^^^^^^^^^^^^
 >doSomething_Actual({ prop: "test" }) : { prop?: string; }
->                                     :       ^           
+>                                     : ^^^^^^^^^^^^^^^^^^
 >doSomething_Actual : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ prop: "test" } : { prop: string; }
@@ -69,7 +69,7 @@ export let b = doSomething_Expected({ prop: "test" });
 >b : { prop?: string; }
 >  : ^^^^^^^^^^^^^^^^^^
 >doSomething_Expected({ prop: "test" }) : { prop?: string; }
->                                       :       ^           
+>                                       : ^^^^^^^^^^^^^^^^^^
 >doSomething_Expected : <T extends { prop: string; }>(a: T) => { [P in keyof PartialProperties<T, "prop">]: PartialProperties<T, "prop">[P]; }
 >                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ prop: "test" } : { prop: string; }

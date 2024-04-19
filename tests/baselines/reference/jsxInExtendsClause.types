@@ -33,7 +33,7 @@ class Foo extends createComponentClass(() => class extends React.Component<{}, {
 >class extends React.Component<{}, {}> {  render() {    return <span>Hello, world!</span>;  }} : typeof (Anonymous class)
 >                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >React.Component : React.Component<{}, {}>
->                : ^^^^^^^^^^^^^^^^^^^^  ^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >React : typeof React
 >      : ^^^^^^^^^^^^
 >Component : typeof React.Component
