@@ -9,7 +9,8 @@
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`import j = require("./j");
+`import i = require("./i");
+import j = require("./j");
 j;`,
         "/y.ts":
 `import i = require("./i");

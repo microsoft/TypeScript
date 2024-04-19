@@ -12,7 +12,8 @@
 verify.moveToNewFile({
     newFileContents: {
         "/tests/cases/fourslash/file.tsx":
-`1;`,
+`import React = require('react');
+1;`,
         "/tests/cases/fourslash/newFile.tsx":
 `import React = require('react');
 
