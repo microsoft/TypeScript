@@ -2358,14 +2358,8 @@ export class ProjectService {
             const result = this.configFileForOpenFiles.get(info.path);
             if (result !== undefined) return result || undefined;
         }
-        this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
         const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info));
-        if (configFileName) {
-            this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
-        }
-        else {
-            this.logger.info(`For info: ${info.fileName} :: No config files found.`);
-        }
+        this.logger.info(`getConfigFileNameForFile:: File: ${info.fileName} ProjectRootPath: ${this.openFiles.get(info.path)}:: Result: ${configFileName}`);
         if (isOpenScriptInfo(info)) {
             this.configFileForOpenFiles.set(info.path, configFileName || false);
         }
