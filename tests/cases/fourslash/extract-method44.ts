@@ -6,4 +6,4 @@
 ////}
 
 goTo.select("a", "b");
-verify.not.refactorAvailable("Extract Symbol", "function_scope_0", "Extract to inner function in arrow function");
+verify.refactorAvailable("Extract Symbol", "function_scope_0", "Extract to inner function in arrow function");
