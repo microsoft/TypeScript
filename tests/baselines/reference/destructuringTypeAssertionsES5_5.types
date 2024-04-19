@@ -3,6 +3,8 @@
 === destructuringTypeAssertionsES5_5.ts ===
 var { x } = <any>0;
 >x : any
+>  : ^^^
 ><any>0 : any
 >0 : 0
+>  : ^
 

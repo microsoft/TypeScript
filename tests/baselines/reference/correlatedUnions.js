@@ -528,12 +528,12 @@ declare function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]
 declare function createEventListener<K extends keyof DocumentEventMap>({ name, once, callback }: Ev<K>): Ev<K>;
 declare const clickEvent: {
     readonly name: "click";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: MouseEvent) => void;
 };
 declare const scrollEvent: {
     readonly name: "scroll";
-    readonly once?: boolean | undefined;
+    readonly once?: boolean;
     readonly callback: (ev: Event) => void;
 };
 declare function ff1(): void;

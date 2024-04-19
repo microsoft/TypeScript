@@ -3,44 +3,70 @@
 === use.js ===
 const util = require('./mod')
 >util : typeof util
+>     : ^^^^^^^^^^^
 >require('./mod') : typeof util
+>                 : ^^^^^^^^^^^
 >require : any
 >'./mod' : "./mod"
+>        : ^^^^^^^
 
 function n() {
 >n : () => void
+>  : ^^^^^^^^^^
 
     util.existy // no error
 >util.existy : () => void
+>            : ^^^^^^^^^^
 >util : typeof util
+>     : ^^^^^^^^^^^
 >existy : () => void
+>       : ^^^^^^^^^^
 }
 util.existy // no error
 >util.existy : () => void
+>            : ^^^^^^^^^^
 >util : typeof util
+>     : ^^^^^^^^^^^
 >existy : () => void
+>       : ^^^^^^^^^^
 
 === mod.js ===
 const util = exports = module.exports = {}
 >util : typeof module.exports
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >exports = module.exports = {} : typeof module.exports
+>                              : ^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof import("mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports = {} : typeof module.exports
+>                    : ^^^^^^^^^^^^^^^^^^^^^
 >module.exports : typeof module.exports
+>               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof module.exports
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 if (!!false) {
 >!!false : boolean
+>        : ^^^^^^^
 >!false : true
+>       : ^^^^
 >false : false
+>      : ^^^^^
 
     util.existy = function () { }
 >util.existy = function () { } : () => void
+>                              : ^^^^^^^^^^
 >util.existy : () => void
+>            : ^^^^^^^^^^
 >util : typeof module.exports
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >existy : () => void
+>       : ^^^^^^^^^^
 >function () { } : () => void
+>                : ^^^^^^^^^^
 }
 

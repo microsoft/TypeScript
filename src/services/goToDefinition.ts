@@ -107,9 +107,7 @@ import {
     TypeReference,
     unescapeLeadingUnderscores,
 } from "./_namespaces/ts";
-import {
-    isContextWithStartAndEndNode,
-} from "./_namespaces/ts.FindAllReferences";
+import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {
@@ -344,7 +342,7 @@ export function getReferenceAtPosition(sourceFile: SourceFile, position: number,
 
     const typeReferenceDirective = findReferenceInPosition(sourceFile.typeReferenceDirectives, position);
     if (typeReferenceDirective) {
-        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || sourceFile.impliedNodeFormat)?.resolvedTypeReferenceDirective;
+        const reference = program.getResolvedTypeReferenceDirectives().get(typeReferenceDirective.fileName, typeReferenceDirective.resolutionMode || program.getDefaultResolutionModeForFile(sourceFile))?.resolvedTypeReferenceDirective;
         const file = reference && program.getSourceFile(reference.resolvedFileName!); // TODO:GH#18217
         return file && { reference: typeReferenceDirective, fileName: file.fileName, file, unverified: false };
     }

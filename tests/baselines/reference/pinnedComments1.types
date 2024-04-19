@@ -10,4 +10,5 @@
 /*! pinned comment that need to be removed */
 class C {
 >C : C
+>  : ^
 }

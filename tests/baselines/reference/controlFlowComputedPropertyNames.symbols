@@ -1,0 +1,134 @@
+//// [tests/cases/conformance/controlFlow/controlFlowComputedPropertyNames.ts] ////
+
+=== controlFlowComputedPropertyNames.ts ===
+function f1(obj: Record<string, unknown>, key: string) {
+>f1 : Symbol(f1, Decl(controlFlowComputedPropertyNames.ts, 0, 0))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 0, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 0, 41))
+
+    if (typeof obj[key] === "string") {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 0, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 0, 41))
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 0, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 0, 41))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function f2(obj: Record<string, string | undefined>, key: string) {
+>f2 : Symbol(f2, Decl(controlFlowComputedPropertyNames.ts, 4, 1))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+
+    if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+>undefined : Symbol(undefined)
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    let key2 = key + key;
+>key2 : Symbol(key2, Decl(controlFlowComputedPropertyNames.ts, 10, 7))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+
+    if (obj[key2] !== undefined) {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key2 : Symbol(key2, Decl(controlFlowComputedPropertyNames.ts, 10, 7))
+>undefined : Symbol(undefined)
+
+        obj[key2].toUpperCase();
+>obj[key2].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key2 : Symbol(key2, Decl(controlFlowComputedPropertyNames.ts, 10, 7))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    const key3 = key + key;
+>key3 : Symbol(key3, Decl(controlFlowComputedPropertyNames.ts, 14, 9))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 6, 52))
+
+    if (obj[key3] !== undefined) {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key3 : Symbol(key3, Decl(controlFlowComputedPropertyNames.ts, 14, 9))
+>undefined : Symbol(undefined)
+
+        obj[key3].toUpperCase();
+>obj[key3].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 6, 12))
+>key3 : Symbol(key3, Decl(controlFlowComputedPropertyNames.ts, 14, 9))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+type Thing = { a?: string, b?: number, c?: number };
+>Thing : Symbol(Thing, Decl(controlFlowComputedPropertyNames.ts, 18, 1))
+>a : Symbol(a, Decl(controlFlowComputedPropertyNames.ts, 20, 14))
+>b : Symbol(b, Decl(controlFlowComputedPropertyNames.ts, 20, 26))
+>c : Symbol(c, Decl(controlFlowComputedPropertyNames.ts, 20, 38))
+
+function f3(obj: Thing, key: keyof Thing) {
+>f3 : Symbol(f3, Decl(controlFlowComputedPropertyNames.ts, 20, 52))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>Thing : Symbol(Thing, Decl(controlFlowComputedPropertyNames.ts, 18, 1))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+>Thing : Symbol(Thing, Decl(controlFlowComputedPropertyNames.ts, 18, 1))
+
+    if (obj[key] !== undefined) {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+>undefined : Symbol(undefined)
+
+        if (typeof obj[key] === "string") {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+
+            obj[key].toUpperCase();
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+        }
+        if (typeof obj[key] === "number") {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+
+            obj[key].toFixed();
+>obj[key].toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 22, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 22, 23))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+
+function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
+>f4 : Symbol(f4, Decl(controlFlowComputedPropertyNames.ts, 31, 1))
+>K : Symbol(K, Decl(controlFlowComputedPropertyNames.ts, 33, 12))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 33, 30))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(controlFlowComputedPropertyNames.ts, 33, 12))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 33, 65))
+>K : Symbol(K, Decl(controlFlowComputedPropertyNames.ts, 33, 12))
+
+    if (obj[key]) {
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 33, 30))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 33, 65))
+
+        obj[key].toUpperCase();
+>obj[key].toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(controlFlowComputedPropertyNames.ts, 33, 30))
+>key : Symbol(key, Decl(controlFlowComputedPropertyNames.ts, 33, 65))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+}
+

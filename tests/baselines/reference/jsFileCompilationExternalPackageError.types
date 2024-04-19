@@ -3,33 +3,46 @@
 === moduleA/a.js ===
 import {a} from "b";
 >a : any
+>  : ^^^
 
 a++;
 >a++ : number
+>    : ^^^^^^
 >a : error
 
 import {c} from "c";
 >c : any
+>  : ^^^
 
 c++;
 >c++ : number
+>    : ^^^^^^
 >c : error
 
 === node_modules/b.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 === node_modules/c.js ===
 exports.a = 10;
 >exports.a = 10 : 10
+>               : ^^
 >exports.a : 10
+>          : ^^
 >exports : typeof import("node_modules/c")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : 10
+>  : ^^
 >10 : 10
+>   : ^^
 
 c = 10;
 >c = 10 : 10
+>       : ^^
 >c : error
 >10 : 10
+>   : ^^
 

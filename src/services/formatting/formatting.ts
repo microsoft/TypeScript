@@ -1376,7 +1376,7 @@ const enum LineAction {
 export function getRangeOfEnclosingComment(
     sourceFile: SourceFile,
     position: number,
-    precedingToken?: Node | null,
+    precedingToken?: Node | null, // eslint-disable-line no-restricted-syntax
     tokenAtPosition = getTokenAtPosition(sourceFile, position),
 ): CommentRange | undefined {
     const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
@@ -1386,7 +1386,7 @@ export function getRangeOfEnclosingComment(
         return undefined;
     }
 
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
 
     // Between two consecutive tokens, all comments are either trailing on the former

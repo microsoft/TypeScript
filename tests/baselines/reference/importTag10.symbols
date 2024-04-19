@@ -1,0 +1,8 @@
+//// [tests/cases/conformance/jsdoc/importTag10.ts] ////
+
+=== /foo.js ===
+
+/**
+ * @import
+ */
+
