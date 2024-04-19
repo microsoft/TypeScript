@@ -474,10 +474,6 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
 }
 
 function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
-    if (!isNodeKind(node.kind)) {
-        return emptyArray;
-    }
-
     const children: Node[] = [];
 
     if (isJSDocCommentContainingNode(node)) {
