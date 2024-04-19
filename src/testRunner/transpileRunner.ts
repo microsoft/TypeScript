@@ -7,11 +7,11 @@ import {
     TestCaseParser,
     TestRunnerKind,
 } from "./_namespaces/Harness";
-import * as vpath from "./_namespaces/vpath";
 import * as ts from "./_namespaces/ts";
+import * as vpath from "./_namespaces/vpath";
 
 export class TranspileRunner extends RunnerBase {
-    protected basePath: string = "tests/cases/transpile";
+    protected basePath = "tests/cases/transpile";
     protected testSuiteName: TestRunnerKind = "transpile";
 
     constructor() {
@@ -63,7 +63,7 @@ class TranspileTestCase {
         const settingConfigurations = getFileBasedTestConfigurations(settings, TranspileTestCase.varyBy);
         return settingConfigurations?.map(c => {
             const desc = Object.entries(c).map(([key, value]) => `${key}=${value}`).join(",");
-            return new TranspileTestCase(`${justName}(${desc})`, ext, content, {...settings, ...c});
+            return new TranspileTestCase(`${justName}(${desc})`, ext, content, { ...settings, ...c });
         }) || [new TranspileTestCase(justName, ext, content, settings)];
     }
 
@@ -94,7 +94,7 @@ class TranspileTestCase {
                 baselineText += `//// [${unit.name}] ////\r\n`;
                 baselineText += unit.content;
                 if (!unit.content.endsWith("\n")) {
-                    baselineText += "\r\n"
+                    baselineText += "\r\n";
                 }
             });
 
@@ -102,17 +102,17 @@ class TranspileTestCase {
                 const opts: ts.CompilerOptions = {};
                 Compiler.setCompilerOptionsFromHarnessSetting(this.settings, opts);
                 const result = (kind === TranspileKind.Module ? ts.transpileModule : ts.transpileDeclaration)(unit.content, { compilerOptions: opts, fileName: unit.name, reportDiagnostics: this.settings.reportDiagnostics === "true" });
-    
-                baselineText += `//// [${ts.changeExtension(unit.name, kind === TranspileKind.Module ? this.getJsOutputExtension(unit.name) : ts.getDeclarationEmitExtensionForPath(unit.name) )}] ////\r\n`;
+
+                baselineText += `//// [${ts.changeExtension(unit.name, kind === TranspileKind.Module ? this.getJsOutputExtension(unit.name) : ts.getDeclarationEmitExtensionForPath(unit.name))}] ////\r\n`;
                 baselineText += result.outputText;
                 if (!result.outputText.endsWith("\n")) {
-                    baselineText += "\r\n"
+                    baselineText += "\r\n";
                 }
                 if (result.diagnostics && result.diagnostics.length) {
                     baselineText += "\r\n\r\n//// [Diagnostics reported]\r\n";
                     baselineText += Compiler.getErrorBaseline([{ content: unit.content, unitName: unit.name }], result.diagnostics, !!opts.pretty);
                     if (!baselineText.endsWith("\n")) {
-                        baselineText += "\r\n"
+                        baselineText += "\r\n";
                     }
                 }
             });

@@ -73,6 +73,33 @@ export declare abstract class Baz {
     abstract method(): void;
 }
 export {};
+
+
+//// [Diagnostics reported]
+class.ts(1,7): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+
+
+==== class.ts (1 errors) ====
+    const i = Symbol();
+          ~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 class.ts:1:7: Add a type annotation to the variable i.
+    export class Bar {
+        a: string;
+        b?: string;
+        declare c: string;
+        #d: string;
+        public e: string;
+        protected f: string;
+        private g: string;
+        ["h"]: string;
+        [i]: string;
+    }
+    
+    export abstract class Baz {
+        abstract a: string;
+        abstract method(): void;
+    }
 //// [namespace.d.ts] ////
 export declare namespace ns {
     namespace internal {

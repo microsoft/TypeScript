@@ -61,13 +61,14 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
  * - declaration = false
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-    return transpileWorker(input, transpileOptions, /*declarations*/ false);
+    return transpileWorker(input, transpileOptions, /*declaration*/ false);
 }
 
 /*
  * This function will create a declaration file from 'input' argument using specified compiler options.
  * If no options are provided - it will use a set of default compiler options.
  * Extra compiler options that will unconditionally be used by this function are:
+ * - isolatedDeclarations = true
  * - isolatedModules = true
  * - allowNonTsExtensions = true
  * - noLib = true
@@ -78,7 +79,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
  * in that only types in the single input file are available to be used in the generated declarations.
  */
 export function transpileDeclaration(input: string, transpileOptions: TranspileOptions): TranspileOutput {
-    return transpileWorker(input, transpileOptions, /*declarations*/ true);
+    return transpileWorker(input, transpileOptions, /*declaration*/ true);
 }
 
 // Declaration emit works without a `lib`, but some local inferences you'd expect to work won't without
@@ -106,7 +107,7 @@ interface Symbol {
     readonly [Symbol.toStringTag]: string;
 }`;
 const barebonesLibName = "lib.d.ts";
-const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, {languageVersion: ScriptTarget.Latest});
+const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
 
 function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
@@ -139,6 +140,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     if (declaration) {
         options.declaration = true;
         options.emitDeclarationOnly = true;
+        options.isolatedDeclarations = true;
     }
     else {
         options.declaration = false;
@@ -201,7 +203,10 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ declaration, transpileOptions.transformers);
+    const result = program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ declaration, transpileOptions.transformers, /*forceDtsEmit*/ declaration);
+
+    // TODO: Should this require `reportDiagnostics`?
+    addRange(/*to*/ diagnostics, /*from*/ result.diagnostics);
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
 
