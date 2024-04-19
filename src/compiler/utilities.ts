@@ -5850,6 +5850,9 @@ export function createDiagnosticCollection(): DiagnosticCollection {
         if (result >= 0) {
             return diagnostics[result];
         }
+        if (~result > 0 && diagnosticsEqualityComparer(diagnostic, diagnostics[~result - 1])) {
+            return diagnostics[~result - 1];
+        }
         return undefined;
     }
 
@@ -5873,7 +5876,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
             diagnostics = nonFileDiagnostics;
         }
 
-        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
+        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation, diagnosticsEqualityComparer);
     }
 
     function getGlobalDiagnostics(): Diagnostic[] {
@@ -8548,15 +8551,18 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
 
 // An diagnostic message with more elaboration should be considered *less than* a diagnostic message
 // with less elaboration that is otherwise similar.
-function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
+function compareMessageText(
+    t1: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">): Comparison {
     if (typeof t1 === "string" && typeof t2 === "string") {
         return compareStringsCaseSensitive(t1, t2);
     }
-    else if (typeof t1 === "string") {
-        return Comparison.GreaterThan;
+
+    if (typeof t1 === "string") {
+        t1 = { messageText: t1 };
     }
-    else if (typeof t2 === "string") {
-        return Comparison.LessThan;
+    if (typeof t2 === "string") {
+        t2 = { messageText: t2 };
     }
     let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
     if (res) {

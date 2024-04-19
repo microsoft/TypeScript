@@ -1340,7 +1340,7 @@ function completionInfoFromData(
                 !uniqueNames.has(keywordEntry.name)
             ) {
                 uniqueNames.add(keywordEntry.name);
-                insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+                insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
             }
         }
     }
@@ -1348,14 +1348,14 @@ function completionInfoFromData(
     for (const keywordEntry of getContextualKeywords(contextToken, position)) {
         if (!uniqueNames.has(keywordEntry.name)) {
             uniqueNames.add(keywordEntry.name);
-            insertSorted(entries, keywordEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+            insertSorted(entries, keywordEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
         }
     }
 
     for (const literal of literals) {
         const literalEntry = createCompletionEntryForLiteral(sourceFile, preferences, literal);
         uniqueNames.add(literalEntry.name);
-        insertSorted(entries, literalEntry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, literalEntry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     if (!isChecked) {
@@ -2630,7 +2630,7 @@ export function getCompletionEntriesFromSymbols(
         /** True for locals; false for globals, module exports from other files, `this.` completions. */
         const shouldShadowLaterSymbols = (!origin || originIsTypeOnlyAlias(origin)) && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location.getSourceFile()));
         uniques.set(name, shouldShadowLaterSymbols);
-        insertSorted(entries, entry, compareCompletionEntries, /*allowDuplicates*/ true);
+        insertSorted(entries, entry, compareCompletionEntries, /*equalityComparer*/ undefined, /*allowDuplicates*/ true);
     }
 
     log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));
