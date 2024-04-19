@@ -28,7 +28,7 @@ Object.defineProperty(Graphic.prototype, "instance", {
 >get : () => this
 >    : ^^^^^^^^^^
 >function() {    return this;  } : () => this
->                                :           
+>                                : ^^^^^^^^^^
 
     return this;
 >this : this

@@ -438,7 +438,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
         return this.getChildren(sourceFile)[index];
     }
 
-    public getChildren(sourceFile?: SourceFileLike): Node[] {
+    public getChildren(sourceFile?: SourceFileLike): readonly Node[] {
         this.assertHasRealPosition("Node without a real position cannot be scanned and thus has no token nodes - use forEachChild and collect the result if that's fine");
         return getNodeChildren(this) ?? setNodeChildren(this, createChildren(this, sourceFile));
     }
@@ -473,11 +473,7 @@ class NodeObject<TKind extends SyntaxKind> implements Node {
     }
 }
 
-function createChildren(node: Node, sourceFile: SourceFileLike | undefined): Node[] {
-    if (!isNodeKind(node.kind)) {
-        return emptyArray;
-    }
-
+function createChildren(node: Node, sourceFile: SourceFileLike | undefined): readonly Node[] {
     const children: Node[] = [];
 
     if (isJSDocCommentContainingNode(node)) {
@@ -2907,7 +2903,7 @@ export function createLanguageService(
         if (descriptors.length > 0 && !isNodeModulesFile(sourceFile.fileName)) {
             const regExp = getTodoCommentsRegExp();
 
-            let matchArray: RegExpExecArray | null;
+            let matchArray: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
             while (matchArray = regExp.exec(fileContents)) {
                 cancellationToken.throwIfCancellationRequested();
 

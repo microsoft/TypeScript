@@ -86,7 +86,7 @@ var messenger = {
 >messenger : { message: string; start: () => number; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function () {        return setTimeout(() => { var x = this.message; }, 3000);    }} : { message: string; start: () => number; }
->                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
@@ -98,7 +98,7 @@ var messenger = {
 >start : () => number
 >      : ^^^^^^^^^^^^
 >function () {        return setTimeout(() => { var x = this.message; }, 3000);    } : () => number
->                                                                                    :             
+>                                                                                    : ^^^^^^^^^^^^
 
         return setTimeout(() => { var x = this.message; }, 3000);
 >setTimeout(() => { var x = this.message; }, 3000) : number

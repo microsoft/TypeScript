@@ -112,7 +112,7 @@ let o = {
 >o : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >{    n: 101,    explicitThis: function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    },    implicitThis(m: number): number { return m; }} : { n: number; explicitThis: (m: number) => any; implicitThis(m: number): number; }
->                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
+>                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^      ^^^
 
     n: 101,
 >n : number
@@ -124,7 +124,7 @@ let o = {
 >explicitThis : (m: number) => any
 >             : ^ ^^      ^^^^^^^^
 >function (m: number) {        return m + this.n.length; // error, 'length' does not exist on 'number'    } : (m: number) => any
->                                                                                                           :                   
+>                                                                                                           : ^ ^^      ^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -176,7 +176,7 @@ let o2: I = {
 >explicitThis : (this: I, m: number) => any
 >             : ^    ^^^^^ ^^^^^^^^^^^^^^^^
 >function (m) {         return m + this.n.length;  // error, this.n: number, no member 'length'    } : (this: I, m: number) => any
->                                                                                                    :                            
+>                                                                                                    : ^    ^^^^^ ^^^^^^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -202,7 +202,7 @@ let x = i.explicitThis;
 >x : (this: I, m: number) => number
 >  : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >i.explicitThis : (this: I, m: number) => number
->               :                               
+>               : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >i : I
 >  : ^
 >explicitThis : (this: I, m: number) => number
@@ -226,7 +226,7 @@ let y = u.implicitNoThis;
 >y : (m: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >u.implicitNoThis : (m: number) => number
->                 :                      
+>                 : ^ ^^      ^^^^^^^^^^^
 >u : Unused
 >  : ^^^^^^
 >implicitNoThis : (m: number) => number

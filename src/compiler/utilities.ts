@@ -208,6 +208,7 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
+    HasInferredType,
     HasInitializer,
     hasInitializer,
     HasJSDoc,
@@ -460,6 +461,7 @@ import {
     Pattern,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    PrimitiveLiteral,
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
@@ -1507,6 +1509,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2022: [
                 "at",
             ],
+            esnext: [
+                "isWellFormed",
+                "toWellFormed",
+            ],
         })),
         StringConstructor: new Map(Object.entries({
             es2015: [
@@ -2367,6 +2373,17 @@ export function isVarUsing(node: VariableDeclaration | VariableDeclarationList):
  */
 export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
     return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const`, `using` or `await using` declaration.
+ * @internal
+ */
+export function isVarConstLike(node: VariableDeclaration | VariableDeclarationList) {
+    const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+    return blockScopeKind === NodeFlags.Const ||
+        blockScopeKind === NodeFlags.Using ||
+        blockScopeKind === NodeFlags.AwaitUsing;
 }
 
 /**
@@ -5340,10 +5357,6 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
     return node.escapedText === "push" || node.escapedText === "unshift";
 }
 
-// TODO(jakebailey): this function should not be named this. While it does technically
-// return true if the argument is a ParameterDeclaration, it also returns true for nodes
-// that are children of ParameterDeclarations inside binding elements.
-// Probably, this should be called `rootDeclarationIsParameter`.
 /**
  * This function returns true if the this node's root declaration is a parameter.
  * For example, passing a `ParameterDeclaration` will return true, as will passing a
@@ -5353,7 +5366,7 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
  *
  * @internal
  */
-export function isParameterDeclaration(node: Declaration): boolean {
+export function isPartOfParameterDeclaration(node: Declaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
@@ -9064,6 +9077,7 @@ export interface SymlinkCache {
     getSymlinkedFiles(): ReadonlyMap<Path, string> | undefined;
     setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
     setSymlinkedFile(symlinkPath: Path, real: string): void;
+    hasAnySymlinks(): boolean;
     /**
      * @internal
      * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
@@ -9079,6 +9093,7 @@ export interface SymlinkCache {
         ) => void,
         typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
     ): void;
+    setSymlinksFromResolution(resolution: ResolvedModuleFull | undefined): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -9118,7 +9133,15 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
+        setSymlinksFromResolution(resolution) {
+            processResolution(this, resolution);
+        },
+        hasAnySymlinks,
     };
+
+    function hasAnySymlinks() {
+        return !!symlinkedFiles?.size || (!!symlinkedDirectories && !!forEachEntry(symlinkedDirectories, value => !!value));
+    }
 
     function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
         if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
@@ -9943,7 +9966,7 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
 
 /** @internal */
 export function isJsonEqual(a: unknown, b: unknown): boolean {
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
 }
 
@@ -10723,8 +10746,8 @@ export function getNameFromImportAttribute(node: ImportAttribute) {
 }
 
 /** @internal */
-export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false): EvaluatorResult<T> {
-    return { value, isSyntacticallyString, resolvedOtherFiles };
+export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false, hasExternalReferences = false): EvaluatorResult<T> {
+    return { value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences };
 }
 
 /** @internal */
@@ -10734,6 +10757,7 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
     function evaluate(expr: Expression, location?: Declaration): EvaluatorResult {
         let isSyntacticallyString = false;
         let resolvedOtherFiles = false;
+        let hasExternalReferences = false;
         // It's unclear when/whether we should consider skipping other kinds of outer expressions.
         // Type assertions intentionally break evaluation when evaluating literal types, such as:
         //     type T = `one ${"two" as any} three`; // string
@@ -10751,14 +10775,15 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.PrefixUnaryExpression:
                 const result = evaluate((expr as PrefixUnaryExpression).operand, location);
                 resolvedOtherFiles = result.resolvedOtherFiles;
+                hasExternalReferences = result.hasExternalReferences;
                 if (typeof result.value === "number") {
                     switch ((expr as PrefixUnaryExpression).operator) {
                         case SyntaxKind.PlusToken:
-                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.MinusToken:
-                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.TildeToken:
-                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                     }
                 }
                 break;
@@ -10767,32 +10792,33 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
                 const right = evaluate((expr as BinaryExpression).right, location);
                 isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken;
                 resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles;
+                hasExternalReferences = left.hasExternalReferences || right.hasExternalReferences;
                 if (typeof left.value === "number" && typeof right.value === "number") {
                     switch ((expr as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.BarToken:
-                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AmpersandToken:
-                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.GreaterThanGreaterThanToken:
-                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.LessThanLessThanToken:
-                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.CaretToken:
-                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AsteriskToken:
-                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.SlashToken:
-                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.PlusToken:
-                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.MinusToken:
-                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.PercentToken:
-                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AsteriskAsteriskToken:
-                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                     }
                 }
                 else if (
@@ -10804,6 +10830,7 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
                         "" + left.value + right.value,
                         isSyntacticallyString,
                         resolvedOtherFiles,
+                        hasExternalReferences,
                     );
                 }
 
@@ -10826,12 +10853,13 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.ElementAccessExpression:
                 return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
         }
-        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles);
+        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
     }
 
     function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined> {
         let result = expr.head.text;
         let resolvedOtherFiles = false;
+        let hasExternalReferences = false;
         for (const span of expr.templateSpans) {
             const spanResult = evaluate(span.expression, location);
             if (spanResult.value === undefined) {
@@ -10840,11 +10868,13 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             result += spanResult.value;
             result += span.literal.text;
             resolvedOtherFiles ||= spanResult.resolvedOtherFiles;
+            hasExternalReferences ||= spanResult.hasExternalReferences;
         }
         return evaluatorResult(
             result,
             /*isSyntacticallyString*/ true,
             resolvedOtherFiles,
+            hasExternalReferences,
         );
     }
     return evaluate;
@@ -11229,7 +11259,7 @@ export function createNameResolver({
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation)
                         )
                     ) {
-                        if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                        if (isPartOfParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
                             associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                         }
                     }
@@ -11422,5 +11452,60 @@ export function createNameResolver({
         }
 
         return false;
+    }
+}
+
+/** @internal */
+export function isPrimitiveLiteralValue(node: Expression, includeBigInt = true): node is PrimitiveLiteral {
+    Debug.type<PrimitiveLiteral>(node);
+    switch (node.kind) {
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+        case SyntaxKind.BigIntLiteral:
+            return includeBigInt;
+        case SyntaxKind.PrefixUnaryExpression:
+            if (node.operator === SyntaxKind.MinusToken) {
+                return isNumericLiteral(node.operand) || (includeBigInt && isBigIntLiteral(node.operand));
+            }
+            if (node.operator === SyntaxKind.PlusToken) {
+                return isNumericLiteral(node.operand);
+            }
+            return false;
+        default:
+            assertType<never>(node);
+            return false;
+    }
+}
+
+/** @internal */
+export function unwrapParenthesizedExpression(o: Expression) {
+    while (o.kind === SyntaxKind.ParenthesizedExpression) {
+        o = (o as ParenthesizedExpression).expression;
+    }
+    return o;
+}
+
+/** @internal */
+export function hasInferredType(node: Node): node is HasInferredType {
+    Debug.type<HasInferredType>(node);
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.PropertyAssignment:
+            return true;
+        default:
+            assertType<never>(node);
+            return false;
     }
 }

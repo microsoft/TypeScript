@@ -23,7 +23,7 @@ function test<P>(wrappedProps: P) {
 >MySFC : (props: P) => JSX.Element
 >      : ^     ^^ ^^^^^^^^^^^^^^^^
 >function(props: P) {        return <>hello</>;    } : (props: P) => JSX.Element
->                                                    :                          
+>                                                    : ^     ^^ ^^^^^^^^^^^^^^^^
 >props : P
 >      : ^
 

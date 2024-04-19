@@ -96,7 +96,7 @@ const Component = <T extends Animations>({
 >Component : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
 >          : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
 ><T extends Animations>({  animations,  style,}: AnimatedViewProps<T>) => <></> : <T extends Animations>({ animations, style, }: AnimatedViewProps<T>) => JSX.Element
->                                                                               :                                                                                    
+>                                                                               : ^ ^^^^^^^^^^^^^^^^^^^^^                      ^^                    ^^^^^^^^^^^^^^^^
 
   animations,
 >animations : T
@@ -178,7 +178,7 @@ const Component = <T extends Animations>({
 >test : { kind: "a"; value: number; a: true; func(): { a: true; }; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      kind: "a",      value: 1,      a: true,      func() {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func(): { a: true; }; }
->                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       kind: "a",
 >kind : "a"
@@ -246,7 +246,7 @@ const Component = <T extends Animations>({
 >test : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      kind: "a",      value: 1,      a: true,      func: () => {        return {          a: true,        };      },    } : { kind: "a"; value: number; a: true; func: () => { a: true; }; }
->                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^
+>                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       kind: "a",
 >kind : "a"
@@ -270,7 +270,7 @@ const Component = <T extends Animations>({
 >func : () => { a: true; }
 >     : ^^^^^^^^^^^^^^^^^^
 >() => {        return {          a: true,        };      } : () => { a: true; }
->                                                           :                   
+>                                                           : ^^^^^^^^^^^^^^^^^^
 
         return {
 >{          a: true,        } : { a: true; }
@@ -408,7 +408,7 @@ function Foo<T>(props: Props<T>) {
 >a : (x: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => 10 : (x: string) => number
->          :                      
+>          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >10 : 10
@@ -418,7 +418,7 @@ function Foo<T>(props: Props<T>) {
 >b : (arg: number) => void
 >  : ^   ^^^^^^^^^^^^^^^^^
 >(arg) => { arg.toString(); } : (arg: number) => void
->                             :                      
+>                             : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >arg.toString() : string

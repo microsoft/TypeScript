@@ -124,8 +124,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/myproject/src/secondary.ts :: Config file name: /home/src/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/myproject/src/secondary.ts ProjectRootPath: undefined:: Result: /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/tsconfig.json 2000 {"excludeDirectories":["/home/src/projects/myproject/node_modules"]} Project: /home/src/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

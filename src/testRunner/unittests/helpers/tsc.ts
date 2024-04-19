@@ -553,7 +553,7 @@ export function verifyTsc({
                 }
                 Harness.Baseline.runBaseline(
                     tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
-                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-null/no-null
+                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-restricted-syntax
                 );
             });
         }

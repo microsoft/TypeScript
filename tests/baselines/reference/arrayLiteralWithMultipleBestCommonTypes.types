@@ -31,7 +31,7 @@ var as = [a, b]; // { x: number; y?: number };[]
 >as : ({ x: number; y?: number; } | { x: number; z?: number; })[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[a, b] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
->       : ^              ^           ^^^              ^           ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y?: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { x: number; z?: number; }
@@ -41,7 +41,7 @@ var bs = [b, a]; // { x: number; z?: number };[]
 >bs : ({ x: number; y?: number; } | { x: number; z?: number; })[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[b, a] : ({ x: number; y?: number; } | { x: number; z?: number; })[]
->       : ^              ^           ^^^              ^           ^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { x: number; z?: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y?: number; }
@@ -51,7 +51,7 @@ var cs = [a, b, c]; // { x: number; y?: number };[]
 >cs : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[a, b, c] : ({ x: number; y?: number; } | { x: number; z?: number; } | { x: number; a?: number; })[]
->          : ^              ^           ^^^              ^           ^^^              ^           ^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y?: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { x: number; z?: number; }
@@ -63,7 +63,7 @@ var ds = [(x: Object) => 1, (x: string) => 2]; // { (x:Object) => number }[]
 >ds : ((x: Object) => number)[]
 >   : ^^ ^^      ^^^^^^^^^^^^^^
 >[(x: Object) => 1, (x: string) => 2] : ((x: Object) => number)[]
->                                     : ^                     ^^^
+>                                     : ^^ ^^      ^^^^^^^^^^^^^^
 >(x: Object) => 1 : (x: Object) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : Object
@@ -81,7 +81,7 @@ var es = [(x: string) => 2, (x: Object) => 1]; // { (x:string) => number }[]
 >es : ((x: string) => number)[]
 >   : ^^ ^^      ^^^^^^^^^^^^^^
 >[(x: string) => 2, (x: Object) => 1] : ((x: string) => number)[]
->                                     : ^                     ^^^
+>                                     : ^^ ^^      ^^^^^^^^^^^^^^
 >(x: string) => 2 : (x: string) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >x : string
@@ -99,7 +99,7 @@ var fs = [(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) =>
 >fs : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
 >   : ^^^ ^^                          ^^^^^^^^^^^^^^^^^ ^^                          ^^^^^^^^^^^^^^^
 >[(a: { x: number; y?: number }) => 1, (b: { x: number; z?: number }) => 2] : (((a: { x: number; y?: number; }) => number) | ((b: { x: number; z?: number; }) => number))[]
->                                                                           : ^^                                         ^^^^^                                         ^^^^
+>                                                                           : ^^^ ^^                          ^^^^^^^^^^^^^^^^^ ^^                          ^^^^^^^^^^^^^^^
 >(a: { x: number; y?: number }) => 1 : (a: { x: number; y?: number; }) => number
 >                                    : ^ ^^                          ^^^^^^^^^^^
 >a : { x: number; y?: number; }
@@ -125,7 +125,7 @@ var gs = [(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) =>
 >gs : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
 >   : ^^^ ^^                          ^^^^^^^^^^^^^^^^^ ^^                          ^^^^^^^^^^^^^^^
 >[(b: { x: number; z?: number }) => 2, (a: { x: number; y?: number }) => 1] : (((b: { x: number; z?: number; }) => number) | ((a: { x: number; y?: number; }) => number))[]
->                                                                           : ^^                                         ^^^^^                                         ^^^^
+>                                                                           : ^^^ ^^                          ^^^^^^^^^^^^^^^^^ ^^                          ^^^^^^^^^^^^^^^
 >(b: { x: number; z?: number }) => 2 : (b: { x: number; z?: number; }) => number
 >                                    : ^ ^^                          ^^^^^^^^^^^
 >b : { x: number; z?: number; }

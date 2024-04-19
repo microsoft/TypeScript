@@ -81,7 +81,7 @@ const x1 = f1(fo, fs);  // (x: string) => void
 >x1 : (x: string) => void
 >   : ^ ^^^^^^^^^^^^^^^^^
 >f1(fo, fs) : (x: string) => void
->           :                    
+>           : ^ ^^^^^^^^^^^^^^^^^
 >f1 : <T>(f1: (x: T) => void, f2: (x: T) => void) => (x: T) => void
 >   : ^ ^^  ^^              ^^  ^^              ^^^^^^ ^^ ^^^^^^^^^
 >fo : (x: Object) => void

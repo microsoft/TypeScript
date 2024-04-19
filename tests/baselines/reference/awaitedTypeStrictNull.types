@@ -260,7 +260,7 @@ async function fn<T>(): Promise<T extends object ? { [K in keyof T]: Obj } : Obj
 >api : Api<{}>
 >    : ^^^^^^^
 >post : <T_1 = {}>() => Promise<T_1>
->     : ^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // helps with tests where '.types' just prints out the type alias name

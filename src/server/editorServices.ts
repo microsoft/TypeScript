@@ -1700,6 +1700,16 @@ export class ProjectService {
                     const project = this.getConfiguredProjectByCanonicalConfigFilePath(projectCanonicalPath);
                     if (!project) return;
 
+                    if (
+                        configuredProjectForConfig !== project &&
+                        this.getHostPreferences().includeCompletionsForModuleExports
+                    ) {
+                        const path = this.toPath(configFileName);
+                        if (find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)) {
+                            project.markAutoImportProviderAsDirty();
+                        }
+                    }
+
                     // Load root file names for configured project with the config file name
                     // But only schedule update if project references this config file
                     const updateLevel = configuredProjectForConfig === project ? ProgramUpdateLevel.RootNamesAndUpdate : ProgramUpdateLevel.Update;
@@ -1765,11 +1775,19 @@ export class ProjectService {
                 project.pendingUpdateLevel = ProgramUpdateLevel.Full;
                 project.pendingUpdateReason = loadReason;
                 this.delayUpdateProjectGraph(project);
+                project.markAutoImportProviderAsDirty();
             }
             else {
                 // Change in referenced project config file
-                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(this.toPath(canonicalConfigFilePath));
+                const path = this.toPath(canonicalConfigFilePath);
+                project.resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
                 this.delayUpdateProjectGraph(project);
+                if (
+                    this.getHostPreferences().includeCompletionsForModuleExports &&
+                    find(project.getCurrentProgram()?.getResolvedProjectReferences(), ref => ref?.sourceFile.path === path)
+                ) {
+                    project.markAutoImportProviderAsDirty();
+                }
             }
         });
         return scheduledAnyProjectUpdate;
@@ -2340,14 +2358,8 @@ export class ProjectService {
             const result = this.configFileForOpenFiles.get(info.path);
             if (result !== undefined) return result || undefined;
         }
-        this.logger.info(`Search path: ${getDirectoryPath(info.fileName)}`);
         const configFileName = this.forEachConfigFileLocation(info, (canonicalConfigFilePath, configFileName) => this.configFileExists(configFileName, canonicalConfigFilePath, info));
-        if (configFileName) {
-            this.logger.info(`For info: ${info.fileName} :: Config file name: ${configFileName}`);
-        }
-        else {
-            this.logger.info(`For info: ${info.fileName} :: No config files found.`);
-        }
+        this.logger.info(`getConfigFileNameForFile:: File: ${info.fileName} ProjectRootPath: ${this.openFiles.get(info.path)}:: Result: ${configFileName}`);
         if (isOpenScriptInfo(info)) {
             this.configFileForOpenFiles.set(info.path, configFileName || false);
         }
@@ -3557,6 +3569,7 @@ export class ProjectService {
                 const {
                     lazyConfiguredProjectsFromExternalProject,
                     includePackageJsonAutoImports,
+                    includeCompletionsForModuleExports,
                 } = this.hostConfiguration.preferences;
 
                 this.hostConfiguration.preferences = { ...this.hostConfiguration.preferences, ...args.preferences };
@@ -3576,7 +3589,10 @@ export class ProjectService {
                         })
                     );
                 }
-                if (includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports) {
+                if (
+                    includePackageJsonAutoImports !== args.preferences.includePackageJsonAutoImports ||
+                    !!includeCompletionsForModuleExports !== !!args.preferences.includeCompletionsForModuleExports
+                ) {
                     this.forEachProject(project => {
                         project.onAutoImportProviderSettingsChanged();
                     });

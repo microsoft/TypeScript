@@ -236,6 +236,7 @@ const libEntries: [string, string][] = [
     ["esnext.object", "lib.esnext.object.d.ts"],
     ["esnext.array", "lib.esnext.array.d.ts"],
     ["esnext.regexp", "lib.esnext.regexp.d.ts"],
+    ["esnext.string", "lib.esnext.string.d.ts"],
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -829,6 +830,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Do_not_transform_or_elide_any_imports_or_exports_not_marked_as_type_only_ensuring_they_are_written_in_the_output_file_s_format_based_on_the_module_setting,
         defaultValueDescription: false,
+    },
+    {
+        name: "isolatedDeclarations",
+        type: "boolean",
+        category: Diagnostics.Interop_Constraints,
+        description: Diagnostics.Require_sufficient_annotation_on_exports_so_other_tools_can_trivially_generate_declaration_files,
+        defaultValueDescription: false,
+        affectsBuildInfo: true,
+        affectsSemanticDiagnostics: true,
     },
 
     // Strict Type Checks
@@ -2394,7 +2404,7 @@ export function convertToJson(
                 return false;
 
             case SyntaxKind.NullKeyword:
-                return null; // eslint-disable-line no-null/no-null
+                return null; // eslint-disable-line no-restricted-syntax
 
             case SyntaxKind.StringLiteral:
                 if (!isDoubleQuotedString(valueExpression)) {
@@ -2869,8 +2879,8 @@ export function setConfigFileInOptions(options: CompilerOptions, configFile: TsC
     }
 }
 
-function isNullOrUndefined(x: any): x is null | undefined {
-    return x === undefined || x === null; // eslint-disable-line no-null/no-null
+function isNullOrUndefined(x: any): x is null | undefined { // eslint-disable-line no-restricted-syntax
+    return x === undefined || x === null; // eslint-disable-line no-restricted-syntax
 }
 
 function directoryOfCombinedPath(fileName: string, basePath: string) {

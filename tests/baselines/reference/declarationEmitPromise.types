@@ -71,7 +71,7 @@ export async function runSampleWorks<A, B, C, D, E>(
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 >     : ^ ^^ ^^                                       ^^^^^ 
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->                                                                                   :                                                     
+>                                                                                   : ^ ^^ ^^                                       ^^^^^ 
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >  : ^ ^^ ^^ ^^^ ^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >a : A
@@ -171,7 +171,7 @@ export async function runSampleBreaks<A, B, C, D, E>(
 >func : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
 >     : ^ ^^ ^^                                       ^^^^^ 
 ><T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T): T =>        f.apply(this, result) : <T>(f: (a: A, b?: B, c?: C, d?: D, e?: E) => T) => T
->                                                                                   :                                                     
+>                                                                                   : ^ ^^ ^^                                       ^^^^^ 
 >f : (a: A, b?: B, c?: C, d?: D, e?: E) => T
 >  : ^ ^^ ^^ ^^^ ^^ ^^^ ^^ ^^^ ^^ ^^^ ^^^^^ 
 >a : A

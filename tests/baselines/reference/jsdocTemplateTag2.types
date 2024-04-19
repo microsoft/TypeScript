@@ -5,7 +5,7 @@ var obj = {
 >obj : { x: <T>(a: T) => T; }
 >    : ^^^^^^ ^^ ^^ ^^^^^ ^^^
 >{	/**	 * @template T	 * @param {T} a	 * @returns {T}	 */	x: function (a) {		return a;	},} : { x: <T>(a: T) => T; }
->                                                                                          : ^^^^^              ^^^
+>                                                                                          : ^^^^^^ ^^ ^^ ^^^^^ ^^^
 
 	/**
 	 * @template T
@@ -16,7 +16,7 @@ var obj = {
 >x : <T>(a: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >function (a) {		return a;	} : <T>(a: T) => T
->                            :               
+>                            : ^ ^^ ^^ ^^^^^ 
 >a : T
 >  : ^
 

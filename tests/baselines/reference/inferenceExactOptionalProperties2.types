@@ -138,23 +138,23 @@ setup({
 >actors : { counter: ActorLogic<{ type: "INCREMENT"; }>; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ counter: counterLogic } : { counter: ActorLogic<{ type: "INCREMENT"; }>; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^                      ^^^^
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >counter : ActorLogic<{ type: "INCREMENT"; }>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >counterLogic : ActorLogic<{ type: "INCREMENT"; }>
->             : ^^^^^^^^^^^                      ^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 }).createMachine({
 >createMachine : <const TConfig extends MachineConfig<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>>(config: TConfig) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^      ^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^
 >{  entry: assign((spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  }),} : { entry: AssignAction<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>; }
->                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   entry: assign((spawn) => {
 >entry : AssignAction<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign((spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  }) : AssignAction<{ src: "counter"; logic: ActorLogic<{ type: "INCREMENT"; }>; }>
->                                                                                             : ^^^^^^^^^^^^^                                                              ^
+>                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign : <TActor extends ProvidedActor>(_: (spawn: (actor: TActor["src"]) => void) => {}) => AssignAction<TActor>
 >       : ^      ^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(spawn) => {    spawn("counter"); // ok    spawn("alarm"); // error    return {};  } : (spawn: (actor: "counter") => void) => {}

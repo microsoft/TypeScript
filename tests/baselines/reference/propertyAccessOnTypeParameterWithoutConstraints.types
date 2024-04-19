@@ -136,13 +136,13 @@ var b = {
 >b : { foo: <T>(x: T) => string; }
 >  : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    }} : { foo: <T>(x: T) => string; }
->                                                                                                                   : ^^^^^^^                   ^^^
+>                                                                                                                   : ^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <T>(x: T) => {
 >foo : <T>(x: T) => string
 >    : ^ ^^ ^^ ^^^^^^^^^^^
 ><T>(x: T) => {        var a = x['toString'](); // should be string        return a + x.toString();    } : <T>(x: T) => string
->                                                                                                        :                    
+>                                                                                                        : ^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 

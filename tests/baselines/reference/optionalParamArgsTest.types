@@ -217,7 +217,7 @@ var L1 = function() {return 0;}
 >L1 : () => number
 >   : ^^^^^^^^^^^^
 >function() {return 0;} : () => number
->                       :             
+>                       : ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -225,7 +225,7 @@ var L2 = function (L2A1:number) { return L2A1; }
 >L2 : (L2A1: number) => number
 >   : ^    ^^      ^^^^^^^^^^^
 >function (L2A1:number) { return L2A1; } : (L2A1: number) => number
->                                        :                         
+>                                        : ^    ^^      ^^^^^^^^^^^
 >L2A1 : number
 >     : ^^^^^^
 >L2A1 : number
@@ -235,7 +235,7 @@ var L3 = function (L3A1=0,L3A2=L3A1) {return L3A1 + L3A2; }
 >L3 : (L3A1?: number, L3A2?: number) => number
 >   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >function (L3A1=0,L3A2=L3A1) {return L3A1 + L3A2; } : (L3A1?: number, L3A2?: number) => number
->                                                   :      ^              ^                   
+>                                                   : ^    ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^
 >L3A1 : number
 >     : ^^^^^^
 >0 : 0
@@ -255,7 +255,7 @@ var L4 = function (L4A1:number,L4A2?:number) { return L4A1 + L4A2; }
 >L4 : (L4A1: number, L4A2?: number) => number
 >   : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
 >function (L4A1:number,L4A2?:number) { return L4A1 + L4A2; } : (L4A1: number, L4A2?: number) => number
->                                                            :                    ^                   
+>                                                            : ^    ^^      ^^    ^^^      ^^^^^^^^^^^
 >L4A1 : number
 >     : ^^^^^^
 >L4A2 : number

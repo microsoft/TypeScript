@@ -972,7 +972,7 @@ function getCompletionEntriesForNonRelativeModules(
                         const packageJson = readJson(packageFile, host);
                         const exports = (packageJson as any).exports;
                         if (exports) {
-                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-null/no-null
+                            if (typeof exports !== "object" || exports === null) { // eslint-disable-line no-restricted-syntax
                                 return; // null exports or entrypoint only, no sub-modules available
                             }
                             const keys = getOwnKeys(exports);

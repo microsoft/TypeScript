@@ -142,7 +142,7 @@ var b = {
 >foo : <T extends Date>(x: T) => T
 >    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 ><T extends Date>(x: T): T => {        var a = x['notHere'](); // should be string        return a + x.notHere();    } : <T extends Date>(x: T) => T
->                                                                                                                      :                            
+>                                                                                                                      : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 

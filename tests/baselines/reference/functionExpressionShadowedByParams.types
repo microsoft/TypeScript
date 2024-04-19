@@ -33,13 +33,13 @@ var x = {
 >x : { b: (b: number) => void; }
 >  : ^^^^^^ ^^      ^^^^^^^^^^^^
 >{   b: function b(b: number) {      b.toPrecision(2); // should not error      b.apply(null, null); // should error   }} : { b: (b: number) => void; }
->                                                                                                                         : ^^^^^                   ^^^
+>                                                                                                                         : ^^^^^^ ^^      ^^^^^^^^^^^^
 
    b: function b(b: number) {
 >b : (b: number) => void
 >  : ^ ^^      ^^^^^^^^^
 >function b(b: number) {      b.toPrecision(2); // should not error      b.apply(null, null); // should error   } : (b: number) => void
->                                                                                                                 :                    
+>                                                                                                                 : ^ ^^      ^^^^^^^^^
 >b : (b: number) => void
 >  : ^ ^^      ^^^^^^^^^
 >b : number

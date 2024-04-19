@@ -54,8 +54,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/app
-Info seq  [hh:mm:ss:mss] For info: /packages/app/package.json :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/package.json ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -374,8 +373,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/app/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/app/src
-Info seq  [hh:mm:ss:mss] For info: /packages/app/src/index.ts :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/src/index.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -586,7 +584,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getCodeFixes"
     }
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /packages/dep/src 1 undefined Project: /dev/null/autoImportProviderProject1* WatchType: Failed Lookup Locations

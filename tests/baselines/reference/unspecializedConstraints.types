@@ -720,7 +720,7 @@ module ts {
 >hasOwnProperty : (v: PropertyKey) => boolean
 >               : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype.hasOwnProperty : (v: PropertyKey) => boolean
->                                :                            
+>                                : ^ ^^           ^^^^^^^^^^^^
 >Object.prototype : Object
 >                 : ^^^^^^
 >Object : ObjectConstructor

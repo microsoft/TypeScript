@@ -16,7 +16,7 @@ class Thing {
 >doSomething : () => void
 >            : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
     }
 }
 
@@ -42,7 +42,7 @@ class ElementsArray extends Array {
 >superisArray : (arg: any) => arg is any[]
 >             : ^   ^^   ^^^^^^^^^^^^^^^^^
 >super.isArray : (arg: any) => arg is any[]
->              :                           
+>              : ^   ^^   ^^^^^^^^^^^^^^^^^
 >super : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
@@ -52,7 +52,7 @@ class ElementsArray extends Array {
 >customIsArray : (arg: any) => arg is any[]
 >              : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >(arg)=> superisArray(arg) : (arg: any) => arg is any[]
->                          :                           
+>                          : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >arg : any
 >superisArray(arg) : boolean
 >                  : ^^^^^^^
@@ -70,7 +70,7 @@ class ElementsArray extends Array {
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^^^^^^^^^^^^^^^^^^^^^
 >customIsArray : (arg: any) => arg is any[]
->              :                           
+>              : ^   ^^^^^^^^^^^^^^^^^^^^^^
     }
 }
 

@@ -25,7 +25,7 @@ export const MyFunction = ({ msg }: MyFunction) => console.log(`Got message "${m
 >MyFunction : ({ msg }: MyFunction) => void
 >           : ^       ^^          ^^^^^^^^^
 >({ msg }: MyFunction) => console.log(`Got message "${msg}"`) : ({ msg }: MyFunction) => void
->                                                             :                              
+>                                                             : ^       ^^          ^^^^^^^^^
 >msg : string
 >    : ^^^^^^
 >console.log(`Got message "${msg}"`) : void

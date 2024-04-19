@@ -75,7 +75,7 @@ class C {
 >m3 : () => void
 >   : ^^^^^^^^^^
 >function() { } : () => void
->               :           
+>               : ^^^^^^^^^^
 
     constructor(public foo: string) {}
 >foo : string
@@ -150,7 +150,7 @@ class E {
 >bar : () => string
 >    : ^^^^^^^^^^^^
 >() => this.foo1 + this.foo2 : () => string
->                            :             
+>                            : ^^^^^^^^^^^^
 >this.foo1 + this.foo2 : string
 >                      : ^^^^^^
 >this.foo1 : string
@@ -243,7 +243,7 @@ class H {
 >p2 : () => string
 >   : ^^^^^^^^^^^^
 >() => {        return this.p1.foo;    } : () => string
->                                        :             
+>                                        : ^^^^^^^^^^^^
 
         return this.p1.foo;
 >this.p1.foo : string
@@ -262,7 +262,7 @@ class H {
 >p3 : () => string
 >   : ^^^^^^^^^^^^
 >() => this.p1.foo : () => string
->                  :             
+>                  : ^^^^^^^^^^^^
 >this.p1.foo : string
 >            : ^^^^^^
 >this.p1 : C

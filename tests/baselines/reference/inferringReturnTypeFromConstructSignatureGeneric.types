@@ -64,7 +64,7 @@ const g1 = g(GenericObject);
 >g1 : GenericObject<{}>
 >   : ^^^^^^^^^^^^^^^^^
 >g(GenericObject) : GenericObject<{}>
->                 : ^^^^^^^^^^^^^^  ^
+>                 : ^^^^^^^^^^^^^^^^^
 >g : <T>(type: new () => T) => T
 >  : ^ ^^    ^^           ^^^^^^
 >GenericObject : typeof GenericObject
@@ -74,11 +74,11 @@ g1.give({});
 >g1.give({}) : {}
 >            : ^^
 >g1.give : (value: {}) => {}
->        : ^     ^^^^^^^^^  
+>        : ^     ^^^^^^^^^^^
 >g1 : GenericObject<{}>
 >   : ^^^^^^^^^^^^^^^^^
 >give : (value: {}) => {}
->     : ^     ^^^^^^^^^  
+>     : ^     ^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

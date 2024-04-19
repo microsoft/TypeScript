@@ -61,7 +61,7 @@ export function Component() {
 >foo : (arg: any) => void
 >    : ^   ^^^^^^^^^^^^^^
 >(arg) => setState(arg) : (arg: any) => void
->                       :                   
+>                       : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 >setState(arg) : void
@@ -75,7 +75,7 @@ export function Component() {
 >bar : (arg: any) => void
 >    : ^   ^^^^^^^^^^^^^^
 >(arg) => setState(arg) : (arg: any) => void
->                       :                   
+>                       : ^   ^^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 >setState(arg) : void

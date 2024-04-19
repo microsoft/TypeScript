@@ -130,8 +130,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/index.ts :: Config file name: /user/username/projects/solution/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/b/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/b/tsconfig.json 2000 undefined Project: /user/username/projects/solution/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -267,12 +266,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/b/tsconfig.json :: Config file name: /user/username/projects/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/b/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -361,8 +358,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -450,8 +446,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -803,21 +798,14 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1086,26 +1074,17 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/b/index.ts position 86 in project /user/username/projects/solution/d/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/a/index.ts :: Config file name: /user/username/projects/solution/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/c
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/c/index.ts :: Config file name: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/a/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/c/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/a/index.ts position 34 in project /user/username/projects/solution/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {

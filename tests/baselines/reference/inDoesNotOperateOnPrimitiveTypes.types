@@ -5,7 +5,7 @@ const validHasKey = <T extends object>(
 >validHasKey : <T extends object>(thing: T, key: string) => boolean
 >            : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^   ^^      ^^^^^       
 ><T extends object>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok} : <T extends object>(thing: T, key: string) => boolean
->                                                                                         :                                                     
+>                                                                                         : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^   ^^      ^^^^^       
 
   thing: T,
 >thing : T
@@ -30,7 +30,7 @@ const alsoValidHasKey = <T>(
 >alsoValidHasKey : <T>(thing: T, key: string) => boolean
 >                : ^ ^^     ^^ ^^   ^^      ^^^^^       
 ><T>(  thing: T,  key: string,): boolean => {  return key in thing; // Ok (as T may be instantiated with a valid type)} : <T>(thing: T, key: string) => boolean
->                                                                                                                       :                                      
+>                                                                                                                       : ^ ^^     ^^ ^^   ^^      ^^^^^       
 
   thing: T,
 >thing : T

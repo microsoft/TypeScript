@@ -42,7 +42,7 @@ const Foo = (props: Props) => <div>{ props.a }</div>;
 >Foo : (props: Props) => JSX.Element
 >    : ^     ^^     ^^^^^^^^^^^^^^^^
 >(props: Props) => <div>{ props.a }</div> : (props: Props) => JSX.Element
->                                         :                              
+>                                         : ^     ^^     ^^^^^^^^^^^^^^^^
 >props : Props
 >      : ^^^^^
 ><div>{ props.a }</div> : JSX.Element

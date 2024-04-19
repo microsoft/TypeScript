@@ -99,7 +99,7 @@ function test2() {
 >foo : (options: { [key: string]: any; b: number; }) => string
 >    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(options) => "Foo" : (options: { [key: string]: any; b: number; }) => string
->                   :                                                        
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : { [key: string]: any; b: number; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Foo" : "Foo"
@@ -109,7 +109,7 @@ function test2() {
 >bar : (options: { [key: string]: any; a: string; }) => string
 >    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(options) => "Bar" : (options: { [key: string]: any; a: string; }) => string
->                   :                                                        
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : { [key: string]: any; a: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Bar" : "Bar"
@@ -121,7 +121,7 @@ function test2() {
 >test1 : (type: "foo" | "bar") => string
 >      : ^    ^^             ^^^^^^^^^^^
 >(type: "foo" | "bar") =>        messages[type]({ a: "A", b: 0 }) : (type: "foo" | "bar") => string
->                                                                 :                                
+>                                                                 : ^    ^^             ^^^^^^^^^^^
 >type : "foo" | "bar"
 >     : ^^^^^^^^^^^^^
 

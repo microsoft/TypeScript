@@ -32,7 +32,7 @@ const o = {
 >o : { f: (this: { n: number; }, s: string) => number; n: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    f,    n: 1} : { f: (this: { n: number; }, s: string) => number; n: number; }
->                 : ^^^^^                                           ^^^^^^^^^^^^^^
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     f,
 >f : (this: { n: number; }, s: string) => number
