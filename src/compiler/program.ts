@@ -264,6 +264,7 @@ import {
     projectReferenceIsEqualTo,
     PropertyAssignment,
     PropertyDeclaration,
+    PropertyName,
     ReferencedFile,
     removeFileExtension,
     removePrefix,
@@ -1618,6 +1619,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // Map storing if there is emit blocking diagnostics for given input
     const hasEmitBlockingDiagnostics = new Map<string, boolean>();
     let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
+    let _compilerOptionsKeySyntax: PropertyName | false | undefined;
 
     let moduleResolutionCache: ModuleResolutionCache | undefined;
     let actualResolveModuleNamesWorker: (
@@ -4400,7 +4402,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.checkJs && !getAllowJSCompilerOption(options)) {
-            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
+            createCompilerOptionsDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs");
         }
 
         if (options.emitDeclarationOnly) {
@@ -4823,7 +4825,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4845,7 +4847,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4893,13 +4895,30 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, ...args);
 
         if (needCompilerDiagnostic) {
+            createCompilerOptionsDiagnostic(message, ...args);
+        }
+    }
+
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessageChain): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
+        const compilerOptionsKey = getCompilerOptionsKeySyntax();
+        if (compilerOptionsKey) {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
-                programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, compilerOptionsKey, message));
             }
             else {
-                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, compilerOptionsKey, message, ...args));
             }
+        }
+        // eslint-disable-next-line local/no-in-operator
+        else if ("messageText" in message) {
+            programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+        }
+        else {
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
@@ -4912,6 +4931,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             ) || false;
         }
         return _compilerOptionsObjectLiteralSyntax || undefined;
+    }
+
+    function getCompilerOptionsKeySyntax() {
+        if (_compilerOptionsKeySyntax === undefined) {
+            _compilerOptionsKeySyntax = forEachPropertyAssignment(
+                getTsConfigObjectLiteralExpression(options.configFile),
+                "compilerOptions",
+                prop => prop.name,
+            ) || false;
+        }
+        return _compilerOptionsKeySyntax || undefined;
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;

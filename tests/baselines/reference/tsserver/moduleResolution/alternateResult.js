@@ -467,9 +467,18 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": [
           {
+            "start": {
+              "line": 2,
+              "offset": 3
+            },
+            "end": {
+              "line": 2,
+              "offset": 20
+            },
             "text": "Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.",
             "code": 5110,
-            "category": "error"
+            "category": "error",
+            "fileName": "/home/src/projects/project/tsconfig.json"
           }
         ]
       }
