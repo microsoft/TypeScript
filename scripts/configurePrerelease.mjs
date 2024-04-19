@@ -1,7 +1,5 @@
 import assert from "assert";
-import {
-    execFileSync,
-} from "child_process";
+import { execFileSync } from "child_process";
 import {
     readFileSync,
     writeFileSync,
@@ -66,7 +64,7 @@ function main() {
     writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
-/* eslint-disable no-null/no-null */
+/* eslint-disable no-restricted-syntax */
 /**
  * @param {string} tsFilePath
  * @param {string} tsFileContents
@@ -103,7 +101,7 @@ function parsePackageJsonVersion(versionString) {
     assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
     return { majorMinor: match[1], patch: match[2] };
 }
-/* eslint-enable no-null/no-null */
+/* eslint-enable no-restricted-syntax */
 
 /**
  * e.g. 0-dev.20170707

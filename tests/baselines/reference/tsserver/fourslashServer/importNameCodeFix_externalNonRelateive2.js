@@ -91,6 +91,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfi
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /apps/app1/src/package.json 2000 undefined Project: /apps/app1/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
@@ -179,6 +180,8 @@ watchedFiles::
   {"pollingInterval":500}
 /apps/app1/src/index.ts: *new*
   {"pollingInterval":500}
+/apps/app1/src/package.json: *new*
+  {"pollingInterval":2000}
 /apps/app1/src/utils.ts: *new*
   {"pollingInterval":500}
 /apps/app1/tsconfig.json: *new*
@@ -204,6 +207,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -320,6 +324,8 @@ After Request
 watchedFiles::
 /apps/app1/src/app.ts:
   {"pollingInterval":500}
+/apps/app1/src/package.json:
+  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:
@@ -344,6 +350,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts
@@ -565,6 +580,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -709,6 +725,8 @@ Info seq  [hh:mm:ss:mss] 	FileName: /apps/app1/src/app.ts ProjectRootPath: undef
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 After Request
 watchedFiles::
+/apps/app1/src/package.json:
+  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:
@@ -733,6 +751,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts (Open) *changed*
@@ -954,6 +981,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1100,6 +1128,8 @@ Info seq  [hh:mm:ss:mss] 	FileName: /shared/data.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /apps/app1/tsconfig.json
 After Request
 watchedFiles::
+/apps/app1/src/package.json:
+  {"pollingInterval":2000}
 /apps/app1/src/utils.ts:
   {"pollingInterval":500}
 /apps/app1/tsconfig.json:
@@ -1122,6 +1152,15 @@ watchedDirectoriesRecursive::
   {}
 /shared:
   {}
+
+Projects::
+/apps/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
 
 ScriptInfos::
 /apps/app1/src/app.ts (Open)
@@ -1343,6 +1382,7 @@ Projects::
 /apps/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /dev/null/inferredProject1* (Inferred)
     projectStateVersion: 1
     projectProgramVersion: 1

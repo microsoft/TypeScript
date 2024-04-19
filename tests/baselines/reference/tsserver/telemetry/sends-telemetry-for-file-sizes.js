@@ -172,6 +172,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 0
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -424,3 +425,4 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*

@@ -4,28 +4,47 @@
 // #24754
 const webpack = function (){
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (){} : { (): void; WebpackOptionsDefaulter: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 exports = module.exports = webpack;
 >exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module.exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: { (): void; WebpackOptionsDefaulter: number; version: 1001; }; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 exports.version = 1001;
 >exports.version = 1001 : 1001
+>                       : ^^^^
 >exports.version : 1001
+>                : ^^^^
 >exports : { (): void; WebpackOptionsDefaulter: number; version: 1001; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >version : 1001
+>        : ^^^^
 >1001 : 1001
+>     : ^^^^
 
 webpack.WebpackOptionsDefaulter = 1111;
 >webpack.WebpackOptionsDefaulter = 1111 : 1111
+>                                       : ^^^^
 >webpack.WebpackOptionsDefaulter : number
+>                                : ^^^^^^
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >WebpackOptionsDefaulter : number
+>                        : ^^^^^^
 >1111 : 1111
+>     : ^^^^
 

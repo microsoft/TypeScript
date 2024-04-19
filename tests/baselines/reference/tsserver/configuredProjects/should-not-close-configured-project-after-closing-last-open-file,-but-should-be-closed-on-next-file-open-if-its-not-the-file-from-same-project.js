@@ -6,11 +6,13 @@ let x =1;
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts" ]
-                }
+  "compilerOptions": {
+    "target": "es6"
+  },
+  "files": [
+    "main.ts"
+  ]
+}
 
 //// [/a/lib/lib.d.ts]
 /// <reference no-default-lib="true"/>
@@ -140,11 +142,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 3,
-                    "offset": 35
+                    "offset": 15
                   },
                   "end": {
                     "line": 3,
-                    "offset": 40
+                    "offset": 20
                   },
                   "file": "/a/b/tsconfig.json"
                 },
@@ -229,7 +231,6 @@ ScriptInfos::
     containingProjects: 1
         /a/b/tsconfig.json *default*
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: true isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -263,6 +264,12 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/main.ts *changed*
     open: false *changed*
@@ -270,7 +277,6 @@ ScriptInfos::
     containingProjects: 1
         /a/b/tsconfig.json
 
-Configured project: /a/b/tsconfig.json hasOpenRef:: false isClosed: false
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -301,6 +307,7 @@ Projects::
 /a/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
@@ -471,6 +478,8 @@ Projects::
 /a/b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*

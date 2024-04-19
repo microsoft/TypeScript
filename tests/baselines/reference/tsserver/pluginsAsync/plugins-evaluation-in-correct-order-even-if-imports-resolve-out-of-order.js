@@ -77,7 +77,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-^memfs:/foo.ts (Open) *new*
+^memfs:/foo.ts (Dynamic) (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
@@ -101,3 +101,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+after waitForPendingPlugins 
+
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*

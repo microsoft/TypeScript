@@ -1,15 +1,7 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "./contents";
-import {
-    libFile,
-} from "./virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { FsContents } from "./contents";
+import { libFile } from "./virtualFileSystemWithWatch";
 
 export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
     return jsonToReadableText({

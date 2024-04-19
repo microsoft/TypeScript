@@ -3,5 +3,7 @@
 === arrowFunctionInExpressionStatement1.ts ===
 () => 0;
 >() => 0 : () => number
+>        : ^^^^^^^^^^^^
 >0 : 0
+>  : ^
 

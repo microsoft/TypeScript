@@ -1,0 +1,30 @@
+//// [tests/cases/conformance/jsdoc/errorIsolation.ts] ////
+
+=== errorIsolation.js ===
+const async = { doSomething: _ => {} };
+>async : { doSomething: (_: any) => void; }
+>      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>{ doSomething: _ => {} } : { doSomething: (_: any) => void; }
+>                         : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>doSomething : (_: any) => void
+>            : ^ ^^^^^^^^^^^^^^
+>_ => {} : (_: any) => void
+>        : ^ ^^^^^^^^^^^^^^
+>_ : any
+
+async.doSomething(
+>async.doSomething(	/***/	() => {}) : void
+>                                   : ^^^^
+>async.doSomething : (_: any) => void
+>                  : ^ ^^^^^^^^^^^^^^
+>async : { doSomething: (_: any) => void; }
+>      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>doSomething : (_: any) => void
+>            : ^ ^^^^^^^^^^^^^^
+
+	/***/
+	() => {}
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+);

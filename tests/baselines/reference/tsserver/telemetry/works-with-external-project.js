@@ -225,6 +225,7 @@ Projects::
 /hunter2/foo.csproj (External) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
 
 ScriptInfos::
 /a.ts *changed*

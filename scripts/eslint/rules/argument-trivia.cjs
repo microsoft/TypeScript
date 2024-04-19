@@ -53,7 +53,7 @@ module.exports = createRule({
             }
 
             if (node.type === AST_NODE_TYPES.Literal) {
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 return node.value === null || node.value === true || node.value === false;
             }
 

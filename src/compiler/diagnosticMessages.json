@@ -163,7 +163,7 @@
         "category": "Error",
         "code": 1054
     },
-    "Type '{0}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.": {
+    "Type '{0}' is not a valid async function return type in ES5 because it does not refer to a Promise-compatible constructor value.": {
         "category": "Error",
         "code": 1055
     },
@@ -799,15 +799,15 @@
         "category": "Error",
         "code": 1249
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.": {
         "category": "Error",
         "code": 1250
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Class definitions are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1251
     },
-    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'. Modules are automatically in strict mode.": {
+    "Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'. Modules are automatically in strict mode.": {
         "category": "Error",
         "code": 1252
     },
@@ -966,6 +966,10 @@
     "'{0}' resolves to a type and must be marked type-only in this file before re-exporting when '{1}' is enabled. Consider using 'export type { {0} as default }'.": {
         "category": "Error",
         "code": 1292
+    },
+    "ESM syntax is not allowed in a CommonJS module when 'module' is set to 'preserve'.": {
+        "category": "Error",
+        "code": 1293
     },
 
     "'with' statements are not allowed in an async function block.": {
@@ -1203,10 +1207,6 @@
     "Did you mean '{0}'?": {
         "category": "Message",
         "code": 1369
-    },
-    "This import is never used as a value and must use 'import type' because 'importsNotUsedAsValues' is set to 'error'.": {
-        "category": "Error",
-        "code": 1371
     },
     "'await' expressions are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.": {
         "category": "Error",
@@ -1472,14 +1472,6 @@
         "category": "Error",
         "code": 1443
     },
-    "'{0}' is a type and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1444
-    },
-    "'{0}' resolves to a type-only declaration and must be imported using a type-only import when 'preserveValueImports' and 'isolatedModules' are both enabled.": {
-        "category": "Error",
-        "code": 1446
-    },
     "'{0}' resolves to a type-only declaration and must be re-exported using a type-only re-export when '{1}' is enabled.": {
         "category": "Error",
         "code": 1448
@@ -1648,6 +1640,14 @@
     "Identifier, string literal, or number literal expected.": {
         "category": "Error",
         "code": 1496
+    },
+    "Expression must be enclosed in parentheses to be used as a decorator.": {
+        "category": "Error",
+        "code": 1497
+    },
+    "Invalid syntax in decorator.": {
+        "category": "Error",
+        "code": 1498
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -1839,10 +1839,6 @@
     "'this' cannot be referenced in current location.": {
         "category": "Error",
         "code": 2332
-    },
-    "'this' cannot be referenced in constructor arguments.": {
-        "category": "Error",
-        "code": 2333
     },
     "'this' cannot be referenced in a static property initializer.": {
         "category": "Error",
@@ -2420,7 +2416,7 @@
         "category": "Error",
         "code": 2495
     },
-    "The 'arguments' object cannot be referenced in an arrow function in ES3 and ES5. Consider using a standard function expression.": {
+    "The 'arguments' object cannot be referenced in an arrow function in ES5. Consider using a standard function expression.": {
         "category": "Error",
         "code": 2496
     },
@@ -2496,7 +2492,7 @@
         "category": "Error",
         "code": 2514
     },
-    "Non-abstract class '{0}' does not implement inherited abstract member '{1}' from class '{2}'.": {
+    "Non-abstract class '{0}' does not implement inherited abstract member {1} from class '{2}'.": {
         "category": "Error",
         "code": 2515
     },
@@ -2520,7 +2516,7 @@
         "category": "Error",
         "code": 2520
     },
-    "The 'arguments' object cannot be referenced in an async function or method in ES3 and ES5. Consider using a standard function or method.": {
+    "The 'arguments' object cannot be referenced in an async function or method in ES5. Consider using a standard function or method.": {
         "category": "Error",
         "code": 2522
     },
@@ -2938,6 +2934,10 @@
         "category": "Error",
         "code": 2649
     },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1} and {2} more.": {
+        "category": "Error",
+        "code": 2650
+    },
     "A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.": {
         "category": "Error",
         "code": 2651
@@ -2949,6 +2949,18 @@
     "Non-abstract class expression does not implement inherited abstract member '{0}' from class '{1}'.": {
         "category": "Error",
         "code": 2653
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2}.": {
+        "category": "Error",
+        "code": 2654
+    },
+    "Non-abstract class '{0}' is missing implementations for the following members of '{1}': {2} and {3} more.": {
+        "category": "Error",
+        "code": 2655
+    },
+    "Non-abstract class expression is missing implementations for the following members of '{0}': {1}.": {
+        "category": "Error",
+        "code": 2656
     },
     "JSX expressions must have one parent element.": {
         "category": "Error",
@@ -3135,7 +3147,7 @@
         "category": "Error",
         "code": 2704
     },
-    "An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "An async function or method in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2705
     },
@@ -3163,7 +3175,7 @@
         "category": "Error",
         "code": 2711
     },
-    "A dynamic import call in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
+    "A dynamic import call in ES5 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your '--lib' option.": {
         "category": "Error",
         "code": 2712
     },
@@ -4229,10 +4241,6 @@
         "category": "Error",
         "code": 5047
     },
-    "Option '{0}' cannot be specified when option 'target' is 'ES3'.": {
-        "category": "Error",
-        "code": 5048
-    },
     "Option '{0} can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.": {
         "category": "Error",
         "code": 5051
@@ -5065,7 +5073,7 @@
         "category": "Message",
         "code": 6171
     },
-    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'.": {
+    "Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5'.": {
         "category": "Message",
         "code": 6179
     },
@@ -5451,6 +5459,18 @@
         "category": "Message",
         "code": 6280
     },
+    "'package.json' has a 'peerDependencies' field.": {
+        "category": "Message",
+        "code": 6281
+    },
+    "Found peerDependency '{0}' with '{1}' version.": {
+        "category": "Message",
+        "code": 6282
+    },
+    "Failed to find peerDependency '{0}'.": {
+        "category": "Message",
+        "code": 6283
+    },
 
     "Enable project compilation": {
         "category": "Message",
@@ -5471,14 +5491,6 @@
     "File '{0}' is not listed within the file list of project '{1}'. Projects must list all files or use an 'include' pattern.": {
         "category": "Error",
         "code": 6307
-    },
-    "Cannot prepend project '{0}' because it does not have 'outFile' set": {
-        "category": "Error",
-        "code": 6308
-    },
-    "Output file '{0}' from project '{1}' does not exist": {
-        "category": "Error",
-        "code": 6309
     },
     "Referenced project '{0}' may not disable emit.": {
         "category": "Error",
@@ -5560,25 +5572,9 @@
         "category": "Message",
         "code": 6371
     },
-    "Project '{0}' is out of date because output of its dependency '{1}' has changed": {
-        "category": "Message",
-        "code": 6372
-    },
-    "Updating output of project '{0}'...": {
-        "category": "Message",
-        "code": 6373
-    },
     "A non-dry build would update timestamps for output of project '{0}'": {
         "category": "Message",
         "code": 6374
-    },
-    "A non-dry build would update output of project '{0}'": {
-        "category": "Message",
-        "code": 6375
-    },
-    "Cannot update output of project '{0}' because there was error reading file '{1}'": {
-        "category": "Message",
-        "code": 6376
     },
     "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}'": {
         "category": "Error",
@@ -7059,6 +7055,10 @@
         "category": "Message",
         "code": 90060
     },
+    "Update modifiers of '{0}'": {
+        "category": "Message",
+        "code": 90061
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
@@ -7812,6 +7812,14 @@
         "category": "Message",
         "code": 95193
     },
+    "Wrap in parentheses": {
+        "category": "Message",
+        "code": 95194
+    },
+    "Wrap all invalid decorator expressions in parentheses": {
+        "category": "Message",
+        "code": 95195
+    },
 
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
@@ -7973,10 +7981,6 @@
         "category": "Error",
         "code": 18051
     },
-    "Non-abstract class '{0}' does not implement all abstract members of '{1}'": {
-        "category": "Error",
-        "code": 18052
-    },
     "Its type '{0}' is not a valid JSX element type.": {
         "category": "Error",
         "code": 18053
@@ -7984,5 +7988,13 @@
     "'await using' statements cannot be used inside a class static block.": {
         "category": "Error",
         "code": 18054
+    },
+    "'{0}' has a string type, but must have syntactically recognizable string syntax when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18055
+    },
+    "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
+        "category": "Error",
+        "code": 18056
     }
 }

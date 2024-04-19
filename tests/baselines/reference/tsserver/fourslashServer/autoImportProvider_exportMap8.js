@@ -209,6 +209,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -293,6 +294,15 @@ watchedDirectoriesRecursive::
 :
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /lib.d.ts
     version: Text-1
@@ -362,7 +372,7 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
 Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 2 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/dependency/lib/lol.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
@@ -720,6 +730,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -727,12 +743,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -978,18 +988,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -997,6 +995,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1023,6 +1033,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {
@@ -1649,6 +1665,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "Int8Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Int16Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -1656,12 +1678,6 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Int32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Int8Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1907,18 +1923,6 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
-            "name": "Uint16Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
-            "name": "Uint32Array",
-            "kind": "var",
-            "kindModifiers": "declare",
-            "sortText": "15"
-          },
-          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",
@@ -1926,6 +1930,18 @@ Info seq  [hh:mm:ss:mss] response:
           },
           {
             "name": "Uint8ClampedArray",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint16Array",
+            "kind": "var",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "Uint32Array",
             "kind": "var",
             "kindModifiers": "declare",
             "sortText": "15"
@@ -1952,6 +1968,12 @@ Info seq  [hh:mm:ss:mss] response:
             "name": "URIError",
             "kind": "var",
             "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
             "sortText": "15"
           },
           {

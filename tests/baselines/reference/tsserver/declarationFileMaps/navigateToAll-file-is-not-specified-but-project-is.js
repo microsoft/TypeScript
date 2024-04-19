@@ -340,6 +340,12 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/a.ts *changed*
     open: false *changed*
@@ -566,6 +572,8 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -632,6 +640,12 @@ FsWatches::
 FsWatchesRecursive::
 /b:
   {}
+
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /b/b.ts *changed*
@@ -868,9 +882,10 @@ FsWatchesRecursive::
   {}
 
 Projects::
-/b/tsconfig.json (Configured)
+/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: false *changed*
 /user/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

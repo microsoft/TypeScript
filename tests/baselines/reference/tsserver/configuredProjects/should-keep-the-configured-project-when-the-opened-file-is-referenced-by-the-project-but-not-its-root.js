@@ -9,11 +9,13 @@ export const objA = Object.assign({foo: "bar"}, {bar: "baz"});
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "target": "es6"
-                    },
-                    "files": [ "main.ts" ]
-                }
+  "compilerOptions": {
+    "target": "es6"
+  },
+  "files": [
+    "main.ts"
+  ]
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -134,11 +136,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 3,
-                    "offset": 35
+                    "offset": 15
                   },
                   "end": {
                     "line": 3,
-                    "offset": 40
+                    "offset": 20
                   },
                   "file": "/a/b/tsconfig.json"
                 },
@@ -264,6 +266,12 @@ FsWatches::
 /a/b/tsconfig.json:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/main.ts *changed*
     open: false *changed*
@@ -315,6 +323,12 @@ FsWatches::
 FsWatches *deleted*::
 /a/b/obj-a.ts:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /a/b/main.ts

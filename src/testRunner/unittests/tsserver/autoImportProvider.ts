@@ -1,7 +1,5 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -95,11 +93,7 @@ describe("unittests:: tsserver:: autoImportProvider", () => {
     it("Auto-importable file is in inferred project until imported", () => {
         const { session, updateFile } = setup([angularFormsDts, angularFormsPackageJson, tsconfig, packageJson, indexTs]);
         openFilesForSession([angularFormsDts], session);
-        session.logger.log(`Default Project for ${angularFormsDts.path}:: ${session.getProjectService().getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)?.projectName}`);
-
         updateFile(indexTs.path, "import '@angular/forms'");
-        session.logger.log(`Default Project for ${angularFormsDts.path}:: ${session.getProjectService().getDefaultProjectForFile(angularFormsDts.path as ts.server.NormalizedPath, /*ensureProject*/ true)?.projectName}`);
-
         assert.isUndefined(session.getProjectService().configuredProjects.get(tsconfig.path)!.getLanguageService().getAutoImportProvider());
         session.host.baselineHost("After getAutoImportProvider");
         baselineTsserverLogs("autoImportProvider", "Auto-importable file is in inferred project until imported", session);
@@ -399,6 +393,15 @@ describe("unittests:: tsserver:: autoImportProvider - monorepo", () => {
 function setup(files: File[]) {
     const host = createServerHost(files);
     const session = new TestSession(host);
+    session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
+        command: ts.server.protocol.CommandTypes.Configure,
+        arguments: {
+            preferences: {
+                includePackageJsonAutoImports: "auto",
+                includeCompletionsForModuleExports: true,
+            },
+        },
+    });
     return {
         host,
         session,
@@ -433,16 +436,12 @@ function setup(files: File[]) {
     }
 
     function triggerCompletions(file: string, line: number, offset: number) {
-        const requestLocation: ts.server.protocol.FileLocationRequestArgs = {
-            file,
-            line,
-            offset,
-        };
         session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
             command: ts.server.protocol.CommandTypes.CompletionInfo,
             arguments: {
-                ...requestLocation,
-                includeExternalModuleExports: true,
+                file,
+                line,
+                offset,
             },
         });
     }

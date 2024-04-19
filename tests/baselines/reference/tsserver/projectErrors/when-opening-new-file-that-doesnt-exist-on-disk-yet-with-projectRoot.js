@@ -98,11 +98,6 @@ untitled:Untitled-1 (Open) *new*
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-
-ScriptInfos:
-path: /user/someuser/projects/somefolder/untitled:untitled-1 fileName: untitled:Untitled-1
-path: /a/lib/lib.d.ts fileName: /a/lib/lib.d.ts
-
 Before request
 
 Info seq  [hh:mm:ss:mss] request:

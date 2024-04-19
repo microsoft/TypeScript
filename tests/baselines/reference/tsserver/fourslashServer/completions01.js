@@ -131,6 +131,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts
@@ -393,6 +394,13 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 6,
@@ -412,6 +420,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts
@@ -914,3 +923,9 @@ Info seq  [hh:mm:ss:mss] response:
         ]
       }
     }
+After Request
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*

@@ -253,6 +253,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts
     version: Text-1
@@ -310,6 +316,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts
     version: Text-1
@@ -359,6 +371,12 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -417,6 +435,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts
     version: Text-1
@@ -466,6 +490,12 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/lib/module2.ts
@@ -524,6 +554,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
@@ -573,6 +609,12 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*
@@ -631,6 +673,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
@@ -680,6 +728,12 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*
@@ -738,6 +792,12 @@ FsWatchesRecursive::
 /a/b:
   {}
 
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
+
 ScriptInfos::
 /a/b/lib/module2.ts (Open) *changed*
     open: true *changed*
@@ -787,6 +847,12 @@ FsWatches::
 FsWatchesRecursive::
 /a/b:
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
 
 ScriptInfos::
 /a/b/lib/module2.ts *changed*

@@ -262,9 +262,7 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/classes.ts",
         "line": 4,
         "offset": 23,
-        "prefix": "render",
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "prefix": "render"
       },
       "seq": 3,
       "type": "request"
@@ -498,6 +496,7 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /classes.ts (Open) *changed*
@@ -524,9 +523,7 @@ Info seq  [hh:mm:ss:mss] request:
         "file": "/classes.ts",
         "line": 4,
         "offset": 22,
-        "prefix": "rende",
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "prefix": "rende"
       },
       "seq": 6,
       "type": "request"
@@ -658,3 +655,9 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*

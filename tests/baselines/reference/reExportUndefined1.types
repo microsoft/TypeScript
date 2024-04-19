@@ -3,4 +3,5 @@
 === a.ts ===
 export { undefined };
 >undefined : undefined
+>          : ^^^^^^^^^
 

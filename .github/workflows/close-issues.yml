@@ -47,3 +47,4 @@ jobs:
           close_issues "Declined"
           close_issues "Won't Fix"
           close_issues "Too Complex"
+          close_issues "Design Limitation"

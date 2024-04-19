@@ -3,9 +3,7 @@ import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsc:: listFilesOnly::", () => {
     verifyTsc({

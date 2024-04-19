@@ -87,6 +87,10 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/utils/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/models/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/controllers/vessels/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/controllers/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
@@ -250,6 +254,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/b/controllers/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/controllers/vessels/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/models/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/utils/package.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
 
@@ -350,6 +362,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/b/controllers/package.json:
+  {"pollingInterval":2000}
+/a/b/controllers/vessels/package.json:
+  {"pollingInterval":2000}
+/a/b/models/package.json:
+  {"pollingInterval":2000}
+/a/b/utils/package.json:
+  {"pollingInterval":2000}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 

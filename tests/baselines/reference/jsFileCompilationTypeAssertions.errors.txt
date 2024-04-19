@@ -1,12 +1,8 @@
-error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-  Use 'outFile' instead.
 /src/a.js(1,6): error TS8016: Type assertion expressions can only be used in TypeScript files.
 /src/a.js(2,10): error TS17008: JSX element 'string' has no corresponding closing tag.
 /src/a.js(3,1): error TS1005: '</' expected.
 
 
-!!! error TS5101: Option 'out' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
-!!! error TS5101:   Use 'outFile' instead.
 ==== /src/a.js (3 errors) ====
     0 as number;
          ~~~~~~

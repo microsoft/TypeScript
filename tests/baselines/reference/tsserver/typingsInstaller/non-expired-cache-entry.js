@@ -269,6 +269,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1 *changed*
+    dirty: true *changed*
 
 Before running PendingInstalls callback:: count: 0
 

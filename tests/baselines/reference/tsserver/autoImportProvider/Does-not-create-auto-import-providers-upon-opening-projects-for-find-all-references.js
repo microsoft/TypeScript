@@ -34,11 +34,39 @@ export class B {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
+      "command": "configure",
+      "arguments": {
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true
+        }
+      },
+      "seq": 1,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
       "command": "open",
       "arguments": {
         "file": "/packages/b/index.ts"
       },
-      "seq": 1,
+      "seq": 2,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Search path: /packages/b
@@ -80,10 +108,11 @@ Info seq  [hh:mm:ss:mss] 	Files (1)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/b/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/@angular/forms/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -235,6 +264,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/node_modules/@angular/forms/package.json: *new*
+  {}
 /package.json: *new*
   {}
 /packages/b/package.json: *new*
@@ -261,6 +292,7 @@ Projects::
 /tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts *new*
@@ -282,7 +314,7 @@ Info seq  [hh:mm:ss:mss] request:
         "line": 1,
         "offset": 13
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 12 in project /packages/b/tsconfig.json
@@ -538,20 +570,69 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/packages/a/tsconfig.json",
+        "configFile": "/packages/a/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Search path: /packages/a
 Info seq  [hh:mm:ss:mss] For info: /packages/a/index.ts :: Config file name: /packages/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /packages/b/index.ts position 13 in project /packages/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /packages/b
-Info seq  [hh:mm:ss:mss] For info: /packages/b/index.ts :: Config file name: /packages/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -614,6 +695,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/node_modules/@angular/forms/package.json:
+  {}
 /package.json:
   {}
 /packages/a/index.ts: *new*
@@ -644,6 +727,10 @@ Projects::
 /packages/a/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    originalConfiguredProjects: 3
+        /packages/b/tsconfig.json
+        /tsconfig.json
+        /packages/a/tsconfig.json
 /packages/b/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -651,6 +738,11 @@ Projects::
 /tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
+    originalConfiguredProjects: 3 *changed*
+        /packages/b/tsconfig.json *new*
+        /tsconfig.json *new*
+        /packages/a/tsconfig.json *new*
 
 ScriptInfos::
 /node_modules/@angular/forms/forms.d.ts

@@ -357,6 +357,7 @@ Projects::
 /user/username/projects/myproject/a/b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
+    dirty: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/myproject/a/b/tsconfig.json
@@ -638,6 +639,7 @@ Projects::
 /user/username/projects/myproject/a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts

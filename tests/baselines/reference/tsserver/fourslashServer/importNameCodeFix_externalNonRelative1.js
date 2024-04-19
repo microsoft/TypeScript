@@ -266,10 +266,11 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-1/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/index.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/utils.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/package.json 2000 undefined Project: /dev/null/autoImportProviderProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -334,6 +335,8 @@ watchedFiles::
   {"pollingInterval":2000}
 /packages/pkg-2/src/index.ts: *new*
   {"pollingInterval":500}
+/packages/pkg-2/src/package.json: *new*
+  {"pollingInterval":2000}
 /packages/pkg-2/src/utils.ts: *new*
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json: *new*
@@ -568,6 +571,8 @@ watchedFiles::
   {"pollingInterval":2000}
 /packages/pkg-2/src/index.ts:
   {"pollingInterval":500}
+/packages/pkg-2/src/package.json:
+  {"pollingInterval":2000}
 /packages/pkg-2/src/utils.ts:
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json:
@@ -608,6 +613,7 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::
@@ -714,6 +720,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /packages/pkg-2/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/pkg-2/src/package.json 2000 undefined Project: /packages/pkg-2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /packages/pkg-2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/packages/pkg-2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
@@ -802,6 +809,9 @@ watchedFiles::
   {"pollingInterval":250}
 /packages/pkg-2/src/index.ts:
   {"pollingInterval":500}
+/packages/pkg-2/src/package.json:
+  {"pollingInterval":2000}
+  {"pollingInterval":2000} *new*
 /packages/pkg-2/src/utils.ts:
   {"pollingInterval":500}
 /packages/pkg-2/tsconfig.json:
@@ -827,6 +837,7 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 /packages/pkg-2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
@@ -1058,10 +1069,12 @@ Projects::
 /packages/pkg-1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 /packages/pkg-2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /lib.d.ts

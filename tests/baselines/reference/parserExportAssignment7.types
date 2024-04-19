@@ -3,8 +3,10 @@
 === parserExportAssignment7.ts ===
 export class C {
 >C : C
+>  : ^
 }
 
 export = B;
 >B : any
+>  : ^^^
 

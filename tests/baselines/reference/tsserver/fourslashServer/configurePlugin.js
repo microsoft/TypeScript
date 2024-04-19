@@ -193,6 +193,7 @@ Projects::
 /tests/cases/fourslash/server/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -274,6 +275,15 @@ watchedDirectoriesRecursive::
 /tests/cases/fourslash/server/node_modules/@types:
   {}
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tests/cases/fourslash/server/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /lib.d.ts

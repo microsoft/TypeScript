@@ -371,7 +371,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -472,6 +472,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 1: /a/b/tsconfig.json
@@ -612,6 +613,7 @@ Projects::
 /a/b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/b/app.js (Open)

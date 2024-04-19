@@ -195,7 +195,7 @@ FsWatches::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -302,6 +302,7 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
@@ -309,6 +310,9 @@ Before running Timeout callback:: count: 2
 
 Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/cache/node_modules/@types/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/cache/node_modules/@types/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/cache/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -447,10 +451,29 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
+PolledWatches::
+/a/bower_components:
+  {"pollingInterval":500}
+/a/cache/node_modules/@types/commander/package.json: *new*
+  {"pollingInterval":2000}
+/a/cache/node_modules/@types/package.json: *new*
+  {"pollingInterval":2000}
+/a/cache/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/a/lib/lib.d.ts:
+  {"pollingInterval":500}
+/a/node_modules:
+  {"pollingInterval":500}
+
+FsWatches::
+/a/package.json:
+  {}
+
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/app.js (Open)

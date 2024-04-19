@@ -325,6 +325,12 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/a.ts *changed*
     open: false *changed*
@@ -551,6 +557,8 @@ Projects::
 /a/tsconfig.json (Configured) *deleted*
     projectStateVersion: 1
     projectProgramVersion: 1
+    isClosed: true *changed*
+    noOpenRef: true
 /b/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -618,6 +626,12 @@ FsWatchesRecursive::
 /b:
   {}
 
+Projects::
+/b/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /b/b.ts *changed*
     open: false *changed*
@@ -626,7 +640,6 @@ ScriptInfos::
         /b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Scheduled: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /b/b.ts 2:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /b/b.ts :: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
@@ -635,22 +648,6 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /b/b.ts
 Before request
 //// [/b/b.ts] deleted
 
-PolledWatches::
-/a/lib/lib.d.ts:
-  {"pollingInterval":500}
-
-FsWatches::
-/b/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/b/b.ts:
-  {}
-
-FsWatchesRecursive::
-/b:
-  {}
-
 Timeout callback:: count: 1
 2: /b/tsconfig.json *new*
 
@@ -658,10 +655,14 @@ Projects::
 /b/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    noOpenRef: true
 
 ScriptInfos::
-/b/b.ts *deleted*
+/b/b.ts *changed*
     version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    deferredDelete: true *changed*
     containingProjects: 0 *changed*
         /b/tsconfig.json *deleted*
 
@@ -710,6 +711,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /b 1 undefined Co
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/tsconfig.json 2000 undefined Project: /b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /b/tsconfig.json WatchType: Missing file
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/b.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -734,6 +736,8 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
+/b/b.ts:
+  {}
 /b/tsconfig.json:
   {}
 
@@ -745,6 +749,9 @@ Projects::
 /b/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    noOpenRef: true
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -754,6 +761,11 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
+/b/b.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    deferredDelete: true
+    containingProjects: 0
 /b/bin/b.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -957,8 +969,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/bin/a.d.ts.map 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/a.ts :: Config file name: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1042,17 +1052,36 @@ FsWatchesRecursive::
 /a:
   {}
 
+Projects::
+/a/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *new*
+    originalConfiguredProjects: 1 *changed*
+        /a/tsconfig.json *new*
+
 ScriptInfos::
 /a/a.ts (Open)
     version: SVC-2-0
     containingProjects: 1
         /a/tsconfig.json *default*
-/a/bin/a.d.ts
+/a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map *changed*
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map *new*
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1062,6 +1091,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Before request
 
@@ -1119,6 +1151,10 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 
 ScriptInfos::
 /a/a.ts (Open)
@@ -1127,10 +1163,15 @@ ScriptInfos::
         /a/tsconfig.json *default*
 /a/bin/a.d.ts
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 1
         /dev/null/inferredProject1*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts
     version: Text-1
@@ -1234,6 +1275,13 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+    documentPositionMappers: 0 *changed*
+        /a/bin/a.d.ts: DocumentPositionMapper1 *deleted*
+    originalConfiguredProjects: 1
+        /a/tsconfig.json
 /dev/null/inferredProject2* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -1245,10 +1293,15 @@ ScriptInfos::
         /a/tsconfig.json *default*
 /a/bin/a.d.ts *changed*
     version: Text-1
+    sourceMapFilePath: /a/bin/a.d.ts.map
     containingProjects: 0 *changed*
         /dev/null/inferredProject1* *deleted*
 /a/bin/a.d.ts.map
     version: Text-1
+    declarationInfoPath: /a/bin/a.d.ts
+    sourceInfos: 1
+        /a/a.ts
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /b/bin/b.d.ts *deleted*
     version: Text-1
