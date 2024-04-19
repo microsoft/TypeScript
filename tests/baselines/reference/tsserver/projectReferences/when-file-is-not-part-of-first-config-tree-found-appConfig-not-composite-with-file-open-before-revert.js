@@ -320,12 +320,11 @@ ScriptInfos::
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/app/tsconfig.json 1:: WatchInfo: /home/src/projects/project/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/app/tsconfig.json 1:: WatchInfo: /home/src/projects/project/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-2: /home/src/projects/project/app/tsconfig.json
-3: *ensureProjectForOpenFiles*
+1: /home/src/projects/project/app/tsconfig.json
+2: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/app/tsconfig.json]
 {
   "compilerOptions": {
@@ -342,8 +341,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-2: /home/src/projects/project/app/tsconfig.json *new*
-3: *ensureProjectForOpenFiles* *new*
+1: /home/src/projects/project/app/tsconfig.json *new*
+2: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -809,8 +808,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/app/tsconfig.json 1:: WatchInfo: /home/src/projects/project/app/tsconfig.json 2000 undefined Project: /home/src/projects/project/app/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
-4: /home/src/projects/project/app/tsconfig.json
-5: *ensureProjectForOpenFiles*
+3: /home/src/projects/project/app/tsconfig.json
+4: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/app/tsconfig.json]
 {
   "compilerOptions": {
@@ -827,8 +826,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-4: /home/src/projects/project/app/tsconfig.json *new*
-5: *ensureProjectForOpenFiles* *new*
+3: /home/src/projects/project/app/tsconfig.json *new*
+4: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -851,7 +850,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/home/src/projects/project/app/tsconfig.json",
-        "reason": "Change in config file detected"
+        "reason": "Change in config file /home/src/projects/project/app/tsconfig.json detected, Creating possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/app/tsconfig.json : {

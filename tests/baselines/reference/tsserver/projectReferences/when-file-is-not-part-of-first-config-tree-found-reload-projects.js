@@ -348,7 +348,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/home/src/projects/project/app/tsconfig.json",
-        "reason": "User requested reload projects"
+        "reason": "User requested reload projects: Creating possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/app/tsconfig.json : {

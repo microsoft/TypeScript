@@ -319,12 +319,10 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 1:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/app/Component-demos.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 1:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
-Before running Timeout callback:: count: 2
-1: /home/src/projects/project/app/tsconfig.json
-2: *ensureProjectForOpenFiles*
+Before running Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
@@ -338,54 +336,10 @@ Before running Timeout callback:: count: 2
 }
 
 
-Timeout callback:: count: 2
-1: /home/src/projects/project/app/tsconfig.json *new*
-2: *ensureProjectForOpenFiles* *new*
+Timeout callback:: count: 1
+1: *ensureProjectForOpenFiles* *new*
 
-Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/home/src/projects/project/app/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2 *changed*
-    projectProgramVersion: 1
-    dirty: true *changed*
-    noOpenRef: false *changed*
-
-Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/home/src/projects/project/app/tsconfig.json",
-        "reason": "Change in config file detected"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/app/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Same program as before
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/home/src/projects/project/app/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/home/src/projects/project/app/tsconfig.json",
-        "configFile": "/home/src/projects/project/app/tsconfig.json",
-        "diagnostics": []
-      }
-    }
+Host is moving to new time
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/app/tsconfig.json' (Configured)
@@ -424,16 +378,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 After running Timeout callback:: count: 0
-
-Projects::
-/dev/null/inferredProject1* (Inferred)
-    projectStateVersion: 1
-    projectProgramVersion: 1
-/home/src/projects/project/app/tsconfig.json (Configured) *changed*
-    projectStateVersion: 2
-    projectProgramVersion: 1
-    dirty: false *changed*
-    noOpenRef: true *changed*
 
 Info seq  [hh:mm:ss:mss] File: /home/src/projects/project/app/Component-demos.ts:
 	getDefaultProjectForFile:
@@ -654,7 +598,7 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 1
 /home/src/projects/project/app/tsconfig.json (Configured) *deleted*
-    projectStateVersion: 2
+    projectStateVersion: 1
     projectProgramVersion: 1
     isClosed: true *changed*
     noOpenRef: true
@@ -792,8 +736,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/tsconfig.json 1:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Before running Timeout callback:: count: 2
-3: /home/src/projects/project/app/tsconfig.json
-4: *ensureProjectForOpenFiles*
+2: /home/src/projects/project/app/tsconfig.json
+3: *ensureProjectForOpenFiles*
 //// [/home/src/projects/project/tsconfig.json]
 {
   "compilerOptions": {
@@ -811,8 +755,8 @@ Before running Timeout callback:: count: 2
 
 
 Timeout callback:: count: 2
-3: /home/src/projects/project/app/tsconfig.json *new*
-4: *ensureProjectForOpenFiles* *new*
+2: /home/src/projects/project/app/tsconfig.json *new*
+3: *ensureProjectForOpenFiles* *new*
 
 Projects::
 /dev/null/inferredProject1* (Inferred)
@@ -835,7 +779,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/home/src/projects/project/app/tsconfig.json",
-        "reason": "Change in config file detected"
+        "reason": "Change in config file /home/src/projects/project/tsconfig.json detected, Creating possible configured project for /home/src/projects/project/app/Component-demos.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/app/tsconfig.json : {
