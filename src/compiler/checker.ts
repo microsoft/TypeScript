@@ -1007,7 +1007,6 @@ import {
     SymbolTable,
     SymbolTracker,
     SymbolVisibilityResult,
-    SyntacticTypeNodeBuilderContext,
     SyntaxKind,
     SyntheticDefaultModuleType,
     SyntheticExpression,
@@ -1484,7 +1483,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
     var nodeBuilder = createNodeBuilder();
-    var syntacticNodeBuilder = createSyntacticTypeNodeBuilder(compilerOptions);
+    var syntacticNodeBuilder = createSyntacticTypeNodeBuilder(compilerOptions, {
+        isEntityNameVisible: (enclosingDeclaration, entityName, shouldComputeAliasToMakeVisible) => isEntityNameVisible(entityName, enclosingDeclaration, shouldComputeAliasToMakeVisible),
+        isExpandoFunctionDeclaration,
+        isNonNarrowedBindableName,
+        getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
+        requiresAddingImplicitUndefined,
+        isUndefinedIdentifierExpression(node: Identifier) {
+            Debug.assert(isExpressionNode(node));
+            return getSymbolAtLocation(node) === undefinedSymbol;
+        },
+    });
     var evaluate = createEvaluator({
         evaluateElementAccessExpression,
         evaluateEntityNameExpression,
@@ -6131,15 +6140,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 approximateLength: 0,
                 trackedSymbols: undefined,
                 bundled: !!compilerOptions.outFile && !!enclosingDeclaration && isExternalOrCommonJsModule(getSourceFileOfNode(enclosingDeclaration)),
-                isEntityNameVisible: (entityName, shouldComputeAliasToMakeVisible) => isEntityNameVisible(entityName, context.enclosingDeclaration!, shouldComputeAliasToMakeVisible),
-                isExpandoFunctionDeclaration,
-                isNonNarrowedBindableName,
-                getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
-                requiresAddingImplicitUndefined,
-                isUndefinedIdentifierExpression(node: Identifier) {
-                    Debug.assert(isExpressionNode(node));
-                    return getSymbolAtLocation(node) === undefinedSymbol;
-                },
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -51118,7 +51118,7 @@ function createBasicNodeBuilderModuleSpecifierResolutionHost(host: TypeCheckerHo
     };
 }
 
-interface NodeBuilderContext extends SyntacticTypeNodeBuilderContext {
+interface NodeBuilderContext {
     enclosingDeclaration: Node | undefined;
     /**
      * `enclosingFile` is generated from the initial `enclosingDeclaration` and
