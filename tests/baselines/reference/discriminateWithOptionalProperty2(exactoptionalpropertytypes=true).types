@@ -12,8 +12,8 @@ function mapAsyncIterable<T, U, R = undefined>(
 >                 : ^ ^^ ^^ ^^^^^^^^^^^^^^        ^^                                                                ^^        ^^                               ^^^^^                          
 
   iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
->iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   callback: (value: T) => PromiseOrValue<U>,
 >callback : (value: T) => PromiseOrValue<U>
@@ -29,8 +29,8 @@ function mapAsyncIterable<T, U, R = undefined>(
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >iterable[Symbol.asyncIterator] : (() => AsyncGenerator<T, R, undefined>) | (() => AsyncIterator<T, R, undefined>)
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : AsyncGenerator<T, R, undefined> | AsyncIterable<T, R>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Symbol.asyncIterator : unique symbol
 >                     : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor

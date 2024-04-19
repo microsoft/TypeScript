@@ -81,22 +81,22 @@ export class IterableWeakMap<K extends object, V> implements WeakMap<K, V> {
 >                        : ^            ^^                                                                      ^^^^^^^^^
 
     constructor(iterable: Iterable<[key: K, value: V]> | null = null) {
->iterable : Iterable<[key: K, value: V], void, undefined> | null
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : Iterable<[key: K, value: V]> | null
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (iterable !== null) {
 >iterable !== null : boolean
 >                  : ^^^^^^^
->iterable : Iterable<[key: K, value: V], void, undefined> | null
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : Iterable<[key: K, value: V]> | null
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             for (const { 0: key, 1: value } of iterable) {
 >key : K
 >    : ^
 >value : V
 >      : ^
->iterable : Iterable<[key: K, value: V], void, undefined>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterable : Iterable<[key: K, value: V]>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 this.set(key, value);
 >this.set(key, value) : this

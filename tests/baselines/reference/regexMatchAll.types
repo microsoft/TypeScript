@@ -2,12 +2,12 @@
 
 === regexMatchAll.ts ===
 const matches = /\w/g[Symbol.matchAll]("matchAll");
->matches : IterableIterator<RegExpMatchArray, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray, void, undefined>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->/\w/g[Symbol.matchAll] : (str: string) => IterableIterator<RegExpMatchArray, void, undefined>
->                       : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matches : IterableIterator<RegExpMatchArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\w/g[Symbol.matchAll]("matchAll") : IterableIterator<RegExpMatchArray>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>/\w/g[Symbol.matchAll] : (str: string) => IterableIterator<RegExpMatchArray>
+>                       : ^   ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >/\w/g : RegExp
 >      : ^^^^^^
 >Symbol.matchAll : unique symbol
@@ -26,8 +26,8 @@ const array = [...matches];
 >             : ^^^^^^^^^^^^^^^^^^
 >...matches : RegExpMatchArray
 >           : ^^^^^^^^^^^^^^^^
->matches : IterableIterator<RegExpMatchArray, void, undefined>
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>matches : IterableIterator<RegExpMatchArray>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { index, input } = array[0];
 >index : number

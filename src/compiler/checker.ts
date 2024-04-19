@@ -6830,7 +6830,36 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     let typeArgumentNodes: readonly TypeNode[] | undefined;
                     if (typeArguments.length > 0) {
-                        const typeParameterCount = (type.target.typeParameters || emptyArray).length;
+                        let typeParameterCount: number;
+                        if (type.target.typeParameters) {
+                            typeParameterCount = Math.min(type.target.typeParameters.length, typeArguments.length);
+
+                            // Maybe we should do this for more types, but for now we only elide type arguments that are
+                            // identical to their associated type parameters' defaults for `Iterable`, `IterableIterator`,
+                            // `AsyncIterable`, and `AsyncIterableIterator` to provide backwards-compatible .d.ts emit due
+                            // to each now having three type parameters instead of only one.
+                            if (
+                                isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                                isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false)) ||
+                                isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
+                                isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))
+                            ) {
+                                if (!type.node || !isTypeReferenceNode(type.node) || !type.node.typeArguments || type.node.typeArguments.length < typeParameterCount) {
+                                    while (typeParameterCount > 0) {
+                                        const typeArgument = typeArguments[typeParameterCount - 1];
+                                        const defaultType = getDefaultFromTypeParameter(type.target.typeParameters[typeParameterCount - 1]);
+                                        if (!defaultType || !isTypeIdenticalTo(typeArgument, defaultType)) {
+                                            break;
+                                        }
+                                        typeParameterCount--;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            typeParameterCount = 0;
+                        }
+
                         typeArgumentNodes = mapToTypeNodes(typeArguments.slice(i, typeParameterCount), context);
                     }
                     const flags = context.flags;

@@ -1,5 +1,5 @@
-generatorTypeCheck31.ts(2,11): error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number, void, undefined>'.
-  Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number, void, undefined>'.
+generatorTypeCheck31.ts(2,11): error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number>'.
+  Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number>'.
 
 
 ==== generatorTypeCheck31.ts (1 errors) ====
@@ -10,6 +10,6 @@ generatorTypeCheck31.ts(2,11): error TS2322: Type 'Generator<(x: any) => any, vo
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         } ()
     ~~~~~~~~
-!!! error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number, void, undefined>'.
-!!! error TS2322:   Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number, void, undefined>'.
+!!! error TS2322: Type 'Generator<(x: any) => any, void, unknown>' is not assignable to type '() => Iterable<(x: string) => number>'.
+!!! error TS2322:   Type 'Generator<(x: any) => any, void, unknown>' provides no match for the signature '(): Iterable<(x: string) => number>'.
     }

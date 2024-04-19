@@ -150,8 +150,8 @@ g2 = g1;
 declare function foo1<T>(obj: string[] & Iterable<T>): T;
 >foo1 : <T>(obj: string[] & Iterable<T>) => T
 >     : ^ ^^   ^^                      ^^^^^ 
->obj : string[] & Iterable<T, void, undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : string[] & Iterable<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 declare function foo2<T>(obj: string[] & T): T;
 >foo2 : <T>(obj: string[] & T) => T
