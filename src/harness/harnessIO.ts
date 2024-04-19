@@ -303,6 +303,7 @@ export namespace Compiler {
         { name: "noTypesAndSymbols", type: "boolean", defaultValueDescription: false },
         // Emitted js baseline will print full paths for every output file
         { name: "fullEmitPaths", type: "boolean", defaultValueDescription: false },
+        { name: "reportDiagnostics", type: "boolean", defaultValueDescription: false }, // used to enable error collection in `transpile` baselines
     ];
 
     let optionsIndex: Map<string, ts.CommandLineOption>;

@@ -25,6 +25,7 @@ import {
     normalizePath,
     optionDeclarations,
     parseCustomTypeOption,
+    ScriptTarget,
     toPath,
     transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts";
@@ -80,6 +81,33 @@ export function transpileDeclaration(input: string, transpileOptions: TranspileO
     return transpileWorker(input, transpileOptions, /*declarations*/ true);
 }
 
+// Declaration emit works without a `lib`, but some local inferences you'd expect to work won't without
+//  at least a minimal `lib` available, since the checker will `any` their types without these defined.
+//  Late bound symbol names, in particular, are impossible to define without `Symbol` at least partially defined.
+// TODO: This should *probably* just load the full, real `lib` for the `target`.
+const barebonesLibContent = `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number {}
+interface Object {}
+interface RegExp {}
+interface String {}
+interface Array<T> { length: number; [n: number]: T; }
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}`;
+const barebonesLibName = "lib.d.ts";
+const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, {languageVersion: ScriptTarget.Latest});
+
 function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
 
@@ -119,7 +147,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
     const compilerHost: CompilerHost = {
-        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
+        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : fileName === normalizePath(barebonesLibName) ? barebonesLibSourceFile : undefined,
         writeFile: (name, text) => {
             if (fileExtensionIs(name, ".map")) {
                 Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
@@ -130,12 +158,12 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
                 outputText = text;
             }
         },
-        getDefaultLibFileName: () => "lib.d.ts",
+        getDefaultLibFileName: () => barebonesLibName,
         useCaseSensitiveFileNames: () => false,
         getCanonicalFileName: fileName => fileName,
         getCurrentDirectory: () => "",
         getNewLine: () => newLine,
-        fileExists: (fileName): boolean => fileName === inputFileName,
+        fileExists: (fileName): boolean => fileName === inputFileName || (!!declaration && fileName === barebonesLibName),
         readFile: () => "",
         directoryExists: () => true,
         getDirectories: () => [],
@@ -165,7 +193,8 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     let outputText: string | undefined;
     let sourceMapText: string | undefined;
 
-    const program = createProgram([inputFileName], options, compilerHost);
+    const inputs = declaration ? [inputFileName, barebonesLibName] : [inputFileName];
+    const program = createProgram(inputs, options, compilerHost);
 
     if (transpileOptions.reportDiagnostics) {
         addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
