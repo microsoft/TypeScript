@@ -1353,7 +1353,7 @@ function narrowingNarrows(x: {} | undefined) {
 >_y : {}
 >   : ^^
 >x : {}
->  :   
+>  : ^^
     }
 }
 

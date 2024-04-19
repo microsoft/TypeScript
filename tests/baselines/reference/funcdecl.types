@@ -13,7 +13,7 @@ var simpleFuncVar = simpleFunc;
 >simpleFuncVar : () => string
 >              : ^^^^^^^^^^^^
 >simpleFunc : () => string
->           :             
+>           : ^^^^^^^^^^^^
 
 function anotherFuncNoReturn() {
 >anotherFuncNoReturn : () => void
@@ -23,7 +23,7 @@ var anotherFuncNoReturnVar = anotherFuncNoReturn;
 >anotherFuncNoReturnVar : () => void
 >                       : ^^^^^^^^^^
 >anotherFuncNoReturn : () => void
->                    :           
+>                    : ^^^^^^^^^^
 
 function withReturn() : string{
 >withReturn : () => string
@@ -37,7 +37,7 @@ var withReturnVar = withReturn;
 >withReturnVar : () => string
 >              : ^^^^^^^^^^^^
 >withReturn : () => string
->           :             
+>           : ^^^^^^^^^^^^
 
 function withParams(a : string) : string{
 >withParams : (a: string) => string
@@ -53,7 +53,7 @@ var withparamsVar = withParams;
 >withparamsVar : (a: string) => string
 >              : ^ ^^      ^^^^^^^^^^^
 >withParams : (a: string) => string
->           :                      
+>           : ^ ^^      ^^^^^^^^^^^
 
 function withMultiParams(a : number, b, c: Object) {
 >withMultiParams : (a: number, b: any, c: Object) => number
@@ -72,7 +72,7 @@ var withMultiParamsVar = withMultiParams;
 >withMultiParamsVar : (a: number, b: any, c: Object) => number
 >                   : ^ ^^      ^^ ^^^^^^^ ^^      ^^^^^^^^^^^
 >withMultiParams : (a: number, b: any, c: Object) => number
->                :                                         
+>                : ^ ^^      ^^ ^^^^^^^ ^^      ^^^^^^^^^^^
 
 function withOptionalParams(a?: string) {
 >withOptionalParams : (a?: string) => void
@@ -84,7 +84,7 @@ var withOptionalParamsVar = withOptionalParams;
 >withOptionalParamsVar : (a?: string) => void
 >                      : ^ ^^^      ^^^^^^^^^
 >withOptionalParams : (a?: string) => void
->                   :   ^                 
+>                   : ^ ^^^      ^^^^^^^^^
 
 function withInitializedParams(a: string, b0, b = 30, c = "string value") {
 >withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
@@ -105,7 +105,7 @@ var withInitializedParamsVar = withInitializedParams;
 >withInitializedParamsVar : (a: string, b0: any, b?: number, c?: string) => void
 >                         : ^ ^^      ^^  ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >withInitializedParams : (a: string, b0: any, b?: number, c?: string) => void
->                      :                       ^           ^                 
+>                      : ^ ^^      ^^  ^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 
 function withOptionalInitializedParams(a: string, c: string = "hello string") {
 >withOptionalInitializedParams : (a: string, c?: string) => void
@@ -121,7 +121,7 @@ var withOptionalInitializedParamsVar = withOptionalInitializedParams;
 >withOptionalInitializedParamsVar : (a: string, c?: string) => void
 >                                 : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >withOptionalInitializedParams : (a: string, c?: string) => void
->                              :              ^                 
+>                              : ^ ^^      ^^ ^^^      ^^^^^^^^^
 
 function withRestParams(a: string, ... myRestParameter : number[]) {
 >withRestParams : (a: string, ...myRestParameter: number[]) => number[]
@@ -139,7 +139,7 @@ var withRestParamsVar = withRestParams;
 >withRestParamsVar : (a: string, ...myRestParameter: number[]) => number[]
 >                  : ^ ^^      ^^^^^               ^^        ^^^^^^^^^^^^^
 >withRestParams : (a: string, ...myRestParameter: number[]) => number[]
->               :             ^^^                                      
+>               : ^ ^^      ^^^^^               ^^        ^^^^^^^^^^^^^
 
 function overload1(n: number) : string;
 >overload1 : { (n: number): string; (s: string): string; }
@@ -170,7 +170,7 @@ var withOverloadSignature = overload1;
 >withOverloadSignature : { (n: number): string; (s: string): string; }
 >                      : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >overload1 : { (n: number): string; (s: string): string; }
->          :                                              
+>          : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 
 function f(n: () => void) { }
 >f : (n: () => void) => void
@@ -238,7 +238,7 @@ var f2 = () => {
 >f2 : () => string
 >   : ^^^^^^^^^^^^
 >() => {    return "string";} : () => string
->                             :             
+>                             : ^^^^^^^^^^^^
 
     return "string";
 >"string" : "string"

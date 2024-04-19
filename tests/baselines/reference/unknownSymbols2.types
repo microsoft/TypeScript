@@ -60,7 +60,7 @@ module M {
 >a : () => any
 >  : ^^^^^^^^^
 >() => asdf : () => any
->           :          
+>           : ^^^^^^^^^
 >asdf : any
 >     : ^^^
 
@@ -68,7 +68,7 @@ module M {
 >b : (asdf: any) => any
 >  : ^    ^^^^^^^^^^^^^
 >(asdf) => { return qwerty } : (asdf: any) => any
->                            :                   
+>                            : ^    ^^^^^^^^^^^^^
 >asdf : any
 >     : ^^^
 >qwerty : any

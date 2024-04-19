@@ -103,7 +103,7 @@ Multimap2.prototype = {
 >prototype : { get: (key: K) => V; }
 >          : ^^^^^^^^   ^^ ^^^^^^^^^
 >{    /**     * @param {K} key the key ok     * @returns {V} the value ok     */    get: function(key) {        return this._map[key + ''];    }} : { get: (key: K) => V; }
->                                                                                                                                                 : ^^^^^^^             ^^^
+>                                                                                                                                                 : ^^^^^^^^   ^^ ^^^^^ ^^^
 
     /**
      * @param {K} key the key ok
@@ -113,7 +113,7 @@ Multimap2.prototype = {
 >get : (key: K) => V
 >    : ^   ^^ ^^^^^ 
 >function(key) {        return this._map[key + ''];    } : (key: K) => V
->                                                        :              
+>                                                        : ^   ^^ ^^^^^ 
 >key : K
 >    : ^
 

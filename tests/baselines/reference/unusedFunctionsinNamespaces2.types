@@ -9,6 +9,6 @@ namespace Validation {
 >function1 : () => void
 >          : ^^^^^^^^^^
 >function() {    } : () => void
->                  :           
+>                  : ^^^^^^^^^^
     }
 }

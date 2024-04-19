@@ -25,8 +25,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Bar
-Info seq  [hh:mm:ss:mss] For info: /Bar/a.ts :: Config file name: /Bar/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Bar/a.ts ProjectRootPath: undefined:: Result: /Bar/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /Bar/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Bar/tsconfig.json 2000 undefined Project: /Bar/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

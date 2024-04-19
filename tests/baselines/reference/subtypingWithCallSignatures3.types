@@ -256,7 +256,7 @@ module Errors {
 >r1 : (x: number) => string[]
 >   : ^ ^^      ^^^^^^^^^^^^^
 >foo2(<T, U>(x: T) => <U[]>null) : (x: number) => string[]
->                                :                        
+>                                : ^ ^^      ^^^^^^^^^^^^^
 >foo2 : { (a2: (x: number) => string[]): (x: number) => string[]; (a2: any): any; }
 >     : ^^^  ^^                       ^^^^ ^^      ^^^^^^^^^^^^^^^^  ^^   ^^^^^^^^^
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
@@ -270,7 +270,7 @@ module Errors {
 >r1a : ((x: number) => string[])[]
 >    : ^^ ^^      ^^^^^^^^^^^^^^^^
 >[(x: number) => [''], <T, U>(x: T) => <U[]>null] : ((x: number) => string[])[]
->                                                 : ^                       ^^^
+>                                                 : ^^ ^^      ^^^^^^^^^^^^^^^^
 >(x: number) => [''] : (x: number) => string[]
 >                    : ^ ^^      ^^^^^^^^^^^^^
 >x : number
@@ -290,7 +290,7 @@ module Errors {
 >r1b : ((x: number) => string[])[]
 >    : ^^ ^^      ^^^^^^^^^^^^^^^^
 >[<T, U>(x: T) => <U[]>null, (x: number) => ['']] : ((x: number) => string[])[]
->                                                 : ^                       ^^^
+>                                                 : ^^ ^^      ^^^^^^^^^^^^^^^^
 ><T, U>(x: T) => <U[]>null : <T, U>(x: T) => U[]
 >                          : ^ ^^ ^^ ^^ ^^^^^   
 >x : T
@@ -310,7 +310,7 @@ module Errors {
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 >      : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^             ^^^^^^ ^^ ^^^^^ 
 ><T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => <V>null : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
->                                                                                               :                                                                                         
+>                                                                                               : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^             ^^^^^^ ^^ ^^^^^ 
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -326,7 +326,7 @@ module Errors {
 >r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >       : ^ ^^                      ^^^^^^ ^^    ^^^^^        
 >(x: (arg: Base) => Derived) => (r: Base) => <Derived2>null : (x: (arg: Base) => Derived) => (r: Base) => Derived2
->                                                           :                                                     
+>                                                           : ^ ^^                      ^^^^^^ ^^    ^^^^^        
 >x : (arg: Base) => Derived
 >  : ^   ^^    ^^^^^       
 >arg : Base
@@ -342,7 +342,7 @@ module Errors {
 >r2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >   : ^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^
 >foo7(r2arg) : (x: (arg: Base) => Derived) => (r: Base) => Derived2
->            :                                                     
+>            : ^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^
 >foo7 : { (a2: (x: (arg: Base) => Derived) => (r: Base) => Derived2): (x: (arg: Base) => Derived) => (r: Base) => Derived2; (a2: any): any; }
 >     : ^^^  ^^                                                    ^^^^ ^^                      ^^^^^^ ^^    ^^^^^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
@@ -352,7 +352,7 @@ module Errors {
 >r2a : ((x: (arg: Base) => Derived) => (r: Base) => Derived2)[]
 >    : ^^ ^^                      ^^^^^^ ^^    ^^^^^        ^^^
 >[r2arg2, r2arg] : ((x: (arg: Base) => Derived) => (r: Base) => Derived2)[]
->                : ^                                                    ^^^
+>                : ^^ ^^                      ^^^^^^ ^^    ^^^^^        ^^^
 >r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
 >       : ^ ^^                      ^^^^^^ ^^    ^^^^^        
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
@@ -362,7 +362,7 @@ module Errors {
 >r2b : ((x: (arg: Base) => Derived) => (r: Base) => Derived2)[]
 >    : ^^ ^^                      ^^^^^^ ^^    ^^^^^        ^^^
 >[r2arg, r2arg2] : ((x: (arg: Base) => Derived) => (r: Base) => Derived2)[]
->                : ^                                                    ^^^
+>                : ^^ ^^                      ^^^^^^ ^^    ^^^^^        ^^^
 >r2arg : <T extends Base, U extends Derived, V extends Derived2>(x: (arg: T) => U) => (r: T) => V
 >      : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^             ^^^^^^ ^^ ^^^^^ 
 >r2arg2 : (x: (arg: Base) => Derived) => (r: Base) => Derived2
@@ -372,7 +372,7 @@ module Errors {
 >r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
 >      : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ 
 ><T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => <U>null : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
->                                                                                                             :                                                                                                       
+>                                                                                                             : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ 
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T
@@ -394,7 +394,7 @@ module Errors {
 >r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >       : ^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       
 >(x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => <Derived>null : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
->                                                                                      :                                                                                
+>                                                                                      : ^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       
 >x : (arg: Base) => Derived
 >  : ^   ^^    ^^^^^       
 >arg : Base
@@ -422,7 +422,7 @@ module Errors {
 >r3a : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
 >    : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ ^^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       ^^^^
 >[r3arg2, r3arg] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
->                : ^^                                                                                                      ^^^^^                                                                               ^^^^
+>                : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ ^^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       ^^^^
 >r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
 >       : ^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       
 >r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
@@ -432,7 +432,7 @@ module Errors {
 >r3b : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
 >    : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ ^^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       ^^^^
 >[r3arg, r3arg2] : ((<T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U) | ((x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived))[]
->                : ^^                                                                                                      ^^^^^                                                                               ^^^^
+>                : ^^^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ ^^^^^^ ^^                      ^^ ^^                       ^^^^^^ ^^    ^^^^^       ^^^^
 >r3arg : <T extends Base, U extends Derived>(x: (arg: T) => U, y: (arg2: { foo: number; }) => U) => (r: T) => U
 >      : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^ ^^                             ^^^^^^ ^^ ^^^^^ 
 >r3arg2 : (x: (arg: Base) => Derived, y: (arg2: Base) => Derived) => (r: Base) => Derived
@@ -442,7 +442,7 @@ module Errors {
 >r4arg : <T extends Derived>(...x: T[]) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^ 
 ><T extends Derived>(...x: T[]) => <T>null : <T extends Derived>(...x: T[]) => T
->                                          :                     ^^^            
+>                                          : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^ 
 >x : T[]
 >  : ^^^
 ><T>null : T
@@ -452,7 +452,7 @@ module Errors {
 >r4arg2 : (...x: Base[]) => Base
 >       : ^^^^ ^^      ^^^^^    
 >(...x: Base[]) => <Base>null : (...x: Base[]) => Base
->                             :  ^^^                  
+>                             : ^^^^ ^^      ^^^^^    
 >x : Base[]
 >  : ^^^^^^
 ><Base>null : Base
@@ -462,7 +462,7 @@ module Errors {
 >r4 : (...x: Base[]) => Base
 >   : ^^^^ ^^      ^^^^^^^^^
 >foo10(r4arg) : (...x: Base[]) => Base
->             :  ^^^                  
+>             : ^^^^ ^^      ^^^^^^^^^
 >foo10 : { (a2: (...x: Base[]) => Base): (...x: Base[]) => Base; (a2: any): any; }
 >      : ^^^  ^^                      ^^^^^^^ ^^      ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r4arg : <T extends Derived>(...x: T[]) => T
@@ -472,7 +472,7 @@ module Errors {
 >r4a : ((...x: Base[]) => Base)[]
 >    : ^^^^^ ^^      ^^^^^    ^^^
 >[r4arg2, r4arg] : ((...x: Base[]) => Base)[]
->                : ^ ^^^                  ^^^
+>                : ^^^^^ ^^      ^^^^^    ^^^
 >r4arg2 : (...x: Base[]) => Base
 >       : ^^^^ ^^      ^^^^^    
 >r4arg : <T extends Derived>(...x: T[]) => T
@@ -482,7 +482,7 @@ module Errors {
 >r4b : ((...x: Base[]) => Base)[]
 >    : ^^^^^ ^^      ^^^^^    ^^^
 >[r4arg, r4arg2] : ((...x: Base[]) => Base)[]
->                : ^ ^^^                  ^^^
+>                : ^^^^^ ^^      ^^^^^    ^^^
 >r4arg : <T extends Derived>(...x: T[]) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^ 
 >r4arg2 : (...x: Base[]) => Base
@@ -492,7 +492,7 @@ module Errors {
 >r5arg : <T extends Derived>(x: T, y: T) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 ><T extends Derived>(x: T, y: T) => <T>null : <T extends Derived>(x: T, y: T) => T
->                                           :                                     
+>                                           : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T
@@ -504,7 +504,7 @@ module Errors {
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >       : ^ ^^                ^^ ^^                             ^^^^^    
 >(x: { foo: string }, y: { foo: string; bar: string }) => <Base>null : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->                                                                    :                                                                
+>                                                                    : ^ ^^                ^^ ^^                             ^^^^^    
 >x : { foo: string; }
 >  : ^^^^^^^      ^^^
 >foo : string
@@ -522,7 +522,7 @@ module Errors {
 >r5 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >   : ^ ^^                ^^ ^^                             ^^^^^^^^^
 >foo11(r5arg) : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
->             :                                                                
+>             : ^ ^^                ^^ ^^                             ^^^^^^^^^
 >foo11 : { (a2: (x: { foo: string; }, y: { foo: string; bar: string; }) => Base): (x: { foo: string; }, y: { foo: string; bar: string; }) => Base; (a2: any): any; }
 >      : ^^^  ^^                                                               ^^^^ ^^                ^^ ^^                             ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r5arg : <T extends Derived>(x: T, y: T) => T
@@ -532,7 +532,7 @@ module Errors {
 >r5a : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
 >    : ^^ ^^                ^^ ^^                             ^^^^^    ^^^
 >[r5arg2, r5arg] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->                : ^                                                               ^^^
+>                : ^^ ^^                ^^ ^^                             ^^^^^    ^^^
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
 >       : ^ ^^                ^^ ^^                             ^^^^^    
 >r5arg : <T extends Derived>(x: T, y: T) => T
@@ -542,7 +542,7 @@ module Errors {
 >r5b : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
 >    : ^^ ^^                ^^ ^^                             ^^^^^    ^^^
 >[r5arg, r5arg2] : ((x: { foo: string; }, y: { foo: string; bar: string; }) => Base)[]
->                : ^                                                               ^^^
+>                : ^^ ^^                ^^ ^^                             ^^^^^    ^^^
 >r5arg : <T extends Derived>(x: T, y: T) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >r5arg2 : (x: { foo: string; }, y: { foo: string; bar: string; }) => Base
@@ -552,7 +552,7 @@ module Errors {
 >r6arg : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >      : ^ ^^           ^^ ^^               ^^^^^              
 >(x: Array<Base>, y: Array<Derived2>) => <Array<Derived>>null : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
->                                                             :                                                       
+>                                                             : ^ ^^           ^^ ^^               ^^^^^              
 >x : Base[]
 >  : ^^^^^^
 >y : Derived2[]
@@ -564,7 +564,7 @@ module Errors {
 >r6arg2 : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^ 
 ><T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => <T>null : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
->                                                                       :                                                            
+>                                                                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^ 
 >x : Base[]
 >  : ^^^^^^
 >y : Base[]
@@ -576,7 +576,7 @@ module Errors {
 >r6 : (x: Array<Base>, y: Array<Derived2>) => Derived[]
 >   : ^ ^^           ^^ ^^               ^^^^^^^^^^^^^^
 >foo12(r6arg) : (x: Array<Base>, y: Array<Derived2>) => Derived[]
->             :                                                  
+>             : ^ ^^           ^^ ^^               ^^^^^^^^^^^^^^
 >foo12 : { (a2: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>): (x: Array<Base>, y: Array<Derived2>) => Derived[]; (a2: any): any; }
 >      : ^^^  ^^                                                      ^^^^ ^^           ^^ ^^               ^^^^^^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r6arg : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
@@ -586,7 +586,7 @@ module Errors {
 >r6a : ((x: Array<Base>, y: Array<Derived2>) => Array<Derived>)[]
 >    : ^^ ^^           ^^ ^^               ^^^^^              ^^^
 >[r6arg2, r6arg] : ((x: Array<Base>, y: Array<Derived2>) => Array<Derived>)[]
->                : ^                                                      ^^^
+>                : ^^ ^^           ^^ ^^               ^^^^^              ^^^
 >r6arg2 : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^ 
 >r6arg : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
@@ -596,7 +596,7 @@ module Errors {
 >r6b : ((x: Array<Base>, y: Array<Derived2>) => Array<Derived>)[]
 >    : ^^ ^^           ^^ ^^               ^^^^^              ^^^
 >[r6arg, r6arg2] : ((x: Array<Base>, y: Array<Derived2>) => Array<Derived>)[]
->                : ^                                                      ^^^
+>                : ^^ ^^           ^^ ^^               ^^^^^              ^^^
 >r6arg : (x: Array<Base>, y: Array<Derived2>) => Array<Derived>
 >      : ^ ^^           ^^ ^^               ^^^^^              
 >r6arg2 : <T extends Derived2[]>(x: Array<Base>, y: Array<Base>) => T
@@ -606,7 +606,7 @@ module Errors {
 >r7arg : <T>(x: { a: T; b: T; }) => T
 >      : ^ ^^ ^^               ^^^^^ 
 ><T>(x: { a: T; b: T }) => <T>null : <T>(x: { a: T; b: T; }) => T
->                                  :                             
+>                                  : ^ ^^ ^^               ^^^^^ 
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -620,7 +620,7 @@ module Errors {
 >r7arg2 : (x: { a: string; b: number; }) => number
 >       : ^ ^^                         ^^^^^^^^^^^
 >(x: { a: string; b: number }) => 1 : (x: { a: string; b: number; }) => number
->                                   :                                         
+>                                   : ^ ^^                         ^^^^^^^^^^^
 >x : { a: string; b: number; }
 >  : ^^^^^      ^^^^^      ^^^
 >a : string
@@ -642,7 +642,7 @@ module Errors {
 >r7a : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => number))[]
 >    : ^^^ ^^ ^^               ^^^^^ ^^^^^^ ^^                         ^^^^^^^^^^^^^^^
 >[r7arg2, r7arg] : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => number))[]
->                : ^^                            ^^^^^                                        ^^^^
+>                : ^^^ ^^ ^^               ^^^^^ ^^^^^^ ^^                         ^^^^^^^^^^^^^^^
 >r7arg2 : (x: { a: string; b: number; }) => number
 >       : ^ ^^                         ^^^^^^^^^^^
 >r7arg : <T>(x: { a: T; b: T; }) => T
@@ -652,7 +652,7 @@ module Errors {
 >r7b : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => number))[]
 >    : ^^^ ^^ ^^               ^^^^^ ^^^^^^ ^^                         ^^^^^^^^^^^^^^^
 >[r7arg, r7arg2] : ((<T>(x: { a: T; b: T; }) => T) | ((x: { a: string; b: number; }) => number))[]
->                : ^^                            ^^^^^                                        ^^^^
+>                : ^^^ ^^ ^^               ^^^^^ ^^^^^^ ^^                         ^^^^^^^^^^^^^^^
 >r7arg : <T>(x: { a: T; b: T; }) => T
 >      : ^ ^^ ^^               ^^^^^ 
 >r7arg2 : (x: { a: string; b: number; }) => number
@@ -662,7 +662,7 @@ module Errors {
 >r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number
 >       : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^
 ><T extends Base>(x: { a: T; b: T }) => 1 : <T extends Base>(x: { a: T; b: T; }) => number
->                                         :                                               
+>                                         : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -684,7 +684,7 @@ module Errors {
 >r7d : (((x: { a: string; b: number; }) => number) | (<T extends Base>(x: { a: T; b: T; }) => number))[]
 >    : ^^^ ^^                         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^^^
 >[r7arg2, r7arg3] : (((x: { a: string; b: number; }) => number) | (<T extends Base>(x: { a: T; b: T; }) => number))[]
->                 : ^^                                        ^^^^^                                              ^^^^
+>                 : ^^^ ^^                         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^^^
 >r7arg2 : (x: { a: string; b: number; }) => number
 >       : ^ ^^                         ^^^^^^^^^^^
 >r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number
@@ -694,7 +694,7 @@ module Errors {
 >r7e : (((x: { a: string; b: number; }) => number) | (<T extends Base>(x: { a: T; b: T; }) => number))[]
 >    : ^^^ ^^                         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^^^
 >[r7arg3, r7arg2] : (((x: { a: string; b: number; }) => number) | (<T extends Base>(x: { a: T; b: T; }) => number))[]
->                 : ^^                                        ^^^^^                                              ^^^^
+>                 : ^^^ ^^                         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^^^
 >r7arg3 : <T extends Base>(x: { a: T; b: T; }) => number
 >       : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^
 >r7arg2 : (x: { a: string; b: number; }) => number
@@ -704,7 +704,7 @@ module Errors {
 >r8arg : <T>(x: (a: T) => T) => T[]
 >      : ^ ^^ ^^           ^^^^^   
 ><T>(x: (a: T) => T) => <T[]>null : <T>(x: (a: T) => T) => T[]
->                                 :                           
+>                                 : ^ ^^ ^^           ^^^^^   
 >x : (a: T) => T
 >  : ^ ^^ ^^^^^ 
 >a : T
@@ -724,7 +724,7 @@ module Errors {
 >r9arg : <T>(x: (a: T) => T) => any[]
 >      : ^ ^^ ^^           ^^^^^     
 ><T>(x: (a: T) => T) => <any[]>null : <T>(x: (a: T) => T) => any[]
->                                   :                             
+>                                   : ^ ^^ ^^           ^^^^^     
 >x : (a: T) => T
 >  : ^ ^^ ^^^^^ 
 >a : T
@@ -736,7 +736,7 @@ module Errors {
 >r9 : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
 >   : ^^^ ^^                                                            ^^^^^^^^^^^ ^^                                                             ^^^^^^^^^^^
 >foo17(r9arg) : { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }
->             :                                                                                                                                                         
+>             : ^^^ ^^                                                            ^^^^^^^^^^^ ^^                                                             ^^^^^^^^^^^
 >foo17 : { (a2: { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }): { (x: { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }): any[]; (x: { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }): any[]; }; (a2: any): any; }
 >      : ^^^  ^^                                                                                                                                                        ^^^^^^ ^^                                                            ^^^^^^^^^^^ ^^                                                             ^^^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r9arg : <T>(x: (a: T) => T) => any[]
@@ -766,7 +766,7 @@ module WithGenericSignaturesInBaseType {
 >r2arg2 : <T>(x: T) => string[]
 >       : ^ ^^ ^^ ^^^^^^^^^^^^^
 ><T>(x: T) => [''] : <T>(x: T) => string[]
->                  :                      
+>                  : ^ ^^ ^^ ^^^^^^^^^^^^^
 >x : T
 >  : ^
 >[''] : string[]
@@ -801,7 +801,7 @@ module WithGenericSignaturesInBaseType {
 >r3arg2 : <T>(x: T) => T[]
 >       : ^ ^^ ^^ ^^^^^   
 ><T>(x: T) => <T[]>null : <T>(x: T) => T[]
->                       :                 
+>                       : ^ ^^ ^^ ^^^^^   
 >x : T
 >  : ^
 ><T[]>null : T[]

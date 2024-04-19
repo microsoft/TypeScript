@@ -139,13 +139,13 @@ var b = {
 >b : { foo: <T extends Date>(x: T) => number; }
 >  : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    }} : { foo: <T extends Date>(x: T) => number; }
->                                                                                                                    : ^^^^^^^                                ^^^
+>                                                                                                                    : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <T extends Date>(x: T) => {
 >foo : <T extends Date>(x: T) => number
 >    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 ><T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    } : <T extends Date>(x: T) => number
->                                                                                                         :                                 
+>                                                                                                         : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 

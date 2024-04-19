@@ -81,7 +81,7 @@ export let createElement = Element.createElement;
 >createElement : (args: any[]) => {}
 >              : ^    ^^     ^^^^^^^
 >Element.createElement : (args: any[]) => {}
->                      :                    
+>                      : ^    ^^     ^^^^^^^
 >Element : typeof Element
 >        : ^^^^^^^^^^^^^^
 >createElement : (args: any[]) => {}

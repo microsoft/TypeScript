@@ -19,7 +19,7 @@ var b: Ib = { m: function (test: string, fn: Function) { } };
 >m : (test: string, fn: Function) => void
 >  : ^    ^^      ^^  ^^        ^^^^^^^^^
 >function (test: string, fn: Function) { } : (test: string, fn: Function) => void
->                                          :                                     
+>                                          : ^    ^^      ^^  ^^        ^^^^^^^^^
 >test : string
 >     : ^^^^^^
 >fn : Function

@@ -351,7 +351,7 @@ const returnExemplar = () => x;
 >returnExemplar : () => typeof x
 >               : ^^^^^^^^^^^^^^
 >() => x : () => typeof x
->        :               
+>        : ^^^^^^^^^^^^^^
 >x : typeof x
 >  : ^^^^^^^^
 
@@ -359,7 +359,7 @@ const needsExemplar = (_ = x) => void 0;
 >needsExemplar : (_?: typeof x) => undefined
 >              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(_ = x) => void 0 : (_?: typeof x) => undefined
->                  :   ^                        
+>                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : typeof x
 >  : ^^^^^^^^
 >x : typeof x
@@ -373,7 +373,7 @@ const expected = /** @type {{name: string, readonly middleInit: string, readonly
 >expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(/** @type {*} */(null)) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
->                         :                                                                                                                                     
+>                         : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^      ^^^
 >(null) : any
 >       : ^^^
 

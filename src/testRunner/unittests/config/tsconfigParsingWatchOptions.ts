@@ -97,6 +97,18 @@ describe("unittests:: config:: tsconfigParsingWatchOptions:: parseConfigFileText
                 }),
             },
         },
+        {
+            json: {
+                extends: "./base/tsconfig.json",
+            },
+            additionalFiles: {
+                "/base/tsconfig.json": jsonToReadableText({
+                    watchOptions: {
+                        excludeFiles: ["${configDir}/temp/*.ts"], // eslint-disable-line no-template-curly-in-string
+                    },
+                }),
+            },
+        },
     ]);
 
     verifyWatchOptions("different options", () => [

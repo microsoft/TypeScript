@@ -111,7 +111,7 @@ function func3() {
 >x : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func({keys: ["aa", "bb"]}) : { readonly keys: ("aa" | "bb")[]; readonly firstKey: "aa" | "bb"; }
->                           :                                                                    
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >func : <T extends string>(arg: { keys: T[]; }) => { readonly keys: T[]; readonly firstKey: T; }
 >     : ^ ^^^^^^^^^^^^^^^^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{keys: ["aa", "bb"]} : { keys: ("aa" | "bb")[]; }

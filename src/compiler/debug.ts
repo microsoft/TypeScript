@@ -244,13 +244,13 @@ export namespace Debug {
     }
 
     export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (value === undefined || value === null) {
             fail(message, stackCrawlMark || assertIsDefined);
         }
     }
 
-    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
+    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T { // eslint-disable-line no-restricted-syntax
         assertIsDefined(value, message, stackCrawlMark || checkDefined);
         return value;
     }
@@ -935,7 +935,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             FlowFlags.Condition |
             FlowFlags.ArrayMutation;
 
-        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
         const nodes: FlowGraphNode[] = [];
         const edges: FlowGraphEdge[] = [];
         const root = buildGraphNode(flowNode, new Set());

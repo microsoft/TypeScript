@@ -39,7 +39,7 @@ repro({
 >callback : () => (a: number) => number
 >         : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >() => { return a => a + 1 } : () => (a: number) => number
->                            :                            
+>                            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a => a + 1 : (a: number) => number
 >           : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number

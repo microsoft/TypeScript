@@ -83,11 +83,11 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } ) : void
 >                                                                                                  : ^^^^
 >files.forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
->              : ^          ^^^     ^^^^^^     ^^      ^^     ^^  ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>              : ^          ^^^     ^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >files : {}[]
 >      : ^^^^
 >forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^     ^^      ^^     ^^  ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(file) => {                    var fullPath = join(IDoNotExist);                } : (file: {}) => void
 >                                                                                  : ^    ^^^^^^^^^^^^^
 >file : {}
