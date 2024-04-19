@@ -38923,6 +38923,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // requires VarExpr to be classified as a reference
                 // A compound assignment furthermore requires VarExpr to be classified as a reference (section 4.1)
                 // and the type of the non-compound operation to be assignable to the type of VarExpr.
+
                 if (checkReferenceExpression(left, Diagnostics.The_left_hand_side_of_an_assignment_expression_must_be_a_variable_or_a_property_access, Diagnostics.The_left_hand_side_of_an_assignment_expression_may_not_be_an_optional_property_access)) {
                     let headMessage: DiagnosticMessage | undefined;
                     if (exactOptionalPropertyTypes && isPropertyAccessExpression(left) && maybeTypeOfKind(valueType, TypeFlags.Undefined)) {
