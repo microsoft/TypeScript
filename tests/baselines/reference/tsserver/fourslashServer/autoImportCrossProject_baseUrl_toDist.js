@@ -54,8 +54,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /common
-Info seq  [hh:mm:ss:mss] For info: /common/tsconfig.json :: Config file name: /common/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /common/tsconfig.json ProjectRootPath: undefined:: Result: /common/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /common/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /common/tsconfig.json 2000 undefined Project: /common/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -216,8 +215,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /web/src
-Info seq  [hh:mm:ss:mss] For info: /web/src/Helper.ts :: Config file name: /web/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /web/src/Helper.ts ProjectRootPath: undefined:: Result: /web/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /web/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /web/tsconfig.json 2000 undefined Project: /web/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
