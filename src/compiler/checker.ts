@@ -37786,7 +37786,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkReferenceExpression(expr: Expression, invalidReferenceMessage: DiagnosticMessage, invalidOptionalChainMessage: DiagnosticMessage): boolean {
         // References are combinations of identifiers, parentheses, and property accesses.
-        const node = skipOuterExpressions(expr, OuterExpressionKinds.Assertions | OuterExpressionKinds.SatisfiesExpressions | OuterExpressionKinds.Parentheses);
+        const node = skipOuterExpressions(expr, OuterExpressionKinds.Assertions | OuterExpressionKinds.Parentheses);
         if (node.kind !== SyntaxKind.Identifier && !isAccessExpression(node)) {
             error(expr, invalidReferenceMessage);
             return false;

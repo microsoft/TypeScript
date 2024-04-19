@@ -7300,11 +7300,10 @@ declare namespace ts {
         Parentheses = 1,
         TypeAssertions = 2,
         NonNullAssertions = 4,
-        SatisfiesExpressions = 8,
-        PartiallyEmittedExpressions = 16,
+        PartiallyEmittedExpressions = 8,
         Assertions = 6,
-        All = 31,
-        ExcludeJSDocTypeAssertion = 32,
+        All = 15,
+        ExcludeJSDocTypeAssertion = 16,
     }
     type ImmediatelyInvokedFunctionExpression = CallExpression & {
         readonly expression: FunctionExpression;
