@@ -4,6 +4,7 @@
 {
    export function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
    }
 }
 

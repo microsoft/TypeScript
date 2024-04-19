@@ -32,5 +32,4 @@ var y = x.getA().x;
 
 
 //// [f.d.ts]
-/// <reference path="array.d.ts" />
 import "array";

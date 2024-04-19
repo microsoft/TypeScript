@@ -1,8 +1,6 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -467,7 +465,7 @@ describe("unittests:: tsserver:: externalProjects", () => {
                 arguments: {
                     knownProjects: knownProjects.map(p => p.info!),
                 },
-            }).response as ts.server.protocol.ProjectFilesWithDiagnostics[];
+            });
 
             externalProject.rootFiles.length = 1;
             openExternalProjectsForSession([externalProject], session);

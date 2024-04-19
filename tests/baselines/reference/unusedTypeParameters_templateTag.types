@@ -4,4 +4,5 @@
 /** @template T */
 function f() {}
 >f : <T>() => void
+>  : ^^^^^^^^^^^^^
 

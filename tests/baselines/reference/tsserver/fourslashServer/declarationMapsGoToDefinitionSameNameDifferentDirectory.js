@@ -79,8 +79,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server/BaseClass
-Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/BaseClass/Source.d.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/BaseClass/Source.d.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -190,8 +189,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server/buttonClass
-Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/buttonClass/Source.ts :: Config file name: /tests/cases/fourslash/server/buttonClass/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/buttonClass/Source.ts ProjectRootPath: undefined:: Result: /tests/cases/fourslash/server/buttonClass/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tests/cases/fourslash/server/buttonClass/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/buttonClass/tsconfig.json 2000 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -490,6 +488,13 @@ watchedDirectoriesRecursive::
 /tests/cases/fourslash/server/node_modules/@types:
   {}
 
+Projects::
+/tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /tests/cases/fourslash/server/baseclass/source.d.ts: DocumentPositionMapper1 *new*
+
 ScriptInfos::
 /lib.d.ts
     version: Text-1
@@ -513,7 +518,7 @@ ScriptInfos::
     declarationInfoPath: /tests/cases/fourslash/server/baseclass/source.d.ts
     sourceInfos: 1
         /tests/cases/fourslash/server/baseclass/source.ts
-    documentPositionMapper: DocumentPositionMapper
+    documentPositionMapper: DocumentPositionMapper1
     containingProjects: 0
 /tests/cases/fourslash/server/BaseClass/Source.ts *new*
     version: Text-1
@@ -522,6 +527,9 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *default*
+
+DocumentPositionMappers::
+DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {

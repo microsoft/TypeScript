@@ -1,15 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    TscCompileSystem,
-} from "./tsc";
-import {
-    TestServerHost,
-} from "./virtualFileSystemWithWatch";
+import { jsonToReadableText } from "../helpers";
+import { TscCompileSystem } from "./tsc";
+import { TestServerHost } from "./virtualFileSystemWithWatch";
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {
@@ -91,14 +85,20 @@ function baselineProgram(baseline: string[], [program, builderProgram]: CommandL
                 baseline.push("Shape signatures in builder refreshed for::");
                 internalState.hasCalledUpdateShapeSignature.forEach((path: ts.Path) => {
                     const info = state.fileInfos.get(path);
-                    if (info?.version === info?.signature || !info?.signature) {
-                        baseline.push(path + " (used version)");
-                    }
-                    else if (internalState.filesChangingSignature?.has(path)) {
-                        baseline.push(path + " (computed .d.ts during emit)");
-                    }
-                    else {
-                        baseline.push(path + " (computed .d.ts)");
+                    const signatureInfo = internalState.signatureInfo?.get(path)!;
+                    switch (signatureInfo) {
+                        case ts.SignatureInfo.ComputedDts:
+                            baseline.push(path + " (computed .d.ts)");
+                            break;
+                        case ts.SignatureInfo.StoredSignatureAtEmit:
+                            baseline.push(path + " (computed .d.ts during emit)");
+                            break;
+                        case ts.SignatureInfo.UsedVersion:
+                            ts.Debug.assert(info?.version === info?.signature || !info?.signature);
+                            baseline.push(path + " (used version)");
+                            break;
+                        default:
+                            ts.Debug.assertNever(signatureInfo);
                     }
                 });
             }
@@ -130,45 +130,6 @@ export function generateSourceMapBaselineFiles(sys: ts.System & { writtenFiles: 
     }
 }
 
-function generateBundleFileSectionInfo(sys: ts.System, originalReadCall: ts.System["readFile"], baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: ts.BundleFileInfo | undefined, outFile: string | undefined) {
-    if (!ts.length(bundleFileInfo && bundleFileInfo.sections) && !outFile) return; // Nothing to baseline
-
-    const content = outFile && sys.fileExists(outFile) ? originalReadCall.call(sys, outFile, "utf8")! : "";
-    baselineRecorder.WriteLine("======================================================================");
-    baselineRecorder.WriteLine(`File:: ${outFile}`);
-    for (const section of bundleFileInfo ? bundleFileInfo.sections : ts.emptyArray) {
-        baselineRecorder.WriteLine("----------------------------------------------------------------------");
-        writeSectionHeader(section);
-        if (section.kind !== ts.BundleFileSectionKind.Prepend) {
-            writeTextOfSection(section.pos, section.end);
-        }
-        else if (section.texts.length > 0) {
-            ts.Debug.assert(section.pos === ts.first(section.texts).pos);
-            ts.Debug.assert(section.end === ts.last(section.texts).end);
-            for (const text of section.texts) {
-                baselineRecorder.WriteLine(">>--------------------------------------------------------------------");
-                writeSectionHeader(text);
-                writeTextOfSection(text.pos, text.end);
-            }
-        }
-        else {
-            ts.Debug.assert(section.pos === section.end);
-        }
-    }
-    baselineRecorder.WriteLine("======================================================================");
-
-    function writeTextOfSection(pos: number, end: number) {
-        const textLines = content.substring(pos, end).split(/\r?\n/);
-        for (const line of textLines) {
-            baselineRecorder.WriteLine(line);
-        }
-    }
-
-    function writeSectionHeader(section: ts.BundleFileSection) {
-        baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}${section.kind === ts.BundleFileSectionKind.Prepend ? " texts:: " + section.texts.length : ""}`);
-    }
-}
-
 export type ReadableProgramBuildInfoDiagnostic = string | [string, readonly ts.ReusableDiagnostic[]];
 export type ReadableBuilderFileEmit = string & { __readableBuilderFileEmit: any; };
 export type ReadableProgramBuilderInfoFilePendingEmit = [original: string | [string], emitKind: ReadableBuilderFileEmit];
@@ -180,12 +141,11 @@ export type ReadableProgramBuildInfoFileInfo<T> = Omit<ts.BuilderState.FileInfo,
 export type ReadableProgramBuildInfoRoot =
     | [original: ts.ProgramBuildInfoFileId, readable: string]
     | [original: ts.ProgramBuildInfoRootStartEnd, readable: readonly string[]];
-export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "exportedModulesMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
+export type ReadableProgramMultiFileEmitBuildInfo = Omit<ts.ProgramMultiFileEmitBuildInfo, "fileIdsList" | "fileInfos" | "root" | "referencedMap" | "semanticDiagnosticsPerFile" | "emitDiagnosticsPerFile" | "affectedFilesPendingEmit" | "changeFileSet" | "emitSignatures"> & {
     fileNamesList: readonly (readonly string[])[] | undefined;
     fileInfos: ts.MapLike<ReadableProgramBuildInfoFileInfo<ts.ProgramMultiFileEmitBuildInfoFileInfo>>;
     root: readonly ReadableProgramBuildInfoRoot[];
     referencedMap: ts.MapLike<string[]> | undefined;
-    exportedModulesMap: ts.MapLike<string[]> | undefined;
     semanticDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     emitDiagnosticsPerFile: readonly ReadableProgramBuildInfoDiagnostic[] | undefined;
     affectedFilesPendingEmit: readonly ReadableProgramBuilderInfoFilePendingEmit[] | undefined;
@@ -202,7 +162,7 @@ export type ReadableProgramBundleEmitBuildInfo = Omit<ts.ProgramBundleEmitBuildI
 export type ReadableProgramBuildInfo = ReadableProgramMultiFileEmitBuildInfo | ReadableProgramBundleEmitBuildInfo;
 
 export function isReadableProgramBundleEmitBuildInfo(info: ReadableProgramBuildInfo | undefined): info is ReadableProgramBundleEmitBuildInfo {
-    return !!info && !!ts.outFile(info.options || {});
+    return !!info && !!info.options?.outFile;
 }
 export type ReadableBuildInfo = Omit<ts.BuildInfo, "program"> & { program: ReadableProgramBuildInfo | undefined; size: number; };
 function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string, buildInfo: ts.BuildInfo) {
@@ -240,7 +200,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
             root: buildInfo.program.root.map(toReadableProgramBuildInfoRoot),
             options: buildInfo.program.options,
             referencedMap: toMapOfReferencedSet(buildInfo.program.referencedMap),
-            exportedModulesMap: toMapOfReferencedSet(buildInfo.program.exportedModulesMap),
             semanticDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.semanticDiagnosticsPerFile),
             emitDiagnosticsPerFile: toReadableProgramBuildInfoDiagnosticsPerFile(buildInfo.program.emitDiagnosticsPerFile),
             affectedFilesPendingEmit: buildInfo.program.affectedFilesPendingEmit?.map(value => toReadableProgramBuilderInfoFilePendingEmit(value, fullEmitForOptions!)),
@@ -255,22 +214,6 @@ function generateBuildInfoProgramBaseline(sys: ts.System, buildInfoPath: string,
     }
     const version = buildInfo.version === ts.version ? fakes.version : buildInfo.version;
     const result: ReadableBuildInfo = {
-        // Baseline fixed order for bundle
-        bundle: buildInfo.bundle && {
-            ...buildInfo.bundle,
-            js: buildInfo.bundle.js && {
-                sections: buildInfo.bundle.js.sections,
-                hash: buildInfo.bundle.js.hash,
-                mapHash: buildInfo.bundle.js.mapHash,
-                sources: buildInfo.bundle.js.sources,
-            },
-            dts: buildInfo.bundle.dts && {
-                sections: buildInfo.bundle.dts.sections,
-                hash: buildInfo.bundle.dts.hash,
-                mapHash: buildInfo.bundle.dts.mapHash,
-                sources: buildInfo.bundle.dts.sources,
-            },
-        },
         program,
         version,
         size: ts.getBuildInfoText({ ...buildInfo, version }).length,
@@ -358,19 +301,6 @@ export function baselineBuildInfo(
     const buildInfo = ts.getBuildInfo(buildInfoPath, (originalReadCall || sys.readFile).call(sys, buildInfoPath, "utf8"));
     if (!buildInfo) return sys.writeFile(`${buildInfoPath}.baseline.txt`, "Error reading valid buildinfo file");
     generateBuildInfoProgramBaseline(sys, buildInfoPath, buildInfo);
-
-    if (!ts.outFile(options)) return;
-    const { jsFilePath, declarationFilePath } = ts.getOutputPathsForBundle(options, /*forceDtsPaths*/ false);
-    const bundle = buildInfo.bundle;
-    if (!bundle || (!ts.length(bundle.js && bundle.js.sections) && !ts.length(bundle.dts && bundle.dts.sections))) return;
-
-    // Write the baselines:
-    const baselineRecorder = new Harness.Compiler.WriterAggregator();
-    generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.js, jsFilePath);
-    generateBundleFileSectionInfo(sys, originalReadCall || sys.readFile, baselineRecorder, bundle.dts, declarationFilePath);
-    baselineRecorder.Close();
-    const text = baselineRecorder.lines.join("\r\n");
-    sys.writeFile(`${buildInfoPath}.baseline.txt`, text);
 }
 
 export function tscBaselineName(scenario: string, subScenario: string, commandLineArgs: readonly string[], isWatch?: boolean, suffix?: string) {

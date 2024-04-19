@@ -25,7 +25,6 @@ import {
     createRange,
     createRuntimeTypeSerializer,
     createTokenRange,
-    createUnparsedSourceFile,
     Debug,
     Declaration,
     Decorator,
@@ -69,7 +68,6 @@ import {
     ImportClause,
     ImportDeclaration,
     ImportEqualsDeclaration,
-    ImportsNotUsedAsValues,
     ImportSpecifier,
     InitializedVariableDeclaration,
     insertStatementsAfterStandardPrologue,
@@ -293,12 +291,6 @@ export function transformTypeScript(context: TransformationContext) {
     function transformBundle(node: Bundle) {
         return factory.createBundle(
             node.sourceFiles.map(transformSourceFile),
-            mapDefined(node.prepends, prepend => {
-                if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend, "js");
-                }
-                return prepend;
-            }),
         );
     }
 
@@ -1129,7 +1121,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let decorators: Decorator[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node));
+                const typeMetadata = emitHelpers().createMetadataHelper("design:type", typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container));
                 decorators = append(decorators, factory.createDecorator(typeMetadata));
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1148,7 +1140,7 @@ export function transformTypeScript(context: TransformationContext) {
         if (typeSerializer) {
             let properties: ObjectLiteralElementLike[] | undefined;
             if (shouldAddTypeMetadata(node)) {
-                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node)));
+                const typeProperty = factory.createPropertyAssignment("type", factory.createArrowFunction(/*modifiers*/ undefined, /*typeParameters*/ undefined, [], /*type*/ undefined, factory.createToken(SyntaxKind.EqualsGreaterThanToken), typeSerializer.serializeTypeOfNode({ currentLexicalScope, currentNameScope: container }, node, container)));
                 properties = append(properties, typeProperty);
             }
             if (shouldAddParamTypesMetadata(node)) {
@@ -1922,7 +1914,8 @@ export function transformTypeScript(context: TransformationContext) {
         // we pass false as 'generateNameForComputedPropertyName' for a backward compatibility purposes
         // old emitter always generate 'expression' part of the name as-is.
         const name = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ false);
-        const valueExpression = transformEnumMemberDeclarationValue(member);
+        const evaluated = resolver.getEnumMemberValue(member);
+        const valueExpression = transformEnumMemberDeclarationValue(member, evaluated?.value);
         const innerAssignment = factory.createAssignment(
             factory.createElementAccessExpression(
                 currentNamespaceContainerName,
@@ -1930,7 +1923,7 @@ export function transformTypeScript(context: TransformationContext) {
             ),
             valueExpression,
         );
-        const outerAssignment = valueExpression.kind === SyntaxKind.StringLiteral ?
+        const outerAssignment = typeof evaluated?.value === "string" || evaluated?.isSyntacticallyString ?
             innerAssignment :
             factory.createAssignment(
                 factory.createElementAccessExpression(
@@ -1955,12 +1948,11 @@ export function transformTypeScript(context: TransformationContext) {
      *
      * @param member The enum member node.
      */
-    function transformEnumMemberDeclarationValue(member: EnumMember): Expression {
-        const value = resolver.getConstantValue(member);
-        if (value !== undefined) {
-            return typeof value === "string" ? factory.createStringLiteral(value) :
-                value < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-value)) :
-                factory.createNumericLiteral(value);
+    function transformEnumMemberDeclarationValue(member: EnumMember, constantValue: string | number | undefined): Expression {
+        if (constantValue !== undefined) {
+            return typeof constantValue === "string" ? factory.createStringLiteral(constantValue) :
+                constantValue < 0 ? factory.createPrefixUnaryExpression(SyntaxKind.MinusToken, factory.createNumericLiteral(-constantValue)) :
+                factory.createNumericLiteral(constantValue);
         }
         else {
             enableSubstitutionForNonQualifiedEnumMembers();
@@ -2276,9 +2268,7 @@ export function transformTypeScript(context: TransformationContext) {
 
         // Elide the declaration if the import clause was elided.
         const importClause = visitNode(node.importClause, visitImportClause, isImportClause);
-        return importClause ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
+        return importClause
             ? factory.updateImportDeclaration(
                 node,
                 /*modifiers*/ undefined,
@@ -2314,10 +2304,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
         else {
             // Elide named imports if all of its import specifiers are elided and settings allow.
-            const allowEmpty = compilerOptions.verbatimModuleSyntax || compilerOptions.preserveValueImports && (
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                        compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                    );
+            const allowEmpty = compilerOptions.verbatimModuleSyntax;
             const elements = visitNodes(node.elements, visitImportSpecifier, isImportSpecifier);
             return allowEmpty || some(elements) ? factory.updateNamedImports(node, elements) : undefined;
         }
@@ -2363,10 +2350,7 @@ export function transformTypeScript(context: TransformationContext) {
         }
 
         // Elide the export declaration if all of its named exports are elided.
-        const allowEmpty = compilerOptions.verbatimModuleSyntax || !!node.moduleSpecifier && (
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve ||
-                    compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Error
-                );
+        const allowEmpty = !!compilerOptions.verbatimModuleSyntax;
         const exportClause = visitNode(
             node.exportClause,
             (bindings: NamedExportBindings) => visitNamedExportBindings(bindings, allowEmpty),
@@ -2442,22 +2426,6 @@ export function transformTypeScript(context: TransformationContext) {
 
         if (isExternalModuleImportEqualsDeclaration(node)) {
             const isReferenced = shouldEmitAliasDeclaration(node);
-            // If the alias is unreferenced but we want to keep the import, replace with 'import "mod"'.
-            if (!isReferenced && compilerOptions.importsNotUsedAsValues === ImportsNotUsedAsValues.Preserve) {
-                return setOriginalNode(
-                    setTextRange(
-                        factory.createImportDeclaration(
-                            /*modifiers*/ undefined,
-                            /*importClause*/ undefined,
-                            node.moduleReference.expression,
-                            /*attributes*/ undefined,
-                        ),
-                        node,
-                    ),
-                    node,
-                );
-            }
-
             return isReferenced ? visitEachChild(node, visitor, context) : undefined;
         }
 
@@ -2767,9 +2735,6 @@ export function transformTypeScript(context: TransformationContext) {
     }
 
     function shouldEmitAliasDeclaration(node: Node): boolean {
-        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) ||
-            (compilerOptions.preserveValueImports
-                ? resolver.isValueAliasDeclaration(node)
-                : resolver.isReferencedAliasDeclaration(node));
+        return compilerOptions.verbatimModuleSyntax || isInJSFile(node) || resolver.isReferencedAliasDeclaration(node);
     }
 }

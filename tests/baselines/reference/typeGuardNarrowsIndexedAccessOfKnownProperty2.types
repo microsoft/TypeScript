@@ -2,28 +2,43 @@
 
 === typeGuardNarrowsIndexedAccessOfKnownProperty2.ts ===
 const foo: { key?: number } = {};
->foo : { key?: number | undefined; }
+>foo : { key?: number; }
+>    : ^^^^^^^^      ^^^
 >key : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 const key = 'key' as const;
 >key : "key"
+>    : ^^^^^
 >'key' as const : "key"
+>               : ^^^^^
 >'key' : "key"
+>      : ^^^^^
 
 if (foo[key]) {
 >foo[key] : number | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 >foo : { key?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "key"
+>    : ^^^^^
 
     foo[key]; // number
 >foo[key] : number
+>         : ^^^^^^
 >foo : { key?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "key"
+>    : ^^^^^
 
     foo.key;  // number
 >foo.key : number
+>        : ^^^^^^
 >foo : { key?: number | undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : number
+>    : ^^^^^^
 }
 

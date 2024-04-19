@@ -3,5 +3,6 @@
 === unusedTypeParameterInFunction1.ts ===
 function f1<T>() {
 >f1 : <T>() => void
+>   : ^^^^^^^^^^^^^
 
 }

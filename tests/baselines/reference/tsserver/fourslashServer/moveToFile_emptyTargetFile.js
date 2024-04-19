@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /source.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /source.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -248,7 +247,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "name": "Move to a new file",
               "description": "Move to a new file",
-              "kind": "refactor.move.newFile"
+              "kind": "refactor.move.newFile",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                }
+              }
             }
           ]
         },
@@ -259,7 +268,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "name": "Move to file",
               "description": "Move to file",
-              "kind": "refactor.move.file"
+              "kind": "refactor.move.file",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 20
+                }
+              }
             }
           ]
         },
@@ -270,7 +289,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to function in module scope",
               "name": "function_scope_0",
-              "kind": "refactor.extract.function"
+              "kind": "refactor.extract.function",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
             }
           ]
         },
@@ -281,7 +310,17 @@ Info seq  [hh:mm:ss:mss] response:
             {
               "description": "Extract to constant in enclosing scope",
               "name": "constant_scope_0",
-              "kind": "refactor.extract.constant"
+              "kind": "refactor.extract.constant",
+              "range": {
+                "start": {
+                  "line": 1,
+                  "offset": 17
+                },
+                "end": {
+                  "line": 1,
+                  "offset": 19
+                }
+              }
             }
           ]
         }

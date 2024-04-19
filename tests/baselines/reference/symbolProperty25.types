@@ -4,21 +4,31 @@
 interface I {
     [Symbol.toPrimitive]: () => boolean;
 >[Symbol.toPrimitive] : () => boolean
+>                     : ^^^^^^       
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 }
 
 class C implements I {
 >C : C
+>  : ^
 
     [Symbol.toStringTag]() {
 >[Symbol.toStringTag] : () => string
+>                     : ^^^^^^^^^^^^
 >Symbol.toStringTag : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toStringTag : unique symbol
+>            : ^^^^^^^^^^^^^
 
         return "";
 >"" : ""
+>   : ^^
     }
 }

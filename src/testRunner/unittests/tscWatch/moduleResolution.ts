@@ -1,16 +1,12 @@
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
 } from "../helpers/alternateResult";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { verifyTscWatch } from "../helpers/tscWatch";
 import {
     createWatchedSystem,
     File,

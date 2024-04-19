@@ -1,13 +1,7 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
+import { dedent } from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
+import { jsonToReadableText } from "../helpers";
+import { verifyTsc } from "../helpers/tsc";
 import {
     loadProjectFromFiles,
     replaceText,

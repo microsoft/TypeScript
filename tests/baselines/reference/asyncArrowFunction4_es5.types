@@ -3,5 +3,7 @@
 === asyncArrowFunction4_es5.ts ===
 var await = () => {
 >await : () => void
+>      : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 }

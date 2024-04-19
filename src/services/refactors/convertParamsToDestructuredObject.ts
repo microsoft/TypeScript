@@ -104,9 +104,7 @@ import {
     TypeNode,
     VariableDeclaration,
 } from "../_namespaces/ts";
-import {
-    registerRefactor,
-} from "../_namespaces/ts.refactor";
+import { registerRefactor } from "../_namespaces/ts.refactor";
 
 const refactorName = "Convert parameters to destructured object";
 const minimumParameterLength = 1;

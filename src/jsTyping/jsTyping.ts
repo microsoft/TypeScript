@@ -30,9 +30,7 @@ import {
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts";
-import {
-    stringifyIndented,
-} from "./_namespaces/ts.server";
+import { stringifyIndented } from "./_namespaces/ts.server";
 
 export interface TypingResolutionHost {
     directoryExists(path: string): boolean;

@@ -35,7 +35,6 @@ import {
     identity,
     ImplementationLocation,
     InlayHint,
-    InlayHintKind,
     InteractiveRefactorArguments,
     isString,
     JSDocTagInfo,
@@ -75,9 +74,7 @@ import {
     TodoCommentDescriptor,
     UserPreferences,
 } from "./_namespaces/ts";
-import {
-    protocol,
-} from "./_namespaces/ts.server";
+import { protocol } from "./_namespaces/ts.server";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;
@@ -777,7 +774,7 @@ export class SessionClient implements LanguageService {
             return ({
                 ...item,
                 position: this.lineOffsetToPosition(file, position),
-                kind: item.kind as InlayHintKind,
+                kind: item.kind,
                 displayParts: displayParts?.map(({ text, span }) => ({
                     text,
                     span: span && {

@@ -13,10 +13,9 @@ import { foo } from "./foo"; // should error, suggest adding ".js"
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
+exports.foo = foo;
 function foo() {
     return "";
 }
-exports.foo = foo;
 //// [bar.mjs]
 export {};
