@@ -10,8 +10,8 @@ function* g(): IterableIterator<(x: string) => number, (x: string) => number> {
 >  : ^^^^^^
 
     yield x => x.length;
->yield x => x.length : undefined
->                    : ^^^^^^^^^
+>yield x => x.length : unknown
+>                    : ^^^^^^^
 >x => x.length : (x: string) => number
 >              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string

@@ -6844,7 +6844,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
                                 isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))
                             ) {
-                                if (!type.node || !isTypeReferenceNode(type.node) || !type.node.typeArguments || type.node.typeArguments.length < typeParameterCount) {
+                                if (
+                                    !type.node || !isTypeReferenceNode(type.node) || !type.node.typeArguments ||
+                                    type.node.typeArguments.length < typeParameterCount
+                                ) {
                                     while (typeParameterCount > 0) {
                                         const typeArgument = typeArguments[typeParameterCount - 1];
                                         const defaultType = getDefaultFromTypeParameter(type.target.typeParameters[typeParameterCount - 1]);

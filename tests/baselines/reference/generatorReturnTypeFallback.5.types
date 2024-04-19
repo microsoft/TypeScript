@@ -7,8 +7,8 @@ function* f(): IterableIterator<number> {
 >  : ^^^^^^                        
 
     yield 1;
->yield 1 : undefined
->        : ^^^^^^^^^
+>yield 1 : unknown
+>        : ^^^^^^^
 >1 : 1
 >  : ^
 }

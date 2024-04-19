@@ -789,22 +789,22 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 // Repro from #46143
 
 declare var it: Iterator<number>;
->it : Iterator<number, void, undefined>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it : Iterator<number, any, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const { value, done } = it.next();
->value : number | void
->      : ^^^^^^^^^^^^^
+>value : any
+>      : ^^^
 >done : boolean | undefined
 >     : ^^^^^^^^^^^^^^^^^^^
->it.next() : IteratorResult<number, void>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->it.next : (...args: [] | [undefined]) => IteratorResult<number, void>
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->it : Iterator<number, void, undefined>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->next : (...args: [] | [undefined]) => IteratorResult<number, void>
->     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it.next() : IteratorResult<number, any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it.next : (...args: [] | [unknown]) => IteratorResult<number, any>
+>        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>it : Iterator<number, any, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>next : (...args: [] | [unknown]) => IteratorResult<number, any>
+>     : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 if (!done) {
 >!done : boolean
