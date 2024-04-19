@@ -57,6 +57,7 @@ import {
     SignatureDeclaration,
     SymbolAccessibility,
     SyntacticTypeNodeBuilderContext,
+    SyntacticTypeNodeBuilderResolver,
     SyntaxKind,
     TypeAssertion,
     TypeNode,
@@ -66,7 +67,7 @@ import {
 } from "./_namespaces/ts";
 
 /** @internal */
-export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
+export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolver: SyntacticTypeNodeBuilderResolver) {
     const strictNullChecks = getStrictOptionValue(options, "strictNullChecks");
 
     return {
@@ -76,7 +77,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
         serializeTypeOfExpression,
     };
     function serializeExistingTypeAnnotation(type: TypeNode | undefined, context: SyntacticTypeNodeBuilderContext) {
-        return type === undefined ? undefined : !type.parent || !isParameter(type.parent) || !context.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
+        return type === undefined ? undefined : !type.parent || !isParameter(type.parent) || !resolver.requiresAddingImplicitUndefined(type.parent) || canAddUndefined(type);
     }
     function serializeTypeOfExpression(expr: Expression, context: SyntacticTypeNodeBuilderContext, addUndefined?: boolean, preserveLiterals?: boolean) {
         return typeFromExpression(expr, context, /*isConstContext*/ false, addUndefined, preserveLiterals) ?? inferExpressionType(expr, context);
@@ -149,7 +150,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
     }
 
     function typeFromAccessor(node: AccessorDeclaration, context: SyntacticTypeNodeBuilderContext) {
-        const accessorDeclarations = context.getAllAccessorDeclarations(node);
+        const accessorDeclarations = resolver.getAllAccessorDeclarations(node);
         const accessorType = getTypeAnnotationFromAllAccessorDeclarations(node, accessorDeclarations);
         if (accessorType) {
             return serializeExistingTypeAnnotation(accessorType, context);
@@ -166,7 +167,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
         }
         let resultType;
         if (node.initializer) {
-            if (!context.isExpandoFunctionDeclaration(node)) {
+            if (!resolver.isExpandoFunctionDeclaration(node)) {
                 resultType = typeFromExpression(node.initializer, context, /*isConstContext*/ undefined, /*requiresAddingUndefined*/ undefined, isVarConstLike(node));
             }
         }
@@ -178,7 +179,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
             return typeFromAccessor(parent, context);
         }
         const declaredType = getEffectiveTypeAnnotationNode(node);
-        const addUndefined = context.requiresAddingImplicitUndefined(node);
+        const addUndefined = resolver.requiresAddingImplicitUndefined(node);
         let resultType;
         if (!addUndefined) {
             if (declaredType) {
@@ -248,7 +249,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
                 }
                 return typeFromExpression((node as ParenthesizedExpression).expression, context, isConstContext, requiresAddingUndefined);
             case SyntaxKind.Identifier:
-                if (context.isUndefinedIdentifierExpression(node as Identifier)) {
+                if (resolver.isUndefinedIdentifierExpression(node as Identifier)) {
                     return true;
                 }
                 break;
@@ -367,11 +368,11 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
 
             const name = prop.name;
             if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
-                if (!context.isNonNarrowedBindableName(prop.name)) {
+                if (!resolver.isNonNarrowedBindableName(prop.name)) {
                     context.tracker.reportInferenceFallback(prop.name);
                 }
                 else if (isEntityNameExpression(prop.name.expression)) {
-                    const visibilityResult = context.isEntityNameVisible(prop.name.expression, /*shouldComputeAliasToMakeVisible*/ false);
+                    const visibilityResult = resolver.isEntityNameVisible(context.enclosingDeclaration!, prop.name.expression, /*shouldComputeAliasToMakeVisible*/ false);
                     if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
                         context.tracker.reportInferenceFallback(prop.name);
                     }
@@ -416,7 +417,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions) {
         return returnType && typeParameters && parameters;
     }
     function typeFromObjectLiteralAccessor(accessor: GetAccessorDeclaration | SetAccessorDeclaration, name: PropertyName, context: SyntacticTypeNodeBuilderContext) {
-        const allAccessors = context.getAllAccessorDeclarations(accessor);
+        const allAccessors = resolver.getAllAccessorDeclarations(accessor);
         const getAccessorType = allAccessors.getAccessor && getTypeAnnotationFromAccessor(allAccessors.getAccessor);
         const setAccessorType = allAccessors.setAccessor && getTypeAnnotationFromAccessor(allAccessors.setAccessor);
         // We have types for both accessors, we can't know if they are the same type so we keep both accessors
