@@ -45,10 +45,16 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                     watcher: sys.watchFile!(
                         toWatch,
                         (fileName, eventKind, modifiedTime) => {
-                            assert.equal(fileName, toWatch);
-                            assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
-                            const actual = modifiedTimeToString(modifiedTime);
-                            assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            try {
+                                assert.equal(fileName, toWatch);
+                                assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
+                                const actual = modifiedTimeToString(modifiedTime);
+                                assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            }
+                            catch (e) {
+                                result.deferred.reject(e);
+                                return;
+                            }
                             result.deferred.resolve();
                         },
                         10,
@@ -118,8 +124,14 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         const deferred = defer();
         delayedOp(() => {
             if (opType !== "init") {
-                verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
-                verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                try {
+                    verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
+                    verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                }
+                catch (e) {
+                    deferred.reject(e);
+                    return;
+                }
             }
             deferred.resolve();
         }, !!process.env.CI ? 1000 : 500);
