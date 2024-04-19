@@ -8185,7 +8185,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 syntacticNodeBuilder.serializeTypeOfDeclaration(decl, context);
             }
             context.flags |= NodeBuilderFlags.NoSyntacticPrinter;
-            const result = expressionOrTypeToTypeNodeHelper(context, expr, type, addUndefined);
+            const result = expressionOrTypeToTypeNode(context, expr, type, addUndefined);
             context.flags = oldFlags;
             return result;
         }
@@ -8239,7 +8239,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return typePredicateToTypePredicateNodeHelper(typePredicate, context);
             }
             const expr = signature.declaration && getPossibleTypeNodeReuseExpression(signature.declaration);
-            return expressionOrTypeToTypeNodeHelper(context, expr, type);
+            return expressionOrTypeToTypeNode(context, expr, type);
         }
 
         function trackExistingEntityName<T extends EntityNameOrEntityNameExpression>(node: T, context: NodeBuilderContext) {
