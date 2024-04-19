@@ -1789,7 +1789,7 @@
         "category": "Error",
         "code": 1534
     },
-    "'\\{0}' is not a valid character escape.": {
+    "This character cannot be escaped in a regular expression.": {
         "category": "Error",
         "code": 1535
     },

@@ -46,7 +46,6 @@ import {
     find,
     flattenDiagnosticMessageText,
     forEach,
-    forEachEntry,
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     formatDiagnostic,
@@ -57,6 +56,7 @@ import {
     getDirectoryPath,
     getEmitScriptTarget,
     getLineAndCharacterOfPosition,
+    getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
@@ -93,7 +93,6 @@ import {
     sourceMapCommentRegExpDontCareLineStart,
     sys,
     System,
-    targetOptionDeclaration,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -537,7 +536,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
         }
         case FileIncludeKind.LibFile: {
             if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
-            const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+            const target = getNameOfScriptTarget(getEmitScriptTarget(options));
             const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target] : [Diagnostics.Default_library];
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }

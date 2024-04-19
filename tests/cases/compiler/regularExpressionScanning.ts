@@ -1,11 +1,11 @@
-// @target: es3,es5,es2015,esnext
+// @target: es5,es2015,esnext
 
 const regexes: RegExp[] = [
 	// Flags
 	/foo/visualstudiocode,
 	// Pattern modifiers
 	/(?med-ium:bar)/,
-	// Capture groups
+	// Capturing groups
 	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/,
 	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/u,
 	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,

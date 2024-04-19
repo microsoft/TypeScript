@@ -126,6 +126,7 @@ import {
     getLineStarts,
     getMatchedFileSpec,
     getMatchedIncludeSpec,
+    getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
@@ -306,7 +307,6 @@ import {
     SyntaxKind,
     sys,
     System,
-    targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
@@ -4712,7 +4712,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     message = Diagnostics.File_is_library_specified_here;
                     break;
                 }
-                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+                const target = getNameOfScriptTarget(getEmitScriptTarget(options));
                 configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
                 message = Diagnostics.File_is_default_library_for_target_specified_here;
                 break;

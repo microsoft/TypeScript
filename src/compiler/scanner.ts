@@ -12,6 +12,7 @@ import {
     DiagnosticMessage,
     Diagnostics,
     forEach,
+    getNameOfScriptTarget,
     getSpellingSuggestion,
     identity,
     JSDocParsingMode,
@@ -426,10 +427,6 @@ export function regularExpressionFlagToCharacter(f: RegularExpressionFlags): str
 /** @internal */
 export function characterToRegularExpressionFlag(c: string): RegularExpressionFlags | undefined {
     return charToRegExpFlag.get(c);
-}
-
-function regularExpressionFlagToFirstAvailableLanguageVersion(f: RegularExpressionFlags): ScriptTarget | undefined {
-    return regExpFlagToFirstAvailableLanguageVersion.get(f);
 }
 
 /** @internal */
@@ -1627,13 +1624,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return "";
             default:
                 if (isRegularExpression && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
-                    error(Diagnostics._0_is_not_a_valid_character_escape, pos - 2, 2, String.fromCharCode(ch));
+                    error(Diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, pos - 2, 2);
                 }
                 return String.fromCharCode(ch);
         }
     }
 
-    function scanExtendedUnicodeEscape(shouldEmitInvalidEscapeError = true): string {
+    function scanExtendedUnicodeEscape(shouldEmitInvalidEscapeError: boolean): string {
         const start = pos;
         pos += 3;
         const escapedStart = pos;
@@ -1717,7 +1714,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             else if (ch === CharacterCodes.backslash) {
                 ch = peekExtendedUnicodeEscape();
                 if (ch >= 0 && isIdentifierPart(ch, languageVersion)) {
-                    result += scanExtendedUnicodeEscape();
+                    result += scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true);
                     start = pos;
                     continue;
                 }
@@ -2243,7 +2240,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 case CharacterCodes.backslash:
                     const extendedCookedChar = peekExtendedUnicodeEscape();
                     if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                        tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                        tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
                         return token = getIdentifierToken();
                     }
 
@@ -2270,7 +2267,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         pos++;
                         const extendedCookedChar = peekExtendedUnicodeEscape();
                         if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                            tokenValue = "#" + scanExtendedUnicodeEscape() + scanIdentifierParts();
+                            tokenValue = "#" + scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
                             return token = SyntaxKind.PrivateIdentifier;
                         }
 
@@ -2402,9 +2399,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // Quickly get to the end of regex such that we know the flags
             let p = tokenStart + 1;
             let inEscape = false;
-            // Although nested character class is allowed in Unicode Sets mode,
-            // an unescaped slash is nevertheless invalid even in character class in Unicode mode.
-            // Thus we can simply ignore nested character class in the first pass.
+            // Although nested character classes are allowed in Unicode Sets mode,
+            // an unescaped slash is nevertheless invalid even in a character class in Unicode mode.
+            // Additionally, parsing nested character classes will misinterpret regexes like `/[[]/`
+            // as unterminated, consuming characters beyond the slash. (This even applies to `/[[]/v`,
+            // which should be parsed as a well-terminated regex with an incomplete character class.)
+            // Thus we must not handle nested character classes in the first pass.
             let inCharacterClass = false;
             while (true) {
                 // If we reach the end of a file, or hit a newline, then this is an unterminated
@@ -2464,9 +2464,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 else {
                     regExpFlags |= flag;
-                    const availableFrom = regularExpressionFlagToFirstAvailableLanguageVersion(flag)!;
+                    const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
                     if (languageVersion < availableFrom) {
-                        error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, ScriptTarget[availableFrom]);
+                        error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
                     }
                 }
                 p++;
@@ -2474,7 +2474,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             pos = tokenStart + 1;
             const saveTokenPos = tokenStart;
             const saveTokenFlags = tokenFlags;
-            scanRegularExpressionWorker(text.slice(0, endOfBody), endOfBody, regExpFlags, isUnterminated);
+            scanRegularExpressionWorker(text, endOfBody, regExpFlags, isUnterminated);
             if (!isUnterminated) {
                 pos = p;
             }
@@ -2486,14 +2486,22 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token;
 
         function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean) {
+            /** Grammar parameter */
             const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
+            /** Grammar parameter */
             const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
+            /** @see {scanClassSetExpression} */
             let mayContainStrings = false;
 
+            /** The number of numeric (anonymous) capturing groups defined in the regex. */
             let numberOfCapturingGroups = 0;
+            /** All named capturing groups defined in the regex. */
             const groupSpecifiers = new Set<string>();
+            /** All references to named capturing groups in the regex. */
             const groupNameReferences: (TextRange & { name: string; })[] = [];
+            /** All numeric backreferences within the regex. */
             const decimalEscapes: (TextRange & { value: number; })[] = [];
+            /** A stack of scopes for named capturing groups. @see {scanGroupName} */
             const namedCapturingGroups: Set<string>[] = [];
 
             // Disjunction ::= Alternative ('|' Alternative)*
@@ -2595,7 +2603,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                         break;
                                     default:
                                         const start = pos;
-                                        const setFlags = scanPatternModifiers();
+                                        const setFlags = scanPatternModifiers(RegularExpressionFlags.None);
                                         if (text.charCodeAt(pos) === CharacterCodes.minus) {
                                             pos++;
                                             scanPatternModifiers(setFlags);
@@ -2689,7 +2697,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 // Assume what starting from the character to be outside of the regex
                                 return;
                             }
-                            if (unicodeMode) {
+                            if (unicodeMode || ch === CharacterCodes.closeParen) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                             }
                             pos++;
@@ -2706,7 +2714,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             }
 
-            function scanPatternModifiers(currFlags = RegularExpressionFlags.None): RegularExpressionFlags {
+            function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
                 while (pos < end) {
                     const ch = text.charCodeAt(pos);
                     if (!isIdentifierPart(ch, languageVersion)) {
@@ -2724,9 +2732,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         currFlags |= flag;
-                        const availableFrom = regularExpressionFlagToFirstAvailableLanguageVersion(flag)!;
+                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
                         if (languageVersion < availableFrom) {
-                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, ScriptTarget[availableFrom]);
+                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
                         }
                     }
                     pos++;
@@ -3702,7 +3710,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 pos--;
                 const extendedCookedChar = peekExtendedUnicodeEscape();
                 if (extendedCookedChar >= 0 && isIdentifierStart(extendedCookedChar, languageVersion)) {
-                    tokenValue = scanExtendedUnicodeEscape() + scanIdentifierParts();
+                    tokenValue = scanExtendedUnicodeEscape(/*shouldEmitInvalidEscapeError*/ true) + scanIdentifierParts();
                     return token = getIdentifierToken();
                 }
 

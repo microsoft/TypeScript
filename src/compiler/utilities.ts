@@ -514,6 +514,7 @@ import {
     SymbolTable,
     SyntaxKind,
     TaggedTemplateExpression,
+    targetOptionDeclaration,
     TemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -8919,6 +8920,11 @@ export type StrictOptionName =
 /** @internal */
 export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
     return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
+}
+
+/** @internal */
+export function getNameOfScriptTarget(scriptTarget: ScriptTarget): string | undefined {
+    return forEachEntry(targetOptionDeclaration.type, (value, key) => value === scriptTarget ? key : undefined);
 }
 
 /** @internal */

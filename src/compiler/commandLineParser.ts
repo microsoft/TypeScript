@@ -534,6 +534,8 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2020: ScriptTarget.ES2020,
         es2021: ScriptTarget.ES2021,
         es2022: ScriptTarget.ES2022,
+        es2023: ScriptTarget.ES2023,
+        es2024: ScriptTarget.ES2024,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,

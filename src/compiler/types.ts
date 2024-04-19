@@ -7366,7 +7366,7 @@ export const enum ScriptKind {
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
 //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
-export enum ScriptTarget {
+export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
     ES5 = 1,
