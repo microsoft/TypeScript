@@ -49,7 +49,7 @@ foo({
 >cb : (x: string) => void
 >   : ^ ^^^^^^^^^^^^^^^^^
 >(x) => {    x; // string  } : (x: string) => void
->                            :                    
+>                            : ^ ^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 

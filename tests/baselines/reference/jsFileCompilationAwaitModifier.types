@@ -28,7 +28,7 @@ class Foo {
 >b : () => Promise<void>
 >  : ^^^^^^^^^^^^^^^^^^^
 >async () => {        await Promise.resolve(1);    } : () => Promise<void>
->                                                    :                    
+>                                                    : ^^^^^^^^^^^^^^^^^^^
 
         await Promise.resolve(1);
 >await Promise.resolve(1) : number

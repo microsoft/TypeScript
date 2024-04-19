@@ -58,7 +58,7 @@ const p3: ClickableDiscriminatedUnion = {
 >onClick : (ev: string) => void
 >        : ^  ^^^^^^^^^^^^^^^^^
 >(ev) => console.log('@@@@', ev) : (ev: string) => void
->                                :                     
+>                                : ^  ^^^^^^^^^^^^^^^^^
 >ev : string
 >   : ^^^^^^
 >console.log('@@@@', ev) : void

@@ -33,7 +33,7 @@ describe("unittests:: config:: showConfig", () => {
                 }
                 const initResult = ts.convertToTSConfig(commandLine, configPath, configParseHost);
 
-                // eslint-disable-next-line no-null/no-null
+                // eslint-disable-next-line no-restricted-syntax
                 Harness.Baseline.runBaseline(outputFileName, JSON.stringify(initResult, null, 4) + "\n");
             });
         });
@@ -113,6 +113,21 @@ describe("unittests:: config:: showConfig", () => {
         include: [
             "./src/**/*",
         ],
+    });
+
+    showTSConfigCorrectly("Show TSConfig with configDir template template", ["-p", "tsconfig.json"], {
+        compilerOptions: {
+            outDir: "${configDir}/outDir", // eslint-disable-line no-template-curly-in-string
+            typeRoots: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+            paths: {
+                "@myscope/*": ["${configDir}/types/*"], // eslint-disable-line no-template-curly-in-string
+                "other/*": ["other/*"],
+            },
+        },
+        include: [
+            "${configDir}/src/**/*", // eslint-disable-line no-template-curly-in-string
+        ],
+        files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string
     });
 
     // Bulk validation of all option declarations

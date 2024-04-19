@@ -92,7 +92,7 @@ function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 
   return MixedClass;
 >MixedClass : ((abstract new (...args: any[]) => MixedClass) & { prototype: ApiItemContainerMixin<any>.MixedClass; }) & TBaseClass
->           : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 // Subclass inheriting from mixin

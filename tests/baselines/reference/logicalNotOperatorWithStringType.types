@@ -109,7 +109,7 @@ var ResultIsBoolean5 = !{ x: "", y: (s: string) => { return s; } };
 >y : (s: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string

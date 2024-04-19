@@ -67,7 +67,7 @@ async function main() {
 >c : number | {}
 >  : ^^^^^^^^^^^
 >await x.next3() : number | {}
->                : ^^^^^^^^^  
+>                : ^^^^^^^^^^^
 >x.next3() : Promise<number | {}>
 >          : ^^^^^^^^^^^^^^^^^^^^
 >x.next3 : () => Promise<number | {}>
@@ -81,7 +81,7 @@ async function main() {
 >d : number | { x: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >await x.next4() : number | { x: string; }
->                : ^^^^^^^^^              
+>                : ^^^^^^^^^^^^^^^^^^^^^^^
 >x.next4() : Promise<number | { x: string; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x.next4 : () => Promise<number | { x: string; }>

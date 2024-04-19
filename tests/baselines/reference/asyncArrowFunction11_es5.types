@@ -10,7 +10,7 @@ class A {
 >b : (...args: any[]) => Promise<void>
 >  : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
 >async (...args: any[]) => {        await Promise.resolve();        const obj = { ["a"]: () => this }; // computed property name after `await` triggers case    } : (...args: any[]) => Promise<void>
->                                                                                                                                                                 :  ^^^                             
+>                                                                                                                                                                 : ^^^^    ^^     ^^^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 
@@ -30,13 +30,13 @@ class A {
 >obj : { a: () => this; }
 >    : ^^^^^^^^^^^^^^^^^^
 >{ ["a"]: () => this } : { a: () => this; }
->                      : ^^^^^          ^^^
+>                      : ^^^^^^^^^^^^^^^^^^
 >["a"] : () => this
 >      : ^^^^^^^^^^
 >"a" : "a"
 >    : ^^^
 >() => this : () => this
->           :           
+>           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 

@@ -61,7 +61,7 @@ const instance = new Howl({
 >onplayerror : () => undefined
 >            : ^^^^^^^^^^^^^^^
 >() => void instance.once("unlock", () => {}) : () => undefined
->                                             :                
+>                                             : ^^^^^^^^^^^^^^^
 >void instance.once("unlock", () => {}) : undefined
 >                                       : ^^^^^^^^^
 >instance.once("unlock", () => {}) : void

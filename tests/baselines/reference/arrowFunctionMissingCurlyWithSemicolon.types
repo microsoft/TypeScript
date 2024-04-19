@@ -6,7 +6,7 @@ var f = () => ;
 >f : () => any
 >  : ^^^^^^^^^
 >() => : () => any
->      :          
+>      : ^^^^^^^^^
 > : any
 > : ^^^
 
@@ -32,7 +32,7 @@ var square = (x: number) => x * x;
 >square : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x * x : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x * x : number

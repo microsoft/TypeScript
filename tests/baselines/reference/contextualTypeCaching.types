@@ -58,7 +58,7 @@ emit('a', {
 >callback : (r: string) => void
 >         : ^ ^^^^^^^^^^^^^^^^^
 >(r) => {} : (r: string) => void
->          :                    
+>          : ^ ^^^^^^^^^^^^^^^^^
 >r : string
 >  : ^^^^^^
 
@@ -66,13 +66,13 @@ emit('a', {
 >nested : { nestedCallback: (r: string) => void; }
 >       : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >{        nestedCallback: (r) => {},    } : { nestedCallback: (r: string) => void; }
->                                         : ^^^^^^^^^^^^^^^^^^                   ^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 
         nestedCallback: (r) => {},
 >nestedCallback : (r: string) => void
 >               : ^ ^^^^^^^^^^^^^^^^^
 >(r) => {} : (r: string) => void
->          :                    
+>          : ^ ^^^^^^^^^^^^^^^^^
 >r : string
 >  : ^^^^^^
 
@@ -129,7 +129,7 @@ export const applyOptimizationDefaults = (optimization: Optimization) => {
 >applyOptimizationDefaults : (optimization: Optimization) => void
 >                          : ^            ^^            ^^^^^^^^^
 >(optimization: Optimization) => {  A(optimization, "minimizer", () => [    {      apply: (compiler) => {},    },  ]);} : (optimization: Optimization) => void
->                                                                                                                       :                                     
+>                                                                                                                       : ^            ^^            ^^^^^^^^^
 >optimization : Optimization
 >             : ^^^^^^^^^^^^
 
@@ -154,7 +154,7 @@ export const applyOptimizationDefaults = (optimization: Optimization) => {
 >apply : (compiler: MyCompiler) => void
 >      : ^        ^^^^^^^^^^^^^^^^^^^^^
 >(compiler) => {} : (compiler: MyCompiler) => void
->                 :                               
+>                 : ^        ^^^^^^^^^^^^^^^^^^^^^
 >compiler : MyCompiler
 >         : ^^^^^^^^^^
 

@@ -19,7 +19,7 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 >toThenable : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
 >           : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then<V>(onFulfilled: (value: Result) => V | Thenable<V>) {                return toThenable<V, Result>(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->                                                                                                                                                                                                                                                                                                                                          :                                                                                                       
+>                                                                                                                                                                                                                                                                                                                                          : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 >fn : (input: Input) => Result | Thenable<Result>
 >   : ^     ^^     ^^^^^                         
 >input : Input
@@ -74,7 +74,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 >toThenableInferred : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
 >                   : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 ><Result, Input>(fn: (input: Input) => Result | Thenable<Result>) =>    (input: Input): Thenable<Result> => {        const result = fn(input)        return {            then(onFulfilled) {                return toThenableInferred(onFulfilled)(result as Result)            }        };    } : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->                                                                                                                                                                                                                                                                                                :                                                                                                       
+>                                                                                                                                                                                                                                                                                                : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 >fn : (input: Input) => Result | Thenable<Result>
 >   : ^     ^^     ^^^^^                         
 >input : Input

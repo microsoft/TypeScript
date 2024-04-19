@@ -25,7 +25,7 @@ const Compa = (x: {x: number}) => <div>{"" + x}</div>;
 >Compa : (x: { x: number; }) => JSX.Element
 >      : ^ ^^              ^^^^^^^^^^^^^^^^
 >(x: {x: number}) => <div>{"" + x}</div> : (x: { x: number; }) => JSX.Element
->                                        :                                   
+>                                        : ^ ^^              ^^^^^^^^^^^^^^^^
 >x : { x: number; }
 >  : ^^^^^      ^^^
 >x : number
@@ -47,11 +47,11 @@ const x = { video: () => null }
 >x : { video: () => any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >{ video: () => null } : { video: () => any; }
->                      : ^^^^^^^^^         ^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^
 >video : () => any
 >      : ^^^^^^^^^
 >() => null : () => any
->           :          
+>           : ^^^^^^^^^
 
 // unicode escape sequence is not allowed in tag name or JSX attribute name.
 // tag name:

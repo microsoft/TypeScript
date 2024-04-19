@@ -208,7 +208,7 @@ function f20() {
 >x1 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
->                                         :                          
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
 >               : ^ ^^       ^^ ^^         ^^           ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -232,7 +232,7 @@ function f20() {
 >x2 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
->                                               :                          
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
 >               : ^ ^^       ^^ ^^         ^^           ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -260,7 +260,7 @@ function f20() {
 >x3 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
->                                                     :                          
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndReadonly : <T>(primary: T, secondary: Readonly<T>) => T
 >               : ^ ^^       ^^ ^^         ^^           ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -297,7 +297,7 @@ function f21() {
 >x1 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1 }) : { x: number; y: number; }
->                                        :                          
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
 >              : ^ ^^       ^^ ^^         ^^          ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -321,7 +321,7 @@ function f21() {
 >x2 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 }) : { x: number; y: number; }
->                                              :                          
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
 >              : ^ ^^       ^^ ^^         ^^          ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -349,7 +349,7 @@ function f21() {
 >x3 : { x: number; y: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }) : { x: number; y: number; }
->                                                    :                          
+>                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >objAndPartial : <T>(primary: T, secondary: Partial<T>) => T
 >              : ^ ^^       ^^ ^^         ^^          ^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }

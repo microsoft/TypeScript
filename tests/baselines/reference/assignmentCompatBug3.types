@@ -31,7 +31,7 @@ function makePoint(x: number, y: number) {
 >dist : () => number
 >     : ^^^^^^^^^^^^
 >function () {			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit		} : () => number
->                                                                                                         :             
+>                                                                                                         : ^^^^^^^^^^^^
 
 			return Math.sqrt(x*x+y*y); // shouldn't be picking up "x" and "y" from the object lit
 >Math.sqrt(x*x+y*y) : number

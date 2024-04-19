@@ -112,7 +112,7 @@ var f1 = (x: string) => { return 1 };
 >f1 : (x: string) => number
 >   : ^ ^^      ^^^^^^^^^^^
 >(x: string) => { return 1 } : (x: string) => number
->                            :                      
+>                            : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >1 : 1
@@ -122,7 +122,7 @@ var f2 = (y: number) => { return new Date() };
 >f2 : (y: number) => Date
 >   : ^ ^^      ^^^^^^^^^
 >(y: number) => { return new Date() } : (y: number) => Date
->                                     :                    
+>                                     : ^ ^^      ^^^^^^^^^
 >y : number
 >  : ^^^^^^
 >new Date() : Date

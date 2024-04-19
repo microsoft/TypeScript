@@ -36,7 +36,7 @@ function foo2(y = function(x: typeof z) {}, z = 1) {
 >y : (x: typeof z) => void
 >  : ^ ^^        ^^^^^^^^^
 >function(x: typeof z) {} : (x: typeof z) => void
->                         :                      
+>                         : ^ ^^        ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >z : number
@@ -118,7 +118,7 @@ function foo6(y = () => (() => z)(), z = 1) {
 >y : () => number
 >  : ^^^^^^^^^^^^
 >() => (() => z)() : () => number
->                  :             
+>                  : ^^^^^^^^^^^^
 >(() => z)() : number
 >            : ^^^^^^
 >(() => z) : () => number
@@ -182,7 +182,7 @@ function foo9(y = {[z]() { return z; }}, z = 1) {
 >y : { [x: number]: () => number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{[z]() { return z; }} : { [x: number]: () => number; }
->                      : ^^^^^^^^^^^^^^^            ^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[z] : () => number
 >    : ^^^^^^^^^^^^
 >z : number

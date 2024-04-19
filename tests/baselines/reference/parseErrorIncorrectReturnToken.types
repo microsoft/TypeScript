@@ -22,7 +22,7 @@ let f = (n: number) => string => n.toString();
 >f : (n: number) => (string: any) => string
 >  : ^ ^^      ^^^^^^      ^^^^^^^^^^^^^^^^
 >(n: number) => string => n.toString() : (n: number) => (string: any) => string
->                                      :                                       
+>                                      : ^ ^^      ^^^^^^      ^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >string => n.toString() : (string: any) => string

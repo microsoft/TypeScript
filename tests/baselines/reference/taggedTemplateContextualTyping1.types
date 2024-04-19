@@ -56,7 +56,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }
 >`${ x => { x<number>(undefined); return x; }                   }${ 10 }` : string
 >                                                                         : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >x<number>(undefined) : number
@@ -78,7 +78,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y =>
 >`${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }` : string
 >                                                                                                                                       : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >x<number>(undefined) : number
@@ -90,7 +90,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y =>
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >y : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >y<number>(undefined) : number
@@ -111,7 +111,7 @@ tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: 
 >`${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }` : string
 >                                                                                                                                              : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >x<number>(undefined) : number
@@ -160,7 +160,7 @@ tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y =>
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >y => { y<number>(undefined); return y; } : (y: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >y : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >y<number>(undefined) : number

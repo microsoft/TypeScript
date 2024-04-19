@@ -25,7 +25,7 @@ for(;;) {
 >x : () => void
 >  : ^^^^^^^^^^
 >() => {        break TWO;    } : () => void
->                               :           
+>                               : ^^^^^^^^^^
 
         break TWO;
 >TWO : any
@@ -42,7 +42,7 @@ for(;;) {
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () {        break THREE;    } : () => void
->                                       :           
+>                                       : ^^^^^^^^^^
 
         break THREE;
 >THREE : any

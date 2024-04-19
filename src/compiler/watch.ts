@@ -44,6 +44,7 @@ import {
     FileWatcher,
     filter,
     find,
+    findIndex,
     flattenDiagnosticMessageText,
     forEach,
     ForegroundColorEscapeSequences,
@@ -55,6 +56,7 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitScriptTarget,
+    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
     getNameOfScriptTarget,
     getNewLineCharacter,
@@ -351,13 +353,14 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 
 /** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
+    options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
 ): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
@@ -376,7 +379,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (file.impliedNodeFormat) {
+        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
@@ -415,7 +418,8 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 
     const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    const index = findIndex(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return index !== -1 ? configFile.configFileSpecs.validatedFilesSpecBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */
@@ -429,11 +433,12 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
     const isJsonFile = fileExtensionIs(fileName, Extension.Json);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
     const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
-    return find(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
+    const index = findIndex(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
         if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
         return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
+    return index !== -1 ? configFile.configFileSpecs.validatedIncludeSpecsBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */

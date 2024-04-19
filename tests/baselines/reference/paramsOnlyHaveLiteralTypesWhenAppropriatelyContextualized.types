@@ -33,7 +33,7 @@ export function appendToOptionalArray<
 >array : { [x in K]?: Lower<T>[] | undefined; }[K]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >object[key] : { [x in K]?: Lower<T>[] | undefined; }[K]
->            :           ^                           ^^^
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >object : { [x in K]?: Lower<T>[] | undefined; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

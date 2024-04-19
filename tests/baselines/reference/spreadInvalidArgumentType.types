@@ -140,7 +140,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o6 : { [P in keyof T]: T[P]; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ ...mapped_generic } : { [P in keyof T]: T[P]; }
->                      :                          
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapped_generic : { [P in keyof T]: T[P]; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -172,7 +172,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o10 : T & { a: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >{ ...intersection_generic } : T & { a: number; }
->                            : ^^^^              
+>                            : ^^^^^^^^^^^^^^^^^^
 >intersection_generic : T & { a: number; }
 >                     : ^^^^^^^^^^^^^^^^^^
 

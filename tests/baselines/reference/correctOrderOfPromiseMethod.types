@@ -25,7 +25,7 @@ async function countEverything(): Promise<number> {
 >providerA : () => Promise<A[]>
 >          : ^^^^^^            
 >async (): Promise<A[]> => { return [] } : () => Promise<A[]>
->                                        :                   
+>                                        : ^^^^^^            
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -33,7 +33,7 @@ async function countEverything(): Promise<number> {
 >providerB : () => Promise<B[]>
 >          : ^^^^^^            
 >async (): Promise<B[]> => { return [] } : () => Promise<B[]>
->                                        :                   
+>                                        : ^^^^^^            
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 

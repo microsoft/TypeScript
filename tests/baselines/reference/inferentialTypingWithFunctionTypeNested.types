@@ -35,5 +35,5 @@ var s = map("", () => { return { x: identity }; });
 >x : <V>(y: V) => V
 >  : ^ ^^ ^^ ^^^^^^
 >identity : <V>(y: V) => V
->         :               
+>         : ^ ^^ ^^ ^^^^^^
 
