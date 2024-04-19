@@ -3,218 +3,361 @@
 === restTupleUnionWithRestContextualParams.ts ===
 const f1: (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void = (a, b, c) => {};
 >f1 : (...args: [number, string, ...boolean[]] | [string, number, ...boolean[]]) => void
+>   : ^^^^    ^^                                                               ^^^^^    
 >args : [number, string, ...boolean[]] | [string, number, ...boolean[]]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, b, c) => {} : (a: string | number, b: string | number, c: boolean) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >c : boolean
+>  : ^^^^^^^
 
 const f2: (x: string, ...args: [string] | [number, boolean]) => void = (a, b, c) => {};
 >f2 : (x: string, ...args: [string] | [number, boolean]) => void
+>   : ^ ^^      ^^^^^    ^^                            ^^^^^    
 >x : string
+>  : ^^^^^^
 >args : [string] | [number, boolean]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, b, c) => {} : (a: string, b: string | number, c: boolean | undefined) => void
+>                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
+>  : ^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >c : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 const f3: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => {}
 >f3 : (...args: [type: "one"] | [type: "two", x: string]) => void
+>   : ^^^^    ^^                                        ^^^^^    
 >args : [type: "one"] | [type: "two", x: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(type, x) => {} : (type: "one" | "two", x: string | undefined) => void
+>                : ^    ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "one" | "two"
+>     : ^^^^^^^^^^^^^
 >x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 const f4: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => {}
 >f4 : (...args: [type: "one", x?: number] | [type: "two", x: string]) => void
+>   : ^^^^    ^^                                                    ^^^^^    
 >args : [type: "one", x?: number | undefined] | [type: "two", x: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(type, x) => {} : (type: "one" | "two", x: string | number | undefined) => void
+>                : ^    ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "one" | "two"
+>     : ^^^^^^^^^^^^^
 >x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // #45972
 type Fn1 = (...args: [...strs: string[], num1: number, num2: number]) => void;
->Fn1 : (...args: [...strs: string[], num1: number, num2: number]) => void
+>Fn1 : Fn1
+>    : ^^^
 >args : [...strs: string[], num1: number, num2: number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const f5: Fn1 = () => {}
 >f5 : Fn1
+>   : ^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 
 const f6: Fn1 = (arg1) => {}
 >f6 : Fn1
+>   : ^^^
 >(arg1) => {} : (arg1: string | number) => void
+>             : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 const f7: Fn1 = (arg1, arg2) => {}
 >f7 : Fn1
+>   : ^^^
 >(arg1, arg2) => {} : (arg1: string | number, arg2: string | number) => void
+>                   : ^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg2 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 const f8: Fn1 = (arg1, arg2, arg3) => {}
 >f8 : Fn1
+>   : ^^^
 >(arg1, arg2, arg3) => {} : (arg1: string | number, arg2: string | number, arg3: string | number) => void
+>                         : ^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg2 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg3 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 // #45972#issuecomment-1140417029
 const f9: Fn1 = (...[arg1]: [string | number]) => {}
 >f9 : Fn1
+>   : ^^^
 >(...[arg1]: [string | number]) => {} : (__0_0: string | number) => void
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 const f10: Fn1 = (...[arg1, arg2]: [string | number, string | number]) => {}
 >f10 : Fn1
+>    : ^^^
 >(...[arg1, arg2]: [string | number, string | number]) => {} : (__0_0: string | number, __0_1: string | number) => void
+>                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg2 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 const f11: Fn1 = (...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {}
 >f11 : Fn1
+>    : ^^^
 >(...[arg1, arg2, arg3]: [string | number, string | number, string | number]) => {} : (__0_0: string | number, __0_1: string | number, __0_2: string | number) => void
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg1 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg2 : string | number
+>     : ^^^^^^^^^^^^^^^
 >arg3 : string | number
+>     : ^^^^^^^^^^^^^^^
 
 const f12: (...args: [...strs: string[], num: number]) => void = (a, ...rest) => {}
 >f12 : (...args: [...strs: string[], num: number]) => void
+>    : ^^^^    ^^                                ^^^^^    
 >args : [...strs: string[], num: number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, ...rest) => {} : (a: string | number, ...rest: (string | number)[]) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >rest : (string | number)[]
+>     : ^^^^^^^^^^^^^^^^^^^
 
 // #49218#pullrequestreview-1241473951
 const f13: <T extends string[]>(...rest: [number, ...T, boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
 >f13 : <T extends string[]>(...rest: [number, ...T, boolean]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^                       ^^^^^    
 >rest : [number, ...T, boolean]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>                                                  : ^ ^^      ^^^^^   ^^                      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >arg : [...string[], boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 const f14: <T extends boolean>(...rest: [number, ...string[], T] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
 >f14 : <T extends boolean>(...rest: [number, ...string[], T]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^    ^^                        ^^^^^    
 >rest : [number, ...string[], T]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>                                                  : ^ ^^      ^^^^^   ^^                      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >arg : [...string[], boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 const f15: <T extends string>(...rest: [number, ...T[], boolean] ) => void = (a: number, ...arg: [...string[], boolean]) => {};
 >f15 : <T extends string>(...rest: [number, ...T[], boolean]) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^^^    ^^                         ^^^^^    
 >rest : [number, ...T[], boolean]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a: number, ...arg: [...string[], boolean]) => {} : (a: number, ...arg: [...string[], boolean]) => void
+>                                                  : ^ ^^      ^^^^^   ^^                      ^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >arg : [...string[], boolean]
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
 const f16: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {};
 >f16 : (...rest: [...string[], number]) => void
+>    : ^^^^    ^^                     ^^^^^    
 >rest : [...string[], number]
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >(...rest: [...string[], number]) => {} : (...rest: [...string[], number]) => void
+>                                       : ^^^^    ^^                     ^^^^^^^^^
 >rest : [...string[], number]
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 const f17: (...rest: [...string[], number]) => void = (a, b, c?) => {};
 >f17 : (...rest: [...string[], number]) => void
+>    : ^^^^    ^^                     ^^^^^    
 >rest : [...string[], number]
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >(a, b, c?) => {} : (a: string | number, b: string | number, c?: string | number | undefined) => void
+>                 : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >c : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const f18: (...rest: [...string[], number]) => void = (a, b, c?: string | number) => {};
 >f18 : (...rest: [...string[], number]) => void
+>    : ^^^^    ^^                     ^^^^^    
 >rest : [...string[], number]
+>     : ^^^^^^^^^^^^^^^^^^^^^
 >(a, b, c?: string | number) => {} : (a: string | number, b: string | number, c?: string | number) => void
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^               ^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >b : string | number
+>  : ^^^^^^^^^^^^^^^
 >c : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const f19: (...rest: [string, ...boolean[], string] | [number]) => void = (a, ...rest) => {};
 >f19 : (...rest: [string, ...boolean[], string] | [number]) => void
+>    : ^^^^    ^^                                         ^^^^^    
 >rest : [string, ...boolean[], string] | [number]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, ...rest) => {} : (a: string | number, ...rest: (string | number | boolean)[]) => void
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string | number
+>  : ^^^^^^^^^^^^^^^
 >rest : (string | number | boolean)[]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type entryArgsWithIndex<o> = {
 >entryArgsWithIndex : entryArgsWithIndex<o>
+>                   : ^^^^^^^^^^^^^^^^^^^^^
 
   [k in keyof o]: [k: k, v: o[k], i: number];
 }[keyof o];
 
 declare const iterateEntries1: <const o extends object>(
 >iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+>                : ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^            ^^                                        ^^^^^    
 
   o: o,
 >o : o
+>  : ^
 
   flatMapEntry: (...args: entryArgsWithIndex<o>) => void,
 >flatMapEntry : (...args: entryArgsWithIndex<o>) => void
+>             : ^^^^    ^^                     ^^^^^    
 >args : entryArgsWithIndex<o>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 ) => void;
 
 const ie1 = iterateEntries1({ a: true, b: false }, (k, v) => [k, v]);
 >ie1 : void
+>    : ^^^^
 >iterateEntries1({ a: true, b: false }, (k, v) => [k, v]) : void
+>                                                         : ^^^^
 >iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+>                : ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^            ^^                                        ^^^^^^^^^
 >{ a: true, b: false } : { a: true; b: false; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >(k, v) => [k, v] : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>                 : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >[k, v] : (boolean | "a" | "b")[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 
 const ie2 = iterateEntries1({ a: true, b: false }, (k, v) => {
 >ie2 : void
+>    : ^^^^
 >iterateEntries1({ a: true, b: false }, (k, v) => {  return [k, v];}) : void
+>                                                                     : ^^^^
 >iterateEntries1 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => void) => void
+>                : ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^            ^^                                        ^^^^^^^^^
 >{ a: true, b: false } : { a: true; b: false; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >(k, v) => {  return [k, v];} : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>                             : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 
   return [k, v];
 >[k, v] : (boolean | "a" | "b")[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 
 });
 
 declare const iterateEntries2: <const o extends object>(
 >iterateEntries2 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown) => void
+>                : ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^            ^^                                           ^^^^^    
 
   o: o,
 >o : o
+>  : ^
 
   flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown,
 >flatMapEntry : (...args: entryArgsWithIndex<o>) => unknown
+>             : ^^^^    ^^                     ^^^^^       
 >args : entryArgsWithIndex<o>
+>     : ^^^^^^^^^^^^^^^^^^^^^
 
 ) => void;
 
 const ie3 = iterateEntries2({ a: true, b: false }, (k, v) => [k, v]);
 >ie3 : void
+>    : ^^^^
 >iterateEntries2({ a: true, b: false }, (k, v) => [k, v]) : void
+>                                                         : ^^^^
 >iterateEntries2 : <const o extends object>(o: o, flatMapEntry: (...args: entryArgsWithIndex<o>) => unknown) => void
+>                : ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^            ^^                                           ^^^^^^^^^
 >{ a: true, b: false } : { a: true; b: false; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >a : true
+>  : ^^^^
 >true : true
+>     : ^^^^
 >b : false
+>  : ^^^^^
 >false : false
+>      : ^^^^^
 >(k, v) => [k, v] : (k: "a" | "b", v: boolean) => (boolean | "a" | "b")[]
+>                 : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 >[k, v] : (boolean | "a" | "b")[]
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 >k : "a" | "b"
+>  : ^^^^^^^^^
 >v : boolean
+>  : ^^^^^^^
 
