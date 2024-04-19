@@ -14,10 +14,6 @@ export class TranspileRunner extends RunnerBase {
     protected basePath = "tests/cases/transpile";
     protected testSuiteName: TestRunnerKind = "transpile";
 
-    constructor() {
-        super();
-    }
-
     public enumerateTestFiles() {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.enumerateFiles(this.basePath, /\.[cm]?[tj]sx?/i, { recursive: true });
@@ -64,7 +60,7 @@ class TranspileTestCase {
         return settingConfigurations?.map(c => {
             const desc = Object.entries(c).map(([key, value]) => `${key}=${value}`).join(",");
             return new TranspileTestCase(`${justName}(${desc})`, ext, content, { ...settings, ...c });
-        }) || [new TranspileTestCase(justName, ext, content, settings)];
+        }) ?? [new TranspileTestCase(justName, ext, content, settings)];
     }
 
     private jsOutName;
