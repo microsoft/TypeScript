@@ -6854,7 +6854,7 @@
         "category": "Error",
         "code": 9034
     },
-    "Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.": {
+    "Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.": {
         "category": "Error",
         "code": 9035
     },

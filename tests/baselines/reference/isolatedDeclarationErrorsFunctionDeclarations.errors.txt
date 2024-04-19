@@ -26,15 +26,15 @@ isolatedDeclarationErrorsFunctionDeclarations.ts(9,55): error TS9013: Expression
                                                                      ~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:7:56: Add a type annotation to the parameter p2.
-!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:66: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:66: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
                                                                                     ~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:7:75: Add a type annotation to the parameter p3.
-!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:81: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:7:81: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
     
     export function noParamAnnotationBadDefault2(p = { a: 1 + 1 }): void {}
                                                           ~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9028 isolatedDeclarationErrorsFunctionDeclarations.ts:9:46: Add a type annotation to the parameter p.
-!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:9:55: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsFunctionDeclarations.ts:9:55: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
     

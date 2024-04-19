@@ -27,7 +27,7 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
            ~~~~~~~~~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:6:12: Add a type annotation to the variable oBad.
-!!! related TS9035 isolatedDeclarationErrorsObjects.ts:7:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:7:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
     }
     export const V = 1;
     export let oBad2 = {
@@ -36,7 +36,7 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
                ~~~~~~~~~~~~~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:10:12: Add a type annotation to the variable oBad2.
-!!! related TS9035 isolatedDeclarationErrorsObjects.ts:12:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:12:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
         },
         c: {
             d: 1,
@@ -44,7 +44,7 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
                ~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:10:12: Add a type annotation to the variable oBad2.
-!!! related TS9035 isolatedDeclarationErrorsObjects.ts:16:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:16:12: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
         }
     }
     
@@ -65,7 +65,7 @@ isolatedDeclarationErrorsObjects.ts(84,9): error TS9015: Objects that contain sp
            ~
 !!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 !!! related TS9027 isolatedDeclarationErrorsObjects.ts:20:12: Add a type annotation to the variable oWithMethods.
-!!! related TS9035 isolatedDeclarationErrorsObjects.ts:25:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make type type explicit.
+!!! related TS9035 isolatedDeclarationErrorsObjects.ts:25:8: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
     }
     export let oWithMethodsNested = {
         foo: {
