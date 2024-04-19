@@ -372,7 +372,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
                     context.tracker.reportInferenceFallback(prop.name);
                 }
                 else if (isEntityNameExpression(prop.name.expression)) {
-                    const visibilityResult = resolver.isEntityNameVisible(context.enclosingDeclaration!, prop.name.expression, /*shouldComputeAliasToMakeVisible*/ false);
+                    const visibilityResult = resolver.isEntityNameVisible(prop.name.expression, context.enclosingDeclaration!, /*shouldComputeAliasToMakeVisible*/ false);
                     if (visibilityResult.accessibility !== SymbolAccessibility.Accessible) {
                         context.tracker.reportInferenceFallback(prop.name);
                     }

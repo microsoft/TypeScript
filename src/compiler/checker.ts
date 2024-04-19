@@ -1484,7 +1484,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var emitResolver = createResolver();
     var nodeBuilder = createNodeBuilder();
     var syntacticNodeBuilder = createSyntacticTypeNodeBuilder(compilerOptions, {
-        isEntityNameVisible: (enclosingDeclaration, entityName, shouldComputeAliasToMakeVisible) => isEntityNameVisible(entityName, enclosingDeclaration, shouldComputeAliasToMakeVisible),
+        isEntityNameVisible,
         isExpandoFunctionDeclaration,
         isNonNarrowedBindableName,
         getAllAccessorDeclarations: getAllAccessorDeclarationsForDeclaration,
