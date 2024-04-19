@@ -8553,7 +8553,8 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
 // with less elaboration that is otherwise similar.
 function compareMessageText(
     t1: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
-    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">): Comparison {
+    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+): Comparison {
     if (typeof t1 === "string" && typeof t2 === "string") {
         return compareStringsCaseSensitive(t1, t2);
     }
@@ -8564,33 +8565,81 @@ function compareMessageText(
     if (typeof t2 === "string") {
         t2 = { messageText: t2 };
     }
-    let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+    const res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
     if (res) {
         return res;
     }
-    if (!t1.next && !t2.next) {
+
+    return compareMessageChain(t1.next, t2.next);
+}
+
+// First compare by size of the message chain,
+// then compare by content of the message chain.
+function compareMessageChain(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
         return Comparison.EqualTo;
     }
-    if (!t1.next) {
+    if (c1 === undefined) {
         return Comparison.GreaterThan;
     }
-    if (!t2.next) {
+    if (c2 === undefined) {
         return Comparison.LessThan;
     }
 
-    res = compareValues(t2.next.length, t1.next.length);
+    return compareMessageElaborationSize(c1, c2) || compareMessageElaborationContent(c1, c2);
+}
+
+function compareMessageElaborationSize(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
+        return Comparison.EqualTo;
+    }
+    if (c1 === undefined) {
+        return Comparison.GreaterThan;
+    }
+    if (c2 === undefined) {
+        return Comparison.LessThan;
+    }
+
+    let res = compareValues(c2.length, c1.length);
     if (res) {
         return res;
     }
 
-    const len = t2.next.length;
-    for (let i = 0; i < len; i++) {
-        res = compareMessageText(t1.next[i], t2.next[i]);
+    for (let i = 0; i < c2.length; i++) {
+        res = compareMessageElaborationSize(c1[i].next, c2[i].next);
         if (res) {
             return res;
         }
     }
 
+    return Comparison.EqualTo;
+}
+
+// Assumes the two chains have the same shape.
+function compareMessageElaborationContent(
+    c1: DiagnosticMessageChain[],
+    c2: DiagnosticMessageChain[],
+): Comparison {
+    let res;
+    for (let i = 0; i < c2.length; i++) {
+        res = compareStringsCaseSensitive(c1[i].messageText, c2[i].messageText);
+        if (res) {
+            return res;
+        }
+        if (c1[i].next === undefined) {
+            continue;
+        }
+        res = compareMessageElaborationContent(c1[i].next!, c2[i].next!);
+        if (res) {
+            return res;
+        }
+    }
     return Comparison.EqualTo;
 }
 

@@ -813,7 +813,8 @@ export function insertSorted<T>(
     insert: T,
     compare: Comparer<T>,
     equalityComparer?: EqualityComparer<T>,
-    allowDuplicates?: boolean): boolean {
+    allowDuplicates?: boolean,
+): boolean {
     if (array.length === 0) {
         array.push(insert);
         return true;
