@@ -313,6 +313,7 @@ import {
     toPath as ts_toPath,
     trace,
     tracing,
+    tryCast,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -1618,6 +1619,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // Map storing if there is emit blocking diagnostics for given input
     const hasEmitBlockingDiagnostics = new Map<string, boolean>();
     let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
+    let _compilerOptionsPropertySyntax: PropertyAssignment | false | undefined;
 
     let moduleResolutionCache: ModuleResolutionCache | undefined;
     let actualResolveModuleNamesWorker: (
@@ -4232,6 +4234,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
+        if (options.isolatedDeclarations) {
+            if (getAllowJSCompilerOption(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "isolatedDeclarations");
+            }
+            if (!getEmitDeclarations(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "isolatedDeclarations", "declaration", "composite");
+            }
+        }
+
         if (options.inlineSourceMap) {
             if (options.sourceMap) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap");
@@ -4400,7 +4411,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.checkJs && !getAllowJSCompilerOption(options)) {
-            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
+            createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs");
         }
 
         if (options.emitDeclarationOnly) {
@@ -4823,7 +4834,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4845,7 +4856,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4893,25 +4904,50 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, ...args);
 
         if (needCompilerDiagnostic) {
+            createCompilerOptionsDiagnostic(message, ...args);
+        }
+    }
+
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessageChain): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
+        const compilerOptionsProperty = getCompilerOptionsPropertySyntax();
+        if (compilerOptionsProperty) {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
-                programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, compilerOptionsProperty.name, message));
             }
             else {
-                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, compilerOptionsProperty.name, message, ...args));
             }
+        }
+        // eslint-disable-next-line local/no-in-operator
+        else if ("messageText" in message) {
+            programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+        }
+        else {
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
     function getCompilerOptionsObjectLiteralSyntax() {
         if (_compilerOptionsObjectLiteralSyntax === undefined) {
-            _compilerOptionsObjectLiteralSyntax = forEachPropertyAssignment(
-                getTsConfigObjectLiteralExpression(options.configFile),
-                "compilerOptions",
-                prop => isObjectLiteralExpression(prop.initializer) ? prop.initializer : undefined,
-            ) || false;
+            const compilerOptionsProperty = getCompilerOptionsPropertySyntax();
+            _compilerOptionsObjectLiteralSyntax = compilerOptionsProperty ? tryCast(compilerOptionsProperty.initializer, isObjectLiteralExpression) || false : false;
         }
         return _compilerOptionsObjectLiteralSyntax || undefined;
+    }
+
+    function getCompilerOptionsPropertySyntax() {
+        if (_compilerOptionsPropertySyntax === undefined) {
+            _compilerOptionsPropertySyntax = forEachPropertyAssignment(
+                getTsConfigObjectLiteralExpression(options.configFile),
+                "compilerOptions",
+                identity,
+            ) || false;
+        }
+        return _compilerOptionsPropertySyntax || undefined;
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;

@@ -4215,7 +4215,7 @@ declare namespace ts {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): Node[];
+        getChildren(sourceFile?: SourceFile): readonly Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
@@ -6903,6 +6903,7 @@ declare namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
+        isolatedDeclarations?: boolean;
         jsx?: JsxEmit;
         /** @deprecated */
         keyofStringsOnly?: boolean;

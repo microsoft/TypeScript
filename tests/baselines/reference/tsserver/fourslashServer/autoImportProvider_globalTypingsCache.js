@@ -44,8 +44,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Library/Caches/typescript/node_modules/@types/react-router-dom
-Info seq  [hh:mm:ss:mss] For info: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Library/Caches/typescript/node_modules/@types/react-router-dom/package.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/react-router-dom/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Library/Caches/typescript/node_modules/@types/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -171,8 +170,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /project
-Info seq  [hh:mm:ss:mss] For info: /project/index.js :: Config file name: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/index.js ProjectRootPath: undefined:: Result: /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/tsconfig.json 2000 undefined Project: /project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

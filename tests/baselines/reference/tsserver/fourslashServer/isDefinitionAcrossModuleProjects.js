@@ -150,8 +150,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/index.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/index.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -268,12 +267,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/tsconfig.json :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
@@ -580,8 +577,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "references-full"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /a/index.ts position 188 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -622,10 +618,8 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/c/tsconfig.json"
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a2/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -675,12 +669,9 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -1165,12 +1156,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a2/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a2
-Info seq  [hh:mm:ss:mss] For info: /a2/index.ts :: Config file name: /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /a2
-Info seq  [hh:mm:ss:mss] For info: /a2/tsconfig.json :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a2/index.ts ProjectRootPath: undefined:: Result: /a2/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a2/tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
@@ -1433,19 +1421,13 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "references-full"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /a2/index.ts position 188 in project /a2/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /c/index.ts position 70 in project /c/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -1862,8 +1844,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/index.ts :: Config file name: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/index.ts ProjectRootPath: undefined:: Result: /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1919,10 +1900,8 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/tsconfig.json :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
@@ -2423,12 +2402,9 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /c/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/index.ts :: Config file name: /c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/tsconfig.json :: Config file name: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/index.ts ProjectRootPath: undefined:: Result: /c/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/tsconfig.json ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 
