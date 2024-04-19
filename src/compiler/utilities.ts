@@ -1507,6 +1507,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2022: [
                 "at",
             ],
+            esnext: [
+                "isWellFormed",
+                "toWellFormed",
+            ],
         })),
         StringConstructor: new Map(Object.entries({
             es2015: [
