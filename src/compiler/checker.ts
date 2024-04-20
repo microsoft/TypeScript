@@ -1478,6 +1478,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
+    var strictReadonly = compilerOptions.strictReadonly;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -23479,9 +23480,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // They're still assignable to one another, since `readonly` doesn't affect assignability.
             // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
             if (
-                relation === strictSubtypeRelation &&
-                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
+                (relation === strictSubtypeRelation || strictReadonly) &&
+                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp) && !(targetProp.flags & SymbolFlags.Method)
             ) {
+                if (reportErrors) {
+                    reportError(Diagnostics.Property_0_is_readonly_in_the_source_but_not_in_the_target, symbolToString(targetProp));
+                }
                 return Ternary.False;
             }
             // If the target comes from a partial union prop, allow `undefined` in the target type
@@ -23940,13 +23944,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function indexInfoRelatedTo(sourceInfo: IndexInfo, targetInfo: IndexInfo, reportErrors: boolean, intersectionState: IntersectionState) {
             const related = isRelatedTo(sourceInfo.type, targetInfo.type, RecursionFlags.Both, reportErrors, /*headMessage*/ undefined, intersectionState);
-            if (!related && reportErrors) {
-                if (sourceInfo.keyType === targetInfo.keyType) {
-                    reportError(Diagnostics._0_index_signatures_are_incompatible, typeToString(sourceInfo.keyType));
+            if (!related) {
+                if (reportErrors) {
+                    if (sourceInfo.keyType === targetInfo.keyType) {
+                        reportError(Diagnostics._0_index_signatures_are_incompatible, typeToString(sourceInfo.keyType));
+                    }
+                    else {
+                        reportError(Diagnostics._0_and_1_index_signatures_are_incompatible, typeToString(sourceInfo.keyType), typeToString(targetInfo.keyType));
+                    }
                 }
-                else {
-                    reportError(Diagnostics._0_and_1_index_signatures_are_incompatible, typeToString(sourceInfo.keyType), typeToString(targetInfo.keyType));
+                return Ternary.False;
+            }
+            if (strictReadonly && sourceInfo.isReadonly && !targetInfo.isReadonly) {
+                if (reportErrors) {
+                    reportError(Diagnostics._0_index_signature_is_readonly_in_the_source_but_not_in_the_target, typeToString(sourceInfo.keyType));
                 }
+                return Ternary.False;
             }
             return related;
         }
@@ -30968,10 +30981,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getTypeOfPropertyOfContextualType(type: Type, name: __String, nameType?: Type) {
         return mapType(type, t => {
             if (isGenericMappedType(t) && !t.declaration.nameType) {
-                const constraint = getConstraintTypeFromMappedType(t);
-                const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                const constraint = getBaseConstraintOrType(getConstraintTypeFromMappedType(t));
                 const propertyNameType = nameType || getStringLiteralType(unescapeLeadingUnderscores(name));
-                if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                if (isTypeAssignableTo(propertyNameType, constraint)) {
                     return substituteIndexedMappedType(t, propertyNameType);
                 }
             }
@@ -31019,23 +31031,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const symbol = getSymbolOfDeclaration(element);
                 return getTypeOfPropertyOfContextualType(type, symbol.escapedName, getSymbolLinks(symbol).nameType);
             }
-            if (hasDynamicName(element)) {
-                const name = getNameOfDeclaration(element);
-                if (name && isComputedPropertyName(name)) {
-                    const exprType = checkExpression(name.expression);
-                    const propType = isTypeUsableAsPropertyName(exprType) && getTypeOfPropertyOfContextualType(type, getPropertyNameFromType(exprType));
-                    if (propType) {
-                        return propType;
-                    }
+            const name = getNameOfDeclaration(element);
+            if (name && isComputedPropertyName(name)) {
+                const exprType = checkExpression(name.expression);
+                if (isTypeUsableAsPropertyName(exprType)) {
+                    return getTypeOfPropertyOfContextualType(type, getPropertyNameFromType(exprType), exprType);
                 }
-            }
-            if (element.name) {
-                const nameType = getLiteralTypeFromPropertyName(element.name);
                 // We avoid calling getApplicableIndexInfo here because it performs potentially expensive intersection reduction.
-                return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType)?.type, /*noReductions*/ true);
+                return mapType(type, t => findApplicableIndexInfo(getIndexInfosOfStructuredType(t), exprType)?.type, /*noReductions*/ true);
             }
         }
         return undefined;
+    }
+
+    function isContextualPropertyMutable(type: Type, name: __String, nameType: Type | undefined) {
+        return someType(type, t => {
+            const propName = nameType ? isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined : name;
+            const prop = propName && getPropertyOfType(t, propName);
+            if (prop) {
+                return !isReadonlySymbol(prop);
+            }
+            const indexInfo = findApplicableIndexInfo(getIndexInfosOfStructuredType(t), nameType || getStringLiteralType(unescapeLeadingUnderscores(name)));
+            if (indexInfo) {
+                return !indexInfo.isReadonly;
+            }
+            return false;
+        });
     }
 
     function getSpreadIndices(elements: readonly Node[]) {
@@ -31956,7 +31977,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const contextualTypeHasPattern = contextualType && contextualType.pattern &&
             (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
         const inConstContext = isConstContext(node);
-        const checkFlags = inConstContext ? CheckFlags.Readonly : 0;
         const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
         const enumTag = isInJavascript ? getJSDocEnumTag(node) : undefined;
         const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
@@ -32003,6 +32023,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 objectFlags |= getObjectFlags(type) & ObjectFlags.PropagatingFlags;
                 const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
+                const checkFlags = inConstContext && !(strictReadonly && contextualType && isContextualPropertyMutable(contextualType, member.escapedName, nameType)) ? CheckFlags.Readonly : 0;
                 const prop = nameType ?
                     createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), checkFlags | CheckFlags.Late) :
                     createSymbol(SymbolFlags.Property | member.flags, member.escapedName, checkFlags);

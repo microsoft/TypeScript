@@ -4192,6 +4192,14 @@
         "category": "Error",
         "code": 4126
     },
+    "Property '{0}' is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 4127
+    },
+    "'{0}' index signature is 'readonly' in the source but not in the target.": {
+        "category": "Error",
+        "code": 4128
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -6222,6 +6230,10 @@
     "Specify emit/checking behavior for imports that are only used for types.": {
         "category": "Message",
         "code": 6718
+    },
+    "Ensure that 'readonly' properties remain read-only in type relationships.": {
+        "category": "Message",
+        "code": 6719
     },
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
