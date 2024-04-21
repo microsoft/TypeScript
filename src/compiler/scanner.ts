@@ -257,6 +257,7 @@ const textToToken = new Map(Object.entries({
     "^": SyntaxKind.CaretToken,
     "!": SyntaxKind.ExclamationToken,
     "~": SyntaxKind.TildeToken,
+    "~>": SyntaxKind.TildeGreaterThanToken,
     "&&": SyntaxKind.AmpersandAmpersandToken,
     "||": SyntaxKind.BarBarToken,
     "?": SyntaxKind.QuestionToken,
@@ -2288,6 +2289,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.CloseBraceToken;
                 case CharacterCodes.tilde:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.greaterThan) {
+                        return pos += 2, token = SyntaxKind.TildeGreaterThanToken;
+                    }
                     pos++;
                     return token = SyntaxKind.TildeToken;
                 case CharacterCodes.at:
