@@ -140,7 +140,7 @@ interface ObjectConstructor {
     (value: any): any;
 
     /** A reference to the prototype for a class of objects. */
-    readonly prototype: Object;
+    prototype: Object;
 
     /**
      * Returns the prototype of an object.
@@ -295,7 +295,7 @@ interface FunctionConstructor {
      */
     new (...args: string[]): Function;
     (...args: string[]): Function;
-    readonly prototype: Function;
+    prototype: Function;
 }
 
 declare var Function: FunctionConstructor;
@@ -516,7 +516,7 @@ interface String {
 interface StringConstructor {
     new (value?: any): String;
     (value?: any): string;
-    readonly prototype: String;
+    prototype: String;
     fromCharCode(...codes: number[]): string;
 }
 
@@ -533,7 +533,7 @@ interface Boolean {
 interface BooleanConstructor {
     new (value?: any): Boolean;
     <T>(value?: T): boolean;
-    readonly prototype: Boolean;
+    prototype: Boolean;
 }
 
 declare var Boolean: BooleanConstructor;
@@ -570,7 +570,7 @@ interface Number {
 interface NumberConstructor {
     new (value?: any): Number;
     (value?: any): number;
-    readonly prototype: Number;
+    prototype: Number;
 
     /** The largest number that can be represented in JavaScript. Equal to approximately 1.79E+308. */
     readonly MAX_VALUE: number;
@@ -919,7 +919,7 @@ interface DateConstructor {
      */
     new (year: number, monthIndex: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
-    readonly prototype: Date;
+    prototype: Date;
     /**
      * Parses a string containing a date, and returns the number of milliseconds between that date and midnight, January 1, 1970.
      * @param s A date string
@@ -1063,7 +1063,7 @@ interface Error {
 interface ErrorConstructor {
     new (message?: string): Error;
     (message?: string): Error;
-    readonly prototype: Error;
+    prototype: Error;
 }
 
 declare var Error: ErrorConstructor;
@@ -1074,7 +1074,7 @@ interface EvalError extends Error {
 interface EvalErrorConstructor extends ErrorConstructor {
     new (message?: string): EvalError;
     (message?: string): EvalError;
-    readonly prototype: EvalError;
+    prototype: EvalError;
 }
 
 declare var EvalError: EvalErrorConstructor;
@@ -1085,7 +1085,7 @@ interface RangeError extends Error {
 interface RangeErrorConstructor extends ErrorConstructor {
     new (message?: string): RangeError;
     (message?: string): RangeError;
-    readonly prototype: RangeError;
+    prototype: RangeError;
 }
 
 declare var RangeError: RangeErrorConstructor;
@@ -1096,7 +1096,7 @@ interface ReferenceError extends Error {
 interface ReferenceErrorConstructor extends ErrorConstructor {
     new (message?: string): ReferenceError;
     (message?: string): ReferenceError;
-    readonly prototype: ReferenceError;
+    prototype: ReferenceError;
 }
 
 declare var ReferenceError: ReferenceErrorConstructor;
@@ -1107,7 +1107,7 @@ interface SyntaxError extends Error {
 interface SyntaxErrorConstructor extends ErrorConstructor {
     new (message?: string): SyntaxError;
     (message?: string): SyntaxError;
-    readonly prototype: SyntaxError;
+    prototype: SyntaxError;
 }
 
 declare var SyntaxError: SyntaxErrorConstructor;
@@ -1118,7 +1118,7 @@ interface TypeError extends Error {
 interface TypeErrorConstructor extends ErrorConstructor {
     new (message?: string): TypeError;
     (message?: string): TypeError;
-    readonly prototype: TypeError;
+    prototype: TypeError;
 }
 
 declare var TypeError: TypeErrorConstructor;
@@ -1129,7 +1129,7 @@ interface URIError extends Error {
 interface URIErrorConstructor extends ErrorConstructor {
     new (message?: string): URIError;
     (message?: string): URIError;
-    readonly prototype: URIError;
+    prototype: URIError;
 }
 
 declare var URIError: URIErrorConstructor;
@@ -1493,7 +1493,7 @@ interface ArrayConstructor {
     <T>(arrayLength: number): T[];
     <T>(...items: T[]): T[];
     isArray(arg: any): arg is any[];
-    readonly prototype: any[];
+    prototype: any[];
 }
 
 declare var Array: ArrayConstructor;
@@ -1695,7 +1695,7 @@ interface ArrayBufferTypes {
 type ArrayBufferLike = ArrayBufferTypes[keyof ArrayBufferTypes];
 
 interface ArrayBufferConstructor {
-    readonly prototype: ArrayBuffer;
+    prototype: ArrayBuffer;
     new (byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
@@ -1705,17 +1705,17 @@ interface ArrayBufferView {
     /**
      * The ArrayBuffer instance referenced by the array.
      */
-    buffer: ArrayBufferLike;
+    readonly buffer: ArrayBufferLike;
 
     /**
      * The length in bytes of the array.
      */
-    byteLength: number;
+    readonly byteLength: number;
 
     /**
      * The offset in bytes of the array.
      */
-    byteOffset: number;
+    readonly byteOffset: number;
 }
 
 interface DataView {
@@ -1847,8 +1847,8 @@ interface DataView {
 }
 
 interface DataViewConstructor {
-    readonly prototype: DataView;
-    new (buffer: ArrayBufferLike & { BYTES_PER_ELEMENT?: never; }, byteOffset?: number, byteLength?: number): DataView;
+    prototype: DataView;
+    new (buffer: ArrayBufferLike & { readonly BYTES_PER_ELEMENT?: never; }, byteOffset?: number, byteLength?: number): DataView;
 }
 declare var DataView: DataViewConstructor;
 
@@ -2100,7 +2100,7 @@ interface Int8Array {
     [index: number]: number;
 }
 interface Int8ArrayConstructor {
-    readonly prototype: Int8Array;
+    prototype: Int8Array;
     new (length: number): Int8Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Int8Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int8Array;
@@ -2381,7 +2381,7 @@ interface Uint8Array {
 }
 
 interface Uint8ArrayConstructor {
-    readonly prototype: Uint8Array;
+    prototype: Uint8Array;
     new (length: number): Uint8Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Uint8Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8Array;
@@ -2662,7 +2662,7 @@ interface Uint8ClampedArray {
 }
 
 interface Uint8ClampedArrayConstructor {
-    readonly prototype: Uint8ClampedArray;
+    prototype: Uint8ClampedArray;
     new (length: number): Uint8ClampedArray;
     new (array: ArrayLike<number> | ArrayBufferLike): Uint8ClampedArray;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint8ClampedArray;
@@ -2942,7 +2942,7 @@ interface Int16Array {
 }
 
 interface Int16ArrayConstructor {
-    readonly prototype: Int16Array;
+    prototype: Int16Array;
     new (length: number): Int16Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Int16Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int16Array;
@@ -3223,7 +3223,7 @@ interface Uint16Array {
 }
 
 interface Uint16ArrayConstructor {
-    readonly prototype: Uint16Array;
+    prototype: Uint16Array;
     new (length: number): Uint16Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Uint16Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint16Array;
@@ -3503,7 +3503,7 @@ interface Int32Array {
 }
 
 interface Int32ArrayConstructor {
-    readonly prototype: Int32Array;
+    prototype: Int32Array;
     new (length: number): Int32Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Int32Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Int32Array;
@@ -3783,7 +3783,7 @@ interface Uint32Array {
 }
 
 interface Uint32ArrayConstructor {
-    readonly prototype: Uint32Array;
+    prototype: Uint32Array;
     new (length: number): Uint32Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Uint32Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Uint32Array;
@@ -4064,7 +4064,7 @@ interface Float32Array {
 }
 
 interface Float32ArrayConstructor {
-    readonly prototype: Float32Array;
+    prototype: Float32Array;
     new (length: number): Float32Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Float32Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float32Array;
@@ -4345,7 +4345,7 @@ interface Float64Array {
 }
 
 interface Float64ArrayConstructor {
-    readonly prototype: Float64Array;
+    prototype: Float64Array;
     new (length: number): Float64Array;
     new (array: ArrayLike<number> | ArrayBufferLike): Float64Array;
     new (buffer: ArrayBufferLike, byteOffset?: number, length?: number): Float64Array;
@@ -4472,7 +4472,7 @@ declare namespace Intl {
         new (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         (locales?: string | string[], options?: NumberFormatOptions): NumberFormat;
         supportedLocalesOf(locales: string | string[], options?: NumberFormatOptions): string[];
-        readonly prototype: NumberFormat;
+        prototype: NumberFormat;
     }
 
     var NumberFormat: NumberFormatConstructor;
@@ -4519,7 +4519,7 @@ declare namespace Intl {
         new (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         (locales?: string | string[], options?: DateTimeFormatOptions): DateTimeFormat;
         supportedLocalesOf(locales: string | string[], options?: DateTimeFormatOptions): string[];
-        readonly prototype: DateTimeFormat;
+        prototype: DateTimeFormat;
     }
 
     var DateTimeFormat: DateTimeFormatConstructor;

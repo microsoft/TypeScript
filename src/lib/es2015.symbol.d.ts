@@ -2,7 +2,7 @@ interface SymbolConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: Symbol;
+    prototype: Symbol;
 
     /**
      * Returns a new unique Symbol value.

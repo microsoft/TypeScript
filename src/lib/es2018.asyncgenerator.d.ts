@@ -30,7 +30,7 @@ interface AsyncGeneratorFunction {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: AsyncGenerator;
+    prototype: AsyncGenerator;
 }
 
 interface AsyncGeneratorFunctionConstructor {
@@ -55,5 +55,5 @@ interface AsyncGeneratorFunctionConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: AsyncGeneratorFunction;
+    prototype: AsyncGeneratorFunction;
 }

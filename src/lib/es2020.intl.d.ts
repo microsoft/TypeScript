@@ -426,7 +426,7 @@ declare namespace Intl {
          *
          * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DisplayNames/supportedLocalesOf).
          */
-        supportedLocalesOf(locales?: LocalesArgument, options?: { localeMatcher?: RelativeTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
+        supportedLocalesOf(locales?: LocalesArgument, options?: { readonly localeMatcher?: RelativeTimeFormatLocaleMatcher; }): UnicodeBCP47LocaleIdentifier[];
     };
 
     interface CollatorConstructor {

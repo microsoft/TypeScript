@@ -490,8 +490,8 @@ interface PushSubscriptionOptionsInit {
 }
 
 interface QueuingStrategy<T = any> {
-    highWaterMark?: number;
-    size?: QueuingStrategySize<T>;
+    readonly highWaterMark?: number;
+    readonly size?: QueuingStrategySize<T>;
 }
 
 interface QueuingStrategyInit {
@@ -500,7 +500,7 @@ interface QueuingStrategyInit {
      *
      * Note that the provided high water mark will not be validated ahead of time. Instead, if it is negative, NaN, or not a number, the resulting ByteLengthQueuingStrategy will cause the corresponding stream constructor to throw.
      */
-    highWaterMark: number;
+    readonly highWaterMark: number;
 }
 
 interface RTCEncodedAudioFrameMetadata {
@@ -1879,9 +1879,9 @@ interface DOMException extends Error {
      */
     readonly code: number;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMException/message) */
-    readonly message: string;
+    message: string;
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/DOMException/name) */
-    readonly name: string;
+    name: string;
     readonly INDEX_SIZE_ERR: 1;
     readonly DOMSTRING_SIZE_ERR: 2;
     readonly HIERARCHY_REQUEST_ERR: 3;
@@ -4840,7 +4840,7 @@ interface ReadableStream<R = any> {
 
 declare var ReadableStream: {
     prototype: ReadableStream;
-    new(underlyingSource: UnderlyingByteSource, strategy?: { highWaterMark?: number }): ReadableStream<Uint8Array>;
+    new(underlyingSource: UnderlyingByteSource, strategy?: { readonly highWaterMark?: number }): ReadableStream<Uint8Array>;
     new<R = any>(underlyingSource: UnderlyingDefaultSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
     new<R = any>(underlyingSource?: UnderlyingSource<R>, strategy?: QueuingStrategy<R>): ReadableStream<R>;
 };
