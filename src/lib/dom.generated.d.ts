@@ -12824,7 +12824,7 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Sets or retrieves abbreviated text for the object.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/abbr)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     abbr: string;
     /**
@@ -12838,7 +12838,7 @@ interface HTMLTableCellElement extends HTMLElement {
      * Sets or retrieves a comma-delimited list of conceptual categories associated with the object.
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/axis)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#deprecated_properties)
      */
     axis: string;
     /**
@@ -12850,38 +12850,38 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Retrieves the position of the object in the cells collection of a row.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/cellIndex)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     readonly cellIndex: number;
     /**
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/ch)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#deprecated_properties)
      */
     ch: string;
     /**
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/chOff)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#deprecated_properties)
      */
     chOff: string;
     /**
      * Sets or retrieves the number columns in the table that the object should span.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/colSpan)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     colSpan: number;
     /**
      * Sets or retrieves a list of header cells that provide information for the object.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/headers)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     headers: string;
     /**
      * Sets or retrieves the height of the object.
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/height)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#deprecated_properties)
      */
     height: string;
     /**
@@ -12894,13 +12894,13 @@ interface HTMLTableCellElement extends HTMLElement {
     /**
      * Sets or retrieves how many rows in a table the cell should span.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/rowSpan)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     rowSpan: number;
     /**
      * Sets or retrieves the group of cells in a table to which the object's information applies.
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/scope)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#instance_properties)
      */
     scope: string;
     /**
@@ -12913,7 +12913,7 @@ interface HTMLTableCellElement extends HTMLElement {
      * Sets or retrieves the width of the object.
      * @deprecated
      *
-     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/HTMLTableCellElement/width)
+     * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/API/HTMLTableCellElement#deprecated_properties)
      */
     width: string;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLTableCellElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
