@@ -204,7 +204,8 @@ function addCodeAction(
     fixes: CodeFixAction[],
     context: CodeFixContext | CodeFixAllContext,
     typePrintMode: TypePrintMode,
-    cb: (fixer: Fixer) => DiagnosticOrDiagnosticAndArguments | undefined) {
+    cb: (fixer: Fixer) => DiagnosticOrDiagnosticAndArguments | undefined,
+) {
     const changes = withContext(context, typePrintMode, cb);
     if (changes.result && changes.textChanges.length) {
         fixes.push(createCodeFixAction(
@@ -236,7 +237,7 @@ function withContext<T>(
     const fixedNodes = new Set<Node>();
     const expandoPropertiesAdded = new Set<Node>();
     const typePrinter = createPrinter({
-      preserveSourceNewlines: false,
+        preserveSourceNewlines: false,
     });
 
     const result = cb({ addTypeAnnotation, addInlineAssertion, extractAsVariable });
@@ -318,10 +319,10 @@ function withContext<T>(
     }
 
     function createSatisfiesAsExpression(node: Expression, type: TypeNode) {
-      if (needsParenthesizedExpressionForAssertion(node)) {
-          node = factory.createParenthesizedExpression(node);
-      }
-      return factory.createAsExpression(factory.createSatisfiesExpression(node, getSynthesizedDeepClone(type)), type);
+        if (needsParenthesizedExpressionForAssertion(node)) {
+            node = factory.createParenthesizedExpression(node);
+        }
+        return factory.createAsExpression(factory.createSatisfiesExpression(node, getSynthesizedDeepClone(type)), type);
     }
 
     function addInlineAssertion(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
@@ -574,22 +575,22 @@ function withContext<T>(
             case SyntaxKind.Parameter:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.VariableDeclaration:
-              return addTypeToVariableLike(node as ParameterDeclaration | PropertyDeclaration | VariableDeclaration);
+                return addTypeToVariableLike(node as ParameterDeclaration | PropertyDeclaration | VariableDeclaration);
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
             case SyntaxKind.GetAccessor:
-              return addTypeToSignatureDeclaration(node as SignatureDeclaration, sourceFile);
+                return addTypeToSignatureDeclaration(node as SignatureDeclaration, sourceFile);
             case SyntaxKind.ExportAssignment:
-              return transformExportAssignment(node as ExportAssignment);
+                return transformExportAssignment(node as ExportAssignment);
             case SyntaxKind.ClassDeclaration:
-              return transformExtendsClauseWithExpression(node as ClassDeclaration);
+                return transformExtendsClauseWithExpression(node as ClassDeclaration);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
-              return transformDestructuringPatterns(node as BindingPattern);
+                return transformDestructuringPatterns(node as BindingPattern);
             default:
-              throw new Error(`Cannot find a fix for the given node ${node.kind}`);
+                throw new Error(`Cannot find a fix for the given node ${node.kind}`);
         }
     }
 
@@ -609,30 +610,30 @@ function withContext<T>(
     }
 
     function transformExportAssignment(defaultExport: ExportAssignment): DiagnosticOrDiagnosticAndArguments | undefined {
-      if (defaultExport.isExportEquals) {
-        return;
-      }
+        if (defaultExport.isExportEquals) {
+            return;
+        }
 
-      const { typeNode } = inferType(defaultExport.expression);
-      if (!typeNode) return undefined;
-      changeTracker.replaceNodeWithNodes(sourceFile, defaultExport, [
-          factory.createVariableStatement(
-              /*modifiers*/ undefined,
-              factory.createVariableDeclarationList(
-                  [factory.createVariableDeclaration(
-                      "__default",
-                      /*exclamationToken*/ undefined,
-                      typeNode,
-                      defaultExport.expression,
-                  )],
-                  NodeFlags.Const,
-              ),
-          ),
-          factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
-      ]);
-      return [
-          Diagnostics.Extract_default_export_to_variable,
-      ];
+        const { typeNode } = inferType(defaultExport.expression);
+        if (!typeNode) return undefined;
+        changeTracker.replaceNodeWithNodes(sourceFile, defaultExport, [
+            factory.createVariableStatement(
+                /*modifiers*/ undefined,
+                factory.createVariableDeclarationList(
+                    [factory.createVariableDeclaration(
+                        "__default",
+                        /*exclamationToken*/ undefined,
+                        typeNode,
+                        defaultExport.expression,
+                    )],
+                    NodeFlags.Const,
+                ),
+            ),
+            factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
+        ]);
+        return [
+            Diagnostics.Extract_default_export_to_variable,
+        ];
     }
 
     /**
@@ -660,7 +661,7 @@ function withContext<T>(
             /*modifiers*/ undefined,
             factory.createVariableDeclarationList(
                 [factory.createVariableDeclaration(
-                  baseClassName,
+                    baseClassName,
                     /*exclamationToken*/ undefined,
                     heritageTypeNode,
                     heritageExpression.expression,
@@ -915,7 +916,7 @@ function withContext<T>(
 
     function inferType(node: Node): InferenceResult {
         if (typePrintMode !== TypePrintMode.FULL) {
-          return relativeType(node);
+            return relativeType(node);
         }
 
         let type = isValueSignatureDeclaration(node) ?
@@ -1123,7 +1124,7 @@ function withContext<T>(
         }
     }
 
-    function addTypeToVariableLike(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): DiagnosticOrDiagnosticAndArguments | undefined{
+    function addTypeToVariableLike(decl: ParameterDeclaration | VariableDeclaration | PropertyDeclaration): DiagnosticOrDiagnosticAndArguments | undefined {
         const { typeNode } = inferType(decl);
         if (typeNode) {
             if (decl.type) {
@@ -1147,25 +1148,24 @@ function withContext<T>(
     }
 }
 
-
 // Some --isolatedDeclarations errors are not present on the node that directly needs type annotation, so look in the
 // ancestors to look for node that needs type annotation. This function can return undefined if the AST is ill-formed.
 function findAncestorWithMissingType(node: Node): Node | undefined {
-  return findAncestor(node, (n) => {
-    return canHaveTypeAnnotation.has(n.kind) &&
-      ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
-  });
+    return findAncestor(node, n => {
+        return canHaveTypeAnnotation.has(n.kind) &&
+            ((!isObjectBindingPattern(n) && !isArrayBindingPattern(n)) || isVariableDeclaration(n.parent));
+    });
 }
 
 function findBestFittingNode(node: Node, span: TextSpan) {
-  while (node && node.end < span.start + span.length) {
-      node = node.parent;
-  }
-  while (node.parent.pos === node.pos && node.parent.end === node.end) {
-      node = node.parent;
-  }
-  if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
-      return node.parent.initializer;
-  }
-  return node;
+    while (node && node.end < span.start + span.length) {
+        node = node.parent;
+    }
+    while (node.parent.pos === node.pos && node.parent.end === node.end) {
+        node = node.parent;
+    }
+    if (isIdentifier(node) && hasInitializer(node.parent) && node.parent.initializer) {
+        return node.parent.initializer;
+    }
+    return node;
 }
