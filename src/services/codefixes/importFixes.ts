@@ -507,7 +507,7 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 // has named bindings
                 d.importClause?.namedBindings &&
                 // is not being fully removed
-                emptyImportDeclarations.indexOf(d) === -1 &&
+                !emptyImportDeclarations.includes(d) &&
                 // is not gaining named imports
                 !addToExisting.get(d.importClause)?.namedImports &&
                 // all named imports are being removed
@@ -532,8 +532,8 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                 const importDeclaration = findAncestor(declaration, isImportDeclaration);
                 if (
                     importDeclaration &&
-                    emptyImportDeclarations.indexOf(importDeclaration) === -1 &&
-                    namedBindingsToDelete.indexOf(importDeclaration) === -1
+                    !emptyImportDeclarations.includes(importDeclaration) &&
+                    !namedBindingsToDelete.includes(importDeclaration)
                 ) {
                     if (declaration.kind === SyntaxKind.ImportClause) {
                         changeTracker.delete(sourceFile, declaration.name!);
