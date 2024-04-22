@@ -6,7 +6,7 @@ body:
       value: |
         💡 Did you know? TypeScript has over 2,000 open suggestions!
 
-        🔎 Please [search thoroughly in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite **search engine** before logging new feature requests as most common ideas already have a proposal in progress.
+        🔎 Please [search thoroughly in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging new feature requests as most common ideas already have a proposal in progress.
 
         The "Common Feature Requests" section of the FAQ lists many popular requests: https://github.com/Microsoft/TypeScript/wiki/FAQ#common-feature-requests
 
