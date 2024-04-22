@@ -3,23 +3,31 @@
 === for-of28.ts ===
 class StringIterator {
 >StringIterator : StringIterator
+>               : ^^^^^^^^^^^^^^
 
     next: any;
 >next : any
 
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
+>                  : ^^^^^^^^^^
 >Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >iterator : unique symbol
+>         : ^^^^^^^^^^^^^
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 
 for (var v of new StringIterator) { }
 >v : any
 >new StringIterator : StringIterator
+>                   : ^^^^^^^^^^^^^^
 >StringIterator : typeof StringIterator
+>               : ^^^^^^^^^^^^^^^^^^^^^
 

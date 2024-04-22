@@ -1,0 +1,5 @@
+// === goToDefinition ===
+// === /a.js ===
+// /**
+//  * @import { A } from     /*GOTO DEF*/ "./b";
+//  */

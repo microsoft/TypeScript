@@ -282,7 +282,7 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // eslint-disable-line no-restricted-syntax
                 }
                 catch (e) {
                     errs.push(e);

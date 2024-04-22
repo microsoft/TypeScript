@@ -18,9 +18,7 @@
     ],
     "plugins": [
         "@typescript-eslint",
-        "no-null",
         "eslint-plugin-local",
-        "simple-import-sort",
         "unicorn"
     ],
     "ignorePatterns": [
@@ -62,6 +60,18 @@
         "prefer-const": "error",
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
+
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "Literal[raw=null]",
+                "message": "Avoid using null; use undefined instead."
+            },
+            {
+                "selector": "TSNullKeyword",
+                "message": "Avoid using null; use undefined instead."
+            }
+        ],
 
         // Enabled in eslint:recommended, but not applicable here
         "no-extra-boolean-cast": "off",
@@ -112,7 +122,7 @@
             }
         ],
         "@typescript-eslint/no-unused-vars": [
-            "error",
+            "warn",
             {
                 // Ignore: (solely underscores | starting with exactly one underscore)
                 "argsIgnorePattern": "^(_+$|_[^_])",
@@ -214,14 +224,7 @@
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
         "unicorn/prefer-top-level-await": "off",
         "unicorn/prefer-negative-index": "off",
-        "unicorn/no-unreadable-array-destructuring": "off",
-
-        // eslint-plugin-no-null
-        "no-null/no-null": "error",
-
-        // eslint-plugin-simple-import-sort
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "unicorn/no-unreadable-array-destructuring": "off"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -247,14 +250,6 @@
                     { "name": "module" },
                     { "name": "exports" }
                 ]
-            }
-        },
-        {
-            // These files contain imports in a specific order that are generally unsafe to modify.
-            "files": ["**/_namespaces/**"],
-            "rules": {
-                "simple-import-sort/imports": "off",
-                "simple-import-sort/exports": "off"
             }
         }
     ]

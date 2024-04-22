@@ -3,15 +3,9 @@ import {
     nowString,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    stringifyIndented,
-} from "../../_namespaces/ts.server";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    TestSession,
-} from "./tsserver";
+import { stringifyIndented } from "../../_namespaces/ts.server";
+import { jsonToReadableText } from "../helpers";
+import { TestSession } from "./tsserver";
 import {
     File,
     TestServerHost,

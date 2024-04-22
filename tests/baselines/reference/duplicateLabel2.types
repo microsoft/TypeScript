@@ -3,14 +3,18 @@
 === duplicateLabel2.ts ===
 target:
 >target : any
+>       : ^^^
 
 while (true) {
 >true : true
+>     : ^^^^
 
   target:
 >target : any
+>       : ^^^
 
   while (true) {
 >true : true
+>     : ^^^^
   }
 }

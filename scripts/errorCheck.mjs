@@ -1,9 +1,7 @@
 import assert from "assert";
 import fs from "fs";
 import fsPromises from "fs/promises";
-import {
-    glob,
-} from "glob";
+import { glob } from "glob";
 
 async function checkErrorBaselines() {
     const data = await fsPromises.readFile("src/compiler/diagnosticMessages.json", "utf-8");

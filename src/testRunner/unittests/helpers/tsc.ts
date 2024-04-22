@@ -2,9 +2,7 @@ import * as fakes from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselinePrograms,
     CommandLineCallbacks,
@@ -555,7 +553,7 @@ export function verifyTsc({
                 }
                 Harness.Baseline.runBaseline(
                     tscBaselineName(scenario, subScenario, commandLineArgs, /*isWatch*/ undefined, "-discrepancies"),
-                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-null/no-null
+                    baselines ? baselines.join("\r\n") : null, // eslint-disable-line no-restricted-syntax
                 );
             });
         }

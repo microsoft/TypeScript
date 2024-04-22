@@ -596,7 +596,7 @@ export function start() {
             consoleReporter.epilogue();
             if (noColors) Base.useColors = savedUseColors;
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
             if (xunitReporter) {

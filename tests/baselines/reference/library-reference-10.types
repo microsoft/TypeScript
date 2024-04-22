@@ -4,13 +4,19 @@
 /// <reference types="jquery" />
 $.foo();
 >$.foo() : void
+>        : ^^^^
 >$.foo : () => void
+>      : ^^^^^^^^^^
 >$ : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 
 === /foo/types/jquery/jquery.d.ts ===
 declare var $: { foo(): void };
 >$ : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
 >foo : () => void
+>    : ^^^^^^    
 
 

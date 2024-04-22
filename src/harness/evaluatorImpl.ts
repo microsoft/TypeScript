@@ -253,7 +253,7 @@ class SystemLoader extends Loader<SystemModule> {
     protected createModule(file: string): SystemModule {
         return {
             file,
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             exports: Object.create(/*o*/ null),
             dependencies: [],
             dependers: [],

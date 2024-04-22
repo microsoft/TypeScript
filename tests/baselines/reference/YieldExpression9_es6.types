@@ -3,10 +3,15 @@
 === YieldExpression9_es6.ts ===
 var v = function*() {
 >v : () => Generator<any, void, unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function*() {  yield(foo);} : () => Generator<any, void, unknown>
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   yield(foo);
 >yield(foo) : any
+>           : ^^^
 >(foo) : any
+>      : ^^^
 >foo : any
+>    : ^^^
 }

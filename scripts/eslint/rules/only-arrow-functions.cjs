@@ -67,7 +67,7 @@ module.exports = createRule({
                 return;
             }
 
-            if ((allowNamedFunctions && node.id !== null) || isMethodType(node)) { // eslint-disable-line no-null/no-null
+            if ((allowNamedFunctions && node.id !== null) || isMethodType(node)) { // eslint-disable-line no-restricted-syntax
                 return;
             }
 

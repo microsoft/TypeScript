@@ -3,9 +3,7 @@ import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     commonFile1,
     commonFile2,
@@ -24,6 +22,7 @@ import {
     createServerHost,
     File,
     libFile,
+    TestServerHostOsFlavor,
     Tsc_WatchDirectory,
 } from "../helpers/virtualFileSystemWithWatch";
 
@@ -52,7 +51,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const files = [index, file1, configFile, libFile];
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-            const host = createServerHost(files, { environmentVariables });
+            const host = createServerHost(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
             const session = new TestSession(host);
             openFilesForSession([index], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
@@ -141,7 +140,10 @@ describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", ()
         };
         const environmentVariables = new Map<string, string>();
         environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
+        const host = createServerHost(
+            [index, file1, configFile, libFile, nodeModulesExistingUnusedFile],
+            { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables },
+        );
         const session = new TestSession(host);
         openFilesForSession([index], session);
 
@@ -237,7 +239,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -257,7 +259,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -297,7 +299,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
         baselineTsserverLogs("watchEnvironment", `with watchDirectory option in configFile`, session);
@@ -313,7 +315,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -515,7 +517,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
             path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
             content: `export function randomSeed(): string;`,
         };
-        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, runWithoutRecursiveWatches: true });
+        const host = createServerHost([config, main, randomSeed, libFile], { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([main], session);
         verifyGetErrRequest({ session, files: [main] });

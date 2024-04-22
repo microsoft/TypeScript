@@ -3,11 +3,14 @@
 === b.ts ===
 import y = require("./a");
 >y : typeof y
+>  : ^^^^^^^^
 
 === ref.ts ===
 var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === a.ts ===
 /// <reference path="ref.ts"/>

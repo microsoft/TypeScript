@@ -4,9 +4,7 @@ import {
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: Text storage", () => {
     const f = {

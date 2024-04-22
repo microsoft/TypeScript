@@ -131,6 +131,7 @@ const jsDocTagNames = [
     "host",
     "ignore",
     "implements",
+    "import",
     "inheritdoc",
     "inner",
     "instance",

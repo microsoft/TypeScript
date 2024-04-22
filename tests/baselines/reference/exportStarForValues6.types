@@ -8,5 +8,7 @@ export interface Foo { x }
 export * from "file1"
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
