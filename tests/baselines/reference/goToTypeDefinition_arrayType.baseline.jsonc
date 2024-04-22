@@ -202,7 +202,7 @@
 // --- (line: --) skipped ---
 
 // --- (line: --) skipped ---
-//     readonly prototype: any[];
+//     prototype: any[];
 // }
 // 
 // <|declare var [|{| defId: 2 |}Array|]: ArrayConstructor;|>
@@ -455,7 +455,7 @@
 // --- (line: --) skipped ---
 
 // --- (line: --) skipped ---
-//     readonly prototype: any[];
+//     prototype: any[];
 // }
 // 
 // <|declare var [|{| defId: 2 |}Array|]: ArrayConstructor;|>
