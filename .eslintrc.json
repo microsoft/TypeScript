@@ -219,7 +219,7 @@
         "unicorn/prefer-native-coercion-functions": "off",
         "unicorn/prefer-spread": "off",
         "unicorn/prefer-event-target": "off",
-        "unicorn/better-regex": "off", // crashes
+        "unicorn/better-regex": "off", // doesn't always produce a good alternative
         "unicorn/prefer-string-slice": "off", // Probably good, but most are not fixed
         "unicorn/prefer-reflect-apply": "off", // tbh don't understand the difference
         "unicorn/prefer-top-level-await": "off",
