@@ -8589,10 +8589,10 @@ function compareMessageChain(
         return Comparison.LessThan;
     }
 
-    return compareMessageElaborationSize(c1, c2) || compareMessageElaborationContent(c1, c2);
+    return compareMessageChainSize(c1, c2) || compareMessageChainContent(c1, c2);
 }
 
-function compareMessageElaborationSize(
+function compareMessageChainSize(
     c1: DiagnosticMessageChain[] | undefined,
     c2: DiagnosticMessageChain[] | undefined,
 ): Comparison {
@@ -8612,7 +8612,7 @@ function compareMessageElaborationSize(
     }
 
     for (let i = 0; i < c2.length; i++) {
-        res = compareMessageElaborationSize(c1[i].next, c2[i].next);
+        res = compareMessageChainSize(c1[i].next, c2[i].next);
         if (res) {
             return res;
         }
@@ -8622,7 +8622,7 @@ function compareMessageElaborationSize(
 }
 
 // Assumes the two chains have the same shape.
-function compareMessageElaborationContent(
+function compareMessageChainContent(
     c1: DiagnosticMessageChain[],
     c2: DiagnosticMessageChain[],
 ): Comparison {
@@ -8635,7 +8635,7 @@ function compareMessageElaborationContent(
         if (c1[i].next === undefined) {
             continue;
         }
-        res = compareMessageElaborationContent(c1[i].next!, c2[i].next!);
+        res = compareMessageChainContent(c1[i].next!, c2[i].next!);
         if (res) {
             return res;
         }
