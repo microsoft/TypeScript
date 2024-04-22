@@ -27681,6 +27681,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!flowNode) {
             return declaredType;
         }
+        declaredType = isNoInferType(declaredType) ? (declaredType as SubstitutionType).baseType : declaredType;
+        initialType = isNoInferType(initialType) ? (initialType as SubstitutionType).baseType : initialType;
         flowInvocationCount++;
         const sharedFlowStart = sharedFlowCount;
         const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
@@ -28183,17 +28185,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getDiscriminantPropertyAccess(expr: Expression, computedType: Type) {
-            const effectiveDeclaredType = isNoInferType(declaredType) ? (declaredType as SubstitutionType).baseType : declaredType;
-            const effectiveComputedType = isNoInferType(computedType) ? (computedType as SubstitutionType).baseType : computedType;
             // As long as the computed type is a subset of the declared type, we use the full declared type to detect
             // a discriminant property. In cases where the computed type isn't a subset, e.g because of a preceding type
             // predicate narrowing, we use the actual computed type.
-            if (effectiveDeclaredType.flags & TypeFlags.Union || effectiveComputedType.flags & TypeFlags.Union) {
+            if (declaredType.flags & TypeFlags.Union || computedType.flags & TypeFlags.Union) {
                 const access = getCandidateDiscriminantPropertyAccess(expr);
                 if (access) {
                     const name = getAccessedPropertyName(access);
                     if (name) {
-                        const type = effectiveDeclaredType.flags & TypeFlags.Union && isTypeSubsetOf(effectiveComputedType, effectiveDeclaredType) ? effectiveDeclaredType : effectiveComputedType;
+                        const type = declaredType.flags & TypeFlags.Union && isTypeSubsetOf(computedType, declaredType) ? declaredType : computedType;
                         if (isDiscriminantProperty(type, name)) {
                             return access;
                         }
@@ -28223,19 +28223,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function narrowTypeByDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, operator: SyntaxKind, value: Expression, assumeTrue: boolean) {
-            const effectiveType = isNoInferType(type) ? (type as SubstitutionType).baseType : type;
-            if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && effectiveType.flags & TypeFlags.Union) {
-                const keyPropertyName = getKeyPropertyName(effectiveType as UnionType);
+            if ((operator === SyntaxKind.EqualsEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) && type.flags & TypeFlags.Union) {
+                const keyPropertyName = getKeyPropertyName(type as UnionType);
                 if (keyPropertyName && keyPropertyName === getAccessedPropertyName(access)) {
-                    const candidate = getConstituentTypeForKeyType(effectiveType as UnionType, getTypeOfExpression(value));
+                    const candidate = getConstituentTypeForKeyType(type as UnionType, getTypeOfExpression(value));
                     if (candidate) {
                         return operator === (assumeTrue ? SyntaxKind.EqualsEqualsEqualsToken : SyntaxKind.ExclamationEqualsEqualsToken) ? candidate :
-                            isUnitType(getTypeOfPropertyOfType(candidate, keyPropertyName) || unknownType) ? removeType(effectiveType, candidate) :
-                            effectiveType;
+                            isUnitType(getTypeOfPropertyOfType(candidate, keyPropertyName) || unknownType) ? removeType(type, candidate) :
+                            type;
                     }
                 }
             }
-            return narrowTypeByDiscriminant(effectiveType, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
+            return narrowTypeByDiscriminant(type, access, t => narrowTypeByEquality(t, operator, value, assumeTrue));
         }
 
         function narrowTypeBySwitchOnDiscriminantProperty(type: Type, access: AccessExpression | BindingElement | ParameterDeclaration, data: FlowSwitchClauseData) {
@@ -28835,6 +28834,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Narrow the given type based on the given expression having the assumed boolean value. The returned type
         // will be a subtype or the same type as the argument.
         function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
+            type = isNoInferType(type) ? (type as SubstitutionType).baseType : type;
             // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
             if (
                 isExpressionOfOptionalChainRoot(expr) ||
