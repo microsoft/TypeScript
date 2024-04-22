@@ -21,6 +21,7 @@ import {
     KeywordSyntaxKind,
     LanguageVariant,
     last,
+    lastOrUndefined,
     LineAndCharacter,
     MapLike,
     parsePseudoBigInt,
@@ -2389,7 +2390,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function reScanSlashToken(): SyntaxKind {
         if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
             // Quickly get to the end of regex such that we know the flags
-            let p = tokenStart + 1;
+            const startOfRegExpBody = tokenStart + 1;
+            pos = startOfRegExpBody;
             let inEscape = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in Unicode mode.
@@ -2401,16 +2403,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             while (true) {
                 // If we reach the end of a file, or hit a newline, then this is an unterminated
                 // regex.  Report error and return what we have so far.
-                if (p >= end) {
+                if (pos >= end) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    error(Diagnostics.Unterminated_regular_expression_literal);
                     break;
                 }
 
-                const ch = text.charCodeAt(p);
+                const ch = text.charCodeAt(pos);
                 if (isLineBreak(ch)) {
                     tokenFlags |= TokenFlags.Unterminated;
-                    error(Diagnostics.Unterminated_regular_expression_literal);
                     break;
                 }
 
@@ -2422,7 +2422,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 else if (ch === CharacterCodes.slash && !inCharacterClass) {
                     // A slash within a character class is permissible,
                     // but in general it signals the end of the regexp literal.
-                    p++;
                     break;
                 }
                 else if (ch === CharacterCodes.openBracket) {
@@ -2434,50 +2433,94 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 else if (ch === CharacterCodes.closeBracket) {
                     inCharacterClass = false;
                 }
-                p++;
+                pos++;
             }
-            const isUnterminated = !!(tokenFlags & TokenFlags.Unterminated);
-            const endOfBody = p - (isUnterminated ? 0 : 1);
-            let regExpFlags = RegularExpressionFlags.None;
-            while (p < end) {
-                const ch = text.charCodeAt(p);
-                if (!isIdentifierPart(ch, languageVersion)) {
-                    break;
-                }
-                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
-                if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, p, 1);
-                }
-                else if (regExpFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, p, 1);
-                }
-                else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
-                    error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, p, 1);
-                }
-                else {
-                    regExpFlags |= flag;
-                    const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
-                    if (languageVersion < availableFrom) {
-                        error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
+            const endOfRegExpBody = pos;
+            if (tokenFlags & TokenFlags.Unterminated) {
+                // Search for the nearest unbalanced bracket for better recovery. Since the expression is
+                // invalid anyways, we take nested square brackets into consideration for the best guess.
+                pos = startOfRegExpBody;
+                inEscape = false;
+                let characterClassDepth = 0;
+                const bracketStack: CharacterCodes[] = [];
+                while (pos < endOfRegExpBody) {
+                    const ch = text.charCodeAt(pos);
+                    if (inEscape) {
+                        inEscape = false;
                     }
+                    else if (ch === CharacterCodes.backslash) {
+                        inEscape = true;
+                    }
+                    else if (ch === CharacterCodes.openBracket) {
+                        characterClassDepth++;
+                    }
+                    else if (ch === CharacterCodes.closeBracket && characterClassDepth) {
+                        characterClassDepth--;
+                    }
+                    else if (!characterClassDepth) {
+                        if (ch === CharacterCodes.openParen) {
+                            bracketStack.push(CharacterCodes.closeParen);
+                        }
+                        else if (ch === CharacterCodes.openBrace) {
+                            bracketStack.push(CharacterCodes.closeBrace);
+                        }
+                        else if (ch === lastOrUndefined(bracketStack)) {
+                            bracketStack.pop();
+                        }
+                        else if (ch === CharacterCodes.closeParen || ch === CharacterCodes.closeBracket || ch === CharacterCodes.closeBrace) {
+                            // We encountered an unbalanced bracket outside a character class. Treat this position as the end of regex.
+                            break;
+                        }
+                    }
+                    pos++;
                 }
-                p++;
+                // Whitespaces and semicolons at the end are not likely to be part of the regex
+                while (isWhiteSpaceLike(text.charCodeAt(pos - 1)) || text.charCodeAt(pos - 1) === CharacterCodes.semicolon) pos--;
+                error(Diagnostics.Unterminated_regular_expression_literal, tokenStart, pos - tokenStart);
             }
-            pos = tokenStart + 1;
-            const saveTokenPos = tokenStart;
-            const saveTokenFlags = tokenFlags;
-            scanRegularExpressionWorker(text, endOfBody, regExpFlags, isUnterminated);
-            if (!isUnterminated) {
-                pos = p;
+            else {
+                // Consume the slash character
+                pos++;
+                let regExpFlags = RegularExpressionFlags.None;
+                while (pos < end) {
+                    const ch = text.charCodeAt(pos);
+                    if (!isIdentifierPart(ch, languageVersion)) {
+                        break;
+                    }
+                    const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                    if (flag === undefined) {
+                        error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
+                    }
+                    else if (regExpFlags & flag) {
+                        error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                    }
+                    else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
+                        error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, pos, 1);
+                    }
+                    else {
+                        regExpFlags |= flag;
+                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
+                        if (languageVersion < availableFrom) {
+                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+                        }
+                    }
+                    pos++;
+                }
+                const endOfRegExpFlags = pos;
+                pos = startOfRegExpBody;
+                const saveTokenPos = tokenStart;
+                const saveTokenFlags = tokenFlags;
+                scanRegularExpressionWorker(text, endOfRegExpBody, regExpFlags);
+                pos = endOfRegExpFlags;
+                tokenStart = saveTokenPos;
+                tokenFlags = saveTokenFlags;
             }
-            tokenStart = saveTokenPos;
-            tokenFlags = saveTokenFlags;
             tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
         }
         return token;
 
-        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean) {
+        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags) {
             /** Grammar parameter */
             const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
             /** Grammar parameter */
@@ -2685,10 +2728,6 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         // falls through
                         case CharacterCodes.closeBracket:
                         case CharacterCodes.closeBrace:
-                            if (isUnterminated && !isInGroup) {
-                                // Assume what starting from the character to be outside of the regex
-                                return;
-                            }
                             if (unicodeMode || ch === CharacterCodes.closeParen) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                             }

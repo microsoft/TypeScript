@@ -10,7 +10,7 @@ file.tsx(11,1): error TS2362: The left-hand side of an arithmetic operation must
 file.tsx(11,8): error TS1003: Identifier expected.
 file.tsx(11,9): error TS2304: Cannot find name 'data'.
 file.tsx(11,13): error TS1005: ';' expected.
-file.tsx(11,20): error TS1161: Unterminated regular expression literal.
+file.tsx(11,19): error TS1161: Unterminated regular expression literal.
 
 
 ==== file.tsx (13 errors) ====
@@ -49,5 +49,5 @@ file.tsx(11,20): error TS1161: Unterminated regular expression literal.
 !!! error TS2304: Cannot find name 'data'.
                 ~
 !!! error TS1005: ';' expected.
-                       
+                      ~~
 !!! error TS1161: Unterminated regular expression literal.

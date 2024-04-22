@@ -16,6 +16,7 @@ import "./unittests/paths";
 import "./unittests/printer";
 import "./unittests/programApi";
 import "./unittests/publicApi";
+import "./unittests/regExpParserRecovery";
 import "./unittests/reuseProgramStructure";
 import "./unittests/semver";
 import "./unittests/transform";
