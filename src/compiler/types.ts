@@ -3045,7 +3045,7 @@ export type OptionalChainRoot =
     | ElementAccessChainRoot
     | CallChainRoot;
 
-export interface CallThisExpression extends LeftHandSideExpression, Declaration {
+export interface CallThisExpression extends MemberExpression, LeftHandSideExpression, Declaration {
     readonly kind: SyntaxKind.CallThisExpression;
     readonly receiver: LeftHandSideExpression;
     readonly expression: Expression;

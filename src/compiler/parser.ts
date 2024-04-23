@@ -26,6 +26,7 @@ import {
     BreakStatement,
     CallExpression,
     CallSignatureDeclaration,
+    CallThisExpression,
     canHaveJSDoc,
     canHaveModifiers,
     CaseBlock,
@@ -744,6 +745,7 @@ const forEachChildTable: ForEachChildTable = {
     },
     [SyntaxKind.CallExpression]: forEachChildInCallOrNewExpression,
     [SyntaxKind.NewExpression]: forEachChildInCallOrNewExpression,
+    [SyntaxKind.CallThisExpression]: forEachChildInCallThisExpression,
     [SyntaxKind.TaggedTemplateExpression]: function forEachChildInTaggedTemplateExpression<T>(node: TaggedTemplateExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
         return visitNode(cbNode, node.tag) ||
             visitNode(cbNode, node.questionDotToken) ||
@@ -1162,6 +1164,13 @@ function forEachChildInCallOrNewExpression<T>(node: CallExpression | NewExpressi
         visitNodes(cbNode, cbNodes, node.arguments);
 }
 
+function forEachChildInCallThisExpression<T>(node: CallThisExpression, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
+    return visitNode(cbNode, node.receiver) ||
+        visitNode(cbNode, node.expression) ||
+        visitNodes(cbNode, cbNodes, node.typeArguments) ||
+        visitNodes(cbNode, cbNodes, node.arguments);
+}
+
 function forEachChildInBlock<T>(node: Block | ModuleBlock, cbNode: (node: Node) => T | undefined, cbNodes?: (nodes: NodeArray<Node>) => T | undefined): T | undefined {
     return visitNodes(cbNode, cbNodes, node.statements);
 }
@@ -1476,6 +1485,7 @@ namespace Parser {
         createCallExpression: factoryCreateCallExpression,
         createCallChain: factoryCreateCallChain,
         createNewExpression: factoryCreateNewExpression,
+        createCallThisExpression: factoryCreateCallThisExpression,
         createParenthesizedExpression: factoryCreateParenthesizedExpression,
         createBlock: factoryCreateBlock,
         createVariableStatement: factoryCreateVariableStatement,
@@ -6421,6 +6431,15 @@ namespace Parser {
         return finishNode(indexedAccess, pos);
     }
 
+    function parseCallThisExpressionRest(pos: number, expression: LeftHandSideExpression) {
+        const name = parseIdentifier();
+        const typeArguments = tryParse(parseTypeArgumentsInExpression);
+        const argumentList = parseArgumentList();
+
+        const callThis = factoryCreateCallThisExpression(expression, name, typeArguments, argumentList);
+        return finishNode(callThis, pos);
+    }
+
     function parseMemberExpressionRest(pos: number, expression: LeftHandSideExpression, allowOptionalChain: boolean): MemberExpression {
         while (true) {
             let questionDotToken: QuestionDotToken | undefined;
@@ -6463,6 +6482,12 @@ namespace Parser {
                     expression = finishNode(factory.createExpressionWithTypeArguments(expression, typeArguments), pos);
                     continue;
                 }
+            }
+
+            const isCallThis = parseOptional(SyntaxKind.TildeGreaterThanToken);
+            if (isCallThis) {
+                expression = parseCallThisExpressionRest(pos, expression);
+                continue;
             }
 
             return expression as MemberExpression;
