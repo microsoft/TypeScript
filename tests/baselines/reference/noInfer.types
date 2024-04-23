@@ -460,12 +460,12 @@ class OkClass<T> {
 >      : ^
 
         return this._value; // ok
->this._value : NoInfer<T>
->            : ^^^^^^^^^^
+>this._value : T
+>            : ^
 >this : this
 >     : ^^^^
->_value : NoInfer<T>
->       : ^^^^^^^^^^
+>_value : T
+>       : ^
     }
 }
 class OkClass2<T> {
