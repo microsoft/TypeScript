@@ -1,0 +1,261 @@
+//// [tests/cases/compiler/enforceReadonly1.ts] ////
+
+=== enforceReadonly1.ts ===
+// A read-only property is not assignable to a mutable property
+
+function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: string }, rx: { readonly [x: string]: string }) {
+>f1 : Symbol(f1, Decl(enforceReadonly1.ts, 0, 0))
+>mp : Symbol(mp, Decl(enforceReadonly1.ts, 2, 12))
+>x : Symbol(x, Decl(enforceReadonly1.ts, 2, 17))
+>rp : Symbol(rp, Decl(enforceReadonly1.ts, 2, 30))
+>x : Symbol(x, Decl(enforceReadonly1.ts, 2, 36))
+>mx : Symbol(mx, Decl(enforceReadonly1.ts, 2, 58))
+>x : Symbol(x, Decl(enforceReadonly1.ts, 2, 66))
+>rx : Symbol(rx, Decl(enforceReadonly1.ts, 2, 87))
+>x : Symbol(x, Decl(enforceReadonly1.ts, 2, 104))
+
+    mp = rp;  // Error
+>mp : Symbol(mp, Decl(enforceReadonly1.ts, 2, 12))
+>rp : Symbol(rp, Decl(enforceReadonly1.ts, 2, 30))
+
+    rp = mp;
+>rp : Symbol(rp, Decl(enforceReadonly1.ts, 2, 30))
+>mp : Symbol(mp, Decl(enforceReadonly1.ts, 2, 12))
+
+    mx = mp;
+>mx : Symbol(mx, Decl(enforceReadonly1.ts, 2, 58))
+>mp : Symbol(mp, Decl(enforceReadonly1.ts, 2, 12))
+
+    mx = rp;
+>mx : Symbol(mx, Decl(enforceReadonly1.ts, 2, 58))
+>rp : Symbol(rp, Decl(enforceReadonly1.ts, 2, 30))
+
+    mx = rx;  // Error
+>mx : Symbol(mx, Decl(enforceReadonly1.ts, 2, 58))
+>rx : Symbol(rx, Decl(enforceReadonly1.ts, 2, 87))
+
+    rx = mp;
+>rx : Symbol(rx, Decl(enforceReadonly1.ts, 2, 87))
+>mp : Symbol(mp, Decl(enforceReadonly1.ts, 2, 12))
+
+    rx = rp;
+>rx : Symbol(rx, Decl(enforceReadonly1.ts, 2, 87))
+>rp : Symbol(rp, Decl(enforceReadonly1.ts, 2, 30))
+
+    rx = mx;
+>rx : Symbol(rx, Decl(enforceReadonly1.ts, 2, 87))
+>mx : Symbol(mx, Decl(enforceReadonly1.ts, 2, 58))
+}
+
+// A derived interface may not change property from mutable to read-only
+
+interface B1 {
+>B1 : Symbol(B1, Decl(enforceReadonly1.ts, 11, 1))
+
+    x: number;
+>x : Symbol(B1.x, Decl(enforceReadonly1.ts, 15, 14))
+}
+
+interface D1 extends B1 {  // Error
+>D1 : Symbol(D1, Decl(enforceReadonly1.ts, 17, 1))
+>B1 : Symbol(B1, Decl(enforceReadonly1.ts, 11, 1))
+
+    readonly x: number;
+>x : Symbol(D1.x, Decl(enforceReadonly1.ts, 19, 25))
+}
+
+interface B2 {
+>B2 : Symbol(B2, Decl(enforceReadonly1.ts, 21, 1))
+
+    get x(): number;
+>x : Symbol(B2.x, Decl(enforceReadonly1.ts, 23, 14), Decl(enforceReadonly1.ts, 24, 20))
+
+    set x(value: number);
+>x : Symbol(B2.x, Decl(enforceReadonly1.ts, 23, 14), Decl(enforceReadonly1.ts, 24, 20))
+>value : Symbol(value, Decl(enforceReadonly1.ts, 25, 10))
+}
+
+interface D2 extends B2 {  // Error
+>D2 : Symbol(D2, Decl(enforceReadonly1.ts, 26, 1))
+>B2 : Symbol(B2, Decl(enforceReadonly1.ts, 21, 1))
+
+    get x(): number;
+>x : Symbol(D2.x, Decl(enforceReadonly1.ts, 28, 25))
+}
+
+class B3 {
+>B3 : Symbol(B3, Decl(enforceReadonly1.ts, 30, 1))
+
+    x = 0;
+>x : Symbol(B3.x, Decl(enforceReadonly1.ts, 32, 10))
+}
+
+class D3 extends B3 {  // Error
+>D3 : Symbol(D3, Decl(enforceReadonly1.ts, 34, 1))
+>B3 : Symbol(B3, Decl(enforceReadonly1.ts, 30, 1))
+
+    readonly x = 1;
+>x : Symbol(D3.x, Decl(enforceReadonly1.ts, 36, 21))
+}
+
+// A const assertion means "as const as possible" without violating constraints
+
+const x1 = { a: "hello", b: 42 };
+>x1 : Symbol(x1, Decl(enforceReadonly1.ts, 42, 5))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 42, 12))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 42, 24))
+
+const x2 = { a: "hello", b: 42 } as const;
+>x2 : Symbol(x2, Decl(enforceReadonly1.ts, 43, 5))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 43, 12))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 43, 24))
+>const : Symbol(const)
+
+const y1: { a: string, b: number } = { a: "hello", b: 42 };
+>y1 : Symbol(y1, Decl(enforceReadonly1.ts, 45, 5))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 45, 11))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 45, 22))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 45, 38))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 45, 50))
+
+const y2: { a: string, b: number } = { a: "hello", b: 42 } as const;
+>y2 : Symbol(y2, Decl(enforceReadonly1.ts, 46, 5))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 46, 11))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 46, 22))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 46, 38))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 46, 50))
+>const : Symbol(const)
+
+const y3: { a: string, readonly b: number } = { a: "hello", b: 42 };
+>y3 : Symbol(y3, Decl(enforceReadonly1.ts, 47, 5))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 47, 11))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 47, 22))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 47, 47))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 47, 59))
+
+const y4: Record<string, unknown> = { a: 1, b: 2 } as const;
+>y4 : Symbol(y4, Decl(enforceReadonly1.ts, 48, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 48, 37))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 48, 43))
+>const : Symbol(const)
+
+declare function f10<T>(obj: T): T;
+>f10 : Symbol(f10, Decl(enforceReadonly1.ts, 48, 60))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 50, 21))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 50, 24))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 50, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 50, 21))
+
+declare function f11<const T>(obj: T): T;
+>f11 : Symbol(f11, Decl(enforceReadonly1.ts, 50, 35))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 51, 21))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 51, 30))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 51, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 51, 21))
+
+declare function f12<const T extends { a: string, b: number }>(obj: T): T;
+>f12 : Symbol(f12, Decl(enforceReadonly1.ts, 51, 41))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 52, 21))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 52, 38))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 52, 49))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 52, 63))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 52, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 52, 21))
+
+declare function f13<const T extends { a: string, readonly b: number }>(obj: T): T;
+>f13 : Symbol(f13, Decl(enforceReadonly1.ts, 52, 74))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 53, 21))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 53, 38))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 53, 49))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 53, 72))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 53, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 53, 21))
+
+declare function f14<const T extends Record<string, unknown>>(obj: T): T;
+>f14 : Symbol(f14, Decl(enforceReadonly1.ts, 53, 83))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 54, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 54, 62))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 54, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 54, 21))
+
+declare function f15<const T extends Readonly<Record<string, unknown>>>(obj: T): T;
+>f15 : Symbol(f15, Decl(enforceReadonly1.ts, 54, 73))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 55, 21))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(enforceReadonly1.ts, 55, 72))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 55, 21))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 55, 21))
+
+f10({ a: "hello", b: 42 });  // { a: string; b: number; }
+>f10 : Symbol(f10, Decl(enforceReadonly1.ts, 48, 60))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 57, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 57, 17))
+
+f11({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
+>f11 : Symbol(f11, Decl(enforceReadonly1.ts, 50, 35))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 58, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 58, 17))
+
+f12({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
+>f12 : Symbol(f12, Decl(enforceReadonly1.ts, 51, 41))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 59, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 59, 17))
+
+f13({ a: "hello", b: 42 });  // { a: "hello"; readonly b: 42; }
+>f13 : Symbol(f13, Decl(enforceReadonly1.ts, 52, 74))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 60, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 60, 17))
+
+f14({ a: "hello", b: 42 });  // { a: "hello"; b: 42; }
+>f14 : Symbol(f14, Decl(enforceReadonly1.ts, 53, 83))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 61, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 61, 17))
+
+f15({ a: "hello", b: 42 });  // { readonly a: "hello"; readonly b: 42; }
+>f15 : Symbol(f15, Decl(enforceReadonly1.ts, 54, 73))
+>a : Symbol(a, Decl(enforceReadonly1.ts, 62, 5))
+>b : Symbol(b, Decl(enforceReadonly1.ts, 62, 17))
+
+// https://github.com/microsoft/TypeScript/issues/13347
+
+interface MutableValue<T> {
+>MutableValue : Symbol(MutableValue, Decl(enforceReadonly1.ts, 62, 27))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 66, 23))
+
+    value: T;
+>value : Symbol(MutableValue.value, Decl(enforceReadonly1.ts, 66, 27))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 66, 23))
+}
+
+interface ImmutableValue<T> {
+>ImmutableValue : Symbol(ImmutableValue, Decl(enforceReadonly1.ts, 68, 1))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 70, 25))
+
+    readonly value: T;
+>value : Symbol(ImmutableValue.value, Decl(enforceReadonly1.ts, 70, 29))
+>T : Symbol(T, Decl(enforceReadonly1.ts, 70, 25))
+}
+
+let i: ImmutableValue<string> = { value: "hi" };
+>i : Symbol(i, Decl(enforceReadonly1.ts, 74, 3))
+>ImmutableValue : Symbol(ImmutableValue, Decl(enforceReadonly1.ts, 68, 1))
+>value : Symbol(value, Decl(enforceReadonly1.ts, 74, 33))
+
+i.value = "Excellent, I can't change it";  // Error
+>i.value : Symbol(ImmutableValue.value, Decl(enforceReadonly1.ts, 70, 29))
+>i : Symbol(i, Decl(enforceReadonly1.ts, 74, 3))
+>value : Symbol(ImmutableValue.value, Decl(enforceReadonly1.ts, 70, 29))
+
+let m: MutableValue<string> = i;  // Error
+>m : Symbol(m, Decl(enforceReadonly1.ts, 77, 3))
+>MutableValue : Symbol(MutableValue, Decl(enforceReadonly1.ts, 62, 27))
+>i : Symbol(i, Decl(enforceReadonly1.ts, 74, 3))
+
+m.value = "Oh dear, I can change it";
+>m.value : Symbol(MutableValue.value, Decl(enforceReadonly1.ts, 66, 27))
+>m : Symbol(m, Decl(enforceReadonly1.ts, 77, 3))
+>value : Symbol(MutableValue.value, Decl(enforceReadonly1.ts, 66, 27))
+
