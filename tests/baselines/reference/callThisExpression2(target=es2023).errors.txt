@@ -1,0 +1,17 @@
+callThisExpression2.ts(5,14): error TS2554: Expected 1 arguments, but got 0.
+callThisExpression2.ts(6,14): error TS2684: The 'this' context of type 'string' is not assignable to method's 'this' of type 'number'.
+
+
+==== callThisExpression2.ts (2 errors) ====
+    declare const receiver: number;
+    declare const badReceiver: string;
+    declare const fn: (this: number, arg: boolean) => string;
+    
+    const err1 = receiver~>fn();
+                 ~~~~~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 callThisExpression2.ts:3:34: An argument for 'arg' was not provided.
+    const err2 = badReceiver~>fn(true);
+                 ~~~~~~~~~~~
+!!! error TS2684: The 'this' context of type 'string' is not assignable to method's 'this' of type 'number'.
+    

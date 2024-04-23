@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/esnext/callThisExpression/callThisExpression2.ts] ////
+
+=== callThisExpression2.ts ===
+declare const receiver: number;
+>receiver : Symbol(receiver, Decl(callThisExpression2.ts, 0, 13))
+
+declare const badReceiver: string;
+>badReceiver : Symbol(badReceiver, Decl(callThisExpression2.ts, 1, 13))
+
+declare const fn: (this: number, arg: boolean) => string;
+>fn : Symbol(fn, Decl(callThisExpression2.ts, 2, 13))
+>this : Symbol(this, Decl(callThisExpression2.ts, 2, 19))
+>arg : Symbol(arg, Decl(callThisExpression2.ts, 2, 32))
+
+const err1 = receiver~>fn();
+>err1 : Symbol(err1, Decl(callThisExpression2.ts, 4, 5))
+>receiver : Symbol(receiver, Decl(callThisExpression2.ts, 0, 13))
+>fn : Symbol(fn, Decl(callThisExpression2.ts, 2, 13))
+
+const err2 = badReceiver~>fn(true);
+>err2 : Symbol(err2, Decl(callThisExpression2.ts, 5, 5))
+>badReceiver : Symbol(badReceiver, Decl(callThisExpression2.ts, 1, 13))
+>fn : Symbol(fn, Decl(callThisExpression2.ts, 2, 13))
+
