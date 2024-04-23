@@ -1,0 +1,14 @@
+duplicateErrorNameNotFound.ts(4,5): error TS2304: Cannot find name 'RoomInterface'.
+duplicateErrorNameNotFound.ts(4,5): error TS2552: Cannot find name 'RoomInterface'. Did you mean 'RoomInterfae'?
+
+
+==== duplicateErrorNameNotFound.ts (2 errors) ====
+    type RoomInterfae = {};
+    
+    export type {
+        RoomInterface
+        ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'RoomInterface'.
+        ~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'RoomInterface'. Did you mean 'RoomInterfae'?
+    }
