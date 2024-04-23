@@ -102,6 +102,7 @@ import {
     countWhere,
     createBinaryExpressionTrampoline,
     createCompilerDiagnostic,
+    createDetachedDiagnostic,
     createDiagnosticCollection,
     createDiagnosticForFileFromMessageChain,
     createDiagnosticForNode,
@@ -123,6 +124,7 @@ import {
     createPrinterWithRemoveCommentsNeverAsciiEscape,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createPropertyNameNodeForIdentifierOrLiteral,
+    createScanner,
     createSymbolTable,
     createSyntacticTypeNodeBuilder,
     createTextWriter,
@@ -937,6 +939,7 @@ import {
     rangeOfTypeParameters,
     ReadonlyKeyword,
     reduceLeft,
+    RegularExpressionLiteral,
     RelationComparisonResult,
     relativeComplement,
     removeExtension,
@@ -31353,6 +31356,42 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkGrammarRegularExpressionLiteral(node: RegularExpressionLiteral) {
+        const sourceFile = getSourceFileOfNode(node);
+        if (!hasParseDiagnostics(sourceFile)) {
+            let lastError: DiagnosticWithLocation | undefined;
+            const scanner = createScanner(
+                sourceFile.languageVersion,
+                /*skipTrivia*/ true,
+                sourceFile.languageVariant,
+                sourceFile.text,
+                (message, length, arg0) => {
+                    // emulate `parseErrorAtPosition` from parser.ts
+                    const start = scanner.getTokenEnd();
+                    if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
+                        const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
+                        addRelatedInfo(lastError, error);
+                    }
+                    else if (!lastError || start !== lastError.start) {
+                        lastError = createFileDiagnostic(sourceFile, start, length, message, arg0);
+                        diagnostics.add(lastError);
+                    }
+                },
+                node.pos,
+                node.end - node.pos,
+            );
+            Debug.assert(scanner.scan() === SyntaxKind.SlashToken);
+            Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral);
+            return !!lastError;
+        }
+        return false;
+    }
+
+    function checkRegularExpressionLiteral(node: RegularExpressionLiteral) {
+        checkGrammarRegularExpressionLiteral(node);
+        return globalRegExpType;
+    }
+
     function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
         if (languageVersion < LanguageFeatureMinimumTarget.SpreadElements) {
             checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
@@ -39662,7 +39701,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.TemplateExpression:
                 return checkTemplateExpression(node as TemplateExpression);
             case SyntaxKind.RegularExpressionLiteral:
-                return globalRegExpType;
+                return checkRegularExpressionLiteral(node as RegularExpressionLiteral);
             case SyntaxKind.ArrayLiteralExpression:
                 return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
             case SyntaxKind.ObjectLiteralExpression:
