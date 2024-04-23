@@ -2492,7 +2492,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             /** Grammar parameter */
             const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
             /** Grammar parameter */
-            const unicodeMode = unicodeSetsMode || !!(regExpFlags & RegularExpressionFlags.UnicodeMode); // v always implies u
+            const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
 
             if (unicodeMode) {
                 // Annex B treats any unicode mode as the strict syntax.
