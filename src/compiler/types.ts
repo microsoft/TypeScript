@@ -7132,6 +7132,7 @@ export interface CompilerOptions {
     downlevelIteration?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;
+    enforceReadonly?: boolean;
     exactOptionalPropertyTypes?: boolean;
     experimentalDecorators?: boolean;
     forceConsistentCasingInFileNames?: boolean;
@@ -7225,7 +7226,6 @@ export interface CompilerOptions {
     strictBindCallApply?: boolean; // Always combine with strict property
     strictNullChecks?: boolean; // Always combine with strict property
     strictPropertyInitialization?: boolean; // Always combine with strict property
-    strictReadonly?: boolean;
     stripInternal?: boolean;
     /** @deprecated */
     suppressExcessPropertyErrors?: boolean;

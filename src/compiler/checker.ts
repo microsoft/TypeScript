@@ -1478,7 +1478,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
-    var strictReadonly = compilerOptions.strictReadonly;
+    var enforceReadonly = compilerOptions.enforceReadonly;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -23480,7 +23480,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // They're still assignable to one another, since `readonly` doesn't affect assignability.
             // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
             if (
-                (relation === strictSubtypeRelation || strictReadonly) &&
+                (relation === strictSubtypeRelation || enforceReadonly) &&
                 isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp) && !(targetProp.flags & SymbolFlags.Method)
             ) {
                 if (reportErrors) {
@@ -23955,7 +23955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 return Ternary.False;
             }
-            if (strictReadonly && sourceInfo.isReadonly && !targetInfo.isReadonly) {
+            if (enforceReadonly && sourceInfo.isReadonly && !targetInfo.isReadonly) {
                 if (reportErrors) {
                     reportError(Diagnostics._0_index_signature_is_readonly_in_the_source_but_not_in_the_target, typeToString(sourceInfo.keyType));
                 }
@@ -32023,7 +32023,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 objectFlags |= getObjectFlags(type) & ObjectFlags.PropagatingFlags;
                 const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
-                const checkFlags = inConstContext && !(strictReadonly && contextualType && isContextualPropertyMutable(contextualType, member.escapedName, nameType)) ? CheckFlags.Readonly : 0;
+                const checkFlags = inConstContext && !(enforceReadonly && contextualType && isContextualPropertyMutable(contextualType, member.escapedName, nameType)) ? CheckFlags.Readonly : 0;
                 const prop = nameType ?
                     createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), checkFlags | CheckFlags.Late) :
                     createSymbol(SymbolFlags.Property | member.flags, member.escapedName, checkFlags);

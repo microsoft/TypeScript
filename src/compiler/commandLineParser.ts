@@ -999,7 +999,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
     },
     {
-        name: "strictReadonly",
+        name: "enforceReadonly",
         type: "boolean",
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
