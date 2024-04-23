@@ -3,7 +3,7 @@
 === functionOverloadAmbiguity1.ts ===
 function callb(lam: (l: number) => void );
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
->      : ^^^   ^^                   ^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >lam : (l: number) => void
 >    : ^ ^^      ^^^^^    
 >l : number
@@ -11,7 +11,7 @@ function callb(lam: (l: number) => void );
 
 function callb(lam: (n: string) => void );
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
->      : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                   ^^^^^^^^^
+>      : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >lam : (n: string) => void
 >    : ^ ^^      ^^^^^    
 >n : string
@@ -19,7 +19,7 @@ function callb(lam: (n: string) => void );
 
 function callb(a) { }
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
->      : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -27,7 +27,7 @@ callb((a) => { a.length; } ); // error, chose first overload
 >callb((a) => { a.length; } ) : any
 >                             : ^^^
 >callb : { (lam: (l: number) => void): any; (lam: (n: string) => void): any; }
->      : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >(a) => { a.length; } : (a: number) => void
 >                     : ^ ^^^^^^^^^^^^^^^^^
 >a : number
@@ -41,7 +41,7 @@ callb((a) => { a.length; } ); // error, chose first overload
 
 function callb2(lam: (n: string) => void );
 >callb2 : { (lam: (n: string) => void): any; (lam: (l: number) => void): any; }
->       : ^^^   ^^                   ^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >lam : (n: string) => void
 >    : ^ ^^      ^^^^^    
 >n : string
@@ -49,7 +49,7 @@ function callb2(lam: (n: string) => void );
 
 function callb2(lam: (l: number) => void );
 >callb2 : { (lam: (n: string) => void): any; (lam: (l: number) => void): any; }
->       : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                   ^^^^^^^^^
+>       : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >lam : (l: number) => void
 >    : ^ ^^      ^^^^^    
 >l : number
@@ -57,7 +57,7 @@ function callb2(lam: (l: number) => void );
 
 function callb2(a) { }
 >callb2 : { (lam: (n: string) => void): any; (lam: (l: number) => void): any; }
->       : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -65,7 +65,7 @@ callb2((a) => { a.length; } ); // ok, chose first overload
 >callb2((a) => { a.length; } ) : any
 >                              : ^^^
 >callb2 : { (lam: (n: string) => void): any; (lam: (l: number) => void): any; }
->       : ^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^   ^^                   ^^^^^^^^^   ^^                   ^^^^^^^^^
 >(a) => { a.length; } : (a: string) => void
 >                     : ^ ^^^^^^^^^^^^^^^^^
 >a : string

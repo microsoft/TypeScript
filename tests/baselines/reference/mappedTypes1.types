@@ -123,7 +123,7 @@ let x1 = f1();
 >x1 : {}
 >   : ^^
 >f1() : {}
->     :   
+>     : ^^
 >f1 : <T1>() => { [P in keyof T1]: void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -147,7 +147,7 @@ let x4 = f4();
 >x4 : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4() : { toString: void; toFixed: void; toExponential: void; toPrecision: void; valueOf: void; toLocaleString: void; }
->     :                                                                                                                
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f4 : <T1 extends Number>() => { [P in keyof T1]: void; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

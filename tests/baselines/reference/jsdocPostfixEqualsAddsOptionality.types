@@ -34,19 +34,19 @@ f()
 >f() : void
 >    : ^^^^
 >f : (a?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 f(null) // should not be allowed
 >f(null) : void
 >        : ^^^^
 >f : (a?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 
 f(undefined)
 >f(undefined) : void
 >             : ^^^^
 >f : (a?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -54,7 +54,7 @@ f(1)
 >f(1) : void
 >     : ^^^^
 >f : (a?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^^      ^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -90,28 +90,28 @@ function g(a) {
 g()
 >g() : void
 >    : ^^^^
->g : (a?: number | null | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
+>  : ^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 g(null)
 >g(null) : void
 >        : ^^^^
->g : (a?: number | null | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
+>  : ^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 g(undefined)
 >g(undefined) : void
 >             : ^^^^
->g : (a?: number | null | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
+>  : ^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 g(1)
 >g(1) : void
 >     : ^^^^
->g : (a?: number | null | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : (a?: (((((number | null) | null) | null) | null) | null) | undefined) => void
+>  : ^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

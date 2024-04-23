@@ -1073,11 +1073,12 @@ export function bar() {}`,
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session } = setup(input);
+            const { session, host } = setup(input);
 
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
+            const defaultProject = info.getDefaultProject();
             session.logger.startGroup();
-            session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+            session.logger.info(`getDefaultProject for ${main.path}: ${defaultProject.projectName}`);
             session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
             session.logger.endGroup();
 
@@ -1092,6 +1093,24 @@ export function bar() {}`,
 
             closeFilesForSession([dummyFilePath], session);
             openFilesForSession([dummyFilePath], session);
+
+            // Verify that tsconfig can be deleted and watched
+            if (ts.server.isConfiguredProject(defaultProject)) {
+                closeFilesForSession([dummyFilePath], session);
+                const config = defaultProject.projectName;
+                const content = host.readFile(config)!;
+                host.deleteFile(config);
+                host.runQueuedTimeoutCallbacks();
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+
+                host.deleteFile(config);
+                openFilesForSession([dummyFilePath], session);
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+            }
 
             // Verify Reload projects
             session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({

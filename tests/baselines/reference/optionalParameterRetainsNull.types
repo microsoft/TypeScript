@@ -25,12 +25,12 @@ let a = {
 a.test("bar", null); // ok, null is assignable to number | null | undefined
 >a.test("bar", null) : void
 >                    : ^^^^
->a.test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->test : <K extends keyof Bar>(a: K, b?: Bar[K] | null | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
+>       : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^             ^^^^^^^^^
+>a : { test<K extends keyof Bar>(a: K, b?: Bar[K] | null): void; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^             ^^^^^^^^^^
+>test : <K extends keyof Bar>(a: K, b?: Bar[K] | null) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^             ^^^^^^^^^
 >"bar" : "bar"
 >      : ^^^^^
 

@@ -73,7 +73,7 @@ function foo() {
 >barn((private, public, package) => { }) : void
 >                                        : ^^^^
 >barn : (cb: (private: any, public: any, package: any) => void) => void
->     : ^  ^^^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^          ^^^          ^^^           ^^^         ^^^^^^^^^
 >(private, public, package) => { } : (private: any, public: any, package: any) => void
 >                                  : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^
 >private : any

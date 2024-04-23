@@ -74,13 +74,13 @@
 >prototype : { set: () => void; get(): void; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        set: function() {            this._map            this.set            this.get            this.addon        },        get() {            this._map            this.set            this.get            this.addon        }    } : { set: () => void; get(): void; }
->                                                                                                                                                                                                                                        : ^^^^^^^          ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         set: function() {
 >set : () => void
 >    : ^^^^^^^^^^
 >function() {            this._map            this.set            this.get            this.addon        } : () => void
->                                                                                                         :           
+>                                                                                                         : ^^^^^^^^^^
 
             this._map
 >this._map : {}

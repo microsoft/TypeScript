@@ -1203,3 +1203,16 @@ export function changeToHostTrackingWrittenFiles(inputHost: TestServerHost) {
     };
     return host;
 }
+
+export function osFlavorToString(osFlavor: TestServerHostOsFlavor) {
+    switch (osFlavor) {
+        case TestServerHostOsFlavor.Windows:
+            return "Windows";
+        case TestServerHostOsFlavor.MacOs:
+            return "MacOs";
+        case TestServerHostOsFlavor.Linux:
+            return "Linux";
+        default:
+            Debug.assertNever(osFlavor);
+    }
+}

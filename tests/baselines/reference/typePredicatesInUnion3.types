@@ -193,7 +193,7 @@ if (val.predicate()) {
 >assertType<number>(val.attribute) : void
 >                                  : ^^^^
 >assertType : <T>(_val: T) => void
->           : ^^^^    ^^^^^^^^^^^^
+>           : ^ ^^    ^^ ^^^^^^^^^
 >val.attribute : number | null
 >              : ^^^^^^^^^^^^^
 >val : Type1 | Type2

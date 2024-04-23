@@ -253,13 +253,13 @@ export async function adaptSession(input: GatewayPayload) {
 >assertMessage(input.d) : void
 >                       : ^^^^
 >assertMessage : (event: { a: 1; }) => void
->              : ^     ^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^         ^^^^^^^^^
 >input.d : { a: 1; }
 >        : ^^^^^^^^^
 >input : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { a: 1; }
->  :          
+>  : ^^^^^^^^^
     }
 }
 

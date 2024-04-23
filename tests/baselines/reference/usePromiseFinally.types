@@ -13,11 +13,11 @@ let promise1 = new Promise(function(resolve, reject) {})
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >function(resolve, reject) {} : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
->                             : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                             : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^   ^^^^^^^^^^^^^^^^^^
 >resolve : (value: unknown) => void
 >        : ^     ^^^^^^^^^^^^^^^^^^
 >reject : (reason?: any) => void
->       : ^      ^^^^^^^^^^^^^^^
+>       : ^      ^^^   ^^^^^^^^^
 
                 .finally(function() {});
 >finally : (onfinally?: () => void) => Promise<unknown>

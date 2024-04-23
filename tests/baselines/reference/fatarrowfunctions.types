@@ -15,7 +15,7 @@ function foo(x:any) {
 foo((x:number,y,z)=>{return x+y+z;});
 >foo((x:number,y,z)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x:number,y,z)=>{return x+y+z;} : (x: number, y: any, z: any) => any
 >                                : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : number
@@ -32,7 +32,7 @@ foo((x:number,y,z)=>{return x+y+z;});
 foo((x,y,z)=>{return x+y+z;});
 >foo((x,y,z)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y,z)=>{return x+y+z;} : (x: any, y: any, z: any) => any
 >                         : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
@@ -47,7 +47,7 @@ foo((x,y,z)=>{return x+y+z;});
 foo((x,y:number,z)=>{return x+y+z;});
 >foo((x,y:number,z)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y:number,z)=>{return x+y+z;} : (x: any, y: number, z: any) => any
 >                                : ^ ^^^^^^^ ^^      ^^ ^^^^^^^^^^^^^
 >x : any
@@ -64,7 +64,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo((x,y:number,z:number)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y:number,z:number)=>{return x+y+z;} : (x: any, y: number, z: number) => any
 >                                       : ^ ^^^^^^^ ^^      ^^ ^^      ^^^^^^^^
 >x : any
@@ -83,7 +83,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 foo((x,y,z:number)=>{return x+y+z;});
 >foo((x,y,z:number)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y,z:number)=>{return x+y+z;} : (x: any, y: any, z: number) => any
 >                                : ^ ^^^^^^^ ^^^^^^^ ^^      ^^^^^^^^
 >x : any
@@ -100,7 +100,7 @@ foo((x,y,z:number)=>{return x+y+z;});
 foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >()=>{return 0;} : () => number
 >                : ^^^^^^^^^^^^
 >0 : 0
@@ -109,7 +109,7 @@ foo(()=>{return 0;});
 foo((x:number,y,z)=>x+y+z);
 >foo((x:number,y,z)=>x+y+z) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x:number,y,z)=>x+y+z : (x: number, y: any, z: any) => any
 >                      : ^ ^^      ^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : number
@@ -126,7 +126,7 @@ foo((x:number,y,z)=>x+y+z);
 foo((x,y,z)=>x+y+z);
 >foo((x,y,z)=>x+y+z) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y,z)=>x+y+z : (x: any, y: any, z: any) => any
 >               : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^
 >x : any
@@ -141,7 +141,7 @@ foo((x,y,z)=>x+y+z);
 foo((x,y:number,z)=>{return x+y+z;});
 >foo((x,y:number,z)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y:number,z)=>{return x+y+z;} : (x: any, y: number, z: any) => any
 >                                : ^ ^^^^^^^ ^^      ^^ ^^^^^^^^^^^^^
 >x : any
@@ -158,7 +158,7 @@ foo((x,y:number,z)=>{return x+y+z;});
 foo((x,y:number,z:number)=>{return x+y+z;});
 >foo((x,y:number,z:number)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y:number,z:number)=>{return x+y+z;} : (x: any, y: number, z: number) => any
 >                                       : ^ ^^^^^^^ ^^      ^^ ^^      ^^^^^^^^
 >x : any
@@ -177,7 +177,7 @@ foo((x,y:number,z:number)=>{return x+y+z;});
 foo((x,y,z:number)=>{return x+y+z;});
 >foo((x,y,z:number)=>{return x+y+z;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >(x,y,z:number)=>{return x+y+z;} : (x: any, y: any, z: number) => any
 >                                : ^ ^^^^^^^ ^^^^^^^ ^^      ^^^^^^^^
 >x : any
@@ -194,7 +194,7 @@ foo((x,y,z:number)=>{return x+y+z;});
 foo(()=>{return 0;});
 >foo(()=>{return 0;}) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >()=>{return 0;} : () => number
 >                : ^^^^^^^^^^^^
 >0 : 0
@@ -204,7 +204,7 @@ foo(()=>{return 0;});
 foo(((x) => x));
 >foo(((x) => x)) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >((x) => x) : (x: any) => any
 >           : ^ ^^^^^^^^^^^^^
 >(x) => x : (x: any) => any
@@ -215,7 +215,7 @@ foo(((x) => x));
 foo(x => x*x);
 >foo(x => x*x) : any
 >foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >x => x*x : (x: any) => number
 >         : ^ ^^^^^^^^^^^^^^^^
 >x : any
@@ -228,7 +228,7 @@ var y = x => x*x;
 >y : (x: any) => number
 >  : ^ ^^^^^^^^^^^^^^^^
 >x => x*x : (x: any) => number
->         :                   
+>         : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >x*x : number
 >    : ^^^^^^
@@ -239,7 +239,7 @@ var z = (x:number) => x*x;
 >z : (x: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(x:number) => x*x : (x: number) => number
->                  :                      
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x*x : number
@@ -253,7 +253,7 @@ var w = () => 3;
 >w : () => number
 >  : ^^^^^^^^^^^^
 >() => 3 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -267,7 +267,7 @@ function ternaryTest(isWhile:boolean) {
 >f : (n: any) => boolean
 >  : ^ ^^^^^^^^^^^^^^^^^
 >isWhile ? function (n) { return n > 0; } : function (n) { return n === 0; } : (n: any) => boolean
->                                                                            :                    
+>                                                                            : ^ ^^^^^^^^^^^^^^^^^
 >isWhile : boolean
 >        : ^^^^^^^
 >function (n) { return n > 0; } : (n: any) => boolean
@@ -291,7 +291,7 @@ function ternaryTest(isWhile:boolean) {
 
 declare function setTimeout(expression: any, msec?: number, language?: any): number;
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^       ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^      ^^^
 >expression : any
 >msec : number
 >     : ^^^^^^
@@ -301,7 +301,7 @@ var messenger = {
 >messenger : { message: string; start: () => void; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: string; start: () => void; }
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
@@ -313,13 +313,13 @@ var messenger = {
 >start : () => void
 >      : ^^^^^^^^^^
 >function() {        setTimeout(() => { this.message.toString(); }, 3000);    } : () => void
->                                                                               :           
+>                                                                               : ^^^^^^^^^^
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout(() => { this.message.toString(); }, 3000) : number
 >                                                     : ^^^^^^
 >setTimeout : { (handler: TimerHandler, timeout?: number, ...arguments: any[]): number; (expression: any, msec?: number, language?: any): number; }
->           : ^^^       ^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^          ^^^^^^^    ^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^
+>           : ^^^       ^^            ^^       ^^^      ^^^^^         ^^     ^^^^^^^^^^^^          ^^   ^^    ^^^      ^^        ^^^   ^^^^^^^^^^^^
 >() => { this.message.toString(); } : () => void
 >                                   : ^^^^^^^^^^
 >this.message.toString() : any

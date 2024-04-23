@@ -3,7 +3,7 @@
 === defaultExportWithOverloads01.ts ===
 export default function f();
 >f : { (): any; (x: string): any; }
->  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 
 export default function f(x: string);
 >f : { (): any; (x: string): any; }
@@ -13,7 +13,7 @@ export default function f(x: string);
 
 export default function f(...args: any[]) {
 >f : { (): any; (x: string): any; }
->  : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 }

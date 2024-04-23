@@ -26,11 +26,11 @@ function SFC<T>(props: Record<string, T>) {
 ><SFC<string> prop={1}></SFC> : JSX.Element
 >                             : ^^^^^^^^^^^
 >SFC : <T>(props: Record<string, T>) => string
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^                 ^^^^^^^^^^^
 >prop : number
 >     : ^^^^^^
 >1 : 1
 >  : ^
 >SFC : <T>(props: Record<string, T>) => string
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^                 ^^^^^^^^^^^
 

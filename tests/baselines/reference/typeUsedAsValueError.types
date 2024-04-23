@@ -73,7 +73,7 @@ acceptsSomeType(someType);
 >acceptsSomeType(someType) : void
 >                          : ^^^^
 >acceptsSomeType : (a: someType) => void
->                : ^ ^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^^^^^^^^
 >someType : any
 >         : ^^^
 
@@ -81,7 +81,7 @@ acceptsSomeType(someTypeNotFound);
 >acceptsSomeType(someTypeNotFound) : void
 >                                  : ^^^^
 >acceptsSomeType : (a: someType) => void
->                : ^ ^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^        ^^^^^^^^^
 >someTypeNotFound : any
 >                 : ^^^
 

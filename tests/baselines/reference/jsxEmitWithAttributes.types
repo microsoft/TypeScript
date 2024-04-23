@@ -79,13 +79,13 @@ export namespace Element {
 
 export let createElement = Element.createElement;
 >createElement : (args: any[]) => {}
->              : ^    ^^^^^^^^^^^^^^
+>              : ^    ^^     ^^^^^^^
 >Element.createElement : (args: any[]) => {}
->                      :                    
+>                      : ^    ^^     ^^^^^^^
 >Element : typeof Element
 >        : ^^^^^^^^^^^^^^
 >createElement : (args: any[]) => {}
->              : ^    ^^^^^^^^^^^^^^
+>              : ^    ^^     ^^^^^^^
 
 function toCamelCase(text: string): string {
 >toCamelCase : (text: string) => string
@@ -111,11 +111,11 @@ function toCamelCase(text: string): string {
 >text.substring(1) : string
 >                  : ^^^^^^
 >text.substring : (start: number, end?: number) => string
->               : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >text : string
 >     : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 }

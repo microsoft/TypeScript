@@ -11,7 +11,7 @@ const { promise, resolve, reject } = Promise.withResolvers<T>();
 >resolve : (value: T | PromiseLike<T>) => void
 >        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >reject : (reason?: any) => void
->       : ^      ^^^^^^^^^^^^^^^
+>       : ^      ^^^   ^^^^^^^^^
 >Promise.withResolvers<T>() : PromiseWithResolvers<T>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.withResolvers : <T>() => PromiseWithResolvers<T>

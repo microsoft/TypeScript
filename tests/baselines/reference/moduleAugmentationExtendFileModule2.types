@@ -109,7 +109,7 @@ let z1 = Observable.someValue.toFixed();
 >Observable.someValue.toFixed() : string
 >                               : ^^^^^^
 >Observable.someValue.toFixed : (fractionDigits?: number) => string
->                             : ^              ^^^^^^^^^^^^^^^^^^^^
+>                             : ^              ^^^      ^^^^^^^^^^^
 >Observable.someValue : number
 >                     : ^^^^^^
 >Observable : typeof Observable
@@ -117,7 +117,7 @@ let z1 = Observable.someValue.toFixed();
 >someValue : number
 >          : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 let z2 = Observable.someAnotherValue.toLowerCase();
 >z2 : string

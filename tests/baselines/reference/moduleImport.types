@@ -79,11 +79,11 @@ module X {
 >ABC.ping(x-1) : void
 >              : ^^^^
 >ABC.ping : (x: number) => void
->         : ^ ^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^
 >ABC : typeof ABC
 >    : ^^^^^^^^^^
 >ping : (x: number) => void
->     : ^ ^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >x-1 : number
 >    : ^^^^^^
 >x : number

@@ -26,8 +26,8 @@ function fn<T extends Array<unknown> | undefined>(arg: T) {
         takeArray(arg);
 >takeArray(arg) : void
 >               : ^^^^
->takeArray : (arr: unknown[]) => void
->          : ^   ^^^^^^^^^^^^^^^^^^^^
+>takeArray : (arr: Array<unknown>) => void
+>          : ^   ^^              ^^^^^^^^^
 >arg : unknown[]
 >    : ^^^^^^^^^
 

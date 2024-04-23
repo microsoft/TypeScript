@@ -24,7 +24,7 @@ export class Class2 {
 
     @decorate
 >decorate : (target: any, propertyKey: string) => void
->         : ^      ^^^^^^^           ^^^^^^^^^^^^^^^^^
+>         : ^      ^^   ^^           ^^      ^^^^^^^^^
 
     get prop(): Class1 | undefined {
 >prop : Class1

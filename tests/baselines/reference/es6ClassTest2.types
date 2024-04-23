@@ -80,11 +80,11 @@ console.log((<any>m5.isAlive).toString());
 >console.log((<any>m5.isAlive).toString()) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
@@ -257,7 +257,7 @@ class OverloadedMonster {
 
     attack();
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 
     attack(a: any);
 >attack : { (): any; (a: any): any; }
@@ -266,7 +266,7 @@ class OverloadedMonster {
 
     attack(target?) {
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >target : any
 
         //WScript.Echo("Attacks " + target);
@@ -302,11 +302,11 @@ var m6 = new OverloadedMonster("2");
 m5.attack(m6);
 >m5.attack(m6) : any
 >m5.attack : { (): any; (a: any): any; }
->          : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m5 : OverloadedMonster
 >   : ^^^^^^^^^^^^^^^^^
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m6 : OverloadedMonster
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -434,11 +434,11 @@ class SuperChild extends SuperParent {
 >super.b('str') : void
 >               : ^^^^
 >super.b : (b: string) => void
->        : ^ ^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^
 >super : SuperParent
 >      : ^^^^^^^^^^^
 >b : (b: string) => void
->  : ^ ^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >'str' : "str"
 >      : ^^^^^
     }

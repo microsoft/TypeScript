@@ -54,7 +54,7 @@ for (let x = 0; x < 2; ++x) {
 use(data[0]() === data[1]());
 >use(data[0]() === data[1]()) : any
 >use : (a: any) => any
->    : ^ ^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >data[0]() === data[1]() : boolean
 >                        : ^^^^^^^
 >data[0]() : any

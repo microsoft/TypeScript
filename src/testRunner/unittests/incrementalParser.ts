@@ -160,7 +160,7 @@ describe("unittests:: Incremental Parser", () => {
         const oldText = ts.ScriptSnapshot.fromString(source);
         const newTextAndChange = withInsert(oldText, semicolonIndex, "/");
 
-        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 0);
+        compareTrees(oldText, newTextAndChange.text, newTextAndChange.textChangeRange, 4);
     });
 
     it("Regular expression 2", () => {

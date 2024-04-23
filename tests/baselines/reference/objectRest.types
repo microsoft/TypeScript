@@ -366,7 +366,7 @@ var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmp
 >noContextualType : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
 >                 : ^                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
->                                                                               :                                                             ^                   
+>                                                                               : ^                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >aNumber : number
 >        : ^^^^^^
 >12 : 12

@@ -62,7 +62,7 @@ class A {
 >A.#foo(30) : void
 >           : ^^^^
 >A.#foo : (a: number) => void
->       : ^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -72,7 +72,7 @@ class A {
 >A.#bar(30) : Promise<void>
 >           : ^^^^^^^^^^^^^
 >A.#bar : (a: number) => Promise<void>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -82,7 +82,7 @@ class A {
 >A.#bar(30) : Promise<void>
 >           : ^^^^^^^^^^^^^
 >A.#bar : (a: number) => Promise<void>
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 >30 : 30
@@ -137,7 +137,7 @@ class B extends A {
 >B.#foo("str") : void
 >              : ^^^^
 >B.#foo : (a: string) => void
->       : ^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >B : typeof B
 >  : ^^^^^^^^
 >"str" : "str"

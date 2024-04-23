@@ -24,7 +24,7 @@ function fn1(n: number) {
 >fn1(n - 1) : number
 >           : ^^^^^^
 >fn1 : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >n - 1 : number
 >      : ^^^^^^
 >n : number
@@ -39,7 +39,7 @@ const num: number = fn1();
 >fn1() : number
 >      : ^^^^^^
 >fn1 : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 
 function fn2(n: number) {
 >fn2 : (n: number) => never
@@ -51,7 +51,7 @@ function fn2(n: number) {
 >fn2(n) : never
 >       : ^^^^^
 >fn2 : (n: number) => never
->    : ^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 }
@@ -61,7 +61,7 @@ const nev: never = fn2();
 >fn2() : never
 >      : ^^^^^
 >fn2 : (n: number) => never
->    : ^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^
 
 function fn3(n: number) {
 >fn3 : (n: number) => number
@@ -86,7 +86,7 @@ function fn3(n: number) {
 >fn1("hello world") : number
 >                   : ^^^^^^
 >fn1 : (n: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >"hello world" : "hello world"
 >              : ^^^^^^^^^^^^^
     }

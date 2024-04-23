@@ -186,7 +186,7 @@ if (funA(0, a)) {
 >funA(0, a) : boolean
 >           : ^^^^^^^
 >funA : (p1: any, p2: any) => p1 is B
->     : ^  ^^^^^^^  ^^^^^^^^^^^^^^^^^
+>     : ^  ^^   ^^  ^^   ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >a : A
@@ -232,7 +232,7 @@ acceptingDifferentSignatureTypeGuardFunction(isC);
 >acceptingDifferentSignatureTypeGuardFunction(isC) : any
 >                                                  : ^^^
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
->                                             : ^  ^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^  ^^     ^^^            ^^^^^^^^
 >isC : (p1: any) => p1 is C
 >    : ^  ^^^^^^^^^^^^^^^^^
 
@@ -509,7 +509,7 @@ type KeySet<T extends Keys> = { [k in T]: true }
 
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
->hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | 'd'>
+>hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
 >       : ^ ^^^^^^^^^^^^^^^ ^^         ^^^^^                    
 >x : KeySet<T>
 >  : ^^^^^^^^^

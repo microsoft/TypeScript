@@ -25,7 +25,7 @@ bar(1 as Foo<number>);
 >bar(1 as Foo<number>) : number
 >                      : ^^^^^^
 >bar : <T>(element: Foo) => number
->    : ^^^^       ^^^^^^^^^^^^^^^^
+>    : ^^^^       ^^   ^^^^^^^^^^^
 >1 as Foo<number> : Foo<number>
 >                 : ^^^^^^^^^^^
 >1 : 1

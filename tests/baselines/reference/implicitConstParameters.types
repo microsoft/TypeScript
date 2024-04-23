@@ -34,17 +34,17 @@ function fn(x: number | string) {
 >doSomething(() => x.toFixed()) : void
 >                               : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.toFixed() : () => string
 >                  : ^^^^^^^^^^^^
 >x.toFixed() : string
 >            : ^^^^^^
->x.toFixed : (fractionDigits?: number | undefined) => string
->          : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
   }
 }
 
@@ -66,7 +66,7 @@ function f1(x: string | undefined) {
 >doSomething(() => x.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number
@@ -91,7 +91,7 @@ function f2(x: string | undefined) {
 >doSomething(() => {            doSomething(() => x.length);        }) : void
 >                                                                      : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => {            doSomething(() => x.length);        } : () => void
 >                                                         : ^^^^^^^^^^
 
@@ -99,7 +99,7 @@ function f2(x: string | undefined) {
 >doSomething(() => x.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number
@@ -137,7 +137,7 @@ function f3(x: string | undefined) {
 >doSomething(() => x.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number
@@ -172,7 +172,7 @@ function f4(x: string | undefined) {
 >doSomething(() => x.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number
@@ -198,7 +198,7 @@ function f5(x: string | undefined) {
 >doSomething(() => x.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => x.length : () => number
 >               : ^^^^^^^^^^^^
 >x.length : number
@@ -242,7 +242,7 @@ function f6(x: string | undefined) {
 >doSomething(() => y.length) : void
 >                            : ^^^^
 >doSomething : (cb: () => void) => void
->            : ^  ^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^^
 >() => y.length : () => number
 >               : ^^^^^^^^^^^^
 >y.length : number

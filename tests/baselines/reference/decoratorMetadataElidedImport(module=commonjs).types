@@ -27,13 +27,13 @@ class Test {
 
         @whatever arg1: string,
 >whatever : (a: any, b: any, c: any) => void
->         : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
+>         : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^
 >arg1 : string
 >     : ^^^^^^
 
         @whatever arg2: number
 >whatever : (a: any, b: any, c: any) => void
->         : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
+>         : ^ ^^   ^^ ^^   ^^ ^^   ^^^^^^^^^
 >arg2 : number
 >     : ^^^^^^
 
