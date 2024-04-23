@@ -3126,8 +3126,8 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
         return node;
     }
 
-     // @api
-     function createCallThisExpression(receiver: Expression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
+    // @api
+    function createCallThisExpression(receiver: Expression, expression: Expression, typeArguments: readonly TypeNode[] | undefined, argumentsArray: readonly Expression[] | undefined) {
         const node = createBaseCallThisExpression(
             parenthesizerRules().parenthesizeLeftSideOfAccess(receiver, /*optionalChain*/ false),
             parenthesizerRules().parenthesizeRightSideOfBinary(SyntaxKind.TildeGreaterThanToken, receiver, expression),

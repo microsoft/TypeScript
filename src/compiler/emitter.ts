@@ -2701,7 +2701,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     function emitCallThisExpression(node: CallThisExpression) {
         emitExpression(node.receiver, parenthesizer.parenthesizeLeftSideOfAccess);
         emitTokenWithComment(SyntaxKind.TildeGreaterThanToken, node.receiver.end, writePunctuation, node);
-        emitExpression(node.expression, (expr) => parenthesizer.parenthesizeRightSideOfBinary(SyntaxKind.TildeGreaterThanToken, node.receiver, expr));
+        emitExpression(node.expression, expr => parenthesizer.parenthesizeRightSideOfBinary(SyntaxKind.TildeGreaterThanToken, node.receiver, expr));
         emitTypeArguments(node, node.typeArguments);
         emitExpressionList(node, node.arguments, ListFormat.CallExpressionArguments, parenthesizer.parenthesizeExpressionForDisallowedComma);
     }

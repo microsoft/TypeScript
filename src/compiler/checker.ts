@@ -51,6 +51,7 @@ import {
     CallExpression,
     CallLikeExpression,
     CallSignatureDeclaration,
+    CallThisExpression,
     CancellationToken,
     canHaveDecorators,
     canHaveExportModifier,
@@ -489,6 +490,7 @@ import {
     isCallLikeOrFunctionLikeExpression,
     isCallOrNewExpression,
     isCallSignatureDeclaration,
+    isCallThisExpression,
     isCatchClause,
     isCatchClauseVariableDeclaration,
     isCatchClauseVariableDeclarationOrBindingElement,
@@ -1120,11 +1122,9 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    CallThisExpression,
-    isCallThisExpression,
-} from "./_namespaces/ts.js";
-import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
-import * as performance from "./_namespaces/ts.performance.js";
+} from "./_namespaces/ts";
+import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
+import * as performance from "./_namespaces/ts.performance";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
