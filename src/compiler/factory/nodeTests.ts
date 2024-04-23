@@ -20,6 +20,7 @@ import {
     BreakStatement,
     Bundle,
     CallExpression,
+    CallThisExpression,
     CallSignatureDeclaration,
     CaseBlock,
     CaseClause,
@@ -595,6 +596,10 @@ export function isCallExpression(node: Node): node is CallExpression {
 
 export function isNewExpression(node: Node): node is NewExpression {
     return node.kind === SyntaxKind.NewExpression;
+}
+
+export function isCallThisExpression(node: Node): node is CallThisExpression {
+    return node.kind === SyntaxKind.CallThisExpression;
 }
 
 export function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression {

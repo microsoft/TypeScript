@@ -1120,6 +1120,8 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    CallThisExpression,
+    isCallThisExpression,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -35428,7 +35430,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If the called expression is not of the form `x.f` or `x["f"]`, then sourceType = voidType
             // If the signature's 'this' type is voidType, then the check is skipped -- anything is compatible.
             // If the expression is a new expression or super call expression, then the check is skipped.
-            const thisArgumentNode = getThisArgumentOfCall(node);
+            const thisArgumentNode = isCallThisExpression(node) ? node.receiver : getThisArgumentOfCall(node);
             const thisArgumentType = getThisArgumentType(thisArgumentNode);
             const errorNode = reportErrors ? (thisArgumentNode || node) : undefined;
             const headMessage = Diagnostics.The_this_context_of_type_0_is_not_assignable_to_method_s_this_of_type_1;
@@ -36441,6 +36443,87 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return resolveErrorCall(node);
     }
 
+    function resolveCallThisExpression(node: CallThisExpression, candidatesOutArray: Signature[] | undefined, checkMode: CheckMode): Signature {
+        let funcType = checkExpression(node.expression);
+
+        funcType = checkNonNullTypeWithReporter(
+            funcType,
+            node.expression,
+            reportCannotInvokePossiblyNullOrUndefinedError,
+        );
+
+        if (funcType === silentNeverType) {
+            return silentNeverSignature;
+        }
+
+        const apparentType = getApparentType(funcType);
+        if (isErrorType(apparentType)) {
+            // Another error has already been reported
+            return resolveErrorCall(node);
+        }
+
+        // Technically, this signatures list may be incomplete. We are taking the apparent type,
+        // but we are not including call signatures that may have been added to the Object or
+        // Function interface, since they have none by default. This is a bit of a leap of faith
+        // that the user will not add any.
+        const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+        const numConstructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct).length;
+
+        // TS 1.0 Spec: 4.12
+        // In an untyped function call no TypeArgs are permitted, Args can be any argument list, no contextual
+        // types are provided for the argument expressions, and the result is always of type Any.
+        if (isUntypedFunctionCall(funcType, apparentType, callSignatures.length, numConstructSignatures)) {
+            // The unknownType indicates that an error already occurred (and was reported).  No
+            // need to report another error in this case.
+            if (!isErrorType(funcType) && node.typeArguments) {
+                error(node, Diagnostics.Untyped_function_calls_may_not_accept_type_arguments);
+            }
+            return resolveUntypedCall(node);
+        }
+        // If FuncExpr's apparent type(section 3.8.1) is a function type, the call is a typed function call.
+        // TypeScript employs overload resolution in typed function calls in order to support functions
+        // with multiple call signatures.
+        if (!callSignatures.length) {
+            if (numConstructSignatures) {
+                error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
+            }
+            else {
+                let relatedInformation: DiagnosticRelatedInformation | undefined;
+                if (node.arguments.length === 1) {
+                    const text = getSourceFileOfNode(node).text;
+                    if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /*stopAfterLineBreak*/ true) - 1))) {
+                        relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon);
+                    }
+                }
+                invocationError(node.expression, apparentType, SignatureKind.Call, relatedInformation);
+            }
+            return resolveErrorCall(node);
+        }
+        // When a call to a generic function is an argument to an outer call to a generic function for which
+        // inference is in process, we have a choice to make. If the inner call relies on inferences made from
+        // its contextual type to its return type, deferring the inner call processing allows the best possible
+        // contextual type to accumulate. But if the outer call relies on inferences made from the return type of
+        // the inner call, the inner call should be processed early. There's no sure way to know which choice is
+        // right (only a full unification algorithm can determine that), so we resort to the following heuristic:
+        // If no type arguments are specified in the inner call and at least one call signature is generic and
+        // returns a function type, we choose to defer processing. This narrowly permits function composition
+        // operators to flow inferences through return types, but otherwise processes calls right away. We
+        // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
+        // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
+        // from which we never make inferences).
+        if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
+            skippedGenericFunction(node, checkMode);
+            return resolvingSignature;
+        }
+        // If the function is explicitly marked with `@class`, then it must be constructed.
+        if (callSignatures.some(sig => isInJSFile(sig.declaration) && !!getJSDocClassTag(sig.declaration!))) {
+            error(node, Diagnostics.Value_of_type_0_is_not_callable_Did_you_mean_to_include_new, typeToString(funcType));
+            return resolveErrorCall(node);
+        }
+
+        return resolveCall(node, callSignatures, candidatesOutArray, checkMode, SignatureFlags.None);
+    }
+
     function someSignature(signatures: Signature | readonly Signature[], f: (s: Signature) => boolean): boolean {
         if (isArray(signatures)) {
             return some(signatures, signature => someSignature(signature, f));
@@ -36829,6 +36912,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return resolveCallExpression(node, candidatesOutArray, checkMode);
             case SyntaxKind.NewExpression:
                 return resolveNewExpression(node, candidatesOutArray, checkMode);
+            case SyntaxKind.CallThisExpression:
+                return resolveCallThisExpression(node, candidatesOutArray, checkMode);
             case SyntaxKind.TaggedTemplateExpression:
                 return resolveTaggedTemplateExpression(node, candidatesOutArray, checkMode);
             case SyntaxKind.Decorator:
@@ -37077,6 +37162,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return getIntersectionType([returnType, jsAssignmentType]);
             }
         }
+
+        return returnType;
+    }
+
+    function checkCallThisExpression(node: CallThisExpression, checkMode?: CheckMode): Type {
+        checkGrammarTypeArguments(node, node.typeArguments);
+
+        const signature = getResolvedSignature(node, /*candidatesOutArray*/ undefined, checkMode);
+        const returnType = getReturnTypeOfSignature(signature);
 
         return returnType;
     }
@@ -41032,6 +41126,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // falls through
             case SyntaxKind.NewExpression:
                 return checkCallExpression(node as CallExpression, checkMode);
+            case SyntaxKind.CallThisExpression:
+                return checkCallThisExpression(node as CallThisExpression, checkMode);
             case SyntaxKind.TaggedTemplateExpression:
                 return checkTaggedTemplateExpression(node as TaggedTemplateExpression);
             case SyntaxKind.ParenthesizedExpression:
