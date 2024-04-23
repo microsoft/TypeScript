@@ -205,7 +205,6 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
     // Emit
     const result = program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ declaration, transpileOptions.transformers, /*forceDtsEmit*/ declaration);
 
-    // TODO: Should this require `reportDiagnostics`?
     addRange(/*to*/ diagnostics, /*from*/ result.diagnostics);
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
