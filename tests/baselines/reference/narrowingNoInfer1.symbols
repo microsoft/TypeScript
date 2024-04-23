@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/narrowingNoInfer1.ts] ////
+
+=== narrowingNoInfer1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58266
+
+type TaggedA = { _tag: "a" };
+>TaggedA : Symbol(TaggedA, Decl(narrowingNoInfer1.ts, 0, 0))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16))
+
+type TaggedB = { _tag: "b" };
+>TaggedB : Symbol(TaggedB, Decl(narrowingNoInfer1.ts, 2, 29))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 3, 16))
+
+type TaggedUnion = TaggedA | TaggedB;
+>TaggedUnion : Symbol(TaggedUnion, Decl(narrowingNoInfer1.ts, 3, 29))
+>TaggedA : Symbol(TaggedA, Decl(narrowingNoInfer1.ts, 0, 0))
+>TaggedB : Symbol(TaggedB, Decl(narrowingNoInfer1.ts, 2, 29))
+
+const m: { result: NoInfer<TaggedUnion> }[] = [];
+>m : Symbol(m, Decl(narrowingNoInfer1.ts, 7, 5))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>TaggedUnion : Symbol(TaggedUnion, Decl(narrowingNoInfer1.ts, 3, 29))
+
+function map<A, B>(items: readonly A[], f: (a: NoInfer<A>) => B) {
+>map : Symbol(map, Decl(narrowingNoInfer1.ts, 7, 49))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
+>items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
+>a : Symbol(a, Decl(narrowingNoInfer1.ts, 9, 44))
+>NoInfer : Symbol(NoInfer, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(narrowingNoInfer1.ts, 9, 13))
+>B : Symbol(B, Decl(narrowingNoInfer1.ts, 9, 15))
+
+  return items.map(f);
+>items.map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
+>items : Symbol(items, Decl(narrowingNoInfer1.ts, 9, 19))
+>map : Symbol(ReadonlyArray.map, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(narrowingNoInfer1.ts, 9, 39))
+}
+
+const something = map(m, (_) =>
+>something : Symbol(something, Decl(narrowingNoInfer1.ts, 13, 5))
+>map : Symbol(map, Decl(narrowingNoInfer1.ts, 7, 49))
+>m : Symbol(m, Decl(narrowingNoInfer1.ts, 7, 5))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+
+  _.result._tag === "a" ? { ..._, result: _.result } : null,
+>_.result._tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16), Decl(narrowingNoInfer1.ts, 3, 16))
+>_.result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_tag : Symbol(_tag, Decl(narrowingNoInfer1.ts, 2, 16), Decl(narrowingNoInfer1.ts, 3, 16))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 14, 33))
+>_.result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+>_ : Symbol(_, Decl(narrowingNoInfer1.ts, 13, 26))
+>result : Symbol(result, Decl(narrowingNoInfer1.ts, 7, 10))
+
+);
+
