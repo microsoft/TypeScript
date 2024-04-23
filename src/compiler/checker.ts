@@ -46279,7 +46279,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // If we hit an import declaration in an illegal context, just bail out to avoid cascading errors.
             return;
         }
-        if (!checkGrammarModifiers(node) && hasEffectiveModifiers(node)) {
+        if (!checkGrammarModifiers(node) && node.modifiers) {
             grammarErrorOnFirstToken(node, Diagnostics.An_import_declaration_cannot_have_modifiers);
         }
         if (checkExternalImportOrExportDeclaration(node)) {
