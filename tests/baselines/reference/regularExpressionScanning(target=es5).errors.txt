@@ -17,12 +17,12 @@ regularExpressionScanning.ts(5,6): error TS1499: Unknown regular expression flag
 regularExpressionScanning.ts(5,7): error TS1509: This regular expression flag cannot be toggled within a subpattern.
 regularExpressionScanning.ts(5,10): error TS1509: This regular expression flag cannot be toggled within a subpattern.
 regularExpressionScanning.ts(5,11): error TS1500: Duplicate regular expression flag.
-regularExpressionScanning.ts(8,9): error TS1533: A decimal escape must refer to an existent capturing group. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(8,9): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 regularExpressionScanning.ts(8,24): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
 regularExpressionScanning.ts(8,26): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
 regularExpressionScanning.ts(8,29): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x53'.
 regularExpressionScanning.ts(8,37): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
-regularExpressionScanning.ts(8,42): error TS1533: A decimal escape must refer to an existent capturing group. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(8,42): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 regularExpressionScanning.ts(8,43): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
 regularExpressionScanning.ts(8,48): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
 regularExpressionScanning.ts(9,5): error TS1503: Named capturing groups are only available when targeting 'ES2018' or later.
@@ -258,7 +258,7 @@ regularExpressionScanning.ts(42,101): error TS1501: This regular expression flag
     	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/,
     	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/u,
     	       ~~
-!!! error TS1533: A decimal escape must refer to an existent capturing group. There are only 4 capturing groups in this regular expression.
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
     	                      ~~
 !!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
     	                        ~~~
@@ -268,7 +268,7 @@ regularExpressionScanning.ts(42,101): error TS1501: This regular expression flag
     	                                   ~~~
 !!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
     	                                        ~
-!!! error TS1533: A decimal escape must refer to an existent capturing group. There are only 4 capturing groups in this regular expression.
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
     	                                         ~~~~
 !!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
     	                                              ~
