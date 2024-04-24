@@ -418,12 +418,12 @@ export function stringToToken(s: string): SyntaxKind | undefined {
 
 const regExpFlagChars = makeReverseMap(charToRegExpFlag);
 
-/** @internal */
+/** @internal @knipignore */
 export function regularExpressionFlagToCharacter(f: RegularExpressionFlags): string | undefined {
     return regExpFlagChars[f];
 }
 
-/** @internal */
+/** @internal @knipignore */
 export function characterToRegularExpressionFlag(c: string): RegularExpressionFlags | undefined {
     return charToRegExpFlag.get(c);
 }
