@@ -127,6 +127,7 @@
                 "varsIgnorePattern": "^(_+$|_[^_])"
             }
         ],
+        "@typescript-eslint/no-inferrable-types": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",
