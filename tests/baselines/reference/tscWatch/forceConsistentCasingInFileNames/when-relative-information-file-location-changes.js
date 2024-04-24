@@ -230,7 +230,7 @@ Program options: {
   "explainFiles": true,
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
-Program structureReused: Completely
+Program structureReused: Not
 Program files::
 /a/lib/lib.d.ts
 /user/username/projects/myproject/ModuleC.ts
