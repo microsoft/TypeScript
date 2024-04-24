@@ -2588,7 +2588,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     case CharacterCodes.equals:
                                     case CharacterCodes.exclamation:
                                         pos++;
-                                        // In Annex B, `(?=Disjunction)` and `(?!Disjunciton)` are quantifiable
+                                        // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
                                         isPreviousTermQuantifiable = annexB;
                                         break;
                                     case CharacterCodes.lessThan:

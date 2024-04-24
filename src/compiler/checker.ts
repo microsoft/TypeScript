@@ -1102,6 +1102,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    Scanner,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -1449,6 +1450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var requestedExternalEmitHelperNames = new Set<string>();
     var requestedExternalEmitHelpers: ExternalEmitHelpers;
     var externalHelpersModule: Symbol;
+    var scanner: Scanner | undefined;
 
     var Symbol = objectAllocator.getSymbolConstructor();
     var Type = objectAllocator.getTypeConstructor();
@@ -31360,35 +31362,41 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const sourceFile = getSourceFileOfNode(node);
         if (!hasParseDiagnostics(sourceFile)) {
             let lastError: DiagnosticWithLocation | undefined;
-            const scanner = createScanner(
-                sourceFile.languageVersion,
-                /*skipTrivia*/ true,
-                sourceFile.languageVariant,
-                sourceFile.text,
-                (message, length, arg0) => {
-                    // emulate `parseErrorAtPosition` from parser.ts
-                    const start = scanner.getTokenEnd();
-                    if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
-                        const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
-                        addRelatedInfo(lastError, error);
-                    }
-                    else if (!lastError || start !== lastError.start) {
-                        lastError = createFileDiagnostic(sourceFile, start, length, message, arg0);
-                        diagnostics.add(lastError);
-                    }
-                },
-                node.pos,
-                node.end - node.pos,
-            );
-            Debug.assert(scanner.scan() === SyntaxKind.SlashToken);
-            Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral);
-            return !!lastError;
+            scanner ??= createScanner(ScriptTarget.ESNext, /*skipTrivia*/ true);
+            scanner.setScriptTarget(sourceFile.languageVersion);
+            scanner.setLanguageVariant(sourceFile.languageVariant);
+            scanner.setText(sourceFile.text, node.pos, node.end - node.pos);
+            scanner.setOnError((message, length, arg0) => {
+                // emulate `parseErrorAtPosition` from parser.ts
+                const start = scanner!.getTokenEnd();
+                if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
+                    const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
+                    addRelatedInfo(lastError, error);
+                }
+                else if (!lastError || start !== lastError.start) {
+                    lastError = createFileDiagnostic(sourceFile, start, length, message, arg0);
+                    diagnostics.add(lastError);
+                }
+            });
+            try {
+                Debug.assert(scanner.scan() === SyntaxKind.SlashToken);
+                Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral);
+                return !!lastError;
+            }
+            finally {
+                scanner.setText("");
+                scanner.setOnError(/*onError*/ undefined);
+            }
         }
         return false;
     }
 
     function checkRegularExpressionLiteral(node: RegularExpressionLiteral) {
-        checkGrammarRegularExpressionLiteral(node);
+        const nodeLinks = getNodeLinks(node);
+        if (!nodeLinks.grammarChecked) {
+            addLazyDiagnostic(() => checkGrammarRegularExpressionLiteral(node));
+            nodeLinks.grammarChecked = true;
+        }
         return globalRegExpType;
     }
 
