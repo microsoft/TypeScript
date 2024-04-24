@@ -1553,7 +1553,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let { oldProgram } = createProgramOptions;
     for (const option of commandLineOptionOfCustomType) {
         if (hasProperty(options, option.name)) {
-            if (typeof options[option.name] === "string") throw new Error(`Found option: ${option.name} that is string and expected number/enum value.`);
+            if (typeof options[option.name] === "string") {
+                throw new Error(`${option.name} is a string value; tsconfig JSON must be parsed with parseJsonSourceFileConfigFileContent or getParsedCommandLineOfConfigFile before passing to createProgram`);
+            }
         }
     }
 
