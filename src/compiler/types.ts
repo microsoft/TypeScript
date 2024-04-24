@@ -4888,6 +4888,7 @@ export interface Program extends ScriptReferenceHost {
      * @internal
      */
     writeFile: WriteFileCallback;
+    /** @internal */ hasFileNamesDifferOnlyInCasingError(): boolean;
 }
 
 /** @internal */

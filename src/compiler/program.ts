@@ -1578,6 +1578,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let resolvedTypeReferenceDirectiveNames: Map<Path, ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>> | undefined;
     let resolvedTypeReferenceDirectiveNamesProcessing: Map<Path, readonly ResolvedTypeReferenceDirectiveWithFailedLookupLocations[]> | undefined;
 
+    let hasFileNamesDifferOnlyInCasingError = false;
+
     let packageMap: Map<string, boolean> | undefined;
 
     // The below settings are to track if a .js file should be add to the program if loaded via searching under node_modules.
@@ -1984,6 +1986,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getFileIncludeReasons: () => fileReasons,
         structureIsReused,
         writeFile,
+        hasFileNamesDifferOnlyInCasingError: () => hasFileNamesDifferOnlyInCasingError,
     };
 
     onProgramCreateComplete();
@@ -2421,6 +2424,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function tryReuseStructureFromOldProgram(): StructureIsReused {
         if (!oldProgram) {
+            return StructureIsReused.Not;
+        }
+
+        if (oldProgram.hasFileNamesDifferOnlyInCasingError()) {
             return StructureIsReused.Not;
         }
 
@@ -3584,6 +3591,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function reportFileNamesDifferOnlyInCasingError(fileName: string, existingFile: SourceFile, reason: FileIncludeReason): void {
+        hasFileNamesDifferOnlyInCasingError = true;
         const hasExistingReasonToReportErrorOn = !isReferencedFile(reason) && some(fileReasons.get(existingFile.path), isReferencedFile);
         if (hasExistingReasonToReportErrorOn) {
             addFilePreprocessingFileExplainingDiagnostic(existingFile, reason, Diagnostics.Already_included_file_name_0_differs_from_file_name_1_only_in_casing, [existingFile.fileName, fileName]);
