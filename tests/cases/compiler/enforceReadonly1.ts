@@ -15,6 +15,17 @@ function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: st
     rx = mx;
 }
 
+type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+
+function f2<T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) {
+    mt = tt;  // Error
+    mt = rt;  // Error
+    tt = mt;
+    tt = rt;  // Error
+    rt = mt;
+    rt = tt;
+}
+
 // A derived interface may not change property from mutable to read-only
 
 interface B1 {
@@ -40,6 +51,14 @@ class B3 {
 
 class D3 extends B3 {  // Error
     readonly x = 1;
+}
+
+class B4 {
+    foo() {}
+}
+
+class D4 extends B4 {  // Error
+    readonly foo = () => {}
 }
 
 // A const assertion means "as const as possible" without violating constraints

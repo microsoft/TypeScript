@@ -2,18 +2,24 @@ enforceReadonly1.ts(4,5): error TS2322: Type '{ readonly x: string; }' is not as
   Property 'x' is 'readonly' in the source but not in the target.
 enforceReadonly1.ts(8,5): error TS2322: Type '{ readonly [x: string]: string; }' is not assignable to type '{ [x: string]: string; }'.
   'string' index signature is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(20,11): error TS2430: Interface 'D1' incorrectly extends interface 'B1'.
+enforceReadonly1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'Mutable<T>'.
+enforceReadonly1.ts(18,5): error TS2322: Type 'Readonly<T>' is not assignable to type 'Mutable<T>'.
+enforceReadonly1.ts(20,5): error TS2322: Type 'Readonly<T>' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'Readonly<T>'.
+enforceReadonly1.ts(31,11): error TS2430: Interface 'D1' incorrectly extends interface 'B1'.
   Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(29,11): error TS2430: Interface 'D2' incorrectly extends interface 'B2'.
+enforceReadonly1.ts(40,11): error TS2430: Interface 'D2' incorrectly extends interface 'B2'.
   Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(37,7): error TS2415: Class 'D3' incorrectly extends base class 'B3'.
+enforceReadonly1.ts(48,7): error TS2415: Class 'D3' incorrectly extends base class 'B3'.
   Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(76,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
-enforceReadonly1.ts(78,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
+enforceReadonly1.ts(56,7): error TS2415: Class 'D4' incorrectly extends base class 'B4'.
+  Property 'foo' is 'readonly' in the source but not in the target.
+enforceReadonly1.ts(95,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
+enforceReadonly1.ts(97,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
   Property 'value' is 'readonly' in the source but not in the target.
 
 
-==== enforceReadonly1.ts (7 errors) ====
+==== enforceReadonly1.ts (11 errors) ====
     // A read-only property is not assignable to a mutable property
     
     function f1(mp: { x: string }, rp: { readonly x: string }, mx: { [x: string]: string }, rx: { readonly [x: string]: string }) {
@@ -31,6 +37,25 @@ enforceReadonly1.ts(78,5): error TS2322: Type 'ImmutableValue<string>' is not as
         rx = mp;
         rx = rp;
         rx = mx;
+    }
+    
+    type Mutable<T> = { -readonly [P in keyof T]: T[P] };
+    
+    function f2<T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) {
+        mt = tt;  // Error
+        ~~
+!!! error TS2322: Type 'T' is not assignable to type 'Mutable<T>'.
+!!! related TS2208 enforceReadonly1.ts:16:13: This type parameter might need an `extends Mutable<T>` constraint.
+        mt = rt;  // Error
+        ~~
+!!! error TS2322: Type 'Readonly<T>' is not assignable to type 'Mutable<T>'.
+        tt = mt;
+        tt = rt;  // Error
+        ~~
+!!! error TS2322: Type 'Readonly<T>' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Readonly<T>'.
+        rt = mt;
+        rt = tt;
     }
     
     // A derived interface may not change property from mutable to read-only
@@ -67,6 +92,17 @@ enforceReadonly1.ts(78,5): error TS2322: Type 'ImmutableValue<string>' is not as
 !!! error TS2415: Class 'D3' incorrectly extends base class 'B3'.
 !!! error TS2415:   Property 'x' is 'readonly' in the source but not in the target.
         readonly x = 1;
+    }
+    
+    class B4 {
+        foo() {}
+    }
+    
+    class D4 extends B4 {  // Error
+          ~~
+!!! error TS2415: Class 'D4' incorrectly extends base class 'B4'.
+!!! error TS2415:   Property 'foo' is 'readonly' in the source but not in the target.
+        readonly foo = () => {}
     }
     
     // A const assertion means "as const as possible" without violating constraints
