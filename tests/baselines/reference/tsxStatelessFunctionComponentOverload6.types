@@ -60,13 +60,13 @@ let obj2 = {
 >obj2 : { onClick: () => void; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    onClick: () => {}} : { onClick: () => void; }
->                        : ^^^^^^^^^^^          ^^^
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     onClick: () => {}
 >onClick : () => void
 >        : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 }
 
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
@@ -236,7 +236,7 @@ const b7 = <MainButton {...{onClick: () => { console.log("hi") }}} />;
 >onClick : () => void
 >        : ^^^^^^^^^^
 >() => { console.log("hi") } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >console.log("hi") : void
 >                  : ^^^^
 >console.log : (message?: any, ...optionalParams: any[]) => void

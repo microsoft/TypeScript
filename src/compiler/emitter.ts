@@ -130,6 +130,7 @@ import {
     getEmitFlags,
     getEmitHelpers,
     getEmitModuleKind,
+    getEmitModuleResolutionKind,
     getEmitScriptTarget,
     getExternalModuleName,
     getIdentifierTypeArguments,
@@ -532,7 +533,7 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
 }
 
 /** @internal */
-export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
+export function getOutputExtension(fileName: string, options: Pick<CompilerOptions, "jsx">): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
         options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
         fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
@@ -800,6 +801,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
             newLine: compilerOptions.newLine,
             noEmitHelpers: compilerOptions.noEmitHelpers,
             module: getEmitModuleKind(compilerOptions),
+            moduleResolution: getEmitModuleResolutionKind(compilerOptions),
             target: getEmitScriptTarget(compilerOptions),
             sourceMap: compilerOptions.sourceMap,
             inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -867,6 +869,7 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
                 newLine: compilerOptions.newLine,
                 noEmitHelpers: true,
                 module: compilerOptions.module,
+                moduleResolution: compilerOptions.moduleResolution,
                 target: compilerOptions.target,
                 sourceMap: !forceDtsEmit && compilerOptions.declarationMap,
                 inlineSourceMap: compilerOptions.inlineSourceMap,
@@ -1111,6 +1114,7 @@ export const notImplementedResolver: EmitResolver = {
     isArgumentsLocalBinding: notImplemented,
     getExternalModuleFileFromDeclaration: notImplemented,
     isLiteralConstDeclaration: notImplemented,
+    isNonNarrowedBindableName: notImplemented,
     getJsxFactoryEntity: notImplemented,
     getJsxFragmentFactoryEntity: notImplemented,
     isBindingCapturedByNode: notImplemented,

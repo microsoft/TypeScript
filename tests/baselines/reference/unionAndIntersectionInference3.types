@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 1,500 / 1,500 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 31,500 / 31,500 (nearest 500)
+Type Count: 1,000
+Instantiation count: 2,500
 
 === unionAndIntersectionInference3.ts ===
 // Repro from #30720
@@ -205,7 +203,7 @@ let y2 = foo2(sx);  // { extra: number }
 >y2 : { extra: number; }
 >   : ^^^^^^^^^^^^^^^^^^
 >foo2(sx) : { extra: number; }
->         :                   
+>         : ^^^^^^^^^^^^^^^^^^
 >foo2 : <T>(obj: string[] & T) => T
 >     : ^ ^^   ^^            ^^^^^^
 >sx : string[] & { extra: number; }
@@ -293,7 +291,7 @@ let z = foo(ab);  // [AB<string>, string]
 >z : [{ a: string; } | { b: string; }, string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo(ab) : [{ a: string; } | { b: string; }, string]
->        : ^              ^^^              ^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T, U>(obj: T & AB<U>) => [T, U]
 >    : ^ ^^ ^^   ^^         ^^^^^^^^^^^
 >ab : AB<string>

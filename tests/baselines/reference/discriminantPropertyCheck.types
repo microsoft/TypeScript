@@ -497,7 +497,7 @@ const f = (_a: string, _b: string): void => {};
 >f : (_a: string, _b: string) => void
 >  : ^  ^^      ^^  ^^      ^^^^^    
 >(_a: string, _b: string): void => {} : (_a: string, _b: string) => void
->                                     :                                 
+>                                     : ^  ^^      ^^  ^^      ^^^^^    
 >_a : string
 >   : ^^^^^^
 >_b : string
@@ -920,7 +920,7 @@ const doTestingStuff = (mapOfTests: MapOfAllTests, ids: string[]) => {
 >doTestingStuff : (mapOfTests: MapOfAllTests, ids: string[]) => void
 >               : ^          ^^             ^^   ^^        ^^^^^^^^^
 >(mapOfTests: MapOfAllTests, ids: string[]) => {    ids.forEach(id => {        let test;        test = mapOfTests[id];        if (test.type === 'testA') {            console.log(test.bananas);        }        switch (test.type) {            case 'testA': {                console.log(test.bananas);            }        }    });} : (mapOfTests: MapOfAllTests, ids: string[]) => void
->                                                                                                                                                                                                                                                                                                                                        :                                                   
+>                                                                                                                                                                                                                                                                                                                                        : ^          ^^             ^^   ^^        ^^^^^^^^^
 >mapOfTests : MapOfAllTests
 >           : ^^^^^^^^^^^^^
 >ids : string[]

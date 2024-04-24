@@ -51,7 +51,7 @@ example(42, (foo, bar) => ({
 >t : () => void
 >  : ^^^^^^^^^^
 >() => {        let s: string = bar;    } : () => void
->                                         :           
+>                                         : ^^^^^^^^^^
 
         let s: string = bar;
 >s : string

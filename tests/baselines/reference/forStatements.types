@@ -163,7 +163,7 @@ for(var aFunction: typeof F = F;;){}
 >F : (x: string) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >F : (x: string) => number
->  :                      
+>  : ^ ^^      ^^^^^^^^^^^
 
 for(var anOtherFunction: (x: string) => number = F;;){}
 >anOtherFunction : (x: string) => number

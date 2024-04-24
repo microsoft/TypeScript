@@ -19,7 +19,7 @@ function f1(x: { f(): void }, y: { f(x?: string): void }) {
 >z : { f(x?: string): void; }
 >  : ^^^^ ^^^      ^^^^^^^^^^
 >!!true ? x : y : { f(x?: string): void; }
->               :      ^                  
+>               : ^^^^ ^^^      ^^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -74,7 +74,7 @@ function f2(x: { f(x: string | undefined): void }, y: { f(x?: string): void }) {
 >z : { f(x?: string): void; }
 >  : ^^^^ ^^^      ^^^^^^^^^^
 >!!true ? x : y : { f(x?: string): void; }
->               :      ^                  
+>               : ^^^^ ^^^      ^^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -123,7 +123,7 @@ function f3(x: () => void, y: (x?: string) => void) {
 >f : (x?: string) => void
 >  : ^ ^^^      ^^^^^^^^^
 >!!true ? x : y : (x?: string) => void
->               :   ^                 
+>               : ^ ^^^      ^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -166,7 +166,7 @@ function f4(x: (x: string | undefined) => void, y: (x?: string) => void) {
 >f : (x?: string) => void
 >  : ^ ^^^      ^^^^^^^^^
 >!!true ? x : y : (x?: string) => void
->               :   ^                 
+>               : ^ ^^^      ^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -209,7 +209,7 @@ function f5(x: (x: string | undefined) => void, y: (x?: 'hello') => void) {
 >f : (x?: "hello") => void
 >  : ^ ^^^       ^^^^^^^^^
 >!!true ? x : y : (x?: "hello") => void
->               :   ^                  
+>               : ^ ^^^       ^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -252,7 +252,7 @@ function f6(x: (x: 'hello' | undefined) => void, y: (x?: string) => void) {
 >f : (x: "hello" | undefined) => void
 >  : ^ ^^                   ^^^^^^^^^
 >!!true ? x : y : (x: "hello" | undefined) => void
->               :                                 
+>               : ^ ^^                   ^^^^^^^^^
 >!!true : true
 >       : ^^^^
 >!true : false
@@ -384,7 +384,7 @@ function run(options: { something?(b?: string): void }) {
 >something : (b?: string) => void
 >          : ^ ^^^      ^^^^^^^^^
 >options.something ?? val.something : (b?: string) => void
->                                   :   ^                 
+>                                   : ^ ^^^      ^^^^^^^^^
 >options.something : ((b?: string) => void) | undefined
 >                  : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >options : { something?(b?: string): void; }

@@ -21,7 +21,7 @@ exports.fn2 = Math.min;
 >fn2 : (...values: number[]) => number
 >    : ^^^^      ^^        ^^^^^^^^^^^
 >Math.min : (...values: number[]) => number
->         :  ^^^                           
+>         : ^^^^      ^^        ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >min : (...values: number[]) => number

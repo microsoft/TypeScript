@@ -34,19 +34,19 @@ createMachine<{ count: number }>({
 >count : number
 >      : ^^^^^^
 >{  services: {    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  },} : { services: { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }; }
->                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^
 
   services: {
 >services : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    test: async () => Promise.reject("some err"),    async test2() {      return Promise.reject("some err");    },  } : { test: () => Promise<{ count: number; }>; test2(): Promise<{ count: number; }>; }
->                                                                                                                       : ^^^^^^^^                                 ^^^^^^^^^^^^^^^^^^^                  ^^^^
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     test: async () => Promise.reject("some err"),
 >test : () => Promise<{ count: number; }>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => Promise.reject("some err") : () => Promise<{ count: number; }>
->                                       :                                  
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject("some err") : Promise<{ count: number; }>
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.reject : <T = never>(reason?: any) => Promise<T>

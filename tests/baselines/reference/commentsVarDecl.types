@@ -79,7 +79,7 @@ var z = /** lambda comment */ (x: number, y: number) => x + y;
 >z : (x: number, y: number) => number
 >  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >(x: number, y: number) => x + y : (x: number, y: number) => number
->                                :                                 
+>                                : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -101,7 +101,7 @@ var x2 = z2;
 >x2 : (x: number) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >z2 : (x: number) => string
->   :                      
+>   : ^ ^^      ^^^^^^^^^^^
 
 var n4: (x: number) => string;
 >n4 : (x: number) => string

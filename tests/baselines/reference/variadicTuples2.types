@@ -517,7 +517,7 @@ function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => vo
 >callback : (...values: T) => void
 >         : ^^^^      ^^ ^^^^^    
 >args[args.length - 1] as (...values: T) => void : (...values: T) => void
->                                                :  ^^^                  
+>                                                : ^^^^      ^^ ^^^^^    
 >args[args.length - 1] : [...T, (...values: T) => void][number]
 >                      : ^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^
 >args : [...T, (...values: T) => void]

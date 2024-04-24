@@ -168,14 +168,14 @@ f.register(s, null);
 >  : ^^^^^^
 
 f.unregister(s);
->f.unregister(s) : void
->                : ^^^^
->f.unregister : (unregisterToken: WeakKey) => void
->             : ^               ^^       ^^^^^^^^^
+>f.unregister(s) : boolean
+>                : ^^^^^^^
+>f.unregister : (unregisterToken: WeakKey) => boolean
+>             : ^               ^^       ^^^^^^^^^^^^
 >f : FinalizationRegistry<unknown>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->unregister : (unregisterToken: WeakKey) => void
->           : ^               ^^       ^^^^^^^^^
+>unregister : (unregisterToken: WeakKey) => boolean
+>           : ^               ^^       ^^^^^^^^^^^^
 >s : symbol
 >  : ^^^^^^
 

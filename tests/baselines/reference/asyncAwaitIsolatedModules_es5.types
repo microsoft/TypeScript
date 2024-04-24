@@ -29,43 +29,43 @@ let f4 = async function() { }
 >f4 : () => Promise<void>
 >   : ^^^^^^^^^^^^^^^^^^^
 >async function() { } : () => Promise<void>
->                     :                    
+>                     : ^^^^^^^^^^^^^^^^^^^
 
 let f5 = async function(): Promise<void> { }
 >f5 : () => Promise<void>
 >   : ^^^^^^             
 >async function(): Promise<void> { } : () => Promise<void>
->                                    :                    
+>                                    : ^^^^^^             
 
 let f6 = async function(): MyPromise<void> { }
 >f6 : () => MyPromise<void>
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >async function(): MyPromise<void> { } : () => MyPromise<void>
->                                      :                      
+>                                      : ^^^^^^^^^^^^^^^^^^^^^
 
 let f7 = async () => { };
 >f7 : () => Promise<void>
 >   : ^^^^^^^^^^^^^^^^^^^
 >async () => { } : () => Promise<void>
->                :                    
+>                : ^^^^^^^^^^^^^^^^^^^
 
 let f8 = async (): Promise<void> => { };
 >f8 : () => Promise<void>
 >   : ^^^^^^             
 >async (): Promise<void> => { } : () => Promise<void>
->                               :                    
+>                               : ^^^^^^             
 
 let f9 = async (): MyPromise<void> => { };
 >f9 : () => MyPromise<void>
 >   : ^^^^^^^^^^^^^^^^^^^^^
 >async (): MyPromise<void> => { } : () => MyPromise<void>
->                                 :                      
+>                                 : ^^^^^^^^^^^^^^^^^^^^^
 
 let f10 = async () => p;
 >f10 : () => Promise<number>
 >    : ^^^^^^^^^^^^^^^^^^^^^
 >async () => p : () => Promise<number>
->              :                      
+>              : ^^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 
@@ -73,7 +73,7 @@ let f11 = async () => mp;
 >f11 : () => Promise<MyPromise<number>>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => mp : () => Promise<MyPromise<number>>
->               :                                 
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mp : MyPromise<number>
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ let f12 = async (): Promise<number> => mp;
 >f12 : () => Promise<number>
 >    : ^^^^^^               
 >async (): Promise<number> => mp : () => Promise<number>
->                                :                      
+>                                : ^^^^^^               
 >mp : MyPromise<number>
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -89,7 +89,7 @@ let f13 = async (): MyPromise<number> => p;
 >f13 : () => MyPromise<number>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 >async (): MyPromise<number> => p : () => MyPromise<number>
->                                 :                        
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >p : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 

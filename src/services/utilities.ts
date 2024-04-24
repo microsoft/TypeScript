@@ -97,6 +97,7 @@ import {
     getEmitModuleKind,
     getEmitScriptTarget,
     getExternalModuleImportEqualsDeclarationExpression,
+    getImpliedNodeFormatForEmitWorker,
     getImpliedNodeFormatForFile,
     getImpliedNodeFormatForFileWorker,
     getIndentString,
@@ -1829,7 +1830,7 @@ function findRightmostToken(n: Node, sourceFile: SourceFileLike): Node | undefin
 /**
  * Finds the rightmost child to the left of `children[exclusiveStartPosition]` which is a non-all-whitespace token or has constituent tokens.
  */
-function findRightmostChildNodeWithTokens(children: Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
+function findRightmostChildNodeWithTokens(children: readonly Node[], exclusiveStartPosition: number, sourceFile: SourceFileLike, parentKind: SyntaxKind): Node | undefined {
     for (let i = exclusiveStartPosition - 1; i >= 0; i--) {
         const child = children[i];
 
@@ -2486,6 +2487,8 @@ export function createModuleSpecifierResolutionHost(program: Program, host: Lang
         getNearestAncestorDirectoryWithPackageJson: maybeBind(host, host.getNearestAncestorDirectoryWithPackageJson),
         getFileIncludeReasons: () => program.getFileIncludeReasons(),
         getCommonSourceDirectory: () => program.getCommonSourceDirectory(),
+        getDefaultResolutionModeForFile: file => program.getDefaultResolutionModeForFile(file),
+        getModeForResolutionAtIndex: (file, index) => program.getModeForResolutionAtIndex(file, index),
     };
 }
 
@@ -4262,11 +4265,13 @@ export function fileShouldUseJavaScriptRequire(file: SourceFile | string, progra
     if (!hasJSFileExtension(fileName)) {
         return false;
     }
-    const compilerOptions = program.getCompilerOptions();
+    const compilerOptions = typeof file === "string" ? program.getCompilerOptions() : program.getCompilerOptionsForFile(file);
     const moduleKind = getEmitModuleKind(compilerOptions);
-    const impliedNodeFormat = typeof file === "string"
-        ? getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions)
-        : file.impliedNodeFormat;
+    const sourceFileLike = typeof file === "string" ? {
+        fileName: file,
+        impliedNodeFormat: getImpliedNodeFormatForFile(toPath(file, host.getCurrentDirectory(), hostGetCanonicalFileName(host)), program.getPackageJsonInfoCache?.(), host, compilerOptions),
+    } : file;
+    const impliedNodeFormat = getImpliedNodeFormatForEmitWorker(sourceFileLike, compilerOptions);
 
     if (impliedNodeFormat === ModuleKind.ESNext) {
         return false;

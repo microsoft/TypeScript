@@ -225,7 +225,7 @@ let impl: I = {
 >explicitVoid2 : () => any
 >              : ^^^^^^^^^
 >() => this.a : () => any
->             :          
+>             : ^^^^^^^^^
 >this.a : any
 >       : ^^^
 >this : typeof globalThis
@@ -237,7 +237,7 @@ let impl: I = {
 >explicitStructural : () => number
 >                   : ^^^^^^^^^^^^
 >() => 12 : () => number
->         :             
+>         : ^^^^^^^^^^^^
 >12 : 12
 >   : ^^
 
@@ -245,7 +245,7 @@ let impl: I = {
 >explicitInterface : () => number
 >                  : ^^^^^^^^^^^^
 >() => 12 : () => number
->         :             
+>         : ^^^^^^^^^^^^
 >12 : 12
 >   : ^^
 
@@ -267,7 +267,7 @@ let implExplicitStructural = impl.explicitStructural;
 >implExplicitStructural : (this: { a: number; }) => number
 >                       : ^    ^^              ^^^^^^^^^^^
 >impl.explicitStructural : (this: { a: number; }) => number
->                        :                                 
+>                        : ^    ^^              ^^^^^^^^^^^
 >impl : I
 >     : ^
 >explicitStructural : (this: { a: number; }) => number
@@ -283,7 +283,7 @@ let implExplicitInterface = impl.explicitInterface;
 >implExplicitInterface : (this: I) => number
 >                      : ^    ^^ ^^^^^^^^^^^
 >impl.explicitInterface : (this: I) => number
->                       :                    
+>                       : ^    ^^ ^^^^^^^^^^^
 >impl : I
 >     : ^
 >explicitInterface : (this: I) => number
@@ -704,7 +704,7 @@ let reconstructed: {
 >explicitThis : (this: C, m: number) => number
 >             : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >c.explicitThis : (this: C, m: number) => number
->               :                               
+>               : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitThis : (this: C, m: number) => number
@@ -714,7 +714,7 @@ let reconstructed: {
 >explicitC : (this: C, m: number) => number
 >          : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c.explicitC : (this: C, m: number) => number
->            :                               
+>            : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitC : (this: C, m: number) => number
@@ -724,7 +724,7 @@ let reconstructed: {
 >explicitProperty : (this: { n: number; }, m: number) => number
 >                 : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 >c.explicitProperty : (this: { n: number; }, m: number) => number
->                   :                                            
+>                   : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitProperty : (this: { n: number; }, m: number) => number
@@ -734,7 +734,7 @@ let reconstructed: {
 >explicitVoid : (this: void, m: number) => number
 >             : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >c.explicitVoid : (this: void, m: number) => number
->               :                                  
+>               : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitVoid : (this: void, m: number) => number
@@ -1275,7 +1275,7 @@ const f2 = <T>(this: {n: number}, m: number) => m + this.n;
 >f2 : <T>(this: { n: number; }, m: number) => any
 >   : ^^^^    ^^              ^^ ^^      ^^^^^^^^
 ><T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => any
->                                                :                                            
+>                                                : ^^^^    ^^              ^^ ^^      ^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -1297,7 +1297,7 @@ const f3 = async (this: {n: number}, m: number) => m + this.n;
 >f3 : (this: { n: number; }, m: number) => Promise<any>
 >   : ^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >async (this: {n: number}, m: number) => m + this.n : (this: { n: number; }, m: number) => Promise<any>
->                                                   :                                                  
+>                                                   : ^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number
@@ -1319,7 +1319,7 @@ const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
 >f4 : <T>(this: { n: number; }, m: number) => Promise<any>
 >   : ^^^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => Promise<any>
->                                                      :                                                     
+>                                                      : ^^^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^
 >this : { n: number; }
 >     : ^^^^^      ^^^
 >n : number

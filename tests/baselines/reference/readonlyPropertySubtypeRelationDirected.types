@@ -39,7 +39,7 @@ function doSomething(condition: boolean) {
 >three : { readonly a: string; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) ? one : two : { readonly a: string; }
->                        :                        
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
@@ -118,7 +118,7 @@ function doSomething(condition: boolean) {
 >three : { readonly a: string; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) ? two : one : { readonly a: string; }
->                        :                        
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
@@ -198,7 +198,7 @@ function doSomething(condition: boolean) {
 >three : { readonly a: string; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) ? one : two : { readonly a: string; }
->                        :                        
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean
@@ -278,7 +278,7 @@ function doSomething(condition: boolean) {
 >three : { readonly a: string; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) ? two : one : { readonly a: string; }
->                        :                        
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >(condition) : boolean
 >            : ^^^^^^^
 >condition : boolean

@@ -1853,7 +1853,7 @@ module TypeScript {
 >lookupData : { key: any; data: any; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.lookup(key) : { key: any; data: any; }
->                 :                         
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
 >this.lookup : (key: any, findValue?: boolean) => { key: any; data: any; }
 >            : ^   ^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this

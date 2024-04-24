@@ -19,7 +19,7 @@ function greeter(person: string, person2: string) {
 >maker : (child: string) => void
 >      : ^     ^^      ^^^^^    
 >function(child: string): void {        var unused2 = 22;    } : (child: string) => void
->                                                              :                        
+>                                                              : ^     ^^      ^^^^^    
 >child : string
 >      : ^^^^^^
 
@@ -33,7 +33,7 @@ function greeter(person: string, person2: string) {
 >maker2 : (child2: string) => void
 >       : ^      ^^      ^^^^^    
 >function(child2: string): void {        var unused3 = 23;    } : (child2: string) => void
->                                                               :                         
+>                                                               : ^      ^^      ^^^^^    
 >child2 : string
 >       : ^^^^^^
 

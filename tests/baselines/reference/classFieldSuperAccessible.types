@@ -87,7 +87,7 @@ class D {
 >b : () => void
 >  : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 }
 class E extends D {
 >E : E

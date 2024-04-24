@@ -1,17 +1,23 @@
 shebangError.ts(2,1): error TS18026: '#!' can only be used at the start of a file.
 shebangError.ts(2,2): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+shebangError.ts(2,8): error TS1499: Unknown regular expression flag.
+shebangError.ts(2,10): error TS1499: Unknown regular expression flag.
 shebangError.ts(2,12): error TS2304: Cannot find name 'env'.
 shebangError.ts(2,16): error TS1005: ';' expected.
 shebangError.ts(2,16): error TS2304: Cannot find name 'node'.
 
 
-==== shebangError.ts (5 errors) ====
+==== shebangError.ts (7 errors) ====
     var foo = 'Shebang is only allowed on the first line';
     #!/usr/bin/env node
-    
+    ~~
 !!! error TS18026: '#!' can only be used at the start of a file.
      ~~~~~~~~~
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+           ~
+!!! error TS1499: Unknown regular expression flag.
+             ~
+!!! error TS1499: Unknown regular expression flag.
                ~~~
 !!! error TS2304: Cannot find name 'env'.
                    ~~~~
