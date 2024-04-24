@@ -1097,6 +1097,7 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    addCanonicalDiagnostic,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
@@ -3100,10 +3101,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (suggestion) {
                         const suggestionName = symbolToString(suggestion);
                         const isUncheckedJS = isUncheckedJSSuggestion(errorLocation, suggestion, /*excludeClasses*/ false);
-                        const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                        const message =
+                            meaning === SymbolFlags.Namespace ||
+                            nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ?
+                                Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
                             : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
                             : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                         const diagnostic = createError(errorLocation, message, diagnosticName(nameArg), suggestionName);
+                        addCanonicalDiagnostic(diagnostic, nameNotFoundMessage, diagnosticName(nameArg));
                         addErrorOrSuggestion(!isUncheckedJS, diagnostic);
                         if (suggestion.valueDeclaration) {
                             addRelatedInfo(

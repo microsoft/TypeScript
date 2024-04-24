@@ -2210,6 +2210,14 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 }
 
 /** @internal */
+export function addCanonicalDiagnostic(d: Diagnostic, canonicalMessage: DiagnosticMessage, ...args: string[]): void {
+    d.canonicalHead = {
+        code: canonicalMessage.code,
+        messageText: formatMessage(canonicalMessage, ...args),
+    };
+}
+
+/** @internal */
 export function getSpanOfTokenAtPosition(sourceFile: SourceFile, pos: number): TextSpan {
     const scanner = createScanner(sourceFile.languageVersion, /*skipTrivia*/ true, sourceFile.languageVariant, sourceFile.text, /*onError*/ undefined, pos);
     scanner.scan();
@@ -8526,11 +8534,13 @@ export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
 
 /** @internal */
 export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
     return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
         compareValues(d1.start, d2.start) ||
         compareValues(d1.length, d2.length) ||
-        compareValues(d1.code, d2.code) ||
-        compareMessageText(d1.messageText, d2.messageText) ||
+        compareValues(code1, code2) ||
+        compareMessageText(d1, d2) || // TODO: this is wrong because skips msg chain comparison if canonical is set
         Comparison.EqualTo;
 }
 
@@ -8552,25 +8562,26 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
 // An diagnostic message with more elaboration should be considered *less than* a diagnostic message
 // with less elaboration that is otherwise similar.
 function compareMessageText(
-    t1: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
-    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+    d1: Diagnostic,
+    d2: Diagnostic,
 ): Comparison {
-    if (typeof t1 === "string" && typeof t2 === "string") {
-        return compareStringsCaseSensitive(t1, t2);
+    let headMsg1 = getDiagnosticMessage(d1);
+    let headMsg2 = getDiagnosticMessage(d2);
+    if (typeof headMsg1 !== "string") {
+        headMsg1 = headMsg1.messageText;
     }
+    if (typeof headMsg2 !== "string") {
+        headMsg2 = headMsg2.messageText;
+    }
+    const chain1 = typeof d1.messageText !== "string" ? d1.messageText.next : undefined;
+    const chain2 = typeof d2.messageText !== "string" ? d2.messageText.next : undefined;
 
-    if (typeof t1 === "string") {
-        t1 = { messageText: t1 };
-    }
-    if (typeof t2 === "string") {
-        t2 = { messageText: t2 };
-    }
-    const res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+    const res = compareStringsCaseSensitive(headMsg1, headMsg2);
     if (res) {
         return res;
     }
 
-    return compareMessageChain(t1.next, t2.next);
+    return compareMessageChain(chain1, chain2);
 }
 
 // First compare by size of the message chain,
@@ -8645,11 +8656,23 @@ function compareMessageChainContent(
 
 /** @internal */
 export function diagnosticsEqualityComparer(d1: Diagnostic, d2: Diagnostic): boolean {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
+    const msg1 = getDiagnosticMessage(d1);
+    const msg2 = getDiagnosticMessage(d2);
     return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) === Comparison.EqualTo &&
         compareValues(d1.start, d2.start) === Comparison.EqualTo &&
         compareValues(d1.length, d2.length) === Comparison.EqualTo &&
-        compareValues(d1.code, d2.code) === Comparison.EqualTo &&
-        messageTextEqualityComparer(d1.messageText, d2.messageText);
+        compareValues(code1, code2) === Comparison.EqualTo &&
+        messageTextEqualityComparer(msg1, msg2);
+}
+
+function getDiagnosticCode(d: Diagnostic): number {
+    return d.canonicalHead?.code || d.code;
+}
+
+function getDiagnosticMessage(d: Diagnostic): string | DiagnosticMessageChain {
+    return d.canonicalHead?.messageText || d.messageText;
 }
 
 function messageTextEqualityComparer(m1: string | DiagnosticMessageChain, m2: string | DiagnosticMessageChain): boolean {

@@ -7051,6 +7051,20 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     source?: string;
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
+    /**
+     * @internal
+     * Used for deduplication and comparison.
+     * Whenever it is possible for two diagnostics that report the same problem to be produced but with a
+     * different message and code (e.g. "Cannot find name 'foo'" vs "Cannot find name 'foo'. Did you mean 'bar'?"),
+     * this field can be set so that those two diagnostics are appropriately considered to be the same.
+     */
+    canonicalHead?: CanonicalDiagnostic;
+}
+
+/** @internal */
+export interface CanonicalDiagnostic {
+    code: number;
+    messageText: string;
 }
 
 /** @internal */
