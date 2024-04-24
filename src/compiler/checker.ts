@@ -31393,9 +31393,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkRegularExpressionLiteral(node: RegularExpressionLiteral) {
         const nodeLinks = getNodeLinks(node);
-        if (!nodeLinks.grammarChecked) {
+        if (!(nodeLinks.flags & NodeCheckFlags.TypeChecked)) {
+            nodeLinks.flags |= NodeCheckFlags.TypeChecked;
             addLazyDiagnostic(() => checkGrammarRegularExpressionLiteral(node));
-            nodeLinks.grammarChecked = true;
         }
         return globalRegExpType;
     }
