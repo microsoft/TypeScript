@@ -956,6 +956,7 @@ import {
     ReverseMappedType,
     sameMap,
     SatisfiesExpression,
+    Scanner,
     scanTokenAtPosition,
     ScriptKind,
     ScriptTarget,
@@ -1102,7 +1103,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    Scanner,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
