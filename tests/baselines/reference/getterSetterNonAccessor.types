@@ -36,13 +36,13 @@ Object.defineProperty({}, "0", <PropertyDescriptor>({
 >get : () => any
 >    : ^^^^^^^^^
 >getFunc : () => any
->        :          
+>        : ^^^^^^^^^
 
           set: setFunc,
 >set : (v: any) => void
 >    : ^ ^^^^^^^^^^^^^^
 >setFunc : (v: any) => void
->        :                 
+>        : ^ ^^^^^^^^^^^^^^
 
           configurable: true
 >configurable : true

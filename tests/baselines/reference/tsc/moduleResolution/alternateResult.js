@@ -344,10 +344,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -657,10 +660,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -898,10 +904,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1129,10 +1138,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1347,10 +1359,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1534,10 +1549,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -1788,10 +1806,13 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2093,10 +2114,13 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/home/src/projects/project/node_modules/foo2/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2414,10 +2438,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2721,10 +2748,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -2962,10 +2992,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -3193,10 +3226,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [
@@ -3411,10 +3447,13 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+[96mhome/src/projects/project/tsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
+
+[7m2[0m   "compilerOptions": {
+[7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
 
-Found 1 error.
+Found 1 error in home/src/projects/project/tsconfig.json[90m:2[0m
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
 Program root files: [

@@ -259,7 +259,7 @@ var v=x.g;
 >v : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
 >  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
 >x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    :                                                                                        
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
 >g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }

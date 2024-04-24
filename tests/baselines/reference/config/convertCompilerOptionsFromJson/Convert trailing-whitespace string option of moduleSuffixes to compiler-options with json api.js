@@ -21,7 +21,7 @@ CompilerOptions::
   "moduleSuffixes": [
     "   "
   ],
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

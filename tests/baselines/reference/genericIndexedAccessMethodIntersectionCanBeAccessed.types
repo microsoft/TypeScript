@@ -31,7 +31,7 @@ export const createService = <T>(
 >createService : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
 >              : ^ ^^          ^^                               ^^^^^^^^^
 ><T>(    ServiceCtr: ExtendedService<T> & Service<T>) => {    Object.keys(ServiceCtr).forEach(key => {        const method = (ServiceCtr)[key as keyof T];        const {__$daemonMode, __$action, id} = method;    })} : <T>(ServiceCtr: ExtendedService<T> & Service<T>) => void
->                                                                                                                                                                                                                       :                                                         
+>                                                                                                                                                                                                                       : ^ ^^          ^^                               ^^^^^^^^^
 
     ServiceCtr: ExtendedService<T> & Service<T>
 >ServiceCtr : ExtendedService<T> & Service<T>

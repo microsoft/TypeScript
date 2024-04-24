@@ -10,7 +10,7 @@ class X {
 >f : () => Promise<this>
 >  : ^^^^^^             
 >async (): Promise<this> => this : () => Promise<this>
->                                :                    
+>                                : ^^^^^^             
 >this : this
 >     : ^^^^
 }

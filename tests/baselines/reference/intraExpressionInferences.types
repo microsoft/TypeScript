@@ -35,7 +35,7 @@ callIt({
 >produce : () => number
 >        : ^^^^^^^^^^^^
 >() => 0 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -43,7 +43,7 @@ callIt({
 >consume : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string
@@ -69,7 +69,7 @@ callIt({
 >produce : (_a: number) => number
 >        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a => 0 : (_a: number) => number
->        :                       
+>        : ^  ^^^^^^^^^^^^^^^^^^^
 >_a : number
 >   : ^^^^^^
 >0 : 0
@@ -79,7 +79,7 @@ callIt({
 >consume : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string
@@ -114,7 +114,7 @@ callIt({
 >consume : (n: number) => string
 >        : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string
@@ -208,7 +208,7 @@ const inferTypeFn = <T>(generic: MyInterface<T>) => generic;
 >inferTypeFn : <T>(generic: MyInterface<T>) => MyInterface<T>
 >            : ^ ^^       ^^              ^^^^^^^^^^^^^^^^^^^
 ><T>(generic: MyInterface<T>) => generic : <T>(generic: MyInterface<T>) => MyInterface<T>
->                                        :                                               
+>                                        : ^ ^^       ^^              ^^^^^^^^^^^^^^^^^^^
 >generic : MyInterface<T>
 >        : ^^^^^^^^^^^^^^
 >generic : MyInterface<T>
@@ -228,7 +228,7 @@ const myGeneric = inferTypeFn({
 >retrieveGeneric : (parameter: string) => number
 >                : ^         ^^^^^^^^^^^^^^^^^^^
 >parameter => 5 : (parameter: string) => number
->               :                              
+>               : ^         ^^^^^^^^^^^^^^^^^^^
 >parameter : string
 >          : ^^^^^^
 >5 : 5
@@ -238,7 +238,7 @@ const myGeneric = inferTypeFn({
 >operateWithGeneric : (generic: number) => string
 >                   : ^       ^^^^^^^^^^^^^^^^^^^
 >generic => generic.toFixed() : (generic: number) => string
->                             :                            
+>                             : ^       ^^^^^^^^^^^^^^^^^^^
 >generic : number
 >        : ^^^^^^
 >generic.toFixed() : string
@@ -289,7 +289,7 @@ make({
 >action : (a: { foo(): void; }) => void
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a) => { a.foo() } : (a: { foo(): void; }) => void
->                   :                              
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { foo(): void; }
 >  : ^^^^^^^^^^^^^^^^
 >a.foo() : void
@@ -329,7 +329,7 @@ foo({
 >a : () => 42
 >  : ^^^^^^^^
 >() => { return 42 } : () => 42
->                    :         
+>                    : ^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -353,7 +353,7 @@ foo({
 >a : () => 42
 >  : ^^^^^^^^
 >function () { return 42 } : () => 42
->                          :         
+>                          : ^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -429,7 +429,7 @@ test({
 >a : () => number
 >  : ^^^^^^^^^^^^
 >() => 0 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -437,7 +437,7 @@ test({
 >b : (a: number) => string
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >(a) => 'a' : (a: number) => string
->           :                      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >'a' : "a"
@@ -447,7 +447,7 @@ test({
 >c : (b: string) => void
 >  : ^ ^^^^^^^^^^^^^^^^^
 >(b) => {        const x: string = b;    } : (b: string) => void
->                                          :                    
+>                                          : ^ ^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
@@ -471,7 +471,7 @@ test({
 >a : () => number
 >  : ^^^^^^^^^^^^
 >() => 0 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -479,7 +479,7 @@ test({
 >b : (a: number) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >(a) => a : (a: number) => number
->         :                      
+>         : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -489,7 +489,7 @@ test({
 >c : (b: number) => void
 >  : ^ ^^^^^^^^^^^^^^^^^
 >(b) => {        const x: number = b;    } : (b: number) => void
->                                          :                    
+>                                          : ^ ^^^^^^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 
@@ -695,13 +695,13 @@ simplified({ generator: () => 123, receiver: (t) => console.log(t + 2) })
 >generator : () => number
 >          : ^^^^^^^^^^^^
 >() => 123 : () => number
->          :             
+>          : ^^^^^^^^^^^^
 >123 : 123
 >    : ^^^
 >receiver : (t: number) => void
 >         : ^ ^^^^^^^^^^^^^^^^^
 >(t) => console.log(t + 2) : (t: number) => void
->                          :                    
+>                          : ^ ^^^^^^^^^^^^^^^^^
 >t : number
 >  : ^^^^^^
 >console.log(t + 2) : void
@@ -729,7 +729,7 @@ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2)
 >generator : (bob: any) => 2 | 1
 >          : ^   ^^^^^^^^^^^^^^^
 >(bob) => bob ? 1 : 2 : (bob: any) => 2 | 1
->                     :                    
+>                     : ^   ^^^^^^^^^^^^^^^
 >bob : any
 >    : ^^^
 >bob ? 1 : 2 : 2 | 1
@@ -743,7 +743,7 @@ whatIWant({ generator: (bob) => bob ? 1 : 2, receiver: (t) => console.log(t + 2)
 >receiver : (t: 2 | 1) => void
 >         : ^ ^^^^^^^^^^^^^^^^
 >(t) => console.log(t + 2) : (t: 2 | 1) => void
->                          :                   
+>                          : ^ ^^^^^^^^^^^^^^^^
 >t : 2 | 1
 >  : ^^^^^
 >console.log(t + 2) : void
@@ -879,7 +879,7 @@ example({
 >fetch : (params: Params) => number
 >      : ^      ^^      ^^^^^^^^^^^
 >(params: Params) => 123 : (params: Params) => number
->                        :                           
+>                        : ^      ^^      ^^^^^^^^^^^
 >params : Params
 >       : ^^^^^^
 >123 : 123
@@ -889,7 +889,7 @@ example({
 >map : (number: number) => string
 >    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
->                           :                           
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
 >       : ^^^^^^
 >String(number) : string
@@ -913,7 +913,7 @@ example({
 >fetch : (params: Params, foo: number) => number
 >      : ^      ^^      ^^   ^^      ^^^^^^^^^^^
 >(params: Params, foo: number) => 123 : (params: Params, foo: number) => number
->                                     :                                        
+>                                     : ^      ^^      ^^   ^^      ^^^^^^^^^^^
 >params : Params
 >       : ^^^^^^
 >foo : number
@@ -925,7 +925,7 @@ example({
 >map : (number: number) => string
 >    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
->                           :                           
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
 >       : ^^^^^^
 >String(number) : string
@@ -949,7 +949,7 @@ example({
 >fetch : (params: Params, foo: number) => number
 >      : ^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >(params: Params, foo) => 123 : (params: Params, foo: number) => number
->                             :                                        
+>                             : ^      ^^      ^^   ^^^^^^^^^^^^^^^^^^^
 >params : Params
 >       : ^^^^^^
 >foo : number
@@ -961,7 +961,7 @@ example({
 >map : (number: number) => string
 >    : ^      ^^^^^^^^^^^^^^^^^^^
 >(number) => String(number) : (number: number) => string
->                           :                           
+>                           : ^      ^^^^^^^^^^^^^^^^^^^
 >number : number
 >       : ^^^^^^
 >String(number) : string
@@ -1015,7 +1015,7 @@ branch({
 >if : (t: "a" | "b") => t is "a"
 >   : ^ ^^^^^^^^^^^^^^^^        
 >(t): t is "a" => t === "a" : (t: "a" | "b") => t is "a"
->                           :                           
+>                           : ^ ^^^^^^^^^^^^^^^^        
 >t : "a" | "b"
 >  : ^^^^^^^^^
 >t === "a" : boolean
@@ -1029,7 +1029,7 @@ branch({
 >then : (u: "a") => void
 >     : ^ ^^^^^^^^^^^^^^
 >u => {    let test1: "a" = u  } : (u: "a") => void
->                                :                 
+>                                : ^ ^^^^^^^^^^^^^^
 >u : "a"
 >  : ^^^
 
@@ -1077,7 +1077,7 @@ Foo({
 >a : (x: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >(x) => 10 : (x: string) => number
->          :                      
+>          : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >10 : 10
@@ -1087,7 +1087,7 @@ Foo({
 >b : (arg: number) => void
 >  : ^   ^^^^^^^^^^^^^^^^^
 >(arg) => {      arg.toString();    } : (arg: number) => void
->                                     :                      
+>                                     : ^   ^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 
@@ -1144,13 +1144,13 @@ const resNested = nested({
 >prop : { produce: (a: number) => number[]; consume: (arg: number[]) => string; }
 >     : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >{    produce: (a) => [a],    consume: (arg) => arg.join(","),  } : { produce: (a: number) => number[]; consume: (arg: number[]) => string; }
->                                                                 : ^^^^^^^^^^^                       ^^^^^^^^^^^                         ^^^
+>                                                                 : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 
     produce: (a) => [a],
 >produce : (a: number) => number[]
 >        : ^ ^^^^^^^^^^^^^^^^^^^^^
 >(a) => [a] : (a: number) => number[]
->           :                        
+>           : ^ ^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >[a] : number[]
@@ -1162,7 +1162,7 @@ const resNested = nested({
 >consume : (arg: number[]) => string
 >        : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => arg.join(",") : (arg: number[]) => string
->                       :                          
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : number[]
 >    : ^^^^^^^^
 >arg.join(",") : string
@@ -1219,7 +1219,7 @@ const resTwoConsumers = twoConsumers({
 >a : (arg: string) => string[]
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => [arg] : (arg: string) => string[]
->               :                          
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >[arg] : string[]
@@ -1231,7 +1231,7 @@ const resTwoConsumers = twoConsumers({
 >consume1 : (arg1: string[]) => void
 >         : ^    ^^^^^^^^^^^^^^^^^^^
 >(arg1) => {} : (arg1: string[]) => void
->             :                         
+>             : ^    ^^^^^^^^^^^^^^^^^^^
 >arg1 : string[]
 >     : ^^^^^^^^
 
@@ -1239,7 +1239,7 @@ const resTwoConsumers = twoConsumers({
 >consume2 : (arg2: string[]) => void
 >         : ^    ^^^^^^^^^^^^^^^^^^^
 >(arg2) => {} : (arg2: string[]) => void
->             :                         
+>             : ^    ^^^^^^^^^^^^^^^^^^^
 >arg2 : string[]
 >     : ^^^^^^^^
 
@@ -1291,7 +1291,7 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 >a : (arg: string) => string[]
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => [arg] : (arg: string) => string[]
->               :                          
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >[arg] : string[]
@@ -1303,7 +1303,7 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 >b : (arg: string) => number
 >  : ^   ^^^^^^^^^^^^^^^^^^^
 >(arg) => Number(arg) : (arg: string) => number
->                     :                        
+>                     : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >Number(arg) : number
@@ -1317,7 +1317,7 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 >consume1 : (arg1: string[]) => void
 >         : ^    ^^^^^^^^^^^^^^^^^^^
 >(arg1) => {} : (arg1: string[]) => void
->             :                         
+>             : ^    ^^^^^^^^^^^^^^^^^^^
 >arg1 : string[]
 >     : ^^^^^^^^
 
@@ -1325,7 +1325,7 @@ const resMultipleProducersBeforeConsumers = multipleProducersBeforeConsumers({
 >consume2 : (arg2: number) => void
 >         : ^    ^^^^^^^^^^^^^^^^^
 >(arg2) => {} : (arg2: number) => void
->             :                       
+>             : ^    ^^^^^^^^^^^^^^^^^
 >arg2 : number
 >     : ^^^^^^
 
@@ -1371,7 +1371,7 @@ const resWithConditionalExpression = withConditionalExpression({
 >a : (arg: string) => string[]
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => [arg] : (arg: string) => string[]
->               :                          
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >[arg] : string[]
@@ -1383,7 +1383,7 @@ const resWithConditionalExpression = withConditionalExpression({
 >b : ((arg: string[]) => "first") | ((arg: string[]) => "two")
 >  : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >Math.random() ? (arg) => "first" as const : (arg) => "two" as const : ((arg: string[]) => "first") | ((arg: string[]) => "two")
->                                                                    : ^                          ^^^^^                        ^
+>                                                                    : ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >Math.random() : number
 >              : ^^^^^^
 >Math.random : () => number
@@ -1413,7 +1413,7 @@ const resWithConditionalExpression = withConditionalExpression({
 >c : (arg: "first" | "two") => boolean
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg) => Boolean(arg) : (arg: "first" | "two") => boolean
->                      :                                  
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : "first" | "two"
 >    : ^^^^^^^^^^^^^^^
 >Boolean(arg) : boolean
@@ -1475,7 +1475,7 @@ const resOnion = onion({
 >a : (arg: string) => string[]
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => [arg] : (arg: string) => string[]
->               :                          
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >[arg] : string[]
@@ -1487,13 +1487,13 @@ const resOnion = onion({
 >nested : { b: (arg: string[]) => string; nested2: { c: (arg: string) => boolean; }; }
 >       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    b: (arg) => arg.join(","),    nested2: {      c: (arg) => Boolean(arg),    },  } : { b: (arg: string[]) => string; nested2: { c: (arg: string) => boolean; }; }
->                                                                                      : ^^^^^                         ^^^^^^^^^^^^^^^^                        ^^^^^^
+>                                                                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b: (arg) => arg.join(","),
 >b : (arg: string[]) => string
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => arg.join(",") : (arg: string[]) => string
->                       :                          
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string[]
 >    : ^^^^^^^^
 >arg.join(",") : string
@@ -1511,13 +1511,13 @@ const resOnion = onion({
 >nested2 : { c: (arg: string) => boolean; }
 >        : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >{      c: (arg) => Boolean(arg),    } : { c: (arg: string) => boolean; }
->                                      : ^^^^^                        ^^^
+>                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 
       c: (arg) => Boolean(arg),
 >c : (arg: string) => boolean
 >  : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg) => Boolean(arg) : (arg: string) => boolean
->                      :                         
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >Boolean(arg) : boolean
@@ -1587,7 +1587,7 @@ const resOnion2 = onion2({
 >a : (arg: string) => string[]
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => [arg] : (arg: string) => string[]
->               :                          
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >[arg] : string[]
@@ -1599,13 +1599,13 @@ const resOnion2 = onion2({
 >nested : { b: (arg: string[]) => string; c: (arg: string[]) => number; nested2: { d: (arg: number) => boolean; }; }
 >       : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    b: (arg) => arg.join(","),    c: (arg) => Number(arg),    nested2: {      d: (arg) => Boolean(arg),    },  } : { b: (arg: string[]) => string; c: (arg: string[]) => number; nested2: { d: (arg: number) => boolean; }; }
->                                                                                                                  : ^^^^^                         ^^^^^                         ^^^^^^^^^^^^^^^^                        ^^^^^^
+>                                                                                                                  : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     b: (arg) => arg.join(","),
 >b : (arg: string[]) => string
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => arg.join(",") : (arg: string[]) => string
->                       :                          
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string[]
 >    : ^^^^^^^^
 >arg.join(",") : string
@@ -1623,7 +1623,7 @@ const resOnion2 = onion2({
 >c : (arg: string[]) => number
 >  : ^   ^^^^^^^^^^^^^^^^^^^^^
 >(arg) => Number(arg) : (arg: string[]) => number
->                     :                          
+>                     : ^   ^^^^^^^^^^^^^^^^^^^^^
 >arg : string[]
 >    : ^^^^^^^^
 >Number(arg) : number
@@ -1637,13 +1637,13 @@ const resOnion2 = onion2({
 >nested2 : { d: (arg: number) => boolean; }
 >        : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 >{      d: (arg) => Boolean(arg),    } : { d: (arg: number) => boolean; }
->                                      : ^^^^^                        ^^^
+>                                      : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^
 
       d: (arg) => Boolean(arg),
 >d : (arg: number) => boolean
 >  : ^   ^^^^^^^^^^^^^^^^^^^^
 >(arg) => Boolean(arg) : (arg: number) => boolean
->                      :                         
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >Boolean(arg) : boolean
@@ -1706,25 +1706,25 @@ const distantRes = distant({
 >foo : { bar: { baz: { producer: (arg: string) => number; }; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    bar: {      baz: {        producer: (arg) => 1,      },    },  } : { bar: { baz: { producer: (arg: string) => number; }; }; }
->                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     bar: {
 >bar : { baz: { producer: (arg: string) => number; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{      baz: {        producer: (arg) => 1,      },    } : { baz: { producer: (arg: string) => number; }; }
->                                                        : ^^^^^^^^^^^^^^^^^^^                       ^^^^^^
+>                                                        : ^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 
       baz: {
 >baz : { producer: (arg: string) => number; }
 >    : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
 >{        producer: (arg) => 1,      } : { producer: (arg: string) => number; }
->                                      : ^^^^^^^^^^^^                       ^^^
+>                                      : ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^
 
         producer: (arg) => 1,
 >producer : (arg: string) => number
 >         : ^   ^^^^^^^^^^^^^^^^^^^
 >(arg) => 1 : (arg: string) => number
->           :                        
+>           : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : string
 >    : ^^^^^^
 >1 : 1
@@ -1737,7 +1737,7 @@ const distantRes = distant({
 >consumer : (val: number) => void
 >         : ^   ^^^^^^^^^^^^^^^^^
 >(val) => {} : (val: number) => void
->            :                      
+>            : ^   ^^^^^^^^^^^^^^^^^
 >val : number
 >    : ^^^^^^
 

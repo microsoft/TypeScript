@@ -49,9 +49,9 @@ declare function convert<TState, TActions>(m: ModuleWithState<TState> & TActions
 
 const breaks = convert(
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >convert(    createModule({ a: 12 }, { foo() { return true } })) : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
->                                                                : ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^                
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >convert : <TState, TActions>(m: ModuleWithState<TState> & TActions) => ModuleWithState<TState & MoreState> & TActions
 >        : ^      ^^        ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -81,9 +81,9 @@ breaks.state.a
 >breaks.state : { a: number; } & MoreState
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : { a: number; } & MoreState
->      :               ^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -93,9 +93,9 @@ breaks.state.z
 >breaks.state : { a: number; } & MoreState
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : { a: number; } & MoreState
->      :               ^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >z : string
 >  : ^^^^^^
 
@@ -105,7 +105,7 @@ breaks.foo()
 >breaks.foo : () => true
 >           : ^^^^^^^^^^
 >breaks : ModuleWithState<{ a: number; } & MoreState> & ModuleWithState<{ a: number; }> & { foo(): true; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => true
 >    : ^^^^^^^^^^
 

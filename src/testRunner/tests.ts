@@ -99,6 +99,7 @@ import "./unittests/tsbuild/sample";
 import "./unittests/tsbuild/transitiveReferences";
 import "./unittests/tsbuildWatch/configFileErrors";
 import "./unittests/tsbuildWatch/demo";
+import "./unittests/tsbuildWatch/extends";
 import "./unittests/tsbuildWatch/libraryResolution";
 import "./unittests/tsbuildWatch/moduleResolution";
 import "./unittests/tsbuildWatch/noEmit";

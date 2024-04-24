@@ -102,7 +102,7 @@ createMachine<{ count: number }>({
 >entry : AssignAction<{ count: number; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign({    count: (ctx: { count: number }) => ++ctx.count,  }) : AssignAction<{ count: number; }>
->                                                                : ^^^^^^^^^^^^^                  ^
+>                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >assign : <TContext>(assignment: PropertyAssigner<LowInfer<TContext>>) => AssignAction<TContext>
 >       : ^        ^^          ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    count: (ctx: { count: number }) => ++ctx.count,  } : { count: (ctx: { count: number; }) => number; }
@@ -112,7 +112,7 @@ createMachine<{ count: number }>({
 >count : (ctx: { count: number; }) => number
 >      : ^   ^^                  ^^^^^^^^^^^
 >(ctx: { count: number }) => ++ctx.count : (ctx: { count: number; }) => number
->                                        :                                    
+>                                        : ^   ^^                  ^^^^^^^^^^^
 >ctx : { count: number; }
 >    : ^^^^^^^^^      ^^^
 >count : number

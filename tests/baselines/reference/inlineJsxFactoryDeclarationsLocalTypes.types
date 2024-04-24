@@ -100,7 +100,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
 >      : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >(props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
->                                                                                                                                               :                                                                                          
+>                                                                                                                                               : ^     ^^                                                          ^^^^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: predom.JSX.Element[]; }
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                    ^^^
 >x : number
@@ -343,7 +343,7 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
 >       : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >(props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
->                                                                                                                                    :                                                                                    
+>                                                                                                                                    : ^     ^^                                                       ^^^^^^^^^^^^^^^^^^^^
 >props : { x: number; y: number; children?: dom.JSX.Element[]; }
 >      : ^^^^^      ^^^^^      ^^^^^^^^^^^^^                 ^^^
 >x : number

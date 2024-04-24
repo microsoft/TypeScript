@@ -626,7 +626,7 @@ var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
 >a9b : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
 >someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->                                                                      :    ^           ^           
+>                                                                      : ^^^^^^      ^^^^^^      ^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >a : number
@@ -677,7 +677,7 @@ var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->                                                               :                                              ^              ^^^                         ^              
+>                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >undefined : undefined
@@ -746,7 +746,7 @@ var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >    : ^^^^^^^^^^^^^^
 >someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
->                                            :               
+>                                            : ^^^^^^^^^^^^^^
 >someGenerics9 : <T extends unknown>(a: T, b: T, c: T) => T
 >              : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >{ x: 3 } : { x: number; }

@@ -41,8 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/username/project/src
-Info seq  [hh:mm:ss:mss] For info: /home/username/project/src/a.ts :: Config file name: /home/username/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/username/project/src/a.ts ProjectRootPath: /home/username/project:: Result: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/username/project/tsconfig.json 2000 undefined Project: /home/username/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -273,8 +272,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/username/project/src
-Info seq  [hh:mm:ss:mss] For info: /home/username/project/src/c.ts :: Config file name: /home/username/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/username/project/src/c.ts ProjectRootPath: /home/username/project:: Result: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/username/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/username/project/src/b.ts 500 undefined Project: /home/username/project/tsconfig.json WatchType: Missing file
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/username/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms

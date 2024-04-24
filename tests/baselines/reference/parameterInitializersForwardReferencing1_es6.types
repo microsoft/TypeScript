@@ -32,7 +32,7 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 >bar : (baz?: string) => string
 >    : ^   ^^^^^^^^^^^^^^^^^^^^
 >(baz = foo) => baz : (baz?: string) => string
->                   :     ^                   
+>                   : ^   ^^^^^^^^^^^^^^^^^^^^
 >baz : string
 >    : ^^^^^^
 >foo : string

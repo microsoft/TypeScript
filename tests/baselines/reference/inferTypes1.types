@@ -702,7 +702,7 @@ const result = invoker('test', true)({ test: (a: boolean) => 123 })
 >test : (a: boolean) => number
 >     : ^ ^^       ^^^^^^^^^^^
 >(a: boolean) => 123 : (a: boolean) => number
->                    :                       
+>                    : ^ ^^       ^^^^^^^^^^^
 >a : boolean
 >  : ^^^^^^^
 >123 : 123

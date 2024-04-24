@@ -41,7 +41,7 @@ const eacher = each(cases);
 >eacher : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
 >       : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >each(cases) : (fn: (...args: readonly [1, "1"] | readonly [2, "2"]) => any) => void
->            :       ^^^                                                            
+>            : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >each : <T extends readonly any[]>(cases: ReadonlyArray<T>) => (fn: (...args: T) => any) => void
 >     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                ^^^^^^  ^^                   ^^^^^^^^^
 >cases : readonly [readonly [1, "1"], readonly [2, "2"]]

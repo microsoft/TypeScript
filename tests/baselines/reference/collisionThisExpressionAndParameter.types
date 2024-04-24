@@ -36,7 +36,7 @@ class Foo {
 >lamda : (_this: number) => (x: any) => this
 >      : ^     ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >(_this: number) => { // Error             return x => this;   // New scope.  So should inject new _this capture        } : (_this: number) => (x: any) => this
->                                                                                                                         :                                    
+>                                                                                                                         : ^     ^^      ^^^^^^ ^^^^^^^^^^^^^^
 >_this : number
 >      : ^^^^^^
 
@@ -58,7 +58,7 @@ class Foo {
 >lambda : () => (x: any) => this
 >       : ^^^^^^^ ^^^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  :                       
+>                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this
@@ -94,7 +94,7 @@ class Foo {
 >lamda : (_this: number) => void
 >      : ^     ^^      ^^^^^^^^^
 >(_this: number) => { // No Error         } : (_this: number) => void
->                                           :                        
+>                                           : ^     ^^      ^^^^^^^^^
 >_this : number
 >      : ^^^^^^
         }
@@ -109,7 +109,7 @@ class Foo {
 >lambda : () => void
 >       : ^^^^^^^^^^
 >() => {        } : () => void
->                 :           
+>                 : ^^^^^^^^^^
         }
     }
 }
@@ -125,13 +125,13 @@ class Foo1 {
 >x2 : { doStuff: (callback: any) => () => any; }
 >   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
->                                                                                                        : ^^^^^^^^^^^                            ^^^
+>                                                                                                        : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(this);            } : (callback: any) => () => any
->                                                                         :                             
+>                                                                         : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(this);            } : () => any
 >                                                           : ^^^^^^^^^
@@ -218,13 +218,13 @@ class Foo3 {
 >x2 : { doStuff: (callback: any) => () => any; }
 >   : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 >{            doStuff: (callback) => () => {                return callback(this);            }        } : { doStuff: (callback: any) => () => any; }
->                                                                                                        : ^^^^^^^^^^^                            ^^^
+>                                                                                                        : ^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^
 
             doStuff: (callback) => () => {
 >doStuff : (callback: any) => () => any
 >        : ^        ^^^^^^^^^^^^^^^^^^^
 >(callback) => () => {                return callback(this);            } : (callback: any) => () => any
->                                                                         :                             
+>                                                                         : ^        ^^^^^^^^^^^^^^^^^^^
 >callback : any
 >() => {                return callback(this);            } : () => any
 >                                                           : ^^^^^^^^^
@@ -259,7 +259,7 @@ class Foo3 {
 >lambda : () => (x: any) => this
 >       : ^^^^^^^ ^^^^^^^^^^^^^^
 >() => {            return x => this;   // New scope.  So should inject new _this capture        } : () => (x: any) => this
->                                                                                                  :                       
+>                                                                                                  : ^^^^^^^ ^^^^^^^^^^^^^^
 
             return x => this;   // New scope.  So should inject new _this capture
 >x => this : (x: any) => this

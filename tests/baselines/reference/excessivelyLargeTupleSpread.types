@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/excessivelyLargeTupleSpread.ts] ////
 
 === Performance Stats ===
-Type Count: 33,100 / 33,100 (nearest 100)
-Instantiation count: 49,500 / 49,500 (nearest 500)
-Symbol count: 108,000 / 108,000 (nearest 500)
+Type Count: 25,000
+Instantiation count: 50,000
+Symbol count: 100,000
 
 === excessivelyLargeTupleSpread.ts ===
 // #41771

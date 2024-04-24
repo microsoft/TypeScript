@@ -29,7 +29,7 @@ export class Test1 {
 >messageHandler : () => void
 >               : ^^^^^^^^^^
 >() => {        console.log(field1); // Should be error that couldnt find symbol field1    } : () => void
->                                                                                            :           
+>                                                                                            : ^^^^^^^^^^
 
         console.log(field1); // Should be error that couldnt find symbol field1
 >console.log(field1) : void

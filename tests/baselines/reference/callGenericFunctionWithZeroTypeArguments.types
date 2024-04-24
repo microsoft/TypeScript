@@ -23,7 +23,7 @@ var f2 = <T>(x: T): T => { return null; }
 >f2 : <T>(x: T) => T
 >   : ^ ^^ ^^ ^^^^^ 
 ><T>(x: T): T => { return null; } : <T>(x: T) => T
->                                 :               
+>                                 : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 

@@ -203,7 +203,7 @@ var r1 = d.a;
 >r1 : { foo: string; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d.a : { foo: string; bar: string; }
->    :                              
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Derived
 >  : ^^^^^^^
 >a : { foo: string; bar: string; }
@@ -227,7 +227,7 @@ var r3 = d.c;
 >r3 : { foo: string; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d.c : { foo: string; bar: string; }
->    :                              
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Derived
 >  : ^^^^^^^
 >c : { foo: string; bar: string; }
@@ -237,7 +237,7 @@ var r3a = d.d;
 >r3a : (a: typeof y) => void
 >    : ^ ^^        ^^^^^^^^^
 >d.d : (a: typeof y) => void
->    :                      
+>    : ^ ^^        ^^^^^^^^^
 >d : Derived
 >  : ^^^^^^^
 >d : (a: typeof y) => void
@@ -253,13 +253,13 @@ d.c = y;
 >c : { foo: string; bar: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { foo: string; bar: string; }
->  :                              
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 var r4 = Derived.r;
 >r4 : { foo: string; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived.r : { foo: string; bar: string; }
->          :                              
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >r : { foo: string; bar: string; }
@@ -283,7 +283,7 @@ var r6 = Derived.t;
 >r6 : { foo: string; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived.t : { foo: string; bar: string; }
->          :                              
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >t : { foo: string; bar: string; }
@@ -293,7 +293,7 @@ var r6a = Derived.u;
 >r6a : (a: typeof y) => void
 >    : ^ ^^        ^^^^^^^^^
 >Derived.u : (a: typeof y) => void
->          :                      
+>          : ^ ^^        ^^^^^^^^^
 >Derived : typeof Derived
 >        : ^^^^^^^^^^^^^^
 >u : (a: typeof y) => void
@@ -309,7 +309,7 @@ Derived.t = y;
 >t : { foo: string; bar: string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : { foo: string; bar: string; }
->  :                              
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 class Base2 {
 >Base2 : Base2
@@ -353,7 +353,7 @@ var r7 = d2[''];
 >r7 : { foo: string; }
 >   : ^^^^^^^^^^^^^^^^
 >d2[''] : { foo: string; }
->       :                 
+>       : ^^^^^^^^^^^^^^^^
 >d2 : Derived2
 >   : ^^^^^^^^
 >'' : ""
@@ -363,7 +363,7 @@ var r8 = d2[1];
 >r8 : { foo: string; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d2[1] : { foo: string; bar: string; }
->      :                              
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d2 : Derived2
 >   : ^^^^^^^^
 >1 : 1

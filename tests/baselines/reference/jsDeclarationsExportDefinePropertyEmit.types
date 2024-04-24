@@ -23,7 +23,7 @@ Object.defineProperty(module.exports, "a", { value: function a() {} });
 >value : () => void
 >      : ^^^^^^^^^^
 >function a() {} : () => void
->                :           
+>                : ^^^^^^^^^^
 >a : () => void
 >  : ^^^^^^^^^^
 
@@ -49,7 +49,7 @@ Object.defineProperty(module.exports, "b", { value: function b() {} });
 >value : () => void
 >      : ^^^^^^^^^^
 >function b() {} : () => void
->                :           
+>                : ^^^^^^^^^^
 >b : () => void
 >  : ^^^^^^^^^^
 
@@ -117,7 +117,7 @@ Object.defineProperty(module.exports, "d", { value: d });
 >value : (a: number, b: number) => string
 >      : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >d : (a: number, b: number) => string
->  :                                 
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 
 
 /**
@@ -157,7 +157,7 @@ Object.defineProperty(module.exports, "e", { value: e });
 >value : <T, U>(a: T, b: U) => T & U
 >      : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 >e : <T, U>(a: T, b: U) => T & U
->  :                            
+>  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^
 
 /**
  * @template T
@@ -195,7 +195,7 @@ Object.defineProperty(module.exports, "f", { value: f });
 >value : <T>(a: T) => T
 >      : ^ ^^ ^^ ^^^^^^
 >f : <T>(a: T) => T
->  :               
+>  : ^ ^^ ^^ ^^^^^^
 
 Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 >Object.defineProperty(module.exports.f, "self", { value: module.exports.f }) : <T>(a: T) => T
@@ -223,7 +223,7 @@ Object.defineProperty(module.exports.f, "self", { value: module.exports.f });
 >value : <T>(a: T) => T
 >      : ^ ^^ ^^ ^^^^^^
 >module.exports.f : <T>(a: T) => T
->                 :               
+>                 : ^ ^^ ^^ ^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -285,7 +285,7 @@ Object.defineProperty(module.exports, "g", { value: g });
 >value : (a: { x: string; }, b: { y: () => void; }) => void
 >      : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (a: { x: string; }, b: { y: () => void; }) => void
->  :                                                   
+>  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 /**
@@ -340,7 +340,7 @@ Object.defineProperty(module.exports, "h", { value: hh });
 >value : (a: { x: string; }, b: { y: () => void; }) => void
 >      : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >hh : (a: { x: string; }, b: { y: () => void; }) => void
->   :                                                   
+>   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Object.defineProperty(module.exports, "i", { value: function i(){} });
 >Object.defineProperty(module.exports, "i", { value: function i(){} }) : typeof module.exports
@@ -364,7 +364,7 @@ Object.defineProperty(module.exports, "i", { value: function i(){} });
 >value : () => void
 >      : ^^^^^^^^^^
 >function i(){} : () => void
->               :           
+>               : ^^^^^^^^^^
 >i : () => void
 >  : ^^^^^^^^^^
 
@@ -390,7 +390,7 @@ Object.defineProperty(module.exports, "ii", { value: module.exports.i });
 >value : () => void
 >      : ^^^^^^^^^^
 >module.exports.i : () => void
->                 :           
+>                 : ^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -423,7 +423,7 @@ Object.defineProperty(module.exports, "jj", { value: module.exports.j });
 >value : () => void
 >      : ^^^^^^^^^^
 >module.exports.j : () => void
->                 :           
+>                 : ^^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -455,7 +455,7 @@ Object.defineProperty(module.exports, "j", { value: function j() {} });
 >value : () => void
 >      : ^^^^^^^^^^
 >function j() {} : () => void
->                :           
+>                : ^^^^^^^^^^
 >j : () => void
 >  : ^^^^^^^^^^
 

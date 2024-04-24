@@ -45,8 +45,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/tsconfig.json :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/tsconfig.json ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /apps/app1/tsconfig.json 2000 undefined Project: /apps/app1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -305,8 +304,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /apps/app1/src/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1/src
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/src/index.ts :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/src/index.ts ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
 
@@ -692,8 +690,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /apps/app1/src/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /apps/app1/src
-Info seq  [hh:mm:ss:mss] For info: /apps/app1/src/app.ts :: Config file name: /apps/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /apps/app1/src/app.ts ProjectRootPath: undefined:: Result: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)
@@ -1093,8 +1090,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /shared/data.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /shared
-Info seq  [hh:mm:ss:mss] For info: /shared/data.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /shared/data.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /apps/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /apps/app1/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/apps/app1/tsconfig.json' (Configured)

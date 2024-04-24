@@ -20,11 +20,11 @@ function testcase() {
 >obj : { toString: () => number; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{toString:function (){return 0}} : { toString: () => number; }
->                                 : ^^^^^^^^^^^^            ^^^
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >toString : () => number
 >         : ^^^^^^^^^^^^
 >function (){return 0} : () => number
->                      :             
+>                      : ^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

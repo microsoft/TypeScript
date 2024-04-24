@@ -72,13 +72,13 @@ const funcs1 = {
 >funcs1 : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >       : ^^^^^^^^^^ ^^       ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^    ^^^
 >{    funcA: (a: boolean): void => {},    funcB: (b: string, bb: string): void => {},    funcC: (c: number, cc: number, ccc: boolean): void => {},} : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
->                                                                                                                                                   : ^^^^^^^^^                    ^^^^^^^^^                               ^^^^^^^^^                                             ^^^
+>                                                                                                                                                   : ^^^^^^^^^^ ^^       ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^^^^    ^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^    ^^^
 
     funcA: (a: boolean): void => {},
 >funcA : (a: boolean) => void
 >      : ^ ^^       ^^^^^    
 >(a: boolean): void => {} : (a: boolean) => void
->                         :                     
+>                         : ^ ^^       ^^^^^    
 >a : boolean
 >  : ^^^^^^^
 
@@ -86,7 +86,7 @@ const funcs1 = {
 >funcB : (b: string, bb: string) => void
 >      : ^ ^^      ^^  ^^      ^^^^^    
 >(b: string, bb: string): void => {} : (b: string, bb: string) => void
->                                    :                                
+>                                    : ^ ^^      ^^  ^^      ^^^^^    
 >b : string
 >  : ^^^^^^
 >bb : string
@@ -96,7 +96,7 @@ const funcs1 = {
 >funcC : (c: number, cc: number, ccc: boolean) => void
 >      : ^ ^^      ^^  ^^      ^^   ^^       ^^^^^    
 >(c: number, cc: number, ccc: boolean): void => {} : (c: number, cc: number, ccc: boolean) => void
->                                                  :                                              
+>                                                  : ^ ^^      ^^  ^^      ^^   ^^       ^^^^^    
 >c : number
 >  : ^^^^^^
 >cc : number
@@ -139,7 +139,7 @@ const {} = useReduxDispatch1(
 >funcA : (a: boolean) => void
 >      : ^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcA(...p)) : (a: boolean) => void
->                           :                     
+>                           : ^^^^^^^^^^^^^^^^^^^^
 >p : [a: boolean]
 >  : ^^^^^^^^^^^^
 >d(f.funcA(...p)) : void
@@ -163,7 +163,7 @@ const {} = useReduxDispatch1(
 >funcB : (b: string, bb: string) => void
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcB(...p)) : (b: string, bb: string) => void
->                           :                                
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : [b: string, bb: string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 >d(f.funcB(...p)) : void
@@ -187,7 +187,7 @@ const {} = useReduxDispatch1(
 >funcC : (c: number, cc: number, ccc: boolean) => void
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...p) => d(f.funcC(...p)) : (c: number, cc: number, ccc: boolean) => void
->                           :                                              
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : [c: number, cc: number, ccc: boolean]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d(f.funcC(...p)) : void

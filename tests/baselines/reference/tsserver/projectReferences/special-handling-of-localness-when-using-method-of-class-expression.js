@@ -96,8 +96,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/api/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/api/src/server.ts :: Config file name: /user/username/projects/solution/api/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/api/src/server.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/api/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/api/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/api/tsconfig.json 2000 undefined Project: /user/username/projects/solution/api/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -241,12 +240,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/api
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/api/tsconfig.json :: Config file name: /user/username/projects/solution/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/api/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/solution/tsconfig.json 2000 undefined Project: /user/username/projects/solution/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/solution/api/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -312,7 +309,6 @@ Projects::
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *new*
@@ -342,8 +338,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/api/src/server.ts position 89 in project /user/username/projects/solution/api/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/shared/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/shared/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -433,8 +428,7 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/shared/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/shared/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/shared/src/index.ts position 27 in project /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
@@ -652,10 +646,8 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/shared/src/index.ts position 27 in project /user/username/projects/solution/app/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/shared/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/solution/shared/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/solution/shared/src/index.ts :: Config file name: /user/username/projects/solution/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/shared/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/shared/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/shared/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -780,7 +772,6 @@ Projects::
 /user/username/projects/solution/app/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
     originalConfiguredProjects: 3
         /user/username/projects/solution/shared/tsconfig.json
         /user/username/projects/solution/api/tsconfig.json
@@ -788,12 +779,10 @@ Projects::
 /user/username/projects/solution/shared/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
-    noOpenRef: true
 /user/username/projects/solution/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
-    noOpenRef: true
 
 ScriptInfos::
 /a/lib/lib.d.ts *changed*

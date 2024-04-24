@@ -1649,6 +1649,154 @@
         "category": "Error",
         "code": 1498
     },
+    "Unknown regular expression flag.": {
+        "category": "Error",
+        "code": 1499
+    },
+    "Duplicate regular expression flag.": {
+        "category": "Error",
+        "code": 1500
+    },
+    "This regular expression flag is only available when targeting '{0}' or later.": {
+        "category": "Error",
+        "code": 1501
+    },
+    "The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.": {
+        "category": "Error",
+        "code": 1502
+    },
+    "Named capturing groups are only available when targeting 'ES2018' or later.": {
+        "category": "Error",
+        "code": 1503
+    },
+    "Subpattern flags must be present when there is a minus sign.": {
+        "category": "Error",
+        "code": 1504
+    },
+    "Incomplete quantifier. Digit expected.": {
+        "category": "Error",
+        "code": 1505
+    },
+    "Numbers out of order in quantifier.": {
+        "category": "Error",
+        "code": 1506
+    },
+    "There is nothing available for repetition.": {
+        "category": "Error",
+        "code": 1507
+    },
+    "Unexpected '{0}'. Did you mean to escape it with backslash?": {
+        "category": "Error",
+        "code": 1508
+    },
+    "This regular expression flag cannot be toggled within a subpattern.": {
+        "category": "Error",
+        "code": 1509
+    },
+    "'\\k' must be followed by a capturing group name enclosed in angle brackets.": {
+        "category": "Error",
+        "code": 1510
+    },
+    "'\\q' is only available inside character class.": {
+        "category": "Error",
+        "code": 1511
+    },
+    "'\\c' must be followed by an ASCII letter.": {
+        "category": "Error",
+        "code": 1512
+    },
+    "Undetermined character escape.": {
+        "category": "Error",
+        "code": 1513
+    },
+    "Expected a capturing group name.": {
+        "category": "Error",
+        "code": 1514
+    },
+    "Named capturing groups with the same name must be mutually exclusive to each other.": {
+        "category": "Error",
+        "code": 1515
+    },
+    "A character class range must not be bounded by another character class.": {
+        "category": "Error",
+        "code": 1516
+    },
+    "Range out of order in character class.": {
+        "category": "Error",
+        "code": 1517
+    },
+    "Anything that would possibly match more than a single character is invalid inside a negated character class.": {
+        "category": "Error",
+        "code": 1518
+    },
+    "Operators must not be mixed within a character class. Wrap it in a nested class instead.": {
+        "category": "Error",
+        "code": 1519
+    },
+    "Expected a class set oprand.": {
+        "category": "Error",
+        "code": 1520
+    },
+    "'\\q' must be followed by string alternatives enclosed in braces.": {
+        "category": "Error",
+        "code": 1521
+    },
+    "A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?": {
+        "category": "Error",
+        "code": 1522
+    },
+    "Expected a Unicode property name.": {
+        "category": "Error",
+        "code": 1523
+    },
+    "Unknown Unicode property name.": {
+        "category": "Error",
+        "code": 1524
+    },
+    "Expected a Unicode property value.": {
+        "category": "Error",
+        "code": 1525
+    },
+    "Unknown Unicode property value.": {
+        "category": "Error",
+        "code": 1526
+    },
+    "Expected a Unicode property name or value.": {
+        "category": "Error",
+        "code": 1527
+    },
+    "Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1528
+    },
+    "Unknown Unicode property name or value.": {
+        "category": "Error",
+        "code": 1529
+    },
+    "Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.": {
+        "category": "Error",
+        "code": 1530
+    },
+    "'\\{0}' must be followed by a Unicode property value expression enclosed in braces.": {
+        "category": "Error",
+        "code": 1531
+    },
+    "There is no capturing group named '{0}' in this regular expression.": {
+        "category": "Error",
+        "code": 1532
+    },
+    "A decimal escape must refer to an existent capturing group. There are only {0} capturing groups in this regular expression.": {
+        "category": "Error",
+        "code": 1533
+    },
+    "Decimal escapes are invalid when there are no capturing groups in a regular expression.": {
+        "category": "Error",
+        "code": 1534
+    },
+    "This character cannot be escaped in a regular expression.": {
+        "category": "Error",
+        "code": 1535
+    },
 
     "The types of '{0}' are incompatible between these types.": {
         "category": "Error",
@@ -6227,6 +6375,11 @@
         "category": "Message",
         "code": 6718
     },
+    "Require sufficient annotation on exports so other tools can trivially generate declaration files.": {
+        "category": "Message",
+        "code": 6719
+    },
+
     "Default catch clause variables as 'unknown' instead of 'any'.": {
         "category": "Message",
         "code": 6803
@@ -6744,6 +6897,126 @@
     "Declaration emit for this file requires using private name '{0}' from module '{1}'. An explicit type annotation may unblock declaration emit.": {
         "category": "Error",
         "code": 9006
+    },
+    "Function must have an explicit return type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9007
+    },
+    "Method must have an explicit return type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9008
+    },
+    "At least one accessor must have an explicit return type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9009
+    },
+    "Variable must have an explicit type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9010
+    },
+    "Parameter must have an explicit type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9011
+    },
+    "Property must have an explicit type annotation with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9012
+    },
+    "Expression type can't be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9013
+    },
+    "Computed properties must be number or string literals, variables or dotted expressions with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9014
+    },
+    "Objects that contain spread assignments can't be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9015
+    },
+    "Objects that contain shorthand properties can't be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9016
+    },
+    "Only const arrays can be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9017
+    },
+    "Arrays with spread elements can't inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9018
+    },
+    "Binding elements can't be exported directly with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9019
+    },
+    "Enum member initializers must be computable without references to external symbols with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9020
+    },
+    "Extends clause can't contain an expression with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9021
+    },
+    "Inference from class expressions is not supported with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9022
+    },
+    "Assigning properties to functions without declaring them is not supported with --isolatedDeclarations. Add an explicit declaration for the properties assigned to this function.": {
+        "category": "Error",
+        "code": 9023
+    },
+    "Declaration emit for this parameter requires implicitly adding undefined to it's type. This is not supported with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9025
+    },
+    "Declaration emit for this file requires preserving this import for augmentations. This is not supported with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9026
+    },
+    "Add a type annotation to the variable {0}.": {
+        "category": "Error",
+        "code": 9027
+    },
+    "Add a type annotation to the parameter {0}.": {
+        "category": "Error",
+        "code": 9028
+    },
+    "Add a type annotation to the property {0}.": {
+        "category": "Error",
+        "code": 9029
+    },
+    "Add a return type to the function expression.": {
+        "category": "Error",
+        "code": 9030
+    },
+    "Add a return type to the function declaration.": {
+        "category": "Error",
+        "code": 9031
+    },
+    "Add a return type to the get accessor declaration.": {
+        "category": "Error",
+        "code": 9032
+    },
+    "Add a type to parameter of the set accessor declaration.": {
+        "category": "Error",
+        "code": 9033
+    },
+    "Add a return type to the method": {
+        "category": "Error",
+        "code": 9034
+    },
+    "Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.": {
+        "category": "Error",
+        "code": 9035
+    },
+    "Move the expression in default export to a variable and add a type annotation to it.": {
+        "category": "Error",
+        "code": 9036
+    },
+    "Default exports can't be inferred with --isolatedDeclarations.": {
+        "category": "Error",
+        "code": 9037
     },
     "JSX attributes must only be assigned a non-empty 'expression'.": {
         "category": "Error",

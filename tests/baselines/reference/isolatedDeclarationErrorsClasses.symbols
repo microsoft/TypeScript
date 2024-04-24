@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsClasses.ts] ////
+
+=== isolatedDeclarationErrorsClasses.ts ===
+export class Cls {
+>Cls : Symbol(Cls, Decl(isolatedDeclarationErrorsClasses.ts, 0, 0))
+
+    field = 1 + 1;
+>field : Symbol(Cls.field, Decl(isolatedDeclarationErrorsClasses.ts, 0, 18))
+
+    method() {}
+>method : Symbol(Cls.method, Decl(isolatedDeclarationErrorsClasses.ts, 2, 18))
+
+    methodOk(): void {}
+>methodOk : Symbol(Cls.methodOk, Decl(isolatedDeclarationErrorsClasses.ts, 3, 15))
+
+    methodParams(p): void {}
+>methodParams : Symbol(Cls.methodParams, Decl(isolatedDeclarationErrorsClasses.ts, 5, 23))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsClasses.ts, 7, 17))
+
+    methodParams2(p = 1 + 1): void {}
+>methodParams2 : Symbol(Cls.methodParams2, Decl(isolatedDeclarationErrorsClasses.ts, 7, 28))
+>p : Symbol(p, Decl(isolatedDeclarationErrorsClasses.ts, 8, 18))
+
+    get getOnly() { return 1 + 1 }
+>getOnly : Symbol(Cls.getOnly, Decl(isolatedDeclarationErrorsClasses.ts, 8, 37))
+
+    set setOnly(value) { }
+>setOnly : Symbol(Cls.setOnly, Decl(isolatedDeclarationErrorsClasses.ts, 10, 34))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 11, 16))
+
+    get getSetBad() { return 0 }
+>getSetBad : Symbol(Cls.getSetBad, Decl(isolatedDeclarationErrorsClasses.ts, 11, 26), Decl(isolatedDeclarationErrorsClasses.ts, 13, 32))
+
+    set getSetBad(value) { }
+>getSetBad : Symbol(Cls.getSetBad, Decl(isolatedDeclarationErrorsClasses.ts, 11, 26), Decl(isolatedDeclarationErrorsClasses.ts, 13, 32))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 14, 18))
+
+    get getSetOk(): number { return 0 }
+>getSetOk : Symbol(Cls.getSetOk, Decl(isolatedDeclarationErrorsClasses.ts, 14, 28), Decl(isolatedDeclarationErrorsClasses.ts, 16, 39))
+
+    set getSetOk(value) { }
+>getSetOk : Symbol(Cls.getSetOk, Decl(isolatedDeclarationErrorsClasses.ts, 14, 28), Decl(isolatedDeclarationErrorsClasses.ts, 16, 39))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 17, 17))
+
+    get getSetOk2() { return 0 }
+>getSetOk2 : Symbol(Cls.getSetOk2, Decl(isolatedDeclarationErrorsClasses.ts, 17, 27), Decl(isolatedDeclarationErrorsClasses.ts, 19, 32))
+
+    set getSetOk2(value: number) { }
+>getSetOk2 : Symbol(Cls.getSetOk2, Decl(isolatedDeclarationErrorsClasses.ts, 17, 27), Decl(isolatedDeclarationErrorsClasses.ts, 19, 32))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 20, 18))
+
+    get getSetOk3(): number { return 0 }
+>getSetOk3 : Symbol(Cls.getSetOk3, Decl(isolatedDeclarationErrorsClasses.ts, 20, 36), Decl(isolatedDeclarationErrorsClasses.ts, 22, 40))
+
+    set getSetOk3(value: number) { }
+>getSetOk3 : Symbol(Cls.getSetOk3, Decl(isolatedDeclarationErrorsClasses.ts, 20, 36), Decl(isolatedDeclarationErrorsClasses.ts, 22, 40))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 23, 18))
+}
+
+let noAnnotationStringName: string = "noAnnotationStringName";
+>noAnnotationStringName : Symbol(noAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 26, 3))
+
+let noParamAnnotationStringName: string = "noParamAnnotationStringName";
+>noParamAnnotationStringName : Symbol(noParamAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 27, 3))
+
+const noAnnotationLiteralName = "noAnnotationLiteralName";
+>noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
+
+const noParamAnnotationLiteralName = "noParamAnnotationLiteralName";
+>noParamAnnotationLiteralName : Symbol(noParamAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 30, 5))
+
+export class C {
+>C : Symbol(C, Decl(isolatedDeclarationErrorsClasses.ts, 30, 68))
+
+    // Should not be reported as an isolated declaration error
+    [missing] = 1;
+>[missing] : Symbol(C[missing], Decl(isolatedDeclarationErrorsClasses.ts, 32, 16))
+    
+    [noAnnotationLiteralName](): void { }
+>[noAnnotationLiteralName] : Symbol(C[noAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 35, 18))
+>noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
+
+    [noParamAnnotationLiteralName](v: string): void { }
+>[noParamAnnotationLiteralName] : Symbol(C[noParamAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 37, 41))
+>noParamAnnotationLiteralName : Symbol(noParamAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 30, 5))
+>v : Symbol(v, Decl(isolatedDeclarationErrorsClasses.ts, 39, 35))
+
+    [noAnnotationStringName]() { }
+>[noAnnotationStringName] : Symbol(C[noAnnotationStringName], Decl(isolatedDeclarationErrorsClasses.ts, 39, 55))
+>noAnnotationStringName : Symbol(noAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 26, 3))
+
+    [noParamAnnotationStringName](v): void { }
+>[noParamAnnotationStringName] : Symbol(C[noParamAnnotationStringName], Decl(isolatedDeclarationErrorsClasses.ts, 41, 34))
+>noParamAnnotationStringName : Symbol(noParamAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 27, 3))
+>v : Symbol(v, Decl(isolatedDeclarationErrorsClasses.ts, 43, 34))
+
+    get [noAnnotationStringName]() { return 0;}
+>[noAnnotationStringName] : Symbol(C[noAnnotationStringName], Decl(isolatedDeclarationErrorsClasses.ts, 43, 46))
+>noAnnotationStringName : Symbol(noAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 26, 3))
+
+    set [noParamAnnotationStringName](value) { }
+>[noParamAnnotationStringName] : Symbol(C[noParamAnnotationStringName], Decl(isolatedDeclarationErrorsClasses.ts, 45, 47))
+>noParamAnnotationStringName : Symbol(noParamAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 27, 3))
+>value : Symbol(value, Decl(isolatedDeclarationErrorsClasses.ts, 47, 38))
+
+    [("A" + "B") as "AB"] =  1;
+>[("A" + "B") as "AB"] : Symbol(C[("A" + "B") as "AB"], Decl(isolatedDeclarationErrorsClasses.ts, 47, 48))
+
+}
+
+export interface I {
+>I : Symbol(I, Decl(isolatedDeclarationErrorsClasses.ts, 51, 1))
+
+    [noAnnotationStringName]: 10;
+>[noAnnotationStringName] : Symbol(I[noAnnotationStringName], Decl(isolatedDeclarationErrorsClasses.ts, 53, 20))
+>noAnnotationStringName : Symbol(noAnnotationStringName, Decl(isolatedDeclarationErrorsClasses.ts, 26, 3))
+
+    [noAnnotationLiteralName]();
+>[noAnnotationLiteralName] : Symbol(I[noAnnotationLiteralName], Decl(isolatedDeclarationErrorsClasses.ts, 54, 33))
+>noAnnotationLiteralName : Symbol(noAnnotationLiteralName, Decl(isolatedDeclarationErrorsClasses.ts, 29, 5))
+}
