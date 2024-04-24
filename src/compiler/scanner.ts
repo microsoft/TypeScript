@@ -3438,10 +3438,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // either a LegacyOctalEscapeSequence or IdentityEscape
                 if (!annexB && escape.value > numberOfCapturingGroups) {
                     if (numberOfCapturingGroups) {
-                        error(Diagnostics.A_decimal_escape_must_refer_to_an_existent_capturing_group_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
+                        error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                     }
                     else {
-                        error(Diagnostics.Decimal_escapes_are_invalid_when_there_are_no_capturing_groups_in_a_regular_expression, escape.pos, escape.end - escape.pos);
+                        error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
                     }
                 }
             });
