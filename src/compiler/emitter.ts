@@ -170,6 +170,7 @@ import {
     getTypeNode,
     guessIndentation,
     HasLocals,
+    hasProperty,
     hasRecordedExternalHelpers,
     HeritageClause,
     Identifier,
@@ -188,6 +189,7 @@ import {
     InferTypeNode,
     InterfaceDeclaration,
     InternalEmitFlags,
+    internalOptionDeclarations,
     IntersectionTypeNode,
     isAccessExpression,
     isArray,
@@ -477,6 +479,7 @@ export function forEachEmittedFile<T>(
 }
 
 export function getTsBuildInfoEmitOutputFilePath(options: CompilerOptions) {
+    if (some(internalOptionDeclarations, d => hasProperty(options, d.name))) return undefined; // disable buildinfo if an internal option is set
     const configFile = options.configFilePath;
     if (!isIncrementalCompilation(options)) return undefined;
     if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
