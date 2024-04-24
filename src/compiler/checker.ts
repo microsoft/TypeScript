@@ -1318,6 +1318,10 @@ const enum MappedTypeModifiers {
     ExcludeReadonly = 1 << 1,
     IncludeOptional = 1 << 2,
     ExcludeOptional = 1 << 3,
+    Include = IncludeReadonly | IncludeOptional,
+    Exclude = ExcludeReadonly | ExcludeOptional,
+    Readonly = IncludeReadonly | ExcludeReadonly,
+    Optional = IncludeOptional | ExcludeOptional,
 }
 
 const enum MappedTypeNameTypeKind {
@@ -13875,25 +13879,26 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             (declaration.questionToken ? declaration.questionToken.kind === SyntaxKind.MinusToken ? MappedTypeModifiers.ExcludeOptional : MappedTypeModifiers.IncludeOptional : 0);
     }
 
-    // Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
-    // optionality is added (i.e. +?).
-    function getMappedTypeOptionality(type: MappedType): number {
-        const modifiers = getMappedTypeModifiers(type);
-        return modifiers & MappedTypeModifiers.ExcludeOptional ? -1 : modifiers & MappedTypeModifiers.IncludeOptional ? 1 : 0;
-    }
-
-    // Return -1, 0, or 1, for stripped, unchanged, or added optionality respectively. When a homomorphic mapped type doesn't
-    // modify optionality, recursively consult the optionality of the type being mapped over to see if it strips or adds optionality.
-    // For intersections, return -1 or 1 when all constituents strip or add optionality, otherwise return 0.
-    function getCombinedMappedTypeOptionality(type: Type): number {
+    // Return the effective modifiers of a mapped type. When a homomorphic mapped type doesn't include modifiers, instead
+    // recursively obtain the effective modifiers of the type being mapped over. For intersections, return 0 if the effective
+    // modifiers differ between constituent types.
+    function getEffectiveMappedTypeModifiers(type: Type, mask: MappedTypeModifiers): number {
         if (getObjectFlags(type) & ObjectFlags.Mapped) {
-            return getMappedTypeOptionality(type as MappedType) || getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(type as MappedType));
+            return getMappedTypeModifiers(type as MappedType) & mask ||
+                getEffectiveMappedTypeModifiers(getModifiersTypeFromMappedType(type as MappedType), mask);
         }
         if (type.flags & TypeFlags.Intersection) {
-            const optionality = getCombinedMappedTypeOptionality((type as IntersectionType).types[0]);
-            return every((type as IntersectionType).types, (t, i) => i === 0 || getCombinedMappedTypeOptionality(t) === optionality) ? optionality : 0;
+            const modifiers = getEffectiveMappedTypeModifiers((type as IntersectionType).types[0], mask);
+            return every((type as IntersectionType).types, (t, i) => i === 0 || getEffectiveMappedTypeModifiers(t, mask) === modifiers) ? modifiers : 0;
         }
         return 0;
+    }
+
+    // Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
+    // optionality is added (i.e. +?).
+    function getMappedTypeModifiersRank(type: Type, mask: MappedTypeModifiers): number {
+        const modifiers = getEffectiveMappedTypeModifiers(type, mask);
+        return modifiers & MappedTypeModifiers.Exclude ? -1 : modifiers & MappedTypeModifiers.Include ? 1 : 0;
     }
 
     function isPartialMappedType(type: Type) {
@@ -18439,10 +18444,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
         const templateMapper = combineTypeMappers(objectType.mapper, mapper);
         const instantiatedTemplateType = instantiateType(getTemplateTypeFromMappedType(objectType.target as MappedType || objectType), templateMapper);
-        const isOptional = getMappedTypeOptionality(objectType) > 0 || (isGenericType(objectType) ?
-            getCombinedMappedTypeOptionality(getModifiersTypeFromMappedType(objectType)) > 0 :
+        const isOptional = getMappedTypeModifiers(objectType) & MappedTypeModifiers.IncludeOptional || (isGenericType(objectType) ?
+            getEffectiveMappedTypeModifiers(getModifiersTypeFromMappedType(objectType), MappedTypeModifiers.Optional) & MappedTypeModifiers.IncludeOptional :
             couldAccessOptionalProperty(objectType, index));
-        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, isOptional);
+        return addOptionality(instantiatedTemplateType, /*isProperty*/ true, !!isOptional);
     }
 
     // Return true if an indexed access with the given object and index types could access an optional property.
@@ -22399,7 +22404,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (targetFlags & TypeFlags.TypeParameter) {
                 // A source type { [P in Q]: X } is related to a target type T if keyof T is related to Q and X is related to T[Q].
                 if (getObjectFlags(source) & ObjectFlags.Mapped && !(source as MappedType).declaration.nameType && isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(source as MappedType), RecursionFlags.Both)) {
-                    if (!(getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeOptional)) {
+                    if (
+                        !(getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeOptional) &&
+                        !(enforceReadonly && getMappedTypeModifiers(source as MappedType) & MappedTypeModifiers.IncludeReadonly)
+                    ) {
                         const templateType = getTemplateTypeFromMappedType(source as MappedType);
                         const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(source as MappedType));
                         if (result = isRelatedTo(templateType, indexedAccessType, RecursionFlags.Both, reportErrors)) {
@@ -22522,7 +22530,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 const keysRemapped = !!target.declaration.nameType;
                 const templateType = getTemplateTypeFromMappedType(target);
                 const modifiers = getMappedTypeModifiers(target);
-                if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
+                if (!(modifiers & MappedTypeModifiers.ExcludeOptional) && !(enforceReadonly && modifiers & MappedTypeModifiers.ExcludeReadonly)) {
                     // If the mapped type has shape `{ [P in Q]: T[P] }`,
                     // source `S` is related to target if `T` = `S`, i.e. `S` is related to `{ [P in Q]: S[P] }`.
                     if (
@@ -22908,11 +22916,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // that S and T are contra-variant whereas X and Y are co-variant.
         function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
             const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
-                getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
+                getMappedTypeModifiersRank(source, MappedTypeModifiers.Optional) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Optional) &&
+                (!enforceReadonly || getMappedTypeModifiersRank(source, MappedTypeModifiers.Readonly) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Readonly))
+            );
             if (modifiersRelated) {
                 let result: Ternary;
                 const targetConstraint = getConstraintTypeFromMappedType(target);
-                const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), getCombinedMappedTypeOptionality(source) < 0 ? reportUnmeasurableMapper : reportUnreliableMapper);
+                const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), getEffectiveMappedTypeModifiers(source, MappedTypeModifiers.Optional) & MappedTypeModifiers.ExcludeOptional ? reportUnmeasurableMapper : reportUnreliableMapper);
                 if (result = isRelatedTo(targetConstraint, sourceConstraint, RecursionFlags.Both, reportErrors)) {
                     const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                     if (instantiateType(getNameTypeFromMappedType(source), mapper) === instantiateType(getNameTypeFromMappedType(target), mapper)) {
@@ -23081,7 +23091,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
             if (
                 (relation === strictSubtypeRelation || enforceReadonly) &&
-                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp) && !(targetProp.flags & SymbolFlags.Method)
+                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
             ) {
                 if (reportErrors) {
                     reportError(Diagnostics.Property_0_is_readonly_in_the_source_but_not_in_the_target, symbolToString(targetProp));
