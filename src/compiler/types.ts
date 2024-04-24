@@ -1708,7 +1708,7 @@ export interface AutoGenerateInfo {
 
 /** @internal */
 export interface GeneratedIdentifier extends Identifier {
-    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
+    emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 export interface QualifiedName extends Node, FlowContainer {
@@ -1787,7 +1787,7 @@ export interface PrivateIdentifier extends PrimaryExpression {
 
 /** @internal */
 export interface GeneratedPrivateIdentifier extends PrivateIdentifier {
-    readonly emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
+    emitNode: EmitNode & { autoGenerate: AutoGenerateInfo; };
 }
 
 /** @internal */

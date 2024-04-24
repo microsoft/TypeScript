@@ -346,8 +346,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     public languageServiceEnabled: boolean;
 
-    readonly trace?: (s: string) => void;
-    readonly realpath?: (path: string) => string;
+    trace?(s: string): void;
+    realpath?(path: string): string;
 
     /** @internal */
     hasInvalidatedResolutions?: HasInvalidatedResolutions | undefined;
@@ -513,7 +513,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     createHash = maybeBind(this.projectService.host, this.projectService.host.createHash);
 
-    readonly jsDocParsingMode: JSDocParsingMode | undefined;
+    jsDocParsingMode: JSDocParsingMode | undefined;
 
     /** @internal */
     constructor(
