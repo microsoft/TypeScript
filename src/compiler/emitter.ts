@@ -533,7 +533,7 @@ function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
 }
 
 /** @internal */
-export function getOutputExtension(fileName: string, options: CompilerOptions): Extension {
+export function getOutputExtension(fileName: string, options: Pick<CompilerOptions, "jsx">): Extension {
     return fileExtensionIs(fileName, Extension.Json) ? Extension.Json :
         options.jsx === JsxEmit.Preserve && fileExtensionIsOneOf(fileName, [Extension.Jsx, Extension.Tsx]) ? Extension.Jsx :
         fileExtensionIsOneOf(fileName, [Extension.Mts, Extension.Mjs]) ? Extension.Mjs :
