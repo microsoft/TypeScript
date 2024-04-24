@@ -31365,7 +31365,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             scanner ??= createScanner(ScriptTarget.ESNext, /*skipTrivia*/ true);
             scanner.setScriptTarget(sourceFile.languageVersion);
             scanner.setLanguageVariant(sourceFile.languageVariant);
-            scanner.setText(sourceFile.text, node.pos, node.end - node.pos);
             scanner.setOnError((message, length, arg0) => {
                 // emulate `parseErrorAtPosition` from parser.ts
                 const start = scanner!.getTokenEnd();
@@ -31378,9 +31377,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     diagnostics.add(lastError);
                 }
             });
+            scanner.setText(sourceFile.text, node.pos, node.end - node.pos);
             try {
-                Debug.assert(scanner.scan() === SyntaxKind.SlashToken);
-                Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral);
+                scanner.scan();
+                Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral, "Expected scanner to rescan RegularExpressionLiteral");
                 return !!lastError;
             }
             finally {
