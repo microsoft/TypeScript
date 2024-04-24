@@ -142,23 +142,20 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/src/projects/project/packages/b/node_modules' does not exist, skipping all lookups in it.
 Resolution for module 'a' was found in cache from location '/src/projects/project/packages'.
 ======== Module name 'a' was successfully resolved to '/src/projects/project/packages/a/index.js' with Package ID 'a/index.js@0.0.0'. ========
+File '/src/projects/project/packages/a/types/package.json' does not exist.
+File '/src/projects/project/packages/a/package.json' exists according to earlier cached lookups.
 File '/lib/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[96mpackages/b/index.js[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS7016: [0mCould not find a declaration file for module 'a'. '/src/projects/project/packages/a/index.js' implicitly has an 'any' type.
-  Try `npm i --save-dev @types/a` if it exists or add a new declaration (.d.ts) file containing `declare module 'a';`
-
-[7m1[0m export { a } from 'a';
-[7m [0m [91m                  ~~~[0m
-
 ../../../lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
+packages/a/types/index.d.ts
+  Imported via 'a' from file 'packages/b/index.js' with packageId 'a/index.js@0.0.0'
+  File is output of project reference source 'packages/a/index.js'
+  File is ECMAScript module because 'packages/a/package.json' has field "type" with value "module"
 packages/b/index.js
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'packages/b/package.json' has field "type" with value "module"
-
-Found 1 error.
-
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.Success
 
 
 //// [/src/projects/project/packages/a/types/index.d.ts]
