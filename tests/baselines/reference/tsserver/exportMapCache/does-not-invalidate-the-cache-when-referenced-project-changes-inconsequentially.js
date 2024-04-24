@@ -197,7 +197,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "composite": true,
             "module": "commonjs",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -356,7 +357,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "module": "commonjs"
+            "module": "commonjs",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

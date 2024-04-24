@@ -429,7 +429,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "target": "es6"
+            "target": "es6",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

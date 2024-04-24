@@ -99,7 +99,8 @@ Info seq  [hh:mm:ss:mss] event:
         },
         "compilerOptions": {
           "module": "system",
-          "outFile": ""
+          "outFile": "",
+          "allowNonTsExtensions": true
         },
         "typeAcquisition": {
           "enable": false,

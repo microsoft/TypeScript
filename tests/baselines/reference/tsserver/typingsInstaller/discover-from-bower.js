@@ -277,7 +277,8 @@ Info seq  [hh:mm:ss:mss] event:
             "maxNodeModuleJsDepth": 2,
             "allowSyntheticDefaultImports": true,
             "skipLibCheck": true,
-            "noEmit": true
+            "noEmit": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": true,

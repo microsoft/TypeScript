@@ -143,7 +143,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "declaration": false
+            "declaration": false,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

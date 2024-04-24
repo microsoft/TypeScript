@@ -136,7 +136,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "declaration": false,
-            "module": "none"
+            "module": "none",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

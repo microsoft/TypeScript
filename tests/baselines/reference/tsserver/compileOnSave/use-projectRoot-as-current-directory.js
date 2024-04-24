@@ -80,7 +80,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "outFile": "",
-            "sourceMap": true
+            "sourceMap": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

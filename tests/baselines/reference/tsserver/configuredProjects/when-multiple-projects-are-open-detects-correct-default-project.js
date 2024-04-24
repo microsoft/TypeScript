@@ -163,7 +163,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "lib": [
               "es2017"
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -365,7 +366,8 @@ Info seq  [hh:mm:ss:mss] event:
             "lib": [
               "dom",
               "es2017"
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

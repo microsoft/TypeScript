@@ -248,7 +248,8 @@ Info seq  [hh:mm:ss:mss] event:
             "forceConsistentCasingInFileNames": true,
             "strict": true,
             "skipLibCheck": true,
-            "traceResolution": true
+            "traceResolution": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

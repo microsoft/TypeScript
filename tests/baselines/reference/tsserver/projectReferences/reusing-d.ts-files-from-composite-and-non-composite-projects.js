@@ -196,7 +196,8 @@ Info seq  [hh:mm:ss:mss] event:
             "outDir": "",
             "rootDir": "",
             "baseUrl": "",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -433,7 +434,8 @@ Info seq  [hh:mm:ss:mss] event:
             "outDir": "",
             "rootDir": "",
             "baseUrl": "",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -115,7 +115,8 @@ Info seq  [hh:mm:ss:mss] event:
           "deferredSize": 0
         },
         "compilerOptions": {
-          "typeRoots": []
+          "typeRoots": [],
+          "allowNonTsExtensions": true
         },
         "typeAcquisition": {
           "enable": false,

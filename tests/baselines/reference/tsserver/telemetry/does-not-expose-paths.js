@@ -183,7 +183,8 @@ Info seq  [hh:mm:ss:mss] event:
             "lib": [
               "es6",
               "dom"
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

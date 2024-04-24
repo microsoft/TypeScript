@@ -292,7 +292,8 @@ Info seq  [hh:mm:ss:mss] event:
             "allowSyntheticDefaultImports": true,
             "skipLibCheck": true,
             "noEmit": true,
-            "checkJs": true
+            "checkJs": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": true,

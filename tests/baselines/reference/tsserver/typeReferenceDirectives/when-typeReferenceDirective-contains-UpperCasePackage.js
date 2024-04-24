@@ -159,7 +159,8 @@ Info seq  [hh:mm:ss:mss] event:
             "typeRoots": [
               "",
               ""
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

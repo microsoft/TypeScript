@@ -165,7 +165,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "module": "none",
             "composite": true,
-            "disableSourceOfProjectReferenceRedirect": true
+            "disableSourceOfProjectReferenceRedirect": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

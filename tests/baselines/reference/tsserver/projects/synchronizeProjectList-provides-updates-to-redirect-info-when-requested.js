@@ -135,7 +135,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "declaration": true
+            "declaration": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -323,7 +324,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "declaration": true
+            "declaration": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

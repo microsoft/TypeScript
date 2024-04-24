@@ -189,7 +189,8 @@ Info seq  [hh:mm:ss:mss] event:
             "esModuleInterop": true,
             "composite": true,
             "rootDir": "",
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -418,7 +419,8 @@ Info seq  [hh:mm:ss:mss] event:
             "esModuleInterop": true,
             "composite": true,
             "rootDir": "",
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

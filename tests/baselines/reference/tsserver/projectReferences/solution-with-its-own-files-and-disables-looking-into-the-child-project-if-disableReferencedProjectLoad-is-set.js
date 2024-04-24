@@ -225,7 +225,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "outDir": "",
             "baseUrl": "",
-            "disableReferencedProjectLoad": true
+            "disableReferencedProjectLoad": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

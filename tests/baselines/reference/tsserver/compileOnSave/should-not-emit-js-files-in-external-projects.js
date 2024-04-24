@@ -91,7 +91,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "allowJs": true,
-            "outFile": ""
+            "outFile": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

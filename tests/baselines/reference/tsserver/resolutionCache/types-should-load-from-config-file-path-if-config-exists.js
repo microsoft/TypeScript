@@ -104,7 +104,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "types": [
               ""
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -120,7 +120,8 @@ Info seq  [hh:mm:ss:mss] event:
             "strict": true,
             "esModuleInterop": true,
             "rootDir": "",
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

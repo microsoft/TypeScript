@@ -166,7 +166,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "disableReferencedProjectLoad": false,
             "disableSourceOfProjectReferenceRedirect": true,
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -391,7 +392,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "declarationMap": true,
             "outDir": "",
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

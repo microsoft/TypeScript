@@ -503,7 +503,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -712,7 +713,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -944,7 +946,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1032,7 +1035,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1121,7 +1125,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "disableReferencedProjectLoad": true
+            "disableReferencedProjectLoad": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1210,7 +1215,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "disableReferencedProjectLoad": true
+            "disableReferencedProjectLoad": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1298,7 +1304,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -1386,7 +1393,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "composite": true
+            "composite": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

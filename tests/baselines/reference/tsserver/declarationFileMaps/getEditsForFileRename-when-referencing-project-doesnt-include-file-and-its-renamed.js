@@ -118,7 +118,8 @@ Info seq  [hh:mm:ss:mss] event:
             "composite": true,
             "declaration": true,
             "declarationMap": true,
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -319,7 +320,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -596,7 +596,8 @@ Info seq  [hh:mm:ss:mss] event:
             "rootDir": "",
             "target": "es2021",
             "traceResolution": true,
-            "tsBuildInfoFile": ""
+            "tsBuildInfoFile": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -122,7 +122,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "checkJs": true,
-            "noEmit": true
+            "noEmit": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

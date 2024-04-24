@@ -136,7 +136,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "allowJs": true
+            "allowJs": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -124,7 +124,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "commonjs"
+            "module": "commonjs",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

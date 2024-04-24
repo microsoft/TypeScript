@@ -1601,6 +1601,24 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         defaultValueDescription: undefined,
     },
+    {
+        name: "allowNonTsExtensions",
+        type: "boolean",
+        defaultValueDescription: undefined,
+        internal: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "allowNonTsExtensions"];
+        },
+    },
+    {
+        name: "suppressOutputPathCheck",
+        type: "boolean",
+        defaultValueDescription: undefined,
+        internal: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "suppressOutputPathCheck"];
+        },
+    },
 ];
 
 /** @internal */
@@ -1626,6 +1644,9 @@ export const sourceFileAffectingCompilerOptions: readonly CommandLineOption[] = 
 
 /** @internal */
 export const optionsAffectingProgramStructure: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.affectsProgramStructure);
+
+/** @internal */
+export const internalOptionDeclarations: readonly CommandLineOption[] = optionDeclarations.filter(option => !!option.internal);
 
 /** @internal */
 export const transpileOptionValueCompilerOptions: readonly CommandLineOption[] = optionDeclarations.filter(option => hasProperty(option, "transpileOptionValue"));

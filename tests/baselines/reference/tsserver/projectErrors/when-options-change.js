@@ -110,7 +110,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "inlineSourceMap": true,
-            "mapRoot": ""
+            "mapRoot": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

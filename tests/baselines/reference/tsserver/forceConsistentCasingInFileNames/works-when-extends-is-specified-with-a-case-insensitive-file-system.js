@@ -156,7 +156,8 @@ Info seq  [hh:mm:ss:mss] event:
             "typeRoots": [
               ""
             ],
-            "forceConsistentCasingInFileNames": true
+            "forceConsistentCasingInFileNames": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

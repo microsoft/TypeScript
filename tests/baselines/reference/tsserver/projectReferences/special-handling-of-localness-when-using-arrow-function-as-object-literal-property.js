@@ -209,7 +209,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "composite": true,
             "outDir": "",
-            "rootDir": ""
+            "rootDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -408,7 +409,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "composite": true,
             "outDir": "",
-            "rootDir": ""
+            "rootDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
