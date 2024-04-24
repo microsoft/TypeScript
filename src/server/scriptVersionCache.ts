@@ -835,7 +835,6 @@ export class LineNode implements LineCollection {
     }
 }
 
-// TODO: knip doesn't see that LineLeaf is visible via LineCollection
 /** @internal @knipignore */
 export class LineLeaf implements LineCollection {
     constructor(public text: string) {

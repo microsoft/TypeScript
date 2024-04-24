@@ -1756,7 +1756,7 @@ function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: 
     );
 }
 
-// TODO: knip applies the internal marker to _all_ declarations, not just the one overload.
+// knip applies the internal marker to _all_ declarations, not just the one overload.
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
 /** @internal @knipignore */
 export function bundlerModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, conditions?: string[]): ResolvedModuleWithFailedLookupLocations; // eslint-disable-line @typescript-eslint/unified-signatures
