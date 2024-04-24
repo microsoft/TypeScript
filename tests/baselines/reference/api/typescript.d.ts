@@ -668,13 +668,13 @@ declare namespace ts {
                 command: CommandTypes.Definition;
             }
             export interface DefinitionAndBoundSpanRequest extends FileLocationRequest {
-                readonly command: CommandTypes.DefinitionAndBoundSpan;
+                command: CommandTypes.DefinitionAndBoundSpan;
             }
             export interface FindSourceDefinitionRequest extends FileLocationRequest {
-                readonly command: CommandTypes.FindSourceDefinition;
+                command: CommandTypes.FindSourceDefinition;
             }
             export interface DefinitionAndBoundSpanResponse extends Response {
-                readonly body: DefinitionInfoAndBoundSpan;
+                body: DefinitionInfoAndBoundSpan;
             }
             /**
              * Go to type request; value of command field is
@@ -786,23 +786,23 @@ declare namespace ts {
                 openingBrace: string;
             }
             export interface JsxClosingTagRequest extends FileLocationRequest {
-                readonly command: CommandTypes.JsxClosingTag;
-                readonly arguments: JsxClosingTagRequestArgs;
+                command: CommandTypes.JsxClosingTag;
+                arguments: JsxClosingTagRequestArgs;
             }
             export interface JsxClosingTagRequestArgs extends FileLocationRequestArgs {
             }
             export interface JsxClosingTagResponse extends Response {
-                readonly body: TextInsertion;
+                body: TextInsertion;
             }
             export interface LinkedEditingRangeRequest extends FileLocationRequest {
-                readonly command: CommandTypes.LinkedEditingRange;
+                command: CommandTypes.LinkedEditingRange;
             }
             export interface LinkedEditingRangesBody {
                 ranges: TextSpan[];
                 wordPattern?: string;
             }
             export interface LinkedEditingRangeResponse extends Response {
-                readonly body: LinkedEditingRangesBody;
+                body: LinkedEditingRangesBody;
             }
             /**
              * Get document highlights request; value of command field is
@@ -2017,8 +2017,8 @@ declare namespace ts {
             }
             export type CreateFileWatcherEventName = "createFileWatcher";
             export interface CreateFileWatcherEvent extends Event {
-                readonly event: CreateFileWatcherEventName;
-                readonly body: CreateFileWatcherEventBody;
+                event: CreateFileWatcherEventName;
+                body: CreateFileWatcherEventBody;
             }
             export interface CreateFileWatcherEventBody {
                 readonly id: number;
@@ -2026,8 +2026,8 @@ declare namespace ts {
             }
             export type CreateDirectoryWatcherEventName = "createDirectoryWatcher";
             export interface CreateDirectoryWatcherEvent extends Event {
-                readonly event: CreateDirectoryWatcherEventName;
-                readonly body: CreateDirectoryWatcherEventBody;
+                event: CreateDirectoryWatcherEventName;
+                body: CreateDirectoryWatcherEventBody;
             }
             export interface CreateDirectoryWatcherEventBody {
                 readonly id: number;
@@ -2037,8 +2037,8 @@ declare namespace ts {
             }
             export type CloseFileWatcherEventName = "closeFileWatcher";
             export interface CloseFileWatcherEvent extends Event {
-                readonly event: CloseFileWatcherEventName;
-                readonly body: CloseFileWatcherEventBody;
+                event: CloseFileWatcherEventName;
+                body: CloseFileWatcherEventBody;
             }
             export interface CloseFileWatcherEventBody {
                 readonly id: number;
@@ -2333,19 +2333,19 @@ declare namespace ts {
                 command: CommandTypes.PrepareCallHierarchy;
             }
             export interface PrepareCallHierarchyResponse extends Response {
-                readonly body: CallHierarchyItem | CallHierarchyItem[];
+                body: CallHierarchyItem | CallHierarchyItem[];
             }
             export interface ProvideCallHierarchyIncomingCallsRequest extends FileLocationRequest {
                 command: CommandTypes.ProvideCallHierarchyIncomingCalls;
             }
             export interface ProvideCallHierarchyIncomingCallsResponse extends Response {
-                readonly body: CallHierarchyIncomingCall[];
+                body: CallHierarchyIncomingCall[];
             }
             export interface ProvideCallHierarchyOutgoingCallsRequest extends FileLocationRequest {
                 command: CommandTypes.ProvideCallHierarchyOutgoingCalls;
             }
             export interface ProvideCallHierarchyOutgoingCallsResponse extends Response {
-                readonly body: CallHierarchyOutgoingCall[];
+                body: CallHierarchyOutgoingCall[];
             }
             export enum IndentStyle {
                 None = "None",
@@ -2728,8 +2728,8 @@ declare namespace ts {
             private generatedFilesMap;
             protected languageService: LanguageService;
             languageServiceEnabled: boolean;
-            readonly trace?: (s: string) => void;
-            readonly realpath?: (path: string) => string;
+            trace?(s: string): void;
+            realpath?(path: string): string;
             private builderState;
             /**
              * Set of files names that were updated since the last call to getChangesSinceVersion.
@@ -2749,7 +2749,7 @@ declare namespace ts {
             isNonTsProject(): boolean;
             isJsOnlyProject(): boolean;
             static resolveModule(moduleName: string, initialDir: string, host: ServerHost, log: (message: string) => void): {} | undefined;
-            readonly jsDocParsingMode: JSDocParsingMode | undefined;
+            jsDocParsingMode: JSDocParsingMode | undefined;
             isKnownTypesPackageName(name: string): boolean;
             installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
             private get typingsCache();
