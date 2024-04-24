@@ -22917,8 +22917,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function mappedTypeRelatedTo(source: MappedType, target: MappedType, reportErrors: boolean): Ternary {
             const modifiersRelated = relation === comparableRelation || (relation === identityRelation ? getMappedTypeModifiers(source) === getMappedTypeModifiers(target) :
                 getMappedTypeModifiersRank(source, MappedTypeModifiers.Optional) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Optional) &&
-                (!enforceReadonly || getMappedTypeModifiersRank(source, MappedTypeModifiers.Readonly) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Readonly))
-            );
+                (!enforceReadonly || getMappedTypeModifiersRank(source, MappedTypeModifiers.Readonly) <= getMappedTypeModifiersRank(target, MappedTypeModifiers.Readonly)));
             if (modifiersRelated) {
                 let result: Ternary;
                 const targetConstraint = getConstraintTypeFromMappedType(target);
