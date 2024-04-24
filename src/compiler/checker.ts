@@ -38493,7 +38493,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         parent = parent.parent;
                     }
                     if (operator === SyntaxKind.AmpersandAmpersandToken || isIfStatement(parent)) {
-                        checkTestingKnownTruthyCallableOrAwaitableType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
+                        checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(node.left, leftType, isIfStatement(parent) ? parent.thenStatement : undefined);
                     }
                     checkTruthinessOfType(leftType, node.left);
                 }
@@ -39127,7 +39127,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkConditionalExpression(node: ConditionalExpression, checkMode?: CheckMode): Type {
         const type = checkTruthinessExpression(node.condition, checkMode);
-        checkTestingKnownTruthyCallableOrAwaitableType(node.condition, type, node.whenTrue);
+        checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(node.condition, type, node.whenTrue);
         const type1 = checkExpression(node.whenTrue, checkMode);
         const type2 = checkExpression(node.whenFalse, checkMode);
         return getUnionType([type1, type2], UnionReduction.Subtype);
@@ -43101,7 +43101,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Grammar checking
         checkGrammarStatementInAmbientContext(node);
         const type = checkTruthinessExpression(node.expression);
-        checkTestingKnownTruthyCallableOrAwaitableType(node.expression, type, node.thenStatement);
+        checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(node.expression, type, node.thenStatement);
         checkSourceElement(node.thenStatement);
 
         if (node.thenStatement.kind === SyntaxKind.EmptyStatement) {
@@ -43111,7 +43111,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.elseStatement);
     }
 
-    function checkTestingKnownTruthyCallableOrAwaitableType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
+    function checkTestingKnownTruthyCallableOrAwaitableOrEnumMemberType(condExpr: Expression, condType: Type, body?: Statement | Expression) {
         if (!strictNullChecks) return;
         bothHelper(condExpr, body);
 
@@ -43136,6 +43136,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return;
             }
             const type = location === condExpr ? condType : checkTruthinessExpression(location);
+            if (type.flags & TypeFlags.EnumLiteral && isPropertyAccessExpression(location) && (getNodeLinks(location.expression).resolvedSymbol ?? unknownSymbol).flags & SymbolFlags.Enum) {
+                // EnumLiteral type at condition with known value is always truthy or always falsy, likely an error
+                error(location, Diagnostics.This_condition_will_always_return_0, !!(type as LiteralType).value ? "true" : "false");
+                return;
+            }
             const isPropertyExpressionCast = isPropertyAccessExpression(location) && isTypeAssertion(location.expression);
             if (!hasTypeFacts(type, TypeFacts.Truthy) || isPropertyExpressionCast) return;
 
