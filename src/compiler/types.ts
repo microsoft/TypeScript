@@ -5006,6 +5006,8 @@ export interface TypeChecker {
     getBaseTypeOfLiteralType(type: Type): Type;
     getWidenedType(type: Type): Type;
     /** @internal */
+    getWidenedLiteralType(type: Type): Type;
+    /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
     getAwaitedType(type: Type): Type | undefined;

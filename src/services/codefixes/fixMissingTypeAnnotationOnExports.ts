@@ -163,8 +163,13 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
+    // Prints it's fully spelled out type
     FULL,
+    // Prints a relative type i.e. typeof X
     RELATIVE,
+    // Prints a widened type in case the expression is known to
+    // e.g. export const a = Math.random() ? "0" : "1"; the type will be `string` in d.ts files
+    WIDENED,
 }
 
 registerCodeFix({
@@ -175,9 +180,11 @@ registerCodeFix({
 
         addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.FULL, f => f.addTypeAnnotation(context.span));
         addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.RELATIVE, f => f.addTypeAnnotation(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.WIDENED, f => f.addTypeAnnotation(context.span));
 
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.FULL, f => f.addInlineAssertion(context.span));
         addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.RELATIVE, f => f.addInlineAssertion(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.WIDENED, f => f.addInlineAssertion(context.span));
 
         addCodeAction(extractExpression, fixes, context, TypePrintMode.FULL, f => f.extractAsVariable(context.span));
 
@@ -915,7 +922,7 @@ function withContext<T>(
     }
 
     function inferType(node: Node): InferenceResult {
-        if (typePrintMode !== TypePrintMode.FULL) {
+        if (typePrintMode === TypePrintMode.RELATIVE) {
             return relativeType(node);
         }
 
@@ -925,6 +932,15 @@ function withContext<T>(
         if (!type) {
             return emptyInferenceResult;
         }
+
+        if (typePrintMode === TypePrintMode.WIDENED) {
+            const widenedType = typeChecker.getWidenedLiteralType(type);
+            if (typeChecker.isTypeAssignableTo(widenedType, type)) {
+                return emptyInferenceResult;
+            }
+            type = widenedType;
+        }
+
         if (isParameter(node) && emitResolver.requiresAddingImplicitUndefined(node)) {
             type = typeChecker.getUnionType([typeChecker.getUndefinedType(), type], UnionReduction.None);
         }

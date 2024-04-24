@@ -15,6 +15,9 @@ verify.codeFixAvailable([
       "description": "Add annotation of type 'typeof A | typeof B'"
     },
     {
+      "description": "Add annotation of type 'string'"
+    },
+    {
       "description": "Add satisfies and an inline type assertion with '\"A\" | \"B\"'"
     },
     {
