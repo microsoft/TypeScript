@@ -693,8 +693,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: delete the ndoe10Result in package/types
@@ -937,8 +935,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: add the alternateResult in @types
@@ -1171,8 +1167,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: add the ndoe10Result in package/types
@@ -1392,8 +1386,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: update package.json from @types so error is fixed
@@ -2781,8 +2773,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: delete the ndoe10Result in package/types
@@ -3025,8 +3015,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: add the alternateResult in @types
@@ -3259,8 +3247,6 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Change:: add the ndoe10Result in package/types
@@ -3480,5 +3466,3 @@ No cached semantic diagnostics in the builder::
 No shapes updated in the builder::
 
 
-//// [/home/src/projects/project/tsconfig.tsbuildinfo] file written with same contents
-//// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

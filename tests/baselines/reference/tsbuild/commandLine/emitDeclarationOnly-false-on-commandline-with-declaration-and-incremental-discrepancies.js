@@ -126,3 +126,138 @@ IncrementalBuild:
   },
   "version": "FakeTSVersion"
 }
+TsBuild info text without affectedFilesPendingEmit:: /src/project2/src/tsconfig.tsbuildinfo.readable.baseline.txt::
+CleanBuild:
+{
+  "program": {
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
+      },
+      "./e.ts": {
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "../../project1/src/a.d.ts": {
+        "version": "-3497920574-export declare const a = 10;\n",
+        "impliedFormat": "commonjs"
+      },
+      "./f.ts": {
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
+      },
+      "../../project1/src/b.d.ts": {
+        "version": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
+      },
+      "./g.ts": {
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": true
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "changeFileSet": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}
+IncrementalBuild:
+{
+  "program": {
+    "fileInfos": {
+      "../../../lib/lib.d.ts": {
+        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
+      },
+      "./e.ts": {
+        "version": "-13789510868-export const e = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "../../project1/src/a.d.ts": {
+        "version": "-3497920574-export declare const a = 10;\n",
+        "impliedFormat": "commonjs"
+      },
+      "./f.ts": {
+        "version": "-2015135303-import { a } from \"../../project1/src/a\"; export const f = a;",
+        "impliedFormat": "commonjs"
+      },
+      "../../project1/src/b.d.ts": {
+        "version": "-3829150557-export declare const b = 10;\n",
+        "impliedFormat": "commonjs"
+      },
+      "./g.ts": {
+        "version": "-2047954019-import { b } from \"../../project1/src/b\"; export const g = b;",
+        "impliedFormat": "commonjs"
+      }
+    },
+    "root": [
+      [
+        2,
+        "./e.ts"
+      ],
+      [
+        4,
+        "./f.ts"
+      ],
+      [
+        6,
+        "./g.ts"
+      ]
+    ],
+    "options": {
+      "declaration": true,
+      "emitDeclarationOnly": false
+    },
+    "referencedMap": {
+      "./f.ts": [
+        "../../project1/src/a.d.ts"
+      ],
+      "./g.ts": [
+        "../../project1/src/b.d.ts"
+      ]
+    },
+    "changeFileSet": [
+      "../../../lib/lib.d.ts",
+      "../../project1/src/a.d.ts",
+      "../../project1/src/b.d.ts",
+      "./e.ts",
+      "./f.ts",
+      "./g.ts"
+    ]
+  },
+  "version": "FakeTSVersion"
+}

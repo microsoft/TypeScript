@@ -451,11 +451,6 @@ function createBuilderProgramState(newProgram: Program, oldState: Readonly<Reusa
                     pendingEmitKind;
             }
         }
-        else if (!canCopySemanticDiagnostics) {
-            // No emit being done, but semantic diagnostics must be recalculated - since these (and the options that change these)
-            // are in the build info file, we need to emit it to keep the info on-disk up-to-date
-            state.buildInfoEmitPending = true;
-        }
     }
     return state;
 }
