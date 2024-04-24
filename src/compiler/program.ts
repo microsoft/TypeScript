@@ -4806,7 +4806,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function verifyProjectReferences() {
-        const buildInfoPath = some(internalOptionDeclarations, d => hasProperty(options, d.name)) ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
+        const buildInfoPath = !some(internalOptionDeclarations, d => hasProperty(options, d.name)) ? getTsBuildInfoEmitOutputFilePath(options) : undefined;
         forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, parent, index) => {
             const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
             const parentFile = parent && parent.sourceFile as JsonSourceFile;
