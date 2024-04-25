@@ -2542,7 +2542,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             /** @see {scanClassSetExpression} */
             let mayContainStrings = false;
 
-            /** The number of numeric (anonymous) capturing groups defined in the regex. */
+            /** The number of all (named and unnamed) capturing groups defined in the regex. */
             let numberOfCapturingGroups = 0;
             /** All named capturing groups defined in the regex. */
             const groupSpecifiers = new Set<string>();
