@@ -8271,7 +8271,6 @@ export const enum LanguageFeatureMinimumTarget {
 
     // ES2023 Features
     ShebangComments = ScriptTarget.ESNext,
-    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
 
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
@@ -8279,6 +8278,7 @@ export const enum LanguageFeatureMinimumTarget {
     //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
     UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
     ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
+    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
 }
 
 // dprint-ignore
