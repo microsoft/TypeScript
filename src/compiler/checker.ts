@@ -102,6 +102,7 @@ import {
     countWhere,
     createBinaryExpressionTrampoline,
     createCompilerDiagnostic,
+    createDetachedDiagnostic,
     createDiagnosticCollection,
     createDiagnosticForFileFromMessageChain,
     createDiagnosticForNode,
@@ -123,6 +124,7 @@ import {
     createPrinterWithRemoveCommentsNeverAsciiEscape,
     createPrinterWithRemoveCommentsOmitTrailingSemicolon,
     createPropertyNameNodeForIdentifierOrLiteral,
+    createScanner,
     createSymbolTable,
     createSyntacticTypeNodeBuilder,
     createTextWriter,
@@ -937,6 +939,7 @@ import {
     rangeOfTypeParameters,
     ReadonlyKeyword,
     reduceLeft,
+    RegularExpressionLiteral,
     RelationComparisonResult,
     relativeComplement,
     removeExtension,
@@ -953,6 +956,7 @@ import {
     ReverseMappedType,
     sameMap,
     SatisfiesExpression,
+    Scanner,
     scanTokenAtPosition,
     ScriptKind,
     ScriptTarget,
@@ -1446,6 +1450,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var requestedExternalEmitHelperNames = new Set<string>();
     var requestedExternalEmitHelpers: ExternalEmitHelpers;
     var externalHelpersModule: Symbol;
+    var scanner: Scanner | undefined;
 
     var Symbol = objectAllocator.getSymbolConstructor();
     var Type = objectAllocator.getTypeConstructor();
@@ -31353,6 +31358,48 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
+    function checkGrammarRegularExpressionLiteral(node: RegularExpressionLiteral) {
+        const sourceFile = getSourceFileOfNode(node);
+        if (!hasParseDiagnostics(sourceFile)) {
+            let lastError: DiagnosticWithLocation | undefined;
+            scanner ??= createScanner(ScriptTarget.ESNext, /*skipTrivia*/ true);
+            scanner.setScriptTarget(sourceFile.languageVersion);
+            scanner.setLanguageVariant(sourceFile.languageVariant);
+            scanner.setOnError((message, length, arg0) => {
+                // emulate `parseErrorAtPosition` from parser.ts
+                const start = scanner!.getTokenEnd();
+                if (message.category === DiagnosticCategory.Message && lastError && start === lastError.start && length === lastError.length) {
+                    const error = createDetachedDiagnostic(sourceFile.fileName, sourceFile.text, start, length, message, arg0);
+                    addRelatedInfo(lastError, error);
+                }
+                else if (!lastError || start !== lastError.start) {
+                    lastError = createFileDiagnostic(sourceFile, start, length, message, arg0);
+                    diagnostics.add(lastError);
+                }
+            });
+            scanner.setText(sourceFile.text, node.pos, node.end - node.pos);
+            try {
+                scanner.scan();
+                Debug.assert(scanner.reScanSlashToken(/*reportErrors*/ true) === SyntaxKind.RegularExpressionLiteral, "Expected scanner to rescan RegularExpressionLiteral");
+                return !!lastError;
+            }
+            finally {
+                scanner.setText("");
+                scanner.setOnError(/*onError*/ undefined);
+            }
+        }
+        return false;
+    }
+
+    function checkRegularExpressionLiteral(node: RegularExpressionLiteral) {
+        const nodeLinks = getNodeLinks(node);
+        if (!(nodeLinks.flags & NodeCheckFlags.TypeChecked)) {
+            nodeLinks.flags |= NodeCheckFlags.TypeChecked;
+            addLazyDiagnostic(() => checkGrammarRegularExpressionLiteral(node));
+        }
+        return globalRegExpType;
+    }
+
     function checkSpreadExpression(node: SpreadElement, checkMode?: CheckMode): Type {
         if (languageVersion < LanguageFeatureMinimumTarget.SpreadElements) {
             checkExternalEmitHelpers(node, compilerOptions.downlevelIteration ? ExternalEmitHelpers.SpreadIncludes : ExternalEmitHelpers.SpreadArray);
@@ -39662,7 +39709,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.TemplateExpression:
                 return checkTemplateExpression(node as TemplateExpression);
             case SyntaxKind.RegularExpressionLiteral:
-                return globalRegExpType;
+                return checkRegularExpressionLiteral(node as RegularExpressionLiteral);
             case SyntaxKind.ArrayLiteralExpression:
                 return checkArrayLiteral(node as ArrayLiteralExpression, checkMode, forceTuple);
             case SyntaxKind.ObjectLiteralExpression:
