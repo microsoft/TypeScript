@@ -13894,8 +13894,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return 0;
     }
 
-    // Return -1, 0, or 1, where -1 means optionality is stripped (i.e. -?), 0 means optionality is unchanged, and 1 means
-    // optionality is added (i.e. +?).
+    // Return -1, 0, or 1, where -1 means modifier is stripped (i.e. -?), 0 means modifier is unchanged, and 1 means
+    // modifier is added (i.e. +?).
     function getMappedTypeModifiersRank(type: Type, mask: MappedTypeModifiers): number {
         const modifiers = getEffectiveMappedTypeModifiers(type, mask);
         return modifiers & MappedTypeModifiers.Exclude ? -1 : modifiers & MappedTypeModifiers.Include ? 1 : 0;
