@@ -252,7 +252,7 @@ export function getNewStatementsAndRemoveFromOldFile(
     importAdderForOldFile.writeFixes(changes, quotePreference);
     deleteMovedStatements(oldFile, toMove.ranges, changes);
     updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, targetFile.fileName, quotePreference);
-    addExportsInOldFIle(oldFile, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
+    addExportsInOldFile(oldFile, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
     addTargetFileImports(oldFile, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, checker, program, importAdderForNewFile);
     if (!isFullSourceFile(targetFile) && prologueDirectives.length) {
         // Ensure prologue directives come before imports
@@ -307,7 +307,7 @@ export function deleteUnusedOldImports(oldFile: SourceFile, toMove: readonly Sta
     }
 }
 
-function addExportsInOldFIle(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
+function addExportsInOldFile(oldFile: SourceFile, targetFileImportsFromOldFile: Map<Symbol, boolean>, changes: textChanges.ChangeTracker, useEsModuleSyntax: boolean) {
     const markSeenTop = nodeSeenTracker(); // Needed because multiple declarations may appear in `const x = 0, y = 1;`.
     targetFileImportsFromOldFile.forEach((_, symbol) => {
         if (!symbol.declarations) {
