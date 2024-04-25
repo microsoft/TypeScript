@@ -1,0 +1,35 @@
+// @strict: true
+// @target: esnext
+
+
+export interface Source1 {
+  map: <S>(callbackfn: (value: string) => S) => S[];
+}
+
+export interface Target {
+  map: <T>(callbackfn: (value: string) => T | undefined) => T[];
+}
+
+declare let s1: Source1;
+declare let t: Target;
+
+// During the following assignment, `Source1["map"]` gets
+// instantiated with the contextual type `Target["map"]` before checking
+// assignability. To do that, an inference is made to `S`. For `Source1`,
+// the only candidate is `T | undefined` from the return type of `callbackfn`.
+// Inference also runs on `map` return types `S[]` and `T[]`, but the result
+// is discarded because it’s run with a lower inference priority. As a result,
+// we end up seeing if the contextually instantiated source signature:
+//
+//   (callbackfn: (value: string) => T | undefined) => (T | undefined)[]
+//
+// is assignable to the target signature:
+//
+//   (callbackfn: (value: string) => T | undefined) => T[]
+//
+// and the return types cause the failed assignability. But as a human reader
+// interpreting why `s1` is not assignable to `t`, I instead equate `S` and `T`
+// and identify the “real” problem as the return type of `callbackfn` in `Target`
+// (`T | undefined`) being a supertype of the one in `Source1` (`S` → `T`).
+
+t = s1; // Bad:  instantiates `S` with `T | undefined`, fails `map` return type assignability

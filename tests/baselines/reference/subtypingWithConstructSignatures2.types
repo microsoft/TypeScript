@@ -1038,8 +1038,10 @@ var r14arg2: new (x: { a: string; b: number }) => Object;
 >  : ^^^^^^
 
 var r14 = foo14(r14arg1); // any
->r14 : any
->foo14(r14arg1) : any
+>r14 : new (x: { a: string; b: number; }) => Object
+>    : ^^^^^ ^^                         ^^^^^^^^^^^
+>foo14(r14arg1) : new (x: { a: string; b: number; }) => Object
+>               : ^^^^^ ^^                         ^^^^^^^^^^^
 >foo14 : { (a: new (x: { a: string; b: number; }) => Object): new (x: { a: string; b: number; }) => Object; (a: any): any; }
 >      : ^^^ ^^                                            ^^^^^^^^ ^^                         ^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >r14arg1 : new <T>(x: { a: T; b: T; }) => T

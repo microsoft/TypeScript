@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/callbackAssignabilityErrorMessage.ts] ////
+
+=== callbackAssignabilityErrorMessage.ts ===
+export interface Source1 {
+>Source1 : Symbol(Source1, Decl(callbackAssignabilityErrorMessage.ts, 0, 0))
+
+  map: <S>(callbackfn: (value: string) => S) => S[];
+>map : Symbol(Source1.map, Decl(callbackAssignabilityErrorMessage.ts, 0, 26))
+>S : Symbol(S, Decl(callbackAssignabilityErrorMessage.ts, 1, 8))
+>callbackfn : Symbol(callbackfn, Decl(callbackAssignabilityErrorMessage.ts, 1, 11))
+>value : Symbol(value, Decl(callbackAssignabilityErrorMessage.ts, 1, 24))
+>S : Symbol(S, Decl(callbackAssignabilityErrorMessage.ts, 1, 8))
+>S : Symbol(S, Decl(callbackAssignabilityErrorMessage.ts, 1, 8))
+}
+
+export interface Target {
+>Target : Symbol(Target, Decl(callbackAssignabilityErrorMessage.ts, 2, 1))
+
+  map: <T>(callbackfn: (value: string) => T | undefined) => T[];
+>map : Symbol(Target.map, Decl(callbackAssignabilityErrorMessage.ts, 4, 25))
+>T : Symbol(T, Decl(callbackAssignabilityErrorMessage.ts, 5, 8))
+>callbackfn : Symbol(callbackfn, Decl(callbackAssignabilityErrorMessage.ts, 5, 11))
+>value : Symbol(value, Decl(callbackAssignabilityErrorMessage.ts, 5, 24))
+>T : Symbol(T, Decl(callbackAssignabilityErrorMessage.ts, 5, 8))
+>T : Symbol(T, Decl(callbackAssignabilityErrorMessage.ts, 5, 8))
+}
+
+declare let s1: Source1;
+>s1 : Symbol(s1, Decl(callbackAssignabilityErrorMessage.ts, 8, 11))
+>Source1 : Symbol(Source1, Decl(callbackAssignabilityErrorMessage.ts, 0, 0))
+
+declare let t: Target;
+>t : Symbol(t, Decl(callbackAssignabilityErrorMessage.ts, 9, 11))
+>Target : Symbol(Target, Decl(callbackAssignabilityErrorMessage.ts, 2, 1))
+
+// During the following assignment, `Source1["map"]` gets
+// instantiated with the contextual type `Target["map"]` before checking
+// assignability. To do that, an inference is made to `S`. For `Source1`,
+// the only candidate is `T | undefined` from the return type of `callbackfn`.
+// Inference also runs on `map` return types `S[]` and `T[]`, but the result
+// is discarded because it’s run with a lower inference priority. As a result,
+// we end up seeing if the contextually instantiated source signature:
+//
+//   (callbackfn: (value: string) => T | undefined) => (T | undefined)[]
+//
+// is assignable to the target signature:
+//
+//   (callbackfn: (value: string) => T | undefined) => T[]
+//
+// and the return types cause the failed assignability. But as a human reader
+// interpreting why `s1` is not assignable to `t`, I instead equate `S` and `T`
+// and identify the “real” problem as the return type of `callbackfn` in `Target`
+// (`T | undefined`) being a supertype of the one in `Source1` (`S` → `T`).
+
+t = s1; // Bad:  instantiates `S` with `T | undefined`, fails `map` return type assignability
+>t : Symbol(t, Decl(callbackAssignabilityErrorMessage.ts, 9, 11))
+>s1 : Symbol(s1, Decl(callbackAssignabilityErrorMessage.ts, 8, 11))
+

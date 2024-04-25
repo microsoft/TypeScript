@@ -33860,7 +33860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
         if (!inferenceContext) {
             applyToReturnTypes(contextualSignature, signature, (source, target) => {
-                inferTypes(context.inferences, source, target, InferencePriority.ReturnType);
+                inferTypes(context.inferences, source, target);
             });
         }
         return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
