@@ -3,7 +3,7 @@
 === undefinedArgumentInference.ts ===
 function foo1<T>(f1: { x: T; y: T }): T {
 >foo1 : <T>(f1: { x: T; y: T; }) => T
->     : ^ ^^^^^^               ^^^^^ 
+>     : ^ ^^  ^^               ^^^^^ 
 >f1 : { x: T; y: T; }
 >   : ^^^^^ ^^^^^ ^^^
 >x : T
@@ -21,7 +21,7 @@ var z1 = foo1({ x: undefined, y: undefined });
 >z1 : any
 >foo1({ x: undefined, y: undefined }) : any
 >foo1 : <T>(f1: { x: T; y: T; }) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^  ^^               ^^^^^^
 >{ x: undefined, y: undefined } : { x: undefined; y: undefined; }
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : undefined

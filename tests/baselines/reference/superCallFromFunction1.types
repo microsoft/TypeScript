@@ -11,7 +11,7 @@ function foo() {
 >super : any
 >      : ^^^
 >value => String(value) : (value: any) => string
->                       : ^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^     ^^^^^^^^^^^^^^^^
 >value : any
 >      : ^^^
 >String(value) : string

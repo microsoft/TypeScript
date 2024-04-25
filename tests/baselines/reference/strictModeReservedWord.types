@@ -45,7 +45,7 @@ function foo() {
 
     function bar(private, implements, let) { }
 >bar : (private: any, implements: any, let: any) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^          ^^^^^^^   ^^^^^^^^^^^^^^
 >private : any
 >        : ^^^
 >implements : any
@@ -59,9 +59,9 @@ function foo() {
 
     function barn(cb: (private, public, package) => void) { }
 >barn : (cb: (private: any, public: any, package: any) => void) => void
->     : ^^^^^          ^^^          ^^^           ^^^         ^^^^^^^^^
+>     : ^  ^^          ^^^          ^^^           ^^^         ^^^^^^^^^
 >cb : (private: any, public: any, package: any) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^    
 >private : any
 >        : ^^^
 >public : any
@@ -73,9 +73,9 @@ function foo() {
 >barn((private, public, package) => { }) : void
 >                                        : ^^^^
 >barn : (cb: (private: any, public: any, package: any) => void) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^  ^^          ^^^          ^^^           ^^^         ^^^^^^^^^
 >(private, public, package) => { } : (private: any, public: any, package: any) => void
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^       ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^
 >private : any
 >        : ^^^
 >public : any
@@ -101,7 +101,7 @@ function foo() {
 
     function foo(x: private.x) { }
 >foo : (x: private.x) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : private.x
 >  : ^^^^^^^^^
 >private : any
@@ -109,7 +109,7 @@ function foo() {
 
     function foo1(x: private.package.x) { }
 >foo1 : (x: private.package.x) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : private.package.x
 >  : ^^^^^^^^^^^^^^^^^
 >private : any
@@ -119,7 +119,7 @@ function foo() {
 
     function foo2(x: private.package.protected) { }
 >foo2 : (x: private.package.protected) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : private.package.protected
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >private : any

@@ -29,7 +29,7 @@ interface TodoListProps {
 }
 function Todo(prop: { key: number, todo: string }) {
 >Todo : (prop: { key: number; todo: string; }) => any
->     : ^^^^^^^                              ^^^^^^^^
+>     : ^    ^^                              ^^^^^^^^
 >prop : { key: number; todo: string; }
 >     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
@@ -47,7 +47,7 @@ function Todo(prop: { key: number, todo: string }) {
 >prop.key.toString() : string
 >                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^^^^^^^
 >prop.key : number
 >         : ^^^^^^
 >prop : { key: number; todo: string; }
@@ -55,7 +55,7 @@ function Todo(prop: { key: number, todo: string }) {
 >key : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >prop.todo : string
 >          : ^^^^^^
 >prop : { key: number; todo: string; }
@@ -67,7 +67,7 @@ function Todo(prop: { key: number, todo: string }) {
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => any
->         : ^^^^^^^^^^^^             ^^^^^^^^
+>         : ^         ^^             ^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 
@@ -81,7 +81,7 @@ function TodoList({ todos }: TodoListProps) {
 ><Todo key={todos[0].id} todo={todos[0].todo} /> : any
 >                                                : ^^^
 >Todo : (prop: { key: number; todo: string; }) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^                              ^^^^^^^^
 >key : number
 >    : ^^^^^^
 >todos[0].id : number
@@ -113,7 +113,7 @@ function TodoList({ todos }: TodoListProps) {
 }
 function TodoListNoError({ todos }: TodoListProps) {
 >TodoListNoError : ({ todos }: TodoListProps) => any
->                : ^^^^^^^^^^^^             ^^^^^^^^
+>                : ^         ^^             ^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 
@@ -132,7 +132,7 @@ function TodoListNoError({ todos }: TodoListProps) {
 ><Todo key={todos[0].id} todo={todos[0].todo} /> : any
 >                                                : ^^^
 >Todo : (prop: { key: number; todo: string; }) => any
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^                              ^^^^^^^^
 >key : number
 >    : ^^^^^^
 >todos[0].id : number
@@ -170,7 +170,7 @@ let x: TodoListProps;
 ><TodoList {...x}/> : any
 >                   : ^^^
 >TodoList : ({ todos }: TodoListProps) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^         ^^             ^^^^^^^^
 >x : TodoListProps
 >  : ^^^^^^^^^^^^^
 

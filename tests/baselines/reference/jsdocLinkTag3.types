@@ -14,7 +14,7 @@ import type { A } from "./a";
  */
 export function foo(a: string) {}
 >foo : (a: string) => void
->    : ^^^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

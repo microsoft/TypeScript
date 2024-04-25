@@ -3,10 +3,10 @@
 === promisesWithConstraints.ts ===
 interface Promise<T> {
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
->then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^                    ^^^          ^^^
+>then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^  ^^                    ^^^          ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^ ^^^^^          
+>   : ^ ^^ ^^^^^          
 >x : T
 >  : ^
 }
@@ -17,11 +17,11 @@ interface CPromise<T extends { x: any; }> {
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
->     : ^ ^^^^^^^^^^^^^^   ^^^^^^^^^                    ^^^^^          
+>     : ^ ^^^^^^^^^^^^^^   ^^^^^  ^^                    ^^^^^          
 >x : any
 >  : ^^^
 >cb : (x: T) => Promise<U>
->   : ^^^^ ^^^^^          
+>   : ^ ^^ ^^^^^          
 >x : T
 >  : ^
 }

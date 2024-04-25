@@ -93,7 +93,7 @@ var k: Function = undefined;
 
 var l: (x: number) => string = undefined;
 >l : (x: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >undefined : undefined
@@ -139,7 +139,7 @@ var n: { foo: string } = undefined;
 
 var o: <T>(x: T) => T = undefined;
 >o : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >undefined : undefined
@@ -159,7 +159,7 @@ var q: String = undefined;
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->    : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

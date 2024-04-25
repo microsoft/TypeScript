@@ -3,9 +3,9 @@
 === innerTypeCheckOfLambdaArgument.ts ===
 function takesCallback(callback: (n) =>any) {
 >takesCallback : (callback: (n: any) => any) => void
->              : ^^^^^^^^^^^    ^^^        ^^^^^^^^^
+>              : ^        ^^    ^^^        ^^^^^^^^^
 >callback : (n: any) => any
->         : ^^^^^^^^^^^^   
+>         : ^ ^^^^^^^^^^   
 >n : any
 >  : ^^^
 
@@ -15,13 +15,13 @@ takesCallback(
 >takesCallback( 	function inner(n) {                // this line should raise an error                // otherwise, there's a bug in overload resolution / partial typechecking		var k: string = 10;     }) : void
 >                                                                                                                                                                                                           : ^^^^
 >takesCallback : (callback: (n: any) => any) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^        ^^    ^^^        ^^^^^^^^^
  
 	function inner(n) {
 >function inner(n) {                // this line should raise an error                // otherwise, there's a bug in overload resolution / partial typechecking		var k: string = 10;     } : (n: any) => void
->                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                          : ^ ^^^^^^^^^^^^^^
 >inner : (n: any) => void
->      : ^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^^
 >n : any
 >  : ^^^
 

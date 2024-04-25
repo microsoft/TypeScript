@@ -9,7 +9,7 @@ a ? b : (c) : d => e // Not legal JS; "Unexpected token ':'" at last colon
 >b : any
 >  : ^^^
 >(c) : d => e : (c: any) => d
->             : ^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^
 >c : any
 >  : ^^^
 >e : any
@@ -24,7 +24,7 @@ a ? b : (c) : d => e
 >b : any
 >  : ^^^
 >(c) : d => e : (c: any) => d
->             : ^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^
 >c : any
 >  : ^^^
 >e : any

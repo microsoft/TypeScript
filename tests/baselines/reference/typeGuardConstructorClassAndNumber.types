@@ -485,7 +485,7 @@ else {
 
 function foo(instance: Function | object) {
 >foo : (instance: Function | object) => number
->    : ^^^^^^^^^^^                 ^^^^^^^^^^^
+>    : ^        ^^                 ^^^^^^^^^^^
 >instance : object | Function
 >         : ^^^^^^^^^^^^^^^^^
 

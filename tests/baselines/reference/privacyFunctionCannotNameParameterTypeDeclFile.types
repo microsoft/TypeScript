@@ -11,7 +11,7 @@ export class publicClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) { // Error
 >myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -25,7 +25,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
 >myPrivateStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -39,7 +39,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     }
     myPublicMethod(param  = exporter.createExportedWidget1()) { // Error
 >myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -53,7 +53,7 @@ export class publicClassWithWithPrivateParmeterTypes {
     }
     private myPrivateMethod(param = exporter.createExportedWidget1()) {
 >myPrivateMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -104,7 +104,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
 
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) { // Error
 >myPublicStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -118,7 +118,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
 >myPrivateStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -132,7 +132,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
     }
     myPublicMethod(param  = exporter.createExportedWidget3()) { // Error
 >myPublicMethod : (param?: import("GlobalWidgets").Widget3) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -146,7 +146,7 @@ export class publicClassWithWithPrivateParmeterTypes1 {
     }
     private myPrivateMethod(param = exporter.createExportedWidget3()) {
 >myPrivateMethod : (param?: import("GlobalWidgets").Widget3) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -198,7 +198,7 @@ class privateClassWithWithPrivateParmeterTypes {
 
     static myPublicStaticMethod(param = exporter.createExportedWidget1()) {
 >myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -212,7 +212,7 @@ class privateClassWithWithPrivateParmeterTypes {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget1()) {
 >myPrivateStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -226,7 +226,7 @@ class privateClassWithWithPrivateParmeterTypes {
     }
     myPublicMethod(param  = exporter.createExportedWidget1()) {
 >myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -240,7 +240,7 @@ class privateClassWithWithPrivateParmeterTypes {
     }
     private myPrivateMethod(param = exporter.createExportedWidget1()) {
 >myPrivateMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -291,7 +291,7 @@ class privateClassWithWithPrivateParmeterTypes2 {
 
     static myPublicStaticMethod(param = exporter.createExportedWidget3()) {
 >myPublicStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -305,7 +305,7 @@ class privateClassWithWithPrivateParmeterTypes2 {
     }
     private static myPrivateStaticMethod(param = exporter.createExportedWidget3()) {
 >myPrivateStaticMethod : (param?: import("GlobalWidgets").Widget3) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -319,7 +319,7 @@ class privateClassWithWithPrivateParmeterTypes2 {
     }
     myPublicMethod(param  = exporter.createExportedWidget3()) {
 >myPublicMethod : (param?: import("GlobalWidgets").Widget3) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -333,7 +333,7 @@ class privateClassWithWithPrivateParmeterTypes2 {
     }
     private myPrivateMethod(param = exporter.createExportedWidget3()) {
 >myPrivateMethod : (param?: import("GlobalWidgets").Widget3) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -381,7 +381,7 @@ class privateClassWithWithPrivateParmeterTypes2 {
 
 export function publicFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) { // Error
 >publicFunctionWithPrivateParmeterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -395,7 +395,7 @@ export function publicFunctionWithPrivateParmeterTypes(param = exporter.createEx
 }
 function privateFunctionWithPrivateParmeterTypes(param = exporter.createExportedWidget1()) {
 >privateFunctionWithPrivateParmeterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1) => void
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget1() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1
@@ -409,7 +409,7 @@ function privateFunctionWithPrivateParmeterTypes(param = exporter.createExported
 }
 export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) { // Error
 >publicFunctionWithPrivateParmeterTypes1 : (param?: import("GlobalWidgets").Widget3) => void
->                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -423,7 +423,7 @@ export function publicFunctionWithPrivateParmeterTypes1(param = exporter.createE
 }
 function privateFunctionWithPrivateParmeterTypes1(param = exporter.createExportedWidget3()) {
 >privateFunctionWithPrivateParmeterTypes1 : (param?: import("GlobalWidgets").Widget3) => void
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").Widget3
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
@@ -443,7 +443,7 @@ export class publicClassWithPrivateModuleParameterTypes {
 
     static myPublicStaticMethod(param= exporter.createExportedWidget2()) { // Error
 >myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -457,7 +457,7 @@ export class publicClassWithPrivateModuleParameterTypes {
     }
     myPublicMethod(param= exporter.createExportedWidget2()) { // Error
 >myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -508,7 +508,7 @@ export class publicClassWithPrivateModuleParameterTypes2 {
 
     static myPublicStaticMethod(param= exporter.createExportedWidget4()) { // Error
 >myPublicStaticMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -522,7 +522,7 @@ export class publicClassWithPrivateModuleParameterTypes2 {
     }
     myPublicMethod(param= exporter.createExportedWidget4()) { // Error
 >myPublicMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -569,7 +569,7 @@ export class publicClassWithPrivateModuleParameterTypes2 {
 }
 export function publicFunctionWithPrivateModuleParameterTypes(param= exporter.createExportedWidget2()) { // Error
 >publicFunctionWithPrivateModuleParameterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                              : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -583,7 +583,7 @@ export function publicFunctionWithPrivateModuleParameterTypes(param= exporter.cr
 }
 export function publicFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) { // Error
 >publicFunctionWithPrivateModuleParameterTypes1 : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -603,7 +603,7 @@ class privateClassWithPrivateModuleParameterTypes {
 
     static myPublicStaticMethod(param= exporter.createExportedWidget2()) {
 >myPublicStaticMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -617,7 +617,7 @@ class privateClassWithPrivateModuleParameterTypes {
     }
     myPublicMethod(param= exporter.createExportedWidget2()) {
 >myPublicMethod : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -668,7 +668,7 @@ class privateClassWithPrivateModuleParameterTypes1 {
 
     static myPublicStaticMethod(param= exporter.createExportedWidget4()) {
 >myPublicStaticMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -682,7 +682,7 @@ class privateClassWithPrivateModuleParameterTypes1 {
     }
     myPublicMethod(param= exporter.createExportedWidget4()) {
 >myPublicMethod : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
@@ -729,7 +729,7 @@ class privateClassWithPrivateModuleParameterTypes1 {
 }
 function privateFunctionWithPrivateModuleParameterTypes(param= exporter.createExportedWidget2()) {
 >privateFunctionWithPrivateModuleParameterTypes : (param?: import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2) => void
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget2() : import("privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2
@@ -743,7 +743,7 @@ function privateFunctionWithPrivateModuleParameterTypes(param= exporter.createEx
 }
 function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createExportedWidget4()) {
 >privateFunctionWithPrivateModuleParameterTypes1 : (param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4) => void
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >param : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4

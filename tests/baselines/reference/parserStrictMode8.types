@@ -1,10 +1,9 @@
 //// [tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode8.ts] ////
 
 === Performance Stats ===
-Assignability cache: 3,600 / 3,600 (nearest 100)
-Type Count: 12,600 / 12,600 (nearest 100)
-Instantiation count: 2,500 / 2,500 (nearest 500)
-Symbol count: 29,000 / 29,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 2,500
 
 === parserStrictMode8.ts ===
 "use strict";
@@ -13,5 +12,5 @@ Symbol count: 29,000 / 29,000 (nearest 500)
 
 function eval() {
 >eval : { (x: string): any; (): void; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^
 }

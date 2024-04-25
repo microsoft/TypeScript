@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,10 +13,10 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 9
 {
   "files": [
     "main.ts"
@@ -36,6 +36,8 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":5} Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":5} Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 {"watchFile":5} File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 {"watchFile":5} File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":5} Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":5} Type roots
@@ -44,7 +46,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -60,9 +62,11 @@ PolledWatches::
 
 FsWatches::
 /a/lib: *new*
-  {}
+  {"inode":2}
+/user/username/projects: *new*
+  {"inode":6}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":7}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -101,7 +105,7 @@ exitCode:: ExitStatus.undefined
 Change:: modify file contents
 
 Input::
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;export const y = 10;
 
 
@@ -129,7 +133,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

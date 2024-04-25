@@ -13,7 +13,7 @@ interface G<T> {
 
 function ff<T>(g: G<T>): void {
 >ff : <T>(g: G<T>) => void
->   : ^ ^^^^^    ^^^^^    
+>   : ^ ^^ ^^    ^^^^^    
 >g : G<T>
 >  : ^^^^
 
@@ -21,7 +21,7 @@ function ff<T>(g: G<T>): void {
 >ff(g) : void
 >      : ^^^^
 >ff : <T>(g: G<T>) => void
->   : ^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^    ^^^^^^^^^
 >g : G<T>
 >  : ^^^^
 }

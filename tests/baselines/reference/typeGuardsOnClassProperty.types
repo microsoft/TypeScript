@@ -44,11 +44,11 @@ class D {
 >data.join(" ") : string
 >               : ^^^^^^
 >data.join : (separator?: string) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^         ^^^      ^^^^^^^^^^^
 >data : string[]
 >     : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >" " : " "
 >    : ^^^
     }
@@ -81,7 +81,7 @@ class D {
 >this.data.join(" ") : string
 >                    : ^^^^^^
 >this.data.join : (separator?: string) => string
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^         ^^^      ^^^^^^^^^^^
 >this.data : string[]
 >          : ^^^^^^^^
 >this : this
@@ -89,7 +89,7 @@ class D {
 >data : string[]
 >     : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^^^^^^^
 >" " : " "
 >    : ^^^
     }
@@ -176,9 +176,9 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >prop1.toLocaleLowerCase() : string
 >                          : ^^^^^^
 >prop1.toLocaleLowerCase : (locales?: string | string[]) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^       ^^^                 ^^^^^^^^^^^
 >prop1 : string
 >      : ^^^^^^
 >toLocaleLowerCase : (locales?: string | string[]) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^       ^^^                 ^^^^^^^^^^^
 

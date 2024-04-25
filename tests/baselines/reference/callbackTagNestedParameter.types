@@ -16,7 +16,7 @@
  */
 function eachPerson(callback) {
 >eachPerson : (callback: WorksWithPeopleCallback) => void
->           : ^^^^^^^^^^^                       ^^^^^    
+>           : ^        ^^                       ^^^^^    
 >callback : WorksWithPeopleCallback
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 

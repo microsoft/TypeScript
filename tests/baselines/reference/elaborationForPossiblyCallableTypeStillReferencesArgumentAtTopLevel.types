@@ -7,7 +7,7 @@ declare var ohno: new () => number;
 
 declare function ff(t: number): void;
 >ff : (t: number) => void
->   : ^^^^      ^^^^^    
+>   : ^ ^^      ^^^^^    
 >t : number
 >  : ^^^^^^
 
@@ -15,7 +15,7 @@ ff(ohno)
 >ff(ohno) : void
 >         : ^^^^
 >ff : (t: number) => void
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >ohno : new () => number
 >     : ^^^^^^^^^^^^^^^^
 

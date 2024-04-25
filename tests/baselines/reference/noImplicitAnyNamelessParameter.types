@@ -7,15 +7,15 @@ class C { }
 
 declare var a: { m(...string): void }
 >a : { m(...string: any[]): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>  : ^^^^^^^      ^^^^^^^^^^    ^^^
 >m : (...string: any[]) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^    
+>  : ^^^^      ^^^^^^^^^^^^    
 >string : any[]
 >       : ^^^^^
 
 declare var b: (string, C) => void;
 >b : (string: any, C: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>  : ^      ^^^^^^^ ^^^^^^^^^^    
 >string : any
 >       : ^^^
 >C : any
@@ -23,7 +23,7 @@ declare var b: (string, C) => void;
 
 declare var c: { (C, number): void };
 >c : (C: any, number: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>  : ^ ^^^^^^^      ^^^^^^^^^^    
 >C : any
 >  : ^^^
 >number : any
@@ -31,9 +31,9 @@ declare var c: { (C, number): void };
 
 declare var d: { m(boolean, C, object, undefined): void }
 >d : { m(boolean: any, C: any, object: any, undefined: any): void; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>  : ^^^^       ^^^^^^^ ^^^^^^^      ^^^^^^^         ^^^^^^^^    ^^^
 >m : (boolean: any, C: any, object: any, undefined: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>  : ^       ^^^^^^^ ^^^^^^^      ^^^^^^^         ^^^^^^^^^^    
 >boolean : any
 >        : ^^^
 >C : any

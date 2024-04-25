@@ -1,6 +1,6 @@
 currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,10 +13,10 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 9
 {
   "files": [
     "main.ts"
@@ -36,6 +36,8 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
@@ -44,7 +46,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -55,16 +57,20 @@ exports.x = 10;
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject/main.ts: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":9}
 
 Program root files: [
   "/user/username/projects/myproject/main.ts"
@@ -103,7 +109,7 @@ exitCode:: ExitStatus.undefined
 Change:: modify file contents
 
 Input::
-//// [/user/username/projects/myproject/main.ts]
+//// [/user/username/projects/myproject/main.ts] Inode:: 8
 export const x = 10;export const y = 10;
 
 
@@ -131,7 +137,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js]
+//// [/user/username/projects/myproject/main.js] Inode:: 10
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = void 0;

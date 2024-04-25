@@ -29,7 +29,7 @@ module A {
 
         fromCarthesian(p: A.Point) {
 >fromCarthesian : (p: A.Point) => { x: number; y: number; }
->               : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : A.Point
 >  : ^^^^^^^
 >A : any

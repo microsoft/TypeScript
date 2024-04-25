@@ -75,7 +75,7 @@ myArray = [[1, 2]];
 
 function isEmpty(l: { length: number }) {
 >isEmpty : (l: { length: number; }) => boolean
->        : ^^^^                   ^^^^^^^^^^^^
+>        : ^ ^^                   ^^^^^^^^^^^^
 >l : { length: number; }
 >  : ^^^^^^^^^^      ^^^
 >length : number
@@ -98,7 +98,7 @@ isEmpty([]);
 >isEmpty([]) : boolean
 >            : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^                   ^^^^^^^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -106,7 +106,7 @@ isEmpty(new Array(3));
 >isEmpty(new Array(3)) : boolean
 >                      : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^                   ^^^^^^^^^^^^
 >new Array(3) : any[]
 >             : ^^^^^
 >Array : ArrayConstructor
@@ -118,7 +118,7 @@ isEmpty(new Array<string>(3));
 >isEmpty(new Array<string>(3)) : boolean
 >                              : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^                   ^^^^^^^^^^^^
 >new Array<string>(3) : string[]
 >                     : ^^^^^^^^
 >Array : ArrayConstructor
@@ -130,7 +130,7 @@ isEmpty(['a']);
 >isEmpty(['a']) : boolean
 >               : ^^^^^^^
 >isEmpty : (l: { length: number; }) => boolean
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^                   ^^^^^^^^^^^^
 >['a'] : string[]
 >      : ^^^^^^^^
 >'a' : "a"

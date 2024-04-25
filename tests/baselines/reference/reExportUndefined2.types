@@ -15,13 +15,13 @@ import { undefined } from "./a";
 
 declare function use(a: number);
 >use : (a: number) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >a : number
 >  : ^^^^^^
 
 use(undefined);
 >use(undefined) : any
 >use : (a: number) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >undefined : any
 

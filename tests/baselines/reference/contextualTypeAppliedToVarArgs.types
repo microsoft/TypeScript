@@ -3,10 +3,10 @@
 === contextualTypeAppliedToVarArgs.ts ===
 function delegate(instance: any, method: (...args: any[]) => any, data?: any): (...args: any[]) => any {
 >delegate : (instance: any, method: (...args: any[]) => any, data?: any) => (...args: any[]) => any
->         : ^^^^^^^^^^^   ^^^^^^^^^^                       ^^^^^^^^^   ^^^^^                       
+>         : ^        ^^   ^^      ^^                       ^^    ^^^   ^^^^^                       
 >instance : any
 >method : (...args: any[]) => any
->       : ^^^^^^^^^^     ^^^^^   
+>       : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 >data : any
@@ -29,13 +29,13 @@ class Foo{
 
         delegate(this, function (source, args2)
 >delegate(this, function (source, args2)        {            var a = source.node;            var b = args2.node;        } ) : (...args: any[]) => any
->                                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                           : ^^^^    ^^     ^^^^^^^^
 >delegate : (instance: any, method: (...args: any[]) => any, data?: any) => (...args: any[]) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^        ^^   ^^      ^^                       ^^    ^^^   ^^^^^^^^^    ^^     ^^^^^^^^
 >this : this
 >     : ^^^^
 >function (source, args2)        {            var a = source.node;            var b = args2.node;        } : (source: any, args2: any) => void
->                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                          : ^      ^^^^^^^     ^^^^^^^^^^^^^^
 >source : any
 >args2 : any
         {

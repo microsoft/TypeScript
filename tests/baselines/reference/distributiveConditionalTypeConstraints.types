@@ -11,7 +11,7 @@ type IsArray<T> = T extends unknown[] ? true : false;
 
 function f1<T extends object>(x: IsArray<T>) {
 >f1 : <T extends object>(x: IsArray<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
 >x : IsArray<T>
 >  : ^^^^^^^^^^
 
@@ -34,7 +34,7 @@ function f1<T extends object>(x: IsArray<T>) {
 
 function f2<T extends unknown[]>(x: IsArray<T>) {
 >f2 : <T extends unknown[]>(x: IsArray<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
 >x : IsArray<T>
 >  : ^^^^^^^^^^
 
@@ -57,7 +57,7 @@ function f2<T extends unknown[]>(x: IsArray<T>) {
 
 function f3<T extends string[]>(x: IsArray<T>) {
 >f3 : <T extends string[]>(x: IsArray<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
 >x : IsArray<T>
 >  : ^^^^^^^^^^
 
@@ -80,7 +80,7 @@ function f3<T extends string[]>(x: IsArray<T>) {
 
 function f4<T extends Function>(x: IsArray<T>) {
 >f4 : <T extends Function>(x: IsArray<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^^^^
 >x : IsArray<T>
 >  : ^^^^^^^^^^
 
@@ -117,7 +117,7 @@ type ZeroOf<T> =
 
 function f10<T extends {}>(x: ZeroOf<T>) {
 >f10 : <T extends {}>(x: ZeroOf<T>) => void
->    : ^ ^^^^^^^^^^^^^^^^         ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^ ^^         ^^^^^^^^^
 >x : ZeroOf<T>
 >  : ^^^^^^^^^
 
@@ -140,7 +140,7 @@ type Foo<T> = T extends "abc" | 42 ? true : false;
 
 function f20<T extends string>(x: Foo<T>) {
 >f20 : <T extends string>(x: Foo<T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
 >x : Foo<T>
 >  : ^^^^^^
 
@@ -171,7 +171,7 @@ interface C { foo(): void, bar(): void }
 
 function test1<T extends A>(y: T extends B ? number : string) {
 >test1 : <T extends A>(y: T extends B ? number : string) => void
->      : ^ ^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^ ^^                             ^^^^^^^^^
 >y : T extends B ? number : string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -207,7 +207,7 @@ function test1<T extends A>(y: T extends B ? number : string) {
 
 function test2<T extends A>(y: T extends B ? string : number) {
 >test2 : <T extends A>(y: T extends B ? string : number) => void
->      : ^ ^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^ ^^                             ^^^^^^^^^
 >y : T extends B ? string : number
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -243,7 +243,7 @@ function test2<T extends A>(y: T extends B ? string : number) {
 
 function test3<T extends A>(y: T extends C ? number : string) {
 >test3 : <T extends A>(y: T extends C ? number : string) => void
->      : ^ ^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^ ^^                             ^^^^^^^^^
 >y : T extends C ? number : string
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -279,7 +279,7 @@ function test3<T extends A>(y: T extends C ? number : string) {
 
 function test4<T extends A>(y: T extends C ? string : number) {
 >test4 : <T extends A>(y: T extends C ? string : number) => void
->      : ^ ^^^^^^^^^^^^^^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^ ^^                             ^^^^^^^^^
 >y : T extends C ? string : number
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

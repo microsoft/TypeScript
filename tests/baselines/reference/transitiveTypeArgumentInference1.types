@@ -4,7 +4,7 @@
 interface I1<T, U> {
 	m(value: T): U;
 >m : (value: T) => U
->  : ^^^^^^^^ ^^^^^ 
+>  : ^     ^^ ^^^^^ 
 >value : T
 >      : ^
 }

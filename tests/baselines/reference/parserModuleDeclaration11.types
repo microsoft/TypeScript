@@ -8,18 +8,18 @@ declare module string {
     interface X { }
     export function foo(s: string);
 >foo : (s: string) => any
->    : ^^^^      ^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >s : string
 >  : ^^^^^^
 }
 string.foo("abc");
 >string.foo("abc") : any
 >string.foo : (s: string) => any
->           : ^^^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^^^^^^^
 >string : typeof string
 >       : ^^^^^^^^^^^^^
 >foo : (s: string) => any
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 

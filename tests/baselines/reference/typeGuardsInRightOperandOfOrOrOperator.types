@@ -6,7 +6,7 @@
 // provided the right operand contains no assignments to the variable or parameter.
 function foo(x: number | string) {
 >foo : (x: number | string) => boolean
->    : ^^^^               ^^^^^^^^^^^^
+>    : ^ ^^               ^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ function foo(x: number | string) {
 }
 function foo2(x: number | string) {
 >foo2 : (x: number | string) => number | true
->     : ^^^^               ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ function foo2(x: number | string) {
 }
 function foo3(x: number | string) {
 >foo3 : (x: number | string) => string | true
->     : ^^^^               ^^^^^^^^^^^^^^^^^^
+>     : ^ ^^               ^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -100,7 +100,7 @@ function foo3(x: number | string) {
 }
 function foo4(x: number | string | boolean) {
 >foo4 : (x: number | string | boolean) => boolean
->     : ^^^^                         ^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -134,7 +134,7 @@ function foo4(x: number | string | boolean) {
 }
 function foo5(x: number | string | boolean) {
 >foo5 : (x: number | string | boolean) => number | boolean
->     : ^^^^                         ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -187,7 +187,7 @@ function foo5(x: number | string | boolean) {
 }
 function foo6(x: number | string | boolean) {
 >foo6 : (x: number | string | boolean) => boolean
->     : ^^^^                         ^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -232,7 +232,7 @@ function foo6(x: number | string | boolean) {
 }
 function foo7(x: number | string | boolean) {
 >foo7 : (x: number | string | boolean) => string | number | true
->     : ^^^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -302,11 +302,11 @@ function foo7(x: number | string | boolean) {
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
         // do not change value
         : ((y = x) && x.toString()))); // number | boolean | string

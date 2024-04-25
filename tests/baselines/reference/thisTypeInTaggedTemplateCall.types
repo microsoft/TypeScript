@@ -7,7 +7,7 @@ class Foo {
 
     static m<T>(this: new () => T, strings: TemplateStringsArray | string) {
 >m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
->  : ^ ^^^^^^^^           ^^^^^^^^^^^                             ^^^^^^
+>  : ^ ^^    ^^           ^^       ^^                             ^^^^^^
 >this : new () => T
 >     : ^^^^^^^^^^ 
 >strings : string | TemplateStringsArray
@@ -24,26 +24,26 @@ class Foo {
 Foo.m`test`;
 >Foo.m`test` : Foo
 >            : ^^^
->Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Foo.m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
+>      : ^ ^^    ^^           ^^       ^^                             ^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
+>  : ^ ^^    ^^           ^^       ^^                             ^^^^^^
 >`test` : "test"
 >       : ^^^^^^
 
 (Foo.m)`test`;
 >(Foo.m)`test` : Foo
 >              : ^^^
->(Foo.m) : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Foo.m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(Foo.m) : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
+>        : ^ ^^    ^^           ^^       ^^                             ^^^^^^
+>Foo.m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
+>      : ^ ^^    ^^           ^^       ^^                             ^^^^^^
 >Foo : typeof Foo
 >    : ^^^^^^^^^^
->m : <T>(this: new () => T, strings: string | TemplateStringsArray) => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m : <T>(this: new () => T, strings: TemplateStringsArray | string) => T
+>  : ^ ^^    ^^           ^^       ^^                             ^^^^^^
 >`test` : "test"
 >       : ^^^^^^
 

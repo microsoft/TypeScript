@@ -73,7 +73,7 @@ class c {
 
     a(eval) { //error
 >a : (eval: any) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^    ^^^^^^^^^^^^^^
 >eval : any
 >     : ^^^
     }

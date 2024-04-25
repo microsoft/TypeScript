@@ -3,7 +3,7 @@
 === classBlockScoping.ts ===
 function f(b: boolean) {
 >f : (b: boolean) => void
->  : ^^^^       ^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^
 >b : boolean
 >  : ^^^^^^^
 

@@ -7,7 +7,7 @@
 
 declare function use(f: number): void;
 >use : (f: number) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >f : number
 >  : ^^^^^^
 
@@ -19,7 +19,7 @@ use(x);
 >use(x) : void
 >       : ^^^^
 >use : (f: number) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 

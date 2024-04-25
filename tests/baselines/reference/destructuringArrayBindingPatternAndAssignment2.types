@@ -120,7 +120,7 @@ interface F {
 
 function foo(idx: number): F {
 >foo : (idx: number) => F
->    : ^^^^^^      ^^^^^ 
+>    : ^   ^^      ^^^^^ 
 >idx : number
 >    : ^^^^^^
 
@@ -145,7 +145,7 @@ var [c4, c5, c6] = foo(1);  // Error
 >foo(1) : F
 >       : ^
 >foo : (idx: number) => F
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^
 >1 : 1
 >  : ^
 

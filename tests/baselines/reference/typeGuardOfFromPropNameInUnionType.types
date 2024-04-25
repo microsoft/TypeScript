@@ -27,7 +27,7 @@ class D { a: Date; }
 
 function namedClasses(x: A | B) {
 >namedClasses : (x: A | B) => void
->             : ^^^^     ^^^^^^^^^
+>             : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -68,7 +68,7 @@ function namedClasses(x: A | B) {
 
 function multipleClasses(x: A | B | C | D) {
 >multipleClasses : (x: A | B | C | D) => void
->                : ^^^^             ^^^^^^^^^
+>                : ^ ^^             ^^^^^^^^^
 >x : A | B | C | D
 >  : ^^^^^^^^^^^^^
 
@@ -105,7 +105,7 @@ function multipleClasses(x: A | B | C | D) {
 
 function anonymousClasses(x: { a: string; } | { b: number; }) {
 >anonymousClasses : (x: { a: string; } | { b: number; }) => void
->                 : ^^^^                               ^^^^^^^^^
+>                 : ^ ^^                               ^^^^^^^^^
 >x : { a: string; } | { b: number; }
 >  : ^^^^^      ^^^^^^^^^^^      ^^^
 >a : string
@@ -158,7 +158,7 @@ class BWithOptionalProp { b?: string; }
 
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
->                                          : ^^^^                                     ^^^^^^^^^
+>                                          : ^ ^^                                     ^^^^^^^^^
 >x : AWithOptionalProp | BWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -215,7 +215,7 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
 
 function inParenthesizedExpression(x: A | B) {
 >inParenthesizedExpression : (x: A | B) => void
->                          : ^^^^     ^^^^^^^^^
+>                          : ^ ^^     ^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -260,7 +260,7 @@ class ClassWithUnionProp { prop: A | B; }
 
 function inProperty(x: ClassWithUnionProp) {
 >inProperty : (x: ClassWithUnionProp) => void
->           : ^^^^                  ^^^^^^^^^
+>           : ^ ^^                  ^^^^^^^^^
 >x : ClassWithUnionProp
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -315,7 +315,7 @@ class NestedClassWithProp { outer: ClassWithUnionProp; }
 
 function innestedProperty(x: NestedClassWithProp) {
 >innestedProperty : (x: NestedClassWithProp) => void
->                 : ^^^^                   ^^^^^^^^^
+>                 : ^ ^^                   ^^^^^^^^^
 >x : NestedClassWithProp
 >  : ^^^^^^^^^^^^^^^^^^^
 
@@ -474,7 +474,7 @@ interface Indexed {
 
 function f(i: Indexed) {
 >f : (i: Indexed) => any
->  : ^^^^       ^^^^^^^^
+>  : ^ ^^       ^^^^^^^^
 >i : Indexed
 >  : ^^^^^^^
 

@@ -3,7 +3,7 @@
 === decoratorOnClassConstructorParameter4.ts ===
 declare function dec(target: Function, propertyKey: string | symbol, parameterIndex: number): void;
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^        ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^      ^^^^^    
+>    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^    
 >target : Function
 >       : ^^^^^^^^
 >propertyKey : string | symbol
@@ -19,7 +19,7 @@ class C {
 >public : any
 >       : ^^^
 >dec : (target: Function, propertyKey: string | symbol, parameterIndex: number) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^      ^^        ^^           ^^               ^^              ^^      ^^^^^^^^^
 >p : number
 >  : ^^^^^^
 }

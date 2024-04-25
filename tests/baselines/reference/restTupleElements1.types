@@ -241,7 +241,7 @@ let ex = t[x];  // number | string | boolean
 
 declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^ ^^ ^^^^^           ^^^^^      
+>   : ^ ^^ ^^ ^^           ^^^^^      
 >x : [T, ...U[]]
 >  : ^^^^^^^^^^^
 
@@ -249,7 +249,7 @@ f0([]);  // Error
 >f0([]) : [unknown, unknown]
 >       : ^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
 >[] : []
 >   : ^^
 
@@ -257,7 +257,7 @@ f0([1]);
 >f0([1]) : [number, unknown]
 >        : ^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
 >[1] : [number]
 >    : ^^^^^^^^
 >1 : 1
@@ -267,7 +267,7 @@ f0([1, 2, 3]);
 >f0([1, 2, 3]) : [number, number]
 >              : ^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
 >[1, 2, 3] : [number, number, number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -281,7 +281,7 @@ f0([1, "hello", true]);
 >f0([1, "hello", true]) : [number, string | boolean]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^           ^^^^^^^^^^^
 >[1, "hello", true] : [number, string, true]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -293,9 +293,9 @@ f0([1, "hello", true]);
 
 declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): void;
 >f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
->   : ^^^^                                                     ^^^^^    
+>   : ^ ^^                                                     ^^^^^    
 >a : [(x: number) => number, ...((x: string) => number)[]]
->  : ^^^^^      ^^^^^      ^^^^^^^^^^      ^^^^^      ^^^^
+>  : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^^^      ^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -303,9 +303,9 @@ declare function f1(a: [(x: number) => number, ...((x: string) => number)[]]): v
 
 declare function f2(...a: [(x: number) => number, ...((x: string) => number)[]]): void;
 >f2 : (a_0: (x: number) => number, ...a_1: ((x: string) => number)[]) => void
->   : ^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^    
+>   : ^^^^^^^ ^^      ^^^^^      ^^^^^^^^^^^^ ^^      ^^^^^      ^^^^^^^^    
 >a : [(x: number) => number, ...((x: string) => number)[]]
->  : ^^^^^      ^^^^^      ^^^^^^^^^^      ^^^^^      ^^^^
+>  : ^^ ^^      ^^^^^      ^^^^^^^ ^^      ^^^^^      ^^^^
 >x : number
 >  : ^^^^^^
 >x : string
@@ -315,11 +315,11 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]) : void
 >                                                      : ^^^^
 >f1 : (a: [(x: number) => number, ...((x: string) => number)[]]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^                                                     ^^^^^^^^^
 >[x => x * 2, x => x.length, x => x.charCodeAt(0)] : [(x: number) => number, (x: string) => number, (x: string) => number]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                  : ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x * 2 : number
@@ -329,7 +329,7 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >2 : 2
 >  : ^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -339,17 +339,17 @@ f1([x => x * 2, x => x.length, x => x.charCodeAt(0)]);
 >length : number
 >       : ^^^^^^
 >x => x.charCodeAt(0) : (x: string) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.charCodeAt(0) : number
 >                : ^^^^^^
 >x.charCodeAt : (index: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -357,9 +357,9 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >f2(x => x * 2, x => x.length, x => x.charCodeAt(0)) : void
 >                                                    : ^^^^
 >f2 : (a_0: (x: number) => number, ...a_1: ((x: string) => number)[]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x * 2 : number
@@ -369,7 +369,7 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >2 : 2
 >  : ^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -379,17 +379,17 @@ f2(x => x * 2, x => x.length, x => x.charCodeAt(0));
 >length : number
 >       : ^^^^^^
 >x => x.charCodeAt(0) : (x: string) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.charCodeAt(0) : number
 >                : ^^^^^^
 >x.charCodeAt : (index: number) => number
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 

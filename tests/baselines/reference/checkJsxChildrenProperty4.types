@@ -14,7 +14,7 @@ interface IUser {
 interface IFetchUserProps {
     children: (user: IUser) => JSX.Element;
 >children : (user: IUser) => JSX.Element
->         : ^^^^^^^     ^^^^^           
+>         : ^    ^^     ^^^^^           
 >user : IUser
 >     : ^^^^^
 >JSX : any
@@ -49,7 +49,7 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >this.props.children(this.state.result) : JSX.Element
 >                                       : ^^^^^^^^^^^
 >this.props.children : ((user: IUser) => JSX.Element) & React.ReactNode
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.props : IFetchUserProps & { children?: React.ReactNode; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
@@ -57,7 +57,7 @@ class FetchUser extends React.Component<IFetchUserProps, any> {
 >props : IFetchUserProps & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >children : ((user: IUser) => JSX.Element) & React.ReactNode
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.state.result : any
 >                  : ^^^
 >this.state : any
@@ -90,7 +90,7 @@ function UserName() {
 
             { user => (
 >user => (                <h1>{ user.NAme }</h1>            ) : (user: IUser) => JSX.Element
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >user : IUser
 >     : ^^^^^
 >(                <h1>{ user.NAme }</h1>            ) : JSX.Element
@@ -136,7 +136,7 @@ function UserName1() {
             
             { user => (
 >user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => JSX.Element
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >user : IUser
 >     : ^^^^^
 >(                <h1>{ user.Name }</h1>            ) : JSX.Element
@@ -159,7 +159,7 @@ function UserName1() {
             ) }
             { user => (
 >user => (                <h1>{ user.Name }</h1>            ) : (user: IUser) => JSX.Element
->                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                             : ^    ^^^^^^^^^^^^^^^^^^^^^^^
 >user : IUser
 >     : ^^^^^
 >(                <h1>{ user.Name }</h1>            ) : JSX.Element

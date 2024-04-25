@@ -1,18 +1,13 @@
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import {
-    patchServiceForStateBaseline,
-} from "../../../harness/projectServiceStateLogger";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
+import { patchServiceForStateBaseline } from "../../../harness/projectServiceStateLogger";
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    ensureErrorFreeBuild,
-} from "./solutionBuilder";
+import { ensureErrorFreeBuild } from "./solutionBuilder";
 import {
     customTypesMap,
     TestTypingsInstallerAdapter,
@@ -132,7 +127,7 @@ export class TestSession extends ts.server.Session {
         if (typingsInstaller) typingsInstaller.session = this;
         this.serverCancellationToken = cancellationToken as TestServerCancellationToken;
         patchHostTimeouts(
-            changeToHostTrackingWrittenFiles(this.host),
+            changeToHostTrackingWrittenFiles(patchHostForBuildInfoReadWrite(this.host)),
             this,
             this.logger,
         );

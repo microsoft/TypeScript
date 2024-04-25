@@ -9,20 +9,20 @@ type Type = {
 
     a: (e: string) => void;
 >a : (e: string) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >e : string
 >  : ^^^^^^
 
     b: (e: number) => void;
 >b : (e: number) => void
->  : ^^^^      ^^^^^    
+>  : ^ ^^      ^^^^^    
 >e : number
 >  : ^^^^^^
 }
 
 declare function f1<T extends keyof Type = "a">(props: Type[T]): void;
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^    
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^    
 >props : Type[T]
 >      : ^^^^^^^
 
@@ -30,9 +30,9 @@ f1(event => { });
 >f1(event => { }) : void
 >                 : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^
 >event => { } : (event: string) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : string
 >      : ^^^^^^
 
@@ -40,9 +40,9 @@ f1<"a">(event => { });
 >f1<"a">(event => { }) : void
 >                      : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^
 >event => { } : (event: string) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : string
 >      : ^^^^^^
 
@@ -50,9 +50,9 @@ f1<"b">(event => { });
 >f1<"b">(event => { }) : void
 >                      : ^^^^
 >f1 : <T extends keyof Type = "a">(props: Type[T]) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^       ^^^^^^^^^
 >event => { } : (event: number) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^^^
 >event : number
 >      : ^^^^^^
 

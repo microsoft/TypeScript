@@ -1,15 +1,9 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
+import { dedent } from "../../_namespaces/Utils";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    createSolutionBuilderHostForBaseline,
-} from "../helpers/solutionBuilder";
+import { jsonToReadableText } from "../helpers";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
 import {
     noChangeOnlyRuns,
     testTscCompileLike,

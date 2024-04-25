@@ -1,6 +1,4 @@
-import {
-    deprecate,
-} from "../../deprecatedCompat/deprecate";
+import { deprecate } from "../../deprecatedCompat/deprecate";
 import * as ts from "../_namespaces/ts";
 
 describe("unittests:: debugDeprecation", () => {

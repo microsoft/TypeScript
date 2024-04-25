@@ -27,11 +27,11 @@ for (let i = 0; i < 10; ++i) {
 >arr.push(class C {        prop = i;    }) : number
 >                                          : ^^^^^^
 >arr.push : (...items: any[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^^^
 >arr : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >class C {        prop = i;    } : typeof C
 >                                : ^^^^^^^^
 >C : typeof C

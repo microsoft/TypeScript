@@ -41,7 +41,7 @@ type Shape = Square | Rectangle | Circle;
 
 function area1(s: Shape) {
 >area1 : (s: Shape) => number
->      : ^^^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
 
@@ -146,7 +146,7 @@ function area1(s: Shape) {
 
 function area2(s: Shape) {
 >area2 : (s: Shape) => number
->      : ^^^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
 
@@ -224,7 +224,7 @@ function area2(s: Shape) {
 
 function assertNever(x: never): never {
 >assertNever : (x: never) => never
->            : ^^^^     ^^^^^     
+>            : ^ ^^     ^^^^^     
 >x : never
 >  : ^^^^^
 
@@ -243,7 +243,7 @@ function assertNever(x: never): never {
 
 function area3(s: Shape) {
 >area3 : (s: Shape) => number
->      : ^^^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
 
@@ -321,7 +321,7 @@ function area3(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >s : never
 >  : ^^^^^
     }
@@ -329,7 +329,7 @@ function area3(s: Shape) {
 
 function area4(s: Shape) {
 >area4 : (s: Shape) => number
->      : ^^^^     ^^^^^^^^^^^
+>      : ^ ^^     ^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
 
@@ -407,7 +407,7 @@ function area4(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >s : never
 >  : ^^^^^
 }
@@ -434,7 +434,7 @@ type Message =
 
 function f1(m: Message) {
 >f1 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -479,7 +479,7 @@ function f1(m: Message) {
 
 function f2(m: Message) {
 >f2 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -504,7 +504,7 @@ function f2(m: Message) {
 
 function f3(m: Message) {
 >f3 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -528,7 +528,7 @@ function f3(m: Message) {
 
 function f4(m: Message, x: "A" | "D") {
 >f4 : (m: Message, x: "A" | "D") => void
->   : ^^^^       ^^^^^         ^^^^^^^^^
+>   : ^ ^^       ^^ ^^         ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 >x : "A" | "D"
@@ -554,7 +554,7 @@ function f4(m: Message, x: "A" | "D") {
 
 function f5(m: Message) {
 >f5 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -593,7 +593,7 @@ function f5(m: Message) {
 
 function f6(m: Message) {
 >f6 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -631,7 +631,7 @@ function f6(m: Message) {
 
 function f7(m: Message) {
 >f7 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 
@@ -660,7 +660,7 @@ function f7(m: Message) {
 
 function f8(m: Message) {
 >f8 : (m: Message) => void
->   : ^^^^       ^^^^^^^^^
+>   : ^ ^^       ^^^^^^^^^
 >m : Message
 >  : ^^^^^^^
 

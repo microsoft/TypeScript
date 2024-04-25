@@ -61,11 +61,11 @@ try {
 >console.error("error") : void
 >                       : ^^^^
 >console.error : (...data: any[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >error : (...data: any[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^    ^^     ^^^^^^^^^
 >"error" : "error"
 >        : ^^^^^^^
 }

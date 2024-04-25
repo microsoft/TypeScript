@@ -33,7 +33,7 @@ for (var i = 0, j = 10; i < j; i++, j--)
 //Comma operator in function arguments and return
 function foo(x: number, y: string)
 >foo : (x: number, y: string) => string
->    : ^^^^      ^^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -53,7 +53,7 @@ var resultIsString = foo(1, "123");
 >foo(1, "123") : string
 >              : ^^^^^^
 >foo : (x: number, y: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 >"123" : "123"

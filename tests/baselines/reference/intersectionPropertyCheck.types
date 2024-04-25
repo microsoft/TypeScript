@@ -38,10 +38,10 @@ declare let wrong: { a: { y: string } };
 >  : ^^^^^^
 
 let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak object type
->weak : { a?: { x?: number | undefined; } | undefined; } & { c?: string | undefined; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : { x?: number | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>weak : { a?: { x?: number; }; } & { c?: string; }
+>     : ^^^^^^               ^^^^^^^^^^^^      ^^^
+>a : { x?: number; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >c : string | undefined
@@ -51,9 +51,9 @@ let weak: { a?: { x?: number } } & { c?: string } = wrong;  // Nested weak objec
 
 function foo<T extends object>(x: { a?: string }, y: T & { a: boolean }) {
 >foo : <T extends object>(x: { a?: string; }, y: T & { a: boolean; }) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^               ^^^^^                   ^^^^^^^^^
->x : { a?: string | undefined; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^               ^^ ^^                   ^^^^^^^^^
+>x : { a?: string; }
+>  : ^^^^^^      ^^^
 >a : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >y : T & { a: boolean; }
@@ -80,7 +80,7 @@ interface Test {
 
 function test<T extends object>(value: T): Test {
 >test : <T extends object>(value: T) => Test
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^    
+>     : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^^^^    
 >value : T
 >      : ^
 

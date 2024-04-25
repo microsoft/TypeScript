@@ -163,7 +163,7 @@ if (x == xAndObj) {
 
 function test(level: number | string):number {
 >test : (level: number | string) => number
->     : ^^^^^^^^               ^^^^^      
+>     : ^     ^^               ^^^^^      
 >level : string | number
 >      : ^^^^^^^^^^^^^^^
 

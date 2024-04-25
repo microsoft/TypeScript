@@ -131,7 +131,7 @@ function Test2() {
 
 function Test3(this: { no: number }) {
 >Test3 : (this: { no: number; }) => void
->      : ^^^^^^^               ^^^^^^^^^
+>      : ^    ^^               ^^^^^^^^^
 >this : { no: number; }
 >     : ^^^^^^      ^^^
 >no : number
@@ -152,7 +152,7 @@ function Test3(this: { no: number }) {
 
 function Test4(this: { no: number } | undefined) {
 >Test4 : (this: { no: number; } | undefined) => void
->      : ^^^^^^^                           ^^^^^^^^^
+>      : ^    ^^                           ^^^^^^^^^
 >this : { no: number; } | undefined
 >     : ^^^^^^      ^^^^^^^^^^^^^^^
 >no : number
@@ -431,8 +431,8 @@ class Test10 {
 >       : ^^^^^^
 
     a?: { b?: string }
->a : { b?: string | undefined; } | undefined
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : { b?: string; } | undefined
+>  : ^^^^^^      ^^^^^^^^^^^^^^^
 >b : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -533,8 +533,8 @@ class Test11 {
 >       : ^^^^^^
 
     this?: { x?: string };
->this : { x?: string | undefined; } | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this : { x?: string; } | undefined
+>     : ^^^^^^      ^^^^^^^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
     

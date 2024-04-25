@@ -11,7 +11,7 @@ module TypeScript {
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
 >create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
->       : ^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^
+>       : ^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
 >arg1 : any
 >     : ^^^
 >arg2 : any
@@ -46,7 +46,7 @@ module TypeScript {
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
 >toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^
+>         : ^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
 >useConstraintInName : boolean
@@ -62,11 +62,11 @@ module TypeScript {
 >this.getScopedNameEx(scopeSymbol, useConstraintInName) : any
 >                                                       : ^^^
 >this.getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >this : this
 >     : ^^^^
 >getScopedNameEx : <A_1, B_1, C_1>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
 >useConstraintInName : boolean
@@ -80,7 +80,7 @@ module TypeScript {
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
 >getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^
+>                : ^^^^^^^^^^           ^^^^^^^^                   ^^^       ^^                 ^^^       ^^                      ^^^       ^^^^^^^^
 >scopeSymbol : any
 >            : ^^^
 >useConstraintInName : boolean
@@ -192,11 +192,11 @@ module TypeScript {
 >MemberName.create(elementMemberName, "", "[]") : any
 >                                               : ^^^
 >MemberName.create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
 >MemberName : typeof MemberName
 >           : ^^^^^^^^^^^^^^^^^
 >create : <A_1, B_1, C_1>(arg1: any, arg2?: any, arg3?: any) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
 >elementMemberName : any
 >                  : ^^^
 >"" : ""

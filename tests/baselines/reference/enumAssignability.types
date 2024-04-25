@@ -174,7 +174,7 @@ module Others {
 
     var l: (x: number) => string = e;
 >l : (x: number) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >e : E
@@ -212,7 +212,7 @@ module Others {
 
     var o: <T>(x: T) => T = e;
 >o : <T>(x: T) => T
->  : ^ ^^^^^ ^^^^^ 
+>  : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >e : E
@@ -232,7 +232,7 @@ module Others {
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
 >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
->    : ^ ^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^ ^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

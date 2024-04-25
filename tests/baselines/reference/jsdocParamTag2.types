@@ -8,7 +8,7 @@
  */
 function good1({a, b}, x) {}
 >good1 : ({ a, b }: { a: string; b: string; }, x: string) => void
->      : ^^^^^^^^^^^                         ^^^^^      ^^^^^^^^^
+>      : ^        ^^                         ^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -22,7 +22,7 @@ function good1({a, b}, x) {}
  */
 function good2({a, b}, {c, d}) {}
 >good2 : ({ a, b }: { a: string; b: string; }, { c, d }: { c: number; d: number; }) => void
->      : ^^^^^^^^^^^                         ^^^^^^^^^^^^                         ^^^^^^^^^
+>      : ^        ^^                         ^^        ^^                         ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -39,7 +39,7 @@ function good2({a, b}, {c, d}) {}
  */
 function good3(x, {a, b}, y) {}
 >good3 : (x: number, { a, b }: { a: string; b: string; }, y: string) => void
->      : ^^^^      ^^^^^^^^^^^^                         ^^^^^      ^^^^^^^^^
+>      : ^ ^^      ^^        ^^                         ^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >a : string
@@ -54,7 +54,7 @@ function good3(x, {a, b}, y) {}
  */
 function good4({a, b}) {}
 >good4 : ({ a, b }: { a: string; b: string; }) => void
->      : ^^^^^^^^^^^                         ^^^^^^^^^
+>      : ^        ^^                         ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -69,7 +69,7 @@ function good4({a, b}) {}
  */
 function good5({a, b}, x) {}
 >good5 : ({ a, b }: {    a: string;    b: string;}, x: string) => void
->      : ^^^^^^^^^^^^     ^^      ^     ^^      ^^^^^^^      ^^^^^^^^^
+>      : ^        ^^^     ^^      ^     ^^      ^^^^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -87,7 +87,7 @@ function good5({a, b}, x) {}
  */
 function good6({a, b}, {c, d}) {}
 >good6 : ({ a, b }: {    a: string;    b: string;}, { c, d }: {    c: string;    d: string;}) => void
->      : ^^^^^^^^^^^^     ^^      ^     ^^      ^^^^^^^^^^^^^^^     ^^      ^     ^^      ^^^^^^^^^^^
+>      : ^        ^^^     ^^      ^     ^^      ^^^^        ^^^     ^^      ^     ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -106,7 +106,7 @@ function good6({a, b}, {c, d}) {}
  */
 function good7(x, {a, b}, y) {}
 >good7 : (x: number, { a, b }: {    a: string;    b: string;}, y: string) => void
->      : ^^^^      ^^^^^^^^^^^^^     ^^      ^     ^^      ^^^^^^^      ^^^^^^^^^
+>      : ^ ^^      ^^        ^^^     ^^      ^     ^^      ^^^^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >a : string
@@ -123,7 +123,7 @@ function good7(x, {a, b}, y) {}
  */
 function good8({a, b}) {}
 >good8 : ({ a, b }: {    a: string;    b: string;}) => void
->      : ^^^^^^^^^^^^     ^^      ^     ^^      ^^^^^^^^^^^
+>      : ^        ^^^     ^^      ^     ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : string
@@ -134,7 +134,7 @@ function good8({a, b}) {}
  */
 function good9({ a }) {
 >good9 : ({ a }: { a: string; }, ...args: any[]) => void
->      : ^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^              ^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 
@@ -142,11 +142,11 @@ function good9({ a }) {
 >console.log(arguments, a) : void
 >                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >arguments : IArguments
 >          : ^^^^^^^^^^
 >a : string
@@ -161,7 +161,7 @@ function good9({ a }) {
  */
 function bad1(x, {a, b}) {}
 >bad1 : (x: string, { a, b }: string) => void
->     : ^^^^      ^^^^^^^^^^^^      ^^^^^^^^^
+>     : ^ ^^      ^^        ^^      ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >a : any
@@ -175,7 +175,7 @@ function bad1(x, {a, b}) {}
  */
 function bad2(x, {a, b}) {}
 >bad2 : (x: any, { a, b }: { a: string; b: string; }) => void
->     : ^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^
+>     : ^ ^^^^^^^        ^^                         ^^^^^^^^^
 >x : any
 >  : ^^^
 >a : string

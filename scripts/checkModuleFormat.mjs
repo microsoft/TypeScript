@@ -1,13 +1,9 @@
-import {
-    createRequire,
-} from "module";
+import { createRequire } from "module";
 import {
     __importDefault,
     __importStar,
 } from "tslib";
-import {
-    pathToFileURL,
-} from "url";
+import { pathToFileURL } from "url";
 
 // This script tests that TypeScript's CJS API is structured
 // as expected. It calls "require" as though it were in CWD,

@@ -1,10 +1,8 @@
 //// [tests/cases/compiler/jsxComplexSignatureHasApplicabilityError.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 500 / 800 (nearest 100)
-Type Count: 1,100 / 1,200 (nearest 100)
-Instantiation count: 2,000 / 2,500 (nearest 500)
-Symbol count: 29,000 / 29,000 (nearest 500)
+Type Count: 1,000
+Instantiation count: 2,500
 
 === jsxComplexSignatureHasApplicabilityError.tsx ===
 /// <reference path="react16.d.ts" />
@@ -21,7 +19,7 @@ interface Props<T extends OptionValues> {
 
     onChange?(value: Option<T> | undefined): void;
 >onChange : ((value: Option<T> | undefined) => void) | undefined
->         : ^^^^^^^^^                     ^^^^^    ^^^^^^^^^^^^^
+>         : ^^     ^^                     ^^^^^    ^^^^^^^^^^^^^
 >value : Option<T> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^
 }
@@ -42,7 +40,7 @@ export type ReactSingleSelectProps<
 
 export function createReactSingleSelect<
 >createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: React.ComponentType<WrappedProps>) => React.ComponentType<ReactSingleSelectProps<WrappedProps>>
->                        : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                 ^^^^^                                                         
+>                        : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                                 ^^^^^                                                         
 
     WrappedProps extends ReactSelectProps<any>
 >(
@@ -58,7 +56,7 @@ export function createReactSingleSelect<
 
     return (props) => {
 >(props) => {        return (            <ReactSelectClass<ExtractValueType<WrappedProps>>                {...props}                multi={false}                autosize={false}                value={props.value}                onChange={(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                }}            />        );    } : (props: Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }) => JSX.Element
->                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -100,29 +98,29 @@ export function createReactSingleSelect<
 
                 onChange={(value) => {
 >onChange : (value: Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(value) => {                    if (props.onChange) {                        props.onChange(value === null ? undefined : value);                    }                } : (value: Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null) => void
->                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                       : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | null
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     if (props.onChange) {
 >props.onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onChange : ((value: Option<ExtractValueType<WrappedProps>> | undefined) => void) | undefined
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                         props.onChange(value === null ? undefined : value);
 >props.onChange(value === null ? undefined : value) : void
 >                                                   : ^^^^
 >props.onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >onChange : (value: Option<ExtractValueType<WrappedProps>> | undefined) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value === null ? undefined : value : Option<ExtractValueType<WrappedProps>> | Options<ExtractValueType<WrappedProps>> | undefined
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value === null : boolean
@@ -167,7 +165,7 @@ declare class ReactSelectClass<TValue = OptionValues> extends React.Component<Re
 
     setValue(value: Option<TValue>): void;
 >setValue : (value: Option<TValue>) => void
->         : ^^^^^^^^              ^^^^^    
+>         : ^     ^^              ^^^^^    
 >value : Option<TValue>
 >      : ^^^^^^^^^^^^^^
 }
@@ -391,7 +389,7 @@ export type LoadOptionsLegacyHandler<TValue = OptionValues> = (input: string, ca
 >input : string
 >      : ^^^^^^
 >callback : (err: any, result: AutocompleteResult<TValue>) => void
->         : ^^^^^^   ^^^^^^^^^^                          ^^^^^    
+>         : ^   ^^   ^^      ^^                          ^^^^^    
 >err : any
 >result : AutocompleteResult<TValue>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -564,7 +562,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     onFocus?: (option: Option<TValue>, event: any) => void;
 >onFocus : ((option: Option<TValue>, event: any) => void) | undefined
->        : ^^^^^^^^^^              ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>        : ^^      ^^              ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
 >       : ^^^^^^^^^^^^^^
 >event : any
@@ -574,7 +572,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     onSelect?: (option: Option<TValue>, event: any) => void;
 >onSelect : ((option: Option<TValue>, event: any) => void) | undefined
->         : ^^^^^^^^^^              ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>         : ^^      ^^              ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >option : Option<TValue>
 >       : ^^^^^^^^^^^^^^
 >event : any
@@ -599,7 +597,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     removeValue?: (value: TValue | TValue[]) => void;
 >removeValue : ((value: TValue | TValue[]) => void) | undefined
->            : ^^^^^^^^^                 ^^^^^    ^^^^^^^^^^^^^
+>            : ^^     ^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
 >      : ^^^^^^^^^^^^^^^^^
 
@@ -608,7 +606,7 @@ export interface OptionComponentProps<TValue = OptionValues> {
      */
     selectValue?: (value: TValue | TValue[]) => void;
 >selectValue : ((value: TValue | TValue[]) => void) | undefined
->            : ^^^^^^^^^                 ^^^^^    ^^^^^^^^^^^^^
+>            : ^^     ^^                 ^^^^^    ^^^^^^^^^^^^^
 >value : TValue | TValue[]
 >      : ^^^^^^^^^^^^^^^^^
 }

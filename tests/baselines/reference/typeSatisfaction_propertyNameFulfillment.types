@@ -40,7 +40,7 @@ let a = p.a.toFixed();
 >p.a.toFixed() : string
 >              : ^^^^^^
 >p.a.toFixed : (fractionDigits?: number) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^              ^^^      ^^^^^^^^^^^
 >p.a : number
 >    : ^^^^^^
 >p : { a: number; b: string; x: number; }
@@ -48,7 +48,7 @@ let a = p.a.toFixed();
 >a : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^^^^^^^
 
 let b = p.b.substring(1);
 >b : string
@@ -56,7 +56,7 @@ let b = p.b.substring(1);
 >p.b.substring(1) : string
 >                 : ^^^^^^
 >p.b.substring : (start: number, end?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >p.b : string
 >    : ^^^^^^
 >p : { a: number; b: string; x: number; }
@@ -64,7 +64,7 @@ let b = p.b.substring(1);
 >b : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 

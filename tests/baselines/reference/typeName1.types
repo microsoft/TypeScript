@@ -21,13 +21,13 @@ class C {
 
 var x1:{ f(s:string):number;f(n:number):string; }=3;
 >x1 : { f(s: string): number; f(n: number): string; }
->   : ^^^^^^^      ^^^      ^^^^^^^      ^^^      ^^^
+>   : ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 >f : { (s: string): number; (n: number): string; }
->  : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >f : { (s: string): number; (n: number): string; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 >3 : 3
@@ -35,9 +35,9 @@ var x1:{ f(s:string):number;f(n:number):string; }=3;
 
 var x2:{ f(s:string):number; } =3;
 >x2 : { f(s: string): number; }
->   : ^^^^^^^      ^^^      ^^^
+>   : ^^^^ ^^      ^^^      ^^^
 >f : (s: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -45,7 +45,7 @@ var x2:{ f(s:string):number; } =3;
 
 var x3:{ (s:string):number;(n:number):string; }=3;
 >x3 : { (s: string): number; (n: number): string; }
->   : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -55,7 +55,7 @@ var x3:{ (s:string):number;(n:number):string; }=3;
 
 var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >x4 : { x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
->   : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^      ^^^^^^^      ^^^      ^^^
+>   : ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 >x : any
 >  : ^^^
 >y : any
@@ -63,11 +63,11 @@ var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -75,7 +75,7 @@ var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 
 var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
 >x5 : { (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }
->   : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^      ^^^      ^^^^^^^      ^^^      ^^^
+>   : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^      ^^^^ ^^      ^^^      ^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -87,11 +87,11 @@ var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -103,7 +103,7 @@ var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
 >z : number
 >  : ^^^^^^
 >f : { (n: number): string; (s: string): number; }
->  : ^^^^^^      ^^^      ^^^^^^      ^^^      ^^^
+>  : ^^^ ^^      ^^^      ^^^ ^^      ^^^      ^^^
 >n : number
 >  : ^^^^^^
 >s : string
@@ -113,7 +113,7 @@ var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
 
 var x7:(s:string)=>boolean=3;
 >x7 : (s: string) => boolean
->   : ^^^^      ^^^^^       
+>   : ^ ^^      ^^^^^       
 >s : string
 >  : ^^^^^^
 >3 : 3
@@ -169,7 +169,7 @@ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:num
 >x : boolean
 >  : ^^^^^^^
 >y : (s: string) => boolean
->  : ^^^^      ^^^^^       
+>  : ^ ^^      ^^^^^       
 >s : string
 >  : ^^^^^^
 >w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
@@ -193,7 +193,7 @@ var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:num
 
 var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
 >x13 : { (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }
->    : ^^^^^^  ^^^^^^^^^^      ^^^^^^^^^^      ^^^      ^^^^^      ^^^^^              ^^^
+>    : ^^^^^^  ^^^^^^^^^^      ^^^^^^^ ^^      ^^^      ^^^^^      ^^^^^              ^^^
 >n : number
 >  : ^^^^^^
 >x : string
@@ -207,9 +207,9 @@ var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {
 
 var x14:{ f(x:number):boolean; p; q; ():string; }=3;
 >x14 : { (): string; f(x: number): boolean; p: any; q: any; }
->    : ^^^^^^      ^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^      ^^^^ ^^      ^^^       ^^^^^^^^^^^^^^^^^^^
 >f : (x: number) => boolean
->  : ^^^^      ^^^^^       
+>  : ^ ^^      ^^^^^       
 >x : number
 >  : ^^^^^^
 >p : any

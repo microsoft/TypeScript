@@ -1,6 +1,4 @@
-import {
-    getModuleSpecifier,
-} from "../../compiler/moduleSpecifiers";
+import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -149,9 +147,7 @@ import {
     VariableDeclarationList,
     VariableStatement,
 } from "../_namespaces/ts";
-import {
-    registerRefactor,
-} from "../refactorProvider";
+import { registerRefactor } from "../refactorProvider";
 import {
     getTargetFileImportsAndAddExportInOldFile,
 } from "./helpers";

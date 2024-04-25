@@ -13,9 +13,9 @@ declare class Banana<T extends string> { constructor(a: string, property: T) }
 
 declare function fruitFactory1<TFruit>(Fruit: new (...args: any[]) => TFruit): TFruit
 >fruitFactory1 : <TFruit>(Fruit: new (...args: any[]) => TFruit) => TFruit
->              : ^      ^^^^^^^^^                              ^^^^^      
+>              : ^      ^^     ^^                              ^^^^^      
 >Fruit : new (...args: any[]) => TFruit
->      : ^^^^^^^^^^^^^^     ^^^^^      
+>      : ^^^^^^^^    ^^     ^^^^^      
 >args : any[]
 >     : ^^^^^
 
@@ -25,15 +25,15 @@ const banana1 = fruitFactory1(Banana) // Banana<any>
 >fruitFactory1(Banana) : Banana<any>
 >                      : ^^^^^^^^^^^
 >fruitFactory1 : <TFruit>(Fruit: new (...args: any[]) => TFruit) => TFruit
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^     ^^                              ^^^^^^^^^^^
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
 declare function fruitFactory2<TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit): TFruit
 >fruitFactory2 : <TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit) => TFruit
->              : ^      ^^^^^^^^^                                         ^^^^^      
+>              : ^      ^^     ^^                                         ^^^^^      
 >Fruit : new (a: string, ...args: any[]) => TFruit
->      : ^^^^^^^^      ^^^^^^^^^^^     ^^^^^      
+>      : ^^^^^ ^^      ^^^^^    ^^     ^^^^^      
 >a : string
 >  : ^^^^^^
 >args : any[]
@@ -45,15 +45,15 @@ const banana2 = fruitFactory2(Banana) // Banana<any>
 >fruitFactory2(Banana) : Banana<any>
 >                      : ^^^^^^^^^^^
 >fruitFactory2 : <TFruit>(Fruit: new (a: string, ...args: any[]) => TFruit) => TFruit
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^     ^^                                         ^^^^^^^^^^^
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
 declare function fruitFactory3<TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit): TFruit
 >fruitFactory3 : <TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit) => TFruit
->              : ^      ^^^^^^^^^                                                   ^^^^^      
+>              : ^      ^^     ^^                                                   ^^^^^      
 >Fruit : new (a: string, s: "foo", ...args: any[]) => TFruit
->      : ^^^^^^^^      ^^^^^     ^^^^^^^^^^^     ^^^^^      
+>      : ^^^^^ ^^      ^^ ^^     ^^^^^    ^^     ^^^^^      
 >a : string
 >  : ^^^^^^
 >s : "foo"
@@ -67,15 +67,15 @@ const banana3 = fruitFactory3(Banana) // Banana<"foo">
 >fruitFactory3(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory3 : <TFruit>(Fruit: new (a: string, s: "foo", ...args: any[]) => TFruit) => TFruit
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^     ^^                                                   ^^^^^^^^^^^
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
 declare function fruitFactory4<TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit): TFruit
 >fruitFactory4 : <TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit) => TFruit
->              : ^      ^^^^^^^^^                                           ^^^^^      
+>              : ^      ^^     ^^                                           ^^^^^      
 >Fruit : new (a: string, ...args: "foo"[]) => TFruit
->      : ^^^^^^^^      ^^^^^^^^^^^       ^^^^^      
+>      : ^^^^^ ^^      ^^^^^    ^^       ^^^^^      
 >a : string
 >  : ^^^^^^
 >args : "foo"[]
@@ -87,15 +87,15 @@ const banana4 = fruitFactory4(Banana) // Banana<"foo">
 >fruitFactory4(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory4 : <TFruit>(Fruit: new (a: string, ...args: "foo"[]) => TFruit) => TFruit
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^     ^^                                           ^^^^^^^^^^^
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 
 declare function fruitFactory5<TFruit>(Fruit: new (...args: "foo"[]) => TFruit): TFruit
 >fruitFactory5 : <TFruit>(Fruit: new (...args: "foo"[]) => TFruit) => TFruit
->              : ^      ^^^^^^^^^                                ^^^^^      
+>              : ^      ^^     ^^                                ^^^^^      
 >Fruit : new (...args: "foo"[]) => TFruit
->      : ^^^^^^^^^^^^^^       ^^^^^      
+>      : ^^^^^^^^    ^^       ^^^^^      
 >args : "foo"[]
 >     : ^^^^^^^
 
@@ -105,7 +105,7 @@ const banana5 = fruitFactory5(Banana) // Banana<"foo">
 >fruitFactory5(Banana) : Banana<"foo">
 >                      : ^^^^^^^^^^^^^
 >fruitFactory5 : <TFruit>(Fruit: new (...args: "foo"[]) => TFruit) => TFruit
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^     ^^                                ^^^^^^^^^^^
 >Banana : typeof Banana
 >       : ^^^^^^^^^^^^^
 

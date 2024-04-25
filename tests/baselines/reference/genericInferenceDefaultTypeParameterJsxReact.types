@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/genericInferenceDefaultTypeParameterJsxReact.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 4,000 / 4,000 (nearest 100)
-Type Count: 10,300 / 10,300 (nearest 100)
-Instantiation count: 221,500 / 221,500 (nearest 500)
-Symbol count: 88,000 / 88,000 (nearest 500)
+Assignability cache: 5,000
+Type Count: 10,000
+Instantiation count: 250,000
+Symbol count: 100,000
 
 === genericInferenceDefaultTypeParameterJsxReact.tsx ===
 /// <reference path="react16.d.ts" />
@@ -29,7 +29,7 @@ type ButtonBaseProps<T extends ElementType> = ComponentPropsWithRef<T> & { child
 
 function Component<T extends ElementType = 'span'>(props: ButtonBaseProps<T>) {
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
->          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                  ^^^^^^^^^^^^^^^^
 >props : ButtonBaseProps<T>
 >      : ^^^^^^^^^^^^^^^^^^
 
@@ -44,11 +44,11 @@ const v1 = <Component onClick={e => e.preventDefault()} />;
 ><Component onClick={e => e.preventDefault()} /> : JSX.Element
 >                                                : ^^^^^^^^^^^
 >Component : <T extends React.ElementType = "span">(props: ButtonBaseProps<T>) => JSX.Element
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                  ^^^^^^^^^^^^^^^^
 >onClick : (e: React.MouseEvent<HTMLSpanElement>) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e => e.preventDefault() : (e: React.MouseEvent<HTMLSpanElement>) => void
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e : React.MouseEvent<HTMLSpanElement>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >e.preventDefault() : void

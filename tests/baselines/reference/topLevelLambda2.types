@@ -3,14 +3,14 @@
 === topLevelLambda2.ts ===
 function foo(x:any) {}
 >foo : (x: any) => void
->    : ^^^^   ^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >x : any
 
 foo(()=>this.window);
 >foo(()=>this.window) : void
 >                     : ^^^^
 >foo : (x: any) => void
->    : ^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^^
 >()=>this.window : () => Window & typeof globalThis
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.window : Window & typeof globalThis

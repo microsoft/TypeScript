@@ -3,7 +3,7 @@
 === unionOfFunctionAndSignatureIsCallable.ts ===
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 >f1 : (c1: Function, c2: () => object, callable: typeof c1 | typeof c2) => void
->   : ^^^^^        ^^^^^^            ^^^^^^^^^^^^                     ^^^^^^^^^
+>   : ^  ^^        ^^  ^^            ^^        ^^                     ^^^^^^^^^
 >c1 : Function
 >   : ^^^^^^^^
 >c2 : () => object
@@ -38,7 +38,7 @@ function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
 
 function f2(fetcherParams: object | (() => object)) {
 >f2 : (fetcherParams: object | (() => object)) => void
->   : ^^^^^^^^^^^^^^^^                       ^^^^^^^^^
+>   : ^             ^^                       ^^^^^^^^^
 >fetcherParams : object | (() => object)
 >              : ^^^^^^^^^^^^^^^^      ^
 

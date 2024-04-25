@@ -3,13 +3,13 @@
 === narrowingTypeofUndefined2.ts ===
 declare function takeArray(arr: Array<unknown>): void;
 >takeArray : (arr: Array<unknown>) => void
->          : ^^^^^^              ^^^^^    
+>          : ^   ^^              ^^^^^    
 >arr : unknown[]
 >    : ^^^^^^^^^
 
 function fn<T extends Array<unknown> | undefined>(arg: T) {
 >fn : <T extends unknown[] | undefined>(arg: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 
@@ -26,8 +26,8 @@ function fn<T extends Array<unknown> | undefined>(arg: T) {
         takeArray(arg);
 >takeArray(arg) : void
 >               : ^^^^
->takeArray : (arr: unknown[]) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>takeArray : (arr: Array<unknown>) => void
+>          : ^   ^^              ^^^^^^^^^
 >arg : unknown[]
 >    : ^^^^^^^^^
 

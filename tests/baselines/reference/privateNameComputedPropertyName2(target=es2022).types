@@ -3,7 +3,7 @@
 === privateNameComputedPropertyName2.ts ===
 let getX: (a: A) => number;
 >getX : (a: A) => number
->     : ^^^^ ^^^^^      
+>     : ^ ^^ ^^^^^      
 >a : A
 >  : ^
 
@@ -25,11 +25,11 @@ class A {
 >getX = (a: A) => a.#x, "_" : "_"
 >                           : ^^^
 >getX = (a: A) => a.#x : (a: A) => number
->                      : ^^^^ ^^^^^^^^^^^
+>                      : ^ ^^ ^^^^^^^^^^^
 >getX : (a: A) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >(a: A) => a.#x : (a: A) => number
->               : ^^^^ ^^^^^^^^^^^
+>               : ^ ^^ ^^^^^^^^^^^
 >a : A
 >  : ^
 >a.#x : number
@@ -44,15 +44,15 @@ console.log(getX(new A));
 >console.log(getX(new A)) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >getX(new A) : number
 >            : ^^^^^^
 >getX : (a: A) => number
->     : ^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^^^^^^^^^^
 >new A : A
 >      : ^
 >A : typeof A

@@ -13,8 +13,8 @@ type Record2<K extends keyof any, T> = {
 };
 
 function defaultRecord(x: Record<'a', string>, y: Record<string, string>) {
->defaultRecord : (x: Record<'a', string>, y: Record<string, string>) => void
->              : ^^^^                   ^^^^^                      ^^^^^^^^^
+>defaultRecord : (x: Record<"a", string>, y: Record<string, string>) => void
+>              : ^ ^^                   ^^ ^^                      ^^^^^^^^^
 >x : Record<"a", string>
 >  : ^^^^^^^^^^^^^^^^^^^
 >y : Record<string, string>
@@ -30,8 +30,8 @@ function defaultRecord(x: Record<'a', string>, y: Record<string, string>) {
 }
 
 function customRecord(x: Record2<'a', string>, y: Record2<string, string>) {
->customRecord : (x: Record2<'a', string>, y: Record2<string, string>) => void
->             : ^^^^                    ^^^^^                       ^^^^^^^^^
+>customRecord : (x: Record2<"a", string>, y: Record2<string, string>) => void
+>             : ^ ^^                    ^^ ^^                       ^^^^^^^^^
 >x : Record2<"a", string>
 >  : ^^^^^^^^^^^^^^^^^^^^
 >y : Record2<string, string>
@@ -47,8 +47,8 @@ function customRecord(x: Record2<'a', string>, y: Record2<string, string>) {
 }
 
 function mixed1(x: Record2<'a', string>, y: Record<string, string>) {
->mixed1 : (x: Record2<'a', string>, y: Record<string, string>) => void
->       : ^^^^                    ^^^^^                      ^^^^^^^^^
+>mixed1 : (x: Record2<"a", string>, y: Record<string, string>) => void
+>       : ^ ^^                    ^^ ^^                      ^^^^^^^^^
 >x : Record2<"a", string>
 >  : ^^^^^^^^^^^^^^^^^^^^
 >y : Record<string, string>
@@ -64,8 +64,8 @@ function mixed1(x: Record2<'a', string>, y: Record<string, string>) {
 }
 
 function mixed2(x: Record<'a', string>, y: Record2<string, string>) {
->mixed2 : (x: Record<'a', string>, y: Record2<string, string>) => void
->       : ^^^^                   ^^^^^                       ^^^^^^^^^
+>mixed2 : (x: Record<"a", string>, y: Record2<string, string>) => void
+>       : ^ ^^                   ^^ ^^                       ^^^^^^^^^
 >x : Record<"a", string>
 >  : ^^^^^^^^^^^^^^^^^^^
 >y : Record2<string, string>
@@ -81,8 +81,8 @@ function mixed2(x: Record<'a', string>, y: Record2<string, string>) {
 }
 
 function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
->defaultRecord2 : <T>(x: Record<'a', T>, y: Record<string, T>) => void
->               : ^ ^^^^^              ^^^^^                 ^^^^^^^^^
+>defaultRecord2 : <T>(x: Record<"a", T>, y: Record<string, T>) => void
+>               : ^ ^^ ^^              ^^ ^^                 ^^^^^^^^^
 >x : Record<"a", T>
 >  : ^^^^^^^^^^^^^^
 >y : Record<string, T>
@@ -98,8 +98,8 @@ function defaultRecord2<T>(x: Record<'a', T>, y: Record<string, T>) {
 }
 
 function customRecord2<T>(x: Record2<'a', T>, y: Record2<string, T>) {
->customRecord2 : <T>(x: Record2<'a', T>, y: Record2<string, T>) => void
->              : ^ ^^^^^               ^^^^^                  ^^^^^^^^^
+>customRecord2 : <T>(x: Record2<"a", T>, y: Record2<string, T>) => void
+>              : ^ ^^ ^^               ^^ ^^                  ^^^^^^^^^
 >x : Record2<"a", T>
 >  : ^^^^^^^^^^^^^^^
 >y : Record2<string, T>
@@ -115,8 +115,8 @@ function customRecord2<T>(x: Record2<'a', T>, y: Record2<string, T>) {
 }
 
 function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
->mixed3 : <T>(x: Record2<'a', T>, y: Record<string, T>) => void
->       : ^ ^^^^^               ^^^^^                 ^^^^^^^^^
+>mixed3 : <T>(x: Record2<"a", T>, y: Record<string, T>) => void
+>       : ^ ^^ ^^               ^^ ^^                 ^^^^^^^^^
 >x : Record2<"a", T>
 >  : ^^^^^^^^^^^^^^^
 >y : Record<string, T>
@@ -132,8 +132,8 @@ function mixed3<T>(x: Record2<'a', T>, y: Record<string, T>) {
 }
 
 function mixed4<T>(x: Record<'a', T>, y: Record2<string, T>) {
->mixed4 : <T>(x: Record<'a', T>, y: Record2<string, T>) => void
->       : ^ ^^^^^              ^^^^^                  ^^^^^^^^^
+>mixed4 : <T>(x: Record<"a", T>, y: Record2<string, T>) => void
+>       : ^ ^^ ^^              ^^ ^^                  ^^^^^^^^^
 >x : Record<"a", T>
 >  : ^^^^^^^^^^^^^^
 >y : Record2<string, T>

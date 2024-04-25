@@ -12,11 +12,11 @@ interface Robot {
 }
 declare var console: {
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
->    : ^^^^^^      ^^^^^    
+>    : ^   ^^      ^^^^^    
 >msg : string
 >    : ^^^^^^
 }
@@ -228,11 +228,11 @@ if (nameA == nameB) {
 >console.log(skillB) : void
 >                    : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >skillB : string
 >       : ^^^^^^
 }
@@ -241,11 +241,11 @@ else {
 >console.log(nameC) : void
 >                   : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >nameC : string
 >      : ^^^^^^
 }

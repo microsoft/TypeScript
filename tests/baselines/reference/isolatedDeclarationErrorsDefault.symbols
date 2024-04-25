@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsDefault.ts] ////
+
+=== a.ts ===
+
+export default 1 + 1;
+
+
+=== b.ts ===
+export default { foo: 1 + 1 };
+>foo : Symbol(foo, Decl(b.ts, 0, 16))
+
+=== c.ts ===
+export default [{ foo: 1 + 1 }];
+>foo : Symbol(foo, Decl(c.ts, 0, 17))
+
+=== d.ts ===
+export default [{ foo: 1 + 1 }] as const;
+>foo : Symbol(foo, Decl(d.ts, 0, 17))
+>const : Symbol(const)
+
+=== e.ts ===
+export default [{ foo: 1 + 1 }] as const;
+>foo : Symbol(foo, Decl(e.ts, 0, 17))
+>const : Symbol(const)
+
+=== f.ts ===
+const a = { foo: 1 };
+>a : Symbol(a, Decl(f.ts, 0, 5))
+>foo : Symbol(foo, Decl(f.ts, 0, 11))
+
+export default a;
+>a : Symbol(a, Decl(f.ts, 0, 5))
+
