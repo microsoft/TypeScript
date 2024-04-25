@@ -2775,8 +2775,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             scanExpectedChar(CharacterCodes.greaterThan);
                         }
                         else {
-                            // This actually is allowed in Annex B if there are no named capturing groups in the regex,
-                            // but if we were going to slience these errors, we would have to record the positions of all '\k's
+                            // This is actually allowed in Annex B if there are no named capturing groups in the regex,
+                            // but if we were going to suppress these errors, we would have to record the positions of all '\k's
                             // and defer the errors until after the scanning to know if the regex has any named capturing groups.
                             error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                         }
