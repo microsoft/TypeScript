@@ -1,0 +1,22 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/index.js ===
+// const Core = {}
+// 
+// <|Core.[|Test|]|> = class { }
+// 
+// Core.Test.prototype.foo = 10
+// 
+// new Core.Tes/*GOTO DEF*/t()
+
+  // === Details ===
+  [
+   {
+    "kind": "property",
+    "name": "Test",
+    "containerName": "Core",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

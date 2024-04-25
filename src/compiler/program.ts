@@ -126,6 +126,7 @@ import {
     getLineStarts,
     getMatchedFileSpec,
     getMatchedIncludeSpec,
+    getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
@@ -307,7 +308,6 @@ import {
     SyntaxKind,
     sys,
     System,
-    targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
@@ -4234,6 +4234,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
+        if (options.isolatedDeclarations) {
+            if (getAllowJSCompilerOption(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "isolatedDeclarations");
+            }
+            if (!getEmitDeclarations(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "isolatedDeclarations", "declaration", "composite");
+            }
+        }
+
         if (options.inlineSourceMap) {
             if (options.sourceMap) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "sourceMap", "inlineSourceMap");
@@ -4771,7 +4780,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     message = Diagnostics.File_is_library_specified_here;
                     break;
                 }
-                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+                const target = getNameOfScriptTarget(getEmitScriptTarget(options));
                 configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
                 message = Diagnostics.File_is_default_library_for_target_specified_here;
                 break;

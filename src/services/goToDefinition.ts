@@ -9,7 +9,6 @@ import {
     createTextSpanFromBounds,
     createTextSpanFromNode,
     createTextSpanFromRange,
-    Debug,
     Declaration,
     DefinitionInfo,
     DefinitionInfoAndBoundSpan,
@@ -581,16 +580,20 @@ function isExpandoDeclaration(node: Declaration): boolean {
 
 function getDefinitionFromSymbol(typeChecker: TypeChecker, symbol: Symbol, node: Node, failedAliasResolution?: boolean, excludeDeclaration?: Node): DefinitionInfo[] | undefined {
     const filteredDeclarations = filter(symbol.declarations, d => d !== excludeDeclaration);
+    const signatureDefinition = getConstructSignatureDefinition() || getCallSignatureDefinition();
+    if (signatureDefinition) {
+        return signatureDefinition;
+    }
     const withoutExpandos = filter(filteredDeclarations, d => !isExpandoDeclaration(d));
     const results = some(withoutExpandos) ? withoutExpandos : filteredDeclarations;
-    return getConstructSignatureDefinition() || getCallSignatureDefinition() || map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
+    return map(results, declaration => createDefinitionInfo(declaration, typeChecker, symbol, node, /*unverified*/ false, failedAliasResolution));
 
     function getConstructSignatureDefinition(): DefinitionInfo[] | undefined {
         // Applicable only if we are in a new expression, or we are on a constructor declaration
         // and in either case the symbol has a construct signature definition, i.e. class
         if (symbol.flags & SymbolFlags.Class && !(symbol.flags & (SymbolFlags.Function | SymbolFlags.Variable)) && (isNewExpressionTarget(node) || node.kind === SyntaxKind.ConstructorKeyword)) {
-            const cls = find(filteredDeclarations, isClassLike) || Debug.fail("Expected declaration to have at least one class-like declaration");
-            return getSignatureDefinition(cls.members, /*selectConstructors*/ true);
+            const cls = find(filteredDeclarations, isClassLike);
+            return cls && getSignatureDefinition(cls.members, /*selectConstructors*/ true);
         }
     }
 

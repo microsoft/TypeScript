@@ -29,6 +29,7 @@ jobs:
           - windows-latest
           - macos-14
         node-version:
+          - '22'
           - '20'
           - '18'
           - '16'
@@ -154,6 +155,7 @@ jobs:
 
       - run: npx hereby lkg
       - run: |
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack
           mv typescript*.tgz typescript.tgz
           echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
