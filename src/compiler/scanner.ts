@@ -76,6 +76,8 @@ export interface Scanner {
     getTokenFlags(): TokenFlags;
     reScanGreaterToken(): SyntaxKind;
     reScanSlashToken(): SyntaxKind;
+    /** @internal */
+    reScanSlashToken(reportErrors?: boolean): SyntaxKind; // eslint-disable-line @typescript-eslint/unified-signatures
     reScanAsteriskEqualsToken(): SyntaxKind;
     reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
     /** @deprecated use {@link reScanTemplateToken}(false) */
@@ -1484,7 +1486,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     //     | [0-3] [0-7] [0-7]?
     //     | [4-7] [0-7]
     // NonOctalDecimalEscapeSequence ::= [89]
-    function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean): string {
+    function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean | "annex-b"): string {
         const start = pos;
         pos++;
         if (pos >= end) {
@@ -1523,7 +1525,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (isRegularExpression || shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    if (isRegularExpression !== "annex-b") {
+                        error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
+                    }
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);
@@ -1559,7 +1563,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 ) {
                     // '\u{DDDDDD}'
                     pos -= 2;
-                    return scanExtendedUnicodeEscape(isRegularExpression || shouldEmitInvalidEscapeError);
+                    return scanExtendedUnicodeEscape(!!isRegularExpression || shouldEmitInvalidEscapeError);
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
@@ -1623,7 +1627,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.paragraphSeparator:
                 return "";
             default:
-                if (isRegularExpression && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
+                if (isRegularExpression === true && (shouldEmitInvalidEscapeError || isIdentifierPart(ch, languageVersion))) {
                     error(Diagnostics.This_character_cannot_be_escaped_in_a_regular_expression, pos - 2, 2);
                 }
                 return String.fromCharCode(ch);
@@ -2386,7 +2390,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token = SyntaxKind.EqualsToken;
     }
 
-    function reScanSlashToken(): SyntaxKind {
+    function reScanSlashToken(reportErrors?: boolean): SyntaxKind {
         if (token === SyntaxKind.SlashToken || token === SyntaxKind.SlashEqualsToken) {
             // Quickly get to the end of regex such that we know the flags
             let p = tokenStart + 1;
@@ -2444,44 +2448,57 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 if (!isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
-                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
-                if (flag === undefined) {
-                    error(Diagnostics.Unknown_regular_expression_flag, p, 1);
-                }
-                else if (regExpFlags & flag) {
-                    error(Diagnostics.Duplicate_regular_expression_flag, p, 1);
-                }
-                else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
-                    error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, p, 1);
-                }
-                else {
-                    regExpFlags |= flag;
-                    const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
-                    if (languageVersion < availableFrom) {
-                        error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
+                if (reportErrors) {
+                    const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                    if (flag === undefined) {
+                        error(Diagnostics.Unknown_regular_expression_flag, p, 1);
+                    }
+                    else if (regExpFlags & flag) {
+                        error(Diagnostics.Duplicate_regular_expression_flag, p, 1);
+                    }
+                    else if (((regExpFlags | flag) & RegularExpressionFlags.UnicodeMode) === RegularExpressionFlags.UnicodeMode) {
+                        error(Diagnostics.The_Unicode_u_flag_and_the_Unicode_Sets_v_flag_cannot_be_set_simultaneously, p, 1);
+                    }
+                    else {
+                        regExpFlags |= flag;
+                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
+                        if (languageVersion < availableFrom) {
+                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
+                        }
                     }
                 }
                 p++;
             }
-            pos = tokenStart + 1;
-            const saveTokenPos = tokenStart;
-            const saveTokenFlags = tokenFlags;
-            scanRegularExpressionWorker(text, endOfBody, regExpFlags, isUnterminated);
-            if (!isUnterminated) {
+            if (reportErrors) {
+                pos = tokenStart + 1;
+                const saveTokenPos = tokenStart;
+                const saveTokenFlags = tokenFlags;
+                scanRegularExpressionWorker(text, endOfBody, regExpFlags, isUnterminated, /*annexB*/ true);
+                if (!isUnterminated) {
+                    pos = p;
+                }
+                tokenStart = saveTokenPos;
+                tokenFlags = saveTokenFlags;
+            }
+            else {
                 pos = p;
             }
-            tokenStart = saveTokenPos;
-            tokenFlags = saveTokenFlags;
             tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
         }
         return token;
 
-        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean) {
-            /** Grammar parameter */
-            const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
+        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
             /** Grammar parameter */
             const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
+            /** Grammar parameter */
+            const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
+
+            if (unicodeMode) {
+                // Annex B treats any unicode mode as the strict syntax.
+                annexB = false;
+            }
+
             /** @see {scanClassSetExpression} */
             let mayContainStrings = false;
 
@@ -2571,7 +2588,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     case CharacterCodes.equals:
                                     case CharacterCodes.exclamation:
                                         pos++;
-                                        isPreviousTermQuantifiable = false;
+                                        // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
+                                        isPreviousTermQuantifiable = annexB;
                                         break;
                                     case CharacterCodes.lessThan:
                                         const groupNameStart = pos;
@@ -2763,7 +2781,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     default:
                         // The scanEscapeSequence call in scanCharacterEscape must return non-empty strings
                         // since there must not be line breaks in a regex literal
-                        Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape());
+                        Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape(/*atomEscape*/ true));
                         break;
                 }
             }
@@ -2788,7 +2806,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // IdentityEscape ::=
             //     | '^' | '$' | '/' | '\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
             //     | [~UnicodeMode] (any other non-identifier characters)
-            function scanCharacterEscape(): string {
+            function scanCharacterEscape(atomEscape: boolean): string {
                 Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
                 let ch = text.charCodeAt(pos);
                 switch (ch) {
@@ -2801,6 +2819,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                         if (unicodeMode) {
                             error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
+                        }
+                        else if (atomEscape && annexB) {
+                            // Annex B treats
+                            //
+                            //  ExtendedAtom : `\` [lookahead = `c`]
+                            //
+                            // as the single character `\` when `c` isn't followed by a valid control character
+                            pos--;
+                            return "\\";
                         }
                         return String.fromCharCode(ch);
                     case CharacterCodes.caret:
@@ -2826,7 +2853,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             return "\\";
                         }
                         pos--;
-                        return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ true);
+                        return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
                 }
             }
 
@@ -2873,12 +2900,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         if (isClassContentExit(ch)) {
                             return;
                         }
-                        if (!minCharacter) {
+                        if (!minCharacter && !annexB) {
                             error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
                         }
                         const maxStart = pos;
                         const maxCharacter = scanClassAtom();
-                        if (!maxCharacter) {
+                        if (!maxCharacter && !annexB) {
                             error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
                             continue;
                         }
@@ -3208,7 +3235,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             pos++;
                             return String.fromCharCode(ch);
                         default:
-                            return scanCharacterEscape();
+                            return scanCharacterEscape(/*atomEscape*/ false);
                     }
                 }
                 else if (ch === text.charCodeAt(pos + 1)) {
@@ -3275,7 +3302,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             if (scanCharacterClassEscape()) {
                                 return "";
                             }
-                            return scanCharacterEscape();
+                            return scanCharacterEscape(/*atomEscape*/ false);
                     }
                 }
                 else {
@@ -3407,12 +3434,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
             });
             forEach(decimalEscapes, escape => {
-                if (escape.value > numberOfCapturingGroups) {
+                // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
+                // either a LegacyOctalEscapeSequence or IdentityEscape
+                if (!annexB && escape.value > numberOfCapturingGroups) {
                     if (numberOfCapturingGroups) {
-                        error(Diagnostics.A_decimal_escape_must_refer_to_an_existent_capturing_group_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
+                        error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                     }
                     else {
-                        error(Diagnostics.Decimal_escapes_are_invalid_when_there_are_no_capturing_groups_in_a_regular_expression, escape.pos, escape.end - escape.pos);
+                        error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
                     }
                 }
             });
