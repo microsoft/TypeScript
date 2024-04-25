@@ -2463,10 +2463,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         regExpFlags |= flag;
-                        const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
-                        if (availableFrom && languageVersion < availableFrom) {
-                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
-                        }
+                        checkRegularExpressionFlagAvailable(flag, p);
                     }
                 }
                 p++;
@@ -2744,10 +2741,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         currFlags |= flag;
-                        const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
-                        if (availableFrom && languageVersion < availableFrom) {
-                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
-                        }
+                        checkRegularExpressionFlagAvailable(flag, pos);
                     }
                     pos++;
                 }
@@ -3447,6 +3441,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                 }
             });
+        }
+
+        function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+            const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
+            if (availableFrom && languageVersion < availableFrom) {
+                error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+            }
         }
     }
 
