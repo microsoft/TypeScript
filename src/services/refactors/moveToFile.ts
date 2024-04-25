@@ -108,7 +108,6 @@ import {
     isValidTypeOnlyAliasUseSite,
     isVariableDeclaration,
     isVariableDeclarationInitializedToRequire,
-    isVariableDeclarationList,
     isVariableStatement,
     LanguageServiceHost,
     last,
@@ -548,78 +547,18 @@ function isExported(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, 
 
 /** @internal */
 export function deleteUnusedImports(sourceFile: SourceFile, importDecl: SupportedImport, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
-    switch (importDecl.kind) {
-        case SyntaxKind.ImportDeclaration:
-            deleteUnusedImportsInDeclaration(sourceFile, importDecl, changes, isUnused);
-            break;
-        case SyntaxKind.ImportEqualsDeclaration:
-            if (isUnused(importDecl.name)) {
-                changes.delete(sourceFile, importDecl);
-            }
-            break;
-        case SyntaxKind.VariableDeclaration:
-            deleteUnusedImportsInVariableDeclaration(sourceFile, importDecl, changes, isUnused);
-            break;
-        default:
-            Debug.assertNever(importDecl, `Unexpected import decl kind ${(importDecl as SupportedImport).kind}`);
-    }
-}
-
-function deleteUnusedImportsInDeclaration(sourceFile: SourceFile, importDecl: ImportDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean): void {
-    if (!importDecl.importClause) return;
-    const { name, namedBindings } = importDecl.importClause;
-    const defaultUnused = !name || isUnused(name);
-    const namedBindingsUnused = !namedBindings ||
-        (namedBindings.kind === SyntaxKind.NamespaceImport ? isUnused(namedBindings.name) : namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)));
-    if (defaultUnused && namedBindingsUnused) {
-        changes.delete(sourceFile, importDecl);
-    }
-    else {
-        if (name && defaultUnused) {
-            changes.delete(sourceFile, name);
-        }
-        if (namedBindings) {
-            if (namedBindingsUnused) {
-                changes.replaceNode(
-                    sourceFile,
-                    importDecl.importClause,
-                    factory.updateImportClause(importDecl.importClause, importDecl.importClause.isTypeOnly, name, /*namedBindings*/ undefined),
-                );
-            }
-            else if (namedBindings.kind === SyntaxKind.NamedImports) {
-                for (const element of namedBindings.elements) {
-                    if (isUnused(element.name)) changes.delete(sourceFile, element);
-                }
-            }
+    if (importDecl.kind === SyntaxKind.ImportDeclaration && importDecl.importClause) {
+        const { name, namedBindings } = importDecl.importClause;
+        if ((!name || isUnused(name)) && (!namedBindings || namedBindings.kind === SyntaxKind.NamedImports && namedBindings.elements.length !== 0 && namedBindings.elements.every(e => isUnused(e.name)))) {
+            return changes.delete(sourceFile, importDecl);
         }
     }
-}
 
-function deleteUnusedImportsInVariableDeclaration(sourceFile: SourceFile, varDecl: VariableDeclaration, changes: textChanges.ChangeTracker, isUnused: (name: Identifier) => boolean) {
-    const { name } = varDecl;
-    switch (name.kind) {
-        case SyntaxKind.Identifier:
-            if (isUnused(name)) {
-                if (varDecl.initializer && isRequireCall(varDecl.initializer, /*requireStringLiteralLikeArgument*/ true)) {
-                    changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && length(varDecl.parent.declarations) === 1 ? varDecl.parent.parent : varDecl);
-                }
-            }
-            break;
-        case SyntaxKind.ArrayBindingPattern:
-            break;
-        case SyntaxKind.ObjectBindingPattern:
-            if (name.elements.every(e => isIdentifier(e.name) && isUnused(e.name))) {
-                changes.delete(sourceFile, isVariableDeclarationList(varDecl.parent) && varDecl.parent.declarations.length === 1 ? varDecl.parent.parent : varDecl);
-            }
-            else {
-                for (const element of name.elements) {
-                    if (isIdentifier(element.name) && isUnused(element.name)) {
-                        changes.delete(sourceFile, element.name);
-                    }
-                }
-            }
-            break;
-    }
+    forEachAliasDeclarationInImportOrRequire(importDecl, i => {
+        if (i.name && isIdentifier(i.name) && isUnused(i.name)) {
+            changes.delete(sourceFile, i);
+        }
+    });
 }
 
 /** @internal */
