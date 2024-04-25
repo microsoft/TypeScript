@@ -302,10 +302,6 @@ const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
-function getRegExpFlagToFirstAvailableLanguageVersion(flag: RegularExpressionFlags) {
-    return regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
-}
-
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
     IdentifierStart ::
@@ -3444,7 +3440,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
-            const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
+            const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
             if (availableFrom && languageVersion < availableFrom) {
                 error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
             }
