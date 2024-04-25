@@ -76,6 +76,22 @@ describe("unittests:: internalApi:: diagnosticCollection", () => {
             const result = collection.getDiagnostics();
             assert.deepEqual(result, [da, dyBetter]);
         });
+
+        it("considers canonical diagnostics in equivalence", () => {
+            const collection = ts.createDiagnosticCollection();
+            const file = ts.createSourceFile("index.ts", "const x = 1", ts.ScriptTarget.ESNext, /*setParentNodes*/ true);
+            const node = file.statements[0];
+
+            const withoutSuggestion = ts.createDiagnosticForNode(node, ts.Diagnostics.Cannot_find_name_0, "x");
+            const withSuggestion = ts.createDiagnosticForNode(node, ts.Diagnostics.Cannot_find_name_0_Did_you_mean_1, "x", "y");
+            withSuggestion.canonicalHead = ts.getCanonicalDiagnostic(ts.Diagnostics.Cannot_find_name_0, "x");
+
+            collection.add(withoutSuggestion);
+            collection.add(withSuggestion);
+
+            const result = collection.getDiagnostics();
+            assert.deepEqual(result, [withSuggestion]);
+        });
     });
 
     describe("lookup", () => {

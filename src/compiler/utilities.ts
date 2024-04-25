@@ -8578,12 +8578,24 @@ function compareMessageText(
     const chain1 = typeof d1.messageText !== "string" ? d1.messageText.next : undefined;
     const chain2 = typeof d2.messageText !== "string" ? d2.messageText.next : undefined;
 
-    const res = compareStringsCaseSensitive(headMsg1, headMsg2);
+    let res = compareStringsCaseSensitive(headMsg1, headMsg2);
     if (res) {
         return res;
     }
 
-    return compareMessageChain(chain1, chain2);
+    res = compareMessageChain(chain1, chain2);
+    if (res) {
+        return res;
+    }
+
+    if (d1.canonicalHead && !d2.canonicalHead) {
+        return Comparison.LessThan;
+    }
+    if (d2.canonicalHead && !d1.canonicalHead) {
+        return Comparison.GreaterThan;
+    }
+
+    return Comparison.EqualTo;
 }
 
 // First compare by size of the message chain,
