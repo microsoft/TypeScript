@@ -23090,7 +23090,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // This is only applied during the strictSubtypeRelation -- currently used in subtype reduction
             if (
                 (relation === strictSubtypeRelation || enforceReadonly) &&
-                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp)
+                isReadonlySymbol(sourceProp) && !isReadonlySymbol(targetProp) && !(targetProp.flags & SymbolFlags.Method)
             ) {
                 if (reportErrors) {
                     reportError(Diagnostics.Property_0_is_readonly_in_the_source_but_not_in_the_target, symbolToString(targetProp));
