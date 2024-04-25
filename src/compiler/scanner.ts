@@ -19,6 +19,7 @@ import {
     JSDocSyntaxKind,
     JsxTokenSyntaxKind,
     KeywordSyntaxKind,
+    LanguageFeatureMinimumTarget,
     LanguageVariant,
     last,
     LineAndCharacter,
@@ -293,15 +294,12 @@ const charToRegExpFlag = new Map(Object.entries({
     y: RegularExpressionFlags.Sticky,
 }));
 
-const regExpFlagToFirstAvailableLanguageVersion = new Map([
-    [RegularExpressionFlags.HasIndices, ScriptTarget.ES2022],
-    [RegularExpressionFlags.Global, ScriptTarget.ES3],
-    [RegularExpressionFlags.IgnoreCase, ScriptTarget.ES3],
-    [RegularExpressionFlags.Multiline, ScriptTarget.ES3],
-    [RegularExpressionFlags.DotAll, ScriptTarget.ES2018],
-    [RegularExpressionFlags.Unicode, ScriptTarget.ES2015],
-    [RegularExpressionFlags.UnicodeSets, ScriptTarget.ESNext],
-    [RegularExpressionFlags.Sticky, ScriptTarget.ES2015],
+const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
+    [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
+    [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
+    [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
+    [RegularExpressionFlags.UnicodeSets, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicodeSets],
+    [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
 
 /*
@@ -2461,10 +2459,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         regExpFlags |= flag;
-                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
-                        if (languageVersion < availableFrom) {
-                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
-                        }
+                        checkRegularExpressionFlagAvailable(flag, p);
                     }
                 }
                 p++;
@@ -2742,10 +2737,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         currFlags |= flag;
-                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)!;
-                        if (languageVersion < availableFrom) {
-                            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
-                        }
+                        checkRegularExpressionFlagAvailable(flag, pos);
                     }
                     pos++;
                 }
@@ -3445,6 +3437,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                 }
             });
+        }
+
+        function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+            const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
+            if (availableFrom && languageVersion < availableFrom) {
+                error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+            }
         }
     }
 

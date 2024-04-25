@@ -1,40 +1,31 @@
 import {
     ApplicableRefactorInfo,
     codefix,
+    createFutureSourceFile,
     Debug,
     Diagnostics,
     emptyArray,
-    fileShouldUseJavaScriptRequire,
     getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
-    getQuotePreference,
     hostGetCanonicalFileName,
-    isPrologueDirective,
     LanguageServiceHost,
     last,
+    ModuleKind,
     Program,
     RefactorContext,
     RefactorEditInfo,
     SourceFile,
-    SyntaxKind,
-    takeWhile,
     textChanges,
     UserPreferences,
 } from "../_namespaces/ts";
 import {
-    addExports,
     addNewFileToTsconfig,
     createNewFileName,
-    deleteMovedStatements,
-    deleteUnusedOldImports,
+    getNewStatementsAndRemoveFromOldFile,
     getStatementsToMove,
-    getTargetFileImportsAndAddExportInOldFile,
     getUsageInfo,
-    makeImportOrRequire,
     registerRefactor,
     ToMove,
-    updateImportsInOtherFiles,
-    UsageInfo,
 } from "../_namespaces/ts.refactor";
 
 const refactorName = "Move to a new file";
@@ -65,65 +56,19 @@ registerRefactor(refactorName, {
     getEditsForAction: function getRefactorEditsToMoveToNewFile(context, actionName): RefactorEditInfo {
         Debug.assert(actionName === refactorName, "Wrong refactor invoked");
         const statements = Debug.checkDefined(getStatementsToMove(context));
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(context, context.file, context.program, statements, t, context.host, context.preferences));
+        const edits = textChanges.ChangeTracker.with(context, t => doChange(context.file, context.program, statements, t, context.host, context, context.preferences));
         return { edits, renameFilename: undefined, renameLocation: undefined };
     },
 });
 
-function doChange(context: RefactorContext, oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, preferences: UserPreferences): void {
+function doChange(oldFile: SourceFile, program: Program, toMove: ToMove, changes: textChanges.ChangeTracker, host: LanguageServiceHost, context: RefactorContext, preferences: UserPreferences): void {
     const checker = program.getTypeChecker();
     const usage = getUsageInfo(oldFile, toMove.all, checker);
     const newFilename = createNewFileName(oldFile, program, host, toMove);
+    const newSourceFile = createFutureSourceFile(newFilename, oldFile.externalModuleIndicator ? ModuleKind.ESNext : oldFile.commonJsModuleIndicator ? ModuleKind.CommonJS : undefined, program, host);
+
     const importAdderForOldFile = codefix.createImportAdder(oldFile, context.program, context.preferences, context.host);
-    // If previous file was global, this is easy.
-    changes.createNewFile(oldFile, newFilename, getNewStatementsAndRemoveFromOldFile(oldFile, usage, changes, toMove, program, host, newFilename, preferences, importAdderForOldFile));
-
+    const importAdderForNewFile = codefix.createImportAdder(newSourceFile, context.program, context.preferences, context.host);
+    getNewStatementsAndRemoveFromOldFile(oldFile, newSourceFile, usage, changes, toMove, program, host, preferences, importAdderForNewFile, importAdderForOldFile);
     addNewFileToTsconfig(program, changes, oldFile.fileName, newFilename, hostGetCanonicalFileName(host));
-}
-
-function getNewStatementsAndRemoveFromOldFile(
-    oldFile: SourceFile,
-    usage: UsageInfo,
-    changes: textChanges.ChangeTracker,
-    toMove: ToMove,
-    program: Program,
-    host: LanguageServiceHost,
-    newFilename: string,
-    preferences: UserPreferences,
-    importAdderForOldFile?: codefix.ImportAdder,
-) {
-    const checker = program.getTypeChecker();
-    const prologueDirectives = takeWhile(oldFile.statements, isPrologueDirective);
-    if (oldFile.externalModuleIndicator === undefined && oldFile.commonJsModuleIndicator === undefined && usage.oldImportsNeededByTargetFile.size === 0) {
-        deleteMovedStatements(oldFile, toMove.ranges, changes);
-        return [...prologueDirectives, ...toMove.all];
-    }
-
-    const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(newFilename, program, host, !!oldFile.commonJsModuleIndicator);
-    const quotePreference = getQuotePreference(oldFile, preferences);
-    makeImportOrRequire(oldFile, /*defaultImport*/ undefined, /*imports*/ [], newFilename, program, host, useEsModuleSyntax, quotePreference, Array.from(usage.oldFileImportsFromTargetFile), importAdderForOldFile, oldFile);
-    if (importAdderForOldFile) {
-        importAdderForOldFile.writeFixes(changes, quotePreference);
-    }
-
-    deleteUnusedOldImports(oldFile, toMove.all, changes, usage.unusedImportsFromOldFile, checker);
-    deleteMovedStatements(oldFile, toMove.ranges, changes);
-    updateImportsInOtherFiles(changes, program, host, oldFile, usage.movedSymbols, newFilename, quotePreference);
-
-    const imports = getTargetFileImportsAndAddExportInOldFile(oldFile, newFilename, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, checker, program, host, useEsModuleSyntax, quotePreference);
-    const body = addExports(oldFile, toMove.all, usage.oldFileImportsFromTargetFile, useEsModuleSyntax);
-    if (imports.length && body.length) {
-        return [
-            ...prologueDirectives,
-            ...imports,
-            SyntaxKind.NewLineTrivia as const,
-            ...body,
-        ];
-    }
-
-    return [
-        ...prologueDirectives,
-        ...imports,
-        ...body,
-    ];
 }
