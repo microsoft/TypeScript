@@ -1,6 +1,6 @@
 callbackAssignabilityErrorMessage.ts(31,1): error TS2322: Type 'Source1' is not assignable to type 'Target'.
-  The types returned by 'map(...)' are incompatible between these types.
-    Type '(T | undefined)[]' is not assignable to type 'T[]'.
+  Types of property 'map' are incompatible.
+    Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
       Type 'T | undefined' is not assignable to type 'T'.
         'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.
 
@@ -39,7 +39,7 @@ callbackAssignabilityErrorMessage.ts(31,1): error TS2322: Type 'Source1' is not 
     t = s1; // Bad:  instantiates `S` with `T | undefined`, fails `map` return type assignability
     ~
 !!! error TS2322: Type 'Source1' is not assignable to type 'Target'.
-!!! error TS2322:   The types returned by 'map(...)' are incompatible between these types.
-!!! error TS2322:     Type '(T | undefined)[]' is not assignable to type 'T[]'.
+!!! error TS2322:   Types of property 'map' are incompatible.
+!!! error TS2322:     Types of parameters 'callbackfn' and 'callbackfn' are incompatible.
 !!! error TS2322:       Type 'T | undefined' is not assignable to type 'T'.
 !!! error TS2322:         'T' could be instantiated with an arbitrary type which could be unrelated to 'T | undefined'.

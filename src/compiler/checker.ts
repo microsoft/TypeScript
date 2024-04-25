@@ -33856,7 +33856,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const sourceSignature = mapper ? instantiateSignature(contextualSignature, mapper) : contextualSignature;
         applyToParameterTypes(sourceSignature, signature, (source, target) => {
             // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
-            inferTypes(context.inferences, source, target);
+            inferTypes(context.inferences, source, target, /*priority*/ undefined, /*contravariant*/ strictFunctionTypes);
         });
         if (!inferenceContext) {
             applyToReturnTypes(contextualSignature, signature, (source, target) => {
