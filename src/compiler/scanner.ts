@@ -2638,6 +2638,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             const digitsStart = pos;
                             scanDigits();
                             const min = tokenValue;
+                            if (annexB && !min) {
+                                isPreviousTermQuantifiable = true;
+                                break;
+                            }
                             if (text.charCodeAt(pos) === CharacterCodes.comma) {
                                 pos++;
                                 scanDigits();
@@ -2647,25 +2651,28 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                         error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
                                     }
                                     else {
-                                        if (unicodeMode) {
-                                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                        }
+                                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                                         isPreviousTermQuantifiable = true;
                                         break;
                                     }
                                 }
-                                if (max && Number.parseInt(min) > Number.parseInt(max)) {
+                                else if (max && Number.parseInt(min) > Number.parseInt(max) && (!annexB || text.charCodeAt(pos) === CharacterCodes.closeBrace)) {
                                     error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                                 }
                             }
                             else if (!min) {
-                                if (unicodeMode) {
+                                if (!annexB) {
                                     error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                                 }
                                 isPreviousTermQuantifiable = true;
                                 break;
                             }
-                            scanExpectedChar(CharacterCodes.closeBrace);
+                            if (!annexB) {
+                                scanExpectedChar(CharacterCodes.closeBrace);
+                            }
+                            else if (text.charCodeAt(pos) === CharacterCodes.closeBrace) {
+                                pos++;
+                            }
                             pos--;
                         // falls through
                         case CharacterCodes.asterisk:
@@ -2707,7 +2714,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 // Assume what starting from the character to be outside of the regex
                                 return;
                             }
-                            if (unicodeMode || ch === CharacterCodes.closeParen) {
+                            if (!annexB || ch === CharacterCodes.closeParen) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                             }
                             pos++;
@@ -2767,7 +2774,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             scanGroupName(/*isReference*/ true);
                             scanExpectedChar(CharacterCodes.greaterThan);
                         }
-                        else if (unicodeMode) {
+                        else {
+                            // This actually is allowed in Annex B if there are no named capturing groups in the regex,
+                            // but if we were going to slience these errors, we would have to record the positions of all '\k's
+                            // and defer the errors until after the scanning to know if the regex has any named capturing groups.
                             error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                         }
                         break;
@@ -3390,7 +3400,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                             }
                         }
-                        else if (unicodeMode) {
+                        else if (!annexB) {
                             error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
                         }
                         return true;
