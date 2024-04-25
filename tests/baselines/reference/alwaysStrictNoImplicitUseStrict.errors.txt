@@ -1,8 +1,8 @@
-error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 alwaysStrictNoImplicitUseStrict.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
 
 
-!!! error TS5102: Option 'noImplicitUseStrict' has been removed. Please remove it from your configuration.
+!!! error TS5101: Option 'noImplicitUseStrict' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== alwaysStrictNoImplicitUseStrict.ts (1 errors) ====
     module M {
         export function f() {
