@@ -8218,11 +8218,6 @@ export type EmitHelperUniqueNameCallback = (name: string) => string;
  * @internal
  */
 export const enum LanguageFeatureMinimumTarget {
-    // ES3 Features
-    RegularExpressionFlagsGlobal = ScriptTarget.ES3,
-    RegularExpressionFlagsIgnoreCase = ScriptTarget.ES3,
-    RegularExpressionFlagsMultiline = ScriptTarget.ES3,
-
     // ES2015 Features
     Classes = ScriptTarget.ES2015,
     ForOf = ScriptTarget.ES2015,

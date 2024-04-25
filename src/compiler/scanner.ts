@@ -296,14 +296,15 @@ const charToRegExpFlag = new Map(Object.entries({
 
 const regExpFlagToFirstAvailableLanguageVersion = new Map<RegularExpressionFlags, LanguageFeatureMinimumTarget>([
     [RegularExpressionFlags.HasIndices, LanguageFeatureMinimumTarget.RegularExpressionFlagsHasIndices],
-    [RegularExpressionFlags.Global, LanguageFeatureMinimumTarget.RegularExpressionFlagsGlobal],
-    [RegularExpressionFlags.IgnoreCase, LanguageFeatureMinimumTarget.RegularExpressionFlagsIgnoreCase],
-    [RegularExpressionFlags.Multiline, LanguageFeatureMinimumTarget.RegularExpressionFlagsMultiline],
     [RegularExpressionFlags.DotAll, LanguageFeatureMinimumTarget.RegularExpressionFlagsDotAll],
     [RegularExpressionFlags.Unicode, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicode],
     [RegularExpressionFlags.UnicodeSets, LanguageFeatureMinimumTarget.RegularExpressionFlagsUnicodeSets],
     [RegularExpressionFlags.Sticky, LanguageFeatureMinimumTarget.RegularExpressionFlagsSticky],
 ]);
+
+function getRegExpFlagToFirstAvailableLanguageVersion(flag: RegularExpressionFlags) {
+    return regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
+}
 
 /*
     As per ECMAScript Language Specification 5th Edition, Section 7.6: ISyntaxToken Names and Identifiers
@@ -2462,8 +2463,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         regExpFlags |= flag;
-                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)! as unknown as ScriptTarget;
-                        if (languageVersion < availableFrom) {
+                        const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
+                        if (availableFrom && languageVersion < availableFrom) {
                             error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, p, 1, getNameOfScriptTarget(availableFrom));
                         }
                     }
@@ -2743,8 +2744,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     else {
                         currFlags |= flag;
-                        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag)! as unknown as ScriptTarget;
-                        if (languageVersion < availableFrom) {
+                        const availableFrom = getRegExpFlagToFirstAvailableLanguageVersion(flag);
+                        if (availableFrom && languageVersion < availableFrom) {
                             error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
                         }
                     }
