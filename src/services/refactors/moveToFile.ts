@@ -1,5 +1,6 @@
 import { getModuleSpecifier } from "../../compiler/moduleSpecifiers";
 import {
+    AnyImportOrRequireStatement,
     ApplicableRefactorInfo,
     arrayFrom,
     AssignmentDeclarationKind,
@@ -479,43 +480,20 @@ export function makeImportOrRequire(
     host: LanguageServiceHost,
     useEs6Imports: boolean,
     quotePreference: QuotePreference,
-    symbols?: Symbol[],
-    importAdder?: codefix.ImportAdder,
-    importingSourceFile?: SourceFile,
-) {
-    const pathToTargetFile = resolvePath(getDirectoryPath(sourceFile.path), targetFileNameWithExtension);
-    const pathToTargetFileWithCorrectExtension = importingSourceFile ? getModuleSpecifier(program.getCompilerOptions(), importingSourceFile, importingSourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host)) :
-        getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
+): AnyImportOrRequireStatement | undefined {
+    const pathToTargetFile = resolvePath(getDirectoryPath(getNormalizedAbsolutePath(sourceFile.fileName, program.getCurrentDirectory())), targetFileNameWithExtension);
+    const pathToTargetFileWithCorrectExtension = getModuleSpecifier(program.getCompilerOptions(), sourceFile, sourceFile.fileName, pathToTargetFile, createModuleSpecifierResolutionHost(program, host));
 
     if (useEs6Imports) {
-        if (importAdder && symbols && importingSourceFile) {
-            for (const symbol of symbols) {
-                if (importAdder) {
-                    importAdder.addImportFromSymbol(symbol, /*isValidTypeOnlyUseSite*/ false, pathToTargetFileWithCorrectExtension, sourceFile);
-                }
-            }
-        }
-        else {
-            const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
-            const newImports = makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
-            return newImports;
-        }
+        const specifiers = imports.map(i => factory.createImportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, factory.createIdentifier(i)));
+        return makeImportIfNecessary(defaultImport, specifiers, pathToTargetFileWithCorrectExtension, quotePreference);
     }
     else {
-        if (importAdder && symbols && importingSourceFile) {
-            for (const symbol of symbols) {
-                if (importAdder) {
-                    importAdder.addImportFromSymbol(symbol, /*isValidTypeOnlyUseSite*/ false, pathToTargetFileWithCorrectExtension, sourceFile);
-                }
-            }
-        }
-        else {
-            Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
-            const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
-            return bindingElements.length
-                ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
-                : undefined;
-        }
+        Debug.assert(!defaultImport, "No default import should exist"); // If there's a default export, it should have been an es6 module.
+        const bindingElements = imports.map(i => factory.createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, i));
+        return bindingElements.length
+            ? makeVariableStatement(factory.createObjectBindingPattern(bindingElements), /*type*/ undefined, createRequireCall(makeStringLiteral(pathToTargetFileWithCorrectExtension, quotePreference))) as RequireVariableStatement
+            : undefined;
     }
 }
 

@@ -715,7 +715,6 @@ export function createImportSpecifierResolver(importingFile: SourceFile, program
             importingFile,
             host,
             preferences,
-            /*targetFileImportFrom*/ undefined,
             importMap,
             fromCacheOnly,
         );
@@ -856,7 +855,7 @@ export function getPromoteTypeOnlyCompletionAction(sourceFile: SourceFile, symbo
 
 function getImportFixForSymbol(sourceFile: SourceFile | FutureSourceFile, exportInfos: readonly SymbolExportInfo[], program: Program, position: number | undefined, isValidTypeOnlyUseSite: boolean, useRequire: boolean, host: LanguageServiceHost, preferences: UserPreferences) {
     const packageJsonImportFilter = createPackageJsonImportFilter(sourceFile, preferences, host);
-    return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences, targetFileImportFrom).fixes, sourceFile, program, packageJsonImportFilter, host);
+    return getBestFix(getImportFixes(exportInfos, position, isValidTypeOnlyUseSite, useRequire, program, sourceFile, host, preferences).fixes, sourceFile, program, packageJsonImportFilter, host);
 }
 
 function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAction): CodeAction {
@@ -933,7 +932,6 @@ function getImportFixes(
         host,
         preferences,
         fromCacheOnly,
-        targetFileImportFrom,
     );
     return {
         computedWithoutCacheCount,
@@ -1289,12 +1287,6 @@ function sortFixInfo(fixes: readonly (FixInfo & { fix: ImportFixWithModuleSpecif
         compareBooleans(!!a.isJsxNamespaceFix, !!b.isJsxNamespaceFix) ||
         compareValues(a.fix.kind, b.fix.kind) ||
         compareModuleSpecifiers(a.fix, b.fix, sourceFile, program, packageJsonImportFilter.allowsImportingSpecifier, _toPath));
-}
-
-function getFixInfosWithoutDiagnostic(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly FixInfo[] | undefined {
-    const info = getFixesInfoForNonUMDImport(context, symbolToken, useAutoImportProvider);
-    const packageJsonImportFilter = createPackageJsonImportFilter(context.sourceFile, context.preferences, context.host);
-    return info && sortFixInfo(info, context.sourceFile, context.program, packageJsonImportFilter, context.host);
 }
 
 function getFixInfosWithoutDiagnostic(context: CodeFixContextBase, symbolToken: Identifier, useAutoImportProvider: boolean): readonly FixInfo[] | undefined {
