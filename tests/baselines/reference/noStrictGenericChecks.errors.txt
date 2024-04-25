@@ -1,11 +1,11 @@
-error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
+error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 noStrictGenericChecks.ts(5,5): error TS2322: Type 'B' is not assignable to type 'A'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'U' is not assignable to type 'T'.
       'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 
 
-!!! error TS5102: Option 'noStrictGenericChecks' has been removed. Please remove it from your configuration.
+!!! error TS5101: Option 'noStrictGenericChecks' is deprecated and will stop functioning in TypeScript 5.5. Specify compilerOption '"ignoreDeprecations": "5.0"' to silence this error.
 ==== noStrictGenericChecks.ts (1 errors) ====
     type A = <T, U>(x: T, y: U) => [T, U];
     type B = <S>(x: S, y: S) => [S, S];

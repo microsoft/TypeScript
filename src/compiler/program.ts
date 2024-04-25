@@ -4569,6 +4569,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function checkDeprecations(
         deprecatedIn: string,
+        stopsWorkingIn: string,
         removedIn: string,
         createDiagnostic: (name: string, value: string | undefined, useInstead: string | undefined, message: DiagnosticMessage, ...args: DiagnosticArguments) => void,
         fn: (createDeprecatedDiagnostic: (name: string, value?: string, useInstead?: string) => void) => void,
@@ -4593,10 +4594,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
                 else {
                     if (value === undefined) {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, removedIn, deprecatedIn);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_is_deprecated_and_will_stop_functioning_in_TypeScript_1_Specify_compilerOption_ignoreDeprecations_Colon_2_to_silence_this_error, name, stopsWorkingIn, deprecatedIn);
                     }
                     else {
-                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, removedIn, deprecatedIn);
+                        createDiagnostic(name, value, useInstead, Diagnostics.Option_0_1_is_deprecated_and_will_stop_functioning_in_TypeScript_2_Specify_compilerOption_ignoreDeprecations_Colon_3_to_silence_this_error, name, value, stopsWorkingIn, deprecatedIn);
                     }
                 }
             });
@@ -4615,7 +4616,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         }
 
-        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+        checkDeprecations("5.0", "5.5", "6.0", createDiagnostic, createDeprecatedDiagnostic => {
             if (options.target === ScriptTarget.ES3) {
                 createDeprecatedDiagnostic("target", "ES3");
             }
@@ -4654,7 +4655,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             createDiagnosticForReference(parentFile, index, message, ...args);
         }
 
-        checkDeprecations("5.0", "5.5", createDiagnostic, createDeprecatedDiagnostic => {
+        checkDeprecations("5.0", "5.5", "6.0", createDiagnostic, createDeprecatedDiagnostic => {
             if (ref.prepend) {
                 createDeprecatedDiagnostic("prepend");
             }
