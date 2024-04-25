@@ -1785,11 +1785,11 @@
         "category": "Error",
         "code": 1532
     },
-    "A decimal escape must refer to an existent capturing group. There are only {0} capturing groups in this regular expression.": {
+    "This backreference refers to a group that does not exist. There are only {0} capturing groups in this regular expression.": {
         "category": "Error",
         "code": 1533
     },
-    "Decimal escapes are invalid when there are no capturing groups in a regular expression.": {
+    "This backreference is invalid because the containing regular expression contains no capturing groups.": {
         "category": "Error",
         "code": 1534
     },
