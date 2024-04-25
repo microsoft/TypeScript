@@ -6,16 +6,16 @@ enforceReadonly1.ts(17,5): error TS2322: Type 'T' is not assignable to type 'Mut
 enforceReadonly1.ts(18,5): error TS2322: Type 'Readonly<T>' is not assignable to type 'Mutable<T>'.
 enforceReadonly1.ts(20,5): error TS2322: Type 'Readonly<T>' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'Readonly<T>'.
-enforceReadonly1.ts(31,11): error TS2430: Interface 'D1' incorrectly extends interface 'B1'.
-  Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(40,11): error TS2430: Interface 'D2' incorrectly extends interface 'B2'.
-  Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(48,7): error TS2415: Class 'D3' incorrectly extends base class 'B3'.
-  Property 'x' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(56,7): error TS2415: Class 'D4' incorrectly extends base class 'B4'.
+enforceReadonly1.ts(29,5): error TS2322: Type '{ readonly foo: () => void; }' is not assignable to type '{ foo: () => void; }'.
   Property 'foo' is 'readonly' in the source but not in the target.
-enforceReadonly1.ts(95,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
-enforceReadonly1.ts(97,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
+enforceReadonly1.ts(44,11): error TS2430: Interface 'D1' incorrectly extends interface 'B1'.
+  Property 'x' is 'readonly' in the source but not in the target.
+enforceReadonly1.ts(53,11): error TS2430: Interface 'D2' incorrectly extends interface 'B2'.
+  Property 'x' is 'readonly' in the source but not in the target.
+enforceReadonly1.ts(61,7): error TS2415: Class 'D3' incorrectly extends base class 'B3'.
+  Property 'x' is 'readonly' in the source but not in the target.
+enforceReadonly1.ts(108,3): error TS2540: Cannot assign to 'value' because it is a read-only property.
+enforceReadonly1.ts(110,5): error TS2322: Type 'ImmutableValue<string>' is not assignable to type 'MutableValue<string>'.
   Property 'value' is 'readonly' in the source but not in the target.
 
 
@@ -56,6 +56,22 @@ enforceReadonly1.ts(97,5): error TS2322: Type 'ImmutableValue<string>' is not as
 !!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'Readonly<T>'.
         rt = mt;
         rt = tt;
+    }
+    
+    // A read-only property is assignable to a property declared as a method
+    
+    function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () => void }) {
+        m = r;
+        p = r;  // Error
+        ~
+!!! error TS2322: Type '{ readonly foo: () => void; }' is not assignable to type '{ foo: () => void; }'.
+!!! error TS2322:   Property 'foo' is 'readonly' in the source but not in the target.
+    }
+    
+    type Paths = string[] & { __brand__: "Paths" };
+    
+    function f4(rp: Readonly<Paths>, rs: Readonly<string[]>) {
+        rs = rp;
     }
     
     // A derived interface may not change property from mutable to read-only
@@ -99,9 +115,6 @@ enforceReadonly1.ts(97,5): error TS2322: Type 'ImmutableValue<string>' is not as
     }
     
     class D4 extends B4 {  // Error
-          ~~
-!!! error TS2415: Class 'D4' incorrectly extends base class 'B4'.
-!!! error TS2415:   Property 'foo' is 'readonly' in the source but not in the target.
         readonly foo = () => {}
     }
     

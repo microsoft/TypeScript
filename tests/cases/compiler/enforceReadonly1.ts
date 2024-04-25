@@ -26,6 +26,19 @@ function f2<T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) {
     rt = tt;
 }
 
+// A read-only property is assignable to a property declared as a method
+
+function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () => void }) {
+    m = r;
+    p = r;  // Error
+}
+
+type Paths = string[] & { __brand__: "Paths" };
+
+function f4(rp: Readonly<Paths>, rs: Readonly<string[]>) {
+    rs = rp;
+}
+
 // A derived interface may not change property from mutable to read-only
 
 interface B1 {

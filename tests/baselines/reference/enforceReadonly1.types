@@ -151,6 +151,64 @@ function f2<T>(mt: Mutable<T>, tt: T, rt: Readonly<T>) {
 >   : ^
 }
 
+// A read-only property is assignable to a property declared as a method
+
+function f3(m: { foo(): void }, p: { foo: () => void }, r: { readonly foo: () => void }) {
+>f3 : (m: { foo(): void; }, p: { foo: () => void; }, r: { readonly foo: () => void; }) => void
+>   : ^ ^^                ^^ ^^                    ^^ ^^                             ^^^^^^^^^
+>m : { foo(): void; }
+>  : ^^^^^^^^^    ^^^
+>foo : () => void
+>    : ^^^^^^    
+>p : { foo: () => void; }
+>  : ^^^^^^^          ^^^
+>foo : () => void
+>    : ^^^^^^    
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^          ^^^
+>foo : () => void
+>    : ^^^^^^    
+
+    m = r;
+>m = r : { readonly foo: () => void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>m : { foo(): void; }
+>  : ^^^^^^^^^^^^^^^^
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    p = r;  // Error
+>p = r : { readonly foo: () => void; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p : { foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^
+>r : { readonly foo: () => void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Paths = string[] & { __brand__: "Paths" };
+>Paths : Paths
+>      : ^^^^^
+>__brand__ : "Paths"
+>          : ^^^^^^^
+
+function f4(rp: Readonly<Paths>, rs: Readonly<string[]>) {
+>f4 : (rp: Readonly<Paths>, rs: Readonly<string[]>) => void
+>   : ^  ^^               ^^  ^^                  ^^^^^^^^^
+>rp : Readonly<Paths>
+>   : ^^^^^^^^^^^^^^^
+>rs : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
+
+    rs = rp;
+>rs = rp : Readonly<Paths>
+>        : ^^^^^^^^^^^^^^^
+>rs : readonly string[]
+>   : ^^^^^^^^^^^^^^^^^
+>rp : Readonly<Paths>
+>   : ^^^^^^^^^^^^^^^
+}
+
 // A derived interface may not change property from mutable to read-only
 
 interface B1 {
