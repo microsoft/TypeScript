@@ -41,6 +41,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     type CanHaveModuleSpecifier,
+    CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -2171,6 +2172,7 @@ export function createFileDiagnosticFromMessageChain(file: SourceFile, start: nu
         category: messageChain.category,
         messageText: messageChain.next ? messageChain : messageChain.messageText,
         relatedInformation,
+        canonicalHead: messageChain.canonicalHead,
     };
 }
 
@@ -2210,10 +2212,10 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
 }
 
 /** @internal */
-export function addCanonicalDiagnostic(d: Diagnostic, canonicalMessage: DiagnosticMessage, ...args: string[]): void {
-    d.canonicalHead = {
-        code: canonicalMessage.code,
-        messageText: formatMessage(canonicalMessage, ...args),
+export function getCanonicalDiagnostic(message: DiagnosticMessage, ...args: string[]): CanonicalDiagnostic {
+    return {
+        code: message.code,
+        messageText: formatMessage(message, ...args),
     };
 }
 

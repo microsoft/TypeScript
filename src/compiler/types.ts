@@ -7041,6 +7041,8 @@ export interface DiagnosticMessageChain {
     next?: DiagnosticMessageChain[];
     /** @internal */
     repopulateInfo?: () => RepopulateDiagnosticChainInfo;
+    /** @internal */
+    canonicalHead?: CanonicalDiagnostic;
 }
 
 export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -7054,9 +7056,10 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     /**
      * @internal
      * Used for deduplication and comparison.
-     * Whenever it is possible for two diagnostics that report the same problem to be produced but with a
-     * different message and code (e.g. "Cannot find name 'foo'" vs "Cannot find name 'foo'. Did you mean 'bar'?"),
-     * this field can be set so that those two diagnostics are appropriately considered to be the same.
+     * Whenever it is possible for two diagnostics that report the same problem to be produced with
+     * different messages (e.g. "Cannot find name 'foo'" vs "Cannot find name 'foo'. Did you mean 'bar'?"),
+     * this property can be set to a canonical message,
+     * so that those two diagnostics are appropriately considered to be the same.
      */
     canonicalHead?: CanonicalDiagnostic;
 }
