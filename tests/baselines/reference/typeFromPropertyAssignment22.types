@@ -19,7 +19,7 @@ function Installer () {
 }
 Installer.prototype.loadArgMetadata = function (next) {
 >Installer.prototype.loadArgMetadata = function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
->                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                       : ^    ^^^^^^^^^^^^^^
 >Installer.prototype.loadArgMetadata : any
 >                                    : ^^^
 >Installer.prototype : any
@@ -31,14 +31,14 @@ Installer.prototype.loadArgMetadata = function (next) {
 >loadArgMetadata : any
 >                : ^^^
 >function (next) {    // ArrowFunction isn't treated as a this-container    (args) => {        this.args = 'hi'        this.newProperty = 1    }} : (next: any) => void
->                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                 : ^    ^^^^^^^^^^^^^^
 >next : any
 >     : ^^^
 
     // ArrowFunction isn't treated as a this-container
     (args) => {
 >(args) => {        this.args = 'hi'        this.newProperty = 1    } : (args: any) => void
->                                                                     : ^^^^^^^^^^^^^^^^^^^
+>                                                                     : ^    ^^^^^^^^^^^^^^
 >args : any
 >     : ^^^
 

@@ -1,0 +1,27 @@
+//// [tests/cases/compiler/isolatedDeclarationErrors.ts] ////
+
+=== isolatedDeclarationErrors.ts ===
+function errorOnAssignmentBelowDecl(): void {}
+>errorOnAssignmentBelowDecl : Symbol(errorOnAssignmentBelowDecl, Decl(isolatedDeclarationErrors.ts, 0, 0), Decl(isolatedDeclarationErrors.ts, 0, 46))
+
+errorOnAssignmentBelowDecl.a = "";
+>errorOnAssignmentBelowDecl.a : Symbol(errorOnAssignmentBelowDecl.a, Decl(isolatedDeclarationErrors.ts, 0, 46))
+>errorOnAssignmentBelowDecl : Symbol(errorOnAssignmentBelowDecl, Decl(isolatedDeclarationErrors.ts, 0, 0), Decl(isolatedDeclarationErrors.ts, 0, 46))
+>a : Symbol(errorOnAssignmentBelowDecl.a, Decl(isolatedDeclarationErrors.ts, 0, 46))
+
+const errorOnAssignmentBelow = (): void => {}
+>errorOnAssignmentBelow : Symbol(errorOnAssignmentBelow, Decl(isolatedDeclarationErrors.ts, 3, 5), Decl(isolatedDeclarationErrors.ts, 3, 45))
+
+errorOnAssignmentBelow.a = "";
+>errorOnAssignmentBelow.a : Symbol(errorOnAssignmentBelow.a, Decl(isolatedDeclarationErrors.ts, 3, 45))
+>errorOnAssignmentBelow : Symbol(errorOnAssignmentBelow, Decl(isolatedDeclarationErrors.ts, 3, 5), Decl(isolatedDeclarationErrors.ts, 3, 45))
+>a : Symbol(errorOnAssignmentBelow.a, Decl(isolatedDeclarationErrors.ts, 3, 45))
+
+const errorOnMissingReturn = () => {}
+>errorOnMissingReturn : Symbol(errorOnMissingReturn, Decl(isolatedDeclarationErrors.ts, 6, 5), Decl(isolatedDeclarationErrors.ts, 6, 37))
+
+errorOnMissingReturn.a = "";
+>errorOnMissingReturn.a : Symbol(errorOnMissingReturn.a, Decl(isolatedDeclarationErrors.ts, 6, 37))
+>errorOnMissingReturn : Symbol(errorOnMissingReturn, Decl(isolatedDeclarationErrors.ts, 6, 5), Decl(isolatedDeclarationErrors.ts, 6, 37))
+>a : Symbol(errorOnMissingReturn.a, Decl(isolatedDeclarationErrors.ts, 6, 37))
+

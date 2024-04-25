@@ -15,7 +15,7 @@ class clodule<T> {
 
     static fn(id: string) { }
 >fn : (id: string) => void
->   : ^^^^^      ^^^^^^^^^
+>   : ^  ^^      ^^^^^^^^^
 >id : string
 >   : ^^^^^^
 }
@@ -27,7 +27,7 @@ module clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
 >fn : <T>(x: T, y: T) => T
->   : ^ ^^^^^ ^^^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : T

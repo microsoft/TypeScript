@@ -1,10 +1,10 @@
 //// [tests/cases/conformance/jsx/jsxs/jsxJsxsCjsTransformNestedSelfClosingChild.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,200 / 2,200 (nearest 100)
-Type Count: 7,700 / 7,700 (nearest 100)
-Instantiation count: 90,000 / 90,000 (nearest 500)
-Symbol count: 67,000 / 67,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxJsxsCjsTransformNestedSelfClosingChild.tsx ===
 /// <reference path="react16.d.ts" />
@@ -16,11 +16,11 @@ console.log(
 >console.log(  <div>    <div />  </div>) : void
 >                                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 
   <div>
 ><div>    <div />  </div> : JSX.Element
@@ -44,11 +44,11 @@ console.log(
 >console.log(  <div>    <div />    <div />  </div>) : void
 >                                                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 
   <div>
 ><div>    <div />    <div />  </div> : JSX.Element
@@ -78,11 +78,11 @@ console.log(
 >console.log(  <div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div>) : void
 >                                                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 
   <div>
 ><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : JSX.Element
@@ -94,7 +94,7 @@ console.log(
 >[1, 2].map(i => <div key={i}>{i}</div>) : JSX.Element[]
 >                                        : ^^^^^^^^^^^^^
 >[1, 2].map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -102,9 +102,9 @@ console.log(
 >2 : 2
 >  : ^
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >i => <div key={i}>{i}</div> : (i: number) => JSX.Element
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 ><div key={i}>{i}</div> : JSX.Element

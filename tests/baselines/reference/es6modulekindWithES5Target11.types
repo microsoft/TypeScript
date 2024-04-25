@@ -3,13 +3,13 @@
 === es6modulekindWithES5Target11.ts ===
 declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
->    : ^^^^^^^^^^     ^^^^^   
+>    : ^^^^    ^^     ^^^^^   
 >args : any[]
 >     : ^^^^^
 
 @foo
 >foo : (...args: any[]) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^
 
 export default class C {
 >C : C

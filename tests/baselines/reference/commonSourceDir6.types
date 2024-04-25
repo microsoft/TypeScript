@@ -26,11 +26,11 @@ export var i = Math.sqrt(-1);
 >Math.sqrt(-1) : number
 >              : ^^^^^^
 >Math.sqrt : (x: number) => number
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^      ^^^^^^^^^^^
 >Math : Math
 >     : ^^^^
 >sqrt : (x: number) => number
->     : ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^
 >-1 : -1
 >   : ^^
 >1 : 1

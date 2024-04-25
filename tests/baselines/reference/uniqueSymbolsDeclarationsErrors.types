@@ -13,13 +13,13 @@ interface I { readonly readonlyType: unique symbol; }
 
 export const obj = {
 >obj : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
->    : ^^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^                 ^^^                 ^^^
+>    : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 >{    method1(p: typeof s): typeof s {        return p;    },    method2(p: I["readonlyType"]): I["readonlyType"] {        return p;    }} : { method1(p: typeof s): typeof s; method2(p: I["readonlyType"]): I["readonlyType"]; }
->                                                                                                                                          : ^^^^^^^^^^^^^        ^^^        ^^^^^^^^^^^^^                 ^^^                 ^^^
+>                                                                                                                                          : ^^^^^^^^^^ ^^        ^^^        ^^^^^^^^^^ ^^                 ^^^                 ^^^
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
->        : ^^^^        ^^^^^        
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -34,7 +34,7 @@ export const obj = {
     },
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
->        : ^^^^                 ^^^^^                 
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -52,7 +52,7 @@ export const classExpression = class {
 
     method1(p: typeof s): typeof s {
 >method1 : (p: typeof s) => typeof s
->        : ^^^^        ^^^^^        
+>        : ^ ^^        ^^^^^        
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
@@ -66,7 +66,7 @@ export const classExpression = class {
     }
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: I["readonlyType"]) => I["readonlyType"]
->        : ^^^^                 ^^^^^                 
+>        : ^ ^^                 ^^^^^                 
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 
@@ -78,19 +78,19 @@ export const classExpression = class {
 
 export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 >funcInferredReturnType : (obj: { method(p: typeof s): void; }) => { method(p: typeof s): void; }
->                       : ^^^^^^                              ^^^^^^^^^^^^^^^^^        ^^^    ^^^
+>                       : ^   ^^                              ^^^^^^^^^^^^^^ ^^        ^^^    ^^^
 >obj : { method(p: typeof s): void; }
->    : ^^^^^^^^^^^^        ^^^    ^^^
+>    : ^^^^^^^^^ ^^        ^^^    ^^^
 >method : (p: typeof s) => void
->       : ^^^^        ^^^^^    
+>       : ^ ^^        ^^^^^    
 >p : unique symbol
 >  : ^^^^^^^^^^^^^
 >s : unique symbol
 >  : ^^^^^^^^^^^^^
 
     return obj;
->obj : { method(p: unique symbol): void; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : { method(p: typeof s): void; }
+>    : ^^^^^^^^^ ^^        ^^^^^^^^^^
 }
 
 export interface InterfaceWithPrivateNamedProperties {

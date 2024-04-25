@@ -31,7 +31,7 @@ interface Y {
 
 function foo(bar: X | Y) { }
 >foo : (bar: X | Y) => void
->    : ^^^^^^     ^^^^^^^^^
+>    : ^   ^^     ^^^^^^^^^
 >bar : X | Y
 >    : ^^^^^
 
@@ -39,7 +39,7 @@ foo({
 >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
 >                                                                                                             : ^^^^
 >foo : (bar: X | Y) => void
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^     ^^^^^^^^^
 >{    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }} : { type: "y"; value: "done"; method(): void; }
 >                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -111,7 +111,7 @@ interface Y2 {
 
 function foo2(bar: X2 | Y2) { }
 >foo2 : (bar: X2 | Y2) => void
->     : ^^^^^^       ^^^^^^^^^
+>     : ^   ^^       ^^^^^^^^^
 >bar : X2 | Y2
 >    : ^^^^^^^
 
@@ -119,7 +119,7 @@ foo2({
 >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
 >                                                                                             : ^^^^
 >foo2 : (bar: X2 | Y2) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^       ^^^^^^^^^
 >{    type2: 'y',    value: 'done',    method() {        this;        this.value;    }} : { type2: "y"; value: "done"; method(): void; }
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

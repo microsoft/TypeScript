@@ -41,7 +41,7 @@ interface TestInterface {
 
 declare function setupImages<R extends ImageHolder<K>, K extends string>(
 >setupImages : <R extends ImageHolder<K>, K extends string>(item: R, keys: K[]) => SetupImages<K>
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^   ^^^^^              
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^ ^^    ^^   ^^^^^              
 
   item: R,
 >item : R
@@ -65,7 +65,7 @@ const { prepare, ...rest } = setupImages(test, ["image"]);
 >setupImages(test, ["image"]) : SetupImages<"image">
 >                             : ^^^^^^^^^^^^^^^^^^^^
 >setupImages : <R extends ImageHolder<K>, K extends string>(item: R, keys: K[]) => SetupImages<K>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^ ^^    ^^   ^^^^^^^^^^^^^^^^^^^
 >test : TestInterface
 >     : ^^^^^^^^^^^^^
 >["image"] : "image"[]

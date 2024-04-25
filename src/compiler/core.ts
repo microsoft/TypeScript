@@ -872,9 +872,9 @@ export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: read
  *
  * @internal
  */
-export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[]; // eslint-disable-line no-restricted-syntax
 /** @internal */
-export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[];
+export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[]; // eslint-disable-line no-restricted-syntax
 // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
 /** @internal */
 export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
@@ -1511,8 +1511,8 @@ export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, r
 /** @internal */
 export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[]; false?: Exclude<T, U>[]; };
 /** @internal */
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; }; // eslint-disable-line no-restricted-syntax
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } { // eslint-disable-line no-restricted-syntax
     const result: Record<string, T[]> = {};
     if (values) {
         for (const value of values) {
@@ -2289,7 +2289,7 @@ export function compareBooleans(a: boolean, b: boolean): Comparison {
  *
  * @internal
  */
-export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+export function getSpellingSuggestion<T>(name: string, candidates: Iterable<T>, getName: (candidate: T) => string | undefined): T | undefined {
     const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
     let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
     let bestCandidate: T | undefined;

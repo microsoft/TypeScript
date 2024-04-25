@@ -20,7 +20,7 @@ export class TestRunner {
 
     static arrayCompare(arg1: any[], arg2: any[]): boolean {
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^^^^^^^     ^^^^^^^^     ^^^^^       
+>             : ^    ^^     ^^    ^^     ^^^^^       
 >arg1 : any[]
 >     : ^^^^^
 >arg2 : any[]
@@ -33,7 +33,7 @@ export class TestRunner {
 
     public addTest(test: TestCase) {
 >addTest : (test: TestCase) => void
->        : ^^^^^^^        ^^^^^^^^^
+>        : ^    ^^        ^^^^^^^^^
 >test : TestCase
 >     : ^^^^^^^^
     }
@@ -61,11 +61,11 @@ export var tests: TestRunner = (function () {
 >testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        })) : void
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                : ^^^^
 >testRunner.addTest : (test: TestCase) => void
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^    ^^        ^^^^^^^^^
 >testRunner : TestRunner
 >           : ^^^^^^^^^^
 >addTest : (test: TestCase) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^        ^^^^^^^^^
 >new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }) : TestCase
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^
 >TestCase : typeof TestCase
@@ -159,11 +159,11 @@ export var tests: TestRunner = (function () {
 >bytes.push(fb.readByte()) : number
 >                          : ^^^^^^
 >bytes.push : (...items: any[]) => number
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^^
 >bytes : any[]
 >      : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >fb.readByte() : any
 >              : ^^^
 >fb.readByte : any
@@ -185,11 +185,11 @@ export var tests: TestRunner = (function () {
 >TestRunner.arrayCompare(bytes, expected) : boolean
 >                                         : ^^^^^^^
 >TestRunner.arrayCompare : (arg1: any[], arg2: any[]) => boolean
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
 >TestRunner : typeof TestRunner
 >           : ^^^^^^^^^^^^^^^^^
 >arrayCompare : (arg1: any[], arg2: any[]) => boolean
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^    ^^     ^^    ^^     ^^^^^^^^^^^^
 >bytes : any[]
 >      : ^^^^^
 >expected : number[]

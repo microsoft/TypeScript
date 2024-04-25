@@ -23,7 +23,7 @@ async function f2(): Promise<void> {
 
 async function f3(x) {
 >f3 : (x: any) => Promise<number>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -47,7 +47,7 @@ function voidFunc(): void {
 
 function calltoVoidFunc(x) {
 >calltoVoidFunc : (x: any) => void
->               : ^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -62,7 +62,7 @@ function calltoVoidFunc(x) {
 
 declare function use(s: string): void;
 >use : (s: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >s : string
 >  : ^^^^^^
 
@@ -74,7 +74,7 @@ let x1 = () => { use("Test"); }
 >use("Test") : void
 >            : ^^^^
 >use : (s: string) => void
->    : ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^
 >"Test" : "Test"
 >       : ^^^^^^
 

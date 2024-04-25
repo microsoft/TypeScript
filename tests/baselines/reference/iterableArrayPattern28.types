@@ -3,7 +3,7 @@
 === iterableArrayPattern28.ts ===
 function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^
+>                    : ^^^^                    ^^                  ^^^^^^^^^
 >k1 : string
 >   : ^^^^^^
 >v1 : number
@@ -17,7 +17,7 @@ takeFirstTwoEntries(...new Map([["", 0], ["hello", true]]));
 >takeFirstTwoEntries(...new Map([["", 0], ["hello", true]])) : void
 >                                                            : ^^^^
 >takeFirstTwoEntries : (...[[k1, v1], [k2, v2]]: [string, number][]) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^^                    ^^                  ^^^^^^^^^
 >...new Map([["", 0], ["hello", true]]) : [string, number]
 >                                       : ^^^^^^^^^^^^^^^^
 >new Map([["", 0], ["hello", true]]) : Map<string, number>

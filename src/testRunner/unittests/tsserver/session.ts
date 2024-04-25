@@ -1,10 +1,6 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
+import { incrementalVerifier } from "../../../harness/incrementalUtils";
 import {
     createHasErrorMessageLogger,
     nullLogger,
@@ -234,7 +230,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;
-                req.arguments = null; // eslint-disable-line no-null/no-null
+                req.arguments = null; // eslint-disable-line no-restricted-syntax
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;

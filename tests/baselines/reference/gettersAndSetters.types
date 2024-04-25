@@ -215,7 +215,7 @@ var i:I1 = function (n) {return n;}
 >i : I1
 >  : ^^
 >function (n) {return n;} : (n: number) => number
->                         : ^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n : number

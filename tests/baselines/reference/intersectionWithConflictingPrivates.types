@@ -43,7 +43,7 @@ ab = {};
 
 function f1(node: A | B) {
 >f1 : (node: A | B) => void
->   : ^^^^^^^     ^^^^^^^^^
+>   : ^    ^^     ^^^^^^^^^
 >node : A | B
 >     : ^^^^^
 
@@ -145,7 +145,7 @@ class Foo {
 
   private async foo(node: CommitFileNode | ResultsFileNode | StashFileNode) {
 >foo : (node: CommitFileNode | ResultsFileNode | StashFileNode) => Promise<void>
->    : ^^^^^^^                                                ^^^^^^^^^^^^^^^^^^
+>    : ^    ^^                                                ^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -199,19 +199,19 @@ class Foo {
 >                     : ^^^^^^^^^
 >this.bar(node) : Promise<undefined>
 >               : ^^^^^^^^^^^^^^^^^^
->this.bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>this.bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
+>         : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {} | undefined) => Promise<undefined>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
+>    : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 	}
 
   private async bar(node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) {
 >bar : (node: CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode, options?: {}) => Promise<undefined>
->    : ^^^^^^^                                                                 ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^                                                                 ^^       ^^^  ^^^^^^^^^^^^^^^^^^^^^^^
 >node : CommitFileNode | ResultsFileNode | StashFileNode | StatusFileNode
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : {} | undefined
@@ -221,11 +221,11 @@ class Foo {
 >Promise.resolve(undefined) : Promise<undefined>
 >                           : ^^^^^^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
   }

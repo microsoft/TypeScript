@@ -20,7 +20,7 @@ interface IProperties {
 
 function init(properties: IProperties) {
 >init : (properties: IProperties) => void
->     : ^^^^^^^^^^^^^           ^^^^^^^^^
+>     : ^          ^^           ^^^^^^^^^
 >properties : IProperties
 >           : ^^^^^^^^^^^
 
@@ -101,7 +101,7 @@ interface DeepOptional {
 
 function init2(foo: DeepOptional) {
 >init2 : (foo: DeepOptional) => void
->      : ^^^^^^            ^^^^^^^^^
+>      : ^   ^^            ^^^^^^^^^
 >foo : DeepOptional
 >    : ^^^^^^^^^^^^
 
@@ -452,7 +452,7 @@ type Pet = Fish | Dog;
 
 function handleDogBroken<PetType extends Pet>(pet: PetType) {
 >handleDogBroken : <PetType extends Pet>(pet: PetType) => void
->                : ^       ^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^
+>                : ^       ^^^^^^^^^^^^^^   ^^       ^^^^^^^^^
 >pet : PetType
 >    : ^^^^^^^
 
@@ -498,7 +498,7 @@ function handleDogBroken<PetType extends Pet>(pet: PetType) {
 
 function handleDogWorking(pet: Pet) {
 >handleDogWorking : (pet: Pet) => void
->                 : ^^^^^^   ^^^^^^^^^
+>                 : ^   ^^   ^^^^^^^^^
 >pet : Pet
 >    : ^^^
 

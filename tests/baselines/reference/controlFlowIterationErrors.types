@@ -7,7 +7,7 @@ let cond: boolean;
 
 function len(s: string) {
 >len : (s: string) => number
->    : ^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 
@@ -48,7 +48,7 @@ function f1() {
 >len(x) : number
 >       : ^^^^^^
 >len : (s: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -93,7 +93,7 @@ function f2() {
 >len(x) : number
 >       : ^^^^^^
 >len : (s: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
     }
@@ -104,13 +104,13 @@ function f2() {
 
 declare function foo(x: string): number;
 >foo : { (x: string): number; (x: number): string; }
->    : ^^^^^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^      ^^^ ^^      ^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 
 declare function foo(x: number): string;
 >foo : { (x: string): number; (x: number): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^      ^^^
 >x : number
 >  : ^^^^^^
 
@@ -142,7 +142,7 @@ function g1() {
 >foo(x) : never
 >       : ^^^^^
 >foo : { (x: string): number; (x: number): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -187,7 +187,7 @@ function g2() {
 >foo(x) : never
 >       : ^^^^^
 >foo : { (x: string): number; (x: number): string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
     }
@@ -198,7 +198,7 @@ function g2() {
 
 function asNumber(x: string | number): number {
 >asNumber : (x: string | number) => number
->         : ^^^^               ^^^^^      
+>         : ^ ^^               ^^^^^      
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -279,7 +279,7 @@ function h2() {
 >asNumber(x) : number
 >            : ^^^^^^
 >asNumber : (x: string | number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 >1 : 1
@@ -317,7 +317,7 @@ function h3() {
 >asNumber(x) : number
 >            : ^^^^^^
 >asNumber : (x: string | number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -369,7 +369,7 @@ function h4() {
 >asNumber(x) : number
 >            : ^^^^^^
 >asNumber : (x: string | number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^               ^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
 

@@ -17,7 +17,7 @@ new B().a.toExponential();
 >new B().a.toExponential() : string
 >                          : ^^^^^^
 >new B().a.toExponential : (fractionDigits?: number) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^^^^^^^
 >new B().a : number
 >          : ^^^^^^
 >new B() : B
@@ -27,7 +27,7 @@ new B().a.toExponential();
 >a : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
 === b.ts ===
 import A from './a';
@@ -44,7 +44,7 @@ new C().a.toExponential();
 >new C().a.toExponential() : string
 >                          : ^^^^^^
 >new C().a.toExponential : (fractionDigits?: number) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^              ^^^      ^^^^^^^^^^^
 >new C().a : number
 >          : ^^^^^^
 >new C() : C
@@ -54,5 +54,5 @@ new C().a.toExponential();
 >a : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 

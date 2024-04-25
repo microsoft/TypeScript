@@ -59,7 +59,7 @@ module M {
 
             this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub);
 >this.g = (v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
->                                                               : ^^^^      ^^^^^^^^^^^
+>                                                               : ^ ^^      ^^^^^^^^^^^
 >this.g : any
 >       : ^^^
 >this : this
@@ -67,17 +67,17 @@ module M {
 >g : any
 >  : ^^^
 >(v:number) => C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : (v: number) => string
->                                                      : ^^^^      ^^^^^^^^^^^
+>                                                      : ^ ^^      ^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >C.f(this.x+C.y+v+this.c1+this.c2+C.pub) : string
 >                                        : ^^^^^^
 >C.f : (n: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >f : (n: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >this.x+C.y+v+this.c1+this.c2+C.pub : number
 >                                   : ^^^^^^
 >this.x+C.y+v+this.c1+this.c2 : number
@@ -146,7 +146,7 @@ module M {
 
         static f(n:number) {
 >f : (n: number) => string
->  : ^^^^      ^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -248,11 +248,11 @@ module M {
 >C.f(10) : string
 >        : ^^^^^^
 >C.f : (n: number) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >f : (n: number) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 

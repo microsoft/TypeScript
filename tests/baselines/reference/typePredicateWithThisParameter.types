@@ -16,7 +16,7 @@ interface Bar {
 
 function isFoo1(object: {}): object is Foo {
 >isFoo1 : (object: {}) => object is Foo
->       : ^^^^^^^^^  ^^^^^             
+>       : ^      ^^  ^^^^^             
 >object : {}
 >       : ^^
 
@@ -31,7 +31,7 @@ function isFoo1(object: {}): object is Foo {
 
 function isFoo2(this: void, object: {}): object is Foo {
 >isFoo2 : (this: void, object: {}) => object is Foo
->       : ^^^^^^^    ^^^^^^^^^^  ^^^^^             
+>       : ^    ^^    ^^      ^^  ^^^^^             
 >this : void
 >     : ^^^^
 >object : {}
@@ -54,7 +54,7 @@ if (isFoo1(test)) {
 >isFoo1(test) : boolean
 >             : ^^^^^^^
 >isFoo1 : (object: {}) => object is Foo
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^  ^^^^^^^^^^^^^^^^^^
 >test : Foo | Bar
 >     : ^^^^^^^^^
 
@@ -75,7 +75,7 @@ if (isFoo2(test)) {
 >isFoo2(test) : boolean
 >             : ^^^^^^^
 >isFoo2 : (this: void, object: {}) => object is Foo
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^    ^^      ^^  ^^^^^^^^^^^^^^^^^^
 >test : Foo | Bar
 >     : ^^^^^^^^^
 

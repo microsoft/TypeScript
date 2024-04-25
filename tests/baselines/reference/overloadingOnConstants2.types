@@ -29,7 +29,7 @@ class E {
 }
 function foo(x: "hi", items: string[]): D;
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^    ^^^^^^^^^        ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^     ^^        ^^^ ^^^ ^^     ^^     ^^        ^^^^^^^
 >x : "hi"
 >  : ^^^^
 >items : string[]
@@ -37,7 +37,7 @@ function foo(x: "hi", items: string[]): D;
 
 function foo(x: "bye", items: string[]): E;
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^        ^^^ ^^^
+>    : ^^^ ^^    ^^     ^^        ^^^^^^^ ^^     ^^     ^^        ^^^ ^^^
 >x : "bye"
 >  : ^^^^^
 >items : string[]
@@ -45,7 +45,7 @@ function foo(x: "bye", items: string[]): E;
 
 function foo(x: string, items: string[]): C {
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^     ^^        ^^^^^^^ ^^     ^^     ^^        ^^^^^^^
 >x : string
 >  : ^^^^^^
 >items : string[]
@@ -59,7 +59,7 @@ var a: D = foo("hi", []); // D
 >foo("hi", []) : D
 >              : ^
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^     ^^        ^^^^^^^ ^^     ^^     ^^        ^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 >[] : undefined[]
@@ -71,7 +71,7 @@ var b: E = foo("bye", []); // E
 >foo("bye", []) : E
 >               : ^
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^     ^^        ^^^^^^^ ^^     ^^     ^^        ^^^^^^^
 >"bye" : "bye"
 >      : ^^^^^
 >[] : undefined[]
@@ -83,7 +83,7 @@ var c = foo("um", []); // error
 >foo("um", []) : D & E
 >              : ^^^^^
 >foo : { (x: "hi", items: string[]): D; (x: "bye", items: string[]): E; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^    ^^     ^^        ^^^^^^^ ^^     ^^     ^^        ^^^^^^^
 >"um" : "um"
 >     : ^^^^
 >[] : undefined[]
@@ -93,7 +93,7 @@ var c = foo("um", []); // error
 //function bar(x: "hi", items: string[]): D;
 function bar(x: "bye", items: string[]): E;
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^     ^^^^^^^^^        ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^     ^^     ^^        ^^^ ^^^ ^^      ^^     ^^        ^^^^^^^
 >x : "bye"
 >  : ^^^^^
 >items : string[]
@@ -101,7 +101,7 @@ function bar(x: "bye", items: string[]): E;
 
 function bar(x: string, items: string[]): C;
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^        ^^^ ^^^
+>    : ^^^ ^^     ^^     ^^        ^^^^^^^ ^^      ^^     ^^        ^^^ ^^^
 >x : string
 >  : ^^^^^^
 >items : string[]
@@ -109,7 +109,7 @@ function bar(x: string, items: string[]): C;
 
 function bar(x: string, items: string[]): C {
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^     ^^     ^^        ^^^^^^^ ^^      ^^     ^^        ^^^^^^^
 >x : string
 >  : ^^^^^^
 >items : string[]
@@ -124,7 +124,7 @@ var d: D = bar("hi", []); // D
 >bar("hi", []) : C
 >              : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^     ^^     ^^        ^^^^^^^ ^^      ^^     ^^        ^^^^^^^
 >"hi" : "hi"
 >     : ^^^^
 >[] : undefined[]
@@ -136,7 +136,7 @@ var e: E = bar("bye", []); // E
 >bar("bye", []) : E
 >               : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^     ^^     ^^        ^^^^^^^ ^^      ^^     ^^        ^^^^^^^
 >"bye" : "bye"
 >      : ^^^^^
 >[] : undefined[]
@@ -148,7 +148,7 @@ var f: C = bar("um", []); // C
 >bar("um", []) : C
 >              : ^
 >bar : { (x: "bye", items: string[]): E; (x: string, items: string[]): C; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^     ^^     ^^        ^^^^^^^ ^^      ^^     ^^        ^^^^^^^
 >"um" : "um"
 >     : ^^^^
 >[] : undefined[]

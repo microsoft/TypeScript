@@ -5,9 +5,7 @@ import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import {
-    LoggerWithInMemoryLogs,
-} from "./tsserverLogger";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 

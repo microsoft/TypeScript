@@ -25,7 +25,7 @@ CompilerOptions::
   "noImplicitAny": false,
   "sourceMap": false,
   "lib": [],
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 

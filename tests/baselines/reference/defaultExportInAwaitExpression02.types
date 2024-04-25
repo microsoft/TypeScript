@@ -9,15 +9,15 @@ const x = new Promise( ( resolve, reject ) => { resolve( {} ); } );
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >( resolve, reject ) => { resolve( {} ); } : (resolve: (value: unknown) => void, reject: (reason?: any) => void) => void
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                          : ^       ^^^     ^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^   ^^^^^^^^^^^^^^^^^^
 >resolve : (value: unknown) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^
 >reject : (reason?: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^   ^^^^^^^^^
 >resolve( {} ) : void
 >              : ^^^^
 >resolve : (value: unknown) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

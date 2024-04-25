@@ -15,13 +15,13 @@ a.forEach(function (v,i,a) {});
 >a.forEach(function (v,i,a) {}) : void
 >                               : ^^^^
 >a.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >a : number[]
 >  : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >function (v,i,a) {} : (v: number, i: number, a: number[]) => void
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >i : number
@@ -34,9 +34,9 @@ declare module _Core {
   interface Array {
     collect(fn:(e:_element) => _element[]) : any[];
 >collect : (fn: (e: _element) => _element[]) => any[]
->        : ^^^^^                           ^^^^^     
+>        : ^  ^^                           ^^^^^     
 >fn : (e: _element) => _element[]
->   : ^^^^^^^^^^^^^^^^^          
+>   : ^ ^^^^^^^^^^^^^^^          
 >e : _element
 >  : ^^^^^^^^
   }
@@ -59,7 +59,7 @@ var arr = (<any>Array).prototype;
 
 arr.collect = function (fn) {
 >arr.collect = function (fn) {    var res = [];    for (var i = 0; i < this.length; ++i) {        var tmp = fn(this[i]);        for (var j = 0; j < tmp.length; ++j) {            res.push(tmp[j]);        }    }    return res;} : (fn: any) => any[]
->                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                 : ^  ^^^^^^^^^^^^^^^
 >arr.collect : any
 >            : ^^^
 >arr : any
@@ -67,7 +67,7 @@ arr.collect = function (fn) {
 >collect : any
 >        : ^^^
 >function (fn) {    var res = [];    for (var i = 0; i < this.length; ++i) {        var tmp = fn(this[i]);        for (var j = 0; j < tmp.length; ++j) {            res.push(tmp[j]);        }    }    return res;} : (fn: any) => any[]
->                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                   : ^  ^^^^^^^^^^^^^^^
 >fn : any
 >   : ^^^
 
@@ -135,11 +135,11 @@ arr.collect = function (fn) {
 >res.push(tmp[j]) : number
 >                 : ^^^^^^
 >res.push : (...items: any[]) => number
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^     ^^^^^^^^^^^^^^^^^^
 >res : any[]
 >    : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >tmp[j] : any
 >       : ^^^
 >tmp : any

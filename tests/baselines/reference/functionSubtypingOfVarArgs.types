@@ -13,9 +13,9 @@ class EventBase {
 
     add(listener: (...args: any[]) => void): void {
 >add : (listener: (...args: any[]) => void) => void
->    : ^^^^^^^^^^^                        ^^^^^    
+>    : ^        ^^                        ^^^^^    
 >listener : (...args: any[]) => void
->         : ^^^^^^^^^^     ^^^^^    
+>         : ^^^^    ^^     ^^^^^    
 >args : any[]
 >     : ^^^^^
 
@@ -23,7 +23,7 @@ class EventBase {
 >this._listeners.push(listener) : number
 >                               : ^^^^^^
 >this._listeners.push : (...items: any[]) => number
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >this._listeners : any[]
 >                : ^^^^^
 >this : this
@@ -31,9 +31,9 @@ class EventBase {
 >_listeners : any[]
 >           : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >listener : (...args: any[]) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^    ^^     ^^^^^^^^^
     }
 }
 
@@ -45,9 +45,9 @@ class StringEvent extends EventBase { // should work
 
     add(listener: (items: string) => void ) { // valid, items is subtype of args
 >add : (listener: (items: string) => void) => void
->    : ^^^^^^^^^^^                       ^^^^^^^^^
+>    : ^        ^^                       ^^^^^^^^^
 >listener : (items: string) => void
->         : ^^^^^^^^      ^^^^^    
+>         : ^     ^^      ^^^^^    
 >items : string
 >      : ^^^^^^
 
@@ -55,13 +55,13 @@ class StringEvent extends EventBase { // should work
 >super.add(listener) : void
 >                    : ^^^^
 >super.add : (listener: (...args: any[]) => void) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^        ^^                        ^^^^^^^^^
 >super : EventBase
 >      : ^^^^^^^^^
 >add : (listener: (...args: any[]) => void) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^                        ^^^^^^^^^
 >listener : (items: string) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^      ^^^^^^^^^
     }
 }
 

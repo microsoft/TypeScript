@@ -7,7 +7,7 @@ namespace n {
 
     function id<T>(x: T): T {
 >id : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -24,7 +24,7 @@ namespace n {
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
     }
@@ -46,7 +46,7 @@ namespace n {
 export { }
 function id<T>(x: T): T {
 >id : <T>(x: T) => T
->   : ^ ^^^^^ ^^^^^ 
+>   : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -63,7 +63,7 @@ function templateObjectFactory() {
 >id`hello world` : TemplateStringsArray
 >                : ^^^^^^^^^^^^^^^^^^^^
 >id : <T>(x: T) => T
->   : ^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^
 >`hello world` : "hello world"
 >              : ^^^^^^^^^^^^^
 }

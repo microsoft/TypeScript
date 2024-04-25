@@ -12,7 +12,7 @@ import { Event } from './event';
 
 function Input(target: any, key: string): void { }
 >Input : (target: any, key: string) => void
->      : ^^^^^^^^^   ^^^^^^^      ^^^^^    
+>      : ^      ^^   ^^   ^^      ^^^^^    
 >target : any
 >key : string
 >    : ^^^^^^
@@ -23,7 +23,7 @@ export class SomeClass {
 
     @Input event: Event;
 >Input : (target: any, key: string) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^   ^^   ^^      ^^^^^^^^^
 >event : Event
 >      : ^^^^^
 }

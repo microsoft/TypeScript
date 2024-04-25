@@ -16,7 +16,7 @@ export class Test<T> {
 
     public test(): T {
 >test : () => T
->     : ^^^^^^^
+>     : ^^^^^^ 
 
         return null as any;
 >null as any : any

@@ -1,17 +1,11 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     FsContents,
     getProjectConfigWithNodeNext,
     libContent,
 } from "./contents";
-import {
-    libFile,
-} from "./virtualFileSystemWithWatch";
+import { libFile } from "./virtualFileSystemWithWatch";
 
 export function getFsContentsForTransitiveReferencesRefsAdts() {
     return dedent`

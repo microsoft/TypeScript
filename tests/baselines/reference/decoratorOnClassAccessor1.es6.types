@@ -3,7 +3,7 @@
 === decoratorOnClassAccessor1.es6.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^ ^^^^^^^^^^   ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^                          ^^^^^                          
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^                          
 >target : any
 >propertyKey : string
 >            : ^^^^^^
@@ -13,7 +13,7 @@ declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPrope
 export default class {
     @dec get accessor() { return 1; }
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^   ^^           ^^      ^^          ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >accessor : number
 >         : ^^^^^^
 >1 : 1

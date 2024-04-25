@@ -3,13 +3,13 @@
 === declarationEmitNestedGenerics.ts ===
 function f<T>(p: T) {
 >f : <T>(p: T) => <T_1>(x: T_1) => typeof p
->  : ^ ^^^^^ ^^^^^^   ^^^^^^^^^^^^^        
+>  : ^ ^^ ^^ ^^^^^^   ^^ ^^   ^^^^^        
 >p : T
 >  : ^
 
     let g: <T>(x: T) => typeof p = null as any;
 >g : <T_1>(x: T_1) => typeof p
->  : ^   ^^^^^^^^^^^^^        
+>  : ^   ^^ ^^   ^^^^^        
 >x : T
 >  : ^
 >p : T_1
@@ -18,12 +18,12 @@ function f<T>(p: T) {
 
     return g;
 >g : <T_1>(x: T_1) => T
->  : ^^^^^^^^^^^^^^^^^^
+>  : ^   ^^ ^^   ^^^^^^
 }
 
 function g<T>(x: T) {
 >g : <T>(x: T) => T extends (infer T_1)[] ? T_1 : T
->  : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 

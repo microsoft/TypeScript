@@ -21,15 +21,15 @@ function Multimap3() {
 
 Multimap3.prototype = {
 >Multimap3.prototype = {    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
->                                                                                                                                                            : ^^^^^^^^^^^      ^^^      ^^^
+>                                                                                                                                                            : ^^^^^^   ^^      ^^^      ^^^
 >Multimap3.prototype : { get(key: string): number; }
->                    : ^^^^^^^^^^^      ^^^      ^^^
+>                    : ^^^^^^   ^^      ^^^      ^^^
 >Multimap3 : typeof Multimap3
 >          : ^^^^^^^^^^^^^^^^
 >prototype : { get(key: string): number; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^   ^^      ^^^^^^^^^^^^
 >{    /**     * @param {string} key     * @returns {number} the value ok     */    get(key) {        return this._map[key + ''];    }} : { get(key: string): number; }
->                                                                                                                                      : ^^^^^^^^^^^      ^^^      ^^^
+>                                                                                                                                      : ^^^^^^   ^^      ^^^      ^^^
 
     /**
      * @param {string} key
@@ -37,7 +37,7 @@ Multimap3.prototype = {
      */
     get(key) {
 >get : (key: string) => number
->    : ^^^^^^      ^^^^^      
+>    : ^   ^^      ^^^^^      
 >key : string
 >    : ^^^^^^
 
@@ -74,11 +74,11 @@ const n = map.get('hi')
 >map.get('hi') : number
 >              : ^^^^^^
 >map.get : (key: string) => number
->        : ^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^   ^^      ^^^^^^^^^^^
 >map : Multimap3
 >    : ^^^^^^^^^
 >get : (key: string) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 

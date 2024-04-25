@@ -33,7 +33,7 @@ class A {
 
     baz(n: Promise<number>): Promise<number> { return n; }
 >baz : (n: Promise<number>) => Promise<number>
->    : ^^^^               ^^^^^               
+>    : ^ ^^               ^^^^^               
 >n : Promise<number>
 >  : ^^^^^^^^^^^^^^^
 >n : Promise<number>

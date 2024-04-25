@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/types/literal/templateLiteralTypes4.ts] ////
 
 === Performance Stats ===
-Assignability cache: 1,400 / 1,400 (nearest 100)
-Type Count: 900 / 900 (nearest 100)
-Instantiation count: 1,000 / 1,500 (nearest 500)
-Symbol count: 30,000 / 30,000 (nearest 500)
+Assignability cache: 1,000
+Instantiation count: 1,000
 
 === templateLiteralTypes4.ts ===
 // infer from number
@@ -614,7 +612,7 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     // get/set a field by name
     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
 >get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                                               
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^                                                               
 >key : K
 >    : ^
 >name : K
@@ -622,7 +620,7 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
 
     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
 >set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                                                               ^^^^^    
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^                                                               ^^^^^    
 >key : K
 >    : ^
 >value : FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
@@ -633,13 +631,13 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     // get/set a field by index
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
 >getIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                                                    
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                                                    
 >index : I
 >      : ^
 
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
 >setIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                                                    ^^^^^    
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^     ^^                                                    ^^^^^    
 >index : I
 >      : ^
 >value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
@@ -681,11 +679,11 @@ p.getIndex(0); // ok, 0 is a valid index
 >p.getIndex(0) : number
 >              : ^^^^^^
 >p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -693,11 +691,11 @@ p.getIndex(1); // ok, 1 is a valid index
 >p.getIndex(1) : number
 >              : ^^^^^^
 >p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -705,11 +703,11 @@ p.getIndex(2); // error, 2 is not a valid index
 >p.getIndex(2) : number
 >              : ^^^^^^
 >p.getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >getIndex : <I extends 0 | 1>(index: I) => FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -717,11 +715,11 @@ p.setIndex(0, 0); // ok, 0 is a valid index
 >p.setIndex(0, 0) : void
 >                 : ^^^^
 >p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >0 : 0
@@ -731,11 +729,11 @@ p.setIndex(1, 0); // ok, 1 is a valid index
 >p.setIndex(1, 0) : void
 >                 : ^^^^
 >p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >0 : 0
@@ -745,11 +743,11 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 >p.setIndex(2, 3) : void
 >                 : ^^^^
 >p.setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Point
 >  : ^^^^^
 >setIndex : <I extends 0 | 1>(index: I, value: FieldType<Extract<[{ name: "x"; type: "f64"; }, { name: "y"; type: "f64"; }][I], FieldDefinition>["type"]>) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >3 : 3
@@ -758,7 +756,7 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 // function inference
 declare function f1<T extends string | number>(s: `**${T}**`): T;
 >f1 : <T extends string | number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^ 
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -766,13 +764,13 @@ f1("**123**"); // "123"
 >f1("**123**") : "123"
 >              : ^^^^^
 >f1 : <T extends string | number>(s: `**${T}**`) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f2<T extends number>(s: `**${T}**`): T;
 >f2 : <T extends number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^          ^^^^^ 
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -780,13 +778,13 @@ f2("**123**"); // 123
 >f2("**123**") : 123
 >              : ^^^
 >f2 : <T extends number>(s: `**${T}**`) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 >f3 : <T extends bigint>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^          ^^^^^ 
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -794,13 +792,13 @@ f3("**123**"); // 123n
 >f3("**123**") : 123n
 >              : ^^^^
 >f3 : <T extends bigint>(s: `**${T}**`) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f4<T extends boolean>(s: `**${T}**`): T;
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^          ^^^^^ 
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -808,7 +806,7 @@ f4("**true**"); // true | "true"
 >f4("**true**") : true
 >               : ^^^^
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
 >"**true**" : "**true**"
 >           : ^^^^^^^^^^
 
@@ -816,7 +814,7 @@ f4("**false**"); // false | "false"
 >f4("**false**") : false
 >                : ^^^^^
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
 >"**false**" : "**false**"
 >            : ^^^^^^^^^^^
 

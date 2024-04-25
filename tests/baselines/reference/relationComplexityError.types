@@ -1,9 +1,8 @@
 //// [tests/cases/compiler/relationComplexityError.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,000,000 / 2,000,000 (nearest 100)
-Type Count: 31,200 / 31,200 (nearest 100)
-Symbol count: 25,500 / 25,500 (nearest 500)
+Assignability cache: 2,500,000
+Type Count: 25,000
 
 === relationComplexityError.ts ===
 // Repro from #55630
@@ -26,7 +25,7 @@ type T2 = { a: string } | { b: number };
 
 function f1(x: T1, y: T1 & T2) {
 >f1 : (x: T1, y: T1 & T2) => void
->   : ^^^^  ^^^^^       ^^^^^^^^^
+>   : ^ ^^  ^^ ^^       ^^^^^^^^^
 >x : T1
 >  : ^^
 >y : T1 & T2
@@ -43,7 +42,7 @@ function f1(x: T1, y: T1 & T2) {
 
 function f2(x: T1 | null, y: T1 & T2) {
 >f2 : (x: T1 | null, y: T1 & T2) => void
->   : ^^^^         ^^^^^       ^^^^^^^^^
+>   : ^ ^^         ^^ ^^       ^^^^^^^^^
 >x : T1 | null
 >  : ^^^^^^^^^
 >y : T1 & T2

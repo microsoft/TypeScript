@@ -73,12 +73,12 @@ export interface HTMLCollection {
 
 declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->           : ^^^^^^^^^^^^   ^^^^^                     
+>           : ^         ^^   ^^^^^                     
 >sourceObj : any
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->                 : ^^^^^^^^^^^^   ^^^^^                           
+>                 : ^         ^^   ^^^^^                           
 >sourceObj : any
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
@@ -98,7 +98,7 @@ if (isNodeList(sourceObj)) {
 >isNodeList(sourceObj) : boolean
 >                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 
@@ -115,7 +115,7 @@ if (isHTMLCollection(sourceObj)) {
 >isHTMLCollection(sourceObj) : boolean
 >                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 
@@ -134,13 +134,13 @@ if (isNodeList(sourceObj) || isHTMLCollection(sourceObj)) {
 >isNodeList(sourceObj) : boolean
 >                      : ^^^^^^^
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 >isHTMLCollection(sourceObj) : boolean
 >                            : ^^^^^^^
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^         ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sourceObj : { a: string; }
 >          : ^^^^^^^^^^^^^^
 

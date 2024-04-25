@@ -6,7 +6,7 @@
  */
 function identity(v) {
 >identity : (v: any) => any
->         : ^^^^   ^^^^^^^^
+>         : ^ ^^   ^^^^^^^^
 >v : any
 
     return v;
@@ -17,7 +17,7 @@ const x = identity(
 >x : any
 >identity(    /**     * @param {number} param     * @returns {number=}     */    param => param) : any
 >identity : (v: any) => any
->         : ^^^^^^^^^^^^^^^
+>         : ^ ^^   ^^^^^^^^
 
     /**
      * @param {number} param
@@ -25,7 +25,7 @@ const x = identity(
      */
     param => param
 >param => param : (param: number) => number | undefined
->               : ^^^^^^^^      ^^^^^      ^^^^^^^^^^^^
+>               : ^     ^^      ^^^^^      ^^^^^^^^^^^^
 >param : number
 >      : ^^^^^^
 >param : number

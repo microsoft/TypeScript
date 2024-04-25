@@ -3,7 +3,7 @@
 === couldNotSelectGenericOverload.ts ===
 function makeArray<T>(items: T[]): T[] { return items; }
 >makeArray : <T>(items: T[]) => T[]
->          : ^ ^^^^^^^^^   ^^^^^   
+>          : ^ ^^     ^^   ^^^^^   
 >items : T[]
 >      : ^^^
 >items : T[]
@@ -25,7 +25,7 @@ var b1G = makeArray(1, ""); // any, no error
 >makeArray(1, "") : unknown[]
 >                 : ^^^^^^^^^
 >makeArray : <T>(items: T[]) => T[]
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^   ^^^^^^^^
 >1 : 1
 >  : ^
 >"" : ""
@@ -37,13 +37,13 @@ var b2G = makeArray(b); // any[]
 >makeArray(b) : (string | number)[]
 >             : ^^^^^^^^^^^^^^^^^^^
 >makeArray : <T>(items: T[]) => T[]
->          : ^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^   ^^^^^^^^
 >b : (string | number)[]
 >  : ^^^^^^^^^^^^^^^^^^^
 
 function makeArray2(items: any[]): any[] { return items; }
 >makeArray2 : (items: any[]) => any[]
->           : ^^^^^^^^     ^^^^^     
+>           : ^     ^^     ^^^^^     
 >items : any[]
 >      : ^^^^^
 >items : any[]
@@ -55,7 +55,7 @@ var b3G = makeArray2(1, ""); // error
 >makeArray2(1, "") : any[]
 >                  : ^^^^^
 >makeArray2 : (items: any[]) => any[]
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^     ^^^^^^^^^^
 >1 : 1
 >  : ^
 >"" : ""

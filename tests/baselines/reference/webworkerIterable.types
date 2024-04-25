@@ -6,7 +6,7 @@ importScripts("")
 >importScripts("") : void
 >                  : ^^^^
 >importScripts : (...urls: (string | URL)[]) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^    ^^                ^^^^^^^^^
 >"" : ""
 >   : ^^
 

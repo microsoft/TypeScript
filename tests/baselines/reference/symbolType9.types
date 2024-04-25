@@ -7,11 +7,11 @@ var s = Symbol.for("equal");
 >Symbol.for("equal") : symbol
 >                    : ^^^^^^
 >Symbol.for : (key: string) => symbol
->           : ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^   ^^      ^^^^^^^^^^^
 >Symbol : SymbolConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >for : (key: string) => symbol
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^^^
 >"equal" : "equal"
 >        : ^^^^^^^
 

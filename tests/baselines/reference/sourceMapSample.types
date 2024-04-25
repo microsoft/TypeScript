@@ -45,7 +45,7 @@ module Foo.Bar {
 
     function foo(greeting: string): Foo.Bar.Greeter {
 >foo : (greeting: string) => Foo.Bar.Greeter
->    : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^      ^^^^^^^^^^^^^^^^^^^^
 >greeting : string
 >         : ^^^^^^
 >Foo : any
@@ -86,7 +86,7 @@ module Foo.Bar {
 
     function foo2(greeting: string, ...restGreetings: string[]) {
 >foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
->     : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^
+>     : ^        ^^      ^^^^^             ^^        ^^^^^^^^^^^^^^
 >greeting : string
 >         : ^^^^^^
 >restGreetings : string[]
@@ -138,11 +138,11 @@ module Foo.Bar {
 >greeters.push(new Greeter(restGreetings[i])) : number
 >                                             : ^^^^^^
 >greeters.push : (...items: Greeter[]) => number
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >greeters : Greeter[]
 >         : ^^^^^^^^^
 >push : (...items: Greeter[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^
 >new Greeter(restGreetings[i]) : Greeter
 >                              : ^^^^^^^
 >Greeter : typeof Greeter
@@ -166,7 +166,7 @@ module Foo.Bar {
 >foo2("Hello", "World", "!") : Greeter[]
 >                            : ^^^^^^^^^
 >foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^^^^             ^^        ^^^^^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"

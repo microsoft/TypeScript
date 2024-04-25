@@ -3,7 +3,7 @@
 === localClassesInLoop_ES6.ts ===
 declare function use(a: any);
 >use : (a: any) => any
->    : ^^^^   ^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >a : any
 
 "use strict"
@@ -40,11 +40,11 @@ for (let x = 0; x < 2; ++x) {
 >data.push(() => C) : number
 >                   : ^^^^^^
 >data.push : (...items: any[]) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^     ^^^^^^^^^^^^^^^^^^
 >data : any[]
 >     : ^^^^^
 >push : (...items: any[]) => number
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^^
 >() => C : () => typeof C
 >        : ^^^^^^^^^^^^^^
 >C : typeof C
@@ -54,7 +54,7 @@ for (let x = 0; x < 2; ++x) {
 use(data[0]() === data[1]());
 >use(data[0]() === data[1]()) : any
 >use : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^^^^^^^
 >data[0]() === data[1]() : boolean
 >                        : ^^^^^^^
 >data[0]() : any

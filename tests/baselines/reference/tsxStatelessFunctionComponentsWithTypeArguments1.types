@@ -7,7 +7,7 @@ import React = require('react')
 
 declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.Element;
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
->                           : ^ ^^ ^^^^^                      ^^^^^           
+>                           : ^ ^^ ^^ ^^                      ^^^^^           
 >l : { key1: K; value: V; }
 >  : ^^^^^^^^ ^^^^^^^^^ ^^^
 >key1 : K
@@ -20,7 +20,7 @@ declare function ComponentWithTwoAttributes<K,V>(l: {key1: K, value: V}): JSX.El
 // OK
 function Baz<T,U>(key1: T, value: U) {
 >Baz : <T, U>(key1: T, value: U) => void
->    : ^ ^^ ^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^
+>    : ^ ^^ ^^    ^^ ^^     ^^ ^^^^^^^^^
 >key1 : T
 >     : ^
 >value : U
@@ -32,7 +32,7 @@ function Baz<T,U>(key1: T, value: U) {
 ><ComponentWithTwoAttributes key1={key1} value={value} /> : JSX.Element
 >                                                         : ^^^^^^^^^^^
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^ ^^ ^^                      ^^^^^^^^^^^^^^^^
 >key1 : T
 >     : ^
 >key1 : T
@@ -48,7 +48,7 @@ function Baz<T,U>(key1: T, value: U) {
 ><ComponentWithTwoAttributes {...{key1, value: value}} key="Component" /> : JSX.Element
 >                                                                         : ^^^^^^^^^^^
 >ComponentWithTwoAttributes : <K, V>(l: { key1: K; value: V; }) => JSX.Element
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^ ^^ ^^                      ^^^^^^^^^^^^^^^^
 >{key1, value: value} : { key1: T; value: U; }
 >                     : ^^^^^^^^^^^^^^^^^^^^^^
 >key1 : T
@@ -63,11 +63,11 @@ function Baz<T,U>(key1: T, value: U) {
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->     : ^ ^^^^^                           ^^^^^           
+>     : ^ ^^ ^^                           ^^^^^           
 >l : { func: (arg: U) => void; }
 >  : ^^^^^^^^                ^^^
 >func : (arg: U) => void
->     : ^^^^^^ ^^^^^    
+>     : ^   ^^ ^^^^^    
 >arg : U
 >    : ^
 >JSX : any
@@ -76,9 +76,9 @@ declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 // OK
 function createLink(func: (a: number)=>void) {
 >createLink : (func: (a: number) => void) => void
->           : ^^^^^^^                   ^^^^^^^^^
+>           : ^    ^^                   ^^^^^^^^^
 >func : (a: number) => void
->     : ^^^^      ^^^^^    
+>     : ^ ^^      ^^^^^    
 >a : number
 >  : ^^^^^^
 
@@ -88,18 +88,18 @@ function createLink(func: (a: number)=>void) {
 ><Link func={func} /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                           ^^^^^^^^^^^^^^^^
 >func : (a: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 >func : (a: number) => void
->     : ^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^
 }
 
 function createLink1(func: (a: number)=>boolean) {
 >createLink1 : (func: (a: number) => boolean) => void
->            : ^^^^^^^                      ^^^^^^^^^
+>            : ^    ^^                      ^^^^^^^^^
 >func : (a: number) => boolean
->     : ^^^^      ^^^^^       
+>     : ^ ^^      ^^^^^       
 >a : number
 >  : ^^^^^^
 
@@ -109,11 +109,11 @@ function createLink1(func: (a: number)=>boolean) {
 ><Link func={func} /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                           ^^^^^^^^^^^^^^^^
 >func : (a: number) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^
 >func : (a: number) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^
 }
 
 interface InferParamProp<T> {
@@ -123,14 +123,14 @@ interface InferParamProp<T> {
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
->              : ^^^^^^^^^^^^^^ ^^^^^    
+>              : ^           ^^ ^^^^^    
 >selectedVal : T
 >            : ^
 }
 
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->                    : ^ ^^^^^^^^                 ^^^^^           
+>                    : ^ ^^    ^^                 ^^^^^           
 >attr : InferParamProp<T>
 >     : ^^^^^^^^^^^^^^^^^
 >JSX : any
@@ -143,7 +143,7 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 ><InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} /> : JSX.Element
 >                                                                           : ^^^^^^^^^^^
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^    ^^                 ^^^^^^^^^^^^^^^^
 >values : number[]
 >       : ^^^^^^^^
 >[1, 2, 3, 4] : number[]
@@ -157,9 +157,9 @@ let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val) => { }} 
 >4 : 4
 >  : ^
 >selectHandler : (val: number) => void
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^^^^^^^^^^^^^^^^
 >(val) => { } : (val: number) => void
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^   ^^^^^^^^^^^^^^^^^
 >val : number
 >    : ^^^^^^
 

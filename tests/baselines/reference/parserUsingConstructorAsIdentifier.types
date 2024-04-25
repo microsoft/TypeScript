@@ -3,7 +3,7 @@
 === parserUsingConstructorAsIdentifier.ts ===
         function define(constructor, instanceMembers, staticMembers) {
 >define : (constructor: any, instanceMembers: any, staticMembers: any) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >constructor : any
 >            : ^^^
 >instanceMembers : any
@@ -78,7 +78,7 @@
 
         function derive(baseClass, constructor, instanceMembers, staticMembers) {
 >derive : (baseClass: any, constructor: any, instanceMembers: any, staticMembers: any) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^^^^^^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >baseClass : any
 >          : ^^^
 >constructor : any
@@ -125,12 +125,12 @@
 >          : ^^^
 >Object.create(basePrototype) : any
 >                             : ^^^
->Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>              : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>create : { (o: object | null): any; (o: object | null, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>       : ^^^ ^^             ^^^^^^^^^ ^^             ^^          ^^                                     ^^^^^^^^^
 >basePrototype : any
 >              : ^^^
 
@@ -154,11 +154,11 @@
 >Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true }) : any
 >                                                                                                                                          : ^^^
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^ ^^           ^^          ^^                                  ^^^^^^
 >constructor.prototype : any
 >                      : ^^^
 >constructor : any
@@ -227,7 +227,7 @@
 >define(constructor, instanceMembers, staticMembers) : any
 >                                                    : ^^^
 >define : (constructor: any, instanceMembers: any, staticMembers: any) => any
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^           ^^^^^^^               ^^^^^^^             ^^^^^^^^^^^^^
 >constructor : any
 >            : ^^^
 >instanceMembers : any
@@ -239,7 +239,7 @@
 
         function mix(constructor) {
 >mix : (constructor: any) => any
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^           ^^^^^^^^^^^^^
 >constructor : any
 >            : ^^^
 

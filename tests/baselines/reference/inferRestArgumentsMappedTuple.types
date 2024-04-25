@@ -24,7 +24,7 @@ type MyMappedTupleOld = TupleMapperOld<[string, number]>; // [MyMappedType<strin
 
 declare function extractPrimitivesOld<Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>): Tuple;
 >extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
->                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^     
+>                     : ^     ^^^^^^^^^^^^^^^^^^^           ^^                     ^^^^^     
 >mappedTypes : TupleMapperOld<Tuple>
 >            : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -34,7 +34,7 @@ const myPrimitiveTupleOld: [string, number] = extractPrimitivesOld({ primitive: 
 >extractPrimitivesOld({ primitive: "" }, { primitive: 0 }) : [string, number]
 >                                                          : ^^^^^^^^^^^^^^^^
 >extractPrimitivesOld : <Tuple extends any[]>(...mappedTypes: TupleMapperOld<Tuple>) => Tuple
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^           ^^                     ^^^^^^^^^^
 >{ primitive: "" } : { primitive: string; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : string
@@ -61,7 +61,7 @@ type MyMappedTupleNew = TupleMapperNew<[string, number]>;
 
 declare function extractPrimitivesNew<Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>): Tuple;
 >extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple
->                     : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                     ^^^^^     
+>                     : ^     ^^^^^^^^^^^^^^^^^^^           ^^                     ^^^^^     
 >mappedTypes : TupleMapperNew<Tuple>
 >            : ^^^^^^^^^^^^^^^^^^^^^
 
@@ -71,7 +71,7 @@ const myPrimitiveTupleNew: [string, number] = extractPrimitivesNew({ primitive: 
 >extractPrimitivesNew({ primitive: "" }, { primitive: 0 }) : [string, number]
 >                                                          : ^^^^^^^^^^^^^^^^
 >extractPrimitivesNew : <Tuple extends any[]>(...mappedTypes: TupleMapperNew<Tuple>) => Tuple
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^^^^           ^^                     ^^^^^^^^^^
 >{ primitive: "" } : { primitive: string; }
 >                  : ^^^^^^^^^^^^^^^^^^^^^^
 >primitive : string

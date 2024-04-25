@@ -34,11 +34,11 @@ class D extends C {
 >console.log(super.blah1) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >super.blah1 : number
 >            : ^^^^^^
 >super : typeof C
@@ -50,11 +50,11 @@ class D extends C {
 >console.log(super.blah2) : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >super.blah2 : number
 >            : ^^^^^^
 >super : typeof C

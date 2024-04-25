@@ -70,7 +70,7 @@ function f2() {
 
     function f(x: number) {
 >f : (x: number) => typeof C
->  : ^^^^      ^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
@@ -98,7 +98,7 @@ function f2() {
 >f(10) : typeof C
 >      : ^^^^^^^^
 >f : (x: number) => typeof C
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 
@@ -139,7 +139,7 @@ function f3() {
 
     function f(x: number, y: number) {
 >f : (x: number, y: number) => typeof C
->  : ^^^^      ^^^^^      ^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -171,7 +171,7 @@ function f3() {
 >f(10, 20) : typeof C
 >          : ^^^^^^^^
 >f : (x: number, y: number) => typeof C
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20

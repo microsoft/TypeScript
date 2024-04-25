@@ -74,13 +74,13 @@ module m1 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -147,13 +147,13 @@ module m1 {
 
         f1(a1: C1_public);
 >f1 : (a1: C1_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C1_public
 >   : ^^^^^^^^^
 
         f2(a1: C2_private);
 >f2 : (a1: C2_private) => any
->   : ^^^^^          ^^^^^^^^
+>   : ^  ^^          ^^^^^^^^
 >a1 : C2_private
 >   : ^^^^^^^^^^
 
@@ -206,7 +206,7 @@ interface C7_public {
 
     f1(a1: C5_public);
 >f1 : (a1: C5_public) => any
->   : ^^^^^         ^^^^^^^^
+>   : ^  ^^         ^^^^^^^^
 >a1 : C5_public
 >   : ^^^^^^^^^
 

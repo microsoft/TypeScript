@@ -66,7 +66,7 @@ enum MyStringEnumWithEmpty {
 
 export function fn(optionalEnum: MyEnum | undefined) {
 >fn : (optionalEnum: MyEnum | undefined) => MyEnum
->   : ^^^^^^^^^^^^^^^                  ^^^^^^^^^^^
+>   : ^            ^^                  ^^^^^^^^^^^
 >optionalEnum : MyEnum
 >             : ^^^^^^
 
@@ -85,7 +85,7 @@ export function fn(optionalEnum: MyEnum | undefined) {
 
 export function fn2(optionalEnum: MyEnum | undefined) {
 >fn2 : (optionalEnum: MyEnum | undefined) => MyEnum.B | MyEnum.C
->    : ^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^            ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
 >             : ^^^^^^
 
@@ -104,7 +104,7 @@ export function fn2(optionalEnum: MyEnum | undefined) {
 
 export function fn3(optionalEnum?: MyEnum) {
 >fn3 : (optionalEnum?: MyEnum) => MyEnum
->    : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^
+>    : ^            ^^^      ^^^^^^^^^^^
 >optionalEnum : MyEnum
 >             : ^^^^^^
 
@@ -123,7 +123,7 @@ export function fn3(optionalEnum?: MyEnum) {
 
 export function fn4(optionalEnum?: MyEnum) {
 >fn4 : (optionalEnum?: MyEnum) => MyEnum.B | MyEnum.C
->    : ^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^            ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyEnum
 >             : ^^^^^^
 
@@ -142,7 +142,7 @@ export function fn4(optionalEnum?: MyEnum) {
 
 export function fn5(optionalEnum?: MyStringEnum) {
 >fn5 : (optionalEnum?: MyStringEnum) => MyStringEnum
->    : ^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^
+>    : ^            ^^^            ^^^^^^^^^^^^^^^^^
 >optionalEnum : MyStringEnum
 >             : ^^^^^^^^^^^^
 
@@ -161,7 +161,7 @@ export function fn5(optionalEnum?: MyStringEnum) {
 
 export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
 >fn6 : (optionalEnum?: MyStringEnumWithEmpty) => MyStringEnumWithEmpty.B | MyStringEnumWithEmpty.C
->    : ^^^^^^^^^^^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^            ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalEnum : MyStringEnumWithEmpty
 >             : ^^^^^^^^^^^^^^^^^^^^^
 

@@ -7,7 +7,7 @@
  */
 function acceptNum(num) {}
 >acceptNum : (num: number) => void
->          : ^^^^^^      ^^^^^^^^^
+>          : ^   ^^      ^^^^^^^^^
 >num : number
 >    : ^^^^^^
 
@@ -25,9 +25,9 @@ const fn1 =
    */
   function self(a, b) {
 >function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number | undefined
@@ -37,7 +37,7 @@ const fn1 =
 >acceptNum(b) : void
 >             : ^^^^
 >acceptNum : (num: number) => void
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^      ^^^^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -45,7 +45,7 @@ const fn1 =
 >self("") : void
 >         : ^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -53,7 +53,7 @@ const fn1 =
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >undefined : undefined
@@ -71,9 +71,9 @@ const fn2 =
    */
   function self(a, b) {
 >function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number | undefined
@@ -83,7 +83,7 @@ const fn2 =
 >acceptNum(b) : void
 >             : ^^^^
 >acceptNum : (num: number) => void
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^      ^^^^^^^^^
 >b : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 
@@ -91,7 +91,7 @@ const fn2 =
 >self("") : void
 >         : ^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 
@@ -99,7 +99,7 @@ const fn2 =
 >self("", undefined) : void
 >                    : ^^^^
 >self : (a: string, b?: number | undefined) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"" : ""
 >   : ^^
 >undefined : undefined

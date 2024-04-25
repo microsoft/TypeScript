@@ -21,7 +21,7 @@ declare class Point
 
      add(dx: number, dy: number): Point;
 >add : (dx: number, dy: number) => Point
->    : ^^^^^      ^^^^^^      ^^^^^     
+>    : ^  ^^      ^^  ^^      ^^^^^     
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -75,7 +75,7 @@ function Point(x, y) {
 
 declare function EF1(a:number, b:number):number;
 >EF1 : (a: number, b: number) => number
->    : ^^^^      ^^^^^      ^^^^^      
+>    : ^ ^^      ^^ ^^      ^^^^^      
 >a : number
 >  : ^^^^^^
 >b : number
@@ -83,7 +83,7 @@ declare function EF1(a:number, b:number):number;
 
 function EF1(a,b) { return a+b; }
 >EF1 : (a: number, b: number) => number
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any

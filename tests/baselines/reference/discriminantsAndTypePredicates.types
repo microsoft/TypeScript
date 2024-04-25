@@ -13,7 +13,7 @@ interface B { type: 'B' }
 
 function isA(x: A | B): x is A { return x.type === 'A'; }
 >isA : (x: A | B) => x is A
->    : ^^^^     ^^^^^      
+>    : ^ ^^     ^^^^^      
 >x : A | B
 >  : ^^^^^
 >x.type === 'A' : boolean
@@ -29,7 +29,7 @@ function isA(x: A | B): x is A { return x.type === 'A'; }
 
 function isB(x: A | B): x is B { return x.type === 'B'; }
 >isB : (x: A | B) => x is B
->    : ^^^^     ^^^^^      
+>    : ^ ^^     ^^^^^      
 >x : A | B
 >  : ^^^^^
 >x.type === 'B' : boolean
@@ -45,7 +45,7 @@ function isB(x: A | B): x is B { return x.type === 'B'; }
 
 function foo1(x: A | B): any {
 >foo1 : (x: A | B) => any
->     : ^^^^     ^^^^^   
+>     : ^ ^^     ^^^^^   
 >x : A | B
 >  : ^^^^^
 
@@ -57,7 +57,7 @@ function foo1(x: A | B): any {
 >isA(x) : boolean
 >       : ^^^^^^^
 >isA : (x: A | B) => x is A
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^^^^^^^^^^
 >x : A | B
 >  : ^^^^^
 
@@ -73,7 +73,7 @@ function foo1(x: A | B): any {
 >isB(x) : boolean
 >       : ^^^^^^^
 >isB : (x: A | B) => x is B
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^^^^^^^^^^
 >x : B
 >  : ^
 
@@ -88,7 +88,7 @@ function foo1(x: A | B): any {
 
 function foo2(x: A | B): any {
 >foo2 : (x: A | B) => any
->     : ^^^^     ^^^^^   
+>     : ^ ^^     ^^^^^   
 >x : A | B
 >  : ^^^^^
 

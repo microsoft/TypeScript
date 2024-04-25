@@ -3,7 +3,7 @@
 === genericCapturingFunctionNarrowing.ts ===
 function needsToNarrowTheType<First extends { foo: string }, Second extends { bar: string }, SubFirst extends First, SubFirstMore extends First & {other: string}>(thing: First | SubFirst | SubFirstMore | Second) {
 >needsToNarrowTheType : <First extends { foo: string; }, Second extends { bar: string; }, SubFirst extends First, SubFirstMore extends First & { other: string; }>(thing: First | SubFirst | SubFirstMore | Second) => void
->                     : ^     ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^                                        ^^^^^^^^^
+>                     : ^     ^^^^^^^^^^^^^^^^      ^^^^^      ^^^^^^^^^^^^^^^^      ^^^^^        ^^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^     ^^                                        ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >bar : string
@@ -17,7 +17,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 >hasAFoo(thing) : boolean
 >               : ^^^^^^^
 >hasAFoo : (value: First | Second) => value is First
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^              ^^^^^^^^^^^^^^^^^^^
 >thing : First | Second | SubFirst | SubFirstMore
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -25,11 +25,11 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 >console.log(thing.foo) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >thing.foo : string
 >          : ^^^^^^
 >thing : First | SubFirst | SubFirstMore
@@ -43,11 +43,11 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 >console.log(thing.bar) : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >thing.bar : string
 >          : ^^^^^^
 >thing : Second
@@ -58,7 +58,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 
     function hasAFoo(value: First | Second): value is First {
 >hasAFoo : (value: First | Second) => value is First
->        : ^^^^^^^^              ^^^^^              
+>        : ^     ^^              ^^^^^              
 >value : First | Second
 >      : ^^^^^^^^^^^^^^
 

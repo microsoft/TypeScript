@@ -19,7 +19,7 @@ module Editor {
         
         addLine(lineText: string): List<Line> {
 >addLine : (lineText: string) => List<Line>
->        : ^^^^^^^^^^^      ^^^^^          
+>        : ^        ^^      ^^^^^          
 >lineText : string
 >         : ^^^^^^
             
@@ -37,7 +37,7 @@ module Editor {
 >this.lines.add(line) : List<Line>
 >                     : ^^^^^^^^^^
 >this.lines.add : (data: Line) => List<Line>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^    ^^^^^^^^^^^^^^^^^^^^^
 >this.lines : List<Line>
 >           : ^^^^^^^^^^
 >this : this
@@ -45,7 +45,7 @@ module Editor {
 >lines : List<Line>
 >      : ^^^^^^^^^^
 >add : (data: Line) => List<Line>
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^    ^^^^^^^^^^^^^^^^^^^^^
 >line : Line
 >     : ^^^^
 
@@ -57,7 +57,7 @@ module Editor {
     
     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->                : ^ ^^^^^^^^^       ^^^^^       
+>                : ^ ^^     ^^       ^^^^^       
 >entry : List<U>
 >      : ^^^^^^^
 
@@ -75,7 +75,7 @@ module Editor {
 
     export function ListMakeEntry<U>(data: U): List<U> {
 >ListMakeEntry : <U>(data: U) => List<U>
->              : ^ ^^^^^^^^ ^^^^^       
+>              : ^ ^^    ^^ ^^^^^       
 >data : U
 >     : ^
 
@@ -92,7 +92,7 @@ module Editor {
 
         add(data: T): List<T> {
 >add : (data: T) => List<T>
->    : ^^^^^^^ ^^^^^       
+>    : ^    ^^ ^^^^^       
 >data : T
 >     : ^
 
@@ -108,7 +108,7 @@ module Editor {
 >ListMakeEntry(data) : List<T>
 >                    : ^^^^^^^
 >ListMakeEntry : <U>(data: U) => List<U>
->              : ^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^    ^^ ^^^^^^^^^^^^
 >data : T
 >     : ^
 
@@ -123,7 +123,7 @@ module Editor {
 
         popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
->         : ^^^^^^^       ^^^^^       
+>         : ^    ^^       ^^^^^       
 >head : List<T>
 >     : ^^^^^^^
 
@@ -133,7 +133,7 @@ module Editor {
 >ListRemoveEntry(this.next) : List<T>
 >                           : ^^^^^^^
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^     ^^       ^^^^^^^^^^^^
 >this.next : List<T>
 >          : ^^^^^^^
 >this : this

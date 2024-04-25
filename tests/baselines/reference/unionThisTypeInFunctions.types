@@ -4,7 +4,7 @@
 interface Real {
     method(this: this, n: number): void;
 >method : (this: this, n: number) => void
->       : ^^^^^^^    ^^^^^      ^^^^^    
+>       : ^    ^^    ^^ ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >n : number
@@ -17,7 +17,7 @@ interface Real {
 interface Fake {
     method(this: this, n: number): void;
 >method : (this: this, n: number) => void
->       : ^^^^^^^    ^^^^^      ^^^^^    
+>       : ^    ^^    ^^ ^^      ^^^^^    
 >this : this
 >     : ^^^^
 >n : number
@@ -29,7 +29,7 @@ interface Fake {
 }
 function test(r: Real | Fake) {
 >test : (r: Real | Fake) => void
->     : ^^^^           ^^^^^^^^^
+>     : ^ ^^           ^^^^^^^^^
 >r : Real | Fake
 >  : ^^^^^^^^^^^
 
@@ -37,11 +37,11 @@ function test(r: Real | Fake) {
 >r.method(12) : void
 >             : ^^^^
 >r.method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^    ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^    ^^^^^^^^ ^^      ^^^^^^^^^^
 >r : Real | Fake
 >  : ^^^^^^^^^^^
 >method : ((this: Real, n: number) => void) | ((this: Fake, n: number) => void)
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^    ^^^^^^^^ ^^      ^^^^^^^^^^^^^^^    ^^^^^^^^ ^^      ^^^^^^^^^^
 >12 : 12
 >   : ^^
 }

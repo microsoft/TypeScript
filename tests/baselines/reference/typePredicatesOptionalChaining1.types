@@ -31,7 +31,7 @@ const x: X = {
 // type guard
 function isNotNull<A>(x: A): x is NonNullable<A> {
 >isNotNull : <A>(x: A) => x is NonNullable<A>
->          : ^ ^^^^^ ^^^^^                   
+>          : ^ ^^ ^^ ^^^^^                   
 >x : A
 >  : ^
 
@@ -52,7 +52,7 @@ function isNotNull<A>(x: A): x is NonNullable<A> {
 // function which I want to call in the result of the expression
 function title(str: string) {
 >title : (str: string) => string
->      : ^^^^^^      ^^^^^^^^^^^
+>      : ^   ^^      ^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -85,7 +85,7 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 >isNotNull(x?.y?.z) : boolean
 >                   : ^^^^^^^
 >isNotNull : <A>(x: A) => x is NonNullable<A>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >x?.y?.z : string | undefined
 >        : ^^^^^^^^^^^^^^^^^^
 >x?.y : { z?: string | undefined; } | undefined
@@ -99,7 +99,7 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 >title(x.y.z) : string
 >             : ^^^^^^
 >title : (str: string) => string
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^      ^^^^^^^^^^^
 >x.y.z : string
 >      : ^^^^^^
 >x.y : { z?: string | undefined; }

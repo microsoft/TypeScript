@@ -15,20 +15,20 @@ type CorrectObject = {name: string};
 
 declare function isCorrect(obj: any): obj is CorrectObject
 >isCorrect : (obj: any) => obj is CorrectObject
->          : ^^^^^^   ^^^^^                    
+>          : ^   ^^   ^^^^^                    
 >obj : any
 
 declare function callsCallback(cb: (name: string)=>void)
 >callsCallback : (cb: (name: string) => void) => any
->              : ^^^^^                      ^^^^^^^^
+>              : ^  ^^                      ^^^^^^^^
 >cb : (name: string) => void
->   : ^^^^^^^      ^^^^^    
+>   : ^    ^^      ^^^^^    
 >name : string
 >     : ^^^^^^
 
 function problemFunction(this: CorrectObject | WrongObject): void {
 >problemFunction : (this: CorrectObject | WrongObject) => void
->                : ^^^^^^^                           ^^^^^    
+>                : ^    ^^                           ^^^^^    
 >this : WrongObject | CorrectObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -39,16 +39,16 @@ function problemFunction(this: CorrectObject | WrongObject): void {
 >isCorrect(this) : boolean
 >                : ^^^^^^^
 >isCorrect : (obj: any) => obj is CorrectObject
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : WrongObject | CorrectObject
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     callsCallback((name)=>{
 >callsCallback((name)=>{        this.name = name; //should not error        type T = typeof this;    }) : any
 >callsCallback : (cb: (name: string) => void) => any
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^  ^^                      ^^^^^^^^
 >(name)=>{        this.name = name; //should not error        type T = typeof this;    } : (name: string) => void
->                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                        : ^    ^^^^^^^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 

@@ -5,7 +5,7 @@
 //Comma operator in function arguments and return
 function foo(x: number, y: string) {
 >foo : (x: number, y: string) => string
->    : ^^^^      ^^^^^      ^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -25,7 +25,7 @@ var resultIsString: number = foo(1, "123"); //error here
 >foo(1, "123") : string
 >              : ^^^^^^
 >foo : (x: number, y: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 >"123" : "123"

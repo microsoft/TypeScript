@@ -8,7 +8,7 @@ interface Foo<T> {
 }
 function foo(a) {
 >foo : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -18,9 +18,9 @@ foo((arg: Foo) => { return arg.x; });
 >foo((arg: Foo) => { return arg.x; }) : any
 >                                     : ^^^
 >foo : (a: any) => any
->    : ^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^
 >(arg: Foo) => { return arg.x; } : (arg: any) => any
->                                : ^^^^^^^^^^^^^^^^^
+>                                : ^   ^^^^^^^^^^^^^
 >arg : any
 >    : ^^^
 >arg.x : any

@@ -1,8 +1,7 @@
 //// [tests/cases/compiler/unionSubtypeReductionErrors.ts] ////
 
 === Performance Stats ===
-Type Count: 11,100 / 13,100 (nearest 100)
-Symbol count: 28,500 / 30,500 (nearest 500)
+Type Count: 10,000
 
 === unionSubtypeReductionErrors.ts ===
 let a = [

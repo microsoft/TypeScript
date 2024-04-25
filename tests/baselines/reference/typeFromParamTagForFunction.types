@@ -3,7 +3,7 @@
 === node.d.ts ===
 declare function require(id: string): any;
 >require : (id: string) => any
->        : ^^^^^      ^^^^^   
+>        : ^  ^^      ^^^^^   
 >id : string
 >   : ^^^^^^
 
@@ -44,14 +44,14 @@ const { A } = require("./a-ext");
 >require("./a-ext") : typeof import("a-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./a-ext" : "./a-ext"
 >          : ^^^^^^^^^
 
 /** @param {A} p */
 function a(p) { p.x; }
 >a : (p: A) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >p : A
 >  : ^
 >p.x : number
@@ -95,14 +95,14 @@ const { B } = require("./b-ext");
 >require("./b-ext") : typeof import("b-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./b-ext" : "./b-ext"
 >          : ^^^^^^^^^
 
 /** @param {B} p */
 function b(p) { p.x; }
 >b : (p: B) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >p : B
 >  : ^
 >p.x : number
@@ -136,14 +136,14 @@ const { C } = require("./c-ext");
 >require("./c-ext") : typeof import("c-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./c-ext" : "./c-ext"
 >          : ^^^^^^^^^
 
 /** @param {C} p */
 function c(p) { p.x; }
 >c : (p: C) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >p : C
 >  : ^
 >p.x : number
@@ -180,14 +180,14 @@ const { D } = require("./d-ext");
 >require("./d-ext") : typeof import("d-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./d-ext" : "./d-ext"
 >          : ^^^^^^^^^
 
 /** @param {D} p */
 function d(p) { p.x; }
 >d : (p: D) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >p : D
 >  : ^
 >p.x : number
@@ -223,14 +223,14 @@ const { E } = require("./e-ext");
 >require("./e-ext") : typeof import("e-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^  ^^      ^^^^^^^^
 >"./e-ext" : "./e-ext"
 >          : ^^^^^^^^^
 
 /** @param {E} p */
 function e(p) { p.x; }
 >e : (p: E) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >p : E
 >  : ^
 >p.x : number
@@ -263,7 +263,7 @@ var F = function () {
 /** @param {F} p */
 function f(p) { p.x; }
 >f : (p: F) => void
->  : ^^^^^^^^^^^^^^
+>  : ^ ^^^^^^^^^^^^
 >p : F
 >  : ^
 >p.x : number
@@ -293,7 +293,7 @@ function G() {
 /** @param {G} p */
 function g(p) { p.x; }
 >g : (p: G) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >p : G
 >  : ^
 >p.x : number
@@ -325,7 +325,7 @@ class H {
 /** @param {H} p */
 function h(p) { p.x; }
 >h : (p: H) => void
->  : ^^^^ ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^
 >p : H
 >  : ^
 >p.x : number

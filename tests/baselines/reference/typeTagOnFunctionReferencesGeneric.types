@@ -8,7 +8,7 @@
 /**@type {IFn}*/
 export function inJs(l) {
 >inJs : <T>(m: T) => T
->     : ^ ^^^^^^^^^^^^
+>     : ^ ^^ ^^ ^^^^^ 
 >l : T
 >  : ^
 
@@ -20,7 +20,7 @@ inJs(1); // lints error. Why?
 >inJs(1) : 1
 >        : ^
 >inJs : <T>(m: T) => T
->     : ^^^^^^^^^^^^^^
+>     : ^ ^^ ^^ ^^^^^^
 >1 : 1
 >  : ^
 
@@ -29,7 +29,7 @@ const inJsArrow = (j) => {
 >inJsArrow : IFn
 >          : ^^^
 >(j) => {    return j;} : <T>(j: T) => T
->                       : ^^^^^^^^^^^^^^
+>                       : ^^^^ ^^^^^^^^^
 >j : T
 >  : ^
 

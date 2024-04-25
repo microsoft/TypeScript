@@ -126,7 +126,7 @@ var classic = new s.Classic()
     @param {s.Classic} classic */
 function f(c, classic) {
 >f : (c: C, classic: s.Classic) => void
->  : ^^^^^^^^^^^^^^^^         ^^^^^^^^^
+>  : ^ ^^^^^       ^^         ^^^^^^^^^
 >c : C
 >  : ^
 >classic : s.Classic

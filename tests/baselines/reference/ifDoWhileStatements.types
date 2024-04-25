@@ -50,7 +50,7 @@ class D<T>{
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 >42 : 42
@@ -58,7 +58,7 @@ function F(x: string): number { return 42; }
 
 function F2(x: number): boolean { return x < 42; }
 >F2 : (x: number) => boolean
->   : ^^^^      ^^^^^       
+>   : ^ ^^      ^^^^^       
 >x : number
 >  : ^^^^^^
 >x < 42 : boolean
@@ -83,17 +83,17 @@ module M {
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 }
 
 module N {
@@ -111,17 +111,17 @@ module N {
 
     export function F2(x: number): string { return x.toString(); }
 >F2 : (x: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 >x.toString() : string
 >             : ^^^^^^
 >x.toString : (radix?: number) => string
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 }
 
 // literals
@@ -542,7 +542,7 @@ do { }while(k)
 
 function fn(x?: string): I { return null; }
 >fn : (x?: string) => I
->   : ^^^^^      ^^^^^ 
+>   : ^ ^^^      ^^^^^ 
 >x : string
 >  : ^^^^^^
 
@@ -550,31 +550,31 @@ if (fn()) { }
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 while (fn()) { }
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 do { }while(fn())
 >fn() : I
 >     : ^
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 if (fn) { }
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 while (fn) { }
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 do { }while(fn)
 >fn : (x?: string) => I
->   : ^^^^^^^^^^^^^^^^^
+>   : ^ ^^^      ^^^^^^
 
 
 

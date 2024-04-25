@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx] ////
 
 === Performance Stats ===
-Assignability cache: 2,100 / 2,100 (nearest 100)
-Type Count: 7,600 / 7,600 (nearest 100)
-Instantiation count: 89,500 / 89,500 (nearest 500)
-Symbol count: 66,000 / 66,000 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === jsxGenericComponentWithSpreadingResultOfGenericFunction.tsx ===
 /// <reference path="react16.d.ts" />
@@ -13,15 +13,15 @@ Symbol count: 66,000 / 66,000 (nearest 500)
 
 declare function omit<T, K extends string>(names: readonly K[], obj: T): Omit<T, K>;
 >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K_1 extends string>(names: readonly K_1[]): <T_1>(obj: T_1) => Omit<T_1, K_1>; }
->     : ^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^^^^ ^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^ ^^^^^^^^^^^^^^^^^     ^^            ^^   ^^ ^^^          ^^^   ^^^^^^^^^^^^^^^^^     ^^              ^^^^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >names : readonly K[]
 >      : ^^^^^^^^^^^^
 >obj : T
 >    : ^
 
 declare function omit<K extends string>(names: readonly K[]): <T>(obj: T) => Omit<T, K>;
->omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K extends string>(names: readonly K[]): <T_1>(obj: T_1) => Omit<T_1, K>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^            ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>omit : { <T, K_1 extends string>(names: readonly K_1[], obj: T): Omit<T, K_1>; <K extends string>(names: readonly K[]): <T>(obj: T_1) => Omit<T_1, K>; }
+>     : ^^^ ^^   ^^^^^^^^^^^^^^^^^     ^^              ^^   ^^ ^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^     ^^            ^^^                             ^^^
 >names : readonly K[]
 >      : ^^^^^^^^^^^^
 >obj : T
@@ -37,7 +37,7 @@ declare const otherProps: { bar: string, qwe: boolean }
 
 declare function GenericComponent<T>(props: T): null
 >GenericComponent : <T>(props: T) => null
->                 : ^ ^^^^^^^^^ ^^^^^    
+>                 : ^ ^^     ^^ ^^^^^    
 >props : T
 >      : ^
 
@@ -45,11 +45,11 @@ declare function GenericComponent<T>(props: T): null
 ><GenericComponent {...omit(['bar'], otherProps)} /> : JSX.Element
 >                                                    : ^^^^^^^^^^^
 >GenericComponent : <T>(props: T) => null
->                 : ^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^     ^^ ^^^^^^^^^
 >omit(['bar'], otherProps) : Omit<{ bar: string; qwe: boolean; }, "bar">
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >omit : { <T, K extends string>(names: readonly K[], obj: T): Omit<T, K>; <K_1 extends string>(names: readonly K_1[]): <T_1>(obj: T_1) => Omit<T_1, K_1>; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^ ^^^^^^^^^^^^^^^^^     ^^            ^^   ^^ ^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^     ^^              ^^^^   ^^   ^^   ^^^^^^^^^^^^^^^^^^^^^^
 >['bar'] : "bar"[]
 >        : ^^^^^^^
 >'bar' : "bar"
