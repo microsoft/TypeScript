@@ -7612,6 +7612,7 @@ export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptio
 // dprint-ignore
 /** @internal */
 export const enum CharacterCodes {
+    EOF = -1,
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,
 
