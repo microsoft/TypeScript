@@ -20,7 +20,7 @@ Fs::
 
 configFileName:: tsconfig.json
 FileNames::
-/b.ts,/bin/a.ts
+/b.ts
 Errors::
 
 
@@ -46,6 +46,6 @@ Fs::
 
 configFileName:: tsconfig.json
 FileNames::
-/b.ts,/bin/a.ts
+/b.ts
 Errors::
 
