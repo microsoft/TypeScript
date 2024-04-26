@@ -935,7 +935,7 @@ function withContext<T>(
 
         if (typePrintMode === TypePrintMode.WIDENED) {
             if (variableType) {
-              type = variableType;
+                type = variableType;
             }
             // Widening of types can happen on union of type literals on
             // declaration emit so we query it.
