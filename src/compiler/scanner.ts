@@ -2946,15 +2946,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 return;
             }
             let start = pos;
-            let oprand!: string;
+            let operand!: string;
             switch (text.slice(pos, pos + 2)) {
                 case "--":
                 case "&&":
-                    error(Diagnostics.Expected_a_class_set_oprand);
+                    error(Diagnostics.Expected_a_class_set_operand);
                     mayContainStrings = false;
                     break;
                 default:
-                    oprand = scanClassSetOprand();
+                    operand = scanClassSetOperand();
                     break;
             }
             switch (text.charCodeAt(pos)) {
@@ -3004,31 +3004,31 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             pos++;
                             error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             start = pos - 2;
-                            oprand = text.slice(start, pos);
+                            operand = text.slice(start, pos);
                             continue;
                         }
                         else {
-                            if (!oprand) {
+                            if (!operand) {
                                 error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - 1 - start);
                             }
                             const secondStart = pos;
-                            const secondOprand = scanClassSetOprand();
+                            const secondOperand = scanClassSetOperand();
                             if (isCharacterComplement && mayContainStrings) {
                                 error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, secondStart, pos - secondStart);
                             }
                             expressionMayContainStrings ||= mayContainStrings;
-                            if (!secondOprand) {
+                            if (!secondOperand) {
                                 error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, secondStart, pos - secondStart);
                                 break;
                             }
-                            if (!oprand) {
+                            if (!operand) {
                                 break;
                             }
-                            const minCharacterValue = codePointAt(oprand, 0);
-                            const maxCharacterValue = codePointAt(secondOprand, 0);
+                            const minCharacterValue = codePointAt(operand, 0);
+                            const maxCharacterValue = codePointAt(secondOperand, 0);
                             if (
-                                oprand.length === charSize(minCharacterValue) &&
-                                secondOprand.length === charSize(maxCharacterValue) &&
+                                operand.length === charSize(minCharacterValue) &&
+                                secondOperand.length === charSize(maxCharacterValue) &&
                                 minCharacterValue > maxCharacterValue
                             ) {
                                 error(Diagnostics.Range_out_of_order_in_character_class, start, pos - start);
@@ -3049,7 +3049,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         else {
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
                         }
-                        oprand = text.slice(start, pos);
+                        operand = text.slice(start, pos);
                         continue;
                 }
                 if (isClassContentExit(text.charCodeAt(pos))) {
@@ -3061,10 +3061,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     case "&&":
                         error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
                         pos += 2;
-                        oprand = text.slice(start, pos);
+                        operand = text.slice(start, pos);
                         break;
                     default:
-                        oprand = scanClassSetOprand();
+                        operand = scanClassSetOperand();
                         break;
                 }
             }
@@ -3123,10 +3123,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 ch = text.charCodeAt(pos);
                 if (isClassContentExit(ch)) {
-                    error(Diagnostics.Expected_a_class_set_oprand);
+                    error(Diagnostics.Expected_a_class_set_operand);
                     break;
                 }
-                scanClassSetOprand();
+                scanClassSetOperand();
                 // Used only if expressionType is Intersection
                 expressionMayContainStrings &&= mayContainStrings;
             }
@@ -3138,7 +3138,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | '\' CharacterClassEscape
         //     | '\q{' ClassStringDisjunctionContents '}'
         //     | ClassSetCharacter
-        function scanClassSetOprand(): string {
+        function scanClassSetOperand(): string {
             mayContainStrings = false;
             switch (text.charCodeAt(pos)) {
                 case CharacterCodes.openBracket:

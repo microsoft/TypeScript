@@ -1733,7 +1733,7 @@
         "category": "Error",
         "code": 1519
     },
-    "Expected a class set oprand.": {
+    "Expected a class set operand.": {
         "category": "Error",
         "code": 1520
     },
