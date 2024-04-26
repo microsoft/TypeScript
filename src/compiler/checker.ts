@@ -35748,8 +35748,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (cached && cached !== resolvingSignature && !candidatesOutArray) {
             return cached;
         }
+        const saveResolutionStart = resolutionStart;
+        if (saveResolutionStart === 0) {
+            // If we haven't already done so, temporarily reset the resolution stack. This allows us to
+            // handle "inverted" situations where, for example, an API client asks for the type of a symbol
+            // containined in a function call argument whose contextual type depends on the symbol itself
+            // through resolution of the containing function call. By resetting the resolution stack we'll
+            // retry the symbol type resolution with the resolvingSignature marker in place to suppress
+            // the contextual type circularity.
+            resolutionStart = resolutionTargets.length;
+        }
         links.resolvedSignature = resolvingSignature;
         let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+        resolutionStart = saveResolutionStart;
         // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
         // resolution should be deferred.
         if (result !== resolvingSignature) {
