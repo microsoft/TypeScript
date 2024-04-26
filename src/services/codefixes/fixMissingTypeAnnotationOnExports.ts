@@ -375,7 +375,7 @@ function withContext<T>(
 
         if (!(isExpressionTarget || isShorthandPropertyAssignmentTarget)) return undefined;
 
-        const { typeNode, mutatedTarget } = inferType(targetNode);
+        const { typeNode, mutatedTarget } = inferType(targetNode, type);
         if (!typeNode || mutatedTarget) return undefined;
 
         if (isShorthandPropertyAssignmentTarget) {
@@ -921,7 +921,7 @@ function withContext<T>(
         mutatedTarget: boolean;
     }
 
-    function inferType(node: Node): InferenceResult {
+    function inferType(node: Node, variableType?: Type | undefined): InferenceResult {
         if (typePrintMode === TypePrintMode.RELATIVE) {
             return relativeType(node);
         }
@@ -934,6 +934,11 @@ function withContext<T>(
         }
 
         if (typePrintMode === TypePrintMode.WIDENED) {
+            if (variableType) {
+              type = variableType;
+            }
+            // Widening of types can happen on union of type literals on
+            // declaration emit so we query it.
             const widenedType = typeChecker.getWidenedLiteralType(type);
             if (typeChecker.isTypeAssignableTo(widenedType, type)) {
                 return emptyInferenceResult;

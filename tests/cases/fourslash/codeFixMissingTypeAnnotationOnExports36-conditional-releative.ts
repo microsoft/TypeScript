@@ -22,11 +22,14 @@ verify.codeFixAvailable([
     },
     {
       "description": "Add satisfies and an inline type assertion with 'typeof A | typeof B'"
+    },
+    {
+      "description": "Add satisfies and an inline type assertion with 'string'"
     }
 ])
 verify.codeFix({
     description: "Add satisfies and an inline type assertion with 'typeof A | typeof B'" ,
-    index: 3,
+    index: 4,
     newFileContent:
 `const A = "A"
 const B = "B"
