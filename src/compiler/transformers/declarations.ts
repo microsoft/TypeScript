@@ -70,6 +70,7 @@ import {
     getResolvedExternalModuleName,
     getSetAccessorValueParameter,
     getSourceFileOfNode,
+    getSourceFilesToEmit,
     GetSymbolAccessibilityDiagnostic,
     getTextOfNode,
     getThisParameter,
@@ -184,6 +185,7 @@ import {
     setTextRange,
     some,
     SourceFile,
+    sourceFileMayBeEmitted,
     Statement,
     StringLiteral,
     Symbol,
@@ -214,7 +216,15 @@ import {
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
-    const result = transformNodes(resolver, host, factory, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJson), [transformDeclarations], /*allowDtsFiles*/ false);
+    const result = transformNodes(
+        resolver,
+        host,
+        factory,
+        compilerOptions,
+        filter(getSourceFilesToEmit(host, file), isSourceFileNotJson),
+        [transformDeclarations],
+        /*allowDtsFiles*/ false,
+    );
     return result.diagnostics;
 }
 
