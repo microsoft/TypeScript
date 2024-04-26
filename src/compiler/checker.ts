@@ -31360,7 +31360,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarRegularExpressionLiteral(node: RegularExpressionLiteral) {
         const sourceFile = getSourceFileOfNode(node);
-        if (!hasParseDiagnostics(sourceFile)) {
+        if (!hasParseDiagnostics(sourceFile) && !node.isUnterminated) {
             let lastError: DiagnosticWithLocation | undefined;
             scanner ??= createScanner(ScriptTarget.ESNext, /*skipTrivia*/ true);
             scanner.setScriptTarget(sourceFile.languageVersion);

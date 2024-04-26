@@ -1109,13 +1109,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return codePointAt(text, pos);
     }
 
-    // /**
-    //  * Returns the code point for the character at the given position within `text`. If
-    //  * `pos` is outside the bounds set for `text`, `CharacterCodes.EOF` is returned instead.
-    //  */
-    // function codePointChecked(pos: number) {
-    //     return pos >= 0 && pos < end ? codePointUnchecked(pos) : CharacterCodes.EOF;
-    // }
+    /**
+     * Returns the code point for the character at the given position within `text`. If
+     * `pos` is outside the bounds set for `text`, `CharacterCodes.EOF` is returned instead.
+     */
+    function codePointChecked(pos: number) {
+        return pos >= 0 && pos < end ? codePointUnchecked(pos) : CharacterCodes.EOF;
+    }
 
     /**
      * Returns the char code for the character at the given position within `text`. This
@@ -1126,13 +1126,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return text.charCodeAt(pos);
     }
 
-    // /**
-    //  * Returns the char code for the character at the given position within `text`. If
-    //  * `pos` is outside the bounds set for `text`, `CharacterCodes.EOF` is returned instead.
-    //  */
-    // function charCodeChecked(pos: number) {
-    //     return pos >= 0 && pos < end ? charCodeUnchecked(pos) : CharacterCodes.EOF;
-    // }
+    /**
+     * Returns the char code for the character at the given position within `text`. If
+     * `pos` is outside the bounds set for `text`, `CharacterCodes.EOF` is returned instead.
+     */
+    function charCodeChecked(pos: number) {
+        return pos >= 0 && pos < end ? charCodeUnchecked(pos) : CharacterCodes.EOF;
+    }
 
     function error(message: DiagnosticMessage): void;
     function error(message: DiagnosticMessage, errPos: number, length: number, arg0?: any): void;
@@ -1325,7 +1325,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanDigits(): boolean {
         const start = pos;
         let isOctal = true;
-        while (isDigit(charCodeUnchecked(pos))) {
+        while (isDigit(charCodeChecked(pos))) {
             if (!isOctalDigit(charCodeUnchecked(pos))) {
                 isOctal = false;
             }
@@ -2554,7 +2554,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 topNamedCapturingGroupsScope = undefined;
                 scanAlternative(isInGroup);
                 topNamedCapturingGroupsScope = namedCapturingGroupsScopeStack.pop();
-                if (charCodeUnchecked(pos) !== CharacterCodes.bar) {
+                if (charCodeChecked(pos) !== CharacterCodes.bar) {
                     return;
                 }
                 pos++;
@@ -2603,7 +2603,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         break;
                     case CharacterCodes.backslash:
                         pos++;
-                        switch (charCodeUnchecked(pos)) {
+                        switch (charCodeChecked(pos)) {
                             case CharacterCodes.b:
                             case CharacterCodes.B:
                                 pos++;
@@ -2617,9 +2617,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         break;
                     case CharacterCodes.openParen:
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.question) {
+                        if (charCodeChecked(pos) === CharacterCodes.question) {
                             pos++;
-                            switch (charCodeUnchecked(pos)) {
+                            switch (charCodeChecked(pos)) {
                                 case CharacterCodes.equals:
                                 case CharacterCodes.exclamation:
                                     pos++;
@@ -2629,7 +2629,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 case CharacterCodes.lessThan:
                                     const groupNameStart = pos;
                                     pos++;
-                                    switch (charCodeUnchecked(pos)) {
+                                    switch (charCodeChecked(pos)) {
                                         case CharacterCodes.equals:
                                         case CharacterCodes.exclamation:
                                             pos++;
@@ -2649,7 +2649,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 default:
                                     const start = pos;
                                     const setFlags = scanPatternModifiers(RegularExpressionFlags.None);
-                                    if (charCodeUnchecked(pos) === CharacterCodes.minus) {
+                                    if (charCodeChecked(pos) === CharacterCodes.minus) {
                                         pos++;
                                         scanPatternModifiers(setFlags);
                                         if (pos === start + 1) {
@@ -2673,12 +2673,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         const digitsStart = pos;
                         scanDigits();
                         const min = tokenValue;
-                        if (charCodeUnchecked(pos) === CharacterCodes.comma) {
+                        if (charCodeChecked(pos) === CharacterCodes.comma) {
                             pos++;
                             scanDigits();
                             const max = tokenValue;
                             if (!min) {
-                                if (max || charCodeUnchecked(pos) === CharacterCodes.closeBrace) {
+                                if (max || charCodeChecked(pos) === CharacterCodes.closeBrace) {
                                     error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
                                 }
                                 else {
@@ -2707,7 +2707,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     case CharacterCodes.plus:
                     case CharacterCodes.question:
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.question) {
+                        if (charCodeChecked(pos) === CharacterCodes.question) {
                             // Non-greedy
                             pos++;
                         }
@@ -2791,10 +2791,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | 'k<' RegExpIdentifierName '>'
         function scanAtomEscape() {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
-            switch (charCodeUnchecked(pos)) {
+            switch (charCodeChecked(pos)) {
                 case CharacterCodes.k:
                     pos++;
-                    if (charCodeUnchecked(pos) === CharacterCodes.lessThan) {
+                    if (charCodeChecked(pos) === CharacterCodes.lessThan) {
                         pos++;
                         scanGroupName(/*isReference*/ true);
                         scanExpectedChar(CharacterCodes.greaterThan);
@@ -2821,7 +2821,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         // DecimalEscape ::= [1-9] [0-9]*
         function scanDecimalEscape(): boolean {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
-            const ch = charCodeUnchecked(pos);
+            const ch = charCodeChecked(pos);
             if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
                 const start = pos;
                 scanDigits();
@@ -2840,11 +2840,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | [~UnicodeMode] (any other non-identifier characters)
         function scanCharacterEscape(atomEscape: boolean): string {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
-            let ch = charCodeUnchecked(pos);
+            let ch = charCodeChecked(pos);
             switch (ch) {
                 case CharacterCodes.c:
                     pos++;
-                    ch = charCodeUnchecked(pos);
+                    ch = charCodeChecked(pos);
                     if (isASCIILetter(ch)) {
                         pos++;
                         return String.fromCharCode(ch & 0x1f);
@@ -2881,7 +2881,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     return String.fromCharCode(ch);
                 default:
                     if (pos >= end) {
-                        error(Diagnostics.Undetermined_character_escape, pos - 1, 1, ch);
+                        error(Diagnostics.Undetermined_character_escape, pos - 1, 1);
                         return "\\";
                     }
                     pos--;
@@ -2892,7 +2892,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         function scanGroupName(isReference: boolean) {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
-            scanIdentifier(codePointUnchecked(pos), languageVersion);
+            scanIdentifier(codePointChecked(pos), languageVersion);
             if (pos === tokenStart) {
                 error(Diagnostics.Expected_a_capturing_group_name);
             }
@@ -2911,13 +2911,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function isClassContentExit(ch: number) {
-            return ch === CharacterCodes.closeBracket || pos >= end;
+            return ch === CharacterCodes.closeBracket || ch === CharacterCodes.EOF || pos >= end;
         }
 
         // ClassRanges ::= '^'? (ClassAtom ('-' ClassAtom)?)*
         function scanClassRanges() {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
-            if (charCodeUnchecked(pos) === CharacterCodes.caret) {
+            if (charCodeChecked(pos) === CharacterCodes.caret) {
                 // character complement
                 pos++;
             }
@@ -2928,9 +2928,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 const minStart = pos;
                 const minCharacter = scanClassAtom();
-                if (charCodeUnchecked(pos) === CharacterCodes.minus) {
+                if (charCodeChecked(pos) === CharacterCodes.minus) {
                     pos++;
-                    const ch = charCodeUnchecked(pos);
+                    const ch = charCodeChecked(pos);
                     if (isClassContentExit(ch)) {
                         return;
                     }
@@ -2977,12 +2977,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         function scanClassSetExpression() {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
             let isCharacterComplement = false;
-            if (charCodeUnchecked(pos) === CharacterCodes.caret) {
+            if (charCodeChecked(pos) === CharacterCodes.caret) {
                 pos++;
                 isCharacterComplement = true;
             }
             let expressionMayContainStrings = false;
-            let ch = charCodeUnchecked(pos);
+            let ch = charCodeChecked(pos);
             if (isClassContentExit(ch)) {
                 return;
             }
@@ -2998,9 +2998,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     operand = scanClassSetOperand();
                     break;
             }
-            switch (charCodeUnchecked(pos)) {
+            switch (charCodeChecked(pos)) {
                 case CharacterCodes.minus:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.minus) {
                         if (isCharacterComplement && mayContainStrings) {
                             error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
                         }
@@ -3011,7 +3011,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     break;
                 case CharacterCodes.ampersand:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.ampersand) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.ampersand) {
                         scanClassSetSubExpression(ClassSetExpressionType.ClassIntersection);
                         if (isCharacterComplement && mayContainStrings) {
                             error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
@@ -3036,7 +3036,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 switch (ch) {
                     case CharacterCodes.minus:
                         pos++;
-                        ch = charCodeUnchecked(pos);
+                        ch = charCodeChecked(pos);
                         if (isClassContentExit(ch)) {
                             mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
                             return;
@@ -3079,10 +3079,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     case CharacterCodes.ampersand:
                         start = pos;
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.ampersand) {
+                        if (charCodeChecked(pos) === CharacterCodes.ampersand) {
                             pos++;
                             error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                            if (charCodeUnchecked(pos) === CharacterCodes.ampersand) {
+                            if (charCodeChecked(pos) === CharacterCodes.ampersand) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                                 pos++;
                             }
@@ -3093,7 +3093,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         operand = text.slice(start, pos);
                         continue;
                 }
-                if (isClassContentExit(charCodeUnchecked(pos))) {
+                if (isClassContentExit(charCodeChecked(pos))) {
                     break;
                 }
                 start = pos;
@@ -3123,7 +3123,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 switch (ch) {
                     case CharacterCodes.minus:
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.minus) {
+                        if (charCodeChecked(pos) === CharacterCodes.minus) {
                             pos++;
                             if (expressionType !== ClassSetExpressionType.ClassSubtraction) {
                                 error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
@@ -3135,12 +3135,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         break;
                     case CharacterCodes.ampersand:
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.ampersand) {
+                        if (charCodeChecked(pos) === CharacterCodes.ampersand) {
                             pos++;
                             if (expressionType !== ClassSetExpressionType.ClassIntersection) {
                                 error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             }
-                            if (charCodeUnchecked(pos) === CharacterCodes.ampersand) {
+                            if (charCodeChecked(pos) === CharacterCodes.ampersand) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                                 pos++;
                             }
@@ -3162,7 +3162,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                         break;
                 }
-                ch = charCodeUnchecked(pos);
+                ch = charCodeChecked(pos);
                 if (isClassContentExit(ch)) {
                     error(Diagnostics.Expected_a_class_set_operand);
                     break;
@@ -3181,7 +3181,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | ClassSetCharacter
         function scanClassSetOperand(): string {
             mayContainStrings = false;
-            switch (charCodeUnchecked(pos)) {
+            switch (charCodeChecked(pos)) {
                 case CharacterCodes.openBracket:
                     pos++;
                     scanClassSetExpression();
@@ -3192,9 +3192,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (scanCharacterClassEscape()) {
                         return "";
                     }
-                    else if (charCodeUnchecked(pos) === CharacterCodes.q) {
+                    else if (charCodeChecked(pos) === CharacterCodes.q) {
                         pos++;
-                        if (charCodeUnchecked(pos) === CharacterCodes.openBrace) {
+                        if (charCodeChecked(pos) === CharacterCodes.openBrace) {
                             pos++;
                             scanClassStringDisjunctionContents();
                             scanExpectedChar(CharacterCodes.closeBrace);
@@ -3244,10 +3244,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | SourceCharacter -- ClassSetSyntaxCharacter -- ClassSetReservedDoublePunctuator
         //     | '\' (CharacterEscape | ClassSetReservedPunctuator | 'b')
         function scanClassSetCharacter(): string {
-            const ch = charCodeUnchecked(pos);
+            const ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.EOF) {
+                // no need to report an error, the initial scan will already have reported that the RegExp is unterminated.
+                return "";
+            }
             if (ch === CharacterCodes.backslash) {
                 pos++;
-                const ch = charCodeUnchecked(pos);
+                const ch = charCodeChecked(pos);
                 switch (ch) {
                     case CharacterCodes.b:
                         pos++;
@@ -3272,7 +3276,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return scanCharacterEscape(/*atomEscape*/ false);
                 }
             }
-            else if (ch === charCodeUnchecked(pos + 1)) {
+            else if (ch === charCodeChecked(pos + 1)) {
                 switch (ch) {
                     case CharacterCodes.ampersand:
                     case CharacterCodes.exclamation:
@@ -3322,9 +3326,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | CharacterClassEscape
         //     | CharacterEscape
         function scanClassAtom(): string {
-            if (charCodeUnchecked(pos) === CharacterCodes.backslash) {
+            if (charCodeChecked(pos) === CharacterCodes.backslash) {
                 pos++;
-                const ch = charCodeUnchecked(pos);
+                const ch = charCodeChecked(pos);
                 switch (ch) {
                     case CharacterCodes.b:
                         pos++;
@@ -3351,7 +3355,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
             let isCharacterComplement = false;
             const start = pos - 1;
-            const ch = charCodeUnchecked(pos);
+            const ch = charCodeChecked(pos);
             switch (ch) {
                 case CharacterCodes.d:
                 case CharacterCodes.D:
@@ -3366,11 +3370,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // falls through
                 case CharacterCodes.p:
                     pos++;
-                    if (charCodeUnchecked(pos) === CharacterCodes.openBrace) {
+                    if (charCodeChecked(pos) === CharacterCodes.openBrace) {
                         pos++;
                         const propertyNameOrValueStart = pos;
                         const propertyNameOrValue = scanWordCharacters();
-                        if (charCodeUnchecked(pos) === CharacterCodes.equals) {
+                        if (charCodeChecked(pos) === CharacterCodes.equals) {
                             const propertyName = nonBinaryUnicodeProperties.get(propertyNameOrValue);
                             if (pos === propertyNameOrValueStart) {
                                 error(Diagnostics.Expected_a_Unicode_property_name);
@@ -3446,13 +3450,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanSourceCharacter(): string {
-            const size = unicodeMode ? charSize(codePointUnchecked(pos)) : 1;
+            const size = unicodeMode ? charSize(charCodeChecked(pos)) : 1;
             pos += size;
-            return text.substring(pos - size, pos);
+            return size > 0 ? text.substring(pos - size, pos) : "";
         }
 
         function scanExpectedChar(ch: CharacterCodes) {
-            if (charCodeUnchecked(pos) === ch) {
+            if (charCodeChecked(pos) === ch) {
                 pos++;
             }
             else {
@@ -3788,7 +3792,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         if (isIdentifierStart(ch, languageVersion)) {
             let char = ch;
-            while (pos < end && isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || charCodeUnchecked(pos) === CharacterCodes.minus) pos += charSize(char);
+            while (pos < end && isIdentifierPart(char = codePointUnchecked(pos), languageVersion) || char === CharacterCodes.minus) pos += charSize(char);
             tokenValue = text.substring(tokenStart, pos);
             if (char === CharacterCodes.backslash) {
                 tokenValue += scanIdentifierParts();
@@ -3912,6 +3916,9 @@ function codePointAt(s: string, i: number): number {
 function charSize(ch: number) {
     if (ch >= 0x10000) {
         return 2;
+    }
+    if (ch === CharacterCodes.EOF) {
+        return 0;
     }
     return 1;
 }
