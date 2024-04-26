@@ -782,6 +782,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         defaultValueDescription: false,
         affectsSemanticDiagnostics: true,
         affectsBuildInfo: true,
+        internal: true,
         extraValidation() {
             return [Diagnostics.Unknown_compiler_option_0, "noCheck"];
         },
