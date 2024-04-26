@@ -8542,7 +8542,7 @@ export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Dia
         compareValues(d1.start, d2.start) ||
         compareValues(d1.length, d2.length) ||
         compareValues(code1, code2) ||
-        compareMessageText(d1, d2) || // TODO: this is wrong because skips msg chain comparison if canonical is set
+        compareMessageText(d1, d2) ||
         Comparison.EqualTo;
 }
 
