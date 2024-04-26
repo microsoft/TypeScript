@@ -215,12 +215,13 @@ import {
 /** @internal */
 export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
     const compilerOptions = host.getCompilerOptions();
+    const files = filter(getSourceFilesToEmit(host, file), isSourceFileNotJson);
     const result = transformNodes(
         resolver,
         host,
         factory,
         compilerOptions,
-        filter(getSourceFilesToEmit(host, file), isSourceFileNotJson),
+        file ? contains(files, file) ? [file] : emptyArray : files,
         [transformDeclarations],
         /*allowDtsFiles*/ false,
     );
