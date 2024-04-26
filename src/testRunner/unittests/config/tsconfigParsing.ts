@@ -241,7 +241,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "files": []
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -251,7 +251,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "references": []
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -261,7 +261,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "references": [{ "path": "/apath" }]
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -269,7 +269,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: `{
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.js"],
     }]);
 
@@ -280,7 +280,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 }
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: [],
     }]);
 
@@ -301,7 +301,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
                 "include": ["**/*"]
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -314,7 +314,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
               }
             }`,
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }], /*skipJson*/ true);
 
@@ -328,7 +328,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             }],
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -339,7 +339,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             ],
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -350,7 +350,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             },
         }),
         configFileName: "/apath/tsconfig.json",
-        basePath: "tests/cases/unittests",
+        basePath: "/apath",
         allFileList: ["/apath/a.ts"],
     }]);
 
@@ -392,6 +392,6 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: jsonToReadableText({
             include: ["./", "./**/*.json"],
         }),
-        basePath: "/foo",
+        basePath: "/foo.bar",
     }]);
 });
