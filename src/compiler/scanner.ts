@@ -21,7 +21,6 @@ import {
     KeywordSyntaxKind,
     LanguageFeatureMinimumTarget,
     LanguageVariant,
-    last,
     LineAndCharacter,
     MapLike,
     parsePseudoBigInt,
@@ -2485,10 +2484,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
+        // Why var? It avoids TDZ checks in the runtime which can be costly.
+        // See: https://github.com/microsoft/TypeScript/issues/52924
+        /* eslint-disable no-var */
+
         /** Grammar parameter */
-        const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
+        var unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
         /** Grammar parameter */
-        const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
+        var unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
 
         if (unicodeMode) {
             // Annex B treats any unicode mode as the strict syntax.
@@ -2496,25 +2499,27 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         /** @see {scanClassSetExpression} */
-        let mayContainStrings = false;
+        var mayContainStrings = false;
 
         /** The number of numeric (anonymous) capturing groups defined in the regex. */
-        let numberOfCapturingGroups = 0;
+        var numberOfCapturingGroups = 0;
         /** All named capturing groups defined in the regex. */
-        const groupSpecifiers = new Set<string>();
+        var groupSpecifiers: Set<string> | undefined;
         /** All references to named capturing groups in the regex. */
-        const groupNameReferences: (TextRange & { name: string; })[] = [];
+        var groupNameReferences: (TextRange & { name: string; })[] | undefined;
         /** All numeric backreferences within the regex. */
-        const decimalEscapes: (TextRange & { value: number; })[] = [];
+        var decimalEscapes: (TextRange & { value: number; })[] | undefined;
         /** A stack of scopes for named capturing groups. @see {scanGroupName} */
-        const namedCapturingGroups: Set<string>[] = [];
+        var namedCapturingGroupsScopeStack: (Set<string> | undefined)[] = [];
+        var topNamedCapturingGroupsScope: Set<string> | undefined;
 
         // Disjunction ::= Alternative ('|' Alternative)*
         function scanDisjunction(isInGroup: boolean) {
             while (true) {
-                namedCapturingGroups.push(new Set());
+                namedCapturingGroupsScopeStack.push(topNamedCapturingGroupsScope);
+                topNamedCapturingGroupsScope = undefined;
                 scanAlternative(isInGroup);
-                namedCapturingGroups.pop();
+                topNamedCapturingGroupsScope = namedCapturingGroupsScopeStack.pop();
                 if (text.charCodeAt(pos) !== CharacterCodes.bar) {
                     return;
                 }
@@ -2786,7 +2791,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
                 const start = pos;
                 scanDigits();
-                decimalEscapes.push({ pos: start, end: pos, value: +tokenValue });
+                decimalEscapes = append(decimalEscapes, { pos: start, end: pos, value: +tokenValue });
                 return true;
             }
             return false;
@@ -2858,13 +2863,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 error(Diagnostics.Expected_a_capturing_group_name);
             }
             else if (isReference) {
-                groupNameReferences.push({ pos: tokenStart, end: pos, name: tokenValue });
+                groupNameReferences = append(groupNameReferences, { pos: tokenStart, end: pos, name: tokenValue });
             }
-            else if (namedCapturingGroups.some(group => group.has(tokenValue))) {
+            else if (topNamedCapturingGroupsScope?.has(tokenValue) || namedCapturingGroupsScopeStack.some(group => group?.has(tokenValue))) {
                 error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
             }
             else {
-                last(namedCapturingGroups).add(tokenValue);
+                topNamedCapturingGroupsScope ??= new Set();
+                topNamedCapturingGroupsScope.add(tokenValue);
+                groupSpecifiers ??= new Set();
                 groupSpecifiers.add(tokenValue);
             }
         }
@@ -3422,7 +3429,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         scanDisjunction(/*isInGroup*/ false);
 
         forEach(groupNameReferences, reference => {
-            if (!groupSpecifiers.has(reference.name)) {
+            if (!groupSpecifiers?.has(reference.name)) {
                 error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
             }
         });
