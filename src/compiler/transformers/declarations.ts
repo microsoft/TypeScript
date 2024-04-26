@@ -185,7 +185,6 @@ import {
     setTextRange,
     some,
     SourceFile,
-    sourceFileMayBeEmitted,
     Statement,
     StringLiteral,
     Symbol,
