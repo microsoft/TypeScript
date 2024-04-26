@@ -2463,19 +2463,19 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 p++;
             }
+            pos = p;
             if (reportErrors) {
-                pos = tokenStart + 1;
-                const saveTokenPos = tokenStart;
+                const saveTokenStart = tokenStart;
                 const saveTokenFlags = tokenFlags;
-                scanRegularExpressionWorker(text, endOfBody, regExpFlags, isUnterminated, /*annexB*/ true);
-                if (!isUnterminated) {
-                    pos = p;
-                }
-                tokenStart = saveTokenPos;
+                const savePos = pos;
+                const saveEnd = end;
+                pos = tokenStart + 1;
+                end = endOfBody;
+                scanRegularExpressionWorker(regExpFlags, isUnterminated, /*annexB*/ true);
+                tokenStart = saveTokenStart;
                 tokenFlags = saveTokenFlags;
-            }
-            else {
-                pos = p;
+                pos = savePos;
+                end = saveEnd;
             }
             tokenValue = text.substring(tokenStart, pos);
             token = SyntaxKind.RegularExpressionLiteral;
@@ -2483,7 +2483,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token;
     }
 
-    function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
+    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
         // Why var? It avoids TDZ checks in the runtime which can be costly.
         // See: https://github.com/microsoft/TypeScript/issues/52924
         /* eslint-disable no-var */
