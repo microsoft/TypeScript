@@ -32,7 +32,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         jsonText: string;
         configFileName: string;
         basePath: string;
-        allFileList: string[];
+        allFileList: string[] | vfs.FileSet;
     }
 
     function baselinedParsed(subScenario: string, scenario: () => VerifyConfig[], skipJson?: true) {
@@ -42,7 +42,7 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
             input: () =>
                 scenario().map(({ jsonText, configFileName, basePath, allFileList }) => ({
                     createHost: () => {
-                        const files = allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet);
+                        const files = ts.isArray(allFileList) ? allFileList.reduce((files, value) => (files[value] = "", files), {} as vfs.FileSet) : allFileList;
                         files[ts.combinePaths(basePath, configFileName)] = jsonText;
                         return new fakes.ParseConfigHost(
                             new vfs.FileSystem(
@@ -208,6 +208,38 @@ describe("unittests:: config:: tsconfigParsing:: parseConfigFileTextToJson", () 
         return [
             { jsonText: tsconfigWithoutExclude, configFileName: "tsconfig.json", basePath, allFileList },
             { jsonText: tsconfigWithExclude, configFileName: "tsconfig.json", basePath, allFileList },
+        ];
+    });
+
+    baselinedParsed("with outDir from base tsconfig", () => {
+        const tsconfigWithoutConfigDir = jsonToReadableText({
+            extends: "./tsconfigWithoutConfigDir.json",
+        });
+        const tsconfigWithConfigDir = jsonToReadableText({
+            extends: "./tsconfigWithConfigDir.json",
+        });
+        const basePath = "/";
+        return [
+            {
+                jsonText: tsconfigWithoutConfigDir,
+                configFileName: "tsconfig.json",
+                basePath,
+                allFileList: {
+                    "/tsconfigWithoutConfigDir.json": jsonToReadableText({ compilerOptions: { outDir: "bin" } }),
+                    "/bin/a.ts": "",
+                    "/b.ts": "",
+                },
+            },
+            {
+                jsonText: tsconfigWithConfigDir,
+                configFileName: "tsconfig.json",
+                basePath,
+                allFileList: {
+                    "/tsconfigWithConfigDir.json": jsonToReadableText({ compilerOptions: { outDir: "${configDir}/bin" } }), // eslint-disable-line no-template-curly-in-string
+                    "/bin/a.ts": "",
+                    "/b.ts": "",
+                },
+            },
         ];
     });
 
