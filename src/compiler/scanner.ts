@@ -2482,968 +2482,968 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             token = SyntaxKind.RegularExpressionLiteral;
         }
         return token;
+    }
 
-        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
-            /** Grammar parameter */
-            const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
-            /** Grammar parameter */
-            const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
+    function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
+        /** Grammar parameter */
+        const unicodeSetsMode = !!(regExpFlags & RegularExpressionFlags.UnicodeSets);
+        /** Grammar parameter */
+        const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
 
-            if (unicodeMode) {
-                // Annex B treats any unicode mode as the strict syntax.
-                annexB = false;
-            }
+        if (unicodeMode) {
+            // Annex B treats any unicode mode as the strict syntax.
+            annexB = false;
+        }
 
-            /** @see {scanClassSetExpression} */
-            let mayContainStrings = false;
+        /** @see {scanClassSetExpression} */
+        let mayContainStrings = false;
 
-            /** The number of numeric (anonymous) capturing groups defined in the regex. */
-            let numberOfCapturingGroups = 0;
-            /** All named capturing groups defined in the regex. */
-            const groupSpecifiers = new Set<string>();
-            /** All references to named capturing groups in the regex. */
-            const groupNameReferences: (TextRange & { name: string; })[] = [];
-            /** All numeric backreferences within the regex. */
-            const decimalEscapes: (TextRange & { value: number; })[] = [];
-            /** A stack of scopes for named capturing groups. @see {scanGroupName} */
-            const namedCapturingGroups: Set<string>[] = [];
+        /** The number of numeric (anonymous) capturing groups defined in the regex. */
+        let numberOfCapturingGroups = 0;
+        /** All named capturing groups defined in the regex. */
+        const groupSpecifiers = new Set<string>();
+        /** All references to named capturing groups in the regex. */
+        const groupNameReferences: (TextRange & { name: string; })[] = [];
+        /** All numeric backreferences within the regex. */
+        const decimalEscapes: (TextRange & { value: number; })[] = [];
+        /** A stack of scopes for named capturing groups. @see {scanGroupName} */
+        const namedCapturingGroups: Set<string>[] = [];
 
-            // Disjunction ::= Alternative ('|' Alternative)*
-            function scanDisjunction(isInGroup: boolean) {
-                while (true) {
-                    namedCapturingGroups.push(new Set());
-                    scanAlternative(isInGroup);
-                    namedCapturingGroups.pop();
-                    if (text.charCodeAt(pos) !== CharacterCodes.bar) {
-                        return;
-                    }
-                    pos++;
+        // Disjunction ::= Alternative ('|' Alternative)*
+        function scanDisjunction(isInGroup: boolean) {
+            while (true) {
+                namedCapturingGroups.push(new Set());
+                scanAlternative(isInGroup);
+                namedCapturingGroups.pop();
+                if (text.charCodeAt(pos) !== CharacterCodes.bar) {
+                    return;
                 }
+                pos++;
             }
+        }
 
-            // Alternative ::= Term*
-            // Term ::=
-            //     | Assertion
-            //     | Atom Quantifier?
-            // Assertion ::=
-            //     | '^'
-            //     | '$'
-            //     | '\b'
-            //     | '\B'
-            //     | '(?=' Disjunction ')'
-            //     | '(?!' Disjunction ')'
-            //     | '(?<=' Disjunction ')'
-            //     | '(?<!' Disjunction ')'
-            // Quantifier ::= QuantifierPrefix '?'?
-            // QuantifierPrefix ::=
-            //     | '*'
-            //     | '+'
-            //     | '?'
-            //     | '{' DecimalDigits (',' DecimalDigits?)? '}'
-            // Atom ::=
-            //     | PatternCharacter
-            //     | '.'
-            //     | '\' AtomEscape
-            //     | CharacterClass
-            //     | '(?<' RegExpIdentifierName '>' Disjunction ')'
-            //     | '(?' RegularExpressionFlags ('-' RegularExpressionFlags)? ':' Disjunction ')'
-            // CharacterClass ::= unicodeMode
-            //     ? '[' ClassRanges ']'
-            //     : '[' ClassSetExpression ']'
-            function scanAlternative(isInGroup: boolean) {
-                let isPreviousTermQuantifiable = false;
-                while (pos < end) {
-                    const start = pos;
-                    const ch = text.charCodeAt(pos);
-                    switch (ch) {
-                        case CharacterCodes.caret:
-                        case CharacterCodes.$:
-                            pos++;
-                            isPreviousTermQuantifiable = false;
-                            break;
-                        case CharacterCodes.backslash:
+        // Alternative ::= Term*
+        // Term ::=
+        //     | Assertion
+        //     | Atom Quantifier?
+        // Assertion ::=
+        //     | '^'
+        //     | '$'
+        //     | '\b'
+        //     | '\B'
+        //     | '(?=' Disjunction ')'
+        //     | '(?!' Disjunction ')'
+        //     | '(?<=' Disjunction ')'
+        //     | '(?<!' Disjunction ')'
+        // Quantifier ::= QuantifierPrefix '?'?
+        // QuantifierPrefix ::=
+        //     | '*'
+        //     | '+'
+        //     | '?'
+        //     | '{' DecimalDigits (',' DecimalDigits?)? '}'
+        // Atom ::=
+        //     | PatternCharacter
+        //     | '.'
+        //     | '\' AtomEscape
+        //     | CharacterClass
+        //     | '(?<' RegExpIdentifierName '>' Disjunction ')'
+        //     | '(?' RegularExpressionFlags ('-' RegularExpressionFlags)? ':' Disjunction ')'
+        // CharacterClass ::= unicodeMode
+        //     ? '[' ClassRanges ']'
+        //     : '[' ClassSetExpression ']'
+        function scanAlternative(isInGroup: boolean) {
+            let isPreviousTermQuantifiable = false;
+            while (pos < end) {
+                const start = pos;
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.caret:
+                    case CharacterCodes.$:
+                        pos++;
+                        isPreviousTermQuantifiable = false;
+                        break;
+                    case CharacterCodes.backslash:
+                        pos++;
+                        switch (text.charCodeAt(pos)) {
+                            case CharacterCodes.b:
+                            case CharacterCodes.B:
+                                pos++;
+                                isPreviousTermQuantifiable = false;
+                                break;
+                            default:
+                                scanAtomEscape();
+                                isPreviousTermQuantifiable = true;
+                                break;
+                        }
+                        break;
+                    case CharacterCodes.openParen:
+                        pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.question) {
                             pos++;
                             switch (text.charCodeAt(pos)) {
-                                case CharacterCodes.b:
-                                case CharacterCodes.B:
+                                case CharacterCodes.equals:
+                                case CharacterCodes.exclamation:
                                     pos++;
-                                    isPreviousTermQuantifiable = false;
+                                    // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
+                                    isPreviousTermQuantifiable = annexB;
+                                    break;
+                                case CharacterCodes.lessThan:
+                                    const groupNameStart = pos;
+                                    pos++;
+                                    switch (text.charCodeAt(pos)) {
+                                        case CharacterCodes.equals:
+                                        case CharacterCodes.exclamation:
+                                            pos++;
+                                            isPreviousTermQuantifiable = false;
+                                            break;
+                                        default:
+                                            scanGroupName(/*isReference*/ false);
+                                            scanExpectedChar(CharacterCodes.greaterThan);
+                                            if (languageVersion < ScriptTarget.ES2018) {
+                                                error(Diagnostics.Named_capturing_groups_are_only_available_when_targeting_ES2018_or_later, groupNameStart, pos - groupNameStart);
+                                            }
+                                            numberOfCapturingGroups++;
+                                            isPreviousTermQuantifiable = true;
+                                            break;
+                                    }
                                     break;
                                 default:
-                                    scanAtomEscape();
+                                    const start = pos;
+                                    const setFlags = scanPatternModifiers(RegularExpressionFlags.None);
+                                    if (text.charCodeAt(pos) === CharacterCodes.minus) {
+                                        pos++;
+                                        scanPatternModifiers(setFlags);
+                                        if (pos === start + 1) {
+                                            error(Diagnostics.Subpattern_flags_must_be_present_when_there_is_a_minus_sign, start, pos - start);
+                                        }
+                                    }
+                                    scanExpectedChar(CharacterCodes.colon);
                                     isPreviousTermQuantifiable = true;
                                     break;
                             }
-                            break;
-                        case CharacterCodes.openParen:
+                        }
+                        else {
+                            numberOfCapturingGroups++;
+                            isPreviousTermQuantifiable = true;
+                        }
+                        scanDisjunction(/*isInGroup*/ true);
+                        scanExpectedChar(CharacterCodes.closeParen);
+                        break;
+                    case CharacterCodes.openBrace:
+                        pos++;
+                        const digitsStart = pos;
+                        scanDigits();
+                        const min = tokenValue;
+                        if (text.charCodeAt(pos) === CharacterCodes.comma) {
                             pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.question) {
-                                pos++;
-                                switch (text.charCodeAt(pos)) {
-                                    case CharacterCodes.equals:
-                                    case CharacterCodes.exclamation:
-                                        pos++;
-                                        // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
-                                        isPreviousTermQuantifiable = annexB;
-                                        break;
-                                    case CharacterCodes.lessThan:
-                                        const groupNameStart = pos;
-                                        pos++;
-                                        switch (text.charCodeAt(pos)) {
-                                            case CharacterCodes.equals:
-                                            case CharacterCodes.exclamation:
-                                                pos++;
-                                                isPreviousTermQuantifiable = false;
-                                                break;
-                                            default:
-                                                scanGroupName(/*isReference*/ false);
-                                                scanExpectedChar(CharacterCodes.greaterThan);
-                                                if (languageVersion < ScriptTarget.ES2018) {
-                                                    error(Diagnostics.Named_capturing_groups_are_only_available_when_targeting_ES2018_or_later, groupNameStart, pos - groupNameStart);
-                                                }
-                                                numberOfCapturingGroups++;
-                                                isPreviousTermQuantifiable = true;
-                                                break;
-                                        }
-                                        break;
-                                    default:
-                                        const start = pos;
-                                        const setFlags = scanPatternModifiers(RegularExpressionFlags.None);
-                                        if (text.charCodeAt(pos) === CharacterCodes.minus) {
-                                            pos++;
-                                            scanPatternModifiers(setFlags);
-                                            if (pos === start + 1) {
-                                                error(Diagnostics.Subpattern_flags_must_be_present_when_there_is_a_minus_sign, start, pos - start);
-                                            }
-                                        }
-                                        scanExpectedChar(CharacterCodes.colon);
-                                        isPreviousTermQuantifiable = true;
-                                        break;
-                                }
-                            }
-                            else {
-                                numberOfCapturingGroups++;
-                                isPreviousTermQuantifiable = true;
-                            }
-                            scanDisjunction(/*isInGroup*/ true);
-                            scanExpectedChar(CharacterCodes.closeParen);
-                            break;
-                        case CharacterCodes.openBrace:
-                            pos++;
-                            const digitsStart = pos;
                             scanDigits();
-                            const min = tokenValue;
-                            if (text.charCodeAt(pos) === CharacterCodes.comma) {
-                                pos++;
-                                scanDigits();
-                                const max = tokenValue;
-                                if (!min) {
-                                    if (max || text.charCodeAt(pos) === CharacterCodes.closeBrace) {
-                                        error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
+                            const max = tokenValue;
+                            if (!min) {
+                                if (max || text.charCodeAt(pos) === CharacterCodes.closeBrace) {
+                                    error(Diagnostics.Incomplete_quantifier_Digit_expected, digitsStart, 0);
+                                }
+                                else {
+                                    if (unicodeMode) {
+                                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                                     }
-                                    else {
-                                        if (unicodeMode) {
-                                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                        }
-                                        isPreviousTermQuantifiable = true;
-                                        break;
-                                    }
-                                }
-                                if (max && Number.parseInt(min) > Number.parseInt(max)) {
-                                    error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
+                                    isPreviousTermQuantifiable = true;
+                                    break;
                                 }
                             }
-                            else if (!min) {
-                                if (unicodeMode) {
-                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
-                                }
-                                isPreviousTermQuantifiable = true;
-                                break;
+                            if (max && Number.parseInt(min) > Number.parseInt(max)) {
+                                error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                             }
-                            scanExpectedChar(CharacterCodes.closeBrace);
-                            pos--;
-                        // falls through
-                        case CharacterCodes.asterisk:
-                        case CharacterCodes.plus:
-                        case CharacterCodes.question:
-                            pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.question) {
-                                // Non-greedy
-                                pos++;
-                            }
-                            if (!isPreviousTermQuantifiable) {
-                                error(Diagnostics.There_is_nothing_available_for_repetition, start, pos - start);
-                            }
-                            isPreviousTermQuantifiable = false;
-                            break;
-                        case CharacterCodes.dot:
-                            pos++;
-                            isPreviousTermQuantifiable = true;
-                            break;
-                        case CharacterCodes.openBracket:
-                            pos++;
-                            if (unicodeSetsMode) {
-                                scanClassSetExpression();
-                            }
-                            else {
-                                scanClassRanges();
-                            }
-                            scanExpectedChar(CharacterCodes.closeBracket);
-                            isPreviousTermQuantifiable = true;
-                            break;
-                        case CharacterCodes.closeParen:
-                            if (isInGroup) {
-                                return;
-                            }
-                        // falls through
-                        case CharacterCodes.closeBracket:
-                        case CharacterCodes.closeBrace:
-                            if (isUnterminated && !isInGroup) {
-                                // Assume what starting from the character to be outside of the regex
-                                return;
-                            }
-                            if (unicodeMode || ch === CharacterCodes.closeParen) {
-                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                            }
-                            pos++;
-                            isPreviousTermQuantifiable = true;
-                            break;
-                        case CharacterCodes.slash:
-                        case CharacterCodes.bar:
-                            return;
-                        default:
-                            scanSourceCharacter();
-                            isPreviousTermQuantifiable = true;
-                            break;
-                    }
-                }
-            }
-
-            function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
-                while (pos < end) {
-                    const ch = text.charCodeAt(pos);
-                    if (!isIdentifierPart(ch, languageVersion)) {
-                        break;
-                    }
-                    const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
-                    if (flag === undefined) {
-                        error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
-                    }
-                    else if (currFlags & flag) {
-                        error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
-                    }
-                    else if (!(flag & RegularExpressionFlags.Modifiers)) {
-                        error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
-                    }
-                    else {
-                        currFlags |= flag;
-                        checkRegularExpressionFlagAvailable(flag, pos);
-                    }
-                    pos++;
-                }
-                return currFlags;
-            }
-
-            // AtomEscape ::=
-            //     | DecimalEscape
-            //     | CharacterClassEscape
-            //     | CharacterEscape
-            //     | 'k<' RegExpIdentifierName '>'
-            function scanAtomEscape() {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
-                switch (text.charCodeAt(pos)) {
-                    case CharacterCodes.k:
-                        pos++;
-                        if (text.charCodeAt(pos) === CharacterCodes.lessThan) {
-                            pos++;
-                            scanGroupName(/*isReference*/ true);
-                            scanExpectedChar(CharacterCodes.greaterThan);
                         }
-                        else if (unicodeMode) {
-                            error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
-                        }
-                        break;
-                    case CharacterCodes.q:
-                        if (unicodeSetsMode) {
-                            pos++;
-                            error(Diagnostics.q_is_only_available_inside_character_class, pos - 2, 2);
+                        else if (!min) {
+                            if (unicodeMode) {
+                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
+                            }
+                            isPreviousTermQuantifiable = true;
                             break;
                         }
+                        scanExpectedChar(CharacterCodes.closeBrace);
+                        pos--;
                     // falls through
-                    default:
-                        // The scanEscapeSequence call in scanCharacterEscape must return non-empty strings
-                        // since there must not be line breaks in a regex literal
-                        Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape(/*atomEscape*/ true));
-                        break;
-                }
-            }
-
-            // DecimalEscape ::= [1-9] [0-9]*
-            function scanDecimalEscape(): boolean {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
-                const ch = text.charCodeAt(pos);
-                if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
-                    const start = pos;
-                    scanDigits();
-                    decimalEscapes.push({ pos: start, end: pos, value: +tokenValue });
-                    return true;
-                }
-                return false;
-            }
-
-            // CharacterEscape ::=
-            //     | `c` ControlLetter
-            //     | IdentityEscape
-            //     | (Other sequences handled by `scanEscapeSequence`)
-            // IdentityEscape ::=
-            //     | '^' | '$' | '/' | '\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
-            //     | [~UnicodeMode] (any other non-identifier characters)
-            function scanCharacterEscape(atomEscape: boolean): string {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
-                let ch = text.charCodeAt(pos);
-                switch (ch) {
-                    case CharacterCodes.c:
-                        pos++;
-                        ch = text.charCodeAt(pos);
-                        if (isASCIILetter(ch)) {
-                            pos++;
-                            return String.fromCharCode(ch & 0x1f);
-                        }
-                        if (unicodeMode) {
-                            error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
-                        }
-                        else if (atomEscape && annexB) {
-                            // Annex B treats
-                            //
-                            //  ExtendedAtom : `\` [lookahead = `c`]
-                            //
-                            // as the single character `\` when `c` isn't followed by a valid control character
-                            pos--;
-                            return "\\";
-                        }
-                        return String.fromCharCode(ch);
-                    case CharacterCodes.caret:
-                    case CharacterCodes.$:
-                    case CharacterCodes.slash:
-                    case CharacterCodes.backslash:
-                    case CharacterCodes.dot:
                     case CharacterCodes.asterisk:
                     case CharacterCodes.plus:
                     case CharacterCodes.question:
-                    case CharacterCodes.openParen:
-                    case CharacterCodes.closeParen:
-                    case CharacterCodes.openBracket:
-                    case CharacterCodes.closeBracket:
-                    case CharacterCodes.openBrace:
-                    case CharacterCodes.closeBrace:
-                    case CharacterCodes.bar:
                         pos++;
-                        return String.fromCharCode(ch);
-                    default:
-                        if (pos >= end) {
-                            error(Diagnostics.Undetermined_character_escape, pos - 1, 1, ch);
-                            return "\\";
+                        if (text.charCodeAt(pos) === CharacterCodes.question) {
+                            // Non-greedy
+                            pos++;
                         }
-                        pos--;
-                        return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
+                        if (!isPreviousTermQuantifiable) {
+                            error(Diagnostics.There_is_nothing_available_for_repetition, start, pos - start);
+                        }
+                        isPreviousTermQuantifiable = false;
+                        break;
+                    case CharacterCodes.dot:
+                        pos++;
+                        isPreviousTermQuantifiable = true;
+                        break;
+                    case CharacterCodes.openBracket:
+                        pos++;
+                        if (unicodeSetsMode) {
+                            scanClassSetExpression();
+                        }
+                        else {
+                            scanClassRanges();
+                        }
+                        scanExpectedChar(CharacterCodes.closeBracket);
+                        isPreviousTermQuantifiable = true;
+                        break;
+                    case CharacterCodes.closeParen:
+                        if (isInGroup) {
+                            return;
+                        }
+                    // falls through
+                    case CharacterCodes.closeBracket:
+                    case CharacterCodes.closeBrace:
+                        if (isUnterminated && !isInGroup) {
+                            // Assume what starting from the character to be outside of the regex
+                            return;
+                        }
+                        if (unicodeMode || ch === CharacterCodes.closeParen) {
+                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                        }
+                        pos++;
+                        isPreviousTermQuantifiable = true;
+                        break;
+                    case CharacterCodes.slash:
+                    case CharacterCodes.bar:
+                        return;
+                    default:
+                        scanSourceCharacter();
+                        isPreviousTermQuantifiable = true;
+                        break;
                 }
             }
+        }
 
-            function scanGroupName(isReference: boolean) {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.lessThan);
-                tokenStart = pos;
-                scanIdentifier(codePointAt(text, pos), languageVersion);
-                if (pos === tokenStart) {
-                    error(Diagnostics.Expected_a_capturing_group_name);
+        function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                if (!isIdentifierPart(ch, languageVersion)) {
+                    break;
                 }
-                else if (isReference) {
-                    groupNameReferences.push({ pos: tokenStart, end: pos, name: tokenValue });
+                const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
+                if (flag === undefined) {
+                    error(Diagnostics.Unknown_regular_expression_flag, pos, 1);
                 }
-                else if (namedCapturingGroups.some(group => group.has(tokenValue))) {
-                    error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
+                else if (currFlags & flag) {
+                    error(Diagnostics.Duplicate_regular_expression_flag, pos, 1);
+                }
+                else if (!(flag & RegularExpressionFlags.Modifiers)) {
+                    error(Diagnostics.This_regular_expression_flag_cannot_be_toggled_within_a_subpattern, pos, 1);
                 }
                 else {
-                    last(namedCapturingGroups).add(tokenValue);
-                    groupSpecifiers.add(tokenValue);
+                    currFlags |= flag;
+                    checkRegularExpressionFlagAvailable(flag, pos);
                 }
+                pos++;
             }
+            return currFlags;
+        }
 
-            function isClassContentExit(ch: number) {
-                return ch === CharacterCodes.closeBracket || pos >= end;
-            }
-
-            // ClassRanges ::= '^'? (ClassAtom ('-' ClassAtom)?)*
-            function scanClassRanges() {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBracket);
-                if (text.charCodeAt(pos) === CharacterCodes.caret) {
-                    // character complement
+        // AtomEscape ::=
+        //     | DecimalEscape
+        //     | CharacterClassEscape
+        //     | CharacterEscape
+        //     | 'k<' RegExpIdentifierName '>'
+        function scanAtomEscape() {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
+            switch (text.charCodeAt(pos)) {
+                case CharacterCodes.k:
                     pos++;
+                    if (text.charCodeAt(pos) === CharacterCodes.lessThan) {
+                        pos++;
+                        scanGroupName(/*isReference*/ true);
+                        scanExpectedChar(CharacterCodes.greaterThan);
+                    }
+                    else if (unicodeMode) {
+                        error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
+                    }
+                    break;
+                case CharacterCodes.q:
+                    if (unicodeSetsMode) {
+                        pos++;
+                        error(Diagnostics.q_is_only_available_inside_character_class, pos - 2, 2);
+                        break;
+                    }
+                // falls through
+                default:
+                    // The scanEscapeSequence call in scanCharacterEscape must return non-empty strings
+                    // since there must not be line breaks in a regex literal
+                    Debug.assert(scanCharacterClassEscape() || scanDecimalEscape() || scanCharacterEscape(/*atomEscape*/ true));
+                    break;
+            }
+        }
+
+        // DecimalEscape ::= [1-9] [0-9]*
+        function scanDecimalEscape(): boolean {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
+            const ch = text.charCodeAt(pos);
+            if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
+                const start = pos;
+                scanDigits();
+                decimalEscapes.push({ pos: start, end: pos, value: +tokenValue });
+                return true;
+            }
+            return false;
+        }
+
+        // CharacterEscape ::=
+        //     | `c` ControlLetter
+        //     | IdentityEscape
+        //     | (Other sequences handled by `scanEscapeSequence`)
+        // IdentityEscape ::=
+        //     | '^' | '$' | '/' | '\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
+        //     | [~UnicodeMode] (any other non-identifier characters)
+        function scanCharacterEscape(atomEscape: boolean): string {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
+            let ch = text.charCodeAt(pos);
+            switch (ch) {
+                case CharacterCodes.c:
+                    pos++;
+                    ch = text.charCodeAt(pos);
+                    if (isASCIILetter(ch)) {
+                        pos++;
+                        return String.fromCharCode(ch & 0x1f);
+                    }
+                    if (unicodeMode) {
+                        error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
+                    }
+                    else if (atomEscape && annexB) {
+                        // Annex B treats
+                        //
+                        //  ExtendedAtom : `\` [lookahead = `c`]
+                        //
+                        // as the single character `\` when `c` isn't followed by a valid control character
+                        pos--;
+                        return "\\";
+                    }
+                    return String.fromCharCode(ch);
+                case CharacterCodes.caret:
+                case CharacterCodes.$:
+                case CharacterCodes.slash:
+                case CharacterCodes.backslash:
+                case CharacterCodes.dot:
+                case CharacterCodes.asterisk:
+                case CharacterCodes.plus:
+                case CharacterCodes.question:
+                case CharacterCodes.openParen:
+                case CharacterCodes.closeParen:
+                case CharacterCodes.openBracket:
+                case CharacterCodes.closeBracket:
+                case CharacterCodes.openBrace:
+                case CharacterCodes.closeBrace:
+                case CharacterCodes.bar:
+                    pos++;
+                    return String.fromCharCode(ch);
+                default:
+                    if (pos >= end) {
+                        error(Diagnostics.Undetermined_character_escape, pos - 1, 1, ch);
+                        return "\\";
+                    }
+                    pos--;
+                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
+            }
+        }
+
+        function scanGroupName(isReference: boolean) {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.lessThan);
+            tokenStart = pos;
+            scanIdentifier(codePointAt(text, pos), languageVersion);
+            if (pos === tokenStart) {
+                error(Diagnostics.Expected_a_capturing_group_name);
+            }
+            else if (isReference) {
+                groupNameReferences.push({ pos: tokenStart, end: pos, name: tokenValue });
+            }
+            else if (namedCapturingGroups.some(group => group.has(tokenValue))) {
+                error(Diagnostics.Named_capturing_groups_with_the_same_name_must_be_mutually_exclusive_to_each_other, tokenStart, pos - tokenStart);
+            }
+            else {
+                last(namedCapturingGroups).add(tokenValue);
+                groupSpecifiers.add(tokenValue);
+            }
+        }
+
+        function isClassContentExit(ch: number) {
+            return ch === CharacterCodes.closeBracket || pos >= end;
+        }
+
+        // ClassRanges ::= '^'? (ClassAtom ('-' ClassAtom)?)*
+        function scanClassRanges() {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBracket);
+            if (text.charCodeAt(pos) === CharacterCodes.caret) {
+                // character complement
+                pos++;
+            }
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                if (isClassContentExit(ch)) {
+                    return;
                 }
-                while (pos < end) {
+                const minStart = pos;
+                const minCharacter = scanClassAtom();
+                if (text.charCodeAt(pos) === CharacterCodes.minus) {
+                    pos++;
                     const ch = text.charCodeAt(pos);
                     if (isClassContentExit(ch)) {
                         return;
                     }
-                    const minStart = pos;
-                    const minCharacter = scanClassAtom();
-                    if (text.charCodeAt(pos) === CharacterCodes.minus) {
-                        pos++;
-                        const ch = text.charCodeAt(pos);
-                        if (isClassContentExit(ch)) {
-                            return;
-                        }
-                        if (!minCharacter && !annexB) {
-                            error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
-                        }
-                        const maxStart = pos;
-                        const maxCharacter = scanClassAtom();
-                        if (!maxCharacter && !annexB) {
-                            error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
-                            continue;
-                        }
-                        if (!minCharacter) {
-                            continue;
-                        }
-                        const minCharacterValue = codePointAt(minCharacter, 0);
-                        const maxCharacterValue = codePointAt(maxCharacter, 0);
-                        if (
-                            minCharacter.length === charSize(minCharacterValue) &&
-                            maxCharacter.length === charSize(maxCharacterValue) &&
-                            minCharacterValue > maxCharacterValue
-                        ) {
-                            error(Diagnostics.Range_out_of_order_in_character_class, minStart, pos - minStart);
-                        }
+                    if (!minCharacter && !annexB) {
+                        error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
+                    }
+                    const maxStart = pos;
+                    const maxCharacter = scanClassAtom();
+                    if (!maxCharacter && !annexB) {
+                        error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
+                        continue;
+                    }
+                    if (!minCharacter) {
+                        continue;
+                    }
+                    const minCharacterValue = codePointAt(minCharacter, 0);
+                    const maxCharacterValue = codePointAt(maxCharacter, 0);
+                    if (
+                        minCharacter.length === charSize(minCharacterValue) &&
+                        maxCharacter.length === charSize(maxCharacterValue) &&
+                        minCharacterValue > maxCharacterValue
+                    ) {
+                        error(Diagnostics.Range_out_of_order_in_character_class, minStart, pos - minStart);
                     }
                 }
             }
+        }
 
-            // Static Semantics: MayContainStrings
-            //     ClassUnion: ClassSetOperands.some(ClassSetOperand => ClassSetOperand.MayContainStrings)
-            //     ClassIntersection: ClassSetOperands.every(ClassSetOperand => ClassSetOperand.MayContainStrings)
-            //     ClassSubtraction: ClassSetOperands[0].MayContainStrings
-            //     ClassSetOperand:
-            //         || ClassStringDisjunctionContents.MayContainStrings
-            //         || CharacterClassEscape.UnicodePropertyValueExpression.LoneUnicodePropertyNameOrValue.MayContainStrings
-            //     ClassStringDisjunctionContents: ClassStrings.some(ClassString => ClassString.ClassSetCharacters.length !== 1)
-            //     LoneUnicodePropertyNameOrValue: isBinaryUnicodePropertyOfStrings(LoneUnicodePropertyNameOrValue)
+        // Static Semantics: MayContainStrings
+        //     ClassUnion: ClassSetOperands.some(ClassSetOperand => ClassSetOperand.MayContainStrings)
+        //     ClassIntersection: ClassSetOperands.every(ClassSetOperand => ClassSetOperand.MayContainStrings)
+        //     ClassSubtraction: ClassSetOperands[0].MayContainStrings
+        //     ClassSetOperand:
+        //         || ClassStringDisjunctionContents.MayContainStrings
+        //         || CharacterClassEscape.UnicodePropertyValueExpression.LoneUnicodePropertyNameOrValue.MayContainStrings
+        //     ClassStringDisjunctionContents: ClassStrings.some(ClassString => ClassString.ClassSetCharacters.length !== 1)
+        //     LoneUnicodePropertyNameOrValue: isBinaryUnicodePropertyOfStrings(LoneUnicodePropertyNameOrValue)
 
-            // ClassSetExpression ::= '^'? (ClassUnion | ClassIntersection | ClassSubtraction)
-            // ClassUnion ::= (ClassSetRange | ClassSetOperand)*
-            // ClassIntersection ::= ClassSetOperand ('&&' ClassSetOperand)+
-            // ClassSubtraction ::= ClassSetOperand ('--' ClassSetOperand)+
-            // ClassSetRange ::= ClassSetCharacter '-' ClassSetCharacter
-            function scanClassSetExpression() {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBracket);
-                let isCharacterComplement = false;
-                if (text.charCodeAt(pos) === CharacterCodes.caret) {
-                    pos++;
-                    isCharacterComplement = true;
+        // ClassSetExpression ::= '^'? (ClassUnion | ClassIntersection | ClassSubtraction)
+        // ClassUnion ::= (ClassSetRange | ClassSetOperand)*
+        // ClassIntersection ::= ClassSetOperand ('&&' ClassSetOperand)+
+        // ClassSubtraction ::= ClassSetOperand ('--' ClassSetOperand)+
+        // ClassSetRange ::= ClassSetCharacter '-' ClassSetCharacter
+        function scanClassSetExpression() {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBracket);
+            let isCharacterComplement = false;
+            if (text.charCodeAt(pos) === CharacterCodes.caret) {
+                pos++;
+                isCharacterComplement = true;
+            }
+            let expressionMayContainStrings = false;
+            let ch = text.charCodeAt(pos);
+            if (isClassContentExit(ch)) {
+                return;
+            }
+            let start = pos;
+            let oprand!: string;
+            switch (text.slice(pos, pos + 2)) {
+                case "--":
+                case "&&":
+                    error(Diagnostics.Expected_a_class_set_oprand);
+                    mayContainStrings = false;
+                    break;
+                default:
+                    oprand = scanClassSetOprand();
+                    break;
+            }
+            switch (text.charCodeAt(pos)) {
+                case CharacterCodes.minus:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.minus) {
+                        if (isCharacterComplement && mayContainStrings) {
+                            error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        }
+                        expressionMayContainStrings = mayContainStrings;
+                        scanClassSetSubExpression(ClassSetExpressionType.ClassSubtraction);
+                        mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+                        return;
+                    }
+                    break;
+                case CharacterCodes.ampersand:
+                    if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
+                        scanClassSetSubExpression(ClassSetExpressionType.ClassIntersection);
+                        if (isCharacterComplement && mayContainStrings) {
+                            error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        }
+                        expressionMayContainStrings = mayContainStrings;
+                        mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+                        return;
+                    }
+                    else {
+                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                    }
+                    break;
+                default:
+                    if (isCharacterComplement && mayContainStrings) {
+                        error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                    }
+                    expressionMayContainStrings = mayContainStrings;
+                    break;
+            }
+            while (pos < end) {
+                ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.minus:
+                        pos++;
+                        ch = text.charCodeAt(pos);
+                        if (isClassContentExit(ch)) {
+                            mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+                            return;
+                        }
+                        if (ch === CharacterCodes.minus) {
+                            pos++;
+                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
+                            start = pos - 2;
+                            oprand = text.slice(start, pos);
+                            continue;
+                        }
+                        else {
+                            if (!oprand) {
+                                error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - 1 - start);
+                            }
+                            const secondStart = pos;
+                            const secondOprand = scanClassSetOprand();
+                            if (isCharacterComplement && mayContainStrings) {
+                                error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, secondStart, pos - secondStart);
+                            }
+                            expressionMayContainStrings ||= mayContainStrings;
+                            if (!secondOprand) {
+                                error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, secondStart, pos - secondStart);
+                                break;
+                            }
+                            if (!oprand) {
+                                break;
+                            }
+                            const minCharacterValue = codePointAt(oprand, 0);
+                            const maxCharacterValue = codePointAt(secondOprand, 0);
+                            if (
+                                oprand.length === charSize(minCharacterValue) &&
+                                secondOprand.length === charSize(maxCharacterValue) &&
+                                minCharacterValue > maxCharacterValue
+                            ) {
+                                error(Diagnostics.Range_out_of_order_in_character_class, start, pos - start);
+                            }
+                        }
+                        break;
+                    case CharacterCodes.ampersand:
+                        start = pos;
+                        pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
+                            pos++;
+                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
+                            if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
+                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                                pos++;
+                            }
+                        }
+                        else {
+                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
+                        }
+                        oprand = text.slice(start, pos);
+                        continue;
                 }
-                let expressionMayContainStrings = false;
-                let ch = text.charCodeAt(pos);
-                if (isClassContentExit(ch)) {
-                    return;
+                if (isClassContentExit(text.charCodeAt(pos))) {
+                    break;
                 }
-                let start = pos;
-                let oprand!: string;
+                start = pos;
                 switch (text.slice(pos, pos + 2)) {
                     case "--":
                     case "&&":
-                        error(Diagnostics.Expected_a_class_set_oprand);
-                        mayContainStrings = false;
+                        error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
+                        pos += 2;
+                        oprand = text.slice(start, pos);
                         break;
                     default:
                         oprand = scanClassSetOprand();
                         break;
                 }
-                switch (text.charCodeAt(pos)) {
+            }
+            mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+        }
+
+        function scanClassSetSubExpression(expressionType: ClassSetExpressionType) {
+            let expressionMayContainStrings = mayContainStrings;
+            while (pos < end) {
+                let ch = text.charCodeAt(pos);
+                if (isClassContentExit(ch)) {
+                    break;
+                }
+                // Provide user-friendly diagnostic messages
+                switch (ch) {
                     case CharacterCodes.minus:
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.minus) {
-                            if (isCharacterComplement && mayContainStrings) {
-                                error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.minus) {
+                            pos++;
+                            if (expressionType !== ClassSetExpressionType.ClassSubtraction) {
+                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             }
-                            expressionMayContainStrings = mayContainStrings;
-                            scanClassSetSubExpression(ClassSetExpressionType.ClassSubtraction);
-                            mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                            return;
+                        }
+                        else {
+                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 1, 1);
                         }
                         break;
                     case CharacterCodes.ampersand:
-                        if (text.charCodeAt(pos + 1) === CharacterCodes.ampersand) {
-                            scanClassSetSubExpression(ClassSetExpressionType.ClassIntersection);
-                            if (isCharacterComplement && mayContainStrings) {
-                                error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        pos++;
+                        if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
+                            pos++;
+                            if (expressionType !== ClassSetExpressionType.ClassIntersection) {
+                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
                             }
-                            expressionMayContainStrings = mayContainStrings;
-                            mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                            return;
+                            if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
+                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                                pos++;
+                            }
                         }
                         else {
-                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                            error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
                         }
                         break;
                     default:
-                        if (isCharacterComplement && mayContainStrings) {
-                            error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, start, pos - start);
+                        switch (expressionType) {
+                            case ClassSetExpressionType.ClassSubtraction:
+                                error(Diagnostics._0_expected, pos, 0, "--");
+                                break;
+                            case ClassSetExpressionType.ClassIntersection:
+                                error(Diagnostics._0_expected, pos, 0, "&&");
+                                break;
+                            default:
+                                break;
                         }
-                        expressionMayContainStrings = mayContainStrings;
                         break;
                 }
-                while (pos < end) {
-                    ch = text.charCodeAt(pos);
-                    switch (ch) {
-                        case CharacterCodes.minus:
-                            pos++;
-                            ch = text.charCodeAt(pos);
-                            if (isClassContentExit(ch)) {
-                                mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
-                                return;
-                            }
-                            if (ch === CharacterCodes.minus) {
-                                pos++;
-                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                                start = pos - 2;
-                                oprand = text.slice(start, pos);
-                                continue;
-                            }
-                            else {
-                                if (!oprand) {
-                                    error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, start, pos - 1 - start);
-                                }
-                                const secondStart = pos;
-                                const secondOprand = scanClassSetOprand();
-                                if (isCharacterComplement && mayContainStrings) {
-                                    error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, secondStart, pos - secondStart);
-                                }
-                                expressionMayContainStrings ||= mayContainStrings;
-                                if (!secondOprand) {
-                                    error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, secondStart, pos - secondStart);
-                                    break;
-                                }
-                                if (!oprand) {
-                                    break;
-                                }
-                                const minCharacterValue = codePointAt(oprand, 0);
-                                const maxCharacterValue = codePointAt(secondOprand, 0);
-                                if (
-                                    oprand.length === charSize(minCharacterValue) &&
-                                    secondOprand.length === charSize(maxCharacterValue) &&
-                                    minCharacterValue > maxCharacterValue
-                                ) {
-                                    error(Diagnostics.Range_out_of_order_in_character_class, start, pos - start);
-                                }
-                            }
-                            break;
-                        case CharacterCodes.ampersand:
-                            start = pos;
-                            pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
-                                pos++;
-                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                                if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
-                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                                    pos++;
-                                }
-                            }
-                            else {
-                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
-                            }
-                            oprand = text.slice(start, pos);
-                            continue;
-                    }
-                    if (isClassContentExit(text.charCodeAt(pos))) {
-                        break;
-                    }
-                    start = pos;
-                    switch (text.slice(pos, pos + 2)) {
-                        case "--":
-                        case "&&":
-                            error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
-                            pos += 2;
-                            oprand = text.slice(start, pos);
-                            break;
-                        default:
-                            oprand = scanClassSetOprand();
-                            break;
-                    }
+                ch = text.charCodeAt(pos);
+                if (isClassContentExit(ch)) {
+                    error(Diagnostics.Expected_a_class_set_oprand);
+                    break;
                 }
-                mayContainStrings = !isCharacterComplement && expressionMayContainStrings;
+                scanClassSetOprand();
+                // Used only if expressionType is Intersection
+                expressionMayContainStrings &&= mayContainStrings;
             }
+            mayContainStrings = expressionMayContainStrings;
+        }
 
-            function scanClassSetSubExpression(expressionType: ClassSetExpressionType) {
-                let expressionMayContainStrings = mayContainStrings;
-                while (pos < end) {
-                    let ch = text.charCodeAt(pos);
-                    if (isClassContentExit(ch)) {
-                        break;
-                    }
-                    // Provide user-friendly diagnostic messages
-                    switch (ch) {
-                        case CharacterCodes.minus:
-                            pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.minus) {
-                                pos++;
-                                if (expressionType !== ClassSetExpressionType.ClassSubtraction) {
-                                    error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                                }
-                            }
-                            else {
-                                error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 1, 1);
-                            }
-                            break;
-                        case CharacterCodes.ampersand:
-                            pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
-                                pos++;
-                                if (expressionType !== ClassSetExpressionType.ClassIntersection) {
-                                    error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos - 2, 2);
-                                }
-                                if (text.charCodeAt(pos) === CharacterCodes.ampersand) {
-                                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                                    pos++;
-                                }
-                            }
-                            else {
-                                error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos - 1, 1, String.fromCharCode(ch));
-                            }
-                            break;
-                        default:
-                            switch (expressionType) {
-                                case ClassSetExpressionType.ClassSubtraction:
-                                    error(Diagnostics._0_expected, pos, 0, "--");
-                                    break;
-                                case ClassSetExpressionType.ClassIntersection:
-                                    error(Diagnostics._0_expected, pos, 0, "&&");
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                    }
-                    ch = text.charCodeAt(pos);
-                    if (isClassContentExit(ch)) {
-                        error(Diagnostics.Expected_a_class_set_oprand);
-                        break;
-                    }
-                    scanClassSetOprand();
-                    // Used only if expressionType is Intersection
-                    expressionMayContainStrings &&= mayContainStrings;
-                }
-                mayContainStrings = expressionMayContainStrings;
-            }
-
-            // ClassSetOperand ::=
-            //     | '[' ClassSetExpression ']'
-            //     | '\' CharacterClassEscape
-            //     | '\q{' ClassStringDisjunctionContents '}'
-            //     | ClassSetCharacter
-            function scanClassSetOprand(): string {
-                mayContainStrings = false;
-                switch (text.charCodeAt(pos)) {
-                    case CharacterCodes.openBracket:
-                        pos++;
-                        scanClassSetExpression();
-                        scanExpectedChar(CharacterCodes.closeBracket);
+        // ClassSetOperand ::=
+        //     | '[' ClassSetExpression ']'
+        //     | '\' CharacterClassEscape
+        //     | '\q{' ClassStringDisjunctionContents '}'
+        //     | ClassSetCharacter
+        function scanClassSetOprand(): string {
+            mayContainStrings = false;
+            switch (text.charCodeAt(pos)) {
+                case CharacterCodes.openBracket:
+                    pos++;
+                    scanClassSetExpression();
+                    scanExpectedChar(CharacterCodes.closeBracket);
+                    return "";
+                case CharacterCodes.backslash:
+                    pos++;
+                    if (scanCharacterClassEscape()) {
                         return "";
-                    case CharacterCodes.backslash:
-                        pos++;
-                        if (scanCharacterClassEscape()) {
-                            return "";
-                        }
-                        else if (text.charCodeAt(pos) === CharacterCodes.q) {
-                            pos++;
-                            if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
-                                pos++;
-                                scanClassStringDisjunctionContents();
-                                scanExpectedChar(CharacterCodes.closeBrace);
-                                return "";
-                            }
-                            else {
-                                error(Diagnostics.q_must_be_followed_by_string_alternatives_enclosed_in_braces, pos - 2, 2);
-                                return "q";
-                            }
-                        }
-                        pos--;
-                    // falls through
-                    default:
-                        return scanClassSetCharacter();
-                }
-            }
-
-            // ClassStringDisjunctionContents ::= ClassSetCharacter* ('|' ClassSetCharacter*)*
-            function scanClassStringDisjunctionContents() {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBrace);
-                let characterCount = 0;
-                while (pos < end) {
-                    const ch = text.charCodeAt(pos);
-                    switch (ch) {
-                        case CharacterCodes.closeBrace:
-                            if (characterCount !== 1) {
-                                mayContainStrings = true;
-                            }
-                            return;
-                        case CharacterCodes.bar:
-                            if (characterCount !== 1) {
-                                mayContainStrings = true;
-                            }
-                            pos++;
-                            start = pos;
-                            characterCount = 0;
-                            break;
-                        default:
-                            scanClassSetCharacter();
-                            characterCount++;
-                            break;
                     }
-                }
-            }
-
-            // ClassSetCharacter ::=
-            //     | SourceCharacter -- ClassSetSyntaxCharacter -- ClassSetReservedDoublePunctuator
-            //     | '\' (CharacterEscape | ClassSetReservedPunctuator | 'b')
-            function scanClassSetCharacter(): string {
-                const ch = text.charCodeAt(pos);
-                if (ch === CharacterCodes.backslash) {
-                    pos++;
-                    const ch = text.charCodeAt(pos);
-                    switch (ch) {
-                        case CharacterCodes.b:
-                            pos++;
-                            return "\b";
-                        case CharacterCodes.ampersand:
-                        case CharacterCodes.minus:
-                        case CharacterCodes.exclamation:
-                        case CharacterCodes.hash:
-                        case CharacterCodes.percent:
-                        case CharacterCodes.comma:
-                        case CharacterCodes.colon:
-                        case CharacterCodes.semicolon:
-                        case CharacterCodes.lessThan:
-                        case CharacterCodes.equals:
-                        case CharacterCodes.greaterThan:
-                        case CharacterCodes.at:
-                        case CharacterCodes.backtick:
-                        case CharacterCodes.tilde:
-                            pos++;
-                            return String.fromCharCode(ch);
-                        default:
-                            return scanCharacterEscape(/*atomEscape*/ false);
-                    }
-                }
-                else if (ch === text.charCodeAt(pos + 1)) {
-                    switch (ch) {
-                        case CharacterCodes.ampersand:
-                        case CharacterCodes.exclamation:
-                        case CharacterCodes.hash:
-                        case CharacterCodes.percent:
-                        case CharacterCodes.asterisk:
-                        case CharacterCodes.plus:
-                        case CharacterCodes.comma:
-                        case CharacterCodes.dot:
-                        case CharacterCodes.colon:
-                        case CharacterCodes.semicolon:
-                        case CharacterCodes.lessThan:
-                        case CharacterCodes.equals:
-                        case CharacterCodes.greaterThan:
-                        case CharacterCodes.question:
-                        case CharacterCodes.at:
-                        case CharacterCodes.backtick:
-                        case CharacterCodes.tilde:
-                            error(Diagnostics.A_character_class_must_not_contain_a_reserved_double_punctuator_Did_you_mean_to_escape_it_with_backslash, pos, 2);
-                            pos += 2;
-                            return text.substring(pos - 2, pos);
-                    }
-                }
-                switch (ch) {
-                    case CharacterCodes.slash:
-                    case CharacterCodes.openParen:
-                    case CharacterCodes.closeParen:
-                    case CharacterCodes.openBracket:
-                    case CharacterCodes.closeBracket:
-                    case CharacterCodes.openBrace:
-                    case CharacterCodes.closeBrace:
-                    case CharacterCodes.minus:
-                    case CharacterCodes.bar:
-                        error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
-                        pos++;
-                        return String.fromCharCode(ch);
-                }
-                return scanSourceCharacter();
-            }
-
-            // ClassAtom ::=
-            //     | SourceCharacter but not one of '\' or ']'
-            //     | '\' ClassEscape
-            // ClassEscape ::=
-            //     | 'b'
-            //     | '-'
-            //     | CharacterClassEscape
-            //     | CharacterEscape
-            function scanClassAtom(): string {
-                if (text.charCodeAt(pos) === CharacterCodes.backslash) {
-                    pos++;
-                    const ch = text.charCodeAt(pos);
-                    switch (ch) {
-                        case CharacterCodes.b:
-                            pos++;
-                            return "\b";
-                        case CharacterCodes.minus:
-                            pos++;
-                            return String.fromCharCode(ch);
-                        default:
-                            if (scanCharacterClassEscape()) {
-                                return "";
-                            }
-                            return scanCharacterEscape(/*atomEscape*/ false);
-                    }
-                }
-                else {
-                    return scanSourceCharacter();
-                }
-            }
-
-            // CharacterClassEscape ::=
-            //     | 'd' | 'D' | 's' | 'S' | 'w' | 'W'
-            //     | [+UnicodeMode] ('P' | 'p') '{' UnicodePropertyValueExpression '}'
-            function scanCharacterClassEscape(): boolean {
-                Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
-                let isCharacterComplement = false;
-                const start = pos - 1;
-                const ch = text.charCodeAt(pos);
-                switch (ch) {
-                    case CharacterCodes.d:
-                    case CharacterCodes.D:
-                    case CharacterCodes.s:
-                    case CharacterCodes.S:
-                    case CharacterCodes.w:
-                    case CharacterCodes.W:
-                        pos++;
-                        return true;
-                    case CharacterCodes.P:
-                        isCharacterComplement = true;
-                    // falls through
-                    case CharacterCodes.p:
+                    else if (text.charCodeAt(pos) === CharacterCodes.q) {
                         pos++;
                         if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
                             pos++;
-                            const propertyNameOrValueStart = pos;
-                            const propertyNameOrValue = scanWordCharacters();
-                            if (text.charCodeAt(pos) === CharacterCodes.equals) {
-                                const propertyName = nonBinaryUnicodeProperties.get(propertyNameOrValue);
-                                if (pos === propertyNameOrValueStart) {
-                                    error(Diagnostics.Expected_a_Unicode_property_name);
-                                }
-                                else if (propertyName === undefined) {
-                                    error(Diagnostics.Unknown_Unicode_property_name, propertyNameOrValueStart, pos - propertyNameOrValueStart);
-                                    const suggestion = getSpellingSuggestion(propertyNameOrValue, nonBinaryUnicodeProperties.keys(), identity);
-                                    if (suggestion) {
-                                        error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
-                                    }
-                                }
-                                pos++;
-                                const propertyValueStart = pos;
-                                const propertyValue = scanWordCharacters();
-                                if (pos === propertyValueStart) {
-                                    error(Diagnostics.Expected_a_Unicode_property_value);
-                                }
-                                else if (propertyName !== undefined && !valuesOfNonBinaryUnicodeProperties[propertyName].has(propertyValue)) {
-                                    error(Diagnostics.Unknown_Unicode_property_value, propertyValueStart, pos - propertyValueStart);
-                                    const suggestion = getSpellingSuggestion(propertyValue, valuesOfNonBinaryUnicodeProperties[propertyName], identity);
-                                    if (suggestion) {
-                                        error(Diagnostics.Did_you_mean_0, propertyValueStart, pos - propertyValueStart, suggestion);
-                                    }
-                                }
-                            }
-                            else {
-                                if (pos === propertyNameOrValueStart) {
-                                    error(Diagnostics.Expected_a_Unicode_property_name_or_value);
-                                }
-                                else if (binaryUnicodePropertiesOfStrings.has(propertyNameOrValue)) {
-                                    if (!unicodeSetsMode) {
-                                        error(Diagnostics.Any_Unicode_property_that_would_possibly_match_more_than_a_single_character_is_only_available_when_the_Unicode_Sets_v_flag_is_set, propertyNameOrValueStart, pos - propertyNameOrValueStart);
-                                    }
-                                    else if (isCharacterComplement) {
-                                        error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, propertyNameOrValueStart, pos - propertyNameOrValueStart);
-                                    }
-                                    else {
-                                        mayContainStrings = true;
-                                    }
-                                }
-                                else if (!valuesOfNonBinaryUnicodeProperties.General_Category.has(propertyNameOrValue) && !binaryUnicodeProperties.has(propertyNameOrValue)) {
-                                    error(Diagnostics.Unknown_Unicode_property_name_or_value, propertyNameOrValueStart, pos - propertyNameOrValueStart);
-                                    const suggestion = getSpellingSuggestion(propertyNameOrValue, [...valuesOfNonBinaryUnicodeProperties.General_Category, ...binaryUnicodeProperties, ...binaryUnicodePropertiesOfStrings], identity);
-                                    if (suggestion) {
-                                        error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
-                                    }
-                                }
-                            }
+                            scanClassStringDisjunctionContents();
                             scanExpectedChar(CharacterCodes.closeBrace);
-                            if (!unicodeMode) {
-                                error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
-                            }
+                            return "";
                         }
-                        else if (unicodeMode) {
-                            error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                        else {
+                            error(Diagnostics.q_must_be_followed_by_string_alternatives_enclosed_in_braces, pos - 2, 2);
+                            return "q";
                         }
-                        return true;
-                }
-                return false;
-            }
-
-            function scanWordCharacters(): string {
-                let value = "";
-                while (pos < end) {
-                    const ch = text.charCodeAt(pos);
-                    if (!isWordCharacter(ch)) {
-                        break;
                     }
-                    value += String.fromCharCode(ch);
-                    pos++;
-                }
-                return value;
+                    pos--;
+                // falls through
+                default:
+                    return scanClassSetCharacter();
             }
-
-            function scanSourceCharacter(): string {
-                const size = unicodeMode ? charSize(codePointAt(text, pos)) : 1;
-                pos += size;
-                return text.substring(pos - size, pos);
-            }
-
-            function scanExpectedChar(ch: CharacterCodes) {
-                if (text.charCodeAt(pos) === ch) {
-                    pos++;
-                }
-                else {
-                    error(Diagnostics._0_expected, pos, 0, String.fromCharCode(ch));
-                }
-            }
-
-            scanDisjunction(/*isInGroup*/ false);
-
-            forEach(groupNameReferences, reference => {
-                if (!groupSpecifiers.has(reference.name)) {
-                    error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
-                }
-            });
-            forEach(decimalEscapes, escape => {
-                // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
-                // either a LegacyOctalEscapeSequence or IdentityEscape
-                if (!annexB && escape.value > numberOfCapturingGroups) {
-                    if (numberOfCapturingGroups) {
-                        error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
-                    }
-                    else {
-                        error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
-                    }
-                }
-            });
         }
 
-        function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
-            const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
-            if (availableFrom && languageVersion < availableFrom) {
-                error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
+        // ClassStringDisjunctionContents ::= ClassSetCharacter* ('|' ClassSetCharacter*)*
+        function scanClassStringDisjunctionContents() {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.openBrace);
+            let characterCount = 0;
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.closeBrace:
+                        if (characterCount !== 1) {
+                            mayContainStrings = true;
+                        }
+                        return;
+                    case CharacterCodes.bar:
+                        if (characterCount !== 1) {
+                            mayContainStrings = true;
+                        }
+                        pos++;
+                        start = pos;
+                        characterCount = 0;
+                        break;
+                    default:
+                        scanClassSetCharacter();
+                        characterCount++;
+                        break;
+                }
             }
+        }
+
+        // ClassSetCharacter ::=
+        //     | SourceCharacter -- ClassSetSyntaxCharacter -- ClassSetReservedDoublePunctuator
+        //     | '\' (CharacterEscape | ClassSetReservedPunctuator | 'b')
+        function scanClassSetCharacter(): string {
+            const ch = text.charCodeAt(pos);
+            if (ch === CharacterCodes.backslash) {
+                pos++;
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.b:
+                        pos++;
+                        return "\b";
+                    case CharacterCodes.ampersand:
+                    case CharacterCodes.minus:
+                    case CharacterCodes.exclamation:
+                    case CharacterCodes.hash:
+                    case CharacterCodes.percent:
+                    case CharacterCodes.comma:
+                    case CharacterCodes.colon:
+                    case CharacterCodes.semicolon:
+                    case CharacterCodes.lessThan:
+                    case CharacterCodes.equals:
+                    case CharacterCodes.greaterThan:
+                    case CharacterCodes.at:
+                    case CharacterCodes.backtick:
+                    case CharacterCodes.tilde:
+                        pos++;
+                        return String.fromCharCode(ch);
+                    default:
+                        return scanCharacterEscape(/*atomEscape*/ false);
+                }
+            }
+            else if (ch === text.charCodeAt(pos + 1)) {
+                switch (ch) {
+                    case CharacterCodes.ampersand:
+                    case CharacterCodes.exclamation:
+                    case CharacterCodes.hash:
+                    case CharacterCodes.percent:
+                    case CharacterCodes.asterisk:
+                    case CharacterCodes.plus:
+                    case CharacterCodes.comma:
+                    case CharacterCodes.dot:
+                    case CharacterCodes.colon:
+                    case CharacterCodes.semicolon:
+                    case CharacterCodes.lessThan:
+                    case CharacterCodes.equals:
+                    case CharacterCodes.greaterThan:
+                    case CharacterCodes.question:
+                    case CharacterCodes.at:
+                    case CharacterCodes.backtick:
+                    case CharacterCodes.tilde:
+                        error(Diagnostics.A_character_class_must_not_contain_a_reserved_double_punctuator_Did_you_mean_to_escape_it_with_backslash, pos, 2);
+                        pos += 2;
+                        return text.substring(pos - 2, pos);
+                }
+            }
+            switch (ch) {
+                case CharacterCodes.slash:
+                case CharacterCodes.openParen:
+                case CharacterCodes.closeParen:
+                case CharacterCodes.openBracket:
+                case CharacterCodes.closeBracket:
+                case CharacterCodes.openBrace:
+                case CharacterCodes.closeBrace:
+                case CharacterCodes.minus:
+                case CharacterCodes.bar:
+                    error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
+                    pos++;
+                    return String.fromCharCode(ch);
+            }
+            return scanSourceCharacter();
+        }
+
+        // ClassAtom ::=
+        //     | SourceCharacter but not one of '\' or ']'
+        //     | '\' ClassEscape
+        // ClassEscape ::=
+        //     | 'b'
+        //     | '-'
+        //     | CharacterClassEscape
+        //     | CharacterEscape
+        function scanClassAtom(): string {
+            if (text.charCodeAt(pos) === CharacterCodes.backslash) {
+                pos++;
+                const ch = text.charCodeAt(pos);
+                switch (ch) {
+                    case CharacterCodes.b:
+                        pos++;
+                        return "\b";
+                    case CharacterCodes.minus:
+                        pos++;
+                        return String.fromCharCode(ch);
+                    default:
+                        if (scanCharacterClassEscape()) {
+                            return "";
+                        }
+                        return scanCharacterEscape(/*atomEscape*/ false);
+                }
+            }
+            else {
+                return scanSourceCharacter();
+            }
+        }
+
+        // CharacterClassEscape ::=
+        //     | 'd' | 'D' | 's' | 'S' | 'w' | 'W'
+        //     | [+UnicodeMode] ('P' | 'p') '{' UnicodePropertyValueExpression '}'
+        function scanCharacterClassEscape(): boolean {
+            Debug.assertEqual(text.charCodeAt(pos - 1), CharacterCodes.backslash);
+            let isCharacterComplement = false;
+            const start = pos - 1;
+            const ch = text.charCodeAt(pos);
+            switch (ch) {
+                case CharacterCodes.d:
+                case CharacterCodes.D:
+                case CharacterCodes.s:
+                case CharacterCodes.S:
+                case CharacterCodes.w:
+                case CharacterCodes.W:
+                    pos++;
+                    return true;
+                case CharacterCodes.P:
+                    isCharacterComplement = true;
+                // falls through
+                case CharacterCodes.p:
+                    pos++;
+                    if (text.charCodeAt(pos) === CharacterCodes.openBrace) {
+                        pos++;
+                        const propertyNameOrValueStart = pos;
+                        const propertyNameOrValue = scanWordCharacters();
+                        if (text.charCodeAt(pos) === CharacterCodes.equals) {
+                            const propertyName = nonBinaryUnicodeProperties.get(propertyNameOrValue);
+                            if (pos === propertyNameOrValueStart) {
+                                error(Diagnostics.Expected_a_Unicode_property_name);
+                            }
+                            else if (propertyName === undefined) {
+                                error(Diagnostics.Unknown_Unicode_property_name, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                const suggestion = getSpellingSuggestion(propertyNameOrValue, nonBinaryUnicodeProperties.keys(), identity);
+                                if (suggestion) {
+                                    error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
+                                }
+                            }
+                            pos++;
+                            const propertyValueStart = pos;
+                            const propertyValue = scanWordCharacters();
+                            if (pos === propertyValueStart) {
+                                error(Diagnostics.Expected_a_Unicode_property_value);
+                            }
+                            else if (propertyName !== undefined && !valuesOfNonBinaryUnicodeProperties[propertyName].has(propertyValue)) {
+                                error(Diagnostics.Unknown_Unicode_property_value, propertyValueStart, pos - propertyValueStart);
+                                const suggestion = getSpellingSuggestion(propertyValue, valuesOfNonBinaryUnicodeProperties[propertyName], identity);
+                                if (suggestion) {
+                                    error(Diagnostics.Did_you_mean_0, propertyValueStart, pos - propertyValueStart, suggestion);
+                                }
+                            }
+                        }
+                        else {
+                            if (pos === propertyNameOrValueStart) {
+                                error(Diagnostics.Expected_a_Unicode_property_name_or_value);
+                            }
+                            else if (binaryUnicodePropertiesOfStrings.has(propertyNameOrValue)) {
+                                if (!unicodeSetsMode) {
+                                    error(Diagnostics.Any_Unicode_property_that_would_possibly_match_more_than_a_single_character_is_only_available_when_the_Unicode_Sets_v_flag_is_set, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                }
+                                else if (isCharacterComplement) {
+                                    error(Diagnostics.Anything_that_would_possibly_match_more_than_a_single_character_is_invalid_inside_a_negated_character_class, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                }
+                                else {
+                                    mayContainStrings = true;
+                                }
+                            }
+                            else if (!valuesOfNonBinaryUnicodeProperties.General_Category.has(propertyNameOrValue) && !binaryUnicodeProperties.has(propertyNameOrValue)) {
+                                error(Diagnostics.Unknown_Unicode_property_name_or_value, propertyNameOrValueStart, pos - propertyNameOrValueStart);
+                                const suggestion = getSpellingSuggestion(propertyNameOrValue, [...valuesOfNonBinaryUnicodeProperties.General_Category, ...binaryUnicodeProperties, ...binaryUnicodePropertiesOfStrings], identity);
+                                if (suggestion) {
+                                    error(Diagnostics.Did_you_mean_0, propertyNameOrValueStart, pos - propertyNameOrValueStart, suggestion);
+                                }
+                            }
+                        }
+                        scanExpectedChar(CharacterCodes.closeBrace);
+                        if (!unicodeMode) {
+                            error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
+                        }
+                    }
+                    else if (unicodeMode) {
+                        error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                    }
+                    return true;
+            }
+            return false;
+        }
+
+        function scanWordCharacters(): string {
+            let value = "";
+            while (pos < end) {
+                const ch = text.charCodeAt(pos);
+                if (!isWordCharacter(ch)) {
+                    break;
+                }
+                value += String.fromCharCode(ch);
+                pos++;
+            }
+            return value;
+        }
+
+        function scanSourceCharacter(): string {
+            const size = unicodeMode ? charSize(codePointAt(text, pos)) : 1;
+            pos += size;
+            return text.substring(pos - size, pos);
+        }
+
+        function scanExpectedChar(ch: CharacterCodes) {
+            if (text.charCodeAt(pos) === ch) {
+                pos++;
+            }
+            else {
+                error(Diagnostics._0_expected, pos, 0, String.fromCharCode(ch));
+            }
+        }
+
+        scanDisjunction(/*isInGroup*/ false);
+
+        forEach(groupNameReferences, reference => {
+            if (!groupSpecifiers.has(reference.name)) {
+                error(Diagnostics.There_is_no_capturing_group_named_0_in_this_regular_expression, reference.pos, reference.end - reference.pos, reference.name);
+            }
+        });
+        forEach(decimalEscapes, escape => {
+            // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
+            // either a LegacyOctalEscapeSequence or IdentityEscape
+            if (!annexB && escape.value > numberOfCapturingGroups) {
+                if (numberOfCapturingGroups) {
+                    error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
+                }
+                else {
+                    error(Diagnostics.This_backreference_is_invalid_because_the_containing_regular_expression_contains_no_capturing_groups, escape.pos, escape.end - escape.pos);
+                }
+            }
+        });
+    }
+
+    function checkRegularExpressionFlagAvailable(flag: RegularExpressionFlags, pos: number) {
+        const availableFrom = regExpFlagToFirstAvailableLanguageVersion.get(flag) as ScriptTarget | undefined;
+        if (availableFrom && languageVersion < availableFrom) {
+            error(Diagnostics.This_regular_expression_flag_is_only_available_when_targeting_0_or_later, pos, 1, getNameOfScriptTarget(availableFrom));
         }
     }
 
