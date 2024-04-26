@@ -96,7 +96,7 @@ function f2(obj: { a?: string, b?: string | undefined }) {
 >obj : { a?: string; b?: string | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { a?: string; b?: string | undefined; }
->    :    ^           ^                       
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     obj.a = obj.a;  // Error
 >obj.a = obj.a : string | undefined

@@ -125,7 +125,7 @@ const A = object<Something>()({
 >fields : () => { a: Field<Something, "a">; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }) : () => { a: Field<Something, "a">; }
->                                                                                                                      :                                    
+>                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  }) : { a: Field<Something, "a">; }
 >                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: field({      type: A,      resolve() {        return {          foo: 100,        };      },    }),  } : { a: Field<Something, "a">; }

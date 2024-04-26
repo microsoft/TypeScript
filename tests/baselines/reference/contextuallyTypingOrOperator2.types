@@ -15,7 +15,7 @@ var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >a : (s: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >s => s.length : (s: string) => number
->              :                      
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length : number
@@ -29,7 +29,7 @@ var v: { a: (_: string) => number } = { a: s => s.length } || { a: s => 1 };
 >a : (s: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >s => 1 : (s: string) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >1 : 1
@@ -39,7 +39,7 @@ var v2 = (s: string) => s.length || function (s) { s.aaa };
 >v2 : (s: string) => number | ((s: any) => void)
 >   : ^ ^^      ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >(s: string) => s.length || function (s) { s.aaa } : (s: string) => number | ((s: any) => void)
->                                                  :                                           
+>                                                  : ^ ^^      ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length || function (s) { s.aaa } : number | ((s: any) => void)

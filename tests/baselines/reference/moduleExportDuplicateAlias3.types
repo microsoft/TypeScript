@@ -61,7 +61,7 @@ exports.apply = a;
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : () => void
->  :           
+>  : ^^^^^^^^^^
 
 exports.apply()
 >exports.apply() : void

@@ -24,7 +24,7 @@ const result = parse([{ a: "foo" }]);
 >result : [{ a: "foo"; }]
 >       : ^^^^^^^^^^^^^^^
 >parse([{ a: "foo" }]) : [{ a: "foo"; }]
->                      : ^             ^
+>                      : ^^^^^^^^^^^^^^^
 >parse : <def>(def: narrow<def>) => def
 >      : ^   ^^   ^^           ^^^^^^^^
 >[{ a: "foo" }] : [{ a: "foo"; }]

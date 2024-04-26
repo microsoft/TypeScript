@@ -37,7 +37,7 @@ const out = myBug({obj1: {a: "test"}})
 >out : { obj1: { a: string; }; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug({obj1: {a: "test"}}) : { obj1: { a: string; }; }
->                           :                          
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >myBug : <T extends { [K in keyof T]: T[K] extends infer U extends { a: string; } ? U : never; }>(arg: T) => T
 >      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
 >{obj1: {a: "test"}} : { obj1: { a: string; }; }

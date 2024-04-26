@@ -115,7 +115,7 @@ function defaultArgFunction(a = function () { return b; }, b = 1) { }
 >a : () => number
 >  : ^^^^^^^^^^^^
 >function () { return b; } : () => number
->                          :             
+>                          : ^^^^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >b : number
@@ -129,7 +129,7 @@ function defaultArgArrow(a = () => () => b, b = 3) { }
 >a : () => () => number
 >  : ^^^^^^^^^^^^^^^^^^
 >() => () => b : () => () => number
->              :                   
+>              : ^^^^^^^^^^^^^^^^^^
 >() => b : () => number
 >        : ^^^^^^^^^^^^
 >b : number
@@ -171,7 +171,7 @@ var x = (a = b, b = c, c = d) => { var d; };
 >x : (a?: any, b?: any, c?: any) => void
 >  : ^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >(a = b, b = c, c = d) => { var d; } : (a?: any, b?: any, c?: any) => void
->                                    :   ^        ^        ^              
+>                                    : ^ ^^^^^^^^ ^^^^^^^^ ^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any
@@ -196,7 +196,7 @@ function f(a, b = function () { return c; }, c = b()) {
 >b : () => any
 >  : ^^^^^^^^^
 >function () { return c; } : () => any
->                          :          
+>                          : ^^^^^^^^^
 >c : any
 >  : ^^^
 >c : any

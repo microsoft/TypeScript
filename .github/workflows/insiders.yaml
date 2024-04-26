@@ -59,6 +59,7 @@ jobs:
           npm ci
           npx hereby configure-insiders
           npx hereby LKG
+          node ./scripts/addPackageJsonGitHead.mjs package.json
           npm publish --tag insiders
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}

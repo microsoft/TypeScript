@@ -13,7 +13,7 @@ function f<A extends string>(p0: { [key in A]: {} | undefined }, p1: A) {
 >v : {}
 >  : ^^
 >p0[p1]! : {}
->        :   
+>        : ^^
 >p0[p1] : {} | undefined
 >       : ^^^^^^^^^^^^^^
 >p0 : { [key in A]: {} | undefined; }

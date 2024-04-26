@@ -4215,7 +4215,7 @@ declare namespace ts {
         getSourceFile(): SourceFile;
         getChildCount(sourceFile?: SourceFile): number;
         getChildAt(index: number, sourceFile?: SourceFile): Node;
-        getChildren(sourceFile?: SourceFile): Node[];
+        getChildren(sourceFile?: SourceFile): readonly Node[];
         getStart(sourceFile?: SourceFile, includeJsDocComment?: boolean): number;
         getFullStart(): number;
         getEnd(): number;
@@ -4377,12 +4377,6 @@ declare namespace ts {
     }
     interface Identifier {
         readonly text: string;
-    }
-    interface Identifier {
-        /** @deprecated Use `idKeyword(identifier)` instead. */
-        readonly originalKeywordKind?: SyntaxKind;
-        /** @deprecated Use `.parent` or the surrounding context to determine this instead. */
-        readonly isInJSDocNamespace?: boolean;
     }
     interface TransientIdentifier extends Identifier {
         resolvedSymbol: Symbol;
@@ -6909,6 +6903,7 @@ declare namespace ts {
         inlineSourceMap?: boolean;
         inlineSources?: boolean;
         isolatedModules?: boolean;
+        isolatedDeclarations?: boolean;
         jsx?: JsxEmit;
         /** @deprecated */
         keyofStringsOnly?: boolean;
@@ -9461,6 +9456,7 @@ declare namespace ts {
     interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
+        diagnostics: readonly Diagnostic[];
     }
     interface OutputFile {
         name: string;
@@ -11195,6 +11191,7 @@ declare namespace ts {
     };
     function preProcessFile(sourceText: string, readImportFiles?: boolean, detectJavaScriptImports?: boolean): PreProcessedFileInfo;
     function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput;
+    function transpileDeclaration(input: string, transpileOptions: TranspileOptions): TranspileOutput;
     function transpile(input: string, compilerOptions?: CompilerOptions, fileName?: string, diagnostics?: Diagnostic[], moduleName?: string): string;
     interface TranspileOptions {
         compilerOptions?: CompilerOptions;

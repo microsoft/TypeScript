@@ -35,7 +35,7 @@ function run(options: { something?(b?: string): void }) {
 >something : (b?: string) => void
 >          : ^ ^^^      ^^^^^^^^^
 >options.something ?? val.something : (b?: string) => void
->                                   :   ^                 
+>                                   : ^ ^^^      ^^^^^^^^^
 >options.something : ((b?: string) => void) | undefined
 >                  : ^^ ^^^      ^^^^^^^^^^^^^^^^^^^^^^
 >options : { something?(b?: string): void; }

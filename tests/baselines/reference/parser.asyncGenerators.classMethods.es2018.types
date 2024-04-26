@@ -127,7 +127,7 @@ class C10 {
 >x : () => void
 >  : ^^^^^^^^^^
 >function yield() {        } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >yield : () => void
 >      : ^^^^^^^^^^
 
@@ -162,7 +162,7 @@ class C12 {
 >x : () => void
 >  : ^^^^^^^^^^
 >function await() {        } : () => void
->                            :           
+>                            : ^^^^^^^^^^
 >await : () => void
 >      : ^^^^^^^^^^
 

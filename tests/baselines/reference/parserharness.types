@@ -366,7 +366,7 @@ module Harness {
 >throwAssertError : (error: Error) => never
 >                 : ^     ^^     ^^^^^^^^^^
 >(error: Error) => {            throw error;        } : (error: Error) => never
->                                                     :                        
+>                                                     : ^     ^^     ^^^^^^^^^^
 >error : Error
 >      : ^^^^^
 
@@ -3758,7 +3758,7 @@ module Harness {
 >subBenchmark : (name: any, f: any) => void
 >             : ^    ^^^^^^^ ^^^^^^^^^^    
 >function (name, f): void {                timeFunction(benchmark, description, name, f);            } : (name: any, f: any) => void
->                                                                                                      :                            
+>                                                                                                      : ^    ^^^^^^^ ^^^^^^^^^^    
 >name : any
 >     : ^^^
 >f : any
@@ -7574,7 +7574,7 @@ module Harness {
 >createFile : (fn: string) => any
 >           : ^  ^^      ^^^^^^^^
 >(fn: string) => {                            outputs[fn] = new Harness.Compiler.WriterAggregator();                            return outputs[fn];                        } : (fn: string) => any
->                                                                                                                                                                            :                    
+>                                                                                                                                                                            : ^  ^^      ^^^^^^^^
 >fn : string
 >   : ^^^^^^
 
@@ -7613,7 +7613,7 @@ module Harness {
 >directoryExists : (path: string) => boolean
 >                : ^    ^^      ^^^^^^^^^^^^
 >(path: string) => true : (path: string) => boolean
->                       :                          
+>                       : ^    ^^      ^^^^^^^^^^^^
 >path : string
 >     : ^^^^^^
 >true : true
@@ -7623,7 +7623,7 @@ module Harness {
 >fileExists : (path: string) => boolean
 >           : ^    ^^      ^^^^^^^^^^^^
 >(path: string) => true : (path: string) => boolean
->                       :                          
+>                       : ^    ^^      ^^^^^^^^^^^^
 >path : string
 >     : ^^^^^^
 >true : true
@@ -7633,7 +7633,7 @@ module Harness {
 >resolvePath : (path: string) => string
 >            : ^    ^^      ^^^^^^^^^^^
 >(path: string) => path : (path: string) => string
->                       :                         
+>                       : ^    ^^      ^^^^^^^^^^^
 >path : string
 >     : ^^^^^^
 >path : string
@@ -7904,11 +7904,11 @@ module Harness {
 >fileResults.forEach(v => lines = lines.concat(v.file.lines)) : void
 >                                                             : ^^^^
 >fileResults.forEach : (callbackfn: (value: { filename: string; file: WriterAggregator; }, index: number, array: { filename: string; file: WriterAggregator; }[]) => void, thisArg?: any) => void
->                    : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                             ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                    : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >fileResults : { filename: string; file: WriterAggregator; }[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >forEach : (callbackfn: (value: { filename: string; file: WriterAggregator; }, index: number, array: { filename: string; file: WriterAggregator; }[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                             ^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >v => lines = lines.concat(v.file.lines) : (v: { filename: string; file: WriterAggregator; }) => any[]
 >                                        : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : { filename: string; file: WriterAggregator; }
@@ -9477,7 +9477,7 @@ module Harness {
 >precompile : () => void
 >           : ^^^^^^^^^^
 >() => {                    // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?                    // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue                    dependencies.forEach(dep => {                        addUnit(dep.content, dep.name, false, Harness.Compiler.isDeclareFile(dep.name));                        addedFiles.push(dep.name);                    });                } : () => void
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  :           
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^
 
                     // REVIEW: if any dependency has a triple slash reference then does postCompile potentially have to do a recreate since we can't update references with updateUnit?
                     // easy enough to do if so, prefer to avoid the recreate cost until it proves to be an issue
@@ -9555,7 +9555,7 @@ module Harness {
 >postcompile : () => void
 >            : ^^^^^^^^^^
 >() => {                    addedFiles.forEach(file => {                        updateUnit('', file);                    });                } : () => void
->                                                                                                                                             :           
+>                                                                                                                                             : ^^^^^^^^^^
 
                     addedFiles.forEach(file => {
 >addedFiles.forEach(file => {                        updateUnit('', file);                    }) : void
@@ -9587,7 +9587,7 @@ module Harness {
 >context : { filename: string; preCompile: () => void; postCompile: () => void; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                    filename: filename,                    preCompile: precompile,                    postCompile: postcompile                } : { filename: string; preCompile: () => void; postCompile: () => void; }
->                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^          ^^^
+>                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                     filename: filename,
 >filename : string
@@ -9599,13 +9599,13 @@ module Harness {
 >preCompile : () => void
 >           : ^^^^^^^^^^
 >precompile : () => void
->           :           
+>           : ^^^^^^^^^^
 
                     postCompile: postcompile
 >postCompile : () => void
 >            : ^^^^^^^^^^
 >postcompile : () => void
->            :           
+>            : ^^^^^^^^^^
 
                 };
                 return context;
@@ -10086,7 +10086,7 @@ module Harness {
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                             {
 >{                                content: currentFileContent,                                name: currentFileName,                                fileOptions: currentFileOptions,                                originalFilePath: filename,                                references: refs                            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
->                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                                 content: currentFileContent,
 >content : string
@@ -10104,7 +10104,7 @@ module Harness {
 >fileOptions : {}
 >            : ^^
 >currentFileOptions : {}
->                   :   
+>                   : ^^
 
                                 originalFilePath: filename,
 >originalFilePath : string
@@ -10253,7 +10253,7 @@ module Harness {
 >newTestFile : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{                content: currentFileContent || '',                name: currentFileName,                fileOptions: currentFileOptions,                originalFilePath: filename,                references: refs            } : { content: string; name: any; fileOptions: {}; originalFilePath: string; references: TypeScript.IFileReference[]; }
->                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 content: currentFileContent || '',
 >content : string
@@ -10275,7 +10275,7 @@ module Harness {
 >fileOptions : {}
 >            : ^^
 >currentFileOptions : {}
->                   :   
+>                   : ^^
 
                 originalFilePath: filename,
 >originalFilePath : string
@@ -10578,7 +10578,7 @@ module Harness {
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                          ^^^^^
+>                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
@@ -10586,7 +10586,7 @@ module Harness {
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                          ^^^^^
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >this.maxScriptVersions - this.editRanges.length : number
@@ -10717,7 +10717,7 @@ module Harness {
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                                             :                                                           ^^
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
@@ -10741,11 +10741,11 @@ module Harness {
 >entries.map(x => x.editRange.minChar) : any[]
 >                                      : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.editRange.minChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
 >                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -10791,11 +10791,11 @@ module Harness {
 >entries.map(x => x.length - x.editRange.limChar) : number[]
 >                                                 : ^^^^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.length - x.editRange.limChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => number
 >                                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -10849,11 +10849,11 @@ module Harness {
 >entries.map(x => x.editRange.delta) : any[]
 >                                    : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^                                                          ^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.editRange.delta : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
 >                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
@@ -12281,9 +12281,9 @@ module Harness {
 >temp : { edit: Services.TextEdit; index: number; }[]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: Services.TextEdit; index: number; }[]
->                                                                                                                                                                                                                               :                                            ^^
+>                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapEdits(edits).sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->                     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                           ^^^^^^^^^^^^^^^^                                           ^^
+>                     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapEdits(edits) : { edit: Services.TextEdit; index: number; }[]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
@@ -12291,9 +12291,9 @@ module Harness {
 >edits : Services.TextEdit[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                           ^^^^^^^^^^^^^^^^                                           ^^
+>     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number
->                                                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                                           ^^^^^^^^^^^
+>                                                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >b : { edit: Services.TextEdit; index: number; }
@@ -13954,7 +13954,7 @@ module Harness {
 >comparison : { expected: string; actual: string; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compareToBaseline(actual, relativeFilename, opts) : { expected: string; actual: string; }
->                                                  :                                      
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compareToBaseline : (actual: string, relativeFilename: string, opts: BaselineOptions) => { expected: string; actual: string; }
 >                  : ^      ^^      ^^                ^^      ^^    ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >actual : string
@@ -14043,7 +14043,7 @@ module Harness {
 >comparison : { expected: string; actual: string; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compareToBaseline(actual, relativeFilename, opts) : { expected: string; actual: string; }
->                                                  :                                      
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >compareToBaseline : (actual: string, relativeFilename: string, opts: BaselineOptions) => { expected: string; actual: string; }
 >                  : ^      ^^      ^^                ^^      ^^    ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >actual : string

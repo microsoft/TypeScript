@@ -23,7 +23,7 @@ let choice = sinOrCos && Math.sin || Math.cos;
 >choice : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >sinOrCos && Math.sin || Math.cos : (x: number) => number
->                                 :                      
+>                                 : ^ ^^      ^^^^^^^^^^^
 >sinOrCos && Math.sin : false | ((x: number) => number)
 >                     : ^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >sinOrCos : boolean

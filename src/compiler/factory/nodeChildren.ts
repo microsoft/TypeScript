@@ -1,14 +1,20 @@
-import { Node } from "../_namespaces/ts";
+import {
+    emptyArray,
+    isNodeKind,
+    Node,
+} from "../_namespaces/ts";
 
-const nodeChildren = new WeakMap<Node, Node[] | undefined>();
+const nodeChildren = new WeakMap<Node, readonly Node[] | undefined>();
 
 /** @internal */
-export function getNodeChildren(node: Node): Node[] | undefined {
+export function getNodeChildren(node: Node): readonly Node[] | undefined {
+    if (!isNodeKind(node.kind)) return emptyArray;
+
     return nodeChildren.get(node);
 }
 
 /** @internal */
-export function setNodeChildren(node: Node, children: Node[]): Node[] {
+export function setNodeChildren(node: Node, children: readonly Node[]): readonly Node[] {
     nodeChildren.set(node, children);
     return children;
 }

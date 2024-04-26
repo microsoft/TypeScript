@@ -47,7 +47,7 @@ var s2 = s.groupBy(s => s.length);
 >s2 : Sequence<{ key: number; items: string[]; }>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s.groupBy(s => s.length) : Sequence<{ key: number; items: string[]; }>
->                         : ^^^^^^^^^                                 ^
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s.groupBy : <K>(keySelector: (value: string) => K) => Sequence<{ key: K; items: string[]; }>
 >          : ^^^^           ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >s : Sequence<string>

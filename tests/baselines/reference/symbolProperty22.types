@@ -41,7 +41,7 @@ foo("", { [Symbol.unscopables]: s => s.length });
 >unscopables : unique symbol
 >            : ^^^^^^^^^^^^^
 >s => s.length : (s: string) => number
->              :                      
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length : number

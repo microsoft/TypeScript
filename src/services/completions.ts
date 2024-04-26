@@ -3948,7 +3948,9 @@ function getCompletionData(
         // If module transpilation is enabled or we're targeting es6 or above, or not emitting, OK.
         if (compilerOptionsIndicateEsModules(program.getCompilerOptions())) return true;
         // If some file is using ES6 modules, assume that it's OK to add more.
-        return programContainsModules(program);
+        return program.getSymlinkCache?.().hasAnySymlinks() ||
+            !!program.getCompilerOptions().paths ||
+            programContainsModules(program);
     }
 
     function isSnippetScope(scopeNode: Node): boolean {

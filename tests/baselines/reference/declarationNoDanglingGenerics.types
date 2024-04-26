@@ -106,7 +106,7 @@ export class AKind extends ClassFactory(Kinds.A) {
 >AKind : AKind
 >      : ^^^^^
 >ClassFactory(Kinds.A) : ClassFactory<"A">.(Anonymous class)
->                      :              ^^^ ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.A : "A"
@@ -121,7 +121,7 @@ export class BKind extends ClassFactory(Kinds.B) {
 >BKind : BKind
 >      : ^^^^^
 >ClassFactory(Kinds.B) : ClassFactory<"B">.(Anonymous class)
->                      :              ^^^ ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.B : "B"
@@ -136,7 +136,7 @@ export class CKind extends ClassFactory(Kinds.C) {
 >CKind : CKind
 >      : ^^^^^
 >ClassFactory(Kinds.C) : ClassFactory<"C">.(Anonymous class)
->                      :              ^^^ ^^^^^^^^^^^^^^^^^^
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
 >             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.C : "C"

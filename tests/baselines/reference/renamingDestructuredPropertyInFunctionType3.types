@@ -33,7 +33,7 @@ const f13 =  ({ [sym]: string }: O) => { };
 >f13 : ({ [sym]: string }: O) => void
 >    : ^                 ^^ ^^^^^^^^^
 >({ [sym]: string }: O) => { } : ({ [sym]: string }: O) => void
->                              :                               
+>                              : ^                 ^^ ^^^^^^^^^
 >sym : unique symbol
 >    : ^^^^^^^^^^^^^
 >string : unknown

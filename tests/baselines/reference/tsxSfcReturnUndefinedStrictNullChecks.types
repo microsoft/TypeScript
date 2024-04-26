@@ -9,7 +9,7 @@ const Foo = (props: any) => undefined;
 >Foo : (props: any) => undefined
 >    : ^     ^^   ^^^^^^^^^^^^^^
 >(props: any) => undefined : (props: any) => undefined
->                          :                          
+>                          : ^     ^^   ^^^^^^^^^^^^^^
 >props : any
 >      : ^^^
 >undefined : undefined

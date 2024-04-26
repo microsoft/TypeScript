@@ -39,7 +39,7 @@ ExpandoDecl.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -89,7 +89,7 @@ const ExpandoExpr = function (n: number) {
 >ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->                                                :                                            ^                               ^                                       
+>                                                : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -145,7 +145,7 @@ ExpandoExpr.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -205,7 +205,7 @@ const ExpandoArrow = (n: number) => n.toString();
 >ExpandoArrow : { (n: number): string; prop: number; m(n: number): number; }
 >             : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >(n: number) => n.toString() : { (n: number): string; prop: number; m(n: number): number; }
->                            :                                                             
+>                            : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toString() : string
@@ -239,7 +239,7 @@ ExpandoArrow.m = function(n: number) {
 >m : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function(n: number) {    return n + 1;} : (n: number) => number
->                                        :                      
+>                                        : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 
@@ -263,7 +263,7 @@ function ExpandoNested(n: number) {
 >nested : { (m: number): number; total: number; }
 >       : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (m: number) {        return n + m;    } : { (m: number): number; total: number; }
->                                                 :                                        
+>                                                 : ^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >m : number
 >  : ^^^^^^
 
@@ -425,7 +425,7 @@ var ExpandoExpr2 = function (n: number) {
 >ExpandoExpr2 : (n: number) => string
 >             : ^ ^^      ^^^^^^^^^^^
 >function (n: number) {    return n.toString();} : (n: number) => string
->                                                :                      
+>                                                : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 

@@ -34,11 +34,11 @@ var b = <T extends T>() => { }
 >b : <T>() => void
 >  : ^^^^^^^^^^^^^
 ><T extends T>() => { } : <T>() => void
->                       :              
+>                       : ^^^^^^^^^^^^^
 
 var b2 = <T, U extends U>() => { }
 >b2 : <T, U>() => void
 >   : ^^^^^^^^^^^^^^^^
 ><T, U extends U>() => { } : <T, U>() => void
->                          :                 
+>                          : ^^^^^^^^^^^^^^^^
 

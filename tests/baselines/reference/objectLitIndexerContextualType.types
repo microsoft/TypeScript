@@ -37,7 +37,7 @@ x = {
 >s : (t: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >t => t * t : (t: string) => number
->           :                      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
 >t * t : number
@@ -60,7 +60,7 @@ x = {
 >0 : (t: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >t => t * t : (t: string) => number
->           :                      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
 >t * t : number
@@ -83,7 +83,7 @@ y = {
 >s : (t: any) => number
 >  : ^ ^^^^^^^^^^^^^^^^
 >t => t * t : (t: any) => number
->           :                   
+>           : ^ ^^^^^^^^^^^^^^^^
 >t : any
 >  : ^^^
 >t * t : number
@@ -106,7 +106,7 @@ y = {
 >0 : (t: string) => number
 >  : ^ ^^^^^^^^^^^^^^^^^^^
 >t => t * t : (t: string) => number
->           :                      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >t : string
 >  : ^^^^^^
 >t * t : number

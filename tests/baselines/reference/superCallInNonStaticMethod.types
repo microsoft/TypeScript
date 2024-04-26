@@ -67,7 +67,7 @@ class Other extends Doing {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => {                super.instanceMethod();            } : () => void
->                                                            :           
+>                                                            : ^^^^^^^^^^
 
                 super.instanceMethod();
 >super.instanceMethod() : void
@@ -167,7 +167,7 @@ class Other extends Doing {
 >functionProperty : () => void
 >                 : ^^^^^^^^^^
 >() => {super.instanceMethod(); } : () => void
->                                 :           
+>                                 : ^^^^^^^^^^
 >super.instanceMethod() : void
 >                       : ^^^^
 >super.instanceMethod : () => void

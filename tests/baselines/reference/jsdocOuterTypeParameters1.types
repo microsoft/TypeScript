@@ -6,7 +6,7 @@ const dedupingMixin = function(mixin) {};
 >dedupingMixin : (mixin: any) => T
 >              : ^     ^^^^^^^^^^^
 >function(mixin) {} : (mixin: any) => T
->                   :                  
+>                   : ^     ^^^^^^^^^^^
 >mixin : any
 >      : ^^^
 
