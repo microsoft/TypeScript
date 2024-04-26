@@ -2882,6 +2882,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): readonly DiagnosticWithLocation[] {
+        if (sourceFile && isSourceOfProjectReferenceRedirect(sourceFile.fileName)) return emptyArray;
         const options = program.getCompilerOptions();
         // collect diagnostics from the program only once if either no source file was specified or out/outFile is set (bundled emit)
         if (!sourceFile || options.outFile) {

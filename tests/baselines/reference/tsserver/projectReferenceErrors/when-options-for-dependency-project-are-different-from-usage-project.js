@@ -407,39 +407,7 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "semanticDiag",
       "body": {
         "file": "/home/src/projects/project/a/index.ts",
-        "diagnostics": [
-          {
-            "start": {
-              "line": 1,
-              "offset": 17
-            },
-            "end": {
-              "line": 1,
-              "offset": 19
-            },
-            "text": "Function must have an explicit return type annotation with --isolatedDeclarations.",
-            "code": 9007,
-            "category": "error",
-            "relatedInformation": [
-              {
-                "span": {
-                  "start": {
-                    "line": 1,
-                    "offset": 17
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 19
-                  },
-                  "file": "/home/src/projects/project/a/index.ts"
-                },
-                "message": "Add a return type to the function declaration.",
-                "category": "error",
-                "code": 9031
-              }
-            ]
-          }
-        ]
+        "diagnostics": []
       }
     }
 After running Immedidate callback:: count: 1
