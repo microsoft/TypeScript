@@ -261,6 +261,7 @@ import {
     getContainingClassExcludingClassDecorators,
     getContainingClassStaticBlock,
     getContainingFunction,
+    getContainingFunctionDeclaration,
     getContainingFunctionOrClassStaticBlock,
     getDeclarationModifierFlagsFromSymbol,
     getDeclarationOfKind,
@@ -47889,6 +47890,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (node.flags & NodeFlags.InWithStatement) {
             // We cannot answer semantic questions within a with block, do not proceed any further
             return errorType;
+        }
+
+        // Big hack: force the full check of a generator function when evaluating anything inside it.
+        const containingFunction = findAncestor(node, node => {
+            if (isFunctionLikeDeclaration(node)) {
+                if (node.asteriskToken) {
+                    return true;
+                }
+                return "quit";
+            }
+            return false;
+        });
+        if (containingFunction) {
+            getReturnTypeOfSignature(getSignatureFromDeclaration(containingFunction as FunctionLikeDeclaration));
         }
 
         const classDecl = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
