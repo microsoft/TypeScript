@@ -170,7 +170,6 @@ import {
     getTypeNode,
     guessIndentation,
     HasLocals,
-    hasProperty,
     hasRecordedExternalHelpers,
     HeritageClause,
     Identifier,
