@@ -29,3 +29,13 @@ child1(ParentThing.prototype);
 export function child1(prototype) {
     prototype.add = (a, b) => a + b;
 }
+
+
+//// [child1.d.ts]
+import { ParentThing } from './parent';
+declare module './parent' {
+    interface ParentThing {
+        add: (a: number, b: number) => number;
+    }
+}
+export declare function child1(prototype: ParentThing): void;

@@ -15,10 +15,54 @@ export class Cls {
 >1 : 1
 >  : ^
 
-    method() {}
+    method() { return console.log() }
 >method : () => void
 >       : ^^^^^^^^^^
+>console.log() : void
+>              : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
 
+    methodImplicitVoid() {
+>methodImplicitVoid : () => void
+>                   : ^^^^^^^^^^
+
+        if (Math.random() > 0.5) console.log()
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^^^^^^^
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^^^^^^^
+>0.5 : 0.5
+>    : ^^^
+>console.log() : void
+>              : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+
+        else console.log()
+>console.log() : void
+>              : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+    }
     methodOk(): void {}
 >methodOk : () => void
 >         : ^^^^^^    
@@ -142,7 +186,7 @@ export class C {
 >        : ^^^
 >1 : 1
 >  : ^
-    
+
     [noAnnotationLiteralName](): void { }
 >[noAnnotationLiteralName] : () => void
 >                          : ^^^^^^    

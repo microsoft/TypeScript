@@ -4,8 +4,12 @@
 export class Cls {
 
     field = 1 + 1;
-    method() {}
+    method() { return console.log() }
 
+    methodImplicitVoid() {
+        if (Math.random() > 0.5) console.log()
+        else console.log()
+    }
     methodOk(): void {}
 
     methodParams(p): void {}
@@ -37,7 +41,7 @@ export class C {
 
     // Should not be reported as an isolated declaration error
     [missing] = 1;
-    
+
     [noAnnotationLiteralName](): void { }
 
     [noParamAnnotationLiteralName](v: string): void { }
@@ -62,7 +66,13 @@ export interface I {
 //// [isolatedDeclarationErrorsClasses.js]
 export class Cls {
     field = 1 + 1;
-    method() { }
+    method() { return console.log(); }
+    methodImplicitVoid() {
+        if (Math.random() > 0.5)
+            console.log();
+        else
+            console.log();
+    }
     methodOk() { }
     methodParams(p) { }
     methodParams2(p = 1 + 1) { }

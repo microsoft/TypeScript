@@ -484,7 +484,9 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
         if (declaration && !nodeIsMissing(declaration.body)) {
             const body = declaration.body;
             if (body && isBlock(body)) {
+                let hasReturn = false;
                 forEachReturnStatement(body, s => {
+                    hasReturn = true;
                     if (!candidateExpr) {
                         candidateExpr = s.expression;
                     }
@@ -493,6 +495,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
                         return true;
                     }
                 });
+                if (!hasReturn) return true; // it's void
             }
             else {
                 candidateExpr = body;

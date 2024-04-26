@@ -1,4 +1,3 @@
-isolatedDeclarationErrorsFunctionDeclarations.ts(1,17): error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsFunctionDeclarations.ts(3,35): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsFunctionDeclarations.ts(7,49): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
 isolatedDeclarationErrorsFunctionDeclarations.ts(7,66): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
@@ -6,11 +5,8 @@ isolatedDeclarationErrorsFunctionDeclarations.ts(7,81): error TS9013: Expression
 isolatedDeclarationErrorsFunctionDeclarations.ts(9,55): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
 
 
-==== isolatedDeclarationErrorsFunctionDeclarations.ts (6 errors) ====
+==== isolatedDeclarationErrorsFunctionDeclarations.ts (5 errors) ====
     export function noReturn() {}
-                    ~~~~~~~~
-!!! error TS9007: Function must have an explicit return type annotation with --isolatedDeclarations.
-!!! related TS9031 isolatedDeclarationErrorsFunctionDeclarations.ts:1:17: Add a return type to the function declaration.
     
     export function noParamAnnotation(p): void {}
                                       ~
