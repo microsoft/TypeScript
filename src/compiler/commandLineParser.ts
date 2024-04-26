@@ -2976,12 +2976,12 @@ function parseJsonConfigFileContentWorker(
         const excludeOfRaw = getSpecsFromRaw("exclude");
         let isDefaultIncludeSpec = false;
         let excludeSpecs = toPropValue(excludeOfRaw);
-        if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
-            const outDir = raw.compilerOptions.outDir;
-            const declarationDir = raw.compilerOptions.declarationDir;
+        if (excludeOfRaw === "no-prop") {
+            const outDir = options.outDir;
+            const declarationDir = options.declarationDir;
 
             if (outDir || declarationDir) {
-                excludeSpecs = [outDir, declarationDir].filter(d => !!d);
+                excludeSpecs = filter([outDir, declarationDir], d => !!d) as string[];
             }
         }
 
