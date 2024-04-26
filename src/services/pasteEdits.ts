@@ -22,10 +22,9 @@ import {
     isIdentifier,
     textChanges,
 } from "./_namespaces/ts";
+import { addTargetFileImports } from "./refactors/helpers";
 import {
-    getTargetFileImportsAndAddExportInOldFile,
-} from "./refactors/helpers";
-import {
+    addExportsInOldFile,
     getExistingLocals,
     getUsageInfo,
 } from "./refactors/moveToFile";
@@ -84,7 +83,10 @@ function pasteEdits(
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
             const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
-            getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
+            //getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
+            const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram!, host, !!copiedFrom.file.commonJsModuleIndicator);
+            addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
+            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram!.getTypeChecker(), updatedProgram!, importAdder);
             importAdder.writeFixes(changes, getQuotePreference(copiedFrom.file, preferences));
         }
         else {
