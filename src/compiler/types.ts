@@ -1380,6 +1380,16 @@ export type HasIllegalModifiers =
     | MissingDeclaration
     | NamespaceExportDeclaration;
 
+/** @internal */
+export type PrimitiveLiteral =
+    | BooleanLiteral
+    | NumericLiteral
+    | StringLiteral
+    | NoSubstitutionTemplateLiteral
+    | BigIntLiteral
+    | PrefixUnaryExpression & { operator: SyntaxKind.PlusToken; operand: NumericLiteral; }
+    | PrefixUnaryExpression & { operator: SyntaxKind.MinusToken; operand: NumericLiteral | BigIntLiteral; };
+
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
  *
@@ -2750,6 +2760,22 @@ export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
 
 export interface RegularExpressionLiteral extends LiteralExpression {
     readonly kind: SyntaxKind.RegularExpressionLiteral;
+}
+
+// dprint-ignore
+/** @internal */
+export const enum RegularExpressionFlags {
+    None        = 0,
+    HasIndices  = 1 << 0, // d
+    Global      = 1 << 1, // g
+    IgnoreCase  = 1 << 2, // i
+    Multiline   = 1 << 3, // m
+    DotAll      = 1 << 4, // s
+    Unicode     = 1 << 5, // u
+    UnicodeSets = 1 << 6, // v
+    Sticky      = 1 << 7, // y
+    UnicodeMode = Unicode | UnicodeSets,
+    Modifiers   = IgnoreCase | Multiline | DotAll,
 }
 
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
@@ -5394,7 +5420,7 @@ export const enum NodeBuilderFlags {
     AllowUniqueESSymbolType                 = 1 << 20,
     AllowEmptyIndexInfoType                 = 1 << 21,
     /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
-
+    /** @internal */ NoSyntacticPrinter     = 1 << 31,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
     /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
@@ -5715,6 +5741,7 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
+    isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
@@ -5729,7 +5756,7 @@ export interface EmitResolver {
     collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
-    isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
+    isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
@@ -6076,6 +6103,7 @@ export interface EvaluatorResult<T extends string | number | undefined = string 
     value: T;
     isSyntacticallyString: boolean;
     resolvedOtherFiles: boolean;
+    hasExternalReferences: boolean;
 }
 
 // dprint-ignore
@@ -7224,6 +7252,7 @@ export interface CompilerOptions {
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     isolatedModules?: boolean;
+    isolatedDeclarations?: boolean;
     jsx?: JsxEmit;
     /** @deprecated */
     keyofStringsOnly?: boolean;
@@ -8202,6 +8231,8 @@ export const enum LanguageFeatureMinimumTarget {
     ArrowFunctions = ScriptTarget.ES2015,
     BlockScopedVariables = ScriptTarget.ES2015,
     ObjectAssign = ScriptTarget.ES2015,
+    RegularExpressionFlagsUnicode = ScriptTarget.ES2015,
+    RegularExpressionFlagsSticky = ScriptTarget.ES2015,
 
     // ES2016 Features
     Exponentiation = ScriptTarget.ES2016, // `x ** y`
@@ -8214,6 +8245,7 @@ export const enum LanguageFeatureMinimumTarget {
     AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
     AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
     ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
+    RegularExpressionFlagsDotAll = ScriptTarget.ES2018,
 
     // ES2019 Features
     BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
@@ -8230,6 +8262,7 @@ export const enum LanguageFeatureMinimumTarget {
     TopLevelAwait = ScriptTarget.ES2022,
     ClassFields = ScriptTarget.ES2022,
     PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
+    RegularExpressionFlagsHasIndices = ScriptTarget.ES2022,
 
     // ES2023 Features
     ShebangComments = ScriptTarget.ESNext,
@@ -8240,6 +8273,7 @@ export const enum LanguageFeatureMinimumTarget {
     //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
     UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
     ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
+    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
 }
 
 // dprint-ignore
@@ -9006,7 +9040,7 @@ export interface NodeFactory {
     // Synthetic Nodes
     //
     /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
-    /** @internal */ createSyntaxList(children: Node[]): SyntaxList;
+    /** @internal */ createSyntaxList(children: readonly Node[]): SyntaxList;
 
     //
     // Transformation nodes
@@ -9709,6 +9743,9 @@ export interface ModuleSpecifierResolutionHost {
     getCommonSourceDirectory(): string;
     getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+
+    getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    trace?(s: string): void;
 }
 
 /** @internal */
@@ -9756,6 +9793,7 @@ export interface SymbolTracker {
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
+    reportInferenceFallback?(node: Node): void;
 }
 
 export interface TextSpan {
@@ -10209,4 +10247,33 @@ export interface Queue<T> {
 export interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
+}
+
+/** @internal */
+export type HasInferredType =
+    | PropertyAssignment
+    | PropertyAccessExpression
+    | BinaryExpression
+    | ElementAccessExpression
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | PropertyDeclaration
+    | PropertySignature
+    | ExportAssignment;
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderContext {
+    tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
+    enclosingDeclaration: Node | undefined;
+}
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderResolver {
+    isUndefinedIdentifierExpression(name: Identifier): boolean;
+    isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
+    isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
+    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 }

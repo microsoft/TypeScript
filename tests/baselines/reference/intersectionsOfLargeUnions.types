@@ -2,7 +2,6 @@
 
 === Performance Stats ===
 Strict subtype cache: 1,000
-Subtype cache: 1,000
 Assignability cache: 1,000
 Type Count: 2,500
 

@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: c:/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: c:/projects/myproject/a.ts :: Config file name: c:/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/projects/myproject/a.ts ProjectRootPath: undefined:: Result: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/projects/myproject/tsconfig.json 2000 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -719,8 +718,7 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Custom watchFile:: Close:: 3: c:/projects/myproject/b.ts
-Info seq  [hh:mm:ss:mss] Search path: c:/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: c:/projects/myproject/b.ts :: Config file name: c:/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/projects/myproject/b.ts ProjectRootPath: undefined:: Result: c:/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
 

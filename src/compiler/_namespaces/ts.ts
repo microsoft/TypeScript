@@ -72,6 +72,7 @@ export * from "../watchPublic";
 export * from "../tsbuild";
 export * from "../tsbuildPublic";
 export * from "../executeCommandLine";
+export * from "../expressionToTypeNode";
 import * as moduleSpecifiers from "./ts.moduleSpecifiers";
 export { moduleSpecifiers };
 import * as performance from "./ts.performance";
