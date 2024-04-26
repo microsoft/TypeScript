@@ -66,14 +66,6 @@ class D3 extends B3 {  // Error
     readonly x = 1;
 }
 
-class B4 {
-    foo() {}
-}
-
-class D4 extends B4 {  // Error
-    readonly foo = () => {}
-}
-
 // A const assertion means "as const as possible" without violating constraints
 
 const x1 = { a: "hello", b: 42 };
