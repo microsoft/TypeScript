@@ -38,7 +38,7 @@ module.exports = createRule({
         if (!commandLineParser) {
             return {};
         }
-        
+
         // The names of the declarations in commandLineParser.ts that vontain the options definitions we want to compare against
         const targetParserDeclarations = ["commonOptionsWithBuild", "targetOptionDeclaration", "moduleOptionDeclaration", "commandOptionsWithoutBuild"];
 
