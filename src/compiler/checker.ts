@@ -778,7 +778,6 @@ import {
     JSDocAugmentsTag,
     JSDocCallbackTag,
     JSDocComment,
-    JSDocEnumTag,
     JSDocFunctionType,
     JSDocImplementsTag,
     JSDocImportTag,
@@ -1272,7 +1271,6 @@ const enum TypeSystemPropertyName {
     DeclaredType,
     ResolvedReturnType,
     ImmediateBaseConstraint,
-    EnumTagType,
     ResolvedTypeArguments,
     ResolvedBaseTypes,
     WriteType,
@@ -10486,8 +10484,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         switch (propertyName) {
             case TypeSystemPropertyName.Type:
                 return !!getSymbolLinks(target as Symbol).type;
-            case TypeSystemPropertyName.EnumTagType:
-                return !!(getNodeLinks(target as JSDocEnumTag).resolvedEnumType);
             case TypeSystemPropertyName.DeclaredType:
                 return !!getSymbolLinks(target as Symbol).declaredType;
             case TypeSystemPropertyName.ResolvedBaseConstructorType:
