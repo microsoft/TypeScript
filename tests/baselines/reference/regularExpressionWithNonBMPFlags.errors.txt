@@ -1,0 +1,23 @@
+regularExpressionWithNonBMPFlags.ts(1,23): error TS1499: Unknown regular expression flag.
+regularExpressionWithNonBMPFlags.ts(1,25): error TS1499: Unknown regular expression flag.
+regularExpressionWithNonBMPFlags.ts(1,28): error TS1499: Unknown regular expression flag.
+regularExpressionWithNonBMPFlags.ts(1,41): error TS1499: Unknown regular expression flag.
+regularExpressionWithNonBMPFlags.ts(1,43): error TS1499: Unknown regular expression flag.
+regularExpressionWithNonBMPFlags.ts(1,45): error TS1499: Unknown regular expression flag.
+
+
+==== regularExpressionWithNonBMPFlags.ts (6 errors) ====
+    const 𝘳𝘦𝘨𝘦𝘹 = /(?𝘴𝘪-𝘮:^𝘧𝘰𝘰.)/𝘨𝘮𝘶;
+                          ~~
+!!! error TS1499: Unknown regular expression flag.
+                            ~~
+!!! error TS1499: Unknown regular expression flag.
+                               ~~
+!!! error TS1499: Unknown regular expression flag.
+                                            ~~
+!!! error TS1499: Unknown regular expression flag.
+                                              ~~
+!!! error TS1499: Unknown regular expression flag.
+                                                ~~
+!!! error TS1499: Unknown regular expression flag.
+    
