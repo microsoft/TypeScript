@@ -2667,13 +2667,16 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 isPreviousTermQuantifiable = true;
                                 break;
                             }
-                            if (!annexB) {
-                                scanExpectedChar(CharacterCodes.closeBrace);
+                            if (text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                                if (annexB) {
+                                    isPreviousTermQuantifiable = true;
+                                    break;
+                                }
+                                else {
+                                    error(Diagnostics._0_expected, pos, 0, String.fromCharCode(CharacterCodes.closeBrace));
+                                    pos--;
+                                }
                             }
-                            else if (text.charCodeAt(pos) === CharacterCodes.closeBrace) {
-                                pos++;
-                            }
-                            pos--;
                         // falls through
                         case CharacterCodes.asterisk:
                         case CharacterCodes.plus:
