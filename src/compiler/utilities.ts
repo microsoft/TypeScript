@@ -5864,6 +5864,9 @@ export function createDiagnosticCollection(): DiagnosticCollection {
         if (result >= 0) {
             return diagnostics[result];
         }
+        if (~result > 0 && diagnosticsEqualityComparer(diagnostic, diagnostics[~result - 1])) {
+            return diagnostics[~result - 1];
+        }
         return undefined;
     }
 
@@ -5887,7 +5890,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
             diagnostics = nonFileDiagnostics;
         }
 
-        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
+        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation, diagnosticsEqualityComparer);
     }
 
     function getGlobalDiagnostics(): Diagnostic[] {
@@ -8545,12 +8548,14 @@ export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Dia
         Comparison.EqualTo;
 }
 
+// A diagnostic with more elaboration should be considered *less than* a diagnostic
+// with less elaboration that is otherwise similar.
 function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     if (!d1.relatedInformation && !d2.relatedInformation) {
         return Comparison.EqualTo;
     }
     if (d1.relatedInformation && d2.relatedInformation) {
-        return compareValues(d1.relatedInformation.length, d2.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
+        return compareValues(d2.relatedInformation.length, d1.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
             const d2i = d2.relatedInformation![index];
             return compareDiagnostics(d1i, d2i); // EqualTo is 0, so falsy, and will cause the next item to be compared
         }) || Comparison.EqualTo;
@@ -8558,43 +8563,113 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
 }
 
-function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
+// An diagnostic message with more elaboration should be considered *less than* a diagnostic message
+// with less elaboration that is otherwise similar.
+function compareMessageText(
+    t1: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+): Comparison {
     if (typeof t1 === "string" && typeof t2 === "string") {
         return compareStringsCaseSensitive(t1, t2);
     }
-    else if (typeof t1 === "string") {
-        return Comparison.LessThan;
+
+    if (typeof t1 === "string") {
+        t1 = { messageText: t1 };
     }
-    else if (typeof t2 === "string") {
-        return Comparison.GreaterThan;
+    if (typeof t2 === "string") {
+        t2 = { messageText: t2 };
     }
-    let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+    const res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
     if (res) {
         return res;
     }
-    if (!t1.next && !t2.next) {
+
+    return compareMessageChain(t1.next, t2.next);
+}
+
+// First compare by size of the message chain,
+// then compare by content of the message chain.
+function compareMessageChain(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
         return Comparison.EqualTo;
     }
-    if (!t1.next) {
-        return Comparison.LessThan;
-    }
-    if (!t2.next) {
+    if (c1 === undefined) {
         return Comparison.GreaterThan;
     }
-    const len = Math.min(t1.next.length, t2.next.length);
-    for (let i = 0; i < len; i++) {
-        res = compareMessageText(t1.next[i], t2.next[i]);
+    if (c2 === undefined) {
+        return Comparison.LessThan;
+    }
+
+    return compareMessageChainSize(c1, c2) || compareMessageChainContent(c1, c2);
+}
+
+function compareMessageChainSize(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
+        return Comparison.EqualTo;
+    }
+    if (c1 === undefined) {
+        return Comparison.GreaterThan;
+    }
+    if (c2 === undefined) {
+        return Comparison.LessThan;
+    }
+
+    let res = compareValues(c2.length, c1.length);
+    if (res) {
+        return res;
+    }
+
+    for (let i = 0; i < c2.length; i++) {
+        res = compareMessageChainSize(c1[i].next, c2[i].next);
         if (res) {
             return res;
         }
     }
-    if (t1.next.length < t2.next.length) {
-        return Comparison.LessThan;
-    }
-    else if (t1.next.length > t2.next.length) {
-        return Comparison.GreaterThan;
+
+    return Comparison.EqualTo;
+}
+
+// Assumes the two chains have the same shape.
+function compareMessageChainContent(
+    c1: DiagnosticMessageChain[],
+    c2: DiagnosticMessageChain[],
+): Comparison {
+    let res;
+    for (let i = 0; i < c2.length; i++) {
+        res = compareStringsCaseSensitive(c1[i].messageText, c2[i].messageText);
+        if (res) {
+            return res;
+        }
+        if (c1[i].next === undefined) {
+            continue;
+        }
+        res = compareMessageChainContent(c1[i].next!, c2[i].next!);
+        if (res) {
+            return res;
+        }
     }
     return Comparison.EqualTo;
+}
+
+/** @internal */
+export function diagnosticsEqualityComparer(d1: Diagnostic, d2: Diagnostic): boolean {
+    return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) === Comparison.EqualTo &&
+        compareValues(d1.start, d2.start) === Comparison.EqualTo &&
+        compareValues(d1.length, d2.length) === Comparison.EqualTo &&
+        compareValues(d1.code, d2.code) === Comparison.EqualTo &&
+        messageTextEqualityComparer(d1.messageText, d2.messageText);
+}
+
+function messageTextEqualityComparer(m1: string | DiagnosticMessageChain, m2: string | DiagnosticMessageChain): boolean {
+    const t1 = typeof m1 === "string" ? m1 : m1.messageText;
+    const t2 = typeof m2 === "string" ? m2 : m2.messageText;
+    return compareStringsCaseSensitive(t1, t2) === Comparison.EqualTo;
 }
 
 /** @internal */

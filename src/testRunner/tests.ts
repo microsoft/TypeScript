@@ -6,6 +6,7 @@ import "./unittests/comments";
 import "./unittests/compilerCore";
 import "./unittests/convertToBase64";
 import "./unittests/customTransforms";
+import "./unittests/diagnosticCollection";
 import "./unittests/factory";
 import "./unittests/incrementalParser";
 import "./unittests/jsDocParsing";
