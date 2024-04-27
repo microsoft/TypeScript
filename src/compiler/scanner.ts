@@ -2592,10 +2592,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     : '[' ClassSetExpression ']'
         function scanAlternative(isInGroup: boolean) {
             let isPreviousTermQuantifiable = false;
-            while (pos < end) {
+            while (true) {
                 const start = pos;
-                const ch = charCodeUnchecked(pos);
+                const ch = charCodeChecked(pos);
                 switch (ch) {
+                    case CharacterCodes.EOF:
+                        return;
                     case CharacterCodes.caret:
                     case CharacterCodes.$:
                         pos++;
@@ -2760,9 +2762,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanPatternModifiers(currFlags: RegularExpressionFlags): RegularExpressionFlags {
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
-                if (!isIdentifierPart(ch, languageVersion)) {
+            while (true) {
+                const ch = charCodeChecked(pos);
+                if (ch === CharacterCodes.EOF || !isIdentifierPart(ch, languageVersion)) {
                     break;
                 }
                 const flag = characterToRegularExpressionFlag(String.fromCharCode(ch));
@@ -2921,8 +2923,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 // character complement
                 pos++;
             }
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
+            while (true) {
+                const ch = charCodeChecked(pos);
                 if (isClassContentExit(ch)) {
                     return;
                 }
@@ -2988,7 +2990,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
             let start = pos;
             let operand!: string;
-            switch (text.slice(pos, pos + 2)) {
+            switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
                 case "--":
                 case "&&":
                     error(Diagnostics.Expected_a_class_set_operand);
@@ -3031,8 +3033,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     expressionMayContainStrings = mayContainStrings;
                     break;
             }
-            while (pos < end) {
-                ch = charCodeUnchecked(pos);
+            while (true) {
+                ch = charCodeChecked(pos);
+                if (ch === CharacterCodes.EOF) {
+                    break;
+                }
                 switch (ch) {
                     case CharacterCodes.minus:
                         pos++;
@@ -3097,7 +3102,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     break;
                 }
                 start = pos;
-                switch (text.slice(pos, pos + 2)) {
+                switch (text.slice(pos, pos + 2)) { // TODO: don't use slice
                     case "--":
                     case "&&":
                         error(Diagnostics.Operators_must_not_be_mixed_within_a_character_class_Wrap_it_in_a_nested_class_instead, pos, 2);
@@ -3114,8 +3119,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanClassSetSubExpression(expressionType: ClassSetExpressionType) {
             let expressionMayContainStrings = mayContainStrings;
-            while (pos < end) {
-                let ch = charCodeUnchecked(pos);
+            while (true) {
+                let ch = charCodeChecked(pos);
                 if (isClassContentExit(ch)) {
                     break;
                 }
@@ -3182,6 +3187,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         function scanClassSetOperand(): string {
             mayContainStrings = false;
             switch (charCodeChecked(pos)) {
+                case CharacterCodes.EOF:
+                    return "";
                 case CharacterCodes.openBracket:
                     pos++;
                     scanClassSetExpression();
@@ -3216,9 +3223,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         function scanClassStringDisjunctionContents() {
             Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBrace);
             let characterCount = 0;
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
+            while (true) {
+                const ch = charCodeChecked(pos);
                 switch (ch) {
+                    case CharacterCodes.EOF:
+                        return;
                     case CharacterCodes.closeBrace:
                         if (characterCount !== 1) {
                             mayContainStrings = true;
@@ -3438,9 +3447,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         function scanWordCharacters(): string {
             let value = "";
-            while (pos < end) {
-                const ch = charCodeUnchecked(pos);
-                if (!isWordCharacter(ch)) {
+            while (true) {
+                const ch = charCodeChecked(pos);
+                if (ch === CharacterCodes.EOF || !isWordCharacter(ch)) {
                     break;
                 }
                 value += String.fromCharCode(ch);
