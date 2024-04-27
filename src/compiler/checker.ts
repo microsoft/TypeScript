@@ -15392,7 +15392,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 type = anyType;
             }
-            signature.resolvedReturnType = type;
+            signature.resolvedReturnType ??= type;
         }
         return signature.resolvedReturnType;
     }
