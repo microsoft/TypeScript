@@ -2546,7 +2546,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         /** A stack of scopes for named capturing groups. @see {scanGroupName} */
         var namedCapturingGroupsScopeStack: (Set<string> | undefined)[] = [];
         var topNamedCapturingGroupsScope: Set<string> | undefined;
-
+        /* eslint-enable no-var */
         // Disjunction ::= Alternative ('|' Alternative)*
         function scanDisjunction(isInGroup: boolean) {
             while (true) {
