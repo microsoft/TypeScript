@@ -81,7 +81,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "outFile": "",
             "sourceMap": true,
-            "allowNonTsExtensions": true
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": false,

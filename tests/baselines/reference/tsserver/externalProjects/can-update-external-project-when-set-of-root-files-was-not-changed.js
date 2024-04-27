@@ -73,7 +73,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "moduleResolution": "node10",
-            "allowNonTsExtensions": true
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": false,

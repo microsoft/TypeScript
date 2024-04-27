@@ -68,7 +68,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "importHelpers": true,
-            "allowNonTsExtensions": true
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": false,

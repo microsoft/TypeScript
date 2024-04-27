@@ -60,7 +60,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "allowNonTsExtensions": true,
             "noResolve": true,
-            "types": []
+            "types": [],
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": false,

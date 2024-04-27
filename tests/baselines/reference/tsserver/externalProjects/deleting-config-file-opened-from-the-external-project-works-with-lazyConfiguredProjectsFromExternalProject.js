@@ -381,7 +381,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "allowJs": false,
-            "allowNonTsExtensions": true
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": true,
