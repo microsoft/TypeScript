@@ -38,13 +38,19 @@ module.exports = createRule({
         if (!commandLineParser) {
             return {};
         }
+        
+        // The names of the declarations in commandLineParser.ts that vontain the options definitions we want to compare against
+        const targetParserDeclarations = ["commonOptionsWithBuild", "targetOptionDeclaration", "moduleOptionDeclaration", "commandOptionsWithoutBuild"];
+
+        // The extra internal members on CompilerOptions that we only use to shuttle around calculated information
+        const ignoredCompilerOptionTypeMembers = ["configFile", "configFilePath", "pathsBasePath"];
 
         const interfaceDecl = /** @type {ts.InterfaceDeclaration} */ (types.statements.find(s => s.kind === ts.SyntaxKind.InterfaceDeclaration && /** @type {ts.InterfaceDeclaration} */ (s).name.text === "CompilerOptions"));
 
         const optionsFromType = interfaceDecl.members.reduce((map, elem) => {
             if (!elem.name || elem.name.kind !== ts.SyntaxKind.Identifier || elem.kind !== ts.SyntaxKind.PropertySignature) return map;
             const name = elem.name.text;
-            if (name === "configFile" || name === "configFilePath") return map;
+            if (ignoredCompilerOptionTypeMembers.includes(name)) return map;
             const internal = !!elem.getFullText().includes("@internal");
             /** @type {OptionData} */
             const option = {
@@ -76,7 +82,6 @@ module.exports = createRule({
             }
             return ts.visitEachChild(node, parserVisitor, /*context*/ undefined);
         };
-        const targetParserDeclarations = ["commonOptionsWithBuild", "targetOptionDeclaration", "moduleOptionDeclaration", "commandOptionsWithoutBuild"];
         commandLineParser.statements.filter(d => {
             if (d.kind !== ts.SyntaxKind.VariableStatement) return false;
             const name = /** @type {ts.VariableStatement} */ (d).declarationList.declarations[0].name;
@@ -97,7 +102,7 @@ module.exports = createRule({
             node.body.body.forEach(e => {
                 if (e.type !== AST_NODE_TYPES.TSPropertySignature) return;
                 if (e.key.type !== AST_NODE_TYPES.Identifier) return;
-                if (e.key.name === "configFile" || e.key.name === "configFilePath") return;
+                if (ignoredCompilerOptionTypeMembers.includes(e.key.name)) return;
 
                 const comments = sourceCode.getCommentsBefore(e);
                 /** @type {import("@typescript-eslint/utils").TSESTree.Comment | undefined} */

@@ -110,12 +110,23 @@ ruleTester.run("compiler-options-consistency", rule, {
                     type: "boolean",
                     internal: true,
                 },
+            ];
+            const doesntMatterOptions: CommandLineOption[] = [
+                {
+                    name: "include",
+                    type: "list",
+                    element {
+                        name: "glob",
+                        type: "string",
+                    }
+                },
             ];`,
             `
             export interface CompilerOptions {
                 /** @internal */ allowJs?: boolean;
                 /** @internal */ configFile?: JsonSourceFile;
                 /** @internal */ configFilePath?: string;
+                /** @internal */ pathsBasePath?: string;
             }`,
         ),
     ],

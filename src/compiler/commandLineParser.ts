@@ -1657,16 +1657,6 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             return [Diagnostics.Unknown_compiler_option_0, "noDtsResolution"];
         },
     },
-    {
-        name: "pathsBasePath",
-        type: "string",
-        isFilePath: true,
-        defaultValueDescription: undefined,
-        internal: true,
-        extraValidation() {
-            return [Diagnostics.Unknown_compiler_option_0, "pathsBasePath"];
-        },
-    },
 ];
 
 /** @internal */
