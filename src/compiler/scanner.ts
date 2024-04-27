@@ -2508,14 +2508,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                 }
                 if (reportErrors) {
-                    const endOfRegExpFlags = pos;
-                    pos = startOfRegExpBody;
-                    const saveTokenPos = tokenStart;
-                    const saveTokenFlags = tokenFlags;
-                    scanRegularExpressionWorker(text, endOfRegExpBody, regExpFlags, /*annexB*/ true);
-                    pos = endOfRegExpFlags;
-                    tokenStart = saveTokenPos;
-                    tokenFlags = saveTokenFlags;
+                    scanRange(startOfRegExpBody, endOfRegExpBody - startOfRegExpBody, () => {
+                        scanRegularExpressionWorker(regExpFlags, /*annexB*/ true);
+                    });
                 }
             }
             tokenValue = text.substring(tokenStart, pos);
@@ -2523,7 +2518,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
         return token;
 
-        function scanRegularExpressionWorker(text: string, end: number, regExpFlags: RegularExpressionFlags, annexB: boolean) {
+        function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, annexB: boolean) {
             /** Grammar parameter */
             const unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
             /** Grammar parameter */
