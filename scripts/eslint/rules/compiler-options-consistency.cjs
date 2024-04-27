@@ -39,7 +39,7 @@ module.exports = createRule({
             return {};
         }
 
-        const interfaceDecl = /** @type {ts.InterfaceDeclaration} */(types.statements.find(s => s.kind === ts.SyntaxKind.InterfaceDeclaration && /** @type {ts.InterfaceDeclaration} */(s).name.text === "CompilerOptions"));
+        const interfaceDecl = /** @type {ts.InterfaceDeclaration} */ (types.statements.find(s => s.kind === ts.SyntaxKind.InterfaceDeclaration && /** @type {ts.InterfaceDeclaration} */ (s).name.text === "CompilerOptions"));
 
         const optionsFromType = interfaceDecl.members.reduce((map, elem) => {
             if (!elem.name || elem.name.kind !== ts.SyntaxKind.Identifier || elem.kind !== ts.SyntaxKind.PropertySignature) return map;
@@ -53,7 +53,7 @@ module.exports = createRule({
             };
             map[name] = option;
             return map;
-        }, /** @type {Record<string, OptionData>} */({}));
+        }, /** @type {Record<string, OptionData>} */ ({}));
 
         /** @type {Record<string, OptionData>} */
         const optionsFromParser = {};
@@ -64,28 +64,28 @@ module.exports = createRule({
         const parserVisitor = node => {
             // Collects what are, by-convention, all the options defined in the command line parser
             if (node.kind === ts.SyntaxKind.ObjectLiteralExpression) {
-                const obj = /** @type {ts.ObjectLiteralExpression} */(node);
-                const nameProp = obj.properties.find(p => p.kind === ts.SyntaxKind.PropertyAssignment && p.name.kind === ts.SyntaxKind.Identifier && p.name.escapedText === "name" && /** @type {ts.PropertyAssignment} */(p).initializer.kind === ts.SyntaxKind.StringLiteral);
+                const obj = /** @type {ts.ObjectLiteralExpression} */ (node);
+                const nameProp = obj.properties.find(p => p.kind === ts.SyntaxKind.PropertyAssignment && p.name.kind === ts.SyntaxKind.Identifier && p.name.escapedText === "name" && /** @type {ts.PropertyAssignment} */ (p).initializer.kind === ts.SyntaxKind.StringLiteral);
                 const typeProp = obj.properties.find(p => p.kind === ts.SyntaxKind.PropertyAssignment && p.name.kind === ts.SyntaxKind.Identifier && p.name.escapedText === "type");
                 if (nameProp && typeProp) {
-                    const name = /** @type {ts.StringLiteral} */(/** @type {ts.PropertyAssignment} */(nameProp).initializer).text;
-                    const internalProp = /** @type {ts.PropertyAssignment | undefined} */(obj.properties.find(p => p.kind === ts.SyntaxKind.PropertyAssignment && p.name.kind === ts.SyntaxKind.Identifier && p.name.escapedText === "internal"));
+                    const name = /** @type {ts.StringLiteral} */ (/** @type {ts.PropertyAssignment} */ (nameProp).initializer).text;
+                    const internalProp = /** @type {ts.PropertyAssignment | undefined} */ (obj.properties.find(p => p.kind === ts.SyntaxKind.PropertyAssignment && p.name.kind === ts.SyntaxKind.Identifier && p.name.escapedText === "internal"));
                     optionsFromParser[name] = { name, internal: !!(internalProp && internalProp.initializer.kind === ts.SyntaxKind.TrueKeyword) };
                 }
                 return; // no nested objects - these are element descriptors
             }
             return ts.visitEachChild(node, parserVisitor, /*context*/ undefined);
-        }
+        };
         const targetParserDeclarations = ["commonOptionsWithBuild", "targetOptionDeclaration", "moduleOptionDeclaration", "commandOptionsWithoutBuild"];
         commandLineParser.statements.filter(d => {
             if (d.kind !== ts.SyntaxKind.VariableStatement) return false;
-            const name = /** @type {ts.VariableStatement} */(d).declarationList.declarations[0].name;
+            const name = /** @type {ts.VariableStatement} */ (d).declarationList.declarations[0].name;
             if (name.kind !== ts.SyntaxKind.Identifier) return false;
             return targetParserDeclarations.includes(name.text);
         }).forEach(d => {
             ts.visitNode(d, parserVisitor);
         });
-        
+
         /** @type {(node: import("@typescript-eslint/utils").TSESTree.TSInterfaceDeclaration) => void} */
         const checkInterface = node => {
             if (!context.physicalFilename.endsWith("compiler/types.ts") && !context.physicalFilename.endsWith("compiler\\types.ts")) {
@@ -155,14 +155,13 @@ module.exports = createRule({
                 internal: !!node.parent.properties.some(e => e.type === AST_NODE_TYPES.Property && e.key.type === AST_NODE_TYPES.Identifier && e.key.name === "internal" && e.value.type === AST_NODE_TYPES.Literal && e.value.value === true),
             };
 
-
             if (!optionsFromType[option.name]) {
                 context.report({ messageId: "notInOptionsType", node: node.key });
             }
             else if (!option.internal && optionsFromType[option.name].internal) {
-                context.report({ messageId: "missingInternalSetting", node: node.key, fix: fixer => fixer.insertTextAfterRange([0, node.range[1] + 1], " internal: true,")  });
+                context.report({ messageId: "missingInternalSetting", node: node.key, fix: fixer => fixer.insertTextAfterRange([0, node.range[1] + 1], " internal: true,") });
             }
-        }
+        };
 
         return {
             Property: checkProperty,

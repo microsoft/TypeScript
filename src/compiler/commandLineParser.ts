@@ -338,6 +338,7 @@ export const optionsForWatch: CommandLineOption[] = [
 export const commonOptionsWithBuild: CommandLineOption[] = [
     {
         name: "help",
+        internal: true,
         shortName: "h",
         type: "boolean",
         showInSimplifiedHelpView: true,
@@ -348,6 +349,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "help",
+        internal: true,
         shortName: "?",
         type: "boolean",
         isCommandLineOnly: true,
@@ -356,6 +358,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "watch",
+        internal: true,
         shortName: "w",
         type: "boolean",
         showInSimplifiedHelpView: true,
@@ -366,6 +369,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "preserveWatchOutput",
+        internal: true,
         type: "boolean",
         showInSimplifiedHelpView: false,
         category: Diagnostics.Output_Formatting,
@@ -374,6 +378,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "listFiles",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Print_all_of_the_files_read_during_the_compilation,
@@ -381,6 +386,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "explainFiles",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Print_files_read_during_the_compilation_including_why_it_was_included,
@@ -388,6 +394,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "listEmittedFiles",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Print_the_names_of_emitted_files_after_a_compilation,
@@ -395,6 +402,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "pretty",
+        internal: true,
         type: "boolean",
         showInSimplifiedHelpView: true,
         category: Diagnostics.Output_Formatting,
@@ -410,6 +418,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "diagnostics",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Output_compiler_performance_information_after_building,
@@ -417,6 +426,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "extendedDiagnostics",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Compiler_Diagnostics,
         description: Diagnostics.Output_more_detailed_compiler_performance_information_after_building,
@@ -424,6 +434,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "generateCpuProfile",
+        internal: true,
         type: "string",
         isFilePath: true,
         paramType: Diagnostics.FILE_OR_DIRECTORY,
@@ -433,6 +444,7 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
     {
         name: "generateTrace",
+        internal: true,
         type: "string",
         isFilePath: true,
         isCommandLineOnly: true,
@@ -587,6 +599,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     // CommandLine only options
     {
         name: "all",
+        internal: true,
         type: "boolean",
         showInSimplifiedHelpView: true,
         category: Diagnostics.Command_line_Options,
@@ -595,6 +608,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "version",
+        internal: true,
         shortName: "v",
         type: "boolean",
         showInSimplifiedHelpView: true,
@@ -604,6 +618,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "init",
+        internal: true,
         type: "boolean",
         showInSimplifiedHelpView: true,
         category: Diagnostics.Command_line_Options,
@@ -622,6 +637,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "build",
+        internal: true,
         type: "boolean",
         shortName: "b",
         showInSimplifiedHelpView: true,
@@ -631,6 +647,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "showConfig",
+        internal: true,
         type: "boolean",
         showInSimplifiedHelpView: true,
         category: Diagnostics.Command_line_Options,
@@ -640,6 +657,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
     {
         name: "listFilesOnly",
+        internal: true,
         type: "boolean",
         category: Diagnostics.Command_line_Options,
         isCommandLineOnly: true,
@@ -1575,6 +1593,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     {
         // A list of plugins to load in the language service
         name: "plugins",
+        internal: true,
         type: "list",
         isTSConfigOnly: true,
         element: {
@@ -1618,6 +1637,34 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         internal: true,
         extraValidation() {
             return [Diagnostics.Unknown_compiler_option_0, "suppressOutputPathCheck"];
+        },
+    },
+    {
+        name: "noEmitForJsFiles",
+        type: "boolean",
+        defaultValueDescription: undefined,
+        internal: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "noEmitForJsFiles"];
+        },
+    },
+    {
+        name: "noDtsResolution",
+        type: "boolean",
+        defaultValueDescription: undefined,
+        internal: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "noDtsResolution"];
+        },
+    },
+    {
+        name: "pathsBasePath",
+        type: "string",
+        isFilePath: true,
+        defaultValueDescription: undefined,
+        internal: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "pathsBasePath"];
         },
     },
 ];
