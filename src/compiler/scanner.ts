@@ -2830,10 +2830,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             pos++;
                             return String.fromCharCode(ch & 0x1f);
                         }
-                        if (unicodeMode) {
+                        if (!annexB) {
                             error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
                         }
-                        else if (atomEscape && annexB) {
+                        else if (atomEscape) {
                             // Annex B treats
                             //
                             //  ExtendedAtom : `\` [lookahead = `c`]
@@ -3403,7 +3403,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                             }
                         }
-                        else if (!annexB) {
+                        else if (annexB) {
+                            pos--;
+                            return false;
+                        }
+                        else {
                             error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
                         }
                         return true;
