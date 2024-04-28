@@ -29,12 +29,8 @@ import {
 
 import validatePackageName = ts.JsTyping.validatePackageName;
 import NameValidationResult = ts.JsTyping.NameValidationResult;
-import {
-    stringifyIndented,
-} from "../../_namespaces/ts.server";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { stringifyIndented } from "../../_namespaces/ts.server";
+import { jsonToReadableText } from "../helpers";
 
 describe("unittests:: tsserver:: typingsInstaller:: local module", () => {
     it("should not be picked up", () => {
@@ -1144,8 +1140,7 @@ describe("unittests:: tsserver:: typingsInstaller:: General functionality", () =
             },
         };
         session.executeCommandSeq(openRequest);
-        const projectService = session.getProjectService();
-        const proj = projectService.inferredProjects[0];
+        const proj = session.getProjectService().inferredProjects[0];
         const version1 = proj.lastCachedUnresolvedImportsList;
 
         // make a change that should not affect the structure of the program
@@ -1668,6 +1663,7 @@ describe("unittests:: tsserver:: typingsInstaller:: discover typings", () => {
         const log = loggerToTypingsInstallerLog(logger);
         const testhost = patchHostTimeouts(
             changeToHostTrackingWrittenFiles(host),
+            /*session*/ undefined,
             logger,
         );
         testhost.baselineHost("");

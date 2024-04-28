@@ -1,0 +1,270 @@
+//// [tests/cases/compiler/modulePreserve4.ts] ////
+
+=== /a.js ===
+export const x = 0;
+>x : Symbol(x, Decl(a.js, 0, 12))
+
+module.exports.y = 0; // Error
+
+=== /b.ts ===
+
+export default 0;
+
+=== /c.ts ===
+export = {
+  default: function() {}
+>default : Symbol(default, Decl(c.ts, 0, 10))
+
+};
+
+=== /d.ts ===
+
+export = function() {};
+
+=== /e.mts ===
+
+export = 0;
+
+=== /f.cts ===
+
+export default 0;
+
+=== /g.js ===
+exports.default = 0;
+>exports.default : Symbol(default, Decl(g.js, 0, 0))
+>exports : Symbol(default, Decl(g.js, 0, 0))
+>default : Symbol(default, Decl(g.js, 0, 0))
+
+=== /main1.ts ===
+import { x, y } from "./a"; // No y
+>x : Symbol(x, Decl(main1.ts, 0, 8))
+>y : Symbol(y, Decl(main1.ts, 0, 11))
+
+import a1 = require("./a"); // { x: 0 }
+>a1 : Symbol(a1, Decl(main1.ts, 0, 27))
+
+const a2 = require("./a"); // Error in TS
+>a2 : Symbol(a2, Decl(main1.ts, 2, 5))
+
+const a3 = await import("./a"); // { x: 0 }
+>a3 : Symbol(a3, Decl(main1.ts, 3, 5))
+>"./a" : Symbol(a1, Decl(a.js, 0, 0))
+
+a3.x;
+>a3.x : Symbol(x, Decl(a.js, 0, 12))
+>a3 : Symbol(a3, Decl(main1.ts, 3, 5))
+>x : Symbol(x, Decl(a.js, 0, 12))
+
+import b1 from "./b"; // 0
+>b1 : Symbol(b1, Decl(main1.ts, 6, 6))
+
+import b2 = require("./b"); // { default: 0 }
+>b2 : Symbol(b2, Decl(main1.ts, 6, 21))
+
+b2.default;
+>b2.default : Symbol(b1, Decl(b.ts, 0, 0))
+>b2 : Symbol(b2, Decl(main1.ts, 6, 21))
+>default : Symbol(b1, Decl(b.ts, 0, 0))
+
+const b3 = await import("./b"); // { default: 0 }
+>b3 : Symbol(b3, Decl(main1.ts, 9, 5))
+>"./b" : Symbol(b2, Decl(b.ts, 0, 0))
+
+b3.default;
+>b3.default : Symbol(b1, Decl(b.ts, 0, 0))
+>b3 : Symbol(b3, Decl(main1.ts, 9, 5))
+>default : Symbol(b1, Decl(b.ts, 0, 0))
+
+import c1 from "./c"; // { default: [Function: default] }
+>c1 : Symbol(c1, Decl(main1.ts, 12, 6))
+
+import c2 = require("./c"); // { default: [Function: default] }
+>c2 : Symbol(c2, Decl(main1.ts, 12, 21))
+
+c2.default;
+>c2.default : Symbol(default, Decl(c.ts, 0, 10))
+>c2 : Symbol(c2, Decl(main1.ts, 12, 21))
+>default : Symbol(default, Decl(c.ts, 0, 10))
+
+import d1 from "./d"; // [Function: default]
+>d1 : Symbol(d1, Decl(main1.ts, 15, 6))
+
+import d2 = require("./d"); // [Function: default]
+>d2 : Symbol(d2, Decl(main1.ts, 15, 21))
+
+d2();
+>d2 : Symbol(d2, Decl(main1.ts, 15, 21))
+
+d2.default(); // Error
+>d2 : Symbol(d2, Decl(main1.ts, 15, 21))
+
+const d3 = await import("./d"); // { default: [Function: default] }
+>d3 : Symbol(d3, Decl(main1.ts, 19, 5))
+>"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+
+d3.default();
+>d3.default : Symbol(default)
+>d3 : Symbol(d3, Decl(main1.ts, 19, 5))
+>default : Symbol(default)
+
+import e1 from "./e.mjs"; // 0
+>e1 : Symbol(e1, Decl(main1.ts, 22, 6))
+
+import e2 = require("./e.mjs"); // 0
+>e2 : Symbol(e2, Decl(main1.ts, 22, 25))
+
+import f1 from "./f.cjs"; // 0
+>f1 : Symbol(f1, Decl(main1.ts, 24, 6))
+
+import f2 = require("./f.cjs"); // { default: 0 }
+>f2 : Symbol(f2, Decl(main1.ts, 24, 25))
+
+f2.default;
+>f2.default : Symbol(f1, Decl(f.cts, 0, 0))
+>f2 : Symbol(f2, Decl(main1.ts, 24, 25))
+>default : Symbol(f1, Decl(f.cts, 0, 0))
+
+import g1 from "./g"; // { default: 0 }
+>g1 : Symbol(g1, Decl(main1.ts, 28, 6))
+
+g1.default;
+>g1.default : Symbol(g1.default, Decl(g.js, 0, 0))
+>g1 : Symbol(g1, Decl(main1.ts, 28, 6))
+>default : Symbol(g1.default, Decl(g.js, 0, 0))
+
+import g2 = require("./g"); // { default: 0 }
+>g2 : Symbol(g2, Decl(main1.ts, 29, 11))
+
+g2.default;
+>g2.default : Symbol(g1.default, Decl(g.js, 0, 0))
+>g2 : Symbol(g2, Decl(main1.ts, 29, 11))
+>default : Symbol(g1.default, Decl(g.js, 0, 0))
+
+=== /main2.mts ===
+import { x, y } from "./a"; // No y
+>x : Symbol(x, Decl(main2.mts, 0, 8))
+>y : Symbol(y, Decl(main2.mts, 0, 11))
+
+import a1 = require("./a"); // { x: 0 }
+>a1 : Symbol(a1, Decl(main2.mts, 0, 27))
+
+a1.x;
+>a1.x : Symbol(x, Decl(a.js, 0, 12))
+>a1 : Symbol(a1, Decl(main2.mts, 0, 27))
+>x : Symbol(x, Decl(a.js, 0, 12))
+
+a1.default.x; // Arguably should exist but doesn't
+>a1 : Symbol(a1, Decl(main2.mts, 0, 27))
+
+const a2 = require("./a"); // Error in TS
+>a2 : Symbol(a2, Decl(main2.mts, 4, 5))
+
+import b1 from "./b"; // 0
+>b1 : Symbol(b1, Decl(main2.mts, 6, 6))
+
+import b2 = require("./b"); // { default: 0 }
+>b2 : Symbol(b2, Decl(main2.mts, 6, 21))
+
+import c1 from "./c"; // { default: [Function: default] }
+>c1 : Symbol(c1, Decl(main2.mts, 9, 6))
+
+import c2 = require("./c"); // { default: [Function: default] }
+>c2 : Symbol(c2, Decl(main2.mts, 9, 21))
+
+import d1 from "./d"; // [Function: default]
+>d1 : Symbol(d1, Decl(main2.mts, 11, 6))
+
+import d2 = require("./d"); // [Function: default]
+>d2 : Symbol(d2, Decl(main2.mts, 11, 21))
+
+import e1 from "./e.mjs"; // 0
+>e1 : Symbol(e1, Decl(main2.mts, 13, 6))
+
+import e2 = require("./e.mjs"); // 0
+>e2 : Symbol(e2, Decl(main2.mts, 13, 25))
+
+import f1 from "./f.cjs"; // 0
+>f1 : Symbol(f1, Decl(main2.mts, 15, 6))
+
+import f2 = require("./f.cjs"); // { default: 0 }
+>f2 : Symbol(f2, Decl(main2.mts, 15, 25))
+
+import g1 from "./g"; // { default: 0 }
+>g1 : Symbol(g1, Decl(main2.mts, 18, 6))
+
+import g2 = require("./g"); // { default: 0 }
+>g2 : Symbol(g2, Decl(main2.mts, 18, 21))
+
+=== /main3.cjs ===
+import { x, y } from "./a"; // No y
+>x : Symbol(x, Decl(main3.cjs, 0, 8))
+>y : Symbol(y, Decl(main3.cjs, 0, 11))
+
+import a1 = require("./a"); // Error in JS
+>a1 : Symbol(a1, Decl(main3.cjs, 0, 27))
+
+const a2 = require("./a"); // { x: 0 }
+>a2 : Symbol(a2, Decl(main3.cjs, 2, 5))
+>require : Symbol(require)
+>"./a" : Symbol(a1, Decl(a.js, 0, 0))
+
+import b1 from "./b"; // 0
+>b1 : Symbol(b1, Decl(main3.cjs, 4, 6))
+
+const b2 = require("./b"); // { default: 0 }
+>b2 : Symbol(b2, Decl(main3.cjs, 5, 5))
+>require : Symbol(require)
+>"./b" : Symbol(b2, Decl(b.ts, 0, 0))
+
+import c1 from "./c"; // { default: [Function: default] }
+>c1 : Symbol(c1, Decl(main3.cjs, 7, 6))
+
+const c2 = require("./c"); // { default: [Function: default] }
+>c2 : Symbol(c2, Decl(main3.cjs, 8, 5))
+>require : Symbol(require)
+>"./c" : Symbol("/c", Decl(c.ts, 0, 0))
+
+import d1 from "./d"; // [Function: default]
+>d1 : Symbol(d1, Decl(main3.cjs, 9, 6))
+
+const d2 = require("./d"); // [Function: default]
+>d2 : Symbol(d2, Decl(main3.cjs, 10, 5))
+>require : Symbol(require)
+>"./d" : Symbol("/d", Decl(d.ts, 0, 0))
+
+import e1 from "./e.mjs"; // 0
+>e1 : Symbol(e1, Decl(main3.cjs, 11, 6))
+
+const e2 = require("./e.mjs"); // 0
+>e2 : Symbol(e2, Decl(main3.cjs, 12, 5))
+>require : Symbol(require)
+>"./e.mjs" : Symbol("/e", Decl(e.mts, 0, 0))
+
+import f1 from "./f.cjs"; // 0
+>f1 : Symbol(f1, Decl(main3.cjs, 13, 6))
+
+const f2 = require("./f.cjs"); // { default: 0 }
+>f2 : Symbol(f2, Decl(main3.cjs, 14, 5))
+>require : Symbol(require)
+>"./f.cjs" : Symbol(f2, Decl(f.cts, 0, 0))
+
+import g1 from "./g"; // { default: 0 }
+>g1 : Symbol(g1, Decl(main3.cjs, 16, 6))
+
+const g2 = require("./g"); // { default: 0 }
+>g2 : Symbol(g2, Decl(main3.cjs, 17, 5))
+>require : Symbol(require)
+>"./g" : Symbol(g1, Decl(g.js, 0, 0))
+
+=== /main4.cjs ===
+exports.x = require("./g");
+>exports.x : Symbol(x, Decl(main4.cjs, 0, 0))
+>exports : Symbol(x, Decl(main4.cjs, 0, 0))
+>x : Symbol(x, Decl(main4.cjs, 0, 0))
+>require : Symbol(require)
+>"./g" : Symbol("/g", Decl(g.js, 0, 0))
+
+=== /dummy.ts ===
+
+export {}; // Silly test harness
+

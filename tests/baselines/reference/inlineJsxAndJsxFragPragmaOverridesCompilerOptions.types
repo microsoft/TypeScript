@@ -3,41 +3,52 @@
 === react.d.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     namespace JSX {
         interface IntrinsicElements {
             [e: string]: any;
 >e : string
+>  : ^^^^^^
         }
     }
 }
 export function createElement(): void;
 >createElement : () => void
+>              : ^^^^^^    
 
 export function Fragment(): void;
 >Fragment : () => void
+>         : ^^^^^^    
 
 === preact.d.ts ===
 export function h(): void;
 >h : () => void
+>  : ^^^^^^    
 
 export function Frag(): void;
 >Frag : () => void
+>     : ^^^^^^    
 
 === snabbdom.d.ts ===
 export function h(): void;
 >h : () => void
+>  : ^^^^^^    
 
 === reacty.tsx ===
 import {createElement, Fragment} from "./react";
 >createElement : () => void
+>              : ^^^^^^^^^^
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <><span></span></>
 ><><span></span></> : error
 ><span></span> : error
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 
 === preacty.tsx ===
 /**
@@ -46,13 +57,17 @@ import {createElement, Fragment} from "./react";
  */
 import {h, Frag} from "./preact";
 >h : () => void
+>  : ^^^^^^^^^^
 >Frag : () => void
+>     : ^^^^^^^^^^
 
 <><div></div></>
 ><><div></div></> : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === snabbdomy.tsx ===
 /**
@@ -61,25 +76,32 @@ import {h, Frag} from "./preact";
  */
 import {h} from "./snabbdom";
 >h : () => void
+>  : ^^^^^^^^^^
 
 <><div></div></>
 ><><div></div></> : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === mix-n-match.tsx ===
 /* @jsx h */
 /* @jsxFrag Fragment */
 import {h} from "./preact";
 >h : () => void
+>  : ^^^^^^^^^^
 
 import {Fragment} from "./react";
 >Fragment : () => void
+>         : ^^^^^^^^^^
 
 <><span></span></>
 ><><span></span></> : error
 ><span></span> : error
 >span : any
+>     : ^^^
 >span : any
+>     : ^^^
 

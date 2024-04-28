@@ -24,7 +24,7 @@ declare global {
     function getInterR(): RequireInterface;
 }
 // @filename: /uses.ts
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export default getInterR();
 // @filename: /index.ts
 import obj from "./uses.js"

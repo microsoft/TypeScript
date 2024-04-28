@@ -3,9 +3,13 @@
 === YieldExpression15_es6.ts ===
 var v = () => {
 >v : () => void
+>  : ^^^^^^^^^^
 >() => {     yield foo  } : () => void
+>                         : ^^^^^^^^^^
 
      yield foo
 >yield foo : any
+>          : ^^^
 >foo : any
+>    : ^^^
   }

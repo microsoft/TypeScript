@@ -32,8 +32,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -64,7 +63,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 5
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /node_modules/bar/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
@@ -132,6 +131,33 @@ watchedDirectoriesRecursive::
 : *new*
   {}
 
+Projects::
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/bar/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 1,
@@ -184,6 +210,37 @@ Info seq  [hh:mm:ss:mss] response:
         }
       ]
     }
+After Request
+Projects::
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    documentPositionMappers: 1 *changed*
+        /node_modules/bar/index.d.ts: identitySourceMapConsumer *new*
+
+ScriptInfos::
+/index.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/bar/index.d.ts *changed*
+    version: Text-1
+    sourceMapFilePath: false *changed*
+    containingProjects: 1
+        /tsconfig.json
+
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 2,

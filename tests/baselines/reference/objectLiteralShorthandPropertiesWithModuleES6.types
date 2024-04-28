@@ -3,6 +3,7 @@
 === objectLiteralShorthandPropertiesWithModuleES6.ts ===
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export var x;
 >x : any
@@ -10,6 +11,7 @@ module m {
 
 module m {
 >m : typeof m
+>  : ^^^^^^^^
 
     var z = x;
 >z : any
@@ -17,7 +19,9 @@ module m {
 
     var y = {
 >y : { a: any; x: any; }
+>  : ^^^^^^^^^^^^^^^^^^^
 >{        a: x,        x    } : { a: any; x: any; }
+>                             : ^^^^^^^^^^^^^^^^^^^
 
         a: x,
 >a : any

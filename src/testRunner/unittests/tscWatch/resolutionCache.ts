@@ -1,11 +1,7 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { libContent } from "../helpers/contents";
 import {
     createBaseline,
     createWatchCompilerHostOfFilesAndCompilerOptionsForBaseline,

@@ -33,7 +33,7 @@ appendToOptionalArray(foo, 'x', "no");  // should fail
 //// [paramsOnlyHaveLiteralTypesWhenAppropriatelyContextualized.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.appendToOptionalArray = void 0;
+exports.appendToOptionalArray = appendToOptionalArray;
 function appendToOptionalArray(object, key, value) {
     var array = object[key];
     if (array) {
@@ -43,7 +43,6 @@ function appendToOptionalArray(object, key, value) {
         object[key] = [value];
     }
 }
-exports.appendToOptionalArray = appendToOptionalArray;
 // e.g.
 var foo = {};
 appendToOptionalArray(foo, 'x', 123); // ok

@@ -3,6 +3,9 @@
 === reactNamespaceInvalidInput.tsx ===
 <foo data/>;
 ><foo data/> : any
+>            : ^^^
 >foo : any
+>    : ^^^
 >data : true
+>     : ^^^^
 

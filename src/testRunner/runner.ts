@@ -11,6 +11,7 @@ import {
     setShardId,
     setShards,
     TestRunnerKind,
+    TranspileRunner,
 } from "./_namespaces/Harness";
 import * as project from "./_namespaces/project";
 import * as ts from "./_namespaces/ts";
@@ -27,8 +28,7 @@ function runTests(runners: RunnerBase[]) {
         const dupes: [string, string][] = [];
         for (const runner of runners) {
             if (runner instanceof CompilerBaselineRunner || runner instanceof FourSlashRunner) {
-                for (const sf of runner.enumerateTestFiles()) {
-                    const full = typeof sf === "string" ? sf : sf.file;
+                for (const full of runner.enumerateTestFiles()) {
                     const base = vpath.basename(full).toLowerCase();
                     // allow existing dupes in fourslash/shims and fourslash/server
                     if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
@@ -67,6 +67,8 @@ export function createRunner(kind: TestRunnerKind): RunnerBase {
             return new FourSlashRunner(FourSlash.FourSlashTestType.Server);
         case "project":
             return new project.ProjectRunner();
+        case "transpile":
+            return new TranspileRunner();
     }
     return ts.Debug.fail(`Unknown runner kind ${kind}`);
 }
@@ -191,6 +193,8 @@ function handleTestConfig() {
                     case "fourslash-generated":
                         runners.push(new GeneratedFourslashRunner(FourSlash.FourSlashTestType.Native));
                         break;
+                    case "transpile":
+                        runners.push(new TranspileRunner());
                         break;
                 }
             }
@@ -208,6 +212,9 @@ function handleTestConfig() {
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Server));
         // runners.push(new GeneratedFourslashRunner());
+
+        // transpile
+        runners.push(new TranspileRunner());
     }
     if (runUnitTests === undefined) {
         runUnitTests = runners.length !== 1; // Don't run unit tests when running only one runner if unit tests were not explicitly asked for

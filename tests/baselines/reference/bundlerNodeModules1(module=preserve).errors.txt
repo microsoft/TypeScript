@@ -1,0 +1,59 @@
+error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+  The file is in the program because:
+    Root file specified for compilation
+/main.cts(1,10): error TS2305: Module '"dual"' has no exported member 'esm'.
+/main.mts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
+/main.ts(1,15): error TS2305: Module '"dual"' has no exported member 'cjs'.
+
+
+!!! error TS6504: File '/node_modules/dual/index.cjs' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+!!! error TS6504: File '/node_modules/dual/index.js' is a JavaScript file. Did you mean to enable the 'allowJs' option?
+!!! error TS6504:   The file is in the program because:
+!!! error TS6504:     Root file specified for compilation
+==== /node_modules/dual/package.json (0 errors) ====
+    {
+      "name": "dual",
+      "version": "1.0.0",
+      "type": "module",
+      "main": "index.cjs",
+      "types": "index.d.cts",
+      "exports": {
+        ".": {
+          "import": "./index.js",
+          "require": "./index.cjs"
+        }
+      }
+    }
+    
+==== /node_modules/dual/index.js (0 errors) ====
+    export const esm = 0;
+    
+==== /node_modules/dual/index.d.ts (0 errors) ====
+    export const esm: number;
+    
+==== /node_modules/dual/index.cjs (0 errors) ====
+    exports.cjs = 0;
+    
+==== /node_modules/dual/index.d.cts (0 errors) ====
+    export const cjs: number;
+    
+==== /main.ts (1 errors) ====
+    import { esm, cjs } from "dual";
+                  ~~~
+!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
+    
+==== /main.mts (1 errors) ====
+    import { esm, cjs } from "dual";
+                  ~~~
+!!! error TS2305: Module '"dual"' has no exported member 'cjs'.
+    
+==== /main.cts (1 errors) ====
+    import { esm, cjs } from "dual";
+             ~~~
+!!! error TS2305: Module '"dual"' has no exported member 'esm'.
+    

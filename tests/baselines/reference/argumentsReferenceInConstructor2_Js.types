@@ -3,6 +3,7 @@
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	/**
 	 * Constructor
@@ -12,6 +13,7 @@ class A {
 	constructor(foo = {}) {
 >foo : any
 >{} : {}
+>   : ^^
 
 		/**
 		 * @type object
@@ -20,7 +22,9 @@ class A {
 >this["arguments"] = foo : any
 >this["arguments"] : any
 >this : this
+>     : ^^^^
 >"arguments" : "arguments"
+>            : ^^^^^^^^^^^
 >foo : any
 	}
 }

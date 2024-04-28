@@ -1,6 +1,4 @@
-import {
-    getSysForNoEmitOnError,
-} from "../helpers/noEmitOnError";
+import { getSysForNoEmitOnError } from "../helpers/noEmitOnError";
 import {
     TscWatchCompileChange,
     verifyTscWatch,

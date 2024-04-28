@@ -29,6 +29,4 @@ exports.B = B;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-require("./a");
-require("./b");
 var b;

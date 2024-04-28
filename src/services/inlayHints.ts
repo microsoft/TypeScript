@@ -22,6 +22,7 @@ import {
     GetAccessorDeclaration,
     getEffectiveReturnTypeNode,
     getEffectiveTypeAnnotationNode,
+    getEmitScriptTarget,
     getLanguageVariant,
     getLeadingCommentRanges,
     getNameOfDeclaration,
@@ -69,8 +70,8 @@ import {
     isObjectLiteralExpression,
     isOptionalTypeNode,
     isParameter,
-    isParameterDeclaration,
     isParenthesizedTypeNode,
+    isPartOfParameterDeclaration,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -117,6 +118,7 @@ import {
     tokenToString,
     TupleTypeReference,
     Type,
+    TypeFlags,
     unescapeLeadingUnderscores,
     UserPreferences,
     usingSingleLineStringWriter,
@@ -259,7 +261,10 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function visitVariableLikeDeclaration(decl: VariableDeclaration | PropertyDeclaration) {
-        if (!decl.initializer || isBindingPattern(decl.name) || isVariableDeclaration(decl) && !isHintableDeclaration(decl)) {
+        if (
+            decl.initializer === undefined && !(isPropertyDeclaration(decl) && !(checker.getTypeAtLocation(decl).flags & TypeFlags.Any)) ||
+            isBindingPattern(decl.name) || (isVariableDeclaration(decl) && !isHintableDeclaration(decl))
+        ) {
             return;
         }
 
@@ -350,7 +355,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function leadingCommentsContainsParameterName(node: Node, name: string) {
-        if (!isIdentifierText(name, compilerOptions.target, getLanguageVariant(file.scriptKind))) {
+        if (!isIdentifierText(name, getEmitScriptTarget(compilerOptions), getLanguageVariant(file.scriptKind))) {
             return false;
         }
 
@@ -894,7 +899,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+        if ((isPartOfParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }

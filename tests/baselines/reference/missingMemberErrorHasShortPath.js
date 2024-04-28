@@ -10,9 +10,8 @@ exit()
 //// [utils.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exist = void 0;
-function exist() { }
 exports.exist = exist;
+function exist() { }
 //// [sample.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
