@@ -23761,6 +23761,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.variances) {
             tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getTypeId(getDeclaredTypeOfSymbol(symbol)) });
             const oldVarianceComputation = inVarianceComputation;
+            const saveResolutionStart = resolutionStart;
             if (!inVarianceComputation) {
                 inVarianceComputation = true;
                 resolutionStart = resolutionTargets.length;
@@ -23805,7 +23806,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (!oldVarianceComputation) {
                 inVarianceComputation = false;
-                resolutionStart = 0;
+                resolutionStart = saveResolutionStart;
             }
             links.variances = variances;
             tracing?.pop({ variances: variances.map(Debug.formatVariance) });
