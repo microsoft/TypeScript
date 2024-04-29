@@ -1106,7 +1106,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
      * function does not perform bounds checks.
      */
     function codePointUnchecked(pos: number) {
-        return codePointAt(text, pos);
+        // eslint-disable-next-line local/bounds-check -- intentionally unsafe call
+        return text.codePointAt(pos)!; // Using `!` as we assume you have already checked bounds before calling.
     }
 
     /**
@@ -1123,6 +1124,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
      * function does not perform bounds checks.
      */
     function charCodeUnchecked(pos: number) {
+        // eslint-disable-next-line local/bounds-check -- intentionally unsafe call
         return text.charCodeAt(pos);
     }
 
@@ -1151,7 +1153,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         let isPreviousTokenSeparator = false;
         let result = "";
         while (true) {
-            const ch = charCodeUnchecked(pos);
+            const ch = charCodeChecked(pos);
             if (ch === CharacterCodes._) {
                 tokenFlags |= TokenFlags.ContainsSeparator;
                 if (allowSeparator) {
@@ -1172,15 +1174,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 start = pos;
                 continue;
             }
-            if (isDigit(ch)) {
-                allowSeparator = true;
-                isPreviousTokenSeparator = false;
-                pos++;
-                continue;
+            if (!isDigit(ch)) {
+                break;
             }
-            break;
+            allowSeparator = true;
+            isPreviousTokenSeparator = false;
+            pos++;
         }
-        if (charCodeUnchecked(pos - 1) === CharacterCodes._) {
+        if (charCodeChecked(pos - 1) === CharacterCodes._) {
             tokenFlags |= TokenFlags.ContainsInvalidSeparator;
             error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
         }
@@ -1210,9 +1211,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanNumber(): SyntaxKind {
         let start = pos;
         let mainFragment: string;
+        // eslint-disable-next-line local/bounds-check -- all call sites should perform bounds checks
         if (charCodeUnchecked(pos) === CharacterCodes._0) {
             pos++;
-            if (charCodeUnchecked(pos) === CharacterCodes._) {
+            if (charCodeChecked(pos) === CharacterCodes._) {
                 tokenFlags |= TokenFlags.ContainsSeparator | TokenFlags.ContainsInvalidSeparator;
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos, 1);
                 // treat it as a normal number literal
@@ -1246,15 +1248,17 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
         let decimalFragment: string | undefined;
         let scientificFragment: string | undefined;
-        if (charCodeUnchecked(pos) === CharacterCodes.dot) {
+        if (charCodeChecked(pos) === CharacterCodes.dot) {
             pos++;
             decimalFragment = scanNumberFragment();
         }
         let end = pos;
-        if (charCodeUnchecked(pos) === CharacterCodes.E || charCodeUnchecked(pos) === CharacterCodes.e) {
+        let ch = charCodeChecked(pos);
+        if (ch === CharacterCodes.E || ch === CharacterCodes.e) {
             pos++;
             tokenFlags |= TokenFlags.Scientific;
-            if (charCodeUnchecked(pos) === CharacterCodes.plus || charCodeUnchecked(pos) === CharacterCodes.minus) pos++;
+            ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.plus || ch === CharacterCodes.minus) pos++;
             const preNumericPart = pos;
             const finalFragment = scanNumberFragment();
             if (!finalFragment) {
@@ -1301,7 +1305,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
-        if (!isIdentifierStart(codePointUnchecked(pos), languageVersion)) {
+        if (!isIdentifierStart(codePointChecked(pos), languageVersion)) {
             return;
         }
 
@@ -1325,10 +1329,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanDigits(): boolean {
         const start = pos;
         let isOctal = true;
-        while (isDigit(charCodeChecked(pos))) {
-            if (!isOctalDigit(charCodeUnchecked(pos))) {
-                isOctal = false;
-            }
+        while (true) {
+            const ch = charCodeChecked(pos);
+            if (!isDigit(ch)) break;
+            isOctal &&= isOctalDigit(ch);
             pos++;
         }
         tokenValue = text.substring(start, pos);
@@ -1357,7 +1361,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         let allowSeparator = false;
         let isPreviousTokenSeparator = false;
         while (valueChars.length < minCount || scanAsManyAsPossible) {
-            let ch = charCodeUnchecked(pos);
+            let ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.EOF) break;
             if (canHaveSeparators && ch === CharacterCodes._) {
                 tokenFlags |= TokenFlags.ContainsSeparator;
                 if (allowSeparator) {
@@ -1390,25 +1395,26 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         if (valueChars.length < minCount) {
             valueChars = [];
         }
-        if (charCodeUnchecked(pos - 1) === CharacterCodes._) {
+        if (charCodeChecked(pos - 1) === CharacterCodes._) {
             error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
         }
         return String.fromCharCode(...valueChars);
     }
 
     function scanString(jsxAttributeString = false): string {
+        // eslint-disable-next-line -- all callers should perform bounds check
         const quote = charCodeUnchecked(pos);
         pos++;
         let result = "";
         let start = pos;
         while (true) {
-            if (pos >= end) {
+            const ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.EOF) {
                 result += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_string_literal);
                 break;
             }
-            const ch = charCodeUnchecked(pos);
             if (ch === quote) {
                 result += text.substring(start, pos);
                 pos++;
@@ -1437,6 +1443,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
      * a literal component of a TemplateExpression.
      */
     function scanTemplateAndSetTokenValue(shouldEmitInvalidEscapeError: boolean): SyntaxKind {
+        // eslint-disable-next-line local/bounds-check -- all callers should have performed bounds check
         const startedWithBacktick = charCodeUnchecked(pos) === CharacterCodes.backtick;
 
         pos++;
@@ -1445,7 +1452,9 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         let resultingToken: SyntaxKind;
 
         while (true) {
-            if (pos >= end) {
+            const ch = charCodeChecked(pos);
+
+            if (ch === CharacterCodes.EOF) {
                 contents += text.substring(start, pos);
                 tokenFlags |= TokenFlags.Unterminated;
                 error(Diagnostics.Unterminated_template_literal);
@@ -1453,10 +1462,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 break;
             }
 
-            const currChar = charCodeUnchecked(pos);
-
             // '`'
-            if (currChar === CharacterCodes.backtick) {
+            if (ch === CharacterCodes.backtick) {
                 contents += text.substring(start, pos);
                 pos++;
                 resultingToken = startedWithBacktick ? SyntaxKind.NoSubstitutionTemplateLiteral : SyntaxKind.TemplateTail;
@@ -1464,7 +1471,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
 
             // '${'
-            if (currChar === CharacterCodes.$ && pos + 1 < end && charCodeUnchecked(pos + 1) === CharacterCodes.openBrace) {
+            if (ch === CharacterCodes.$ && charCodeChecked(pos + 1) === CharacterCodes.openBrace) {
                 contents += text.substring(start, pos);
                 pos += 2;
                 resultingToken = startedWithBacktick ? SyntaxKind.TemplateHead : SyntaxKind.TemplateMiddle;
@@ -1472,7 +1479,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             }
 
             // Escape character
-            if (currChar === CharacterCodes.backslash) {
+            if (ch === CharacterCodes.backslash) {
                 contents += text.substring(start, pos);
                 contents += scanEscapeSequence(shouldEmitInvalidEscapeError, /*isRegularExpression*/ false);
                 start = pos;
@@ -1481,11 +1488,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
             // Speculated ECMAScript 6 Spec 11.8.6.1:
             // <CR><LF> and <CR> LineTerminatorSequences are normalized to <LF> for Template Values
-            if (currChar === CharacterCodes.carriageReturn) {
+            if (ch === CharacterCodes.carriageReturn) {
                 contents += text.substring(start, pos);
                 pos++;
 
-                if (pos < end && charCodeUnchecked(pos) === CharacterCodes.lineFeed) {
+                if (charCodeChecked(pos) === CharacterCodes.lineFeed) {
                     pos++;
                 }
 
@@ -1520,17 +1527,17 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanEscapeSequence(shouldEmitInvalidEscapeError: boolean, isRegularExpression: boolean | "annex-b"): string {
         const start = pos;
         pos++;
-        if (pos >= end) {
+        const ch = charCodeChecked(pos);
+        if (ch === CharacterCodes.EOF) {
             error(Diagnostics.Unexpected_end_of_text);
             return "";
         }
-        const ch = charCodeUnchecked(pos);
         pos++;
         switch (ch) {
             case CharacterCodes._0:
                 // Although '0' preceding any digit is treated as LegacyOctalEscapeSequence,
                 // '\08' should separately be interpreted as '\0' + '8'.
-                if (pos >= end || !isDigit(charCodeUnchecked(pos))) {
+                if (!isDigit(charCodeChecked(pos))) {
                     return "\0";
                 }
             // '\01', '\011'
@@ -1539,7 +1546,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes._2:
             case CharacterCodes._3:
                 // '\1', '\17', '\177'
-                if (pos < end && isOctalDigit(charCodeUnchecked(pos))) {
+                if (isOctalDigit(charCodeChecked(pos))) {
                     pos++;
                 }
             // '\17', '\177'
@@ -1549,7 +1556,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes._6:
             case CharacterCodes._7:
                 // '\4', '\47' but not '\477'
-                if (pos < end && isOctalDigit(charCodeUnchecked(pos))) {
+                if (isOctalDigit(charCodeChecked(pos))) {
                     pos++;
                 }
                 // '\47'
@@ -1590,7 +1597,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.u:
                 if (
                     (!isRegularExpression || shouldEmitInvalidEscapeError) &&
-                    pos < end && charCodeUnchecked(pos) === CharacterCodes.openBrace
+                    charCodeChecked(pos) === CharacterCodes.openBrace
                 ) {
                     // '\u{DDDDDD}'
                     pos -= 2;
@@ -1598,7 +1605,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 }
                 // '\uDDDD'
                 for (; pos < start + 6; pos++) {
-                    if (!(pos < end && isHexDigit(charCodeUnchecked(pos)))) {
+                    if (!isHexDigit(charCodeChecked(pos))) {
                         tokenFlags |= TokenFlags.ContainsInvalidEscape;
                         if (isRegularExpression || shouldEmitInvalidEscapeError) {
                             error(Diagnostics.Hexadecimal_digit_expected);
@@ -1611,6 +1618,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const escapedValueString = String.fromCharCode(escapedValue);
                 if (
                     isRegularExpression && shouldEmitInvalidEscapeError && escapedValue >= 0xD800 && escapedValue <= 0xDBFF &&
+                    // eslint-disable-next-line local/bounds-check -- bounds checked before invocation
                     pos + 6 < end && text.substring(pos, pos + 2) === "\\u" && charCodeUnchecked(pos + 2) !== CharacterCodes.openBrace
                 ) {
                     // For regular expressions in Unicode mode, \u HexLeadSurrogate \u HexTrailSurrogate is treated as a single character
@@ -1619,6 +1627,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     const nextStart = pos;
                     let nextPos = pos + 2;
                     for (; nextPos < nextStart + 6; nextPos++) {
+                        // eslint-disable-next-line local/bounds-check -- bounds checked before invocation
                         if (!isHexDigit(charCodeUnchecked(pos))) {
                             // leave the error to the next call
                             return escapedValueString;
@@ -1727,7 +1736,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function peekExtendedUnicodeEscape(): number {
-        if (codePointUnchecked(pos + 1) === CharacterCodes.u && codePointUnchecked(pos + 2) === CharacterCodes.openBrace) {
+        if (
+            pos + 2 < end &&
+            codePointUnchecked(pos + 1) === CharacterCodes.u &&
+            codePointUnchecked(pos + 2) === CharacterCodes.openBrace
+        ) {
             const start = pos;
             pos += 3;
             const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
@@ -1794,7 +1807,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         let separatorAllowed = false;
         let isPreviousTokenSeparator = false;
         while (true) {
-            const ch = charCodeUnchecked(pos);
+            const ch = charCodeChecked(pos);
+            if (ch === CharacterCodes.EOF) {
+                break;
+            }
             // Numeric separators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
             if (ch === CharacterCodes._) {
                 tokenFlags |= TokenFlags.ContainsSeparator;
@@ -1819,7 +1835,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             pos++;
             isPreviousTokenSeparator = false;
         }
-        if (charCodeUnchecked(pos - 1) === CharacterCodes._) {
+        if (charCodeChecked(pos - 1) === CharacterCodes._) {
             // Literal ends with underscore - not allowed
             error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
         }
@@ -1827,7 +1843,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     }
 
     function checkBigIntSuffix(): SyntaxKind {
-        if (charCodeUnchecked(pos) === CharacterCodes.n) {
+        if (charCodeChecked(pos) === CharacterCodes.n) {
             tokenValue += "n";
             // Use base 10 instead of base 2 or base 8 for shorter literals
             if (tokenFlags & TokenFlags.BinaryOrOctalSpecifier) {
@@ -1854,11 +1870,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         let asteriskSeen = false;
         while (true) {
             tokenStart = pos;
-            if (pos >= end) {
+
+            const ch = codePointChecked(pos);
+            if (ch === CharacterCodes.EOF) {
                 return token = SyntaxKind.EndOfFileToken;
             }
 
-            const ch = codePointUnchecked(pos);
             if (pos === 0) {
                 // Special handling for shebang
                 if (ch === CharacterCodes.hash && isShebangTrivia(text, pos)) {
@@ -1923,8 +1940,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return token = SyntaxKind.WhitespaceTrivia;
                     }
                 case CharacterCodes.exclamation:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.ExclamationEqualsEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.ExclamationEqualsToken;
@@ -1938,19 +1955,19 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 case CharacterCodes.backtick:
                     return token = scanTemplateAndSetTokenValue(/*shouldEmitInvalidEscapeError*/ false);
                 case CharacterCodes.percent:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.PercentEqualsToken;
                     }
                     pos++;
                     return token = SyntaxKind.PercentToken;
                 case CharacterCodes.ampersand:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.ampersand) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.ampersand) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.AmpersandAmpersandEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.AmpersandAmpersandToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AmpersandEqualsToken;
                     }
                     pos++;
@@ -1962,11 +1979,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.CloseParenToken;
                 case CharacterCodes.asterisk:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.AsteriskEqualsToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.asterisk) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.AsteriskAsteriskEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
@@ -1979,10 +1996,10 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     }
                     return token = SyntaxKind.AsteriskToken;
                 case CharacterCodes.plus:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.plus) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.plus) {
                         return pos += 2, token = SyntaxKind.PlusPlusToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.PlusEqualsToken;
                     }
                     pos++;
@@ -1991,27 +2008,27 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.CommaToken;
                 case CharacterCodes.minus:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.minus) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.minus) {
                         return pos += 2, token = SyntaxKind.MinusMinusToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.MinusEqualsToken;
                     }
                     pos++;
                     return token = SyntaxKind.MinusToken;
                 case CharacterCodes.dot:
-                    if (isDigit(charCodeUnchecked(pos + 1))) {
+                    if (isDigit(charCodeChecked(pos + 1))) {
                         scanNumber();
                         return token = SyntaxKind.NumericLiteral;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && charCodeUnchecked(pos + 2) === CharacterCodes.dot) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.dot && charCodeChecked(pos + 2) === CharacterCodes.dot) {
                         return pos += 3, token = SyntaxKind.DotDotDotToken;
                     }
                     pos++;
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.slash:
                     // Single-line comment
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.slash) {
                         pos += 2;
 
                         while (pos < end) {
@@ -2036,16 +2053,16 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     }
                     // Multi-line comment
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.asterisk) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.asterisk) {
                         pos += 2;
-                        const isJSDoc = charCodeUnchecked(pos) === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) !== CharacterCodes.slash;
+                        const isJSDoc = charCodeChecked(pos) === CharacterCodes.asterisk && charCodeChecked(pos + 1) !== CharacterCodes.slash;
 
                         let commentClosed = false;
                         let lastLineStart = tokenStart;
                         while (pos < end) {
                             const ch = charCodeUnchecked(pos);
 
-                            if (ch === CharacterCodes.asterisk && charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
+                            if (ch === CharacterCodes.asterisk && charCodeChecked(pos + 1) === CharacterCodes.slash) {
                                 pos += 2;
                                 commentClosed = true;
                                 break;
@@ -2080,7 +2097,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     }
 
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.SlashEqualsToken;
                     }
 
@@ -2149,19 +2166,19 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     }
 
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.lessThan) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.lessThan) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.LessThanLessThanEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.LessThanLessThanToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.LessThanEqualsToken;
                     }
                     if (
                         languageVariant === LanguageVariant.JSX &&
-                        charCodeUnchecked(pos + 1) === CharacterCodes.slash &&
-                        charCodeUnchecked(pos + 2) !== CharacterCodes.asterisk
+                        charCodeChecked(pos + 1) === CharacterCodes.slash &&
+                        charCodeChecked(pos + 2) !== CharacterCodes.asterisk
                     ) {
                         return pos += 2, token = SyntaxKind.LessThanSlashToken;
                     }
@@ -2178,13 +2195,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     }
 
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.EqualsEqualsEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.EqualsEqualsToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.greaterThan) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.greaterThan) {
                         return pos += 2, token = SyntaxKind.EqualsGreaterThanToken;
                     }
                     pos++;
@@ -2203,11 +2220,11 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.GreaterThanToken;
                 case CharacterCodes.question:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.dot && !isDigit(charCodeUnchecked(pos + 2))) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.dot && !isDigit(charCodeChecked(pos + 2))) {
                         return pos += 2, token = SyntaxKind.QuestionDotToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.question) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.question) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.QuestionQuestionEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.QuestionQuestionToken;
@@ -2221,7 +2238,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     pos++;
                     return token = SyntaxKind.CloseBracketToken;
                 case CharacterCodes.caret:
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.CaretEqualsToken;
                     }
                     pos++;
@@ -2240,13 +2257,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         }
                     }
 
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.bar) {
-                        if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.bar) {
+                        if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                             return pos += 3, token = SyntaxKind.BarBarEqualsToken;
                         }
                         return pos += 2, token = SyntaxKind.BarBarToken;
                     }
-                    if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                    if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                         return pos += 2, token = SyntaxKind.BarEqualsToken;
                     }
                     pos++;
@@ -2285,7 +2302,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return token = SyntaxKind.Unknown;
                     }
 
-                    const charAfterHash = codePointUnchecked(pos + 1);
+                    const charAfterHash = codePointChecked(pos + 1);
                     if (charAfterHash === CharacterCodes.backslash) {
                         pos++;
                         const extendedCookedChar = peekExtendedUnicodeEscape();
@@ -2370,7 +2387,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         Debug.assert(token === SyntaxKind.Unknown, "'reScanInvalidIdentifier' should only be called when the current token is 'SyntaxKind.Unknown'.");
         pos = tokenStart = fullStartPos;
         tokenFlags = 0;
-        const ch = codePointUnchecked(pos);
+        const ch = codePointChecked(pos);
         const identifierKind = scanIdentifier(ch, ScriptTarget.ESNext);
         if (identifierKind) {
             return token = identifierKind;
@@ -2394,20 +2411,20 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
     function reScanGreaterToken(): SyntaxKind {
         if (token === SyntaxKind.GreaterThanToken) {
-            if (charCodeUnchecked(pos) === CharacterCodes.greaterThan) {
-                if (charCodeUnchecked(pos + 1) === CharacterCodes.greaterThan) {
-                    if (charCodeUnchecked(pos + 2) === CharacterCodes.equals) {
+            if (charCodeChecked(pos) === CharacterCodes.greaterThan) {
+                if (charCodeChecked(pos + 1) === CharacterCodes.greaterThan) {
+                    if (charCodeChecked(pos + 2) === CharacterCodes.equals) {
                         return pos += 3, token = SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken;
                     }
                     return pos += 2, token = SyntaxKind.GreaterThanGreaterThanGreaterThanToken;
                 }
-                if (charCodeUnchecked(pos + 1) === CharacterCodes.equals) {
+                if (charCodeChecked(pos + 1) === CharacterCodes.equals) {
                     return pos += 2, token = SyntaxKind.GreaterThanGreaterThanEqualsToken;
                 }
                 pos++;
                 return token = SyntaxKind.GreaterThanGreaterThanToken;
             }
-            if (charCodeUnchecked(pos) === CharacterCodes.equals) {
+            if (charCodeChecked(pos) === CharacterCodes.equals) {
                 pos++;
                 return token = SyntaxKind.GreaterThanEqualsToken;
             }
@@ -2436,13 +2453,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             while (true) {
                 // If we reach the end of a file, or hit a newline, then this is an unterminated
                 // regex.  Report error and return what we have so far.
-                if (p >= end) {
+                const ch = charCodeChecked(p);
+                if (ch === CharacterCodes.EOF) {
                     tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_regular_expression_literal);
                     break;
                 }
 
-                const ch = charCodeUnchecked(p);
                 if (isLineBreak(ch)) {
                     tokenFlags |= TokenFlags.Unterminated;
                     error(Diagnostics.Unterminated_regular_expression_literal);
@@ -2792,7 +2809,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | CharacterEscape
         //     | 'k<' RegExpIdentifierName '>'
         function scanAtomEscape() {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.backslash);
             switch (charCodeChecked(pos)) {
                 case CharacterCodes.k:
                     pos++;
@@ -2822,7 +2839,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         // DecimalEscape ::= [1-9] [0-9]*
         function scanDecimalEscape(): boolean {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.backslash);
             const ch = charCodeChecked(pos);
             if (ch >= CharacterCodes._1 && ch <= CharacterCodes._9) {
                 const start = pos;
@@ -2841,7 +2858,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | '^' | '$' | '/' | '\' | '.' | '*' | '+' | '?' | '(' | ')' | '[' | ']' | '{' | '}' | '|'
         //     | [~UnicodeMode] (any other non-identifier characters)
         function scanCharacterEscape(atomEscape: boolean): string {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.backslash);
             let ch = charCodeChecked(pos);
             switch (ch) {
                 case CharacterCodes.c:
@@ -2892,7 +2909,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         }
 
         function scanGroupName(isReference: boolean) {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.lessThan);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.lessThan);
             tokenStart = pos;
             scanIdentifier(codePointChecked(pos), languageVersion);
             if (pos === tokenStart) {
@@ -2918,7 +2935,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         // ClassRanges ::= '^'? (ClassAtom ('-' ClassAtom)?)*
         function scanClassRanges() {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.openBracket);
             if (charCodeChecked(pos) === CharacterCodes.caret) {
                 // character complement
                 pos++;
@@ -2977,7 +2994,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         // ClassSubtraction ::= ClassSetOperand ('--' ClassSetOperand)+
         // ClassSetRange ::= ClassSetCharacter '-' ClassSetCharacter
         function scanClassSetExpression() {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBracket);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.openBracket);
             let isCharacterComplement = false;
             if (charCodeChecked(pos) === CharacterCodes.caret) {
                 pos++;
@@ -3221,7 +3238,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
 
         // ClassStringDisjunctionContents ::= ClassSetCharacter* ('|' ClassSetCharacter*)*
         function scanClassStringDisjunctionContents() {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.openBrace);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.openBrace);
             let characterCount = 0;
             while (true) {
                 const ch = charCodeChecked(pos);
@@ -3361,7 +3378,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         //     | 'd' | 'D' | 's' | 'S' | 'w' | 'W'
         //     | [+UnicodeMode] ('P' | 'p') '{' UnicodePropertyValueExpression '}'
         function scanCharacterClassEscape(): boolean {
-            Debug.assertEqual(charCodeUnchecked(pos - 1), CharacterCodes.backslash);
+            Debug.assertEqual(charCodeChecked(pos - 1), CharacterCodes.backslash);
             let isCharacterComplement = false;
             const start = pos - 1;
             const ch = charCodeChecked(pos);
@@ -3581,13 +3598,13 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanJsxToken(allowMultilineJsxText = true): JsxTokenSyntaxKind {
         fullStartPos = tokenStart = pos;
 
-        if (pos >= end) {
+        let char = charCodeChecked(pos);
+        if (char === CharacterCodes.EOF) {
             return token = SyntaxKind.EndOfFileToken;
         }
 
-        let char = charCodeUnchecked(pos);
         if (char === CharacterCodes.lessThan) {
-            if (charCodeUnchecked(pos + 1) === CharacterCodes.slash) {
+            if (charCodeChecked(pos + 1) === CharacterCodes.slash) {
                 pos += 2;
                 return token = SyntaxKind.LessThanSlashToken;
             }
@@ -3680,7 +3697,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanJsxAttributeValue(): SyntaxKind {
         fullStartPos = pos;
 
-        switch (charCodeUnchecked(pos)) {
+        switch (charCodeChecked(pos)) {
             case CharacterCodes.doubleQuote:
             case CharacterCodes.singleQuote:
                 tokenValue = scanString(/*jsxAttributeString*/ true);
@@ -3702,13 +3719,14 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         if (pos >= end) {
             return token = SyntaxKind.EndOfFileToken;
         }
-        for (let ch = charCodeUnchecked(pos); pos < end && (!isLineBreak(ch) && ch !== CharacterCodes.backtick); ch = codePointUnchecked(++pos)) {
+        for (let ch = charCodeChecked(pos); ch !== CharacterCodes.EOF && (!isLineBreak(ch) && ch !== CharacterCodes.backtick); ch = codePointChecked(++pos)) {
             if (!inBackticks) {
                 if (ch === CharacterCodes.openBrace) {
                     break;
                 }
                 else if (
                     ch === CharacterCodes.at
+                    // eslint-disable-next-line local/bounds-check -- bounds checked before invocation
                     && pos - 1 >= 0 && isWhiteSpaceSingleLine(charCodeUnchecked(pos - 1))
                     && !(pos + 1 < end && isWhiteSpaceLike(charCodeUnchecked(pos + 1)))
                 ) {
@@ -3727,11 +3745,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
     function scanJsDocToken(): JSDocSyntaxKind {
         fullStartPos = tokenStart = pos;
         tokenFlags = TokenFlags.None;
-        if (pos >= end) {
+
+        const ch = codePointChecked(pos);
+        if (ch === CharacterCodes.EOF) {
             return token = SyntaxKind.EndOfFileToken;
         }
 
-        const ch = codePointUnchecked(pos);
         pos += charSize(ch);
         switch (ch) {
             case CharacterCodes.tab:
@@ -3745,7 +3764,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             case CharacterCodes.at:
                 return token = SyntaxKind.AtToken;
             case CharacterCodes.carriageReturn:
-                if (charCodeUnchecked(pos) === CharacterCodes.lineFeed) {
+                if (charCodeChecked(pos) === CharacterCodes.lineFeed) {
                     pos++;
                 }
                 // falls through
