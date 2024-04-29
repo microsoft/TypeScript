@@ -72,13 +72,13 @@ function pasteEdits(
         }
     });
     host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
+        const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom?.range) {
             Debug.assert(copiedFrom.range.length === pastedText.length);
             copiedFrom.range.forEach(copy => {
                 addRange(statements, copiedFrom.file.statements, getLineOfLocalPosition(copiedFrom.file, copy.pos), getLineOfLocalPosition(copiedFrom.file, copy.end) + 1);
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
-            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
             Debug.assertIsDefined(originalProgram);
             const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
@@ -94,7 +94,6 @@ function pasteEdits(
                 preferences,
                 formatContext,
             };
-            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
             forEachChild(updatedFile, function cb(node) {
                 if (isIdentifier(node)) {
                     if (!originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {

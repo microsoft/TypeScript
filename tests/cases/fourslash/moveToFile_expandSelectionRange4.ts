@@ -5,7 +5,6 @@
 ////const t = b;
 
 // @Filename: /a.ts
-////import { c } from './other';
 //// interface T {
 ////     a: number
 //// }
@@ -16,18 +15,16 @@
 
 // @Filename: /other.ts
 ////export const b = 2;
-////export const c = 3;
 
 verify.moveToFile({
     newFileContents: {
         "/a.ts":
-`import { c } from './other';
- interface T {
-     a: number
- }
- export const x: T={
-     a: 1
- };
+`interface T {
+    a: number
+}
+export const x: T={
+    a: 1
+};
 `,
 
         "/bar.ts":
