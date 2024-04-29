@@ -1551,8 +1551,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
 
-    const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
-
     let processingDefaultLibFiles: SourceFile[] | undefined;
     let processingOtherFiles: SourceFile[] | undefined;
     let files: SourceFile[];
@@ -1903,6 +1901,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     resolvedLibProcessing = undefined;
     resolvedModulesProcessing = undefined;
     resolvedTypeReferenceDirectiveNamesProcessing = undefined;
+
+    let ignoreDeprecationsVersion: Version | undefined;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -4564,17 +4564,23 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getIgnoreDeprecationsVersion(): Version {
-        const ignoreDeprecations = options.ignoreDeprecations;
-        if (ignoreDeprecations) {
-            // While we could do Version.tryParse here to support any version,
-            // for now, only allow "5.0". We aren't planning on deprecating anything
-            // until 6.0.
-            if (ignoreDeprecations === "5.0") {
-                return new Version(ignoreDeprecations);
+        if (!ignoreDeprecationsVersion) {
+            ignoreDeprecationsVersion = Version.zero;
+
+            const ignoreDeprecations = options.ignoreDeprecations;
+            if (ignoreDeprecations) {
+                // While we could do Version.tryParse here to support any version,
+                // for now, only allow "5.0". We aren't planning on deprecating anything
+                // until 6.0.
+                if (ignoreDeprecations === "5.0") {
+                    ignoreDeprecationsVersion = new Version(ignoreDeprecations);
+                }
+                else {
+                    createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations);
+                }
             }
-            reportInvalidIgnoreDeprecations();
         }
-        return Version.zero;
+        return ignoreDeprecationsVersion;
     }
 
     function checkDeprecations(
