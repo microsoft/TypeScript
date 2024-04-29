@@ -251,6 +251,7 @@ import {
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
     getAssignmentTargetKind,
+    getCanonicalDiagnostic,
     getCheckFlags,
     getClassExtendsHeritageElement,
     getClassLikeDeclarationOfSymbol,
@@ -3120,10 +3121,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (suggestion) {
                         const suggestionName = symbolToString(suggestion);
                         const isUncheckedJS = isUncheckedJSSuggestion(errorLocation, suggestion, /*excludeClasses*/ false);
-                        const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                        const message = meaning === SymbolFlags.Namespace ||
+                                nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ?
+                            Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
                             : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
                             : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                         const diagnostic = createError(errorLocation, message, diagnosticName(nameArg), suggestionName);
+                        diagnostic.canonicalHead = getCanonicalDiagnostic(nameNotFoundMessage, diagnosticName(nameArg));
                         addErrorOrSuggestion(!isUncheckedJS, diagnostic);
                         if (suggestion.valueDeclaration) {
                             addRelatedInfo(
@@ -8799,6 +8803,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
+                void getPropertiesOfType(getTypeOfSymbol(symbol)); // resolve symbol's type and properties, which should trigger any required merges
                 // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                 // still skip reserializing it if we encounter the merged product later on
                 const visitedSym = getMergedSymbol(symbol);
@@ -21698,9 +21703,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
             }
+            // Used by, eg, missing property checking to replace the top-level message with a more informative one.
             if (!headMessage && maybeSuppress) {
+                // We suppress a call to `reportRelationError` or not depending on the state of the type checker, so
+                // we call `reportRelationError` here and then undo its effects to figure out what would be the diagnostic
+                // if we hadn't supress it, and save that as a canonical diagnostic for deduplication purposes.
+                const savedErrorState = captureErrorCalculationState();
+                reportRelationError(headMessage, source, target);
+                let canonical;
+                if (errorInfo && errorInfo !== savedErrorState.errorInfo) {
+                    canonical = { code: errorInfo.code, messageText: errorInfo.messageText };
+                }
+                resetErrorInfo(savedErrorState);
+                if (canonical && errorInfo) {
+                    errorInfo.canonicalHead = canonical;
+                }
+
                 lastSkippedInfo = [source, target];
-                // Used by, eg, missing property checking to replace the top-level message with a more informative one
                 return;
             }
             reportRelationError(headMessage, source, target);
@@ -48951,6 +48970,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!sym) {
                     return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker);
                 }
+                resolveExternalModuleSymbol(sym); // ensures cjs export assignment is setup
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker);
             },
             isImportRequiredByAugmentation,

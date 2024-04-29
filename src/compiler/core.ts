@@ -808,7 +808,13 @@ export function createSortedArray<T>(): SortedArray<T> {
 }
 
 /** @internal */
-export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): boolean {
+export function insertSorted<T>(
+    array: SortedArray<T>,
+    insert: T,
+    compare: Comparer<T>,
+    equalityComparer?: EqualityComparer<T>,
+    allowDuplicates?: boolean,
+): boolean {
     if (array.length === 0) {
         array.push(insert);
         return true;
@@ -816,6 +822,16 @@ export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Compa
 
     const insertIndex = binarySearch(array, insert, identity, compare);
     if (insertIndex < 0) {
+        if (equalityComparer && !allowDuplicates) {
+            const idx = ~insertIndex;
+            if (idx > 0 && equalityComparer(insert, array[idx - 1])) {
+                return false;
+            }
+            if (idx < array.length && equalityComparer(insert, array[idx])) {
+                array.splice(idx, 1, insert);
+                return true;
+            }
+        }
         array.splice(~insertIndex, 0, insert);
         return true;
     }

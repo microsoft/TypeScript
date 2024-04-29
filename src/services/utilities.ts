@@ -2508,11 +2508,6 @@ export function moduleResolutionUsesNodeModules(moduleResolution: ModuleResoluti
 }
 
 /** @internal */
-export function makeImportIfNecessary(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string, quotePreference: QuotePreference): ImportDeclaration | undefined {
-    return defaultImport || namedImports && namedImports.length ? makeImport(defaultImport, namedImports, moduleSpecifier, quotePreference) : undefined;
-}
-
-/** @internal */
 export function makeImport(defaultImport: Identifier | undefined, namedImports: readonly ImportSpecifier[] | undefined, moduleSpecifier: string | Expression, quotePreference: QuotePreference, isTypeOnly?: boolean): ImportDeclaration {
     return factory.createImportDeclaration(
         /*modifiers*/ undefined,

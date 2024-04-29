@@ -9474,6 +9474,7 @@ declare namespace ts {
     interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
+        diagnostics: readonly Diagnostic[];
     }
     interface OutputFile {
         name: string;
