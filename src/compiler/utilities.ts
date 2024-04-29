@@ -24,6 +24,7 @@ import {
     AssignmentDeclarationKind,
     AssignmentExpression,
     AssignmentOperatorToken,
+    AutomaticTypeDirectiveFile,
     BarBarEqualsToken,
     BinaryExpression,
     binarySearch,
@@ -136,6 +137,8 @@ import {
     FileExtensionInfo,
     fileExtensionIs,
     fileExtensionIsOneOf,
+    FileIncludeKind,
+    FileIncludeReason,
     FileWatcher,
     filter,
     find,
@@ -399,6 +402,7 @@ import {
     lastOrUndefined,
     LateVisibilityPaintedStatement,
     length,
+    LibFile,
     LiteralImportTypeNode,
     LiteralLikeElementAccessExpression,
     LiteralLikeNode,
@@ -466,6 +470,7 @@ import {
     PrintHandlers,
     PrivateIdentifier,
     ProjectReference,
+    ProjectReferenceFile,
     PrologueDirective,
     PropertyAccessEntityNameExpression,
     PropertyAccessExpression,
@@ -481,6 +486,7 @@ import {
     QuestionQuestionEqualsToken,
     ReadonlyCollection,
     ReadonlyTextRange,
+    ReferencedFile,
     removeTrailingDirectorySeparator,
     RequireOrImportCall,
     RequireVariableStatement,
@@ -492,6 +498,7 @@ import {
     returnFalse,
     ReturnStatement,
     returnUndefined,
+    RootFile,
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
@@ -850,6 +857,36 @@ export function typeDirectiveIsEqualTo(oldResolution: ResolvedTypeReferenceDirec
             oldResolution.resolvedTypeReferenceDirective.resolvedFileName === newResolution.resolvedTypeReferenceDirective.resolvedFileName &&
             !!oldResolution.resolvedTypeReferenceDirective.primary === !!newResolution.resolvedTypeReferenceDirective.primary &&
             oldResolution.resolvedTypeReferenceDirective.originalPath === newResolution.resolvedTypeReferenceDirective.originalPath;
+}
+
+/** @internal */
+export function fileIncludeReasonIsEqual(a: FileIncludeReason, b: FileIncludeReason): boolean {
+    if (a === b) return true;
+    if (a.kind !== b.kind) return false;
+
+    switch (a.kind) {
+        case FileIncludeKind.RootFile:
+            Debug.type<RootFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.LibFile:
+            Debug.type<LibFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.SourceFromProjectReference:
+        case FileIncludeKind.OutputFromProjectReference:
+            Debug.type<ProjectReferenceFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.Import:
+        case FileIncludeKind.ReferenceFile:
+        case FileIncludeKind.TypeReferenceDirective:
+        case FileIncludeKind.LibReferenceDirective:
+            Debug.type<ReferencedFile>(b);
+            return a.file === b.file && a.index === b.index;
+        case FileIncludeKind.AutomaticTypeDirectiveFile:
+            Debug.type<AutomaticTypeDirectiveFile>(b);
+            return a.typeReference === b.typeReference && packageIdIsEqual(a.packageId, b.packageId);
+        default:
+            return Debug.assertNever(a);
+    }
 }
 
 /** @internal */

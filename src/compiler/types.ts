@@ -4598,6 +4598,8 @@ export interface AutomaticTypeDirectiveFile {
     packageId: PackageId | undefined;
 }
 
+// Note: if updating FileIncludeReason, ensure fileIncludeReasonIsEqual is also updated.
+
 /** @internal */
 export type FileIncludeReason =
     | RootFile

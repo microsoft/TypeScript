@@ -83,6 +83,7 @@ import {
     fileExtensionIsOneOf,
     FileIncludeKind,
     FileIncludeReason,
+    fileIncludeReasonIsEqual,
     fileIncludeReasonToDiagnostics,
     FilePreprocessingDiagnostics,
     FilePreprocessingDiagnosticsKind,
@@ -3797,7 +3798,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason) {
-        if (file) fileReasons.add(file.path, reason);
+        if (file) {
+            const existing = fileReasons.get(file.path);
+            if (some(existing, r => fileIncludeReasonIsEqual(r, reason))) return;
+            fileReasons.add(file.path, reason);
+        }
     }
 
     function addFileToFilesByName(file: SourceFile | undefined, path: Path, fileName: string, redirectedPath: Path | undefined) {
