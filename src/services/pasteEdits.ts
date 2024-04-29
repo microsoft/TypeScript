@@ -1,6 +1,4 @@
-import {
-    addRange,
-} from "../compiler/core";
+import { addRange } from "../compiler/core";
 import {
     CancellationToken,
     SourceFile,
@@ -9,9 +7,7 @@ import {
     TextRange,
     UserPreferences,
 } from "../compiler/types";
-import {
-    getLineOfLocalPosition,
-} from "../compiler/utilities";
+import { getLineOfLocalPosition } from "../compiler/utilities";
 import {
     codefix,
     Debug,
@@ -82,11 +78,11 @@ function pasteEdits(
                 addRange(statements, copiedFrom.file.statements, getLineOfLocalPosition(copiedFrom.file, copy.pos), getLineOfLocalPosition(copiedFrom.file, copy.end) + 1);
             });
             const usage = getUsageInfo(copiedFrom.file, statements, originalProgram!.getTypeChecker(), getExistingLocals(updatedFile, statements, originalProgram!.getTypeChecker()));
-            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
-            //getTargetFileImportsAndAddExportInOldFile(copiedFrom.file, targetFile.fileName, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, changes, originalProgram!.getTypeChecker(), updatedProgram!, host, !fileShouldUseJavaScriptRequire(targetFile.fileName, updatedProgram!, host, !!copiedFrom.file.commonJsModuleIndicator), getQuotePreference(targetFile, preferences), importAdder);
-            const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram!, host, !!copiedFrom.file.commonJsModuleIndicator);
+            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
+            Debug.assertIsDefined(originalProgram);
+            const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
-            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram!.getTypeChecker(), updatedProgram!, importAdder);
+            addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram.getTypeChecker(), updatedProgram, importAdder);
             importAdder.writeFixes(changes, getQuotePreference(copiedFrom.file, preferences));
         }
         else {
@@ -98,7 +94,7 @@ function pasteEdits(
                 preferences,
                 formatContext,
             };
-            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram!, preferences, host);
+            const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
             forEachChild(updatedFile, function cb(node) {
                 if (isIdentifier(node)) {
                     if (!originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {

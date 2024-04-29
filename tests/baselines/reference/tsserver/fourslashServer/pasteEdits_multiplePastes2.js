@@ -40,8 +40,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /target.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /target.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -273,8 +272,6 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
 Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache hit
 Info seq  [hh:mm:ss:mss] response:
     {

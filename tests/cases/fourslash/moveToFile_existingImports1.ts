@@ -2,32 +2,22 @@
 
 // @filename: /common.ts
 ////export const x = 1;
-////export const y = 2;
 
 // @filename: /a.ts
-////export const t = 1;
-////export const z = 2;
-////const x = 3;
-////export const q = 0;
-////[|export const bar = z + x + q;|]
+////import { x } from "./common";
+////[|export const bar = x;|]
 
 // @filename: /b.ts
-////import { t, z } from "./a";
-////import { y } from "./common";
-////export const foo = t;
+////import { x } from "./common";
+////export const foo = x;
 
 verify.moveToFile({
     newFileContents: {
-        "/a.ts": `export const t = 1;
-export const z = 2;
-export const x = 3;
-export const q = 0;
-`,
+        "/a.ts": "",
         "/b.ts":
-`import { q, t, x, z } from "./a";
-import { y } from "./common";
-export const foo = t;
-export const bar = z + x + q;
+`import { x } from "./common";
+export const foo = x;
+export const bar = x;
 `,
     },
     interactiveRefactorArguments: { targetFile: "/b.ts" },

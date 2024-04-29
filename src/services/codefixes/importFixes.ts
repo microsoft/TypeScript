@@ -894,7 +894,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
 }
 
 function isFutureSymbolExportInfoArray(info: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[]): info is readonly FutureSymbolExportInfo[] {
-    return info[0].symbol === undefined;
+    return info[0].moduleSymbol === undefined;
 }
 
 function getImportFixes(
@@ -1156,7 +1156,6 @@ function getNewImportFixes(
     host: LanguageServiceHost,
     preferences: UserPreferences,
     fromCacheOnly?: boolean,
-    targetFileImportFrom?: string[],
 ): { computedWithoutCacheCount: number; fixes: readonly (FixAddNewImport | FixAddJsdocTypeImport)[]; } {
     const isJs = hasJSFileExtension(sourceFile.fileName);
     const compilerOptions = program.getCompilerOptions();
@@ -1231,10 +1230,9 @@ function getFixesForAddImport(
     host: LanguageServiceHost,
     preferences: UserPreferences,
     fromCacheOnly?: boolean,
-    targetFileImportFrom?: string[],
 ): { computedWithoutCacheCount?: number; fixes: readonly (FixAddNewImport | FixAddJsdocTypeImport)[]; } {
     const existingDeclaration = firstDefined(existingImports, info => newImportInfoFromExistingSpecifier(info, isValidTypeOnlyUseSite, useRequire, program.getTypeChecker(), program.getCompilerOptions()));
-    return existingDeclaration ? { fixes: [existingDeclaration] } : getNewImportFixes(program, sourceFile, usagePosition, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences, fromCacheOnly, targetFileImportFrom);
+    return existingDeclaration ? { fixes: [existingDeclaration] } : getNewImportFixes(program, sourceFile, usagePosition, isValidTypeOnlyUseSite, useRequire, exportInfos, host, preferences, fromCacheOnly);
 }
 
 function newImportInfoFromExistingSpecifier(

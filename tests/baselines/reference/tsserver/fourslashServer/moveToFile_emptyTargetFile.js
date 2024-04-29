@@ -378,8 +378,6 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "getEditsForRefactor"
     }
-Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
-Info seq  [hh:mm:ss:mss] getExportInfoMap: done in * ms
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
