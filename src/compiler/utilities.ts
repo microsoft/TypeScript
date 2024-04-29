@@ -41,6 +41,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     type CanHaveModuleSpecifier,
+    CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -2178,6 +2179,7 @@ export function createFileDiagnosticFromMessageChain(file: SourceFile, start: nu
         category: messageChain.category,
         messageText: messageChain.next ? messageChain : messageChain.messageText,
         relatedInformation,
+        canonicalHead: messageChain.canonicalHead,
     };
 }
 
@@ -2213,6 +2215,14 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
         code: message.code,
         category: message.category,
         messageText: message.message,
+    };
+}
+
+/** @internal */
+export function getCanonicalDiagnostic(message: DiagnosticMessage, ...args: string[]): CanonicalDiagnostic {
+    return {
+        code: message.code,
+        messageText: formatMessage(message, ...args),
     };
 }
 
@@ -8540,11 +8550,13 @@ export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
 
 /** @internal */
 export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
     return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
         compareValues(d1.start, d2.start) ||
         compareValues(d1.length, d2.length) ||
-        compareValues(d1.code, d2.code) ||
-        compareMessageText(d1.messageText, d2.messageText) ||
+        compareValues(code1, code2) ||
+        compareMessageText(d1, d2) ||
         Comparison.EqualTo;
 }
 
@@ -8566,25 +8578,38 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
 // An diagnostic message with more elaboration should be considered *less than* a diagnostic message
 // with less elaboration that is otherwise similar.
 function compareMessageText(
-    t1: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
-    t2: string | Pick<DiagnosticMessageChain, "messageText" | "next">,
+    d1: Diagnostic,
+    d2: Diagnostic,
 ): Comparison {
-    if (typeof t1 === "string" && typeof t2 === "string") {
-        return compareStringsCaseSensitive(t1, t2);
+    let headMsg1 = getDiagnosticMessage(d1);
+    let headMsg2 = getDiagnosticMessage(d2);
+    if (typeof headMsg1 !== "string") {
+        headMsg1 = headMsg1.messageText;
     }
+    if (typeof headMsg2 !== "string") {
+        headMsg2 = headMsg2.messageText;
+    }
+    const chain1 = typeof d1.messageText !== "string" ? d1.messageText.next : undefined;
+    const chain2 = typeof d2.messageText !== "string" ? d2.messageText.next : undefined;
 
-    if (typeof t1 === "string") {
-        t1 = { messageText: t1 };
-    }
-    if (typeof t2 === "string") {
-        t2 = { messageText: t2 };
-    }
-    const res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+    let res = compareStringsCaseSensitive(headMsg1, headMsg2);
     if (res) {
         return res;
     }
 
-    return compareMessageChain(t1.next, t2.next);
+    res = compareMessageChain(chain1, chain2);
+    if (res) {
+        return res;
+    }
+
+    if (d1.canonicalHead && !d2.canonicalHead) {
+        return Comparison.LessThan;
+    }
+    if (d2.canonicalHead && !d1.canonicalHead) {
+        return Comparison.GreaterThan;
+    }
+
+    return Comparison.EqualTo;
 }
 
 // First compare by size of the message chain,
@@ -8659,11 +8684,23 @@ function compareMessageChainContent(
 
 /** @internal */
 export function diagnosticsEqualityComparer(d1: Diagnostic, d2: Diagnostic): boolean {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
+    const msg1 = getDiagnosticMessage(d1);
+    const msg2 = getDiagnosticMessage(d2);
     return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) === Comparison.EqualTo &&
         compareValues(d1.start, d2.start) === Comparison.EqualTo &&
         compareValues(d1.length, d2.length) === Comparison.EqualTo &&
-        compareValues(d1.code, d2.code) === Comparison.EqualTo &&
-        messageTextEqualityComparer(d1.messageText, d2.messageText);
+        compareValues(code1, code2) === Comparison.EqualTo &&
+        messageTextEqualityComparer(msg1, msg2);
+}
+
+function getDiagnosticCode(d: Diagnostic): number {
+    return d.canonicalHead?.code || d.code;
+}
+
+function getDiagnosticMessage(d: Diagnostic): string | DiagnosticMessageChain {
+    return d.canonicalHead?.messageText || d.messageText;
 }
 
 function messageTextEqualityComparer(m1: string | DiagnosticMessageChain, m2: string | DiagnosticMessageChain): boolean {
