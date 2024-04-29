@@ -144,12 +144,12 @@ const query = Object.entries(obj).map(
 >                        : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.entries(obj) : [string, string][]
 >                    : ^^^^^^^^^^^^^^^^^^
->Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; <T_1>(o: { [s: number]: T_1; }): [string, T_1][]; <T_2>(o: { [s: string | number]: T_2; }): [string, T_2][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                   ^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>entries : { <T>(o: { [s: string]: T; }): [string, T][]; <T_1>(o: { [s: number]: T_1; }): [string, T_1][]; <T_2>(o: { [s: string | number]: T_2; }): [string, T_2][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                   ^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >obj : { param2?: string | undefined; param1: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]

@@ -229,9 +229,9 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
     for (const [key, val] of Object.entries(obj)) {
 >key : Symbol(key, Decl(mappedTypeConstraints2.ts, 64, 16))
 >val : Symbol(val, Decl(mappedTypeConstraints2.ts, 64, 20))
->Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
 >obj : Symbol(obj, Decl(mappedTypeConstraints2.ts, 63, 36))
 
         const boundsForKey = bounds[key as keyof NumericBoundsOf<T>];

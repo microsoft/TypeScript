@@ -223,12 +223,12 @@ function validate<T extends object>(obj: T, bounds: NumericBoundsOf<T>) {
 >    : ^^^
 >Object.entries(obj) : [string, any][]
 >                    : ^^^^^^^^^^^^^^^
->Object.entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->               : ^^^   ^^ ^^                                      ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>Object.entries : { <T_1>(o: { [s: string]: T_1; }): [string, T_1][]; <T_2>(o: { [s: number]: T_2; }): [string, T_2][]; <T_3>(o: { [s: string | number]: T_3; }): [string, T_3][]; (o: {}): [string, any][]; }
+>               : ^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->entries : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): [string, T_1][]; (o: {}): [string, any][]; }
->        : ^^^   ^^ ^^                                      ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>entries : { <T_1>(o: { [s: string]: T_1; }): [string, T_1][]; <T_2>(o: { [s: number]: T_2; }): [string, T_2][]; <T_3>(o: { [s: string | number]: T_3; }): [string, T_3][]; (o: {}): [string, any][]; }
+>        : ^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >obj : T
 >    : ^
 
