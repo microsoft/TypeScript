@@ -28,55 +28,55 @@ ruleTester.run("bounds-check", rule, {
         },
         {
             filename: "scanner.ts",
-            code: "pos < end && charCodeUnchecked(pos)"
+            code: "pos < end && charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "!(pos >= end) && charCodeUnchecked(pos)"
+            code: "!(pos >= end) && charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "pos + 1 < end && charCodeUnchecked(pos)"
+            code: "pos + 1 < end && charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "pos >= end || charCodeUnchecked(pos)"
+            code: "pos >= end || charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "pos < end ? charCodeUnchecked(pos) : null"
+            code: "pos < end ? charCodeUnchecked(pos) : null",
         },
         {
             filename: "scanner.ts",
-            code: "pos >= end ? null : charCodeUnchecked(pos)"
+            code: "pos >= end ? null : charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "if (pos < end) charCodeUnchecked(pos)"
+            code: "if (pos < end) charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "if (pos < end) {charCodeUnchecked(pos)}"
+            code: "if (pos < end) {charCodeUnchecked(pos)}",
         },
         {
             filename: "scanner.ts",
-            code: "if (pos >= end); else charCodeUnchecked(pos)"
+            code: "if (pos >= end); else charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "if (pos >= end); else {charCodeUnchecked(pos)}"
+            code: "if (pos >= end); else {charCodeUnchecked(pos)}",
         },
         {
             filename: "scanner.ts",
-            code: "while (pos < end) charCodeUnchecked(pos)"
+            code: "while (pos < end) charCodeUnchecked(pos)",
         },
         {
             filename: "scanner.ts",
-            code: "while (pos < end) {charCodeUnchecked(pos)}"
+            code: "while (pos < end) {charCodeUnchecked(pos)}",
         },
         {
             filename: "scanner.ts",
-            code: "return pos >= 0 && pos < end ? codePointUnchecked(pos) : CharacterCodes.EOF;"
+            code: "return pos >= 0 && pos < end ? codePointUnchecked(pos) : CharacterCodes.EOF;",
         },
         {
             filename: "scanner.ts",
@@ -86,7 +86,7 @@ ruleTester.run("bounds-check", rule, {
                 codePointUnchecked(pos + 1) === CharacterCodes.u &&
                 codePointUnchecked(pos + 2) === CharacterCodes.openBrace
             ) {}
-            `
+            `,
         },
         {
             filename: "scanner.ts",
@@ -94,12 +94,12 @@ ruleTester.run("bounds-check", rule, {
             while (pos < end) {
                 let ch = codePointUnchecked(pos);
             }
-            `
+            `,
         },
         {
             filename: "scanner.ts",
             code: `
-            while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos)) && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {}`
+            while (pos < end && isWhiteSpaceSingleLine(charCodeUnchecked(pos)) && isWhiteSpaceSingleLine(charCodeUnchecked(pos))) {}`,
         },
     ],
 

@@ -85,7 +85,7 @@ function hasDefiniteBoundsCheck(node) {
         }
         case AST_NODE_TYPES.BinaryExpression: {
             switch (arg.operator) {
-                case "+":{
+                case "+": {
                     const { left, right } = arg;
                     if (
                         left.type === AST_NODE_TYPES.Identifier &&
@@ -241,7 +241,7 @@ function hasDefiniteBoundsCheck(node) {
             }
             case AST_NODE_TYPES.SequenceExpression: {
                 const { expressions } = n.parent;
-                const i = expressions.indexOf(/** @type {TSESTree.Expression} */(n));
+                const i = expressions.indexOf(/** @type {TSESTree.Expression} */ (n));
                 if (expressions.slice(0, i).some(n => containsSideEffect(n, index))) {
                     return false;
                 }
@@ -249,7 +249,7 @@ function hasDefiniteBoundsCheck(node) {
             }
             case AST_NODE_TYPES.CallExpression: {
                 const args = n.parent.arguments;
-                const i = args.indexOf(/** @type {*} */(n));
+                const i = args.indexOf(/** @type {*} */ (n));
                 if (args.slice(0, i).some(n => containsSideEffect(n, index))) {
                     return false;
                 }
@@ -318,7 +318,7 @@ function hasDefiniteBoundsCheck(node) {
             case AST_NODE_TYPES.VariableDeclarator: {
                 const { id, init } = n.parent;
                 switch (n) {
-                    case /** @type {TSESTree.Node} */(id):
+                    case /** @type {TSESTree.Node} */ (id):
                         break;
                     case init:
                         if (containsSideEffect(n, index)) {
@@ -329,7 +329,7 @@ function hasDefiniteBoundsCheck(node) {
                 break;
             }
             case AST_NODE_TYPES.VariableDeclaration: {
-                const declarations = /** @type {readonly TSESTree.Node[]} */(n.parent.declarations);
+                const declarations = /** @type {readonly TSESTree.Node[]} */ (n.parent.declarations);
                 const i = declarations.indexOf(n);
                 if (declarations.slice(0, i).some(n => containsSideEffect(n, index))) {
                     return false;
@@ -581,18 +581,23 @@ const op = {
      * @param {number} a
      * @param {number} b
      */
-    EQ(a, b) { return a === b; },
+    EQ(a, b) {
+        return a === b;
+    },
 
     /**
      * @param {number} a
      * @param {number} b
      */
-    LE(a, b) { return a <= b; },
+    LE(a, b) {
+        return a <= b;
+    },
 
     /**
      * @param {number} a
      * @param {number} b
      */
-    GE(a, b) { return a >= b; },
+    GE(a, b) {
+        return a >= b;
+    },
 };
-
