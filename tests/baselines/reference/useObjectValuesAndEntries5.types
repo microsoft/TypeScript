@@ -1,0 +1,89 @@
+//// [tests/cases/conformance/es2017/useObjectValuesAndEntries5.ts] ////
+
+=== useObjectValuesAndEntries5.ts ===
+{
+enum X {A, B}
+>X : X
+>  : ^
+>A : X.A
+>  : ^^^
+>B : X.B
+>  : ^^^
+
+const xsV = Object.values(X);
+>xsV : (string | X)[]
+>    : ^^^^^^^^^^^^^^
+>Object.values(X) : (string | X)[]
+>                 : ^^^^^^^^^^^^^^
+>Object.values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>              : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>       : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>X : typeof X
+>  : ^^^^^^^^
+
+const xsE = Object.values(X);
+>xsE : (string | X)[]
+>    : ^^^^^^^^^^^^^^
+>Object.values(X) : (string | X)[]
+>                 : ^^^^^^^^^^^^^^
+>Object.values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>              : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>       : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>X : typeof X
+>  : ^^^^^^^^
+
+interface I {
+  [x: number]: string | null;
+>x : number
+>  : ^^^^^^
+}
+
+const o: I = { 5: 'test', 8: null };
+>o : I
+>  : ^
+>{ 5: 'test', 8: null } : { 5: string; 8: null; }
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>5 : string
+>  : ^^^^^^
+>'test' : "test"
+>       : ^^^^^^
+>8 : null
+>  : ^^^^
+
+const v = Object.values(o);
+>v : string[]
+>  : ^^^^^^^^
+>Object.values(o) : string[]
+>                 : ^^^^^^^^
+>Object.values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>              : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
+>       : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
+>o : I
+>  : ^
+
+const e = Object.entries(o);
+>e : [string, string][]
+>  : ^^^^^^^^^^^^^^^^^^
+>Object.entries(o) : [string, string][]
+>                  : ^^^^^^^^^^^^^^^^^^
+>Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; <T_1>(o: { [s: number]: T_1; }): [string, T_1][]; <T_2>(o: { [s: string | number]: T_2; }): [string, T_2][]; (o: {}): [string, any][]; }
+>               : ^^^ ^^ ^^                   ^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>Object : ObjectConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>entries : { <T>(o: { [s: string]: T; }): [string, T][]; <T_1>(o: { [s: number]: T_1; }): [string, T_1][]; <T_2>(o: { [s: string | number]: T_2; }): [string, T_2][]; (o: {}): [string, any][]; }
+>        : ^^^ ^^ ^^                   ^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
+>o : I
+>  : ^
+
+
+}
+

@@ -3,7 +3,9 @@ interface ObjectConstructor {
      * Returns an array of values of the enumerable properties of an object
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    values<T>(o: { [s: string]: T; } | ArrayLike<T>): T[];
+    values<T>(o: { [s: string]: T; } ): T[];
+    values<T>(o: { [s: number]: T; } ): T[];
+    values<T>(o: { [s: string|number]: T; } ): T[];
 
     /**
      * Returns an array of values of the enumerable properties of an object
@@ -15,7 +17,9 @@ interface ObjectConstructor {
      * Returns an array of key/values of the enumerable properties of an object
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    entries<T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][];
+    entries<T>(o: { [s: string]: T; } ): [string, T][];
+    entries<T>(o: { [s: number]: T; } ): [string, T][];
+    entries<T>(o: { [s: string|number]: T; } ): [string, T][];
 
     /**
      * Returns an array of key/values of the enumerable properties of an object
