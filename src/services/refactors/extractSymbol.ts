@@ -91,7 +91,6 @@ import {
     isModuleBlock,
     isParenthesizedTypeNode,
     isPartOfTypeNode,
-    isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isQualifiedName,

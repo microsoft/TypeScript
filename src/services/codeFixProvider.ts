@@ -18,6 +18,7 @@ import {
     DiagnosticWithLocation,
     FileTextChanges,
     flatMap,
+    getEmitDeclarations,
     isString,
     map,
     TextChange,
@@ -129,7 +130,7 @@ function getDiagnostics({ program, sourceFile, cancellationToken }: CodeFixConte
         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
         ...computeSuggestionDiagnostics(sourceFile, program, cancellationToken),
     ];
-    if (program.getCompilerOptions().isolatedDeclarations) {
+    if (getEmitDeclarations(program.getCompilerOptions())) {
         diagnostics.push(
             ...program.getDeclarationDiagnostics(sourceFile, cancellationToken),
         );
