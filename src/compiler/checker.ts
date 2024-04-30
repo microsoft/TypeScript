@@ -30879,7 +30879,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // That would evaluate mapped types with array or tuple type constraints too eagerly
                 // and thus it would prevent `getTypeOfPropertyOfContextualType` from obtaining per-position contextual type for elements of array literal expressions.
                 // Apparent type of other mapped types is already the mapped type itself so we can just avoid calling `getApparentType` here for all mapped types.
-                t => t.flags & TypeFlags.Nullable ? neverType : getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
+                t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
                 /*noReductions*/ true,
             );
             return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
