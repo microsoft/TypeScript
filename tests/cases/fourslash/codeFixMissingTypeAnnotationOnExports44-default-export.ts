@@ -11,6 +11,6 @@ verify.codeFix({
     description: "Extract default export to variable",
     index: 0,
     newFileContent:
-`const __default: number = 1 + 1;
-export default __default;`
+`const _default_1: number = 1 + 1;
+export default _default_1;`
 });

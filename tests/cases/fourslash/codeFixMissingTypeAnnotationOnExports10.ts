@@ -14,9 +14,9 @@ verify.codeFix({
 `function foo() {
     return { x: 1, y: 1 };
 }
-const __default: {
+const _default_1: {
     x: number;
     y: number;
 } = foo();
-export default __default;`,
+export default _default_1;`,
 });

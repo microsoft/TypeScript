@@ -163,13 +163,13 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     | NodeBuilderFlags.WriteComputedProps;
 
 enum TypePrintMode {
-    // Prints it's fully spelled out type
-    FULL,
+    // Prints its fully spelled out type
+    Full,
     // Prints a relative type i.e. typeof X
-    RELATIVE,
+    Relative,
     // Prints a widened type in case the expression is known to
     // e.g. export const a = Math.random() ? "0" : "1"; the type will be `string` in d.ts files
-    WIDENED,
+    Widened,
 }
 
 registerCodeFix({
@@ -178,20 +178,20 @@ registerCodeFix({
     getCodeActions(context) {
         const fixes: CodeFixAction[] = [];
 
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.FULL, f => f.addTypeAnnotation(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.RELATIVE, f => f.addTypeAnnotation(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.WIDENED, f => f.addTypeAnnotation(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Full, f => f.addTypeAnnotation(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Relative, f => f.addTypeAnnotation(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Widened, f => f.addTypeAnnotation(context.span));
 
-        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.FULL, f => f.addInlineAssertion(context.span));
-        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.RELATIVE, f => f.addInlineAssertion(context.span));
-        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.WIDENED, f => f.addInlineAssertion(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Full, f => f.addInlineAssertion(context.span));
+        addCodeAction(addInlineTypeAssertion, fixes, context, TypePrintMode.Relative, f => f.addInlineAssertion(context.span));
+        addCodeAction(addAnnotationFix, fixes, context, TypePrintMode.Widened, f => f.addInlineAssertion(context.span));
 
-        addCodeAction(extractExpression, fixes, context, TypePrintMode.FULL, f => f.extractAsVariable(context.span));
+        addCodeAction(extractExpression, fixes, context, TypePrintMode.Full, f => f.extractAsVariable(context.span));
 
         return fixes;
     },
     getAllCodeActions: context => {
-        const changes = withContext(context, TypePrintMode.FULL, f => {
+        const changes = withContext(context, TypePrintMode.Full, f => {
             eachDiagnostic(context, errorCodes, diag => {
                 f.addTypeAnnotation(diag);
             });
@@ -282,7 +282,7 @@ function withContext<T>(
         const newProperties = [];
         for (const symbol of elements) {
             // non-valid names will not end up in declaration emit
-            if (!isIdentifierText(symbol.name, program.getCompilerOptions().target)) continue;
+            if (!isIdentifierText(symbol.name, getEmitScriptTarget(program.getCompilerOptions()))) continue;
             // already has an existing declaration
             if (symbol.valueDeclaration && isVariableDeclaration(symbol.valueDeclaration)) continue;
 
@@ -419,7 +419,7 @@ function withContext<T>(
         if ((isVariableDeclaration(node) || isPropertyDeclaration(node)) && !isBindingPattern(node.name)) {
             addPropertyName(node.name);
         }
-        return nameParts.filter(s => isIdentifierText(s, program.getCompilerOptions().target)).reverse().join("_");
+        return nameParts.filter(s => isIdentifierText(s, getEmitScriptTarget(program.getCompilerOptions()))).reverse().join("_");
 
         function addPropertyName(name: PropertyName) {
             if (isIdentifier(name)) {
@@ -623,12 +623,13 @@ function withContext<T>(
 
         const { typeNode } = inferType(defaultExport.expression);
         if (!typeNode) return undefined;
+        const defaultIdentifier = factory.createUniqueName("_default");
         changeTracker.replaceNodeWithNodes(sourceFile, defaultExport, [
             factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
                     [factory.createVariableDeclaration(
-                        "__default",
+                        defaultIdentifier,
                         /*exclamationToken*/ undefined,
                         typeNode,
                         defaultExport.expression,
@@ -636,7 +637,7 @@ function withContext<T>(
                     NodeFlags.Const,
                 ),
             ),
-            factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, factory.createIdentifier("__default")),
+            factory.updateExportAssignment(defaultExport, defaultExport?.modifiers, defaultIdentifier),
         ]);
         return [
             Diagnostics.Extract_default_export_to_variable,
@@ -701,17 +702,17 @@ function withContext<T>(
     }
 
     const enum ExpressionType {
-        TEXT = 0,
-        COMPUTED = 1,
-        ARRAY_ACCESS = 2,
-        IDENTIFIER = 3,
+        Text = 0,
+        Computed = 1,
+        ArrayAccess = 2,
+        Identifier = 3,
     }
 
     type SubExpression =
-        | { kind: ExpressionType.TEXT; text: string; }
-        | { kind: ExpressionType.COMPUTED; computed: Expression; }
-        | { kind: ExpressionType.ARRAY_ACCESS; arrayIndex: number; }
-        | { kind: ExpressionType.IDENTIFIER; identifier: Identifier; };
+        | { kind: ExpressionType.Text; text: string; }
+        | { kind: ExpressionType.Computed; computed: Expression; }
+        | { kind: ExpressionType.ArrayAccess; arrayIndex: number; }
+        | { kind: ExpressionType.Identifier; identifier: Identifier; };
 
     function transformDestructuringPatterns(bindingPattern: BindingPattern): DiagnosticOrDiagnosticAndArguments | undefined {
         const enclosingVariableDeclaration = bindingPattern.parent as VariableDeclaration;
@@ -723,7 +724,7 @@ function withContext<T>(
         if (!isIdentifier(enclosingVariableDeclaration.initializer)) {
             // For complex expressions we want to create a temporary variable
             const tempHolderForReturn = factory.createUniqueName("dest", GeneratedIdentifierFlags.Optimistic);
-            baseExpr = { expression: { kind: ExpressionType.IDENTIFIER, identifier: tempHolderForReturn } };
+            baseExpr = { expression: { kind: ExpressionType.Identifier, identifier: tempHolderForReturn } };
             newNodes.push(factory.createVariableStatement(
                 /*modifiers*/ undefined,
                 factory.createVariableDeclarationList(
@@ -739,7 +740,7 @@ function withContext<T>(
         }
         else {
             // If we are destructuring an identifier, just use that. No need for temp var.
-            baseExpr = { expression: { kind: ExpressionType.IDENTIFIER, identifier: enclosingVariableDeclaration.initializer } };
+            baseExpr = { expression: { kind: ExpressionType.Identifier, identifier: enclosingVariableDeclaration.initializer } };
         }
 
         const bindingElements: ExpressionReverseChain[] = [];
@@ -853,7 +854,7 @@ function withContext<T>(
             bindingElements.push({
                 element,
                 parent,
-                expression: { kind: ExpressionType.ARRAY_ACCESS, arrayIndex: i },
+                expression: { kind: ExpressionType.ArrayAccess, arrayIndex: i },
             });
         }
     }
@@ -866,7 +867,7 @@ function withContext<T>(
                     bindingElements.push({
                         element: bindingElement,
                         parent,
-                        expression: { kind: ExpressionType.COMPUTED, computed: bindingElement.propertyName.expression },
+                        expression: { kind: ExpressionType.Computed, computed: bindingElement.propertyName.expression },
                     });
                     continue;
                 }
@@ -880,7 +881,7 @@ function withContext<T>(
             bindingElements.push({
                 element: bindingElement,
                 parent,
-                expression: { kind: ExpressionType.TEXT, text: name },
+                expression: { kind: ExpressionType.Text, text: name },
             });
         }
     }
@@ -894,20 +895,20 @@ function withContext<T>(
         let chainedExpression: Expression = (reverseTraverse[reverseTraverse.length - 1].expression as { identifier: Identifier; }).identifier;
         for (let i = reverseTraverse.length - 2; i >= 0; --i) {
             const nextSubExpr = reverseTraverse[i].expression;
-            if (nextSubExpr.kind === ExpressionType.TEXT) {
+            if (nextSubExpr.kind === ExpressionType.Text) {
                 chainedExpression = factory.createPropertyAccessChain(
                     chainedExpression,
                     /*questionDotToken*/ undefined,
                     factory.createIdentifier(nextSubExpr.text),
                 );
             }
-            else if (nextSubExpr.kind === ExpressionType.COMPUTED) {
+            else if (nextSubExpr.kind === ExpressionType.Computed) {
                 chainedExpression = factory.createElementAccessExpression(
                     chainedExpression,
                     expressionToVar.get(nextSubExpr.computed)!,
                 );
             }
-            else if (nextSubExpr.kind === ExpressionType.ARRAY_ACCESS) {
+            else if (nextSubExpr.kind === ExpressionType.ArrayAccess) {
                 chainedExpression = factory.createElementAccessExpression(
                     chainedExpression,
                     nextSubExpr.arrayIndex,
@@ -922,7 +923,7 @@ function withContext<T>(
     }
 
     function inferType(node: Node, variableType?: Type | undefined): InferenceResult {
-        if (typePrintMode === TypePrintMode.RELATIVE) {
+        if (typePrintMode === TypePrintMode.Relative) {
             return relativeType(node);
         }
 
@@ -933,7 +934,7 @@ function withContext<T>(
             return emptyInferenceResult;
         }
 
-        if (typePrintMode === TypePrintMode.WIDENED) {
+        if (typePrintMode === TypePrintMode.Widened) {
             if (variableType) {
                 type = variableType;
             }
