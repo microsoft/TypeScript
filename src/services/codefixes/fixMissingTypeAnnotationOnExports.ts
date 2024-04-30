@@ -109,6 +109,7 @@ import {
     registerCodeFix,
     typeToAutoImportableTypeNode,
 } from "../_namespaces/ts.codefix";
+import { getIdentifierForNode } from "../refactors/helpers";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 
@@ -407,66 +408,6 @@ function withContext<T>(
         return [Diagnostics.Add_satisfies_and_an_inline_type_assertion_with_0, typeToStringForDiag(typeNode)];
     }
 
-    function suggestVariableName(node: Node) {
-        const nameParts: string[] = [];
-        while (!(isVariableDeclaration(node) || isPropertyDeclaration(node) || isStatement(node))) {
-            if (isPropertyAssignment(node)) {
-                const propName = node.name;
-                addPropertyName(propName);
-            }
-            node = node.parent;
-        }
-        if ((isVariableDeclaration(node) || isPropertyDeclaration(node)) && !isBindingPattern(node.name)) {
-            addPropertyName(node.name);
-        }
-        return nameParts.filter(s => isIdentifierText(s, getEmitScriptTarget(program.getCompilerOptions()))).reverse().join("_");
-
-        function addPropertyName(name: PropertyName) {
-            if (isIdentifier(name)) {
-                nameParts.push(name.text);
-            }
-            if (isStringLiteral(name)) {
-                nameParts.push(name.text);
-            }
-            if (isNumericLiteral(name)) {
-                nameParts.push(name.text);
-            }
-            if (isComputedPropertyName(name)) {
-                let computedName = name.expression;
-
-                if (isStringLiteral(computedName)) {
-                    nameParts.push(computedName.text);
-                }
-                if (isNumericLiteral(computedName)) {
-                    nameParts.push(computedName.text);
-                }
-                if (
-                    isPrefixUnaryExpression(computedName)
-                    && isNumericLiteral(computedName.operand)
-                ) {
-                    if (computedName.operator === SyntaxKind.MinusToken) {
-                        nameParts.push("M" + computedName.operand.text);
-                    }
-                    else if (computedName.operator === SyntaxKind.PlusToken) {
-                        nameParts.push("M" + computedName.operand.text);
-                    }
-                }
-
-                // We only support dotted identifiers as property keys
-                while (true) {
-                    if (isIdentifier(computedName)) {
-                        nameParts.push(computedName.text);
-                        break;
-                    }
-                    else if (isPropertyAccessExpression(computedName)) {
-                        nameParts.push(computedName.name.text);
-                        computedName = computedName.expression;
-                    }
-                }
-            }
-        }
-    }
-
     function extractAsVariable(span: TextSpan): DiagnosticOrDiagnosticAndArguments | undefined {
         const nodeWithDiag = getTokenAtPosition(sourceFile, span.start);
         const targetNode = findBestFittingNode(nodeWithDiag, span) as Expression;
@@ -493,7 +434,7 @@ function withContext<T>(
             if (parentPropertyAssignment === targetNode.parent && isEntityNameExpression(targetNode)) return;
 
             const tempName = factory.createUniqueName(
-                suggestVariableName(targetNode),
+                getIdentifierForNode(targetNode, sourceFile, typeChecker, sourceFile),
                 GeneratedIdentifierFlags.Optimistic,
             );
             let replacementTarget = targetNode;
@@ -917,6 +858,7 @@ function withContext<T>(
         }
         return chainedExpression;
     }
+
     interface InferenceResult {
         typeNode?: TypeNode | undefined;
         mutatedTarget: boolean;

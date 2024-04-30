@@ -24,7 +24,7 @@ verify.codeFixAvailable([
     "description": "Add satisfies and an inline type assertion with 'Person'"
   },
   {
-    "description": "Extract to variable and replace with 'person_1 typeof person_1'"
+    "description": "Extract to variable and replace with 'newLocal typeof newLocal'"
   }
 ])
 

@@ -13,16 +13,16 @@
 ////}
 
 verify.codeFix({
-    description: `Extract to variable and replace with 'o_p typeof o_p'`,
+    description: `Extract to variable and replace with 'newLocal typeof newLocal'`,
     applyChanges: true,
     index: 2,
     newFileContent:
 `let c: string[] = [];
-const o_p = Math.random() ? [] : [
+const newLocal = Math.random() ? [] : [
     ...c
 ];
 export let o = {
-    p: o_p as typeof o_p
+    p: newLocal as typeof newLocal
 }`
 });
 
@@ -33,10 +33,10 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `let c: string[] = [];
-const o_p: string[] = Math.random() ? [] : [
+const newLocal: string[] = Math.random() ? [] : [
     ...c
 ];
 export let o = {
-    p: o_p as typeof o_p
+    p: newLocal as typeof newLocal
 }`
 });

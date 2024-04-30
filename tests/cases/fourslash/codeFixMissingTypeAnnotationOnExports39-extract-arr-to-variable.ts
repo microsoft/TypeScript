@@ -26,16 +26,16 @@ export let o = {
 });
 
 verify.codeFix({
-    description: `Extract to variable and replace with 'o_p typeof o_p'`,
+    description: `Extract to variable and replace with 'newLocal typeof newLocal'`,
     applyChanges: true,
     index: 1,
     newFileContent:
 `let c: string[] = [];
-const o_p = [
+const newLocal = [
     ...c
 ] as const;
 export let o = {
-    p: o_p as typeof o_p
+    p: newLocal as typeof newLocal
 }`
 });
 
@@ -45,10 +45,10 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `let c: string[] = [];
-const o_p: readonly string[] = [
+const newLocal: readonly string[] = [
     ...c
 ] as const;
 export let o = {
-    p: o_p as typeof o_p
+    p: newLocal as typeof newLocal
 }`
 });
