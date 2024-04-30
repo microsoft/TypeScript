@@ -30801,7 +30801,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
-        return getMatchingUnionConstituentForObjectLiteral(contextualType, node) || discriminateTypeByDiscriminableItems(
+        const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
+        return getCachedType(key) ?? setCachedType(key, getMatchingUnionConstituentForObjectLiteral(contextualType, node) ?? discriminateTypeByDiscriminableItems(
             contextualType,
             concatenate(
                 map(
@@ -30825,12 +30826,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ),
             ),
             isTypeAssignableTo,
-        );
+        ));
     }
 
     function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
+        const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
+        const cached = getCachedType(key);
+        if (cached) return cached;
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
-        return discriminateTypeByDiscriminableItems(
+        return setCachedType(key, discriminateTypeByDiscriminableItems(
             contextualType,
             concatenate(
                 map(
@@ -30852,7 +30856,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 ),
             ),
             isTypeAssignableTo,
-        );
+        ));
     }
 
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
