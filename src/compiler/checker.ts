@@ -29379,7 +29379,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (isInternalModuleImportEqualsDeclaration(node)) {
                 if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
                     // import foo = <symbol>
-                    checkExpressionCached(node.moduleReference as Expression);
+                    const left = getFirstIdentifier(node.moduleReference as EntityNameExpression);
+                    markIdentifierAliasReferenced(left);
                 }
             }
         }
