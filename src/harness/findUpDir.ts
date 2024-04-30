@@ -4,9 +4,13 @@ import {
     join,
     resolve,
 } from "path";
+import { fileURLToPath } from "url";
 
 // search directories upward to avoid hard-wired paths based on the
 // build tree (same as scripts/build/findUpDir.js)
+
+const __filename = fileURLToPath(new URL(import.meta.url));
+const __dirname = dirname(__filename);
 
 export function findUpFile(name: string): string {
     let dir = __dirname;

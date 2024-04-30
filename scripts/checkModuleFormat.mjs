@@ -19,7 +19,7 @@ console.log(`Testing ${typescript}...`);
 /** @type {[fn: (() => Promise<any>), shouldSucceed: boolean][]} */
 const fns = [
     [() => require(typescript).version, true],
-    [() => require(typescript).default.version, false],
+    [() => require(typescript).default.version, true],
     [() => __importDefault(require(typescript)).version, false],
     [() => __importDefault(require(typescript)).default.version, true],
     [() => __importStar(require(typescript)).version, true],

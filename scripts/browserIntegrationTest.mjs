@@ -28,7 +28,8 @@ for (const browserType of browsers) {
 
     await page.setContent(`
     <html>
-    <script>${readFileSync(join("built", "local", "typescript.js"), "utf8")}</script>
+    <script type="module">${readFileSync(join("built", "local", "typescript.js"), "utf8")}</script>
+    <!-- TODO(jakebailey): figure out the web story -->
     <script>if (typeof ts.version !== "string") throw new Error("ts.version not set")</script>
     </html>
     `);

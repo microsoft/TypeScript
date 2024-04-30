@@ -2588,6 +2588,5 @@ export function isNodeLikeSystem(): boolean {
     // use in performanceCore.ts.
     return typeof process !== "undefined"
         && !!process.nextTick
-        && !(process as any).browser
-        && typeof require !== "undefined";
+        && !(process as any).browser;
 }

@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('../lib/tsc.js')
+import '../lib/tsc.js';

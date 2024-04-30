@@ -46,6 +46,7 @@ import {
     WatchOptions,
     writeFileEnsuringDirectories,
 } from "./_namespaces/ts.js";
+import { nodeCreateRequire } from "./nodeGetBuiltinModule.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -1466,9 +1467,15 @@ export let sys: System = (() => {
     const byteOrderMarkIndicator = "\uFEFF";
 
     function getNodeSystem(): System {
+        // TODO(jakebailey): Only use createRequire for sys.require.
+        const require = nodeCreateRequire(import.meta.url);
+        const _path: typeof import("path") = require("path");
+        const _url: typeof import("url") = require("url");
+        const __filename = _url.fileURLToPath(new URL(import.meta.url));
+        const __dirname = _path.dirname(__filename);
+
         const nativePattern = /^native |^\([^)]+\)$|^(?:internal[\\/]|[\w\s]+(?:\.js)?$)/;
         const _fs: typeof import("fs") = require("fs");
-        const _path: typeof import("path") = require("path");
         const _os = require("os");
         // crypto can be absent on reduced node installations
         let _crypto: typeof import("crypto") | undefined;

@@ -22,6 +22,7 @@ import {
     UnionType,
 } from "./_namespaces/ts.js";
 import * as performance from "./_namespaces/ts.performance.js";
+import { nodeCreateRequire } from "./nodeGetBuiltinModule.js";
 
 /* Tracing events for the compiler. */
 
@@ -60,6 +61,7 @@ export namespace tracingEnabled {
 
         if (fs === undefined) {
             try {
+                const require = nodeCreateRequire(import.meta.url);
                 fs = require("fs");
             }
             catch (e) {
