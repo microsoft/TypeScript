@@ -29257,7 +29257,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isThisIdentifier(left) || !isIdentifier(left)) {
             return;
         }
-        const right = isPropertyAccessExpression(location) ? location.name : location.right;
         const leftType = parentType || checkExpressionCached(left);
         const parentSymbol = getNodeLinks(left).resolvedSymbol;
         if (!parentSymbol || parentSymbol === unknownSymbol) {
@@ -29283,6 +29282,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         let prop = propSymbol;
         if (!prop && !parentType) {
+            const right = isPropertyAccessExpression(location) ? location.name : location.right;
             const lexicallyScopedSymbol = isPrivateIdentifier(right) && lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
             const assignmentKind = getAssignmentTargetKind(location);
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(location) ? getWidenedType(leftType) : leftType);
