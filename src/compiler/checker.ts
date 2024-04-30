@@ -29259,7 +29259,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         const right = isPropertyAccessExpression(location) ? location.name : location.right;
         const assignmentKind = getAssignmentTargetKind(location);
-        const leftType = parentType || checkExpression(left); // cannot use checkExpressionCached - causes stack overflow in control flow due to resetting the control flow state
+        const leftType = parentType || checkExpressionCached(left);
         const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(location) ? getWidenedType(leftType) : leftType);
         const parentSymbol = getNodeLinks(left).resolvedSymbol;
         if (!parentSymbol || parentSymbol === unknownSymbol) {
