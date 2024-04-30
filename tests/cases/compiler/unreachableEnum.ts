@@ -1,5 +1,6 @@
 // @strict: true
 // @preserveConstEnums: true, false
+// @allowUnreachableCode: false
 
 function func1() {
     aFunc();

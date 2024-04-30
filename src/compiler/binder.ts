@@ -3785,6 +3785,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
                 (isStatementButNotDeclaration(node) && node.kind !== SyntaxKind.EmptyStatement) ||
                 // report error on class declarations
                 node.kind === SyntaxKind.ClassDeclaration ||
+                (node.kind === SyntaxKind.EnumDeclaration && (!isEnumConst(node as EnumDeclaration) || shouldPreserveConstEnums(options))) ||
                 // report error on instantiated modules or const-enums only modules if preserveConstEnums is set
                 (node.kind === SyntaxKind.ModuleDeclaration && shouldReportErrorOnModuleDeclaration(node as ModuleDeclaration));
 

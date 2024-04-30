@@ -1,8 +1,11 @@
 unreachableEnum.ts(4,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableEnum.ts(14,5): error TS7027: Unreachable code detected.
 unreachableEnum.ts(21,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableEnum.ts(29,5): error TS7027: Unreachable code detected.
+unreachableEnum.ts(43,5): error TS7027: Unreachable code detected.
 
 
-==== unreachableEnum.ts (2 errors) ====
+==== unreachableEnum.ts (5 errors) ====
     function func1() {
         aFunc();
     
@@ -20,6 +23,8 @@ unreachableEnum.ts(21,17): error TS2450: Enum 'EnumA' used before its declaratio
         }
     
         enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
         const enum EnumB { Value }
     }
     
@@ -38,6 +43,8 @@ unreachableEnum.ts(21,17): error TS2450: Enum 'EnumA' used before its declaratio
         }
     
         enum EnumA { Value }
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
     
     function func3() {
@@ -52,4 +59,6 @@ unreachableEnum.ts(21,17): error TS2450: Enum 'EnumA' used before its declaratio
         }
     
         const enum EnumB { Value }
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7027: Unreachable code detected.
     }
