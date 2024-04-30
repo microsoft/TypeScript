@@ -1,5 +1,6 @@
 // @target: es6
 // @lib: es2017
+// @strictNullChecks: true
 
 {
 enum X {A, B}

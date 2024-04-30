@@ -57,10 +57,10 @@ const o: I = { 5: 'test', 8: null };
 >  : ^^^^
 
 const v = Object.values(o);
->v : string[]
->  : ^^^^^^^^
->Object.values(o) : string[]
->                 : ^^^^^^^^
+>v : (string | null)[]
+>  : ^^^^^^^^^^^^^^^^^
+>Object.values(o) : (string | null)[]
+>                 : ^^^^^^^^^^^^^^^^^
 >Object.values : { <T>(o: { [s: string]: T; }): T[]; <T_1>(o: { [s: number]: T_1; }): T_1[]; <T_2>(o: { [s: string | number]: T_2; }): T_2[]; (o: {}): any[]; }
 >              : ^^^ ^^ ^^                   ^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^ ^^  ^^^^^^^^^^^
 >Object : ObjectConstructor
@@ -71,10 +71,10 @@ const v = Object.values(o);
 >  : ^
 
 const e = Object.entries(o);
->e : [string, string][]
->  : ^^^^^^^^^^^^^^^^^^
->Object.entries(o) : [string, string][]
->                  : ^^^^^^^^^^^^^^^^^^
+>e : [string, string | null][]
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.entries(o) : [string, string | null][]
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; }): [string, T][]; <T_1>(o: { [s: number]: T_1; }): [string, T_1][]; <T_2>(o: { [s: string | number]: T_2; }): [string, T_2][]; (o: {}): [string, any][]; }
 >               : ^^^ ^^ ^^                   ^^^^^^^^^^^^^^^^^^^   ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^                              ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
