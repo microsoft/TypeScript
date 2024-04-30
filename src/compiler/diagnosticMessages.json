@@ -7212,7 +7212,7 @@
         "category": "Message",
         "code": 90068
     },
-    "Extract to variable and replace with '{0} typeof {0}'": {
+    "Extract to variable and replace with '{0} as typeof {0}'": {
         "category": "Message",
         "code": 90069
     },
