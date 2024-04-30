@@ -19,6 +19,7 @@
         "type": "git",
         "url": "https://github.com/microsoft/TypeScript.git"
     },
+    "type": "module",
     "main": "./lib/typescript.js",
     "typings": "./lib/typescript.d.ts",
     "bin": {
