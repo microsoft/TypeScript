@@ -5751,6 +5751,22 @@ export enum TypeReferenceSerializationKind {
 }
 
 /** @internal */
+export type LazyNodeCheckFlags =
+    | NodeCheckFlags.SuperInstance
+    | NodeCheckFlags.SuperStatic
+    | NodeCheckFlags.MethodWithSuperPropertyAccessInAsync
+    | NodeCheckFlags.MethodWithSuperPropertyAssignmentInAsync
+    | NodeCheckFlags.ContainsSuperPropertyInStaticInitializer
+    | NodeCheckFlags.CaptureArguments
+    | NodeCheckFlags.ContainsCapturedBlockScopeBinding
+    | NodeCheckFlags.NeedsLoopOutParameter
+    | NodeCheckFlags.ContainsConstructorReference
+    | NodeCheckFlags.ConstructorReference
+    | NodeCheckFlags.CapturedBlockScopedBinding
+    | NodeCheckFlags.BlockScopedBindingInLoop
+    | NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+
+/** @internal */
 export interface EmitResolver {
     isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
@@ -5761,10 +5777,11 @@ export interface EmitResolver {
     isValueAliasDeclaration(node: Node): boolean;
     isReferencedAliasDeclaration(node: Node, checkChildren?: boolean): boolean;
     isTopLevelValueImportEqualsWithEntityName(node: ImportEqualsDeclaration): boolean;
-    getNodeCheckFlags(node: Node): NodeCheckFlags;
+    hasNodeCheckFlag(node: Node, flags: LazyNodeCheckFlags): boolean;
     isDeclarationVisible(node: Declaration | AnyImportSyntax): boolean;
     isLateBound(node: Declaration): node is LateBoundDeclaration;
     collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
+    markLinkedReferences(node: Node): void;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
     isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
@@ -6095,6 +6112,21 @@ export const enum NodeCheckFlags {
     ContainsClassWithPrivateIdentifiers      = 1 << 20,  // Marked on all block-scoped containers containing a class with private identifiers.
     ContainsSuperPropertyInStaticInitializer = 1 << 21,  // Marked on all block-scoped containers containing a static initializer with 'super.x' or 'super[x]'.
     InCheckIdentifier                        = 1 << 22,
+
+    /** These flags are LazyNodeCheckFlags and can be calculated lazily by `hasNodeCheckFlag` */
+    LazyFlags = SuperInstance
+        | SuperStatic
+        | MethodWithSuperPropertyAccessInAsync
+        | MethodWithSuperPropertyAssignmentInAsync
+        | ContainsSuperPropertyInStaticInitializer
+        | CaptureArguments
+        | ContainsCapturedBlockScopeBinding
+        | NeedsLoopOutParameter
+        | ContainsConstructorReference
+        | ConstructorReference
+        | CapturedBlockScopedBinding
+        | BlockScopedBindingInLoop
+        | LoopWithCapturedBlockScopedBinding,
 }
 
 /** @internal */
@@ -6109,6 +6141,7 @@ export interface EvaluatorResult<T extends string | number | undefined = string 
 /** @internal */
 export interface NodeLinks {
     flags: NodeCheckFlags;              // Set of flags specific to Node
+    calculatedFlags: NodeCheckFlags;    // Set of flags which have definitely been calculated already
     resolvedType?: Type;                // Cached type of type node
     resolvedSignature?: Signature;      // Cached signature of signature node or call expression
     resolvedSymbol?: Symbol;            // Cached name resolution result
