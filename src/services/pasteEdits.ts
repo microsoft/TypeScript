@@ -58,19 +58,30 @@ function pasteEdits(
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
 ) {
+    if (pastedText.length !== 1) {
+        Debug.assert(pastedText.length === pasteLocations.length);
+    }
+    pasteLocations.forEach((paste, i) => {
+        changes.replaceRangeWithText(
+            targetFile,
+            { pos: paste.pos, end: paste.end },
+            pastedText.length === 1 ?
+                pastedText[0] : pastedText[i],
+        );
+    });
+
     const statements: Statement[] = [];
 
-    let start = 0;
+    let i = pasteLocations.length - 1;
+    let end = targetFile.text.length - 1;
     let newText = "";
-    pasteLocations.forEach((location, i) => {
-        if (i === pasteLocations.length - 1) {
-            newText += targetFile.text.slice(start, location.pos) + pastedText[i] + targetFile.text.slice(location.end);
-        }
-        else {
-            newText += targetFile.text.slice(start, location.pos) + pastedText[i];
-            start = location.end;
-        }
+    pasteLocations.reverse().forEach(location => {
+        newText = pastedText[i] + targetFile.text.slice(location.end, end) + newText;
+        end = location.pos;
+        i--;
     });
+    newText = targetFile.text.slice(0, end) + newText;
+
     host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
         const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom?.range) {
@@ -83,7 +94,6 @@ function pasteEdits(
             const useEsModuleSyntax = !fileShouldUseJavaScriptRequire(targetFile.fileName, originalProgram, host, !!copiedFrom.file.commonJsModuleIndicator);
             addExportsInOldFile(copiedFrom.file, usage.targetFileImportsFromOldFile, changes, useEsModuleSyntax);
             addTargetFileImports(copiedFrom.file, usage.oldImportsNeededByTargetFile, usage.targetFileImportsFromOldFile, originalProgram.getTypeChecker(), updatedProgram, importAdder);
-            importAdder.writeFixes(changes, getQuotePreference(copiedFrom.file, preferences));
         }
         else {
             const context: CodeFixContextBase = {
@@ -95,29 +105,13 @@ function pasteEdits(
                 formatContext,
             };
             forEachChild(updatedFile, function cb(node) {
-                if (isIdentifier(node)) {
-                    if (!originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
-                        // generate imports
-                        importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
-                    }
+                if (isIdentifier(node) && !originalProgram?.getTypeChecker().resolveName(node.text, node, SymbolFlags.All, /*excludeGlobals*/ false)) {
+                    // generate imports
+                    importAdder.addImportForUnresolvedIdentifier(context, node, /*useAutoImportProvider*/ true);
                 }
-                else {
-                    node.forEachChild(cb);
-                }
+                node.forEachChild(cb);
             });
-            importAdder.writeFixes(changes, getQuotePreference(targetFile, preferences));
         }
-    });
-
-    if (pastedText.length !== 1) {
-        Debug.assert(pastedText.length === pasteLocations.length);
-    }
-    pasteLocations.forEach((paste, i) => {
-        changes.replaceRangeWithText(
-            targetFile,
-            { pos: paste.pos, end: paste.end },
-            pastedText.length === 1 ?
-                pastedText[0] : pastedText[i],
-        );
+        importAdder.writeFixes(changes, getQuotePreference(copiedFrom ? copiedFrom.file : targetFile, preferences));
     });
 }

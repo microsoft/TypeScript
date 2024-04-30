@@ -253,7 +253,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/file1.ts Text-1 "export const b = 2;"
 	/file2.ts Text-1 "import { b } from './file1';\nconst a = 1;\nconst c = a + b;\nconst t = 9;"
-	/target.ts SVC-1-1 "export const tt = 2;\nconst c = a + b;\nconst t = 9;\nconst p = 1;"
+	/target.ts SVC-1-1 "export const tt = 2;\nconst c = a + b;\nconst t = 9;\nconst p = 1"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results
@@ -270,22 +270,6 @@ Info seq  [hh:mm:ss:mss] response:
       },
       "body": {
         "edits": [
-          {
-            "fileName": "/file2.ts",
-            "textChanges": [
-              {
-                "start": {
-                  "line": 2,
-                  "offset": 1
-                },
-                "end": {
-                  "line": 2,
-                  "offset": 1
-                },
-                "newText": "export "
-              }
-            ]
-          },
           {
             "fileName": "/target.ts",
             "textChanges": [
@@ -310,6 +294,22 @@ Info seq  [hh:mm:ss:mss] response:
                   "offset": 14
                 },
                 "newText": "const c = a + b;\nconst t = 9;"
+              }
+            ]
+          },
+          {
+            "fileName": "/file2.ts",
+            "textChanges": [
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "newText": "export "
               }
             ]
           }

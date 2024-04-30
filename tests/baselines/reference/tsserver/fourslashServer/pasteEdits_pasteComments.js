@@ -204,7 +204,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/target.ts SVC-1-1 "const a = 10;\nconst b = 10;/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/\nconst c = 10;"
+	/target.ts SVC-1-1 "const a = 10;\nconst b = 10;/**\n* Testing comment line 1\n* line 2\n* line 3\n* line 4\n*/\nconst c = 10"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:

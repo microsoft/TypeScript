@@ -222,7 +222,7 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
-	/file2.ts SVC-1-1 "const a = 10;\nconst b = 10;\ninterface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }const c = 10;"
+	/file2.ts SVC-1-1 "const a = 10;\nconst b = 10;\ninterface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }const c = 10"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
