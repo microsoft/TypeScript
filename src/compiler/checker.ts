@@ -29140,9 +29140,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     /**
+     * This function marks all the imports the given location refers to as `.referenced` in `NodeLinks` (transitively through local import aliases).
+     * (This corresponds to not getting elided in JS emit.)
+     * It can be called on *most* nodes in the AST and will filter its inputs, but care should be taken to avoid calling it on the RHS of an `import =` or specifiers in a `import {} from "..."`,
+     * unless you *really* want to *definitely* mark those as referenced.
+     * These shouldn't be directly marked, and should only get marked transitively by the internals of this function.
+     *
      * @param location The location to mark js import refernces for
      * @param propSymbol The optional symbol of the property we're looking up - this is used for property accesses when `const enum`s do not count as references (no `isolatedModules`, no `preserveConstEnums` + export). It will be calculated if not provided.
-     * @param parentType The optional type of the parent of the LHS of the property access - this will be recalculated if not provided.
+     * @param parentType The optional type of the parent of the LHS of the property access - this will be recalculated if not provided (but is costly).
      */
     function markLinkedReferences(location: Node, propSymbol?: Symbol, parentType?: Type) {
         if (!canCollectSymbolAliasAccessabilityData) {
