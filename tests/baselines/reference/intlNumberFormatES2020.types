@@ -101,7 +101,7 @@ const { currency, currencySign } = new Intl.NumberFormat('en-NZ', { style: 'curr
 const { unit, unitDisplay } = new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions();
 >unit : string | undefined
 >     : ^^^^^^^^^^^^^^^^^^
->unitDisplay : "short" | "long" | "narrow" | undefined
+>unitDisplay : "narrow" | "short" | "long" | undefined
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-NZ', { style: 'unit', unit: 'kilogram', unitDisplay: 'narrow' }).resolvedOptions() : Intl.ResolvedNumberFormatOptions
 >                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
