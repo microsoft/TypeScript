@@ -4106,7 +4106,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
 
                 const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
+                // If this is js file source of project reference, dont treat it as js file but as d.ts
+                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && !getProjectReferenceRedirectProject(resolution.resolvedFileName);
                 const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile && (!resolution.originalPath || pathContainsNodeModules(resolution.resolvedFileName));
                 const resolvedFileName = resolution.resolvedFileName;
 
@@ -4421,6 +4422,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
             if (options.noEmit) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
+            }
+        }
+
+        if (options.noCheck) {
+            if (options.noEmit) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noCheck", "noEmit");
+            }
+            if (!options.emitDeclarationOnly) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "noCheck", "emitDeclarationOnly");
             }
         }
 

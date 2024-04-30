@@ -251,6 +251,7 @@ import {
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
     getAssignmentTargetKind,
+    getCanonicalDiagnostic,
     getCheckFlags,
     getClassExtendsHeritageElement,
     getClassLikeDeclarationOfSymbol,
@@ -3118,10 +3119,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (suggestion) {
                         const suggestionName = symbolToString(suggestion);
                         const isUncheckedJS = isUncheckedJSSuggestion(errorLocation, suggestion, /*excludeClasses*/ false);
-                        const message = meaning === SymbolFlags.Namespace || nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ? Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
+                        const message = meaning === SymbolFlags.Namespace ||
+                                nameArg && typeof nameArg !== "string" && nodeIsSynthesized(nameArg) ?
+                            Diagnostics.Cannot_find_namespace_0_Did_you_mean_1
                             : isUncheckedJS ? Diagnostics.Could_not_find_name_0_Did_you_mean_1
                             : Diagnostics.Cannot_find_name_0_Did_you_mean_1;
                         const diagnostic = createError(errorLocation, message, diagnosticName(nameArg), suggestionName);
+                        diagnostic.canonicalHead = getCanonicalDiagnostic(nameNotFoundMessage, diagnosticName(nameArg));
                         addErrorOrSuggestion(!isUncheckedJS, diagnostic);
                         if (suggestion.valueDeclaration) {
                             addRelatedInfo(
@@ -8797,6 +8801,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function serializeSymbol(symbol: Symbol, isPrivate: boolean, propertyAsAlias: boolean): void {
+                void getPropertiesOfType(getTypeOfSymbol(symbol)); // resolve symbol's type and properties, which should trigger any required merges
                 // cache visited list based on merged symbol, since we want to use the unmerged top-level symbol, but
                 // still skip reserializing it if we encounter the merged product later on
                 const visitedSym = getMergedSymbol(symbol);
@@ -11741,7 +11746,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 type = anyType;
             }
-            links.type = type;
+            links.type ??= type;
         }
         return links.type;
     }
@@ -11763,7 +11768,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 writeType = anyType;
             }
             // Absent an explicit setter type annotation we use the read type of the accessor.
-            links.writeType = writeType || getTypeOfAccessors(symbol);
+            links.writeType ??= writeType || getTypeOfAccessors(symbol);
         }
         return links.writeType;
     }
@@ -11849,7 +11854,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // type symbol, call getDeclaredTypeOfSymbol.
             // This check is important because without it, a call to getTypeOfSymbol could end
             // up recursively calling getTypeOfAlias, causing a stack overflow.
-            links.type = exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
+            links.type ??= exportSymbol?.declarations && isDuplicatedCommonJSExport(exportSymbol.declarations) && symbol.declarations!.length ? getFlowTypeFromCommonJSExport(exportSymbol)
                 : isDuplicatedCommonJSExport(symbol.declarations) ? autoType
                 : declaredType ? declaredType
                 : getSymbolFlags(targetSymbol) & SymbolFlags.Value ? getTypeOfSymbol(targetSymbol)
@@ -11857,7 +11862,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
             if (!popTypeResolution()) {
                 reportCircularityError(exportSymbol ?? symbol);
-                return links.type = errorType;
+                return links.type ??= errorType;
             }
         }
         return links.type;
@@ -12199,7 +12204,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (!popTypeResolution()) {
                 error(type.symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_base_expression, symbolToString(type.symbol));
-                return type.resolvedBaseConstructorType = errorType;
+                return type.resolvedBaseConstructorType ??= errorType;
             }
             if (!(baseConstructorType.flags & TypeFlags.Any) && baseConstructorType !== nullWideningType && !isConstructorType(baseConstructorType)) {
                 const err = error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
@@ -12216,9 +12221,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
                     }
                 }
-                return type.resolvedBaseConstructorType = errorType;
+                return type.resolvedBaseConstructorType ??= errorType;
             }
-            type.resolvedBaseConstructorType = baseConstructorType;
+            type.resolvedBaseConstructorType ??= baseConstructorType;
         }
         return type.resolvedBaseConstructorType;
     }
@@ -12500,7 +12505,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     error(isNamedDeclaration(declaration) ? declaration.name || declaration : declaration, Diagnostics.Type_alias_0_circularly_references_itself, symbolToString(symbol));
                 }
             }
-            links.declaredType = type;
+            links.declaredType ??= type;
         }
         return links.declaredType;
     }
@@ -13814,7 +13819,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(currentNode, Diagnostics.Type_of_property_0_circularly_references_itself_in_mapped_type_1, symbolToString(symbol), typeToString(mappedType));
                 type = errorType;
             }
-            symbol.links.type = type;
+            symbol.links.type ??= type;
         }
         return symbol.links.type;
     }
@@ -14266,7 +14271,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     result = circularConstraintType;
                 }
-                t.immediateBaseConstraint = result || noConstraintType;
+                t.immediateBaseConstraint ??= result || noConstraintType;
             }
             return t.immediateBaseConstraint;
         }
@@ -15392,7 +15397,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 type = anyType;
             }
-            signature.resolvedReturnType = type;
+            signature.resolvedReturnType ??= type;
         }
         return signature.resolvedReturnType;
     }
@@ -15824,10 +15829,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 node.kind === SyntaxKind.ArrayType ? [getTypeFromTypeNode(node.elementType)] :
                 map(node.elements, getTypeFromTypeNode);
             if (popTypeResolution()) {
-                type.resolvedTypeArguments = type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
+                type.resolvedTypeArguments ??= type.mapper ? instantiateTypes(typeArguments, type.mapper) : typeArguments;
             }
             else {
-                type.resolvedTypeArguments = type.target.localTypeParameters?.map(() => errorType) || emptyArray;
+                type.resolvedTypeArguments ??= type.target.localTypeParameters?.map(() => errorType) || emptyArray;
                 error(
                     type.node || currentNode,
                     type.target.symbol ? Diagnostics.Type_arguments_for_0_circularly_reference_themselves : Diagnostics.Tuple_type_arguments_circularly_reference_themselves,
@@ -21696,9 +21701,23 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else {
                 errorInfo = elaborateNeverIntersection(errorInfo, originalTarget);
             }
+            // Used by, eg, missing property checking to replace the top-level message with a more informative one.
             if (!headMessage && maybeSuppress) {
+                // We suppress a call to `reportRelationError` or not depending on the state of the type checker, so
+                // we call `reportRelationError` here and then undo its effects to figure out what would be the diagnostic
+                // if we hadn't supress it, and save that as a canonical diagnostic for deduplication purposes.
+                const savedErrorState = captureErrorCalculationState();
+                reportRelationError(headMessage, source, target);
+                let canonical;
+                if (errorInfo && errorInfo !== savedErrorState.errorInfo) {
+                    canonical = { code: errorInfo.code, messageText: errorInfo.messageText };
+                }
+                resetErrorInfo(savedErrorState);
+                if (canonical && errorInfo) {
+                    errorInfo.canonicalHead = canonical;
+                }
+
                 lastSkippedInfo = [source, target];
-                // Used by, eg, missing property checking to replace the top-level message with a more informative one
                 return;
             }
             reportRelationError(headMessage, source, target);
@@ -23761,6 +23780,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!links.variances) {
             tracing?.push(tracing.Phase.CheckTypes, "getVariancesWorker", { arity: typeParameters.length, id: getTypeId(getDeclaredTypeOfSymbol(symbol)) });
             const oldVarianceComputation = inVarianceComputation;
+            const saveResolutionStart = resolutionStart;
             if (!inVarianceComputation) {
                 inVarianceComputation = true;
                 resolutionStart = resolutionTargets.length;
@@ -23805,7 +23825,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (!oldVarianceComputation) {
                 inVarianceComputation = false;
-                resolutionStart = 0;
+                resolutionStart = saveResolutionStart;
             }
             links.variances = variances;
             tracing?.pop({ variances: variances.map(Debug.formatVariance) });
@@ -29080,7 +29100,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return true;
             }
 
-            links.parameterInitializerContainsUndefined = containsUndefined;
+            links.parameterInitializerContainsUndefined ??= containsUndefined;
         }
 
         return links.parameterInitializerContainsUndefined;
@@ -31360,7 +31380,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarRegularExpressionLiteral(node: RegularExpressionLiteral) {
         const sourceFile = getSourceFileOfNode(node);
-        if (!hasParseDiagnostics(sourceFile)) {
+        if (!hasParseDiagnostics(sourceFile) && !node.isUnterminated) {
             let lastError: DiagnosticWithLocation | undefined;
             scanner ??= createScanner(ScriptTarget.ESNext, /*skipTrivia*/ true);
             scanner.setScriptTarget(sourceFile.languageVersion);
@@ -35748,8 +35768,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (cached && cached !== resolvingSignature && !candidatesOutArray) {
             return cached;
         }
+        const saveResolutionStart = resolutionStart;
+        if (!cached) {
+            // If we haven't already done so, temporarily reset the resolution stack. This allows us to
+            // handle "inverted" situations where, for example, an API client asks for the type of a symbol
+            // containined in a function call argument whose contextual type depends on the symbol itself
+            // through resolution of the containing function call. By resetting the resolution stack we'll
+            // retry the symbol type resolution with the resolvingSignature marker in place to suppress
+            // the contextual type circularity.
+            resolutionStart = resolutionTargets.length;
+        }
         links.resolvedSignature = resolvingSignature;
         let result = resolveSignature(node, candidatesOutArray, checkMode || CheckMode.Normal);
+        resolutionStart = saveResolutionStart;
         // When CheckMode.SkipGenericFunctions is set we use resolvingSignature to indicate that call
         // resolution should be deferred.
         if (result !== resolvingSignature) {
@@ -48893,6 +48924,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!sym) {
                     return !node.locals ? [] : nodeBuilder.symbolTableToDeclarationStatements(node.locals, node, flags, tracker);
                 }
+                resolveExternalModuleSymbol(sym); // ensures cjs export assignment is setup
                 return !sym.exports ? [] : nodeBuilder.symbolTableToDeclarationStatements(sym.exports, node, flags, tracker);
             },
             isImportRequiredByAugmentation,
