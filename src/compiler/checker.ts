@@ -30802,31 +30802,34 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
         const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
-        return getCachedType(key) ?? setCachedType(key, getMatchingUnionConstituentForObjectLiteral(contextualType, node) ?? discriminateTypeByDiscriminableItems(
-            contextualType,
-            concatenate(
-                map(
-                    filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
-                        if (!p.symbol) {
+        return getCachedType(key) ?? setCachedType(
+            key,
+            getMatchingUnionConstituentForObjectLiteral(contextualType, node) ?? discriminateTypeByDiscriminableItems(
+                contextualType,
+                concatenate(
+                    map(
+                        filter(node.properties, (p): p is PropertyAssignment | ShorthandPropertyAssignment => {
+                            if (!p.symbol) {
+                                return false;
+                            }
+                            if (p.kind === SyntaxKind.PropertyAssignment) {
+                                return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                            }
+                            if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                                return isDiscriminantProperty(contextualType, p.symbol.escapedName);
+                            }
                             return false;
-                        }
-                        if (p.kind === SyntaxKind.PropertyAssignment) {
-                            return isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                        }
-                        if (p.kind === SyntaxKind.ShorthandPropertyAssignment) {
-                            return isDiscriminantProperty(contextualType, p.symbol.escapedName);
-                        }
-                        return false;
-                    }),
-                    prop => ([() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const),
+                        }),
+                        prop => ([() => getContextFreeTypeOfExpression(prop.kind === SyntaxKind.PropertyAssignment ? prop.initializer : prop.name), prop.symbol.escapedName] as const),
+                    ),
+                    map(
+                        filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
+                        s => [() => undefinedType, s.escapedName] as const,
+                    ),
                 ),
-                map(
-                    filter(getPropertiesOfType(contextualType), s => !!(s.flags & SymbolFlags.Optional) && !!node?.symbol?.members && !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName)),
-                    s => [() => undefinedType, s.escapedName] as const,
-                ),
+                isTypeAssignableTo,
             ),
-            isTypeAssignableTo,
-        ));
+        );
     }
 
     function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
@@ -30834,29 +30837,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const cached = getCachedType(key);
         if (cached) return cached;
         const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
-        return setCachedType(key, discriminateTypeByDiscriminableItems(
-            contextualType,
-            concatenate(
-                map(
-                    filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
-                    prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const),
+        return setCachedType(
+            key,
+            discriminateTypeByDiscriminableItems(
+                contextualType,
+                concatenate(
+                    map(
+                        filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
+                        prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => getContextFreeTypeOfExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as const),
+                    ),
+                    map(
+                        filter(getPropertiesOfType(contextualType), s => {
+                            if (!(s.flags & SymbolFlags.Optional) || !node?.symbol?.members) {
+                                return false;
+                            }
+                            const element = node.parent.parent;
+                            if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
+                                return false;
+                            }
+                            return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
+                        }),
+                        s => [() => undefinedType, s.escapedName] as const,
+                    ),
                 ),
-                map(
-                    filter(getPropertiesOfType(contextualType), s => {
-                        if (!(s.flags & SymbolFlags.Optional) || !node?.symbol?.members) {
-                            return false;
-                        }
-                        const element = node.parent.parent;
-                        if (s.escapedName === jsxChildrenPropertyName && isJsxElement(element) && getSemanticJsxChildren(element.children).length) {
-                            return false;
-                        }
-                        return !node.symbol.members.has(s.escapedName) && isDiscriminantProperty(contextualType, s.escapedName);
-                    }),
-                    s => [() => undefinedType, s.escapedName] as const,
-                ),
+                isTypeAssignableTo,
             ),
-            isTypeAssignableTo,
-        ));
+        );
     }
 
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
