@@ -1,4 +1,5 @@
 import {
+    ClassLikeDeclaration,
     codefix,
     Debug,
     findAncestor,
@@ -58,7 +59,8 @@ export function getIdentifierForNode(node: Node, scope: FunctionLikeDeclaration 
     return isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
         ? node.name.text
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
- 
+}
+
 /** @internal */
 export function addTargetFileImports(
     oldFile: SourceFile,
