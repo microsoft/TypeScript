@@ -28,7 +28,7 @@ import {
     ScriptTarget,
     toPath,
     transpileOptionValueCompilerOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;

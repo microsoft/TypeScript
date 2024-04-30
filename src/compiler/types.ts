@@ -16,7 +16,7 @@ import {
     ProgramBuildInfo,
     SymlinkCache,
     ThisContainer,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // branded string type used to store absolute, normalized and canonicalized paths
 // arbitrary file name can be converted to Path via toPath function

@@ -1,4 +1,4 @@
-import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers";
+import { getModuleSpecifier } from "../../compiler/_namespaces/ts.moduleSpecifiers.js";
 import {
     ApplicableRefactorInfo,
     arrayFrom,
@@ -153,9 +153,9 @@ import {
     VariableDeclaration,
     VariableDeclarationList,
     VariableStatement,
-} from "../_namespaces/ts";
-import { addTargetFileImports } from "../_namespaces/ts.refactor";
-import { registerRefactor } from "../refactorProvider";
+} from "../_namespaces/ts.js";
+import { addTargetFileImports } from "../_namespaces/ts.refactor.js";
+import { registerRefactor } from "../refactorProvider.js";
 
 const refactorNameForMoveToFile = "Move to file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_file);

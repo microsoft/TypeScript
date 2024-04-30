@@ -225,7 +225,7 @@ import {
     Visitor,
     visitParameterList,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum ClassPropertySubstitutionFlags {
     /**

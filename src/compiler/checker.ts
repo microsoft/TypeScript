@@ -1104,9 +1104,9 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-} from "./_namespaces/ts";
-import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;

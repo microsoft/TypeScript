@@ -1,7 +1,7 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "./contents";
-import { libFile } from "./virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "./contents.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsConentsForAlternateResultAtTypesPackageJson(packageName: string, addTypesCondition: boolean) {
     return jsonToReadableText({

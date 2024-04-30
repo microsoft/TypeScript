@@ -384,7 +384,7 @@ import {
     VoidExpression,
     walkUpParenthesizedExpressions,
     YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // These utilities are common to multiple language service features.
 // #region

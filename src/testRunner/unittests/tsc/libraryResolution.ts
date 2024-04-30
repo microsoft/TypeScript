@@ -1,8 +1,8 @@
 import {
     getCommandLineArgsForLibResolution,
     getFsForLibResolution,
-} from "../helpers/libraryResolution";
-import { verifyTsc } from "../helpers/tsc";
+} from "../helpers/libraryResolution.js";
+import { verifyTsc } from "../helpers/tsc.js";
 
 describe("unittests:: tsc:: libraryResolution:: library file resolution", () => {
     function verify(libRedirection?: true, withoutConfig?: true) {

@@ -215,7 +215,7 @@ import {
     VoidExpression,
     WhileStatement,
     YieldExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const enum ES2015SubstitutionFlags {
     /** Enables substitutions for captured `this` */

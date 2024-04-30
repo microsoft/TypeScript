@@ -585,7 +585,7 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     YieldExpression,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const resolvingEmptyArray: never[] = [];

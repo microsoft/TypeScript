@@ -46,7 +46,7 @@ import {
     WatchFileKind,
     WatchOptions,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;

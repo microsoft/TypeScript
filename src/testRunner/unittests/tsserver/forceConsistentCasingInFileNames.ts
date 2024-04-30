@@ -1,6 +1,6 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -8,13 +8,13 @@ import {
     protocolTextSpanFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
     it("works when extends is specified with a case insensitive file system", () => {

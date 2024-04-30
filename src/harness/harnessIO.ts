@@ -1,15 +1,15 @@
-import * as compiler from "./_namespaces/compiler";
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
+import * as compiler from "./_namespaces/compiler.js";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
 import {
     RunnerBase,
     TypeWriterResult,
     TypeWriterWalker,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export interface IO {
     newLine(): string;

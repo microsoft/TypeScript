@@ -11,7 +11,7 @@ import {
     TransformationContext,
     transformECMAScriptModule,
     transformModule,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformImpliedNodeFormatDependentModule(context: TransformationContext) {

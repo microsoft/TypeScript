@@ -23,13 +23,13 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 import {
     getLogLevel,
     StartInput,
     StartSessionOptions,
-} from "./common";
+} from "./common.js";
 
 interface LogOptions {
     file?: string;
@@ -339,6 +339,7 @@ export function initializeNodeSystem(): StartInput {
 
     let cancellationToken: ts.server.ServerCancellationToken;
     try {
+        // TODO(jakebailey): fix this
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }

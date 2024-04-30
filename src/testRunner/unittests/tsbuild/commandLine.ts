@@ -1,16 +1,16 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
 import {
     noChangeRun,
     TestTscEdit,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: commandLine::", () => {
     describe("different options::", () => {

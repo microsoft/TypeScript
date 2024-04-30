@@ -1,7 +1,7 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -11,13 +11,13 @@ import {
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {

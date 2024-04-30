@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: evaluation:: autoAccessors", () => {
     const editions = [
