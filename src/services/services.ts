@@ -1576,6 +1576,7 @@ const invalidOperationsInPartialSemanticMode: readonly (keyof LanguageService)[]
     "provideCallHierarchyOutgoingCalls",
     "provideInlayHints",
     "getSupportedCodeFixes",
+    "getPasteEdits",
 ];
 
 const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [

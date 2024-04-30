@@ -911,6 +911,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.PrepareCallHierarchy,
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+    protocol.CommandTypes.GetPasteEdits,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
