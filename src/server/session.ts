@@ -2812,10 +2812,7 @@ export class Session<TMessage = string> implements EventSender {
             },
             this.getFormatOptions(file),
         );
-        if (result === undefined) {
-            return undefined;
-        }
-        return this.mapPasteEditsAction(result);
+        return result && this.mapPasteEditsAction(result);
     }
 
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {

@@ -72,14 +72,12 @@ function pasteEdits(
 
     const statements: Statement[] = [];
 
-    let i = pasteLocations.length - 1;
     let end = targetFile.text.length - 1;
     let newText = "";
-    pasteLocations.reverse().forEach(location => {
-        newText = pastedText[i] + targetFile.text.slice(location.end, end) + newText;
-        end = location.pos;
-        i--;
-    });
+    for (let i = pasteLocations.length - 1; i >= 0; i--) {
+        newText = pastedText[i] + targetFile.text.slice(pasteLocations[i].end, end) + newText;
+        end = pasteLocations[i].pos;
+    }
     newText = targetFile.text.slice(0, end) + newText;
 
     host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
