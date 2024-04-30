@@ -1,0 +1,121 @@
+//// [tests/cases/compiler/unreachableEnum.ts] ////
+
+=== unreachableEnum.ts ===
+function func1() {
+>func1 : Symbol(func1, Decl(unreachableEnum.ts, 0, 0))
+
+    aFunc();
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 6, 11))
+
+    console.log(EnumA.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumA.Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 13, 16))
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 11, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 13, 16))
+
+    console.log(EnumB.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumB.Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 14, 22))
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 13, 24))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 14, 22))
+
+    return;
+
+    function aFunc() {
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 6, 11))
+
+        console.log(EnumA.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumA.Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 13, 16))
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 11, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 13, 16))
+
+        console.log(EnumB.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumB.Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 14, 22))
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 13, 24))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 14, 22))
+    }
+
+    enum EnumA { Value }
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 11, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 13, 16))
+
+    const enum EnumB { Value }
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 13, 24))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 14, 22))
+}
+
+function func2() {
+>func2 : Symbol(func2, Decl(unreachableEnum.ts, 15, 1))
+
+    aFunc();
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 22, 11))
+
+    console.log(EnumA.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumA.Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 28, 16))
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 26, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 28, 16))
+
+    return;
+
+    function aFunc() {
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 22, 11))
+
+        console.log(EnumA.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumA.Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 28, 16))
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 26, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 28, 16))
+    }
+
+    enum EnumA { Value }
+>EnumA : Symbol(EnumA, Decl(unreachableEnum.ts, 26, 5))
+>Value : Symbol(EnumA.Value, Decl(unreachableEnum.ts, 28, 16))
+}
+
+function func3() {
+>func3 : Symbol(func3, Decl(unreachableEnum.ts, 29, 1))
+
+    aFunc();
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 36, 11))
+
+    console.log(EnumB.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumB.Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 42, 22))
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 40, 5))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 42, 22))
+
+    return;
+
+    function aFunc() {
+>aFunc : Symbol(aFunc, Decl(unreachableEnum.ts, 36, 11))
+
+        console.log(EnumB.Value);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>EnumB.Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 42, 22))
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 40, 5))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 42, 22))
+    }
+
+    const enum EnumB { Value }
+>EnumB : Symbol(EnumB, Decl(unreachableEnum.ts, 40, 5))
+>Value : Symbol(EnumB.Value, Decl(unreachableEnum.ts, 42, 22))
+}

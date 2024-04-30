@@ -1,0 +1,55 @@
+unreachableEnum.ts(4,17): error TS2450: Enum 'EnumA' used before its declaration.
+unreachableEnum.ts(21,17): error TS2450: Enum 'EnumA' used before its declaration.
+
+
+==== unreachableEnum.ts (2 errors) ====
+    function func1() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableEnum.ts:14:10: 'EnumA' is declared here.
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+            console.log(EnumB.Value);
+        }
+    
+        enum EnumA { Value }
+        const enum EnumB { Value }
+    }
+    
+    function func2() {
+        aFunc();
+    
+        console.log(EnumA.Value);
+                    ~~~~~
+!!! error TS2450: Enum 'EnumA' used before its declaration.
+!!! related TS2728 unreachableEnum.ts:29:10: 'EnumA' is declared here.
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumA.Value);
+        }
+    
+        enum EnumA { Value }
+    }
+    
+    function func3() {
+        aFunc();
+    
+        console.log(EnumB.Value);
+    
+        return;
+    
+        function aFunc() {
+            console.log(EnumB.Value);
+        }
+    
+        const enum EnumB { Value }
+    }

@@ -1,0 +1,208 @@
+//// [tests/cases/compiler/unreachableEnum.ts] ////
+
+=== unreachableEnum.ts ===
+function func1() {
+>func1 : () => void
+>      : ^^^^^^^^^^
+
+    aFunc();
+>aFunc() : void
+>        : ^^^^
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+    console.log(EnumA.Value);
+>console.log(EnumA.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumA.Value : EnumA
+>            : ^^^^^
+>EnumA : typeof EnumA
+>      : ^^^^^^^^^^^^
+>Value : EnumA
+>      : ^^^^^
+
+    console.log(EnumB.Value);
+>console.log(EnumB.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumB.Value : EnumB
+>            : ^^^^^
+>EnumB : typeof EnumB
+>      : ^^^^^^^^^^^^
+>Value : EnumB
+>      : ^^^^^
+
+    return;
+
+    function aFunc() {
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+        console.log(EnumA.Value);
+>console.log(EnumA.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumA.Value : EnumA
+>            : ^^^^^
+>EnumA : typeof EnumA
+>      : ^^^^^^^^^^^^
+>Value : EnumA
+>      : ^^^^^
+
+        console.log(EnumB.Value);
+>console.log(EnumB.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumB.Value : EnumB
+>            : ^^^^^
+>EnumB : typeof EnumB
+>      : ^^^^^^^^^^^^
+>Value : EnumB
+>      : ^^^^^
+    }
+
+    enum EnumA { Value }
+>EnumA : EnumA
+>      : ^^^^^
+>Value : EnumA.Value
+>      : ^^^^^^^^^^^
+
+    const enum EnumB { Value }
+>EnumB : EnumB
+>      : ^^^^^
+>Value : EnumB.Value
+>      : ^^^^^^^^^^^
+}
+
+function func2() {
+>func2 : () => void
+>      : ^^^^^^^^^^
+
+    aFunc();
+>aFunc() : void
+>        : ^^^^
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+    console.log(EnumA.Value);
+>console.log(EnumA.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumA.Value : EnumA
+>            : ^^^^^
+>EnumA : typeof EnumA
+>      : ^^^^^^^^^^^^
+>Value : EnumA
+>      : ^^^^^
+
+    return;
+
+    function aFunc() {
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+        console.log(EnumA.Value);
+>console.log(EnumA.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumA.Value : EnumA
+>            : ^^^^^
+>EnumA : typeof EnumA
+>      : ^^^^^^^^^^^^
+>Value : EnumA
+>      : ^^^^^
+    }
+
+    enum EnumA { Value }
+>EnumA : EnumA
+>      : ^^^^^
+>Value : EnumA.Value
+>      : ^^^^^^^^^^^
+}
+
+function func3() {
+>func3 : () => void
+>      : ^^^^^^^^^^
+
+    aFunc();
+>aFunc() : void
+>        : ^^^^
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+    console.log(EnumB.Value);
+>console.log(EnumB.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumB.Value : EnumB
+>            : ^^^^^
+>EnumB : typeof EnumB
+>      : ^^^^^^^^^^^^
+>Value : EnumB
+>      : ^^^^^
+
+    return;
+
+    function aFunc() {
+>aFunc : () => void
+>      : ^^^^^^^^^^
+
+        console.log(EnumB.Value);
+>console.log(EnumB.Value) : void
+>                         : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^^^^^
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
+>EnumB.Value : EnumB
+>            : ^^^^^
+>EnumB : typeof EnumB
+>      : ^^^^^^^^^^^^
+>Value : EnumB
+>      : ^^^^^
+    }
+
+    const enum EnumB { Value }
+>EnumB : EnumB
+>      : ^^^^^
+>Value : EnumB.Value
+>      : ^^^^^^^^^^^
+}
