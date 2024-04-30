@@ -29257,13 +29257,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (isThisIdentifier(left) || !isIdentifier(left)) {
             return;
         }
-        const leftType = parentType || checkExpressionCached(left);
-        const parentSymbol = getNodeLinks(left).resolvedSymbol;
+        const parentSymbol = getResolvedSymbol(left);
         if (!parentSymbol || parentSymbol === unknownSymbol) {
-            return;
-        }
-        if (isTypeAny(leftType) || leftType === silentNeverType) {
-            markAliasReferenced(parentSymbol, location);
             return;
         }
         // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
@@ -29277,6 +29272,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // The property lookup is deferred as much as possible, in as many situations as possible, to avoid alias marking
         // pulling on types/symbols it doesn't strictly need to.
         if (getIsolatedModules(compilerOptions) || (shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location))) {
+            markAliasReferenced(parentSymbol, location);
+            return;
+        }
+        // Hereafter, this relies on type checking - but every check prior to this only used symbol information
+        const leftType = parentType || checkExpressionCached(left);
+        if (isTypeAny(leftType) || leftType === silentNeverType) {
             markAliasReferenced(parentSymbol, location);
             return;
         }
