@@ -29139,7 +29139,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
-    function markLinkedReferences(location: Node) {
+    /**
+     * @param location The location to mark js import refernces for
+     * @param propSymbol The optional symbol of the property we're looking up - this is used for property accesses when `const enum`s do not count as references (no `isolatedModules`, no `preserveConstEnums` + export). It will be calculated if not provided.
+     * @param parentType The optional type of the parent of the LHS of the property access - this will be recalculated if not provided.
+     */
+    function markLinkedReferences(location: Node, propSymbol?: Symbol, parentType?: Type) {
         if (!canCollectSymbolAliasAccessabilityData) {
             return;
         }
@@ -29161,12 +29166,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 topProp = topProp.parent;
             }
             const left = isPropertyAccessExpression(location) ? location.expression : location.left;
-            if (isThisIdentifier(left)) {
+            if (isThisIdentifier(left) || !isIdentifier(left)) {
                 return;
             }
             const right = isPropertyAccessExpression(location) ? location.name : location.right;
             const assignmentKind = getAssignmentTargetKind(location);
-            const leftType = checkExpression(left); // cannot use checkExpressionCached - causes stack overflow in control flow due to resetting the control flow state
+            const leftType = parentType || checkExpression(left); // cannot use checkExpressionCached - causes stack overflow in control flow due to resetting the control flow state
             const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(location) ? getWidenedType(leftType) : leftType);
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             if (!parentSymbol || parentSymbol === unknownSymbol) {
@@ -29176,9 +29181,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 markAliasReferenced(parentSymbol, location);
                 return;
             }
-            const lexicallyScopedSymbol = isPrivateIdentifier(right) && lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
-            const prop = isPrivateIdentifier(right) ? lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(apparentType, lexicallyScopedSymbol) : getPropertyOfType(apparentType, right.escapedText);
-            const node = location;
             // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
             // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
             // here even if `Foo` is not a const enum.
@@ -29186,14 +29188,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // The exceptions are:
             //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
             //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
+            //
+            // The property lookup is deferred as much as possible, in as many situations as possible, to avoid alias marking
+            // pulling on types/symbols it doesn't strictly need to.
+            if (getIsolatedModules(compilerOptions) || (shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location))) {
+                markAliasReferenced(parentSymbol, location);
+                return;
+            }
+            let prop = propSymbol;
+            if (!prop) {
+                const lexicallyScopedSymbol = isPrivateIdentifier(right) && lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
+                prop = isPrivateIdentifier(right) ? lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(apparentType, lexicallyScopedSymbol) || undefined : getPropertyOfType(apparentType, right.escapedText);
+            }
             if (
-                isIdentifier(left) && parentSymbol && (
-                    getIsolatedModules(compilerOptions) ||
-                    !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && node.parent.kind === SyntaxKind.EnumMember)) ||
-                    shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node)
-                )
+                !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && location.parent.kind === SyntaxKind.EnumMember))
             ) {
-                markAliasReferenced(parentSymbol, node);
+                markAliasReferenced(parentSymbol, location);
             }
             return;
         }
@@ -33297,7 +33307,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ isConstEnumObjectType(apparentType), /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
         }
-        markLinkedReferences(node);
+        markLinkedReferences(node, prop, leftType);
 
         let propType: Type;
         if (!prop) {
