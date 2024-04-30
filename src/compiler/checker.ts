@@ -1955,7 +1955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function resetCachedSymbolTypes(declaration: Declaration) {
             const symbolLinks = getSymbolLinks(getSymbolOfDeclaration(declaration));
             const type = symbolLinks.type;
-            
+
             cachedTypes.push([symbolLinks, type] as const);
             symbolLinks.type = undefined;
         }
