@@ -4291,15 +4291,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    // Aliases that resolve to const enums are not marked as referenced because they are not emitted,
-    // but their usage in value positions must be tracked to determine if the import can be type-only.
-    function markConstEnumAliasAsReferenced(symbol: Symbol) {
-        const links = getSymbolLinks(symbol);
-        if (!links.constEnumReferenced) {
-            links.constEnumReferenced = true;
-        }
-    }
-
     // This function is only for imports with entity names
     function getSymbolOfPartOfRightHandSideOfImportEquals(entityName: EntityName, dontResolveAlias?: boolean): Symbol | undefined {
         // There are three things we might try to look for. In the following examples,
@@ -29201,9 +29192,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
                 ) {
                     markAliasSymbolAsReferenced(symbol);
-                }
-                else {
-                    markConstEnumAliasAsReferenced(symbol);
                 }
             }
         }
