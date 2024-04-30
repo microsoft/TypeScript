@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 1,000
+Instantiation count: 1,000 -> 2,500
 
 === dependentDestructuredVariables.ts ===
 type Action =
@@ -1713,7 +1713,7 @@ interface ClientEvents {
 >shardDisconnect : [closeEvent: CloseEvent, shardId: number]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
-  
+
 declare class Client {
 >Client : Client
 >       : ^^^^^^
@@ -2065,5 +2065,63 @@ const parameterReassignedContextualRest1: (...args: [1, 2] | [3, 4]) => void = (
 >x : 1 | 3
 >  : ^^^^^
   }
+}
+
+// repros from #47190#issuecomment-1339753554
+const f70: (...args: [type: "one"] | [type: "two", x: string]) => void = (type, x) => {
+>f70 : (...args: [type: "one"] | [type: "two", x: string]) => void
+>    : ^^^^    ^^                                        ^^^^^    
+>args : [type: "one"] | [type: "two", x: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(type, x) => {  if (type !== "one") x.toUpperCase();} : (type: "one" | "two", x: string | undefined) => void
+>                                                      : ^    ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "one" | "two"
+>     : ^^^^^^^^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+  if (type !== "one") x.toUpperCase();
+>type !== "one" : boolean
+>               : ^^^^^^^
+>type : "one" | "two"
+>     : ^^^^^^^^^^^^^
+>"one" : "one"
+>      : ^^^^^
+>x.toUpperCase() : string
+>                : ^^^^^^
+>x.toUpperCase : () => string
+>              : ^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^^^^^^^
+}
+const f71: (...args: [type: "one", x?: number] | [type: "two", x: string]) => void = (type, x) => {
+>f71 : (...args: [type: "one", x?: number] | [type: "two", x: string]) => void
+>    : ^^^^    ^^                                                    ^^^^^    
+>args : [type: "one", x?: number | undefined] | [type: "two", x: string]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(type, x) => {  if (type !== "one") x.toUpperCase();} : (type: "one" | "two", x: string | number | undefined) => void
+>                                                      : ^    ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : "one" | "two"
+>     : ^^^^^^^^^^^^^
+>x : string | number | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  if (type !== "one") x.toUpperCase();
+>type !== "one" : boolean
+>               : ^^^^^^^
+>type : "one" | "two"
+>     : ^^^^^^^^^^^^^
+>"one" : "one"
+>      : ^^^^^
+>x.toUpperCase() : string
+>                : ^^^^^^
+>x.toUpperCase : () => string
+>              : ^^^^^^^^^^^^
+>x : string
+>  : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^^^^^^^
 }
 

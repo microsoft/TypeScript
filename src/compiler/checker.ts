@@ -1305,6 +1305,12 @@ export const enum SignatureCheckMode {
     Callback = BivariantCallback | StrictCallback,
 }
 
+const enum TupleStructureComparisonKind {
+    None = 0,
+    MatchFixed = 1 << 0,
+    MatchVariable = 1 << 1,
+}
+
 const enum IntersectionState {
     None = 0,
     Source = 1 << 0, // Source type is a constituent of an outer intersection
@@ -20776,7 +20782,59 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         for (let i = 0; i < paramCount; i++) {
             const sourceType = i === restIndex ? getRestOrAnyTypeAtPosition(source, i) : tryGetTypeAtPosition(source, i);
-            const targetType = i === restIndex ? getRestOrAnyTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+            let targetType = i === restIndex ? getRestOrAnyTypeAtPosition(target, i) : tryGetTypeAtPosition(target, i);
+            if (i === restIndex && targetType && sourceType && isTupleType(sourceType)) {
+                targetType = mapType(targetType, t => {
+                    if (
+                        !isTupleType(t) ||
+                        // When both sides are tuples of the same structure, we don't want to "propagate" types from elements of variable positions
+                        // to the following positions as that would disallow signatures of the exact same structures when trailing fixed elements are involved:
+                        //
+                        // let fn: (...rest: [...string[], number]) => void = (...rest: [...string[], number]) => {}; // ok
+                        //
+                        // Since we want to allow contextual types to flow into paremeters, we don't need to differentiate between rest and variadic elements
+                        // as that doesn't affect the contextual type of the parameter
+                        isTupleTypeStructureMatching(sourceType, t, TupleStructureComparisonKind.MatchVariable)
+                    ) {
+                        return t;
+                    }
+
+                    // We create a tuple type based on the target elements and the source's length here.
+                    // When the source signature accepts less parameters than the target signature
+                    // we only need to check the *used* elements of the target tuple, the rest is ignored by the source anyway
+                    // and thus it can be safely ignored here.
+                    //
+                    // let fn: (a: number, b: string) => void = (a: number) => {}; // ok
+                    //
+                    // In addition to that we also want to "propagate" element types of variable positions
+                    // to all following positions, as that represents possible argument types.
+                    //
+                    // function fn(...[a, b]: [...number[], string]) {
+                    //   a; // number | string
+                    //   b; // number | string
+                    // }
+                    // fn('str'); // valid
+                    const elementTypes: Type[] = [];
+                    const elementFlags: ElementFlags[] = [];
+
+                    const sourceArity = getTypeReferenceArity(sourceType);
+                    const targetArity = getTypeReferenceArity(t);
+
+                    for (let i = 0; i < sourceArity; i++) {
+                        if (i >= targetArity) {
+                            if (sourceType.target.elementFlags[i] & ElementFlags.Fixed) {
+                                elementTypes.push(undefinedType);
+                                elementFlags.push(sourceType.target.elementFlags[i]);
+                            }
+                            continue;
+                        }
+                        elementTypes.push(getTupleElementType(t, i)!);
+                        elementFlags.push(sourceType.target.elementFlags[i]);
+                    }
+
+                    return createTupleType(elementTypes, elementFlags);
+                });
+            }
             if (sourceType && targetType) {
                 // In order to ensure that any generic type Foo<T> is at least co-variant with respect to T no matter
                 // how Foo uses T, we need to relate parameters bi-variantly (given that parameters are input positions,
@@ -24499,9 +24557,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return undefined;
     }
 
-    function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference) {
+    function isTupleTypeStructureMatching(t1: TupleTypeReference, t2: TupleTypeReference, tupleStructureComparisonKind: TupleStructureComparisonKind) {
         return getTypeReferenceArity(t1) === getTypeReferenceArity(t2) &&
-            every(t1.target.elementFlags, (f, i) => (f & ElementFlags.Variable) === (t2.target.elementFlags[i] & ElementFlags.Variable));
+            every(t1.target.elementFlags, (f1, i) => {
+                const f2 = t2.target.elementFlags[i];
+                return f1 === f2 ||
+                    !!(tupleStructureComparisonKind & TupleStructureComparisonKind.MatchFixed && f1 & ElementFlags.Fixed && f2 & ElementFlags.Fixed) ||
+                    !!(tupleStructureComparisonKind & TupleStructureComparisonKind.MatchVariable && f1 & ElementFlags.Variable && f2 & ElementFlags.Variable);
+            });
     }
 
     function isZeroBigInt({ value }: BigIntLiteralType) {
@@ -26109,7 +26172,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         const elementFlags = target.target.elementFlags;
                         // When source and target are tuple types with the same structure (fixed, variadic, and rest are matched
                         // to the same kind in each position), simply infer between the element types.
-                        if (isTupleType(source) && isTupleTypeStructureMatching(source, target)) {
+                        if (isTupleType(source) && isTupleTypeStructureMatching(source, target, TupleStructureComparisonKind.MatchFixed)) {
                             for (let i = 0; i < targetArity; i++) {
                                 inferFromTypes(getTypeArguments(source)[i], elementTypes[i]);
                             }
