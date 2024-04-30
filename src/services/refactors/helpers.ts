@@ -1,12 +1,22 @@
 import {
+    ClassLikeDeclaration,
     codefix,
     Debug,
     findAncestor,
+    FunctionLikeDeclaration,
+    getUniqueName,
+    identifierToKeywordKind,
     isAnyImportOrRequireStatement,
+    isClassLike,
+    isPrivateIdentifier,
+    isPropertyAccessExpression,
+    ModuleBlock,
+    Node,
     Program,
     skipAlias,
     SourceFile,
     Symbol,
+    SymbolFlags,
     TypeChecker,
 } from "../_namespaces/ts";
 import { addImportsForMovedSymbols } from "./moveToFile";
@@ -37,6 +47,18 @@ export function isRefactorErrorInfo(info: unknown): info is RefactorErrorInfo {
 export function refactorKindBeginsWith(known: string, requested: string | undefined): boolean {
     if (!requested) return true;
     return known.substr(0, requested.length) === requested;
+}
+
+/**
+ * Try to come up with a unique name for a given node within the scope for the
+ * use of being used as a property/variable name.
+ *
+ * @internal
+ */
+export function getIdentifierForNode(node: Node, scope: FunctionLikeDeclaration | SourceFile | ModuleBlock | ClassLikeDeclaration, checker: TypeChecker, file: SourceFile) {
+    return isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
+        ? node.name.text
+        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
 }
 
 /** @internal */

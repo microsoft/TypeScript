@@ -7336,6 +7336,46 @@
         "category": "Message",
         "code": 90061
     },
+    "Add annotation of type '{0}'": {
+        "category": "Message",
+        "code": 90062
+    },
+    "Add return type '{0}'": {
+        "category": "Message",
+        "code": 90063
+    },
+    "Extract base class to variable": {
+        "category": "Message",
+        "code": 90064
+    },
+    "Extract default export to variable": {
+        "category": "Message",
+        "code": 90065
+    },
+    "Extract binding expressions to variable": {
+        "category": "Message",
+        "code": 90066
+    },
+    "Add all missing type annotations": {
+        "category": "Message",
+        "code": 90067
+    },
+    "Add satisfies and an inline type assertion with '{0}'": {
+        "category": "Message",
+        "code": 90068
+    },
+    "Extract to variable and replace with '{0} as typeof {0}'": {
+        "category": "Message",
+        "code": 90069
+    },
+    "Mark array literal as const": {
+        "category": "Message",
+        "code": 90070
+    },
+    "Annotate types of properties expando function in a namespace": {
+        "category": "Message",
+        "code": 90071
+    },
 
     "Convert function to an ES2015 class": {
         "category": "Message",
