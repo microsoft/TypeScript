@@ -1112,6 +1112,18 @@ import * as performance from "./_namespaces/ts.performance";
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
 
+const enum ReferenceHint {
+    Unspecified,
+    Identifier,
+    Property,
+    ExportAssignment,
+    Jsx,
+    AsyncFunction,
+    ExportImportEquals,
+    ExportSpecifier,
+    Decorator,
+}
+
 let nextSymbolId = 1;
 let nextNodeId = 1;
 let nextMergeId = 1;
@@ -29137,18 +29149,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             return false;
         });
-    }
-
-    enum ReferenceHint {
-        Unspecified,
-        Identifier,
-        Property,
-        ExportAssignment,
-        Jsx,
-        AsyncFunction,
-        ExportImportEquals,
-        ExportSpecifier,
-        Decorator,
     }
 
     /**
