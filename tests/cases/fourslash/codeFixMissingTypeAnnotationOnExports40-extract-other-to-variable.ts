@@ -13,7 +13,7 @@
 ////}
 
 verify.codeFix({
-    description: `Extract to variable and replace with 'newLocal typeof newLocal'`,
+    description: `Extract to variable and replace with 'newLocal as typeof newLocal'`,
     applyChanges: true,
     index: 2,
     newFileContent:

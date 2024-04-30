@@ -479,7 +479,7 @@ function withContext<T>(
                     ),
                 ),
             );
-            return [Diagnostics.Extract_to_variable_and_replace_with_0_typeof_0, typeToStringForDiag(tempName)];
+            return [Diagnostics.Extract_to_variable_and_replace_with_0_as_typeof_0, typeToStringForDiag(tempName)];
         }
     }
 
