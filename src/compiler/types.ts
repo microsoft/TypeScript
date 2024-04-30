@@ -2762,6 +2762,22 @@ export interface RegularExpressionLiteral extends LiteralExpression {
     readonly kind: SyntaxKind.RegularExpressionLiteral;
 }
 
+// dprint-ignore
+/** @internal */
+export const enum RegularExpressionFlags {
+    None        = 0,
+    HasIndices  = 1 << 0, // d
+    Global      = 1 << 1, // g
+    IgnoreCase  = 1 << 2, // i
+    Multiline   = 1 << 3, // m
+    DotAll      = 1 << 4, // s
+    Unicode     = 1 << 5, // u
+    UnicodeSets = 1 << 6, // v
+    Sticky      = 1 << 7, // y
+    UnicodeMode = Unicode | UnicodeSets,
+    Modifiers   = IgnoreCase | Multiline | DotAll,
+}
+
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
     readonly kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     /** @internal */
@@ -7055,6 +7071,8 @@ export interface DiagnosticMessageChain {
     next?: DiagnosticMessageChain[];
     /** @internal */
     repopulateInfo?: () => RepopulateDiagnosticChainInfo;
+    /** @internal */
+    canonicalHead?: CanonicalDiagnostic;
 }
 
 export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -7065,6 +7083,21 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     source?: string;
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
+    /**
+     * @internal
+     * Used for deduplication and comparison.
+     * Whenever it is possible for two diagnostics that report the same problem to be produced with
+     * different messages (e.g. "Cannot find name 'foo'" vs "Cannot find name 'foo'. Did you mean 'bar'?"),
+     * this property can be set to a canonical message,
+     * so that those two diagnostics are appropriately considered to be the same.
+     */
+    canonicalHead?: CanonicalDiagnostic;
+}
+
+/** @internal */
+export interface CanonicalDiagnostic {
+    code: number;
+    messageText: string;
 }
 
 /** @internal */
@@ -7256,6 +7289,7 @@ export interface CompilerOptions {
     moduleDetection?: ModuleDetectionKind;
     newLine?: NewLineKind;
     noEmit?: boolean;
+    /** @internal */ noCheck?: boolean;
     /** @internal */ noEmitForJsFiles?: boolean;
     noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
@@ -7598,6 +7632,7 @@ export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptio
 // dprint-ignore
 /** @internal */
 export const enum CharacterCodes {
+    EOF = -1,
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,
 
@@ -8217,6 +8252,8 @@ export const enum LanguageFeatureMinimumTarget {
     ArrowFunctions = ScriptTarget.ES2015,
     BlockScopedVariables = ScriptTarget.ES2015,
     ObjectAssign = ScriptTarget.ES2015,
+    RegularExpressionFlagsUnicode = ScriptTarget.ES2015,
+    RegularExpressionFlagsSticky = ScriptTarget.ES2015,
 
     // ES2016 Features
     Exponentiation = ScriptTarget.ES2016, // `x ** y`
@@ -8229,6 +8266,7 @@ export const enum LanguageFeatureMinimumTarget {
     AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
     AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
     ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
+    RegularExpressionFlagsDotAll = ScriptTarget.ES2018,
 
     // ES2019 Features
     BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
@@ -8245,6 +8283,7 @@ export const enum LanguageFeatureMinimumTarget {
     TopLevelAwait = ScriptTarget.ES2022,
     ClassFields = ScriptTarget.ES2022,
     PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
+    RegularExpressionFlagsHasIndices = ScriptTarget.ES2022,
 
     // ES2023 Features
     ShebangComments = ScriptTarget.ESNext,
@@ -8255,6 +8294,7 @@ export const enum LanguageFeatureMinimumTarget {
     //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
     UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
     ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
+    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
 }
 
 // dprint-ignore

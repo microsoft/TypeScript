@@ -1,18 +1,24 @@
 import {
-    ClassLikeDeclaration,
+    codefix,
+    Debug,
+    findAncestor,
     FunctionLikeDeclaration,
     getUniqueName,
     identifierToKeywordKind,
     isClassLike,
+    isAnyImportOrRequireStatement,
     isPrivateIdentifier,
     isPropertyAccessExpression,
     ModuleBlock,
     Node,
+    Program,
+    skipAlias,
     SourceFile,
+    Symbol,
     SymbolFlags,
     TypeChecker,
 } from "../_namespaces/ts";
-
+import { addImportsForMovedSymbols } from "./moveToFile";
 /**
  * Returned by refactor functions when some error message needs to be surfaced to users.
  *
@@ -52,4 +58,30 @@ export function getIdentifierForNode(node: Node, scope: FunctionLikeDeclaration 
     return isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
         ? node.name.text
         : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+ 
+/** @internal */
+export function addTargetFileImports(
+    oldFile: SourceFile,
+    importsToCopy: Map<Symbol, [boolean, codefix.ImportOrRequireAliasDeclaration | undefined]>,
+    targetFileImportsFromOldFile: Map<Symbol, boolean>,
+    checker: TypeChecker,
+    program: Program,
+    importAdder: codefix.ImportAdder,
+) {
+    /**
+     * Recomputing the imports is preferred with importAdder because it manages multiple import additions for a file and writes then to a ChangeTracker,
+     * but sometimes it fails because of unresolved imports from files, or when a source file is not available for the target file (in this case when creating a new file).
+     * So in that case, fall back to copying the import verbatim.
+     */
+    importsToCopy.forEach(([isValidTypeOnlyUseSite, declaration], symbol) => {
+        const targetSymbol = skipAlias(symbol, checker);
+        if (checker.isUnknownSymbol(targetSymbol)) {
+            importAdder.addVerbatimImport(Debug.checkDefined(declaration ?? findAncestor(symbol.declarations?.[0], isAnyImportOrRequireStatement)));
+        }
+        else {
+            importAdder.addImportFromExportedSymbol(targetSymbol, isValidTypeOnlyUseSite, declaration);
+        }
+    });
+
+    addImportsForMovedSymbols(targetFileImportsFromOldFile, oldFile.fileName, importAdder, program);
 }
