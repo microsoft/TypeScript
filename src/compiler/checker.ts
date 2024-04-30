@@ -29321,133 +29321,133 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         return;
+    }
 
-        function markIdentifierAliasReferenced(location: Identifier) {
-            const symbol = getResolvedSymbol(location);
-            if (symbol && symbol !== argumentsSymbol && symbol !== unknownSymbol && !isThisInTypeQuery(location)) {
-                markAliasReferenced(symbol, location);
-            }
+    function markIdentifierAliasReferenced(location: Identifier) {
+        const symbol = getResolvedSymbol(location);
+        if (symbol && symbol !== argumentsSymbol && symbol !== unknownSymbol && !isThisInTypeQuery(location)) {
+            markAliasReferenced(symbol, location);
         }
+    }
 
-        function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (!canCollectSymbolAliasAccessabilityData) {
-                return;
-            }
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location)) {
-                const target = resolveAlias(symbol);
-                if (getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
-                    // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
-                    // (because the const enum value will not be inlined), or if (2) the alias is an export
-                    // of a const enum declaration that will be preserved.
-                    if (
-                        getIsolatedModules(compilerOptions) ||
-                        shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
-                        !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
-                    ) {
-                        markAliasSymbolAsReferenced(symbol);
-                    }
-                    else {
-                        markConstEnumAliasAsReferenced(symbol);
-                    }
-                }
-            }
+    function markAliasReferenced(symbol: Symbol, location: Node) {
+        if (!canCollectSymbolAliasAccessabilityData) {
+            return;
         }
-
-        // Aliases that resolve to const enums are not marked as referenced because they are not emitted,
-        // but their usage in value positions must be tracked to determine if the import can be type-only.
-        function markConstEnumAliasAsReferenced(symbol: Symbol) {
-            const links = getSymbolLinks(symbol);
-            if (!links.constEnumReferenced) {
-                links.constEnumReferenced = true;
-            }
-        }
-
-        // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
-        // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
-        // the alias as an expression (which recursively takes us back here if the target references another alias).
-        function markAliasSymbolAsReferenced(symbol: Symbol) {
-            Debug.assert(canCollectSymbolAliasAccessabilityData);
-            const links = getSymbolLinks(symbol);
-            if (!links.referenced) {
-                links.referenced = true;
-                const node = getDeclarationOfAliasSymbol(symbol);
-                if (!node) return Debug.fail();
-                // We defer checking of the reference of an `import =` until the import itself is referenced,
-                // This way a chain of imports can be elided if ultimately the final input is only used in a type
-                // position.
-                if (isInternalModuleImportEqualsDeclaration(node)) {
-                    if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
-                        // import foo = <symbol>
-                        checkExpressionCached(node.moduleReference as Expression);
-                    }
-                }
-            }
-        }
-
-        function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
-            const symbol = getSymbolOfDeclaration(node);
+        if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location)) {
             const target = resolveAlias(symbol);
-            if (target) {
-                const markAlias = target === unknownSymbol ||
-                    ((getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
-
-                if (markAlias) {
+            if (getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & (SymbolFlags.Value | SymbolFlags.ExportValue)) {
+                // An alias resolving to a const enum cannot be elided if (1) 'isolatedModules' is enabled
+                // (because the const enum value will not be inlined), or if (2) the alias is an export
+                // of a const enum declaration that will be preserved.
+                if (
+                    getIsolatedModules(compilerOptions) ||
+                    shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location) ||
+                    !isConstEnumOrConstEnumOnlyModule(getExportSymbolOfValueSymbolIfExported(target))
+                ) {
                     markAliasSymbolAsReferenced(symbol);
                 }
-            }
-        }
-
-        function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined, forDecoratorMetadata: boolean) {
-            if (!typeName) return;
-
-            const rootName = getFirstIdentifier(typeName);
-            const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
-            const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
-            if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-                if (
-                    canCollectSymbolAliasAccessabilityData
-                    && symbolIsValue(rootSymbol)
-                    && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
-                    && !getTypeOnlyAliasDeclaration(rootSymbol)
-                ) {
-                    markAliasSymbolAsReferenced(rootSymbol);
-                }
-                else if (
-                    forDecoratorMetadata
-                    && getIsolatedModules(compilerOptions)
-                    && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
-                    && !symbolIsValue(rootSymbol)
-                    && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)
-                ) {
-                    const diag = error(typeName, Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled);
-                    const aliasDeclaration = find(rootSymbol.declarations || emptyArray, isAliasSymbolDeclaration);
-                    if (aliasDeclaration) {
-                        addRelatedInfo(diag, createDiagnosticForNode(aliasDeclaration, Diagnostics._0_was_imported_here, idText(rootName)));
-                    }
+                else {
+                    markConstEnumAliasAsReferenced(symbol);
                 }
             }
         }
+    }
 
-        /**
-         * If a TypeNode can be resolved to a value symbol imported from an external module, it is
-         * marked as referenced to prevent import elision.
-         */
-        function markTypeNodeAsReferenced(node: TypeNode | undefined) {
-            markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
+    // Aliases that resolve to const enums are not marked as referenced because they are not emitted,
+    // but their usage in value positions must be tracked to determine if the import can be type-only.
+    function markConstEnumAliasAsReferenced(symbol: Symbol) {
+        const links = getSymbolLinks(symbol);
+        if (!links.constEnumReferenced) {
+            links.constEnumReferenced = true;
         }
+    }
 
-        /**
-         * This function marks the type used for metadata decorator as referenced if it is import
-         * from external module.
-         * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
-         * union and intersection type
-         * @param node
-         */
-        function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
-            const entityName = getEntityNameForDecoratorMetadata(node);
-            if (entityName && isEntityName(entityName)) {
-                markEntityNameOrEntityExpressionAsReference(entityName, /*forDecoratorMetadata*/ true);
+    // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
+    // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
+    // the alias as an expression (which recursively takes us back here if the target references another alias).
+    function markAliasSymbolAsReferenced(symbol: Symbol) {
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
+        const links = getSymbolLinks(symbol);
+        if (!links.referenced) {
+            links.referenced = true;
+            const node = getDeclarationOfAliasSymbol(symbol);
+            if (!node) return Debug.fail();
+            // We defer checking of the reference of an `import =` until the import itself is referenced,
+            // This way a chain of imports can be elided if ultimately the final input is only used in a type
+            // position.
+            if (isInternalModuleImportEqualsDeclaration(node)) {
+                if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
+                    // import foo = <symbol>
+                    checkExpressionCached(node.moduleReference as Expression);
+                }
             }
+        }
+    }
+
+    function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
+        const symbol = getSymbolOfDeclaration(node);
+        const target = resolveAlias(symbol);
+        if (target) {
+            const markAlias = target === unknownSymbol ||
+                ((getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
+
+            if (markAlias) {
+                markAliasSymbolAsReferenced(symbol);
+            }
+        }
+    }
+
+    function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined, forDecoratorMetadata: boolean) {
+        if (!typeName) return;
+
+        const rootName = getFirstIdentifier(typeName);
+        const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
+        const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+        if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+            if (
+                canCollectSymbolAliasAccessabilityData
+                && symbolIsValue(rootSymbol)
+                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
+                && !getTypeOnlyAliasDeclaration(rootSymbol)
+            ) {
+                markAliasSymbolAsReferenced(rootSymbol);
+            }
+            else if (
+                forDecoratorMetadata
+                && getIsolatedModules(compilerOptions)
+                && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
+                && !symbolIsValue(rootSymbol)
+                && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)
+            ) {
+                const diag = error(typeName, Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled);
+                const aliasDeclaration = find(rootSymbol.declarations || emptyArray, isAliasSymbolDeclaration);
+                if (aliasDeclaration) {
+                    addRelatedInfo(diag, createDiagnosticForNode(aliasDeclaration, Diagnostics._0_was_imported_here, idText(rootName)));
+                }
+            }
+        }
+    }
+
+    /**
+     * If a TypeNode can be resolved to a value symbol imported from an external module, it is
+     * marked as referenced to prevent import elision.
+     */
+    function markTypeNodeAsReferenced(node: TypeNode | undefined) {
+        markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
+    }
+
+    /**
+     * This function marks the type used for metadata decorator as referenced if it is import
+     * from external module.
+     * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
+     * union and intersection type
+     * @param node
+     */
+    function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
+        const entityName = getEntityNameForDecoratorMetadata(node);
+        if (entityName && isEntityName(entityName)) {
+            markEntityNameOrEntityExpressionAsReference(entityName, /*forDecoratorMetadata*/ true);
         }
     }
 
