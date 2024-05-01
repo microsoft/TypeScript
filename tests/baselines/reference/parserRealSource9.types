@@ -212,11 +212,11 @@ module TypeScript {
 >this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : Type[]
 >                                                        : ^^^^^^
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                          : ^         ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                     : ^         ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >type.extendsTypeLinks : any
 >                      : ^^^
 >type : Type
@@ -452,11 +452,11 @@ module TypeScript {
 >this.resolveBaseTypeLinks(type.implementsTypeLinks, scope) : Type[]
 >                                                           : ^^^^^^
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                          : ^         ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                     : ^         ^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >type.implementsTypeLinks : any
 >                         : ^^^
 >type : Type
@@ -732,11 +732,11 @@ module TypeScript {
 >this.bindSymbol(scope, signature.parameters[j]) : void
 >                                                : ^^^^
 >this.bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->                : ^     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->           : ^     ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >signature.parameters[j] : any

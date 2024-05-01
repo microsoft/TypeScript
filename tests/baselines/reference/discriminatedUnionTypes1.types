@@ -321,7 +321,7 @@ function area3(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >s : never
 >  : ^^^^^
     }
@@ -407,7 +407,7 @@ function area4(s: Shape) {
 >assertNever(s) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^ ^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >s : never
 >  : ^^^^^
 }

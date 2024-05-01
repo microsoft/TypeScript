@@ -9,7 +9,7 @@ module Variables{
 >x : (a: any, b: any, c: any) => void
 >  : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >function bar(a, b, c) {    } : (a: any, b: any, c: any) => void
->                             :                                 
+>                             : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >bar : (a: any, b: any, c: any) => void
 >    : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^^^^^
 >a : any

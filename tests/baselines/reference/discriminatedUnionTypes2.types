@@ -263,7 +263,7 @@ f15({ value: 10 });
 >f15({ value: 10 }) : void
 >                   : ^^^^
 >f15 : (x: Result<number>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >{ value: 10 } : { value: number; }
 >              : ^^^^^^^^^^^^^^^^^^
 >value : number
@@ -275,7 +275,7 @@ f15({ error: new Error("boom") });
 >f15({ error: new Error("boom") }) : void
 >                                  : ^^^^
 >f15 : (x: Result<number>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^              ^^^^^^^^^
 >{ error: new Error("boom") } : { error: Error; }
 >                             : ^^^^^^^^^^^^^^^^^
 >error : Error
@@ -549,9 +549,9 @@ type RuntimeValue =
 >      : ^^^^^^^
 
 function foo1(x: RuntimeValue & { type: 'number' }) {
->foo1 : (x: RuntimeValue & { type: 'number'; }) => void
+>foo1 : (x: RuntimeValue & { type: "number"; }) => void
 >     : ^ ^^                                  ^^^^^^^^^
->x : { type: "number"; value: number; } & { type: 'number'; }
+>x : { type: "number"; value: number; } & { type: "number"; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^
 >type : "number"
 >     : ^^^^^^^^
@@ -588,9 +588,9 @@ function foo1(x: RuntimeValue & { type: 'number' }) {
 }
 
 function foo2(x: RuntimeValue & ({ type: 'number' } | { type: 'string' })) {
->foo2 : (x: RuntimeValue & ({ type: 'number'; } | { type: 'string'; })) => void
+>foo2 : (x: RuntimeValue & ({ type: "number"; } | { type: "string"; })) => void
 >     : ^ ^^                                                          ^^^^^^^^^
->x : ({ type: "number"; value: number; } & { type: 'number'; }) | ({ type: "string"; value: string; } & { type: 'string'; })
+>x : ({ type: "number"; value: number; } & { type: "number"; }) | ({ type: "string"; value: string; } & { type: "string"; })
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^
 >type : "number"
 >     : ^^^^^^^^

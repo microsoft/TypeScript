@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/narrowBySwitchDiscriminantUndefinedCase1.ts] ////
+
+=== narrowBySwitchDiscriminantUndefinedCase1.ts ===
+// https://github.com/microsoft/TypeScript/issues/57999
+
+interface A {
+>A : Symbol(A, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 0, 0))
+
+  optionalProp?: "hello";
+>optionalProp : Symbol(A.optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 2, 13))
+}
+
+function func(arg: A) {
+>func : Symbol(func, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 4, 1))
+>arg : Symbol(arg, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 6, 14))
+>A : Symbol(A, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 0, 0))
+
+  const { optionalProp } = arg;
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 7, 9))
+>arg : Symbol(arg, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 6, 14))
+
+  switch (optionalProp) {
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 7, 9))
+
+    case undefined:
+>undefined : Symbol(undefined)
+
+      return undefined;
+>undefined : Symbol(undefined)
+
+    case "hello":
+      return "hello";
+    default:
+      assertUnreachable(optionalProp);
+>assertUnreachable : Symbol(assertUnreachable, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 30, 1))
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 7, 9))
+  }
+}
+
+function func2() {
+>func2 : Symbol(func2, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 17, 1))
+
+  const optionalProp = ["hello" as const][Math.random()];
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 20, 7))
+>const : Symbol(const)
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+  switch (optionalProp) {
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 20, 7))
+
+    case undefined:
+>undefined : Symbol(undefined)
+
+      return undefined;
+>undefined : Symbol(undefined)
+
+    case "hello":
+      return "hello";
+    default:
+      assertUnreachable(optionalProp);
+>assertUnreachable : Symbol(assertUnreachable, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 30, 1))
+>optionalProp : Symbol(optionalProp, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 20, 7))
+  }
+}
+
+function assertUnreachable(_: never): never {
+>assertUnreachable : Symbol(assertUnreachable, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 30, 1))
+>_ : Symbol(_, Decl(narrowBySwitchDiscriminantUndefinedCase1.ts, 32, 27))
+
+  throw new Error("Unreachable path taken");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

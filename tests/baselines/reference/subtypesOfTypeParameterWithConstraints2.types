@@ -528,7 +528,7 @@ function f11<T extends () => void>(x: T) {
 >r7 : () => void
 >   : ^^^^^^^^^^
 >true ? () => { } : x : () => void
->                     :           
+>                     : ^^^^^^^^^^
 >true : true
 >     : ^^^^
 >() => { } : () => void
@@ -561,7 +561,7 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >r8 : <T_1>(x: T_1) => T_1
 >   : ^   ^^ ^^   ^^^^^^^^
 >true ? <T>(x: T) => { return x } : x : <T_1>(x: T_1) => T_1
->                                     :                     
+>                                     : ^   ^^ ^^   ^^^^^^^^
 >true : true
 >     : ^^^^
 ><T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
@@ -577,7 +577,7 @@ function f12<T extends <U>(x: U) => U>(x: T) {
 >r8b : <T_1>(x: T_1) => T_1
 >    : ^   ^^ ^^   ^^^^^^^^
 >true ? x : <T>(x: T) => { return x } : <T_1>(x: T_1) => T_1
->                                     :                     
+>                                     : ^   ^^ ^^   ^^^^^^^^
 >true : true
 >     : ^^^^
 >x : T

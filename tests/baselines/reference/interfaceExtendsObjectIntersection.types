@@ -173,9 +173,9 @@ declare namespace NX { export const a = 1 }
 
 type T10 = typeof fx;
 >T10 : (x: string) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >fx : (x: string) => string
->   : ^ ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 
 type T11 = typeof CX;
 >T11 : typeof CX

@@ -121,7 +121,7 @@ type TypesMap = {
 >         : ^^^^^^^^
 
     [0]: { foo: 'bar'; };
->[0] : { foo: 'bar'; }
+>[0] : { foo: "bar"; }
 >    : ^^^^^^^     ^^^
 >0 : 0
 >  : ^
@@ -129,7 +129,7 @@ type TypesMap = {
 >    : ^^^^^
 
     [1]: { a: 'b'; };
->[1] : { a: 'b'; }
+>[1] : { a: "b"; }
 >    : ^^^^^   ^^^
 >1 : 1
 >  : ^
@@ -166,17 +166,17 @@ const typeHandlers: TypeHandlers = {
 >0 : 0
 >  : ^
 >(p) => console.log(p.foo) : (p: P<0>) => void
->                          :                  
+>                          : ^ ^^^^^^^^^^^^^^^
 >p : P<0>
 >  : ^^^^
 >console.log(p.foo) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.foo : "bar"
 >      : ^^^^^
 >p : P<0>
@@ -190,17 +190,17 @@ const typeHandlers: TypeHandlers = {
 >1 : 1
 >  : ^
 >(p) => console.log(p.a) : (p: P<1>) => void
->                        :                  
+>                        : ^ ^^^^^^^^^^^^^^^
 >p : P<1>
 >  : ^^^^
 >console.log(p.a) : void
 >                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >p.a : "b"
 >    : ^^^
 >p : P<1>
@@ -214,7 +214,7 @@ const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
 >            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->                                                                 :                                                        
+>                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 >p : P<T>
 >  : ^^^^
 

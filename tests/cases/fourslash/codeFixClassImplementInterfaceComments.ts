@@ -38,7 +38,7 @@ verify.codeFix({
 class C implements N.I {
     a: N.E.a;
     b: N.E;
-    foo<X>(a: X): string {
+    foo<X>(a: X /** close paren prefix */): string {
         throw new Error("Method not implemented.");
     }
 }`,

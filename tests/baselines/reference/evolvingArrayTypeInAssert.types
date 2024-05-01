@@ -33,7 +33,7 @@ function yadda() {
 >unsafeCast<any>(out) : void
 >                     : ^^^^
 >unsafeCast : <T>(_value: unknown) => asserts _value is T
->           : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >out : number[]
 >    : ^^^^^^^^
 

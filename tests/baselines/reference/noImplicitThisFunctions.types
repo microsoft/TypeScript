@@ -78,7 +78,7 @@ let f5 = () => () => this;
 >f5 : () => () => typeof globalThis
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => () => this : () => () => typeof globalThis
->                 :                              
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
 >           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
@@ -88,7 +88,7 @@ let f6 = function() { return () => this; };
 >f6 : () => () => any
 >   : ^^^^^^^^^^^^^^^
 >function() { return () => this; } : () => () => any
->                                  :                
+>                                  : ^^^^^^^^^^^^^^^
 >() => this : () => any
 >           : ^^^^^^^^^
 >this : any
@@ -98,7 +98,7 @@ let f7 = function() { return function() { return this } };
 >f7 : () => () => any
 >   : ^^^^^^^^^^^^^^^
 >function() { return function() { return this } } : () => () => any
->                                                 :                
+>                                                 : ^^^^^^^^^^^^^^^
 >function() { return this } : () => any
 >                           : ^^^^^^^^^
 >this : any

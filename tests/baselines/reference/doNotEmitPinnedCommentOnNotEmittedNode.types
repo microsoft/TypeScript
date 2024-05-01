@@ -15,7 +15,7 @@ class C {
 
     public foo(x: string, y: number) { }
 >foo : (x: string, y: any) => any
->    : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^
+>    : ^ ^^      ^^ ^^   ^^^^^^^^
 >x : string
 >  : ^^^^^^
 >y : number

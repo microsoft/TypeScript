@@ -143,7 +143,7 @@ export function syncStoreProp<
 >hasOwnProperty(props, key) : boolean
 >                           : ^^^^^^^
 >hasOwnProperty : <T extends AnyObject>(object: T, prop: PropertyKey) => prop is keyof T
->               : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^      ^^ ^^    ^^           ^^^^^^^^^^^^^^^^^^^^
 >props : P
 >      : ^
 >key : string | number | symbol

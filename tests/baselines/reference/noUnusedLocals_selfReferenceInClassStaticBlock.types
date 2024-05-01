@@ -110,7 +110,7 @@ BluethootDevice_create("aa");
 >BluethootDevice_create("aa") : BluethootDevice
 >                             : ^^^^^^^^^^^^^^^
 >BluethootDevice_create : (id: string) => BluethootDevice
->                       : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^  ^^      ^^^^^^^^^^^^^^^^^^^^
 >"aa" : "aa"
 >     : ^^^^
 

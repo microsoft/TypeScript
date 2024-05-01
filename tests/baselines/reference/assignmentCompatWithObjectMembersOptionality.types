@@ -182,7 +182,7 @@ module TargetHasOptional {
 >b : { opt?: Base; }
 >  : ^^^^^^^^^^^^^^^
 >a : { opt?: Base; }
->  :      ^         
+>  : ^^^^^^^^^^^^^^^
 
     b = c;
 >b = c : C

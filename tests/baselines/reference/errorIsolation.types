@@ -5,11 +5,11 @@ const async = { doSomething: _ => {} };
 >async : { doSomething: (_: any) => void; }
 >      : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >{ doSomething: _ => {} } : { doSomething: (_: any) => void; }
->                         : ^^^^^^^^^^^^^^^                ^^^
+>                         : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >doSomething : (_: any) => void
 >            : ^ ^^^^^^^^^^^^^^
 >_ => {} : (_: any) => void
->        :                 
+>        : ^ ^^^^^^^^^^^^^^
 >_ : any
 
 async.doSomething(

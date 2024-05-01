@@ -33,7 +33,7 @@ class c1 {
     }
     public f4(_i: number, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >rest : any[]
@@ -41,7 +41,7 @@ class c1 {
 
     public f4(_i: string, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 >rest : any[]
@@ -49,7 +49,7 @@ class c1 {
 
     public f4(_i: any, ...rest) { // error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : any
 >rest : any[]
 >     : ^^^^^
@@ -60,19 +60,19 @@ class c1 {
 
     public f4NoError(_i: number); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^      ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 
     public f4NoError(_i: string); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 
     public f4NoError(_i: any) { // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : any
 
         var _i: any; // no error
@@ -100,7 +100,7 @@ declare class c2 {
 
     public f4(_i: number, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 >rest : any[]
@@ -108,7 +108,7 @@ declare class c2 {
 
     public f4(_i: string, ...rest); // no codegen no error
 >f4 : { (_i: number, ...rest: any[]): any; (_i: string, ...rest: any[]): any; }
->   : ^^^  ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
+>   : ^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^  ^^      ^^^^^    ^^^^^^^^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 >rest : any[]
@@ -116,13 +116,13 @@ declare class c2 {
 
     public f4NoError(_i: number); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^      ^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : number
 >   : ^^^^^^
 
     public f4NoError(_i: string); // no error
 >f4NoError : { (_i: number): any; (_i: string): any; }
->          : ^^^  ^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^
+>          : ^^^  ^^      ^^^^^^^^^  ^^      ^^^^^^^^^
 >_i : string
 >   : ^^^^^^
 }

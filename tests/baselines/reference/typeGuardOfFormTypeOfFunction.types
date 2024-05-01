@@ -258,11 +258,11 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
             item.call(obj);
 >item.call(obj) : any
 >item.call : (this: Function, thisArg: any, ...argArray: any[]) => any
->          : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>          : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >item : T[K] & Function
 >     : ^^^^^^^^^^^^^^^
 >call : (this: Function, thisArg: any, ...argArray: any[]) => any
->     : ^    ^^^^^^^^^^^^       ^^^^^^^^^^        ^^^^^^^^^^^^^^^
+>     : ^    ^^        ^^       ^^   ^^^^^        ^^     ^^^^^^^^
 >obj : T
 >    : ^
     }
