@@ -45,7 +45,7 @@ my.app.Application = (function () {
 >Application : () => void
 >            : ^^^^^^^^^^
 >(function () {var Application = function () {    //...};return Application;})() : () => void
->                                                                                :           
+>                                                                                : ^^^^^^^^^^
 >(function () {var Application = function () {    //...};return Application;}) : () => () => void
 >                                                                              : ^^^^^^^^^^^^^^^^
 >function () {var Application = function () {    //...};return Application;} : () => () => void
@@ -55,7 +55,7 @@ var Application = function () {
 >Application : () => void
 >            : ^^^^^^^^^^
 >function () {    //...} : () => void
->                        :           
+>                        : ^^^^^^^^^^
 
     //...
 };
@@ -127,7 +127,7 @@ min.app.Application = (function () {
 >Application : () => void
 >            : ^^^^^^^^^^
 >(function () {var Application = function () {    //...};return Application;})() : () => void
->                                                                                :           
+>                                                                                : ^^^^^^^^^^
 >(function () {var Application = function () {    //...};return Application;}) : () => () => void
 >                                                                              : ^^^^^^^^^^^^^^^^
 >function () {var Application = function () {    //...};return Application;} : () => () => void
@@ -137,7 +137,7 @@ var Application = function () {
 >Application : () => void
 >            : ^^^^^^^^^^
 >function () {    //...} : () => void
->                        :           
+>                        : ^^^^^^^^^^
 
     //...
 };

@@ -15,7 +15,7 @@ import {
     TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch";
 
-describe("unittests:: tsserver:: with project references and tsbuild source map", () => {
+describe("unittests:: tsserver:: projectReferencesSourcemap:: with project references and tsbuild source map", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
     const dependecyDeclsLocation = `/user/username/projects/myproject/decls`;
     const mainLocation = `/user/username/projects/myproject/main`;
@@ -71,10 +71,10 @@ fn5();
 
     const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
 
-    function changeDtsFile(session: TestSession) {
+    function changeDtsFile(session: TestSession, content?: string) {
         session.host.writeFile(
             dtsLocation,
-            session.host.readFile(dtsLocation)!.replace(
+            (content ?? session.host.readFile(dtsLocation)!).replace(
                 "//# sourceMappingURL=FnS.d.ts.map",
                 `export declare function fn6(): void;
 //# sourceMappingURL=FnS.d.ts.map`,
@@ -147,14 +147,18 @@ fn5();
     function createSessionWithoutProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
+        writeConfigWithoutProjectReferences(host);
+        onHostCreate?.(host);
+        return new TestSession(host);
+    }
+
+    function writeConfigWithoutProjectReferences(host: TestServerHost) {
         host.writeFile(
             mainConfig.path,
             jsonToReadableText({
                 compilerOptions: { composite: true, declarationMap: true },
             }),
         );
-        onHostCreate?.(host);
-        return new TestSession(host);
     }
 
     function createSessionWithProjectReferences(onHostCreate?: OnHostCreate) {
@@ -166,6 +170,12 @@ fn5();
     function createSessionWithDisabledProjectReferences(onHostCreate?: OnHostCreate) {
         const host = createHostWithSolutionBuild(files, [mainConfig.path]);
         // Erase project reference
+        WithDisabledProjectReferences(host);
+        onHostCreate?.(host);
+        return new TestSession(host);
+    }
+
+    function WithDisabledProjectReferences(host: TestServerHost) {
         host.writeFile(
             mainConfig.path,
             jsonToReadableText({
@@ -177,8 +187,6 @@ fn5();
                 references: [{ path: "../dependency" }],
             }),
         );
-        onHostCreate?.(host);
-        return new TestSession(host);
     }
 
     function makeChangeToMainTs(session: TestSession) {
@@ -209,12 +217,28 @@ fn5();
         });
     }
 
-    function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
-        const session = type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
+    function verifyForAllSessionTypes<T>(worker: (type: SessionType, options: T) => void, options: T) {
+        describe("when main tsconfig doesnt have project reference", () => {
+            worker(SessionType.NoReference, options);
+        });
+        describe("when main tsconfig has project reference", () => {
+            worker(SessionType.ProjectReference, options);
+        });
+        describe("when main tsconfig has disableSourceOfProjectReferenceRedirect along with project reference", () => {
+            worker(SessionType.DisableSourceOfProjectReferenceRedirect, options);
+        });
+    }
+
+    function createSession(type: SessionType, onHostCreate?: OnHostCreate) {
+        return type === SessionType.NoReference ? createSessionWithoutProjectReferences(onHostCreate) :
             type === SessionType.ProjectReference ? createSessionWithProjectReferences(onHostCreate) :
             type === SessionType.DisableSourceOfProjectReferenceRedirect ?
             createSessionWithDisabledProjectReferences(onHostCreate) :
             ts.Debug.assertNever(type);
+    }
+
+    function setup(type: SessionType, openFiles: readonly File[], action: Action | Action[], max?: number, onHostCreate?: OnHostCreate) {
+        const session = createSession(type, onHostCreate);
         openFilesForSession(openFiles, session);
         runActions(session, action, max);
         return session;
@@ -275,10 +299,60 @@ fn5();
         openFiles: readonly File[];
         action: Action | Action[];
     }
-    function verifyFileRenames(options: VerifyFileRenamesOptions) {
+    function verifyFileChangeAndRenames(options: VerifyFileRenamesOptions) {
         function file(options: VerifyFileRenamesOptions) {
             return options.file === "dts" ? dtsLocation : dtsMapLocation;
         }
+        enum ChangeAsRenameType {
+            NoTimeout = "no timeout",
+            TimeoutAfterDelete = "timeout after delete",
+            TimeoutAfterWrite = "timeout after write",
+            ActionBeforeWrite = "action before write",
+        }
+        function change(options: VerifyFileRenamesOptions) {
+            return options.file === "dts" ? changeDtsFile : changeDtsMapFile;
+        }
+        function verifyChangeAsRename(withChange: boolean) {
+            [
+                ChangeAsRenameType.NoTimeout,
+                ChangeAsRenameType.TimeoutAfterDelete,
+                ChangeAsRenameType.TimeoutAfterWrite,
+                ChangeAsRenameType.ActionBeforeWrite,
+            ].forEach(changeAsRenameType => {
+                it(`with ${options.file} file, change as rename  ${changeAsRenameType}`, () => {
+                    const session = setup(options.type, options.openFiles, options.action, 1);
+                    const location = file(options);
+                    const fileContents = session.host.readFile(location)!;
+                    session.host.deleteFile(location);
+                    switch (changeAsRenameType) {
+                        case ChangeAsRenameType.TimeoutAfterDelete:
+                            session.host.runQueuedTimeoutCallbacks();
+                            break;
+                        case ChangeAsRenameType.ActionBeforeWrite:
+                            runActions(session, options.action, 2);
+                            break;
+                        default:
+                            session.host.baselineHost(`Before write ${location}`);
+                    }
+                    if (withChange) change(options)(session, fileContents);
+                    else session.host.writeFile(location, fileContents);
+                    if (changeAsRenameType === ChangeAsRenameType.TimeoutAfterWrite) session.host.runQueuedTimeoutCallbacks();
+                    runActions(session, options.action, 2);
+                    baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${options.type}/dependency ${options.file} ${withChange ? "change" : "rewrite"} as rename ${changeAsRenameType}`, session);
+                });
+            });
+        }
+        // Edit to add new fn
+        verifyScenarioWithChanges({
+            scenarioLocation: options.scenarioLocation,
+            type: options.type,
+            scenario: `dependency ${options.file} changes`,
+            openFiles: options.openFiles,
+            change: change(options),
+            action: options.action,
+        });
+        verifyChangeAsRename(/*withChange*/ true);
+        verifyChangeAsRename(/*withChange*/ false);
         it(`with ${options.file} file, when file is not present`, () => {
             const session = setup(options.type, options.openFiles, options.action, undefined, host => host.deleteFile(file(options)));
             verifyScriptInfoCollectionWith(session, options.openFiles);
@@ -314,93 +388,63 @@ fn5();
         referenceChange: (session: TestSession) => void;
         referenceChangeAction?: Action | Action[];
     }
-    function verifyScenarioWorker(options: VerifyScenario, type: SessionType) {
-        verifyAction({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            scenario: options.scenario,
-            openFiles: options.openFiles,
-            action: options.action,
-        });
-
-        // Edit
-        verifyScenarioWithChanges({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            scenario: "usage file changes",
-            openFiles: options.openFiles,
-            change: options.change,
-            action: options.action,
-        });
-
-        // Edit dts to add new fn
-        verifyScenarioWithChanges({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            scenario: "dependency dts changes",
-            openFiles: options.openFiles,
-            change: changeDtsFile,
-            action: options.action,
-        });
-
-        // Edit map file to represent added new line
-        verifyScenarioWithChanges({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            scenario: "dependency dtsMap changes",
-            openFiles: options.openFiles,
-            change: changeDtsMapFile,
-            action: options.action,
-        });
-
-        verifyFileRenames({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            file: "dtsMap",
-            openFiles: options.openFiles,
-            action: options.action,
-        });
-
-        verifyFileRenames({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            file: "dts",
-            openFiles: options.openFiles,
-            action: options.action,
-        });
-
-        if (type !== SessionType.ProjectReference) return;
-
-        verifyScenarioWithChanges({
-            scenarioLocation: options.scenarioLocation,
-            type,
-            scenario: "dependency source changes",
-            openFiles: options.openFiles,
-            change: options.referenceChange,
-            action: options.action,
-            actionAfterChange: options.referenceChangeAction,
-        });
-
-        it("when projects are not built", () => {
-            const host = createServerHost(files);
-            const session = new TestSession(host);
-            openFilesForSession(options.openFiles, session);
-            runActions(session, options.action);
-            verifyScriptInfoCollectionWith(session, options.openFiles);
-            baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${type}/when projects are not built`, session);
-        });
-    }
-
     function verifyScenario(options: VerifyScenario) {
-        describe("when main tsconfig doesnt have project reference", () => {
-            verifyScenarioWorker(options, SessionType.NoReference);
-        });
-        describe("when main tsconfig has project reference", () => {
-            verifyScenarioWorker(options, SessionType.ProjectReference);
-        });
-        describe("when main tsconfig has disableSourceOfProjectReferenceRedirect along with project reference", () => {
-            verifyScenarioWorker(options, SessionType.DisableSourceOfProjectReferenceRedirect);
-        });
+        verifyForAllSessionTypes((type, options) => {
+            verifyAction({
+                scenarioLocation: options.scenarioLocation,
+                type,
+                scenario: options.scenario,
+                openFiles: options.openFiles,
+                action: options.action,
+            });
+
+            // Edit
+            verifyScenarioWithChanges({
+                scenarioLocation: options.scenarioLocation,
+                type,
+                scenario: "usage file changes",
+                openFiles: options.openFiles,
+                change: options.change,
+                action: options.action,
+            });
+
+            verifyFileChangeAndRenames({
+                scenarioLocation: options.scenarioLocation,
+                type,
+                file: "dtsMap",
+                openFiles: options.openFiles,
+                action: options.action,
+            });
+
+            verifyFileChangeAndRenames({
+                scenarioLocation: options.scenarioLocation,
+                type,
+                file: "dts",
+                openFiles: options.openFiles,
+                action: options.action,
+            });
+
+            if (type !== SessionType.ProjectReference) return;
+
+            verifyScenarioWithChanges({
+                scenarioLocation: options.scenarioLocation,
+                type,
+                scenario: "dependency source changes",
+                openFiles: options.openFiles,
+                change: options.referenceChange,
+                action: options.action,
+                actionAfterChange: options.referenceChangeAction,
+            });
+
+            it("when projects are not built", () => {
+                const host = createServerHost(files);
+                const session = new TestSession(host);
+                openFilesForSession(options.openFiles, session);
+                runActions(session, options.action);
+                verifyScriptInfoCollectionWith(session, options.openFiles);
+                baselineTsserverLogs("projectReferencesSourcemap", `${options.scenarioLocation}/${type}/when projects are not built`, session);
+            });
+        }, options);
     }
 
     describe("from project that uses dependency: goToDef", () => {
@@ -465,5 +509,46 @@ fn5();
                 }),
             referenceChangeAction: [goToDefFromMainTs, renameFromDependencyTsWithDependencyChange],
         });
+
+        verifyForAllSessionTypes(type => {
+            it("goto Definition in usage and rename locations, deleting config file", () => {
+                const session = createSession(type);
+                openFilesForSession([mainTs], session);
+                session.executeCommandSeq<ts.server.protocol.RenameRequest>({
+                    command: ts.server.protocol.CommandTypes.Rename,
+                    arguments: { file: mainTs.path, line: 2, offset: 17 },
+                });
+
+                verifyMainConfigDelete(mainConfig, /*runTimeoutAfterDelete*/ true, /*openRandomAfterDelete*/ false);
+                verifyMainConfigDelete(mainConfig, /*runTimeoutAfterDelete*/ true, /*openRandomAfterDelete*/ true);
+                verifyMainConfigDelete(mainConfig, /*runTimeoutAfterDelete*/ false, /*openRandomAfterDelete*/ false);
+                verifyMainConfigDelete(mainConfig, /*runTimeoutAfterDelete*/ false, /*openRandomAfterDelete*/ true);
+
+                verifyMainConfigDelete(dependencyConfig, /*runTimeoutAfterDelete*/ true, /*openRandomAfterDelete*/ false);
+                verifyMainConfigDelete(dependencyConfig, /*runTimeoutAfterDelete*/ false, /*openRandomAfterDelete*/ true);
+                verifyMainConfigDelete(dependencyConfig, /*runTimeoutAfterDelete*/ true, /*openRandomAfterDelete*/ true);
+                verifyMainConfigDelete(dependencyConfig, /*runTimeoutAfterDelete*/ false, /*openRandomAfterDelete*/ false);
+
+                baselineTsserverLogs("projectReferencesSourcemap", `dependencyAndUsage/${type}/goToDef and rename locations and deleting config file`, session);
+
+                function verifyMainConfigDelete(
+                    config: File,
+                    runTimeoutAfterDelete: boolean,
+                    openRandomAfterDelete: boolean,
+                ) {
+                    const configContent = session.host.readFile(config.path)!;
+                    session.host.deleteFile(config.path);
+                    if (runTimeoutAfterDelete) session.host.runQueuedTimeoutCallbacks();
+                    if (openRandomAfterDelete) {
+                        openFilesForSession([randomFile], session);
+                        closeFilesForSession([randomFile], session);
+                    }
+                    session.host.writeFile(config.path, configContent);
+                    session.host.runQueuedTimeoutCallbacks();
+                    openFilesForSession([randomFile], session);
+                    closeFilesForSession([randomFile], session);
+                }
+            });
+        }, /*options*/ undefined);
     });
 });

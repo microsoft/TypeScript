@@ -35,7 +35,7 @@ export class C {
 >mappy(this.assets) : void
 >                   : ^^^^
 >mappy : (map: { [s: string]: number; }) => void
->      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^   ^^                        ^^^^^^^^^
 >this.assets : { [assetName: string]: number; }
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this

@@ -39,11 +39,11 @@ module clodule {
 >clodule.sfn('a') : number
 >                 : ^^^^^^
 >clodule.sfn : (id: string) => number
->            : ^  ^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^      ^^^^^^^^^^^
 >clodule : typeof clodule
 >        : ^^^^^^^^^^^^^^
 >sfn : (id: string) => number
->    : ^  ^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^      ^^^^^^^^^^^
 >'a' : "a"
 >    : ^^^
     }

@@ -25,7 +25,7 @@ c = { compareTo: (x, y) => { return y; } };
 >compareTo : <U>(x: any, y: U) => U
 >          : ^^^^ ^^^^^^^ ^^^^^^^^^
 >(x, y) => { return y; } : <U>(x: any, y: U) => U
->                        :                       
+>                        : ^^^^ ^^^^^^^ ^^^^^^^^^
 >x : any
 >y : U
 >  : ^

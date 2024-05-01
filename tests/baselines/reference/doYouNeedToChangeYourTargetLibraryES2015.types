@@ -6,7 +6,7 @@ const noOp = () => {};
 >noOp : () => void
 >     : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 const testReflectApply = Reflect.apply(noOp, this, []);
 >testReflectApply : any
@@ -392,11 +392,11 @@ const testObjectConstructorKeys = Object.keys({});
 >Object.keys({}) : string[]
 >                : ^^^^^^^^
 >Object.keys : (o: object) => string[]
->            : ^ ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^      ^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : (o: object) => string[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^      ^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 

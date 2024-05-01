@@ -11,13 +11,13 @@ var WorkspacePrototype = {
 >WorkspacePrototype : { serialize: () => any; }
 >                   : ^^^^^^^^^^^^^^^^^^^   ^^^
 >{    serialize: function (): any {    }} : { serialize: () => any; }
->                                         : ^^^^^^^^^^^^^         ^^^
+>                                         : ^^^^^^^^^^^^^^^^^^^   ^^^
 
     serialize: function (): any {
 >serialize : () => any
 >          : ^^^^^^   
 >function (): any {    } : () => any
->                        :          
+>                        : ^^^^^^   
     }
 };
 WorkspacePrototype['__proto__'] = EntityPrototype;

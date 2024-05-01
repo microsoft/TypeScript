@@ -82,7 +82,7 @@ fun(...new FooArrayIterator);
 >fun(...new FooArrayIterator) : void
 >                             : ^^^^
 >fun : (...[[a], b]: Bar[][]) => void
->    : ^^^^        ^^^^^^^^^^^^^^^^^^
+>    : ^^^^        ^^       ^^^^^^^^^
 >...new FooArrayIterator : Foo[]
 >                        : ^^^^^
 >new FooArrayIterator : FooArrayIterator

@@ -43,7 +43,7 @@ function test1() {
 >foo(x) : number
 >       : ^^^^^^
 >foo : (x: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
             }
@@ -92,7 +92,7 @@ function test2() {
 >foo(x) : number
 >       : ^^^^^^
 >foo : (x: number) => number
->    : ^ ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
         }
@@ -170,7 +170,7 @@ function mapUntilCant<a, b>(
 >canTake(value, index) : boolean
 >                      : ^^^^^^^
 >canTake : (value: a, index: number) => boolean
->        : ^     ^^^^^     ^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^ ^^     ^^      ^^^^^^^^^^^^
 >value : a
 >      : ^
 >index : number
@@ -188,7 +188,7 @@ function mapUntilCant<a, b>(
 >mapping(value, index) : b
 >                      : ^
 >mapping : (value: a, index: number) => b
->        : ^     ^^^^^     ^^^^^^^^^^^^^^
+>        : ^     ^^ ^^     ^^      ^^^^^^
 >value : a
 >      : ^
 >index : number

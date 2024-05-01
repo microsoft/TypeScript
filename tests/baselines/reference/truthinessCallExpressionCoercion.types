@@ -64,11 +64,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log('test') : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >'test' : "test"
 >       : ^^^^^^
     }
@@ -81,11 +81,11 @@ function onlyErrorsWhenUnusedInBody() {
 >console.log(test) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >test : () => boolean
 >     : ^^^^^^^^^^^^^
     }
@@ -109,13 +109,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(() => {            test();        }) : void
 >                                                          : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^          ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^          ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >() => {            test();        } : () => void
 >                                    : ^^^^^^^^^^
 
@@ -136,13 +136,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(test => {            test();        }) : void
 >                                                            : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^          ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^^^^^^^^^     ^^^          ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >test => {            test();        } : (test: () => null) => void
 >                                      : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
@@ -281,11 +281,11 @@ function A(stats: StatsBase<any>) {
 >console.log(`[Directory] ${stats.ctime}`) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >`[Directory] ${stats.ctime}` : string
 >                             : ^^^^^^
 >stats.ctime : number

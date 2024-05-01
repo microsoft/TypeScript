@@ -90,7 +90,7 @@ class C<T extends Foo, U extends Foo> {
 >r : () => void
 >  : ^^^^^^^^^^
 >() => {        this.t = this.u; // error        this.u = this.t; // error    } : () => void
->                                                                               :           
+>                                                                               : ^^^^^^^^^^
 
         this.t = this.u; // error
 >this.t = this.u : U

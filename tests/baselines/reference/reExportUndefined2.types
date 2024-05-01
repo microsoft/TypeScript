@@ -22,6 +22,6 @@ declare function use(a: number);
 use(undefined);
 >use(undefined) : any
 >use : (a: number) => any
->    : ^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^
 >undefined : any
 

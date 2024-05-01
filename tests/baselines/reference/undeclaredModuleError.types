@@ -65,7 +65,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >readdir(covFileDir, () => {        } , (error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } ) : void
 >                                                                                                                                                                                                         : ^^^^
 >readdir : (path: string, accept: (stat: fs.Stats, name: string) => boolean, callback: (error: Error, results: { name: string; stat: fs.Stats; }[]) => void) => void
->        : ^    ^^^^^^^^^^      ^^^    ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^        ^^^     ^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^      ^^      ^^                                         ^^        ^^                                                                    ^^^^^^^^^
 >covFileDir : string
 >           : ^^^^^^
 >() => {        } : () => void
@@ -83,11 +83,11 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } ) : void
 >                                                                                                  : ^^^^
 >files.forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
->              : ^          ^^^     ^^^^^^     ^^^^^^^^^^     ^^  ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>              : ^          ^^^     ^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >files : {}[]
 >      : ^^^^
 >forEach : (callbackfn: (value: {}, index: number, array: {}[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^     ^^^^^^^^^^     ^^  ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
+>        : ^          ^^^     ^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >(file) => {                    var fullPath = join(IDoNotExist);                } : (file: {}) => void
 >                                                                                  : ^    ^^^^^^^^^^^^^
 >file : {}
@@ -99,7 +99,7 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
 >join(IDoNotExist) : void
 >                  : ^^^^
 >join : (...paths: string[]) => void
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^        ^^^^^^^^^
 >IDoNotExist : any
 >            : ^^^
 

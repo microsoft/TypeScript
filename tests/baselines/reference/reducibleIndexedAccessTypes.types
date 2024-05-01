@@ -100,17 +100,17 @@ const payloads2: MappedPayload2 = {
 >A : Type.A
 >  : ^^^^^^
 >data => { console.log(data) } : (data: string) => void
->                              :                       
+>                              : ^    ^^^^^^^^^^^^^^^^^
 >data : string
 >     : ^^^^^^
 >console.log(data) : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >data : string
 >     : ^^^^^^
 }

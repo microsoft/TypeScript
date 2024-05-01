@@ -9,7 +9,7 @@ const a = /* @type string */(Foo);
 >a : () => void
 >  : ^^^^^^^^^^
 >(Foo) : () => void
->      :           
+>      : ^^^^^^^^^^
 >Foo : () => void
 >    : ^^^^^^^^^^
 

@@ -13,6 +13,7 @@ import {
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
+    ConfiguredProject,
     isBackgroundProject,
     isConfiguredProject,
     LogLevel,
@@ -32,6 +33,7 @@ interface ProjectData {
     isClosed: ReturnType<Project["isClosed"]>;
     isOrphan: ReturnType<Project["isOrphan"]>;
     noOpenRef: boolean;
+    deferredClose: ConfiguredProject["deferredClose"];
     documentPositionMappers: SourceMapper["documentPositionMappers"];
     autoImportProviderHost: Project["autoImportProviderHost"];
     noDtsResolutionProject: Project["noDtsResolutionProject"];
@@ -46,6 +48,7 @@ interface ScriptInfoData {
     open: ReturnType<ScriptInfo["isScriptOpen"]>;
     version: ReturnType<TextStorage["getVersion"]>;
     pendingReloadFromDisk: TextStorage["pendingReloadFromDisk"];
+    deferredDelete: ScriptInfo["deferredDelete"];
     sourceMapFilePath: Exclude<ScriptInfo["sourceMapFilePath"], SourceMapFileWatcher> | SourceMapFileWatcherData | undefined;
     declarationInfoPath: ScriptInfo["declarationInfoPath"];
     sourceInfos: ScriptInfo["sourceInfos"];
@@ -101,6 +104,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(/*toRetainConfiguredProjects*/ undefined);
+        const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
             projects,
@@ -115,7 +120,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", noOpenRef(project), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredClose", isConfiguredProject(project) && project.deferredClose, projectDiff, projectPropertyLogs);
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
                     data?.documentPositionMappers,
@@ -145,7 +151,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 dirty: project.dirty,
                 isClosed: project.isClosed(),
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
-                noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
+                noOpenRef: noOpenRef(project),
+                deferredClose: isConfiguredProject(project) && project.deferredClose,
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,
                 originalConfiguredProjects: project.originalConfiguredProjects && new Set(project.originalConfiguredProjects),
@@ -166,6 +173,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 infoDiff = printProperty(PrintPropertyWhen.Changed, data, "open", isOpen, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.Always, data, "version", info.textStorage.getVersion(), infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "pendingReloadFromDisk", info.textStorage.pendingReloadFromDisk, infoDiff, infoPropertyLogs);
+                infoDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredDelete", info.deferredDelete, infoDiff, infoPropertyLogs);
                 infoDiff = printScriptInfoSourceMapFilePath(data, info, infoDiff, infoPropertyLogs);
                 infoDiff = printProperty(PrintPropertyWhen.DefinedOrChangedOrNew, data, "declarationInfoPath", info.declarationInfoPath, infoDiff, infoPropertyLogs);
                 infoDiff = printSetPropertyValueWorker(PrintPropertyWhen.DefinedOrChangedOrNew, data?.sourceInfos, "sourceInfos", info.sourceInfos, infoDiff, infoPropertyLogs, identity);
@@ -200,6 +208,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 sourceInfos: info.sourceInfos && new Set(info.sourceInfos),
                 documentPositionMapper: info.documentPositionMapper,
                 containingProjects: new Set(info.containingProjects),
+                deferredDelete: info.deferredDelete,
             }),
         );
     }

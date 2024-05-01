@@ -46,11 +46,11 @@ m.doSomething(v);
 >m.doSomething(v) : void
 >                 : ^^^^
 >m.doSomething : (v: m.variable) => void
->              : ^ ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^          ^^^^^^^^^
 >m : typeof m
 >  : ^^^^^^^^
 >doSomething : (v: m.variable) => void
->            : ^ ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^          ^^^^^^^^^
 >v : variable
 >  : ^^^^^^^^
 

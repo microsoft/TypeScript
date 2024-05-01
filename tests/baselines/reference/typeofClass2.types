@@ -18,19 +18,19 @@ class C {
 
     static foo(x: number);
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^ ^^      ^^^^^^^^^ ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 
     static foo(x: C);
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : C
 >  : ^
 
     static foo(x) { }
 >foo : { (x: number): any; (x: C): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^
+>    : ^^^ ^^      ^^^^^^^^^ ^^ ^^^^^^^^^
 >x : any
 
     static bar(x) { }

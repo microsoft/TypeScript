@@ -162,7 +162,7 @@ module Foo.Bar {
 >foo2("Hello", "World", "!") : Greeter[]
 >                            : ^^^^^^^^^
 >foo2 : (greeting: string, ...restGreetings: string[]) => Greeter[]
->     : ^        ^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^        ^^      ^^^^^             ^^        ^^^^^^^^^^^^^^
 >"Hello" : "Hello"
 >        : ^^^^^^^
 >"World" : "World"

@@ -13,7 +13,7 @@ fun(...new FooIteratorIterator);
 >fun(...new FooIteratorIterator) : void
 >                                : ^^^^
 >fun : (...[a, b]: [Bar, Bar][]) => void
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^      ^^            ^^^^^^^^^
 >...new FooIteratorIterator : FooIterator
 >                           : ^^^^^^^^^^^
 >new FooIteratorIterator : FooIteratorIterator

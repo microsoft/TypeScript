@@ -1,10 +1,8 @@
 //// [tests/cases/conformance/controlFlow/dependentDestructuredVariables.ts] ////
 
 === Performance Stats ===
-Assignability cache: 300 / 300 (nearest 100)
-Type Count: 2,200 / 2,300 (nearest 100)
-Instantiation count: 1,500 / 1,500 (nearest 500)
-Symbol count: 34,000 / 34,000 (nearest 500)
+Type Count: 2,500
+Instantiation count: 1,000
 
 === dependentDestructuredVariables.ts ===
 type Action =
@@ -42,12 +40,12 @@ function f10({ kind, payload }: Action) {
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -94,12 +92,12 @@ function f11(action: Action) {
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -140,12 +138,12 @@ function f12({ kind, payload }: Action) {
             payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 
             break;
         case 'B':
@@ -190,12 +188,12 @@ function f13<T extends Action>({ kind, payload }: T) {
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -242,12 +240,12 @@ function f14<T extends Action>(t: T) {
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -308,12 +306,12 @@ function f20({ kind, payload }: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -365,12 +363,12 @@ function f21(action: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -426,12 +424,12 @@ function f22(action: Action2) {
             payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
         }
         if (kind === 'B') {
 >kind === 'B' : boolean
@@ -477,12 +475,12 @@ function f23({ kind, payload }: Action2) {
                 payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
 
                 break;
             case 'B':
@@ -618,12 +616,12 @@ function f40(...[kind, data]: Args) {
         data.toFixed();
 >data.toFixed() : string
 >               : ^^^^^^
->data.toFixed : (fractionDigits?: number | undefined) => string
->             : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data.toFixed : (fractionDigits?: number) => string
+>             : ^              ^^^      ^^^^^^^^^^^
 >data : number
 >     : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -701,7 +699,7 @@ function unrefined1<T>(ab: AB<T>): void {
 >printValue<T>(value) : void
 >                     : ^^^^
 >printValue : <T_1>(t: T_1) => void
->           : ^^^^^^ ^^^^^^^^^^^^^^
+>           : ^   ^^ ^^   ^^^^^^^^^
 >value : T
 >      : ^
     }
@@ -709,8 +707,8 @@ function unrefined1<T>(ab: AB<T>): void {
         printValueList<T>(value);
 >printValueList<T>(value) : void
 >                         : ^^^^
->printValueList : <T_1>(t: T_1[]) => void
->               : ^^^^^^ ^^^^^^^^^^^^^^^^
+>printValueList : <T_1>(t: Array<T_1>) => void
+>               : ^   ^^ ^^          ^^^^^^^^^
 >value : T[]
 >      : ^^^
     }
@@ -742,7 +740,7 @@ const reducerBroken = (state: number, { type, payload }: Action3) => {
 >reducerBroken : (state: number, { type, payload }: Action3) => number
 >              : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >(state: number, { type, payload }: Action3) => {    switch (type) {        case 'add':            return state + payload.toAdd;        case 'remove':            return state - payload.toRemove;    }} : (state: number, { type, payload }: Action3) => number
->                                                                                                                                                                                                        :                                                      
+>                                                                                                                                                                                                        : ^     ^^      ^^                 ^^       ^^^^^^^^^^^
 >state : number
 >      : ^^^^^^
 >type : "add" | "remove"
@@ -833,7 +831,7 @@ f50((kind, data) => {
 >f50((kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }}) : void
 >                                                                                                                                  : ^^^^
 >f50 : (cb: (...args: Args) => void) => void
->    : ^  ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^  ^^                       ^^^^^^^^^
 >(kind, data) => {    if (kind === 'A') {        data.toFixed();    }    if (kind === 'B') {        data.toUpperCase();    }} : (kind: "A" | "B", data: string | number) => void
 >                                                                                                                             : ^    ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : "A" | "B"
@@ -852,12 +850,12 @@ f50((kind, data) => {
         data.toFixed();
 >data.toFixed() : string
 >               : ^^^^^^
->data.toFixed : (fractionDigits?: number | undefined) => string
->             : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>data.toFixed : (fractionDigits?: number) => string
+>             : ^              ^^^      ^^^^^^^^^^^
 >data : number
 >     : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -880,7 +878,7 @@ f50((kind, data) => {
 });
 
 const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) => {
->f51 : (...args: ['A', number] | ['B', string]) => void
+>f51 : (...args: ["A", number] | ["B", string]) => void
 >    : ^^^^    ^^                             ^^^^^    
 >args : ["A", number] | ["B", string]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -902,12 +900,12 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === 'B') {
 >kind === 'B' : boolean
@@ -930,7 +928,7 @@ const f51: (...args: ['A', number] | ['B', string]) => void = (kind, payload) =>
 };
 
 const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
->f52 : (...args: ['A', number] | ['B']) => void
+>f52 : (...args: ["A", number] | ["B"]) => void
 >    : ^^^^    ^^                     ^^^^^    
 >args : ["A", number] | ["B"]
 >     : ^^^^^^^^^^^^^^^^^^^^^
@@ -952,12 +950,12 @@ const f52: (...args: ['A', number] | ['B']) => void = (kind, payload?) => {
         payload.toFixed();
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     else {
         payload;  // undefined
@@ -980,7 +978,7 @@ readFile('hello', (err, data) => {
 >readFile('hello', (err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }}) : void
 >                                                                                                                        : ^^^^
 >readFile : (path: string, callback: (...args: [err: null, data: unknown[]] | [err: Error, data: undefined]) => void) => void
->         : ^    ^^^^^^^^^^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^      ^^        ^^                                                                               ^^^^^^^^^
 >'hello' : "hello"
 >        : ^^^^^^^
 >(err, data) => {    if (err === null) {        data.length;    }    else {        err.message;    }} : (err: Error | null, data: unknown[] | undefined) => void
@@ -1051,11 +1049,11 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >console.log(args.a + args.b) : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >args.a + args.b : number
 >                : ^^^^^^
 >args.a : number
@@ -1080,11 +1078,11 @@ const reducer: (...args: ReducerArgs) => void = (op, args) => {
 >console.log(args.firstArr.concat(args.secondArr)) : void
 >                                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >args.firstArr.concat(args.secondArr) : any[]
 >                                     : ^^^^^
 >args.firstArr.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
@@ -1112,7 +1110,7 @@ reducer("add", { a: 1, b: 3 });
 >reducer("add", { a: 1, b: 3 }) : void
 >                               : ^^^^
 >reducer : (...args: ReducerArgs) => void
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^           ^^^^^^^^^
 >"add" : "add"
 >      : ^^^^^
 >{ a: 1, b: 3 } : { a: number; b: number; }
@@ -1130,7 +1128,7 @@ reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] });
 >reducer("concat", { firstArr: [1, 2], secondArr: [3, 4] }) : void
 >                                                           : ^^^^
 >reducer : (...args: ReducerArgs) => void
->        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^    ^^           ^^^^^^^^^
 >"concat" : "concat"
 >         : ^^^^^^^^
 >{ firstArr: [1, 2], secondArr: [3, 4] } : { firstArr: number[]; secondArr: number[]; }
@@ -1179,15 +1177,15 @@ let fooM: FooMethod = {
 >fooM : FooMethod
 >     : ^^^^^^^^^
 >{  method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): void; }
->                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                               : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^
 
   method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => void
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1201,7 +1199,7 @@ let fooM: FooMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -1210,7 +1208,7 @@ let fooM: FooMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1242,15 +1240,15 @@ let fooAsyncM: FooAsyncMethod = {
 >fooAsyncM : FooAsyncMethod
 >          : ^^^^^^^^^^^^^^
 >{  async method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Promise<void>; }
->                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                     : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   async method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Promise<void>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1264,7 +1262,7 @@ let fooAsyncM: FooAsyncMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -1273,7 +1271,7 @@ let fooAsyncM: FooAsyncMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1305,15 +1303,15 @@ let fooGenM: FooGenMethod = {
 >fooGenM : FooGenMethod
 >        : ^^^^^^^^^^^^
 >{  *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): Generator<never, void, any>; }
->                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => Generator<never, void, any>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1327,7 +1325,7 @@ let fooGenM: FooGenMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -1336,7 +1334,7 @@ let fooGenM: FooGenMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1368,15 +1366,15 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >fooAsyncGenM : FooAsyncGenMethod
 >             : ^^^^^^^^^^^^^^^^^
 >{  async *method(type, cb) {    if (type == 'num') {      cb(123)    } else {      cb("abc")    }  }} : { method(type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)): AsyncGenerator<never, void, any>; }
->                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   async *method(type, cb) {
 >method : (type: "str" | "num", cb: ((e: string) => void) | ((e: number) => void)) => AsyncGenerator<never, void, any>
->       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^    ^^^^^^^^^^^^^^^^^  ^^^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "str" | "num"
 >     : ^^^^^^^^^^^^^
 >cb : ((e: string) => void) | ((e: number) => void)
->   : ^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
+>   : ^^ ^^      ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^
 
     if (type == 'num') {
 >type == 'num' : boolean
@@ -1390,7 +1388,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >cb(123) : void
 >        : ^^^^
 >cb : (e: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -1399,7 +1397,7 @@ let fooAsyncGenM: FooAsyncGenMethod = {
 >cb("abc") : void
 >          : ^^^^
 >cb : (e: string) => void
->   : ^ ^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
     }
@@ -1435,12 +1433,12 @@ const f60: Func = (kind, payload) => {
         payload.toFixed();  // error
 >payload.toFixed() : string
 >                  : ^^^^^^
->payload.toFixed : (fractionDigits?: number | undefined) => string
->                : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>payload.toFixed : (fractionDigits?: number) => string
+>                : ^              ^^^      ^^^^^^^^^^^
 >payload : number
 >        : ^^^^^^
->toFixed : (fractionDigits?: number | undefined) => string
->        : ^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^^^^^^^
     }
     if (kind === "b") {
 >kind === "b" : boolean
@@ -1743,11 +1741,11 @@ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconne
 >bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`)) : void
 >                                                                                                                                           : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^        ^^                                  ^^^^^^^^^
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^        ^^                                  ^^^^^^^^^
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >(event, shard) => console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : (event: CloseEvent, shard: number) => void
@@ -1759,11 +1757,11 @@ bot.on("shardDisconnect", (event, shard) => console.log(`Shard ${shard} disconne
 >console.log(`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}`) : void
 >                                                                                              : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >`Shard ${shard} disconnected (${event.code},${event.wasClean}): ${event.reason}` : string
 >                                                                                 : ^^^^^^
 >shard : number
@@ -1791,11 +1789,11 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} ${event.reason}`)) : void
 >                                                                                                   : ^^^^
 >bot.on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^        ^^                                  ^^^^^^^^^
 >bot : Client
 >    : ^^^^^^
 >on : <K extends keyof ClientEvents>(event: K, listener: (...args: ClientEvents[K]) => void) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^        ^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^        ^^                                  ^^^^^^^^^
 >"shardDisconnect" : "shardDisconnect"
 >                  : ^^^^^^^^^^^^^^^^^
 >event => console.log(`${event.code} ${event.wasClean} ${event.reason}`) : (event: CloseEvent) => void
@@ -1805,11 +1803,11 @@ bot.on("shardDisconnect", event => console.log(`${event.code} ${event.wasClean} 
 >console.log(`${event.code} ${event.wasClean} ${event.reason}`) : void
 >                                                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >`${event.code} ${event.wasClean} ${event.reason}` : string
 >                                                  : ^^^^^^
 >event.code : number

@@ -15,7 +15,7 @@ Number.prototype.compareTo = function (other: number) {
 >Number.prototype.compareTo = function (other: number) {   return this.valueOf() == other;} : (other: number) => boolean
 >                                                                                           : ^     ^^      ^^^^^^^^^^^^
 >Number.prototype.compareTo : (other: number) => any
->                           : ^     ^^^^^^^^^^^^^^^^
+>                           : ^     ^^      ^^^^^^^^
 >Number.prototype : Number
 >                 : ^^^^^^
 >Number : NumberConstructor
@@ -23,7 +23,7 @@ Number.prototype.compareTo = function (other: number) {
 >prototype : Number
 >          : ^^^^^^
 >compareTo : (other: number) => any
->          : ^     ^^^^^^^^^^^^^^^^
+>          : ^     ^^      ^^^^^^^^
 >function (other: number) {   return this.valueOf() == other;} : (other: number) => boolean
 >                                                              : ^     ^^      ^^^^^^^^^^^^
 >other : number

@@ -6,7 +6,7 @@ import {
 export interface EmitOutput {
     outputFiles: OutputFile[];
     emitSkipped: boolean;
-    /** @internal */ diagnostics: readonly Diagnostic[];
+    diagnostics: readonly Diagnostic[];
 }
 
 export interface OutputFile {

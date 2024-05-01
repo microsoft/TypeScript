@@ -180,7 +180,7 @@ var b = {
 >foo : <U extends T, T extends A>(x: U) => U
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 ><U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    } : <U extends T, T extends A>(x: U) => U
->                                                                                                                            :                                      
+>                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
 >x : U
 >  : ^
 

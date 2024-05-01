@@ -12,7 +12,7 @@ declare function f(fn: (a: string) => string);
 f((input): string => {
 >f((input): string => {    return "." + input;}) : any
 >f : (fn: (a: string) => string) => any
->  : ^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^  ^^                     ^^^^^^^^
 >(input): string => {    return "." + input;} : (input: string) => string
 >                                             : ^     ^^^^^^^^^^^^^      
 >input : string
