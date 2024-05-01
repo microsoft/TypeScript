@@ -99,16 +99,27 @@ registerRefactor(refactorName, {
         extractToTypeDefAction.kind,
     ],
     getAvailableActions: function getRefactorActionsToExtractType(context): readonly ApplicableRefactorInfo[] {
-        const info = getRangeToExtract(context, context.triggerReason === "invoked");
+        const { info, affectedTextRange } = getRangeToExtract(context, context.triggerReason === "invoked");
         if (!info) return emptyArray;
 
         if (!isRefactorErrorInfo(info)) {
-            return [{
+            const refactorInfo: ApplicableRefactorInfo[] = [{
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
                 actions: info.isJS ?
                     [extractToTypeDefAction] : append([extractToTypeAliasAction], info.typeElements && extractToInterfaceAction),
             }];
+            return refactorInfo.map(info => ({
+                ...info,
+                actions: info.actions.map(action => ({
+                    ...action,
+                    range: affectedTextRange ? {
+                        start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                        end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                    }
+                        : undefined,
+                })),
+            }));
         }
 
         if (context.preferences.provideRefactorNotApplicableReason) {
@@ -127,7 +138,7 @@ registerRefactor(refactorName, {
     },
     getEditsForAction: function getRefactorEditsToExtractType(context, actionName): RefactorEditInfo {
         const { file } = context;
-        const info = getRangeToExtract(context);
+        const { info } = getRangeToExtract(context);
         Debug.assert(info && !isRefactorErrorInfo(info), "Expected to find a range to extract");
 
         const name = getUniqueName("NewType", file);
@@ -171,20 +182,20 @@ interface InterfaceInfo {
 
 type ExtractInfo = TypeAliasInfo | InterfaceInfo;
 
-function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): ExtractInfo | RefactorErrorInfo | undefined {
+function getRangeToExtract(context: RefactorContext, considerEmptySpans = true): { info: ExtractInfo | RefactorErrorInfo | undefined; affectedTextRange?: TextRange; } {
     const { file, startPosition } = context;
     const isJS = isSourceFileJS(file);
     const range = createTextRangeFromSpan(getRefactorContextSpan(context));
     const isCursorRequest = range.pos === range.end && considerEmptySpans;
     const firstType = getFirstTypeAt(file, startPosition, range, isCursorRequest);
-    if (!firstType || !isTypeNode(firstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    if (!firstType || !isTypeNode(firstType)) return { info: { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) }, affectedTextRange: undefined };
 
     const checker = context.program.getTypeChecker();
     const enclosingNode = getEnclosingNode(firstType, isJS);
-    if (enclosingNode === undefined) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    if (enclosingNode === undefined) return { info: { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) }, affectedTextRange: undefined };
 
     const expandedFirstType = getExpandedSelectionNode(firstType, enclosingNode);
-    if (!isTypeNode(expandedFirstType)) return { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) };
+    if (!isTypeNode(expandedFirstType)) return { info: { error: getLocaleSpecificMessage(Diagnostics.Selection_is_not_a_valid_type_node) }, affectedTextRange: undefined };
 
     const typeList: TypeNode[] = [];
     if ((isUnionTypeNode(expandedFirstType.parent) || isIntersectionTypeNode(expandedFirstType.parent)) && range.end > firstType.end) {
@@ -198,11 +209,11 @@ function getRangeToExtract(context: RefactorContext, considerEmptySpans = true):
     }
     const selection = typeList.length > 1 ? typeList : expandedFirstType;
 
-    const typeParameters = collectTypeParameters(checker, selection, enclosingNode, file);
-    if (!typeParameters) return { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) };
+    const { typeParameters, affectedTextRange } = collectTypeParameters(checker, selection, enclosingNode, file);
+    if (!typeParameters) return { info: { error: getLocaleSpecificMessage(Diagnostics.No_type_could_be_extracted_from_this_type_node) }, affectedTextRange: undefined };
 
     const typeElements = flattenTypeLiteralNodeReference(checker, selection);
-    return { isJS, selection, enclosingNode, typeParameters, typeElements };
+    return { info: { isJS, selection, enclosingNode, typeParameters, typeElements }, affectedTextRange };
 }
 
 function getFirstTypeAt(file: SourceFile, startPosition: number, range: TextRange, isCursorRequest: boolean): Node | undefined {
@@ -260,14 +271,14 @@ function rangeContainsSkipTrivia(r1: TextRange, node: TextRange, file: SourceFil
     return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
 }
 
-function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): TypeParameterDeclaration[] | undefined {
+function collectTypeParameters(checker: TypeChecker, selection: TypeNode | TypeNode[], enclosingNode: Node, file: SourceFile): { typeParameters: TypeParameterDeclaration[] | undefined; affectedTextRange: TextRange | undefined; } {
     const result: TypeParameterDeclaration[] = [];
     const selectionArray = toArray(selection);
-    const selectionRange = { pos: selectionArray[0].pos, end: selectionArray[selectionArray.length - 1].end };
+    const selectionRange = { pos: selectionArray[0].getStart(file), end: selectionArray[selectionArray.length - 1].end };
     for (const t of selectionArray) {
-        if (visitor(t)) return undefined;
+        if (visitor(t)) return { typeParameters: undefined, affectedTextRange: undefined };
     }
-    return result;
+    return { typeParameters: result, affectedTextRange: selectionRange };
 
     function visitor(node: Node): true | undefined {
         if (isTypeReferenceNode(node)) {

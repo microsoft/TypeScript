@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/homomorphicMappedTypeNesting.ts] ////
+
+=== homomorphicMappedTypeNesting.ts ===
+// Repro from #58060
+
+type Box<T extends string> = { v: T };
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNesting.ts, 0, 0))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 2, 9))
+>v : Symbol(v, Decl(homomorphicMappedTypeNesting.ts, 2, 30))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 2, 9))
+
+type Test<T extends string[]> = T
+>Test : Symbol(Test, Decl(homomorphicMappedTypeNesting.ts, 2, 38))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 4, 10))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 4, 10))
+
+type UnboxArray<T> = {
+>UnboxArray : Symbol(UnboxArray, Decl(homomorphicMappedTypeNesting.ts, 4, 33))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 6, 16))
+
+    [K in keyof T]: T[K] extends Box<infer R> ? R : never;
+>K : Symbol(K, Decl(homomorphicMappedTypeNesting.ts, 7, 5))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 6, 16))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 6, 16))
+>K : Symbol(K, Decl(homomorphicMappedTypeNesting.ts, 7, 5))
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNesting.ts, 0, 0))
+>R : Symbol(R, Decl(homomorphicMappedTypeNesting.ts, 7, 42))
+>R : Symbol(R, Decl(homomorphicMappedTypeNesting.ts, 7, 42))
+
+};
+
+type Identity<T> = { [K in keyof T]: T[K] };
+>Identity : Symbol(Identity, Decl(homomorphicMappedTypeNesting.ts, 8, 2))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 10, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeNesting.ts, 10, 22))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 10, 14))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 10, 14))
+>K : Symbol(K, Decl(homomorphicMappedTypeNesting.ts, 10, 22))
+
+declare function fnBad<T extends Array<Box<string>>>(...args: T): Test<Identity<UnboxArray<T>>>;
+>fnBad : Symbol(fnBad, Decl(homomorphicMappedTypeNesting.ts, 10, 44))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 12, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Box : Symbol(Box, Decl(homomorphicMappedTypeNesting.ts, 0, 0))
+>args : Symbol(args, Decl(homomorphicMappedTypeNesting.ts, 12, 53))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 12, 23))
+>Test : Symbol(Test, Decl(homomorphicMappedTypeNesting.ts, 2, 38))
+>Identity : Symbol(Identity, Decl(homomorphicMappedTypeNesting.ts, 8, 2))
+>UnboxArray : Symbol(UnboxArray, Decl(homomorphicMappedTypeNesting.ts, 4, 33))
+>T : Symbol(T, Decl(homomorphicMappedTypeNesting.ts, 12, 23))
+

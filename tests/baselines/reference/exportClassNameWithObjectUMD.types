@@ -3,4 +3,5 @@
 === exportClassNameWithObjectUMD.ts ===
 export class Object {}
 >Object : Object
+>       : ^^^^^^
 

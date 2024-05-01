@@ -1,6 +1,4 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -8,9 +6,7 @@ import {
     TestSession,
     toExternalFile,
 } from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {

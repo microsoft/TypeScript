@@ -3,56 +3,79 @@
 === elementWiseErrorInUnionTarget2.ts ===
 type SingleOrArray<T> = T | readonly T[];
 >SingleOrArray : SingleOrArray<T>
+>              : ^^^^^^^^^^^^^^^^
 
 type ProvidedActor = {
->ProvidedActor : { src: string; input?: unknown; }
+>ProvidedActor : ProvidedActor
+>              : ^^^^^^^^^^^^^
 
   src: string;
 >src : string
+>    : ^^^^^^
 
   input?: unknown;
 >input : unknown
+>      : ^^^^^^^
 
 };
 
 type MachineConfig<TActors extends ProvidedActor> = {
 >MachineConfig : MachineConfig<TActors>
+>              : ^^^^^^^^^^^^^^^^^^^^^^
 
   invoke?: SingleOrArray<TActors>;
 >invoke : SingleOrArray<TActors> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 declare function setup<TActors extends ProvidedActor>(): {
 >setup : <TActors extends ProvidedActor>() => { createMachine: (config: MachineConfig<TActors>) => void; }
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                            
 
   createMachine: (config: MachineConfig<TActors>) => void;
 >createMachine : (config: MachineConfig<TActors>) => void
+>              : ^      ^^                      ^^^^^    
 >config : MachineConfig<TActors>
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 
 };
 
 setup<{ src: "fetchUser"; input: string }>().createMachine({
 >setup<{ src: "fetchUser"; input: string }>().createMachine({  invoke: {    src: "fetchUser",    input: 10,  },}) : void
+>                                                                                                                 : ^^^^
 >setup<{ src: "fetchUser"; input: string }>().createMachine : (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void
+>                                                           : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^
 >setup<{ src: "fetchUser"; input: string }>() : { createMachine: (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void; }
+>                                             : ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^^^^
 >setup : <TActors extends ProvidedActor>() => { createMachine: (config: MachineConfig<TActors>) => void; }
+>      : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                      ^^^^^^^^^^^^
 >src : "fetchUser"
+>    : ^^^^^^^^^^^
 >input : string
+>      : ^^^^^^
 >createMachine : (config: MachineConfig<{ src: "fetchUser"; input: string; }>) => void
+>              : ^      ^^^^^^^^^^^^^^^^^^^^^^^           ^^^^^^^^^      ^^^^^^^^^^^^^
 >{  invoke: {    src: "fetchUser",    input: 10,  },} : { invoke: { src: "fetchUser"; input: number; }; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   invoke: {
 >invoke : { src: "fetchUser"; input: number; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    src: "fetchUser",    input: 10,  } : { src: "fetchUser"; input: number; }
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     src: "fetchUser",
 >src : "fetchUser"
+>    : ^^^^^^^^^^^
 >"fetchUser" : "fetchUser"
+>            : ^^^^^^^^^^^
 
     input: 10,
 >input : number
+>      : ^^^^^^
 >10 : 10
+>   : ^^
 
   },
 });

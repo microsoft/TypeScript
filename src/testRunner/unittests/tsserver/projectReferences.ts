@@ -1,13 +1,7 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -54,14 +48,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -79,7 +72,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -88,7 +80,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -115,14 +107,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const files = [libFile, containerLibConfig, containerLibIndex, containerExecConfig, containerExecIndex, containerCompositeExecConfig, containerCompositeExecIndex, containerConfig];
             if (tempFile) files.push(tempFile);
-
-            const rootNames = [containerConfig.path];
-            const host = createServerHost(files);
-            // Can't use createHostWithSolutionBuild. This test used to work,
-            // but no longer does since prepend isn't allowed in project references.
-            // We just baseline and assert nothing about the output.
-            solutionBuildWithBaseline(host, rootNames);
-
+            const host = createHostWithSolutionBuild(files, [containerConfig.path]);
             const session = new TestSession(host);
             return { files, session, containerConfig, containerCompositeExecIndex };
         }
@@ -354,6 +339,35 @@ function foo() {
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
         baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+    });
+
+    it("referencing const enum from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `import { E } from "../utils"; E.A;`,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
+        };
+        const host = createServerHost([libFile, utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -1059,11 +1073,12 @@ export function bar() {}`,
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session } = setup(input);
+            const { session, host } = setup(input);
 
             const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
+            const defaultProject = info.getDefaultProject();
             session.logger.startGroup();
-            session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
+            session.logger.info(`getDefaultProject for ${main.path}: ${defaultProject.projectName}`);
             session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
             session.logger.endGroup();
 
@@ -1079,6 +1094,24 @@ export function bar() {}`,
             closeFilesForSession([dummyFilePath], session);
             openFilesForSession([dummyFilePath], session);
 
+            // Verify that tsconfig can be deleted and watched
+            if (ts.server.isConfiguredProject(defaultProject)) {
+                closeFilesForSession([dummyFilePath], session);
+                const config = defaultProject.projectName;
+                const content = host.readFile(config)!;
+                host.deleteFile(config);
+                host.runQueuedTimeoutCallbacks();
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+
+                host.deleteFile(config);
+                openFilesForSession([dummyFilePath], session);
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+            }
+
             // Verify Reload projects
             session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
                 command: ts.server.protocol.CommandTypes.ReloadProjects,
@@ -1088,7 +1121,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
 
             closeFilesForSession([main, dummyFilePath], session);
 
@@ -1099,7 +1132,7 @@ export function bar() {}`,
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo"),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 

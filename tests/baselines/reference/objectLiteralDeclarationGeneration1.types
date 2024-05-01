@@ -3,4 +3,5 @@
 === objectLiteralDeclarationGeneration1.ts ===
 class y<T extends {}>{ }
 >y : y<T>
+>  : ^^^^
 

@@ -2,243 +2,322 @@
 
 === elementWiseErrorInUnionTarget3.ts ===
 const obj1: {
->obj1 : { prop: string | {    a: string;} | []; }
+>obj1 : { prop: string | { a: string; } | []; }
+>     : ^^^^^^^^                            ^^^
 
   prop:
 >prop : string | { a: string; } | []
+>     : ^^^^^^^^^^^^^^      ^^^^^^^^
 
     | string
     | {
         a: string;
 >a : string
+>  : ^^^^^^
       }
     | [];
 } = {
 >{  prop: {    a: 1,  },} : { prop: { a: number; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >{    a: 1,  } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   },
 };
 
 type WithCallSignature = {
->WithCallSignature : { (): void; a: boolean; }
+>WithCallSignature : WithCallSignature
+>                  : ^^^^^^^^^^^^^^^^^
 
     (): void;
     a: boolean;
 >a : boolean
+>  : ^^^^^^^
 }
 
 const obj2: {
->obj2 : { prop: WithCallSignature | {    a: string;}; }
+>obj2 : { prop: WithCallSignature | { a: string; }; }
+>     : ^^^^^^^^                                  ^^^
 
   prop:
 >prop : WithCallSignature | { a: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     | WithCallSignature
     | {
         a: string;
 >a : string
+>  : ^^^^^^
 
       };
 } = {
 >{  prop: {    a: 1,  },} : { prop: { a: number; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >{    a: 1,  } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   },
 };
 
 class ClsWithPrivateModifier {
 >ClsWithPrivateModifier : ClsWithPrivateModifier
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
 
   a = true
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
   private b = 10;
 >b : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 const obj3: {
->obj3 : { prop: ClsWithPrivateModifier | {    a: string;}; }
+>obj3 : { prop: ClsWithPrivateModifier | { a: string; }; }
+>     : ^^^^^^^^                                       ^^^
 
   prop:
 >prop : ClsWithPrivateModifier | { a: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     | ClsWithPrivateModifier
     | {
         a: string;
 >a : string
+>  : ^^^^^^
 
       };
 } = {
 >{  prop: {    a: 1,  },} : { prop: { a: number; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >{    a: 1,  } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   },
 };
 
 class ClsWithPrivateField {
 >ClsWithPrivateField : ClsWithPrivateField
+>                    : ^^^^^^^^^^^^^^^^^^^
 
   a = true
 >a : boolean
+>  : ^^^^^^^
 >true : true
+>     : ^^^^
 
   #b = 10;
 >#b : number
+>   : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 const obj4: {
->obj4 : { prop: ClsWithPrivateField | {    a: string;}; }
+>obj4 : { prop: ClsWithPrivateField | { a: string; }; }
+>     : ^^^^^^^^                                    ^^^
 
   prop:
 >prop : ClsWithPrivateField | { a: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 
     | ClsWithPrivateField
     | {
         a: string;
 >a : string
+>  : ^^^^^^
 
       };
 } = {
 >{  prop: {    a: 1,  },} : { prop: { a: number; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >{    a: 1,  } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   },
 };
 
 const obj5: {
->obj5 : { prop: (ClsWithPrivateField & {    c: string;}) | {    a: string;}; }
+>obj5 : { prop: (ClsWithPrivateField & { c: string; }) | { a: string; }; }
+>     : ^^^^^^^^                                                       ^^^
 
   prop:
 >prop : (ClsWithPrivateField & { c: string; }) | { a: string; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^
 
     | (ClsWithPrivateField & { c: string })
 >c : string
+>  : ^^^^^^
 
     | {
         a: string;
 >a : string
+>  : ^^^^^^
 
       };
 } = {
 >{  prop: {    a: 1,  },} : { prop: { a: number; }; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { a: number; }
+>     : ^^^^^^^^^^^^^^
 >{    a: 1,  } : { a: number; }
+>              : ^^^^^^^^^^^^^^
 
     a: 1,
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
   },
 };
 
 const obj6: {
->obj6 : { prop: {    type: "foo";    prop: string;} | {    type: "bar";    prop: number;}; }
+>obj6 : { prop: { type: "foo"; prop: string; } | { type: "bar"; prop: number; }; }
+>     : ^^^^^^^^                                                               ^^^
 
   prop:
 >prop : { type: "foo"; prop: string; } | { type: "bar"; prop: number; }
+>     : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
 
     | {
         type: "foo";
 >type : "foo"
+>     : ^^^^^
 
         prop: string;
 >prop : string
+>     : ^^^^^^
       }
     | {
         type: "bar";
 >type : "bar"
+>     : ^^^^^
 
         prop: number;
 >prop : number
+>     : ^^^^^^
 
       };
 } = {
 >{  prop: {    type: "foo",    prop: true,  },} : { prop: { type: "foo"; prop: boolean; }; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { type: "foo"; prop: boolean; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    type: "foo",    prop: true,  } : { type: "foo"; prop: boolean; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: "foo",
 >type : "foo"
+>     : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     prop: true,
 >prop : boolean
+>     : ^^^^^^^
 >true : true
+>     : ^^^^
 
   },
 };
 
 const obj7: {
->obj7 : { prop: {    type: "foo";    prop: string;} | {    type: "bar";    prop: number;}; }
+>obj7 : { prop: { type: "foo"; prop: string; } | { type: "bar"; prop: number; }; }
+>     : ^^^^^^^^                                                               ^^^
 
   prop:
 >prop : { type: "foo"; prop: string; } | { type: "bar"; prop: number; }
+>     : ^^^^^^^^     ^^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^^      ^^^
 
     | {
         type: "foo";
 >type : "foo"
+>     : ^^^^^
 
         prop: string;
 >prop : string
+>     : ^^^^^^
       }
     | {
         type: "bar";
 >type : "bar"
+>     : ^^^^^
 
         prop: number;
 >prop : number
+>     : ^^^^^^
 
       };
 } = {
 >{  prop: {    type: "foo",    prop: 42,  },} : { prop: { type: "foo"; prop: number; }; }
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   prop: {
 >prop : { type: "foo"; prop: number; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    type: "foo",    prop: 42,  } : { type: "foo"; prop: number; }
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     type: "foo",
 >type : "foo"
+>     : ^^^^^
 >"foo" : "foo"
+>      : ^^^^^
 
     prop: 42,
 >prop : number
+>     : ^^^^^^
 >42 : 42
+>   : ^^
 
   },
 };

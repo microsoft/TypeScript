@@ -1,0 +1,52 @@
+{
+    "kind": "JSDoc",
+    "pos": 0,
+    "end": 35,
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
+    "tags": {
+        "0": {
+            "kind": "JSDocImportTag",
+            "pos": 8,
+            "end": 30,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 9,
+                "end": 15,
+                "transformFlags": 0,
+                "escapedText": "import"
+            },
+            "importClause": {
+                "kind": "ImportClause",
+                "pos": 16,
+                "end": 19,
+                "modifierFlagsCache": 0,
+                "transformFlags": 1,
+                "isTypeOnly": true,
+                "name": {
+                    "kind": "Identifier",
+                    "pos": 16,
+                    "end": 19,
+                    "transformFlags": 0,
+                    "escapedText": "foo"
+                }
+            },
+            "moduleSpecifier": {
+                "kind": "StringLiteral",
+                "pos": 24,
+                "end": 30,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
+                "text": "foo"
+            }
+        },
+        "length": 1,
+        "pos": 8,
+        "end": 30,
+        "hasTrailingComma": false,
+        "transformFlags": 0
+    }
+}

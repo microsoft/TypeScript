@@ -3,17 +3,24 @@
 === cloduleSplitAcrossFiles_class.ts ===
 class D { }
 >D : D
+>  : ^
 
 === cloduleSplitAcrossFiles_module.ts ===
 module D {
 >D : typeof D
+>  : ^^^^^^^^
 
     export var y = "hi";
 >y : string
+>  : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 }
 D.y;
 >D.y : string
+>    : ^^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >y : string
+>  : ^^^^^^
 

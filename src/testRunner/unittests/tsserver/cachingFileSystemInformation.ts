@@ -1,13 +1,7 @@
-import {
-    IncrementalVerifierCallbacks,
-} from "../../../harness/incrementalUtils";
-import {
-    LoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
+import { IncrementalVerifierCallbacks } from "../../../harness/incrementalUtils";
+import { LoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     logDiagnostics,

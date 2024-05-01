@@ -26,11 +26,11 @@ var v = E2.B;
 //// [moduleCodeGenTest5.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.E1 = exports.C1 = exports.f1 = exports.x = void 0;
+exports.E1 = exports.C1 = exports.x = void 0;
+exports.f1 = f1;
 exports.x = 0;
 var y = 0;
 function f1() { }
-exports.f1 = f1;
 function f2() { }
 var C1 = /** @class */ (function () {
     function C1() {

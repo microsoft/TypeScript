@@ -1,11 +1,7 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "./baseline";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "./baseline";
 import {
     makeSystemReadyForBaseline,
     TscCompileSystem,
@@ -24,7 +20,6 @@ export function createSolutionBuilderHostForBaseline(
     const { cb } = commandLineCallbacks(sys, originalRead);
     const host = ts.createSolutionBuilderHost(sys, /*createProgram*/ undefined, ts.createDiagnosticReporter(sys, /*pretty*/ true), ts.createBuilderStatusReporter(sys, /*pretty*/ true));
     host.afterProgramEmitAndDiagnostics = cb;
-    host.afterEmitBundle = cb;
     return host;
 }
 
@@ -40,21 +35,27 @@ export function ensureErrorFreeBuild(host: TestServerHost, rootNames: readonly s
 }
 
 export function solutionBuildWithBaseline(sys: TestServerHost, solutionRoots: readonly string[], originalRead?: TestServerHost["readFile"]) {
-    const originalReadFile = sys.readFile;
-    const originalWrite = sys.write;
-    const originalWriteFile = sys.writeFile;
-    ts.Debug.assert(sys.writtenFiles === undefined);
-    const solutionBuilder = createSolutionBuilder(
-        changeToHostTrackingWrittenFiles(
-            fakes.patchHostForBuildInfoReadWrite(sys),
-        ),
-        solutionRoots,
-        originalRead,
-    );
-    solutionBuilder.build();
-    sys.readFile = originalReadFile;
-    sys.write = originalWrite;
-    sys.writeFile = originalWriteFile;
-    sys.writtenFiles = undefined;
-    return sys;
+    if (sys.writtenFiles === undefined) {
+        const originalReadFile = sys.readFile;
+        const originalWrite = sys.write;
+        const originalWriteFile = sys.writeFile;
+        const solutionBuilder = createSolutionBuilder(
+            changeToHostTrackingWrittenFiles(
+                fakes.patchHostForBuildInfoReadWrite(sys),
+            ),
+            solutionRoots,
+            originalRead,
+        );
+        solutionBuilder.build();
+        sys.readFile = originalReadFile;
+        sys.write = originalWrite;
+        sys.writeFile = originalWriteFile;
+        sys.writtenFiles = undefined;
+        return sys;
+    }
+    else {
+        const solutionBuilder = createSolutionBuilder(sys, solutionRoots);
+        solutionBuilder.build();
+        return sys;
+    }
 }

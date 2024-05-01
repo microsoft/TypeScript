@@ -1,16 +1,10 @@
-import {
-    noop,
-} from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { noop } from "../../_namespaces/ts";
+import { jsonToReadableText } from "../helpers";
 import {
     noChangeRun,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild - clean::", () => {
     verifyTsc({

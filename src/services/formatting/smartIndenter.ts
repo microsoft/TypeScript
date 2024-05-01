@@ -92,7 +92,7 @@ export namespace SmartIndenter {
 
         const precedingToken = findPrecedingToken(position, sourceFile, /*startNode*/ undefined, /*excludeJsdoc*/ true);
 
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         const enclosingCommentRange = getRangeOfEnclosingComment(sourceFile, position, precedingToken || null);
         if (enclosingCommentRange && enclosingCommentRange.kind === SyntaxKind.MultiLineCommentTrivia) {
             return getCommentIndent(sourceFile, position, options, enclosingCommentRange);
@@ -721,7 +721,8 @@ export namespace SmartIndenter {
                 return childKind !== SyntaxKind.JsxClosingFragment;
             case SyntaxKind.IntersectionType:
             case SyntaxKind.UnionType:
-                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType) {
+            case SyntaxKind.SatisfiesExpression:
+                if (childKind === SyntaxKind.TypeLiteral || childKind === SyntaxKind.TupleType || childKind === SyntaxKind.MappedType) {
                     return false;
                 }
                 break;

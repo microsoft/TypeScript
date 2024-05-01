@@ -2,7 +2,7 @@ import * as Harness from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 
 export function encodeString(s: string): string {
-    return ts.sys.bufferFrom!(s).toString("utf8");
+    return Buffer.from(s).toString("utf8");
 }
 
 export function evalFile(fileContents: string, fileName: string, nodeContext?: any) {
@@ -203,10 +203,6 @@ export function sourceFileToJSON(file: ts.Node): string {
                     if ((n as any).hasExtendedUnicodeEscape) {
                         o.hasExtendedUnicodeEscape = true;
                     }
-                    break;
-
-                case "originalKeywordKind":
-                    o[propertyName] = getKindName((n as any)[propertyName]);
                     break;
 
                 case "flags":

@@ -43,11 +43,19 @@ Output::
 
 [[90m12:00:12 AM[0m] Building project '/src/child/tsconfig.json'...
 
+File '/src/child/package.json' does not exist.
+File '/src/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module '../child/child2' from '/src/child/child.ts'. ========
 Module resolution kind is not specified, using 'Node10'.
 Loading module as file / folder, candidate module location '/src/child/child2', target file types: TypeScript, Declaration.
 File '/src/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/src/child/child2.ts'. ========
+File '/src/child/package.json' does not exist according to earlier cached lookups.
+File '/src/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File '/lib/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/child/child2.ts
@@ -61,21 +69,19 @@ exitCode:: ExitStatus.Success
 //// [/src/child/child.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child = void 0;
+exports.child = child;
 var child2_1 = require("../child/child2");
 function child() {
     (0, child2_1.child2)();
 }
-exports.child = child;
 
 
 //// [/src/child/child2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.child2 = void 0;
+exports.child2 = child2;
 function child2() {
 }
-exports.child2 = child2;
 
 
 

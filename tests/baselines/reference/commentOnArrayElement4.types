@@ -3,11 +3,14 @@
 === commentOnArrayElement4.ts ===
 const array = [
 >array : number[]
+>      : ^^^^^^^^
 >[    /* element 1 */    1,    /* end of element 1 */] : number[]
+>                                                      : ^^^^^^^^
 
     /* element 1 */
     1,
 >1 : 1
+>  : ^
 
     /* end of element 1 */
 ];

@@ -3,19 +3,27 @@
 === generatorTypeCheck22.ts ===
 class Foo { x: number }
 >Foo : Foo
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 class Bar extends Foo { y: string }
 >Bar : Bar
+>    : ^^^
 >Foo : Foo
+>    : ^^^
 >y : string
+>  : ^^^^^^
 
 class Baz { z: number }
 >Baz : Baz
+>    : ^^^
 >z : number
+>  : ^^^^^^
 
 function* g3() {
 >g3 : () => Generator<Bar | Baz, void, undefined>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield;
 >yield : any
@@ -23,22 +31,32 @@ function* g3() {
     yield new Bar;
 >yield new Bar : any
 >new Bar : Bar
+>        : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
     yield new Baz;
 >yield new Baz : any
 >new Baz : Baz
+>        : ^^^
 >Baz : typeof Baz
+>    : ^^^^^^^^^^
 
     yield *[new Bar];
 >yield *[new Bar] : any
 >[new Bar] : Bar[]
+>          : ^^^^^
 >new Bar : Bar
+>        : ^^^
 >Bar : typeof Bar
+>    : ^^^^^^^^^^
 
     yield *[new Baz];
 >yield *[new Baz] : any
 >[new Baz] : Baz[]
+>          : ^^^^^
 >new Baz : Baz
+>        : ^^^
 >Baz : typeof Baz
+>    : ^^^^^^^^^^
 }

@@ -3,7 +3,9 @@
 === definiteAssignmentWithErrorStillStripped.ts ===
 class C {
 >C : C
+>  : ^
 
     p!;
 >p : any
+>  : ^^^
 }

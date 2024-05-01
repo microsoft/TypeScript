@@ -1,17 +1,9 @@
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
+import { commandLineCallbacks } from "../helpers/baseline";
+import { libContent } from "../helpers/contents";
 import {
     applyEdit,
     createBaseline,
@@ -54,7 +46,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             system: sys,
             cb,
         });
-        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
+        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, ts.getDirectoryPath(config.path));
         host.resolveModuleNames = (moduleNames, containingFile) =>
             moduleNames.map(m => {
                 const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);
