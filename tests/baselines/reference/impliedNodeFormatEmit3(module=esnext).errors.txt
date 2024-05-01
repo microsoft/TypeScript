@@ -1,0 +1,49 @@
+/g.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+/h.mts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+/i.cts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+
+==== /package.json (0 errors) ====
+    {
+      "type": "module"
+    }
+    
+==== /a.ts (0 errors) ====
+    export const _ = 0;
+    
+==== /b.mts (0 errors) ====
+    export const _ = 0;
+    
+==== /c.cts (0 errors) ====
+    export const _ = 0;
+    
+==== /d.js (0 errors) ====
+    export const _ = 0;
+    
+==== /e.mjs (0 errors) ====
+    export const _ = 0;
+    
+==== /f.mjs (0 errors) ====
+    export const _ = 0;
+    
+==== /g.ts (1 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+==== /h.mts (1 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+==== /i.cts (1 errors) ====
+    import {} from "./a";
+    import a = require("./a");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    
+==== /dummy.ts (0 errors) ====
+    export {};
+    

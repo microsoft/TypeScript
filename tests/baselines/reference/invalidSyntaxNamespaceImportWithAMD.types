@@ -3,11 +3,16 @@
 === 0.ts ===
 export class C { }
 >C : C
+>  : ^
 
 === 1.ts ===
 import * from Zero from "./0"
 >from : any
+>     : ^^^
 >Zero : any
+>     : ^^^
 >from : any
+>     : ^^^
 >"./0" : "./0"
+>      : ^^^^^
 

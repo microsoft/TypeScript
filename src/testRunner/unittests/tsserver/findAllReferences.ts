@@ -1,6 +1,4 @@
-import {
-    protocol,
-} from "../../_namespaces/ts.server";
+import { protocol } from "../../_namespaces/ts.server";
 import {
     baselineTsserverLogs,
     TestSession,

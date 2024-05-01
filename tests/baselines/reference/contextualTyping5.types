@@ -3,7 +3,11 @@
 === contextualTyping5.ts ===
 class foo { public bar:{id:number;} = { }; }
 >foo : foo
+>    : ^^^
 >bar : { id: number; }
+>    : ^^^^^^      ^^^
 >id : number
+>   : ^^^^^^
 >{ } : {}
+>    : ^^
 

@@ -3,27 +3,38 @@
 === a.ts ===
 class C {
 >C : C
+>  : ^
 
     static B: number;
 >B : number
+>  : ^^^^^^
 }
 namespace C {
     export interface B { c: number }
 >c : number
+>  : ^^^^^^
 }
 
 export default C.B;
 >C.B : number
+>    : ^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >B : number
+>  : ^^^^^^
 
 === b.ts ===
 import B from "./a";
 >B : number
+>  : ^^^^^^
 
 const x: B = { c: B };
 >x : B
+>  : ^
 >{ c: B } : { c: number; }
+>         : ^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >B : number
+>  : ^^^^^^
 

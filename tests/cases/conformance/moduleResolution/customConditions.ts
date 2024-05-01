@@ -1,3 +1,4 @@
+// @module: preserve
 // @moduleResolution: bundler
 // @customConditions: webpack, browser
 // @resolvePackageJsonExports: true, false
