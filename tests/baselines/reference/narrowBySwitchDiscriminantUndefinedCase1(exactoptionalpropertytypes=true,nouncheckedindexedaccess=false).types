@@ -11,7 +11,7 @@ interface A {
 
 function func(arg: A) {
 >func : (arg: A) => "hello" | undefined
->     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : A
 >    : ^
 
@@ -46,7 +46,7 @@ function func(arg: A) {
 >assertUnreachable(optionalProp) : never
 >                                : ^^^^^
 >assertUnreachable : (_: never) => never
->                  : ^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^^^^^^^^^
 >optionalProp : never
 >             : ^^^^^
   }
@@ -101,7 +101,7 @@ function func2() {
 >assertUnreachable(optionalProp) : never
 >                                : ^^^^^
 >assertUnreachable : (_: never) => never
->                  : ^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^     ^^^^^^^^^^
 >optionalProp : never
 >             : ^^^^^
   }
@@ -109,7 +109,7 @@ function func2() {
 
 function assertUnreachable(_: never): never {
 >assertUnreachable : (_: never) => never
->                  : ^^^^     ^^^^^     
+>                  : ^ ^^     ^^^^^     
 >_ : never
 >  : ^^^^^
 
