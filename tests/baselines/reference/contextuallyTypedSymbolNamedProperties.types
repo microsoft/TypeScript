@@ -74,7 +74,7 @@ f(ab, {
 >A : unique symbol
 >  : ^^^^^^^^^^^^^
 >ap => { ap.description } : (ap: unique symbol) => void
->                         :                            
+>                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >ap : unique symbol
 >   : ^^^^^^^^^^^^^
 >ap.description : string | undefined
@@ -90,7 +90,7 @@ f(ab, {
 >B : unique symbol
 >  : ^^^^^^^^^^^^^
 >bp => { bp.description } : (bp: unique symbol) => void
->                         :                            
+>                         : ^  ^^^^^^^^^^^^^^^^^^^^^^^^
 >bp : unique symbol
 >   : ^^^^^^^^^^^^^
 >bp.description : string | undefined
@@ -116,7 +116,7 @@ const x: { [sym: symbol]: (p: string) => void } = { [A]: s => s.length };
 >A : unique symbol
 >  : ^^^^^^^^^^^^^
 >s => s.length : (s: string) => number
->              :                      
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s.length : number

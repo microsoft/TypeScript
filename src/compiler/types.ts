@@ -1380,6 +1380,16 @@ export type HasIllegalModifiers =
     | MissingDeclaration
     | NamespaceExportDeclaration;
 
+/** @internal */
+export type PrimitiveLiteral =
+    | BooleanLiteral
+    | NumericLiteral
+    | StringLiteral
+    | NoSubstitutionTemplateLiteral
+    | BigIntLiteral
+    | PrefixUnaryExpression & { operator: SyntaxKind.PlusToken; operand: NumericLiteral; }
+    | PrefixUnaryExpression & { operator: SyntaxKind.MinusToken; operand: NumericLiteral | BigIntLiteral; };
+
 /**
  * Declarations that can contain other declarations. Corresponds with `ContainerFlags.IsContainer` in binder.ts.
  *
@@ -2750,6 +2760,22 @@ export interface LiteralExpression extends LiteralLikeNode, PrimaryExpression {
 
 export interface RegularExpressionLiteral extends LiteralExpression {
     readonly kind: SyntaxKind.RegularExpressionLiteral;
+}
+
+// dprint-ignore
+/** @internal */
+export const enum RegularExpressionFlags {
+    None        = 0,
+    HasIndices  = 1 << 0, // d
+    Global      = 1 << 1, // g
+    IgnoreCase  = 1 << 2, // i
+    Multiline   = 1 << 3, // m
+    DotAll      = 1 << 4, // s
+    Unicode     = 1 << 5, // u
+    UnicodeSets = 1 << 6, // v
+    Sticky      = 1 << 7, // y
+    UnicodeMode = Unicode | UnicodeSets,
+    Modifiers   = IgnoreCase | Multiline | DotAll,
 }
 
 export interface NoSubstitutionTemplateLiteral extends LiteralExpression, TemplateLiteralLikeNode, Declaration {
@@ -4720,21 +4746,79 @@ export interface Program extends ScriptReferenceHost {
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
     isSourceFileDefaultLibrary(file: SourceFile): boolean;
     /**
-     * Calculates the final resolution mode for a given module reference node. This is the resolution mode explicitly provided via import
-     * attributes, if present, or the syntax the usage would have if emitted to JavaScript. In `--module node16` or `nodenext`, this may
-     * depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the input syntax of the reference. In other
-     * `module` modes, when overriding import attributes are not provided, this function returns `undefined`, as the result would have no
-     * impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for a given module reference node. This function only returns a result when module resolution
+     * settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided via import attributes,
+     * which cause an `import` or `require` condition to be used during resolution regardless of module resolution settings. In absence of
+     * overriding attributes, and in modes that support differing resolution, the result indicates the syntax the usage would emit to JavaScript.
+     * Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
      */
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     /**
-     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This is the resolution mode
-     * explicitly provided via import attributes, if present, or the syntax the usage would have if emitted to JavaScript. In
-     * `--module node16` or `nodenext`, this may depend on the file's `impliedNodeFormat`. In `--module preserve`, it depends only on the
-     * input syntax of the reference. In other `module` modes, when overriding import attributes are not provided, this function returns
-     * `undefined`, as the result would have no impact on module resolution, emit, or type checking.
+     * Calculates the final resolution mode for an import at some index within a file's `imports` list. This function only returns a result
+     * when module resolution settings allow differing resolution between ESM imports and CJS requires, or when a mode is explicitly provided
+     * via import attributes, which cause an `import` or `require` condition to be used during resolution regardless of module resolution
+     * settings. In absence of overriding attributes, and in modes that support differing resolution, the result indicates the syntax the
+     * usage would emit to JavaScript. Some examples:
+     *
+     * ```ts
+     * // tsc foo.mts --module nodenext
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `impliedNodeFormat` set by .mts file extension
+     *
+     * // tsc foo.cts --module nodenext
+     * import {} from "mod";
+     * // Result: CommonJS - the import emits as CJS due to `impliedNodeFormat` set by .cts file extension
+     *
+     * // tsc foo.ts --module preserve --moduleResolution bundler
+     * import {} from "mod";
+     * // Result: ESNext - the import emits as ESM due to `--module preserve` and `--moduleResolution bundler`
+     * // supports conditional imports/exports
+     *
+     * // tsc foo.ts --module preserve --moduleResolution node10
+     * import {} from "mod";
+     * // Result: undefined - the import emits as ESM due to `--module preserve`, but `--moduleResolution node10`
+     * // does not support conditional imports/exports
+     *
+     * // tsc foo.ts --module commonjs --moduleResolution node10
+     * import type {} from "mod" with { "resolution-mode": "import" };
+     * // Result: ESNext - conditional imports/exports always supported with "resolution-mode" attribute
+     * ```
      */
     getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+    /**
+     * @internal
+     * The resolution mode to use for module resolution or module specifier resolution
+     * outside the context of an existing module reference, where
+     * `program.getModeForUsageLocation` should be used instead.
+     */
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    /** @internal */ getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
+    /** @internal */ shouldTransformImportCall(sourceFile: SourceFile): boolean;
 
     // For testing purposes only.
     // This is set on created program to let us know how the program was created using old program
@@ -4789,6 +4873,7 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     /** @internal */ isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    /** @internal */ getCompilerOptionsForFile(file: SourceFile): CompilerOptions;
     /** @internal */ getBuildInfo?(): BuildInfo;
     /** @internal */ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     /**
@@ -4904,8 +4989,12 @@ export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
     getSourceFile(fileName: string): SourceFile | undefined;
     getProjectReferenceRedirect(fileName: string): string | undefined;
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
+    getEmitSyntaxForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
     getRedirectReferenceForResolutionFromSourceOfProject(filePath: Path): ResolvedProjectReference | undefined;
     getModeForUsageLocation(file: SourceFile, usage: StringLiteralLike): ResolutionMode;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getImpliedNodeFormatForEmit(sourceFile: SourceFile): ResolutionMode;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
 
@@ -4932,6 +5021,8 @@ export interface TypeChecker {
     getBaseTypes(type: InterfaceType): BaseType[];
     getBaseTypeOfLiteralType(type: Type): Type;
     getWidenedType(type: Type): Type;
+    /** @internal */
+    getWidenedLiteralType(type: Type): Type;
     /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
@@ -5331,7 +5422,7 @@ export const enum NodeBuilderFlags {
     AllowUniqueESSymbolType                 = 1 << 20,
     AllowEmptyIndexInfoType                 = 1 << 21,
     /** @internal */ WriteComputedProps      = 1 << 30, // { [E.A]: 1 }
-
+    /** @internal */ NoSyntacticPrinter     = 1 << 31,
     // Errors (cont.)
     AllowNodeModulesRelativePaths           = 1 << 26,
     /** @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
@@ -5561,6 +5652,9 @@ export interface RequireVariableDeclarationList extends VariableDeclarationList 
 }
 
 /** @internal */
+export type CanHaveModuleSpecifier = AnyImportOrBareOrAccessedRequire | AliasDeclarationNode | ExportDeclaration | ImportTypeNode;
+
+/** @internal */
 export type LateVisibilityPaintedStatement =
     | AnyImportOrJsDocImport
     | VariableStatement
@@ -5649,6 +5743,7 @@ export enum TypeReferenceSerializationKind {
 
 /** @internal */
 export interface EmitResolver {
+    isNonNarrowedBindableName(node: ComputedPropertyName): boolean;
     hasGlobalName(name: string): boolean;
     getReferencedExportContainer(node: Identifier, prefixLocals?: boolean): SourceFile | ModuleDeclaration | EnumDeclaration | undefined;
     getReferencedImportDeclaration(node: Identifier): Declaration | undefined;
@@ -5663,7 +5758,7 @@ export interface EmitResolver {
     collectLinkedAliases(node: Identifier, setVisibility?: boolean): Node[] | undefined;
     isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
     requiresAddingImplicitUndefined(node: ParameterDeclaration): boolean;
-    isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
+    isExpandoFunctionDeclaration(node: FunctionDeclaration | VariableDeclaration): boolean;
     getPropertiesOfContainerFunction(node: Declaration): Symbol[];
     createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression | ElementAccessExpression | BinaryExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
     createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
@@ -5823,7 +5918,6 @@ export interface SymbolLinks {
     inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
     mapper?: TypeMapper;                        // Type mapper for instantiation alias
     referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
-    constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
     containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
     leftSpread?: Symbol;                        // Left source for synthetic spread property
     rightSpread?: Symbol;                       // Right source for synthetic spread property
@@ -6010,6 +6104,7 @@ export interface EvaluatorResult<T extends string | number | undefined = string 
     value: T;
     isSyntacticallyString: boolean;
     resolvedOtherFiles: boolean;
+    hasExternalReferences: boolean;
 }
 
 // dprint-ignore
@@ -6975,6 +7070,8 @@ export interface DiagnosticMessageChain {
     next?: DiagnosticMessageChain[];
     /** @internal */
     repopulateInfo?: () => RepopulateDiagnosticChainInfo;
+    /** @internal */
+    canonicalHead?: CanonicalDiagnostic;
 }
 
 export interface Diagnostic extends DiagnosticRelatedInformation {
@@ -6985,6 +7082,21 @@ export interface Diagnostic extends DiagnosticRelatedInformation {
     source?: string;
     relatedInformation?: DiagnosticRelatedInformation[];
     /** @internal */ skippedOn?: keyof CompilerOptions;
+    /**
+     * @internal
+     * Used for deduplication and comparison.
+     * Whenever it is possible for two diagnostics that report the same problem to be produced with
+     * different messages (e.g. "Cannot find name 'foo'" vs "Cannot find name 'foo'. Did you mean 'bar'?"),
+     * this property can be set to a canonical message,
+     * so that those two diagnostics are appropriately considered to be the same.
+     */
+    canonicalHead?: CanonicalDiagnostic;
+}
+
+/** @internal */
+export interface CanonicalDiagnostic {
+    code: number;
+    messageText: string;
 }
 
 /** @internal */
@@ -7100,7 +7212,7 @@ export enum PollingWatchKind {
     FixedChunkSize,
 }
 
-export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined;
+export type CompilerOptionsValue = string | number | boolean | (string | number)[] | string[] | MapLike<string[]> | PluginImport[] | ProjectReference[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
 export interface CompilerOptions {
     /** @internal */ all?: boolean;
@@ -7158,6 +7270,7 @@ export interface CompilerOptions {
     inlineSourceMap?: boolean;
     inlineSources?: boolean;
     isolatedModules?: boolean;
+    isolatedDeclarations?: boolean;
     jsx?: JsxEmit;
     /** @deprecated */
     keyofStringsOnly?: boolean;
@@ -7175,6 +7288,7 @@ export interface CompilerOptions {
     moduleDetection?: ModuleDetectionKind;
     newLine?: NewLineKind;
     noEmit?: boolean;
+    /** @internal */ noCheck?: boolean;
     /** @internal */ noEmitForJsFiles?: boolean;
     noEmitHelpers?: boolean;
     noEmitOnError?: boolean;
@@ -7405,6 +7519,9 @@ export interface ConfigFileSpecs {
     validatedFilesSpec: readonly string[] | undefined;
     validatedIncludeSpecs: readonly string[] | undefined;
     validatedExcludeSpecs: readonly string[] | undefined;
+    validatedFilesSpecBeforeSubstitution: readonly string[] | undefined;
+    validatedIncludeSpecsBeforeSubstitution: readonly string[] | undefined;
+    validatedExcludeSpecsBeforeSubstitution: readonly string[] | undefined;
     pathPatterns: readonly (string | Pattern)[] | undefined;
     isDefaultIncludeSpec: boolean;
 }
@@ -7451,7 +7568,8 @@ export interface CommandLineOptionBase {
     affectsBuildInfo?: true;                                // true if this options should be emitted in buildInfo
     transpileOptionValue?: boolean | undefined;             // If set this means that the option should be set to this value when transpiling
     extraValidation?: (value: CompilerOptionsValue) => [DiagnosticMessage, ...string[]] | undefined; // Additional validation to be performed for the value to be valid
-    disallowNullOrUndefined?: true;                                    // If set option does not allow setting null
+    disallowNullOrUndefined?: true;                         // If set option does not allow setting null
+    allowConfigDirTemplateSubstitution?: true;              // If set option allows substitution of `${configDir}` in the value
 }
 
 /** @internal */
@@ -7513,6 +7631,7 @@ export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptio
 // dprint-ignore
 /** @internal */
 export const enum CharacterCodes {
+    EOF = -1,
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,
 
@@ -7541,6 +7660,9 @@ export const enum CharacterCodes {
     ideographicSpace = 0x3000,
     mathematicalSpace = 0x205F,
     ogham = 0x1680,
+
+    // Unicode replacement character produced when a byte sequence is invalid
+    replacementCharacter = 0xFFFD,
 
     _ = 0x5F,
     $ = 0x24,
@@ -8129,6 +8251,8 @@ export const enum LanguageFeatureMinimumTarget {
     ArrowFunctions = ScriptTarget.ES2015,
     BlockScopedVariables = ScriptTarget.ES2015,
     ObjectAssign = ScriptTarget.ES2015,
+    RegularExpressionFlagsUnicode = ScriptTarget.ES2015,
+    RegularExpressionFlagsSticky = ScriptTarget.ES2015,
 
     // ES2016 Features
     Exponentiation = ScriptTarget.ES2016, // `x ** y`
@@ -8141,6 +8265,7 @@ export const enum LanguageFeatureMinimumTarget {
     AsyncGenerators = ScriptTarget.ES2018, // `async function * f() { }`
     AsyncIteration = ScriptTarget.ES2018, // `Symbol.asyncIterator`
     ObjectSpreadRest = ScriptTarget.ES2018, // `{ ...obj }`
+    RegularExpressionFlagsDotAll = ScriptTarget.ES2018,
 
     // ES2019 Features
     BindinglessCatch = ScriptTarget.ES2019, // `try { } catch { }`
@@ -8157,6 +8282,7 @@ export const enum LanguageFeatureMinimumTarget {
     TopLevelAwait = ScriptTarget.ES2022,
     ClassFields = ScriptTarget.ES2022,
     PrivateNamesAndClassStaticBlocks = ScriptTarget.ES2022, // `class C { static {} #x = y, #m() {} }`, `#x in y`
+    RegularExpressionFlagsHasIndices = ScriptTarget.ES2022,
 
     // ES2023 Features
     ShebangComments = ScriptTarget.ESNext,
@@ -8167,6 +8293,7 @@ export const enum LanguageFeatureMinimumTarget {
     //       transformers/esnext.ts, commandLineParser.ts, and the contents of each lib/esnext.*.d.ts file.
     UsingAndAwaitUsing = ScriptTarget.ESNext, // `using x = y`, `await using x = y`
     ClassAndClassElementDecorators = ScriptTarget.ESNext, // `@dec class C {}`, `class C { @dec m() {} }`
+    RegularExpressionFlagsUnicodeSets = ScriptTarget.ESNext,
 }
 
 // dprint-ignore
@@ -8256,6 +8383,8 @@ export interface EmitHost extends ScriptReferenceHost, ModuleSpecifierResolution
     getCanonicalFileName(fileName: string): string;
 
     isEmitBlocked(emitFileName: string): boolean;
+    shouldTransformImportCall(sourceFile: SourceFile): boolean;
+    getEmitModuleFormatOfFile(sourceFile: SourceFile): ModuleKind;
 
     writeFile: WriteFileCallback;
     getBuildInfo(): BuildInfo | undefined;
@@ -8931,7 +9060,7 @@ export interface NodeFactory {
     // Synthetic Nodes
     //
     /** @internal */ createSyntheticExpression(type: Type, isSpread?: boolean, tupleNameSource?: ParameterDeclaration | NamedTupleMember): SyntheticExpression;
-    /** @internal */ createSyntaxList(children: Node[]): SyntaxList;
+    /** @internal */ createSyntaxList(children: readonly Node[]): SyntaxList;
 
     //
     // Transformation nodes
@@ -9497,6 +9626,7 @@ export interface PrinterOptions {
     omitTrailingSemicolon?: boolean;
     noEmitHelpers?: boolean;
     /** @internal */ module?: CompilerOptions["module"];
+    /** @internal */ moduleResolution?: CompilerOptions["moduleResolution"];
     /** @internal */ target?: CompilerOptions["target"];
     /** @internal */ sourceMap?: boolean;
     /** @internal */ inlineSourceMap?: boolean;
@@ -9514,11 +9644,11 @@ export interface PrinterOptions {
 export interface RawSourceMap {
     version: 3;
     file: string;
-    sourceRoot?: string | null;
+    sourceRoot?: string | null; // eslint-disable-line no-restricted-syntax
     sources: string[];
-    sourcesContent?: (string | null)[] | null;
+    sourcesContent?: (string | null)[] | null; // eslint-disable-line no-restricted-syntax
     mappings: string;
-    names?: string[] | null;
+    names?: string[] | null; // eslint-disable-line no-restricted-syntax
 }
 
 /**
@@ -9535,7 +9665,7 @@ export interface SourceMapGenerator {
     /**
      * Set the content for a source.
      */
-    setSourceContent(sourceIndex: number, content: string | null): void;
+    setSourceContent(sourceIndex: number, content: string | null): void; // eslint-disable-line no-restricted-syntax
     /**
      * Adds a name.
      */
@@ -9631,6 +9761,11 @@ export interface ModuleSpecifierResolutionHost {
     isSourceOfProjectReferenceRedirect(fileName: string): boolean;
     getFileIncludeReasons(): MultiMap<Path, FileIncludeReason>;
     getCommonSourceDirectory(): string;
+    getDefaultResolutionModeForFile(sourceFile: SourceFile): ResolutionMode;
+    getModeForResolutionAtIndex(file: SourceFile, index: number): ResolutionMode;
+
+    getModuleResolutionCache?(): ModuleResolutionCache | undefined;
+    trace?(s: string): void;
 }
 
 /** @internal */
@@ -9678,6 +9813,7 @@ export interface SymbolTracker {
     moduleResolverHost?: ModuleSpecifierResolutionHost & { getCommonSourceDirectory(): string; };
     reportNonlocalAugmentation?(containingFile: SourceFile, parentSymbol: Symbol, augmentingSymbol: Symbol): void;
     reportNonSerializableProperty?(propertyName: string): void;
+    reportInferenceFallback?(node: Node): void;
 }
 
 export interface TextSpan {
@@ -10131,4 +10267,33 @@ export interface Queue<T> {
 export interface EvaluationResolver {
     evaluateEntityNameExpression(expr: EntityNameExpression, location: Declaration | undefined): EvaluatorResult;
     evaluateElementAccessExpression(expr: ElementAccessExpression, location: Declaration | undefined): EvaluatorResult;
+}
+
+/** @internal */
+export type HasInferredType =
+    | PropertyAssignment
+    | PropertyAccessExpression
+    | BinaryExpression
+    | ElementAccessExpression
+    | VariableDeclaration
+    | ParameterDeclaration
+    | BindingElement
+    | PropertyDeclaration
+    | PropertySignature
+    | ExportAssignment;
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderContext {
+    tracker: Required<Pick<SymbolTracker, "reportInferenceFallback">>;
+    enclosingDeclaration: Node | undefined;
+}
+
+/** @internal */
+export interface SyntacticTypeNodeBuilderResolver {
+    isUndefinedIdentifierExpression(name: Identifier): boolean;
+    isNonNarrowedBindableName(name: ComputedPropertyName): boolean;
+    isExpandoFunctionDeclaration(name: FunctionDeclaration | VariableDeclaration): boolean;
+    getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
+    isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node, shouldComputeAliasToMakeVisible?: boolean): SymbolVisibilityResult;
+    requiresAddingImplicitUndefined(parameter: ParameterDeclaration | JSDocParameterTag): boolean;
 }

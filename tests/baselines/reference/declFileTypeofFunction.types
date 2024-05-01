@@ -78,13 +78,13 @@ var foo2 = foo;
 >foo2 : () => typeof foo
 >     : ^^^^^^^^^^^^^^^^
 >foo : () => typeof foo
->    :                 
+>    : ^^^^^^^^^^^^^^^^
 
 var foo3 = function () {
 >foo3 : () => any
 >     : ^^^^^^^^^
 >function () {    return foo3;} : () => any
->                               :          
+>                               : ^^^^^^^^^
 
     return foo3;
 >foo3 : () => any
@@ -94,7 +94,7 @@ var x = () => {
 >x : () => any
 >  : ^^^^^^^^^
 >() => {    return x;} : () => any
->                      :          
+>                      : ^^^^^^^^^
 
     return x;
 >x : () => any

@@ -142,7 +142,7 @@ class C {
 >action : () => void
 >       : ^^^^^^^^^^
 >() => {            if (Math.random()) {                this.inNestedArrowFunction = 0;            }            else {                this.inNestedArrowFunction = "string"            }        } : () => void
->                                                                                                                                                                                                 :           
+>                                                                                                                                                                                                 : ^^^^^^^^^^
 
             if (Math.random()) {
 >Math.random() : number
@@ -288,7 +288,7 @@ class C {
 >prop : () => void
 >     : ^^^^^^^^^^
 >() => {        if (Math.random()) {            this.inPropertyDeclaration = 0;        }        else {            this.inPropertyDeclaration = "string"        }    } : () => void
->                                                                                                                                                                     :           
+>                                                                                                                                                                     : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number
@@ -370,7 +370,7 @@ class C {
 >action : () => void
 >       : ^^^^^^^^^^
 >() => {            if (Math.random()) {                this.inStaticNestedArrowFunction = 0;            }            else {                this.inStaticNestedArrowFunction = "string"            }        } : () => void
->                                                                                                                                                                                                             :           
+>                                                                                                                                                                                                             : ^^^^^^^^^^
 
             if (Math.random()) {
 >Math.random() : number
@@ -493,7 +493,7 @@ class C {
 >prop : () => void
 >     : ^^^^^^^^^^
 >() => {        if (Math.random()) {            this.inStaticPropertyDeclaration = 0;        }        else {            this.inStaticPropertyDeclaration = "string"        }    } : () => void
->                                                                                                                                                                                 :           
+>                                                                                                                                                                                 : ^^^^^^^^^^
 
         if (Math.random()) {
 >Math.random() : number

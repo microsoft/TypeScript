@@ -61,7 +61,6 @@ import {
     hasEffectiveModifier,
     hasSyntacticModifier,
     Identifier,
-    identifierToKeywordKind,
     isArray,
     isArrowFunction,
     isAssignmentExpression,
@@ -92,7 +91,6 @@ import {
     isModuleBlock,
     isParenthesizedTypeNode,
     isPartOfTypeNode,
-    isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isQualifiedName,
@@ -161,6 +159,7 @@ import {
     VisitResult,
 } from "../_namespaces/ts";
 import {
+    getIdentifierForNode,
     refactorKindBeginsWith,
     registerRefactor,
 } from "../_namespaces/ts.refactor";
@@ -1374,9 +1373,7 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const localNameText = getIdentifierForNode(node, scope, checker, file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)

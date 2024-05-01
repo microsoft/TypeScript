@@ -10,7 +10,7 @@ function f(arguments) {
 >a : (arguments: any) => () => any
 >  : ^         ^^^^^^^^^^^^^^^^^^^
 >(arguments) => () => arguments : (arguments: any) => () => any
->                               :                              
+>                               : ^         ^^^^^^^^^^^^^^^^^^^
 >arguments : any
 >() => arguments : () => any
 >                : ^^^^^^^^^

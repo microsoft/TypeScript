@@ -99,7 +99,7 @@ var o = {
 >o : { [x: number]: (value: any) => boolean; a: number; }
 >  : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    a: 2,    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; a: number; }
->                                                                            : ^^^^^^^^^^^^^^^                       ^^^^^^^^^^^^^^
+>                                                                            : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     a: 2,
 >a : number
@@ -226,7 +226,7 @@ const o1 = {
 >o1 : { [x: number]: (value: any) => boolean; }
 >   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
 >{    [Symbol.hasInstance](value: any) {        return false;    }} : { [x: number]: (value: any) => boolean; }
->                                                                   : ^^^^^^^^^^^^^^^                       ^^^
+>                                                                   : ^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^^^^
 
     [Symbol.hasInstance](value: any) {
 >[Symbol.hasInstance] : (value: any) => boolean

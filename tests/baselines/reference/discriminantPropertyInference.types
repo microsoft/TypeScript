@@ -65,7 +65,7 @@ f({
 >cb : (s: string) => number
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >s => parseInt(s) : (s: string) => number
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >parseInt(s) : number
@@ -95,7 +95,7 @@ f({
 >cb : (n: number) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string
@@ -127,7 +127,7 @@ f({
 >cb : (n: number) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string
@@ -153,7 +153,7 @@ f({
 >cb : (n: number) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >n => n.toFixed() : (n: number) => string
->                 :                      
+>                 : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >n.toFixed() : string

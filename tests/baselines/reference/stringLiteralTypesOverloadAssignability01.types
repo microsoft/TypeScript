@@ -39,13 +39,13 @@ let a = f;
 >a : (x: "foo") => number
 >  : ^ ^^     ^^^^^^^^^^^
 >f : (x: "foo") => number
->  :                     
+>  : ^ ^^     ^^^^^^^^^^^
 
 let b = g;
 >b : (x: "bar") => number
 >  : ^ ^^     ^^^^^^^^^^^
 >g : (x: "bar") => number
->  :                     
+>  : ^ ^^     ^^^^^^^^^^^
 
 a = b;
 >a = b : (x: "bar") => number

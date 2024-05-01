@@ -27,7 +27,7 @@ const isA = (x: MyUnion): x is A => x.type === "A";
 >isA : (x: MyUnion) => x is A
 >    : ^ ^^       ^^^^^      
 >(x: MyUnion): x is A => x.type === "A" : (x: MyUnion) => x is A
->                                       :                       
+>                                       : ^ ^^       ^^^^^      
 >x : MyUnion
 >  : ^^^^^^^
 >x.type === "A" : boolean

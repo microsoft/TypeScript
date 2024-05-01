@@ -43,13 +43,13 @@ const result = foo({
 >bar : { fn: (a: string) => void; thing: string; }
 >    : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    fn: (a: string) => {},    thing: 'asd',  } : { fn: (a: string) => void; thing: string; }
->                                                : ^^^^^^                   ^^^^^^^^^^^^^^^^^^
+>                                                : ^^^^^^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     fn: (a: string) => {},
 >fn : (a: string) => void
 >   : ^ ^^      ^^^^^^^^^
 >(a: string) => {} : (a: string) => void
->                  :                    
+>                  : ^ ^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 

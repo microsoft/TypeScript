@@ -14,7 +14,7 @@ class c {
 >x : (a: any) => void
 >  : ^ ^^^^^^^^^^^^^^
 >a => this.method(a) : (a: any) => void
->                    :                 
+>                    : ^ ^^^^^^^^^^^^^^
 >a : any
 >this.method(a) : void
 >               : ^^^^

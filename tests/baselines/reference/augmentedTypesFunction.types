@@ -29,7 +29,7 @@ var y2a = () => { } // error
 >y2a : () => void
 >    : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
 // function then class
 function y3() { } // error

@@ -65,7 +65,7 @@ function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
 >show : (v: number) => number
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v : (v: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >v : number
@@ -98,7 +98,7 @@ let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentit
 >stringIdentity : (x: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : string

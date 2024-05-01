@@ -8,6 +8,6 @@ var a = () => arguments;
 >a : () => any
 >  : ^^^^^^^^^
 >() => arguments : () => any
->                :          
+>                : ^^^^^^^^^
 >arguments : any
 
