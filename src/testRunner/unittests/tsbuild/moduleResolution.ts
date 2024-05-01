@@ -1,5 +1,6 @@
 import * as ts from "../../_namespaces/ts";
 import * as Utils from "../../_namespaces/Utils";
+import { Symlink } from "../../_namespaces/vfs";
 import { jsonToReadableText } from "../helpers";
 import {
     noChangeOnlyRuns,
@@ -129,5 +130,71 @@ describe("unittests:: tsbuild:: moduleResolution:: impliedNodeFormat differs bet
         modifyFs: fs => fs.writeFileSync("/lib/lib.es2022.full.d.ts", libFile.content),
         commandLineArgs: ["-b", "/src/projects/a", "/src/projects/b", "--verbose", "--traceResolution", "--explainFiles"],
         edits: noChangeOnlyRuns,
+    });
+});
+
+describe("unittests:: tsbuild:: moduleResolution:: resolution sharing", () => {
+    function fs() {
+        return loadProjectFromFiles({
+            "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    checkJs: true,
+                    composite: true,
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                    module: "nodenext",
+                    outDir: "types",
+                },
+            }),
+            "/src/projects/project/packages/a/package.json": jsonToReadableText({
+                name: "a",
+                version: "0.0.0",
+                type: "module",
+                exports: {
+                    ".": {
+                        types: "./types/index.d.ts",
+                        default: "./index.js",
+                    },
+                },
+            }),
+            "/src/projects/project/packages/b/index.js": `export { a } from 'a';`,
+            "/src/projects/project/packages/b/tsconfig.json": jsonToReadableText({
+                references: [{ path: "../a" }],
+                compilerOptions: {
+                    checkJs: true,
+                    module: "nodenext",
+                    noEmit: true,
+                    noImplicitAny: true,
+                },
+            }),
+            "/src/projects/project/packages/b/package.json": jsonToReadableText({
+                name: "b",
+                version: "0.0.0",
+                type: "module",
+            }),
+            "/src/projects/project/node_modules/a": new Symlink("/src/projects/project/packages/a"),
+            "/lib/lib.esnext.full.d.ts": libFile.content,
+        }, { cwd: "/src/projects/project" });
+    }
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "shared resolution should not report error",
+        fs,
+        commandLineArgs: ["-b", "packages/b", "--verbose", "--traceResolution", "--explainFiles"],
+    });
+
+    verifyTsc({
+        scenario: "moduleResolution",
+        subScenario: "when resolution is not shared",
+        fs,
+        commandLineArgs: ["-b", "packages/a", "--verbose", "--traceResolution", "--explainFiles"],
+        edits: [{
+            caption: "build b",
+            edit: ts.noop,
+            commandLineArgs: ["-b", "packages/b", "--verbose", "--traceResolution", "--explainFiles"],
+        }],
     });
 });

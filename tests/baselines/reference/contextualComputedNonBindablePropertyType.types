@@ -66,7 +66,7 @@ forceMatch2({
 >testD : () => "d"
 >      : ^^^^^^^^^
 >({ key }) => {} : ({ key }: { key: "d"; }) => void
->                :                                 
+>                : ^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >key : "d"
 >    : ^^^
 
@@ -97,7 +97,7 @@ const propSelector =  <propName extends string>(propName: propName): propName =>
 >propSelector : <propName extends string>(propName: propName) => propName
 >             : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^        
 ><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
->                                                                    :                                                          
+>                                                                    : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^        
 >propName : propName
 >         : ^^^^^^^^
 >propName : propName
@@ -113,7 +113,7 @@ const unexpectedlyFailingExample: Mapped = {
 >foo : (arg: "expects a string literal") => "expects a string literal"
 >    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(arg) => 'expects a string literal' : (arg: "expects a string literal") => "expects a string literal"
->                                    :                                                                
+>                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : "expects a string literal"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'expects a string literal' : "expects a string literal"
@@ -123,7 +123,7 @@ const unexpectedlyFailingExample: Mapped = {
 >baz : (arg: boolean) => true
 >    : ^   ^^^^^^^^^^^^^^^^^^
 >(arg) => true : (arg: boolean) => true
->              :                       
+>              : ^   ^^^^^^^^^^^^^^^^^^
 >arg : boolean
 >    : ^^^^^^^
 >true : true
@@ -139,7 +139,7 @@ const unexpectedlyFailingExample: Mapped = {
 >'bar' : "bar"
 >      : ^^^^^
 >(arg) => 51345 : (arg: number) => number
->               :                        
+>               : ^   ^^^^^^^^^^^^^^^^^^^
 >arg : number
 >    : ^^^^^^
 >51345 : 51345

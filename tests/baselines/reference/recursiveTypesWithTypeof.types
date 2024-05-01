@@ -81,7 +81,7 @@ var g: typeof g.x;
 >g : { x: any; }
 >  : ^^^^^^^^^^^
 >x : { x: any; }
->  :            
+>  : ^^^^^^^^^^^
 
 var h: () => typeof h;
 >h : () => typeof h
@@ -93,7 +93,7 @@ var h = h();
 >h : () => any
 >  : ^^^^^^^^^
 >h() : () => any
->    :          
+>    : ^^^^^^^^^
 >h : () => any
 >  : ^^^^^^^^^
 
@@ -111,11 +111,11 @@ var i = i(i);
 >i : (x: typeof i) => any
 >  : ^ ^^        ^^^^^^^^
 >i(i) : (x: typeof i) => any
->     :                     
+>     : ^ ^^        ^^^^^^^^
 >i : (x: typeof i) => any
 >  : ^ ^^        ^^^^^^^^
 >i : (x: typeof i) => any
->  :                     
+>  : ^ ^^        ^^^^^^^^
 
 var j: <T extends typeof j>(x: T) => T;
 >j : <T extends any>(x: T) => T
@@ -129,11 +129,11 @@ var j = j(j);
 >j : <T extends any>(x: T) => T
 >  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >j(j) : <T extends any>(x: T) => T
->     :                           
+>     : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >j : <T extends any>(x: T) => T
 >  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >j : <T extends any>(x: T) => T
->  :                           
+>  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 
 // Same as h, i, j with construct signatures
 var h2: new () => typeof h2;
@@ -146,7 +146,7 @@ var h2 = new h2();
 >h2 : new () => any
 >   : ^^^^^^^^^^^^^
 >new h2() : new () => any
->         :              
+>         : ^^^^^^^^^^^^^
 >h2 : new () => any
 >   : ^^^^^^^^^^^^^
 
@@ -164,11 +164,11 @@ var i2 = new i2(i2);
 >i2 : new (x: typeof i2) => any
 >   : ^^^^^ ^^         ^^^^^^^^
 >new i2(i2) : new (x: typeof i2) => any
->           :                          
+>           : ^^^^^ ^^         ^^^^^^^^
 >i2 : new (x: typeof i2) => any
 >   : ^^^^^ ^^         ^^^^^^^^
 >i2 : new (x: typeof i2) => any
->   :                          
+>   : ^^^^^ ^^         ^^^^^^^^
 
 var j2: new <T extends typeof j2>(x: T) => T;
 >j2 : new <T extends any>(x: T) => T
@@ -182,11 +182,11 @@ var j2 = new j2(j2);
 >j2 : new <T extends any>(x: T) => T
 >   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >new j2(j2) : new <T extends any>(x: T) => T
->           :                               
+>           : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >j2 : new <T extends any>(x: T) => T
 >   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 >j2 : new <T extends any>(x: T) => T
->   :                               
+>   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
 
 // Indexers
 var k: { [n: number]: typeof k;[s: string]: typeof k };
@@ -205,7 +205,7 @@ var k = k[0];
 >k : { [n: number]: any; [s: string]: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k[0] : { [n: number]: any; [s: string]: any; }
->     :                                        
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
@@ -215,7 +215,7 @@ var k = k[''];
 >k : { [n: number]: any; [s: string]: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k[''] : { [n: number]: any; [s: string]: any; }
->      :                                        
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : { [n: number]: any; [s: string]: any; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'' : ""
@@ -235,7 +235,7 @@ var hy1 = hy1[0].x;
 >hy1 : { x: any[]; }[]
 >    : ^^^^^^^^^^^^^^^
 >hy1[0].x : { x: any[]; }[]
->         :              ^^
+>         : ^^^^^^^^^^^^^^^
 >hy1[0] : { x: any[]; }
 >       : ^^^^^^^^^^^^^
 >hy1 : { x: any[]; }[]
@@ -243,7 +243,7 @@ var hy1 = hy1[0].x;
 >0 : 0
 >  : ^
 >x : { x: any[]; }[]
->  :              ^^
+>  : ^^^^^^^^^^^^^^^
 
 var hy2: { x: Array<typeof hy2> };
 >hy2 : { x: Array<typeof hy2>; }
@@ -257,13 +257,13 @@ var hy2 = hy2.x[0];
 >hy2 : { x: any[]; }
 >    : ^^^^^^^^^^^^^
 >hy2.x[0] : { x: any[]; }
->         :              
+>         : ^^^^^^^^^^^^^
 >hy2.x : { x: any[]; }[]
 >      : ^^^^^^^^^^^^^^^
 >hy2 : { x: any[]; }
 >    : ^^^^^^^^^^^^^
 >x : { x: any[]; }[]
->  :              ^^
+>  : ^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

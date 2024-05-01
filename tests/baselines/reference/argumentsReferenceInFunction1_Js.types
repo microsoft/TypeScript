@@ -5,7 +5,7 @@ const format = function(f) {
 >format : (f: any, ...args: any[]) => string
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function(f) {  var str = '';  var i = 1;  var args = arguments;  var len = args.length;  for (var x = args[i]; i < len; x = args[++i]) {    str += ' ' + x;  }  return str;} : (f: any, ...args: any[]) => string
->                                                                                                                                                                             :          ^^^                      
+>                                                                                                                                                                             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : any
 >  : ^^^
 
@@ -87,7 +87,7 @@ const debuglog = function() {
 >debuglog : (...args: any[]) => string
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function() {  return format.apply(null, arguments);} : (...args: any[]) => string
->                                                     :  ^^^                      
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return format.apply(null, arguments);
 >format.apply(null, arguments) : string

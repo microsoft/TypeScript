@@ -37,7 +37,7 @@ let a = decorateA(({value}) => 5)
 >a : () => number
 >  : ^^^^^^^^^^^^
 >decorateA(({value}) => 5) : () => number
->                          :             
+>                          : ^^^^^^^^^^^^
 >decorateA : <O extends unknown>(fn: (first: { value: typeof val; }) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                    ^^^^^^^^^^^^
 >({value}) => 5 : ({ value }: { value: number; }) => number
@@ -71,7 +71,7 @@ let b = decorateB((value) => 5)
 >b : () => number
 >  : ^^^^^^^^^^^^
 >decorateB((value) => 5) : () => number
->                        :             
+>                        : ^^^^^^^^^^^^
 >decorateB : <O extends unknown>(fn: (first: typeof val) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                        ^^^^^^^^^^^^
 >(value) => 5 : (value: number) => number
@@ -109,7 +109,7 @@ let c = decorateC(({value}) => 5)
 >c : () => number
 >  : ^^^^^^^^^^^^
 >decorateC(({value}) => 5) : () => number
->                          :             
+>                          : ^^^^^^^^^^^^
 >decorateC : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                ^^^^^^^^^^^^
 >({value}) => 5 : ({ value }: { value: number; }) => number
@@ -153,7 +153,7 @@ let d = decorateD(({value}) => 5)
 >d : () => number
 >  : ^^^^^^^^^^^^
 >decorateD(({value}) => 5) : () => number
->                          :             
+>                          : ^^^^^^^^^^^^
 >decorateD : <O extends unknown>(fn: (first: First) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                   ^^^^^^^^^^^^
 >({value}) => 5 : ({ value }: First) => number

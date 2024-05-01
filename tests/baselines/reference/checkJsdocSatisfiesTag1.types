@@ -74,7 +74,7 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >t5 : (m: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >((m) => m.substring(0)) : (m: string) => string
->                        :                      
+>                        : ^ ^^      ^^^^^^^^^^^
 >(m) => m.substring(0) : (m: string) => string
 >                      : ^ ^^^^^^^^^^^^^^^^^^^
 >m : string

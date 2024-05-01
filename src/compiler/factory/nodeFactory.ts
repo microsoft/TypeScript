@@ -6209,7 +6209,7 @@ export function createNodeFactory(flags: NodeFactoryFlags, baseFactory: BaseNode
     }
 
     // @api
-    function createSyntaxList(children: Node[]) {
+    function createSyntaxList(children: readonly Node[]) {
         const node = createBaseNode<SyntaxList>(SyntaxKind.SyntaxList);
         setNodeChildren(node, children);
         return node;

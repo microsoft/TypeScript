@@ -216,7 +216,7 @@ let impl: I = {
 >explicitVoid2 : () => any
 >              : ^^^^^^^^^
 >() => this.a : () => any
->             :          
+>             : ^^^^^^^^^
 >this.a : any
 >       : ^^^
 >this : typeof globalThis
@@ -403,7 +403,7 @@ let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, f:
 >f : (this: { y: number; }, x: number) => number
 >  : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 >explicitStructural : (this: { y: number; }, x: number) => number
->                   :                                            
+>                   : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 
 let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpecified: 12, f: implicitThis };
 >implicitAnyOk : { notSpecified: number; f: (x: number) => number; }
@@ -423,7 +423,7 @@ let implicitAnyOk: {notSpecified: number, f: (x: number) => number} = { notSpeci
 >f : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >implicitThis : (n: number) => number
->             :                      
+>             : ^ ^^      ^^^^^^^^^^^
 
 ok.f(13);
 >ok.f(13) : number
@@ -477,7 +477,7 @@ let ripped = c.explicitC;
 >ripped : (this: C, m: number) => number
 >       : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c.explicitC : (this: C, m: number) => number
->            :                               
+>            : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitC : (this: C, m: number) => number
@@ -611,7 +611,7 @@ let reconstructed: {
 >explicitThis : (this: C, m: number) => number
 >             : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >c.explicitThis : (this: C, m: number) => number
->               :                               
+>               : ^    ^^^^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitThis : (this: C, m: number) => number
@@ -621,7 +621,7 @@ let reconstructed: {
 >explicitC : (this: C, m: number) => number
 >          : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c.explicitC : (this: C, m: number) => number
->            :                               
+>            : ^    ^^ ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitC : (this: C, m: number) => number
@@ -631,7 +631,7 @@ let reconstructed: {
 >explicitProperty : (this: { n: number; }, m: number) => number
 >                 : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 >c.explicitProperty : (this: { n: number; }, m: number) => number
->                   :                                            
+>                   : ^    ^^              ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitProperty : (this: { n: number; }, m: number) => number
@@ -641,7 +641,7 @@ let reconstructed: {
 >explicitVoid : (this: void, m: number) => number
 >             : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >c.explicitVoid : (this: void, m: number) => number
->               :                                  
+>               : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >explicitVoid : (this: void, m: number) => number
@@ -676,7 +676,7 @@ let explicitVoid = reconstructed.explicitVoid;
 >explicitVoid : (this: void, m: number) => number
 >             : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >reconstructed.explicitVoid : (this: void, m: number) => number
->                           :                                  
+>                           : ^    ^^    ^^ ^^      ^^^^^^^^^^^
 >reconstructed : { n: number; explicitThis(this: C, m: number): number; explicitC(this: C, m: number): number; explicitProperty: (this: { n: number; }, m: number) => number; explicitVoid(this: void, m: number): number; }
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^    ^^ ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^ ^^      ^^^^^^^^^^^^
 >explicitVoid : (this: void, m: number) => number

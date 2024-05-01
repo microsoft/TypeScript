@@ -42,7 +42,7 @@ test(
 >checkLimit : (ctx: { count: number; }, max?: number) => void
 >           : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >(ctx, max = 3) => {} : (ctx: { count: number; }, max?: number) => void
->                     :                              ^                 
+>                     : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >max : number

@@ -237,7 +237,7 @@ const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 >arrayMap : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
 >         : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
 ><T, U>(f: (x: T) => U) => (a: T[]) => a.map(f) : <T, U>(f: (x: T) => U) => (a: T[]) => U[]
->                                               :                                          
+>                                               : ^ ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
 >f : (x: T) => U
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -261,7 +261,7 @@ const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
 >arrayFilter : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
 >            : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
 ><T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f) : <T>(f: (x: T) => boolean) => (a: T[]) => T[]
->                                                     :                                             
+>                                                     : ^ ^^ ^^                 ^^^^^^ ^^   ^^^^^^^^
 >f : (x: T) => boolean
 >  : ^ ^^ ^^^^^       
 >x : T

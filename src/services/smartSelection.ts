@@ -279,7 +279,7 @@ function getSelectionChildren(node: Node): readonly Node[] {
  * Groups sibling nodes together into their own SyntaxList if they
  * a) are adjacent, AND b) match a predicate function.
  */
-function groupChildren(children: Node[], groupOn: (child: Node) => boolean): Node[] {
+function groupChildren(children: readonly Node[], groupOn: (child: Node) => boolean): Node[] {
     const result: Node[] = [];
     let group: Node[] | undefined;
     for (const child of children) {
@@ -315,7 +315,7 @@ function groupChildren(children: Node[], groupOn: (child: Node) => boolean): Nod
  * @param separateTrailingSemicolon If the last token is a semicolon, it will be returned as a separate
  * child rather than be included in the right-hand group.
  */
-function splitChildren(children: Node[], pivotOn: (child: Node) => boolean, separateTrailingSemicolon = true): Node[] {
+function splitChildren(children: readonly Node[], pivotOn: (child: Node) => boolean, separateTrailingSemicolon = true): readonly Node[] {
     if (children.length < 2) {
         return children;
     }
@@ -336,7 +336,7 @@ function splitChildren(children: Node[], pivotOn: (child: Node) => boolean, sepa
     return separateLastToken ? result.concat(lastToken) : result;
 }
 
-function createSyntaxList(children: Node[]): SyntaxList {
+function createSyntaxList(children: readonly Node[]): SyntaxList {
     Debug.assertGreaterThanOrEqual(children.length, 1);
     return setTextRangePosEnd(parseNodeFactory.createSyntaxList(children), children[0].pos, last(children).end);
 }

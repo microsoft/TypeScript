@@ -666,7 +666,7 @@ function f43() {
 >fail : () => never
 >     : ^^^^^^     
 >(): never => { throw new Error(); } : () => never
->                                    :            
+>                                    : ^^^^^^     
 >new Error() : Error
 >            : ^^^^^
 >Error : ErrorConstructor
@@ -676,7 +676,7 @@ function f43() {
 >f : (() => never)[]
 >  : ^^^^^^^^^^^^^^^
 >[fail] : (() => never)[]
->       : ^           ^^^
+>       : ^^^^^^^^^^^^^^^
 >fail : () => never
 >     : ^^^^^^^^^^^
 
@@ -841,7 +841,7 @@ const Component = registerComponent('test-component', {
 >Component : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >registerComponent('test-component', {	schema: {		myProperty: {			default: [],			parse() {				return [true];			}		},		string: { type: 'string' },		num: 0	},	init() {		this.data.num = 0;		this.el.setAttribute('custom-attribute', 'custom-value');	},	update() {},	tick() {},	remove() {},	pause() {},	play() {},	multiply(f: number) {		// Reference to system because both were registered with the same name.		return f * this.data.num * this.system!.data.counter;	}}) : ComponentConstructor<{ schema: { myProperty: { default: never[]; parse(): boolean[]; }; string: { type: string; }; num: number; }; init(): void; update(): void; tick(): void; remove(): void; pause(): void; play(): void; multiply(f: number): number; }>
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^                                                                                                                                                                                                                                     ^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^
 >registerComponent : <T extends object>(name: string, component: ComponentDefinition<T>) => ComponentConstructor<T>
 >                  : ^ ^^^^^^^^^^^^^^^^^    ^^      ^^         ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'test-component' : "test-component"

@@ -34,6 +34,19 @@ const c = async () => {
 >  : ^
 }
 
+// Error (good)
+/** @type {function(): string} */
+const d = async () => {
+>d : () => string
+>  : ^^^^^^^^^^^^
+>async () => {	return ""} : () => string
+>                         : ^^^^^^^^^^^^
+
+	return ""
+>"" : ""
+>   : ^^
+}
+
 /** @type {function(function(): string): void} */
 const f = (p) => {}
 >f : (arg0: () => string) => void

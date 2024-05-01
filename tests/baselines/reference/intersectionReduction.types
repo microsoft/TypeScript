@@ -425,7 +425,7 @@ const f1 = (t: "a" | ("b" & "c")): "a" => t;
 >f1 : (t: "a" | ("b" & "c")) => "a"
 >   : ^ ^^                 ^^^^^   
 >(t: "a" | ("b" & "c")): "a" => t : (t: "a" | ("b" & "c")) => "a"
->                                 :                              
+>                                 : ^ ^^                 ^^^^^   
 >t : "a"
 >  : ^^^
 >t : "a"
@@ -444,7 +444,7 @@ const f2 = (t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a
 >f2 : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
 >   : ^ ^^                                                  ^^^^^              
 >(t: Container<"a"> | (Container<"b"> & Container<"c">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & Container<"c">)) => Container<"a">
->                                                                             :                                                                          
+>                                                                             : ^ ^^                                                  ^^^^^              
 >t : Container<"a">
 >  : ^^^^^^^^^^^^^^
 >t : Container<"a">
@@ -454,7 +454,7 @@ const f3 = (t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container
 >f3 : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
 >   : ^ ^^                                                                        ^^^^^              
 >(t: Container<"a"> | (Container<"b"> & { dataB: boolean } & Container<"a">)): Container<"a"> => t : (t: Container<"a"> | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => Container<"a">
->                                                                                                  :                                                                                                
+>                                                                                                  : ^ ^^                                                                        ^^^^^              
 >t : Container<"a">
 >  : ^^^^^^^^^^^^^^
 >dataB : boolean
@@ -466,7 +466,7 @@ const f4 = (t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)):
 >f4 : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
 >   : ^ ^^                                                                ^^^^^      
 >(t: number | (Container<"b"> & { dataB: boolean } & Container<"a">)): number => t : (t: number | (Container<"b"> & { dataB: boolean; } & Container<"a">)) => number
->                                                                                  :                                                                                
+>                                                                                  : ^ ^^                                                                ^^^^^      
 >t : number
 >  : ^^^^^^
 >dataB : boolean

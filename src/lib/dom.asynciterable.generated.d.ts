@@ -8,3 +8,8 @@ interface FileSystemDirectoryHandle {
     keys(): AsyncIterableIterator<string>;
     values(): AsyncIterableIterator<FileSystemHandle>;
 }
+
+interface ReadableStream<R = any> {
+    [Symbol.asyncIterator](options?: ReadableStreamIteratorOptions): AsyncIterableIterator<R>;
+    values(options?: ReadableStreamIteratorOptions): AsyncIterableIterator<R>;
+}

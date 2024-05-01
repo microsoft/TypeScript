@@ -6,7 +6,7 @@ const noOp = () => {};
 >noOp : () => void
 >     : ^^^^^^^^^^
 >() => {} : () => void
->         :           
+>         : ^^^^^^^^^^
 
 const testReflectApply = Reflect.apply(noOp, this, []);
 >testReflectApply : any

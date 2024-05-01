@@ -3,17 +3,22 @@ description: 'Suggest an idea'
 body:
   - type: markdown
     attributes:
-      value: 'Please fill in each section completely. Thank you!'
+      value: |
+        💡 Did you know? TypeScript has over 2,000 open suggestions!
+
+        🔎 Please [search thoroughly in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before logging new feature requests as most common ideas already have a proposal in progress.
+
+        The "Common Feature Requests" section of the FAQ lists many popular requests: https://github.com/Microsoft/TypeScript/wiki/FAQ#common-feature-requests
+
+        Please fill in each section completely. Thank you!
   - type: textarea
     id: search_terms
     attributes:
       label: '🔍 Search Terms'
       description: |
-        💡 Did you know? TypeScript has over 2,000 open suggestions!
+        What search terms did you use when trying to find an existing suggestion?
 
-        🔎 Please search thoroughly before logging new feature requests as most common ideas already have a proposal in progress.
-
-        The "Common Feature Requests" section of the FAQ lists many popular requests: https://github.com/Microsoft/TypeScript/wiki/FAQ#common-feature-requests
+        List them here so people in the future can find this one more easily.
       placeholder: |
         List of keywords you searched for before creating this issue. Write them down here so that others can find this suggestion more easily and help provide feedback.
 

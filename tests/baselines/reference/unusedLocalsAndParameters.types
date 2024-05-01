@@ -23,7 +23,7 @@ var fexp = function (a) {
 >fexp : (a: any) => void
 >     : ^ ^^^^^^^^^^^^^^
 >function (a) {} : (a: any) => void
->                :                 
+>                : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 
@@ -42,7 +42,7 @@ var farrow = (a) => {
 >farrow : (a: any) => void
 >       : ^ ^^^^^^^^^^^^^^
 >(a) => {} : (a: any) => void
->          :                 
+>          : ^ ^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 

@@ -63,9 +63,9 @@ var numStrTuple: [number, string] = [5, "foo"];
 
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 >emptyObjTuple : [{}, {}]
->              : ^^^^^  ^
+>              : ^^^^^^^^
 ><[{}, {}]>numStrTuple : [{}, {}]
->                      : ^  ^^  ^
+>                      : ^^^^^^^^
 >numStrTuple : [number, string]
 >            : ^^^^^^^^^^^^^^^^
 
@@ -173,9 +173,9 @@ var array1 = <{}[]>emptyObjTuple;
 >array1 : {}[]
 >       : ^^^^
 ><{}[]>emptyObjTuple : {}[]
->                    :   ^^
+>                    : ^^^^
 >emptyObjTuple : [{}, {}]
->              : ^^^^^  ^
+>              : ^^^^^^^^
 
 var unionTuple: [C, string | number] = [new C(), "foo"];
 >unionTuple : [C, string | number]

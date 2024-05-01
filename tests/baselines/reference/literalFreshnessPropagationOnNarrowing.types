@@ -93,7 +93,7 @@ function f2() {
 >a4 : (string | false) | (string | false)[]
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Array.isArray(elOrA) ? elOrA : [elOrA] : (string | false)[]
->                                       :                   
+>                                       : ^^^^^^^^^^^^^^^^^^
 >Array.isArray(elOrA) : boolean
 >                     : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]

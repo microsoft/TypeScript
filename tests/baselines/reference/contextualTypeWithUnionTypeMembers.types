@@ -96,7 +96,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -106,7 +106,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -116,7 +116,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1
 >methodOnlyInI1 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -145,7 +145,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i2
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -155,7 +155,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i2
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -165,7 +165,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i2
 >methodOnlyInI2 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -194,7 +194,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -204,7 +204,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -214,7 +214,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >methodOnlyInI1 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -230,7 +230,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 >methodOnlyInI2 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -266,7 +266,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -276,7 +276,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -286,7 +286,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >methodOnlyInI1 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -313,7 +313,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -323,7 +323,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -333,7 +333,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >methodOnlyInI2 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -359,7 +359,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodType : (a: string) => string
 >                 : ^ ^^^^^^^^^^^^^^^^^^^
 >a=> a : (a: string) => string
->      :                      
+>      : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -369,7 +369,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >commonMethodWithTypeParameter : (a: number) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >a : number
@@ -379,7 +379,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >methodOnlyInI1 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -395,7 +395,7 @@ var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >methodOnlyInI2 : (a: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >a => a : (a: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a : string
@@ -466,7 +466,7 @@ var i11Ori21: I11 | I21 = {
 >commonMethodDifferentReturnType : (a: string, b: number) => string
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {        var z = a.charAt(b);        return z;      } : (a: string, b: number) => string
->                                                                :                                 
+>                                                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -509,7 +509,7 @@ var i11Ori21: I11 | I21 = {
 >commonMethodDifferentReturnType : (a: string, b: number) => number
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {        var z = a.charCodeAt(b);        return z;    } : (a: string, b: number) => number
->                                                                  :                                 
+>                                                                  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -564,7 +564,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >commonMethodDifferentReturnType : (a: string, b: number) => string
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {            var z = a.charAt(b);            return z;        } : (a: string, b: number) => string
->                                                                          :                                 
+>                                                                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -604,7 +604,7 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 >commonMethodDifferentReturnType : (a: string, b: number) => number
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {            var z = a.charCodeAt(b);            return z;        } : (a: string, b: number) => number
->                                                                              :                                 
+>                                                                              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number

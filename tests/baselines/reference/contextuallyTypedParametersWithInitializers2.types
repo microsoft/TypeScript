@@ -42,7 +42,7 @@ test1(
 >checkLimit : (ctx: { count: number; }, max?: number) => void
 >           : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >(ctx, max = 500) => {} : (ctx: { count: number; }, max?: number) => void
->                       :                              ^                 
+>                       : ^   ^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >max : number
@@ -54,7 +54,7 @@ test1(
 >hasAccess : (ctx: { count: number; }, user: { name: string; }) => void
 >          : ^   ^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^
 >(ctx, user: { name: string }) => {} : (ctx: { count: number; }, user: { name: string; }) => void
->                                    :                                                           
+>                                    : ^   ^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^^^^^^^^
 >ctx : { count: number; }
 >    : ^^^^^^^^^^^^^^^^^^
 >user : { name: string; }

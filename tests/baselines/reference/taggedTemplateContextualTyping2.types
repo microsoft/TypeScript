@@ -66,7 +66,7 @@ tempTag2 `${ x => { x<number>(undefined); return x; }         }${ 0 }`;
 >`${ x => { x<number>(undefined); return x; }         }${ 0 }` : string
 >                                                              : ^^^^^^
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^              
+>                                         : ^ ^^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^^
 >x<number>(undefined) : number
@@ -88,7 +88,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >`${ x => { x<number, string>(undefined); return x; } }${ y => { y<string, number>(null); return y; } }${ "hello" }` : string
 >                                                                                                                    : ^^^^^^
 >x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
->                                                 : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^                 
+>                                                 : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <S, T>(p: T) => T
 >  : ^^^^ ^^ ^^ ^^^^^^
 >x<number, string>(undefined) : string
@@ -100,7 +100,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ y => { y<strin
 >x : <S, T>(p: T) => T
 >  : ^^^^ ^^ ^^ ^^^^^^
 >y => { y<string, number>(null); return y; } : (y: <S, T>(p: T) => T) => <S, T>(p: T) => T
->                                            : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^                 
+>                                            : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >y : <S, T>(p: T) => T
 >  : ^^^^ ^^ ^^ ^^^^^^
 >y<string, number>(null) : number
@@ -120,7 +120,7 @@ tempTag2 `${ x => { x<number, string>(undefined); return x; } }${ undefined }${ 
 >`${ x => { x<number, string>(undefined); return x; } }${ undefined }${ "hello" }` : string
 >                                                                                  : ^^^^^^
 >x => { x<number, string>(undefined); return x; } : (x: <S, T>(p: T) => T) => <S, T>(p: T) => T
->                                                 : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^                 
+>                                                 : ^ ^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^
 >x : <S, T>(p: T) => T
 >  : ^^^^ ^^ ^^ ^^^^^^
 >x<number, string>(undefined) : string

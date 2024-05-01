@@ -104,6 +104,8 @@ export function patchServiceForStateBaseline(service: ProjectService) {
     function baselineProjects(currentMappers: Set<DocumentPositionMapper>) {
         const autoImportProviderProjects = [] as AutoImportProviderProject[];
         const auxiliaryProjects = [] as AuxiliaryProject[];
+        const orphanConfiguredProjects = service.getOrphanConfiguredProjects(/*toRetainConfiguredProjects*/ undefined);
+        const noOpenRef = (project: Project) => isConfiguredProject(project) && (project.isClosed() || orphanConfiguredProjects.has(project));
         return baselineState(
             [service.externalProjects, service.configuredProjects, service.inferredProjects, autoImportProviderProjects, auxiliaryProjects],
             projects,
@@ -118,7 +120,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "dirty", project.dirty, projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isClosed", project.isClosed(), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "isOrphan", !isBackgroundProject(project) && project.isOrphan(), projectDiff, projectPropertyLogs);
-                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", isConfiguredProject(project) && !project.hasOpenRef(), projectDiff, projectPropertyLogs);
+                projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "noOpenRef", noOpenRef(project), projectDiff, projectPropertyLogs);
                 projectDiff = printProperty(PrintPropertyWhen.TruthyOrChangedOrNew, data, "deferredClose", isConfiguredProject(project) && project.deferredClose, projectDiff, projectPropertyLogs);
                 projectDiff = printMapPropertyValue(
                     PrintPropertyWhen.Changed,
@@ -149,7 +151,7 @@ export function patchServiceForStateBaseline(service: ProjectService) {
                 dirty: project.dirty,
                 isClosed: project.isClosed(),
                 isOrphan: !isBackgroundProject(project) && project.isOrphan(),
-                noOpenRef: isConfiguredProject(project) && !project.hasOpenRef(),
+                noOpenRef: noOpenRef(project),
                 deferredClose: isConfiguredProject(project) && project.deferredClose,
                 autoImportProviderHost: project.autoImportProviderHost,
                 noDtsResolutionProject: project.noDtsResolutionProject,

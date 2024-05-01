@@ -29,7 +29,7 @@ Handler.statische = function() { }
 >statische : () => void
 >          : ^^^^^^^^^^
 >function() { } : () => void
->               :           
+>               : ^^^^^^^^^^
 
 const Strings = {
 >Strings : { a: string; b: string; }
@@ -76,7 +76,7 @@ module.exports.Strings = Strings
 >Strings : { a: string; b: string; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Strings : { a: string; b: string; }
->        :                          
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 /**
  * @typedef {Object} HandlerOptions
