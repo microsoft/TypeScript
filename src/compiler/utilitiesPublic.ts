@@ -49,6 +49,7 @@ import {
     Decorator,
     Diagnostic,
     Diagnostics,
+    diagnosticsEqualityComparer,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -293,8 +294,6 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
-    UnparsedNode,
-    UnparsedTextLike,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
@@ -306,13 +305,15 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 }
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
-    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
     switch (getEmitScriptTarget(options)) {
         case ScriptTarget.ESNext:
             return "lib.esnext.full.d.ts";
+        case ScriptTarget.ES2023:
+            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
             return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
@@ -1395,24 +1396,6 @@ export function isBreakOrContinueStatement(node: Node): node is BreakOrContinueS
 
 export function isNamedExportBindings(node: Node): node is NamedExportBindings {
     return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
-}
-
-/** @deprecated */
-export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
-    switch (node.kind) {
-        case SyntaxKind.UnparsedText:
-        case SyntaxKind.UnparsedInternalText:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @deprecated */
-export function isUnparsedNode(node: Node): node is UnparsedNode {
-    return isUnparsedTextLike(node) ||
-        node.kind === SyntaxKind.UnparsedPrologue ||
-        node.kind === SyntaxKind.UnparsedSyntheticReference;
 }
 
 export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {

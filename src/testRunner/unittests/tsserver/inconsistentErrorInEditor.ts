@@ -4,9 +4,7 @@ import {
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 describe("unittests:: tsserver:: inconsistentErrorInEditor", () => {
     it("should not error", () => {
         const host = createServerHost([]);

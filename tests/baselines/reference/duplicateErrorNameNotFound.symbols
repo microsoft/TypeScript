@@ -1,0 +1,10 @@
+//// [tests/cases/compiler/duplicateErrorNameNotFound.ts] ////
+
+=== duplicateErrorNameNotFound.ts ===
+type RoomInterfae = {};
+>RoomInterfae : Symbol(RoomInterfae, Decl(duplicateErrorNameNotFound.ts, 0, 0))
+
+export type {
+    RoomInterface
+>RoomInterface : Symbol(RoomInterface, Decl(duplicateErrorNameNotFound.ts, 2, 13))
+}

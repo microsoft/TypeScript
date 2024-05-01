@@ -21,5 +21,4 @@ exports.reeexported = somepackage_1.item;
 
 
 //// [index.d.ts]
-/// <reference path="../../types/component.d.ts" />
 export declare const reeexported: typeof import("@namespace/component").Foo;

@@ -3,8 +3,11 @@
 === functionOverloads11.ts ===
 function foo():number;
 >foo : () => number
+>    : ^^^^^^      
 
 function foo():string { return "" }
 >foo : () => number
+>    : ^^^^^^^^^^^^
 >"" : ""
+>   : ^^
 

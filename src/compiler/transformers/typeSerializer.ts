@@ -115,7 +115,7 @@ export interface RuntimeTypeSerializer {
      * Serializes the type of a node for use with decorator type metadata.
      * @param node The node that should have its type serialized.
      */
-    serializeTypeOfNode(serializerContext: RuntimeTypeSerializerContext, node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration): Expression;
+    serializeTypeOfNode(serializerContext: RuntimeTypeSerializerContext, node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration, container: ClassLikeDeclaration): Expression;
     /**
      * Serializes the types of the parameters of a node for use with decorator type metadata.
      * @param node The node that should have its parameter types serialized.
@@ -145,7 +145,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
 
     return {
         serializeTypeNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeTypeNode, node),
-        serializeTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeTypeOfNode, node),
+        serializeTypeOfNode: (serializerContext, node, container) => setSerializerContextAnd(serializerContext, serializeTypeOfNode, node, container),
         serializeParameterTypesOfNode: (serializerContext, node, container) => setSerializerContextAnd(serializerContext, serializeParameterTypesOfNode, node, container),
         serializeReturnTypeOfNode: (serializerContext, node) => setSerializerContextAnd(serializerContext, serializeReturnTypeOfNode, node),
     };
@@ -166,8 +166,8 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
         return result;
     }
 
-    function getAccessorTypeNode(node: AccessorDeclaration) {
-        const accessors = resolver.getAllAccessorDeclarations(node);
+    function getAccessorTypeNode(node: AccessorDeclaration, container: ClassLikeDeclaration) {
+        const accessors = getAllAccessorDeclarations(container.members, node);
         return accessors.setAccessor && getSetAccessorTypeAnnotationNode(accessors.setAccessor)
             || accessors.getAccessor && getEffectiveReturnTypeNode(accessors.getAccessor);
     }
@@ -176,14 +176,14 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
      * Serializes the type of a node for use with decorator type metadata.
      * @param node The node that should have its type serialized.
      */
-    function serializeTypeOfNode(node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration): SerializedTypeNode {
+    function serializeTypeOfNode(node: PropertyDeclaration | ParameterDeclaration | AccessorDeclaration | ClassLikeDeclaration | MethodDeclaration, container: ClassLikeDeclaration): SerializedTypeNode {
         switch (node.kind) {
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.Parameter:
                 return serializeTypeNode(node.type);
             case SyntaxKind.SetAccessor:
             case SyntaxKind.GetAccessor:
-                return serializeTypeNode(getAccessorTypeNode(node));
+                return serializeTypeNode(getAccessorTypeNode(node, container));
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
             case SyntaxKind.MethodDeclaration:
@@ -217,7 +217,7 @@ export function createRuntimeTypeSerializer(context: TransformationContext): Run
                     expressions.push(serializeTypeNode(getRestParameterElementType(parameter.type)));
                 }
                 else {
-                    expressions.push(serializeTypeOfNode(parameter));
+                    expressions.push(serializeTypeOfNode(parameter, container));
                 }
             }
         }

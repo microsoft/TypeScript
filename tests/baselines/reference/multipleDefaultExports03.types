@@ -3,8 +3,10 @@
 === multipleDefaultExports03.ts ===
 export default class C {
 >C : C
+>  : ^
 }
 
 export default class C {
 >C : import("multipleDefaultExports03").default
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

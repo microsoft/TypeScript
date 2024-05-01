@@ -1,6 +1,6 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Input::
-//// [/a/lib/lib.d.ts]
+//// [/a/lib/lib.d.ts] Inode:: 3
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -13,13 +13,13 @@ interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
-//// [/user/username/projects/myproject/src/file1.ts]
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 9
 import { x } from "./file2";
 
-//// [/user/username/projects/myproject/src/file2.ts]
+//// [/user/username/projects/myproject/src/file2.ts] Inode:: 10
 export const x = 10;
 
-//// [/user/username/projects/myproject/tsconfig.json]
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 11
 {
   "compilerOptions": {
     "outDir": "dist"
@@ -30,20 +30,20 @@ export const x = 10;
 /a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file2.js]
+//// [/user/username/projects/myproject/dist/file2.js] Inode:: 13
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.x = 10;
 
 
-//// [/user/username/projects/myproject/dist/file1.js]
+//// [/user/username/projects/myproject/dist/file1.js] Inode:: 14
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
@@ -52,24 +52,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
-  {}
+  {"inode":3}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":7}
 /user/username/projects/myproject/dist: *new*
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src: *new*
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/file1.ts: *new*
-  {}
+  {"inode":9}
 /user/username/projects/myproject/src/file2.ts: *new*
-  {}
+  {"inode":10}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":11}
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts",
@@ -109,10 +115,46 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts]
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 15
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
+
+Output::
+sysLog:: /user/username/projects/myproject/src/file2.ts:: Changing watcher to MissingFileSystemEntryWatcher
+
+
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/file2.ts: *new*
+  {"pollingInterval":250}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts:
+  {"inode":3}
+/user/username/projects/myproject:
+  {"inode":7}
+/user/username/projects/myproject/dist:
+  {"inode":12}
+/user/username/projects/myproject/src:
+  {"inode":8}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":9}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":11}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"inode":10}
 
 Timeout callback:: count: 2
 1: timerToUpdateProgram *new*
@@ -126,43 +168,49 @@ Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents
+//// [/user/username/projects/myproject/dist/file1.js] file written with same contents Inode:: 14
 
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/src/file2.ts: *new*
-  {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":500} *new*
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":250}
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":3}
 /user/username/projects/myproject:
-  {}
+  {"inode":7}
 /user/username/projects/myproject/dist:
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":9}
 /user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/src/file2.ts:
-  {}
+  {"inode":11}
 
 
 Program root files: [
@@ -208,18 +256,18 @@ Before running Timeout callback:: count: 2
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
 
 [7m1[0m import { x } from "./file2";
 [7m [0m [91m                  ~~~~~~~~~[0m
 
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/renamed.js]
+//// [/user/username/projects/myproject/dist/renamed.js] Inode:: 16
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
@@ -230,8 +278,14 @@ exports.x = 10;
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/myproject/src/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/src/file2.ts:
@@ -239,19 +293,19 @@ PolledWatches *deleted*::
 
 FsWatches::
 /a/lib/lib.d.ts:
-  {}
+  {"inode":3}
 /user/username/projects/myproject:
-  {}
+  {"inode":7}
 /user/username/projects/myproject/dist:
-  {}
+  {"inode":12}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":8}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":9}
 /user/username/projects/myproject/src/renamed.ts: *new*
-  {}
+  {"inode":15}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":11}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *deleted*

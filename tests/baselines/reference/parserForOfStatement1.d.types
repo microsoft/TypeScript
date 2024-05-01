@@ -3,5 +3,7 @@
 === parserForOfStatement1.d.ts ===
 for (var i of e) {
 >i : any
+>  : ^^^
 >e : any
+>  : ^^^
 }

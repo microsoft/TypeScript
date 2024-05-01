@@ -1,13 +1,9 @@
 import fs from "fs";
-import {
-    glob,
-} from "glob";
+import { glob } from "glob";
 import path from "path";
 import url from "url";
 
-import {
-    localizationDirectories,
-} from "./build/localization.mjs";
+import { localizationDirectories } from "./build/localization.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);

@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport_vsAmbient.ts] ////
 
 //// [index.js]
-// This tests that an ambient module declaration overrides an untyped import.
-
 This file is not processed.
 
 //// [declarations.d.ts]
