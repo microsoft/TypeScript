@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/regExpWithOpenBracketInCharClass.ts] ////
+
+=== regExpWithOpenBracketInCharClass.ts ===
+const regexes: RegExp[] = [
+>regexes : Symbol(regexes, Decl(regExpWithOpenBracketInCharClass.ts, 0, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+  /[[]/,  // Valid
+  /[[]/u, // Valid
+  /[[]/v, // Well-terminated regex with an incomplete character class
+];
+
