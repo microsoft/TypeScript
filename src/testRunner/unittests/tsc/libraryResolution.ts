@@ -1,6 +1,7 @@
 import {
     getCommandLineArgsForLibResolution,
     getFsForLibResolution,
+    getFsForLibResolutionUnknown,
 } from "../helpers/libraryResolution";
 import { verifyTsc } from "../helpers/tsc";
 
@@ -18,4 +19,12 @@ describe("unittests:: tsc:: libraryResolution:: library file resolution", () => 
     verify(/*libRedirection*/ true);
     verify(/*libRedirection*/ undefined, /*withoutConfig*/ true);
     verify(/*libRedirection*/ true, /*withoutConfig*/ true);
+
+    verifyTsc({
+        scenario: "libraryResolution",
+        subScenario: "unknown lib",
+        fs: () => getFsForLibResolutionUnknown(),
+        commandLineArgs: getCommandLineArgsForLibResolution(/*withoutConfig*/ undefined),
+        baselinePrograms: true,
+    });
 });
