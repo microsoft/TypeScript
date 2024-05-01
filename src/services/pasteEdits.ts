@@ -58,27 +58,26 @@ function pasteEdits(
     cancellationToken: CancellationToken,
     changes: textChanges.ChangeTracker,
 ) {
-    if (pastedText.length !== 1) {
-        Debug.assert(pastedText.length === pasteLocations.length);
+    let actualPastedText: string[] | undefined;
+    if (pastedText.length !== pasteLocations.length) {
+        actualPastedText = pastedText.length === 1 ? pastedText : [pastedText.join("\n")];
     }
     pasteLocations.forEach((paste, i) => {
         changes.replaceRangeWithText(
             targetFile,
             { pos: paste.pos, end: paste.end },
-            pastedText.length === 1 ?
-                pastedText[0] : pastedText[i],
+            actualPastedText ?
+                actualPastedText[0] : pastedText[i],
         );
     });
 
     const statements: Statement[] = [];
 
-    let end = targetFile.text.length - 1;
-    let newText = "";
+    let newText = targetFile.text;
     for (let i = pasteLocations.length - 1; i >= 0; i--) {
-        newText = pastedText[i] + targetFile.text.slice(pasteLocations[i].end, end) + newText;
-        end = pasteLocations[i].pos;
+        const { pos, end } = pasteLocations[i];
+        newText = actualPastedText ? newText.slice(0, pos) + actualPastedText[0] + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
     }
-    newText = targetFile.text.slice(0, end) + newText;
 
     host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
         const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);

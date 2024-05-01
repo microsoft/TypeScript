@@ -1,15 +1,12 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
 Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 //// [/file1.ts]
-export interface Test1 {}
-export interface Test2 {}
-export interface Test3 {}
-export interface Test4 {}
+export const p = 10;
+export const q = 12;
 
-//// [/file2.ts]
-const a = 10;
-const b = 10;
-const c = 10;
+//// [/file3.ts]
+export const r = 10;
+export const s = 12;
 
 //// [/lib.d.ts]
 lib.d.ts-Text
@@ -20,8 +17,16 @@ lib.decorators.d.ts-Text
 //// [/lib.decorators.legacy.d.ts]
 lib.decorators.legacy.d.ts-Text
 
+//// [/target.ts]
+const a = 1;
+
+const b = 2;
+const c = 3;
+
+const d = 4;
+
 //// [/tsconfig.json]
-{ "files": ["file1.ts", "file2.ts"] }
+{ "files": ["file1.ts", "target.ts", "file3.ts"] }
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -29,11 +34,11 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 0,
       "type": "request",
       "arguments": {
-        "file": "/file2.ts"
+        "file": "/target.ts"
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /file2.ts ProjectRootPath: undefined:: Result: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /target.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -43,31 +48,34 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/tsconfig.json",
-        "reason": "Creating possible configured project for /file2.ts to open"
+        "reason": "Creating possible configured project for /target.ts to open"
       }
     }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/file1.ts",
-  "/file2.ts"
+  "/target.ts",
+  "/file3.ts"
  ],
  "options": {
   "configFilePath": "/tsconfig.json"
  }
 }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /file3.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
-	/file2.ts SVC-1-0 "const a = 10;\nconst b = 10;\nconst c = 10;"
+	/file1.ts Text-1 "export const p = 10;\nexport const q = 12;"
+	/target.ts SVC-1-0 "const a = 1;\n\nconst b = 2;\nconst c = 3;\n\nconst d = 4;"
+	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
 
 
 	lib.d.ts
@@ -78,7 +86,9 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	  Library referenced via 'decorators.legacy' from file 'lib.d.ts'
 	file1.ts
 	  Part of 'files' list in tsconfig.json
-	file2.ts
+	target.ts
+	  Part of 'files' list in tsconfig.json
+	file3.ts
 	  Part of 'files' list in tsconfig.json
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
@@ -97,21 +107,23 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/file2.ts",
+        "triggerFile": "/target.ts",
         "configFile": "/tsconfig.json",
         "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /file2.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 	FileName: /target.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /tsconfig.json
 After Request
 watchedFiles::
 /file1.ts: *new*
+  {"pollingInterval":500}
+/file3.ts: *new*
   {"pollingInterval":500}
 /lib.d.ts: *new*
   {"pollingInterval":500}
@@ -132,10 +144,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/file2.ts (Open) *new*
-    version: SVC-1-0
+/file3.ts *new*
+    version: Text-1
     containingProjects: 1
-        /tsconfig.json *default*
+        /tsconfig.json
 /lib.d.ts *new*
     version: Text-1
     containingProjects: 1
@@ -148,6 +160,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/target.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -195,11 +211,22 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request",
       "arguments": {
-        "file": "/file2.ts",
+        "file": "/target.ts",
         "pastedText": [
-          "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
+          "const g = p + q;",
+          "const f = r + s;"
         ],
         "pasteLocations": [
+          {
+            "start": {
+              "line": 2,
+              "offset": 1
+            },
+            "end": {
+              "line": 2,
+              "offset": 1
+            }
+          },
           {
             "start": {
               "line": 3,
@@ -207,6 +234,16 @@ Info seq  [hh:mm:ss:mss] request:
             },
             "end": {
               "line": 3,
+              "offset": 13
+            }
+          },
+          {
+            "start": {
+              "line": 5,
+              "offset": 1
+            },
+            "end": {
+              "line": 5,
               "offset": 1
             }
           }
@@ -217,12 +254,13 @@ Info seq  [hh:mm:ss:mss] request:
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (5)
+Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.d.ts Text-1 lib.d.ts-Text
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/file1.ts Text-1 "export interface Test1 {}\nexport interface Test2 {}\nexport interface Test3 {}\nexport interface Test4 {}"
-	/file2.ts SVC-1-1 "const a = 10;\nconst b = 10;\ninterface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }const c = 10;"
+	/file1.ts Text-1 "export const p = 10;\nexport const q = 12;"
+	/target.ts SVC-1-1 "const a = 1;\nconst g = p + q;\nconst f = r + s;\nconst g = p + q;\nconst f = r + s;\nconst c = 3;\nconst g = p + q;\nconst f = r + s;\nconst d = 4;"
+	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
@@ -238,7 +276,7 @@ Info seq  [hh:mm:ss:mss] response:
       "body": {
         "edits": [
           {
-            "fileName": "/file2.ts",
+            "fileName": "/target.ts",
             "textChanges": [
               {
                 "start": {
@@ -249,7 +287,18 @@ Info seq  [hh:mm:ss:mss] response:
                   "line": 1,
                   "offset": 1
                 },
-                "newText": "import { Test1, Test2, Test3, Test4 } from \"./file1\";\n\n"
+                "newText": "import { p, q } from \"./file1\";\nimport { r, s } from \"./file3\";\n\n"
+              },
+              {
+                "start": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "end": {
+                  "line": 2,
+                  "offset": 1
+                },
+                "newText": "const g = p + q;\nconst f = r + s;"
               },
               {
                 "start": {
@@ -258,9 +307,20 @@ Info seq  [hh:mm:ss:mss] response:
                 },
                 "end": {
                   "line": 3,
+                  "offset": 13
+                },
+                "newText": "const g = p + q;\nconst f = r + s;"
+              },
+              {
+                "start": {
+                  "line": 5,
                   "offset": 1
                 },
-                "newText": "interface Testing {\n            test1: Test1;\n            test2: Test2;\n            test3: Test3;\n            test4: Test4;\n        }"
+                "end": {
+                  "line": 5,
+                  "offset": 1
+                },
+                "newText": "const g = p + q;\nconst f = r + s;"
               }
             ]
           }
@@ -280,10 +340,10 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
-/file2.ts (Open) *changed*
-    version: SVC-1-2 *changed*
+/file3.ts
+    version: Text-1
     containingProjects: 1
-        /tsconfig.json *default*
+        /tsconfig.json
 /lib.d.ts
     version: Text-1
     containingProjects: 1
@@ -296,3 +356,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /tsconfig.json
+/target.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*

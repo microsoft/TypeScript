@@ -248,7 +248,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/file1.ts Text-1 "export const p = 10;\nexport const q = 12;"
-	/target.ts SVC-1-1 "const a = 1;\nconst g = p + q;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;\nundefined\nconst d = 4"
+	/target.ts SVC-1-1 "const a = 1;\nconst g = p + q;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;\nconst g = p + q;\nfunction e();\nconst f = r + s;\nconst d = 4;"
 	/file3.ts Text-1 "export const r = 10;\nexport const s = 12;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------

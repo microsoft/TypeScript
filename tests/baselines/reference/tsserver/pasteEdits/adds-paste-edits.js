@@ -227,7 +227,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
-	/project/a/target.ts SVC-1-1 "const a = 1;const q = 1;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3"
+	/project/a/target.ts SVC-1-1 "const a = 1;const q = 1;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:

@@ -267,7 +267,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/other.ts Text-1 "export const aa = 1;\nexport const bb = 2;"
 	/file1.ts Text-1 "import { aa, bb } from \"./other\";\nexport const r = 10;\nexport const s = 12;\nexport const t = aa + bb + r + s;\nconst u = 1;"
-	/target.ts SVC-1-1 "const a = 1;\nexport const t = aa + bb + r + s;\nconst u = 1;\nconst c = 3;\nundefined\nconst d = 4"
+	/target.ts SVC-1-1 "const a = 1;\nexport const t = aa + bb + r + s;\nconst u = 1;\nconst c = 3;\nexport const t = aa + bb + r + s;\nconst u = 1;\nconst d = 4;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] getExportInfoMap: cache miss or empty; calculating new results

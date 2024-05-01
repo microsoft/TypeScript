@@ -252,7 +252,7 @@ Info seq  [hh:mm:ss:mss] 	Files (7)
 	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/other.ts Text-1 "export const t = 1;"
 	/other3.ts Text-1 "export const t3 = 1;"
-	/target.ts SVC-1-1 "import { t } from \"./other\";\nimport { t3 } from \"./other3\";\nconst a = t + 1;\nconst m = t3 + t2 + 1;\nconst c = 10"
+	/target.ts SVC-1-1 "import { t } from \"./other\";\nimport { t3 } from \"./other3\";\nconst a = t + 1;\nconst m = t3 + t2 + 1;\nconst c = 10;"
 	/other2.ts Text-1 "export const t2 = 1;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
