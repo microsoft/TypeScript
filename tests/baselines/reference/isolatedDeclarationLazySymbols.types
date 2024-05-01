@@ -1,0 +1,144 @@
+//// [tests/cases/compiler/isolatedDeclarationLazySymbols.ts] ////
+
+=== isolatedDeclarationLazySymbols.ts ===
+export function foo() {
+>foo : typeof foo
+>    : ^^^^^^^^^^
+
+}
+
+const o = {
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} as const : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    ["prop.inner"]: "a",    prop: {        inner: "b",    }} : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    ["prop.inner"]: "a",
+>["prop.inner"] : "a"
+>               : ^^^
+>"prop.inner" : "prop.inner"
+>             : ^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+    prop: {
+>prop : { readonly inner: "b"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>{        inner: "b",    } : { readonly inner: "b"; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        inner: "b",
+>inner : "b"
+>      : ^^^
+>"b" : "b"
+>    : ^^^
+    }
+} as const
+
+foo[o["prop.inner"]] ="A";
+>foo[o["prop.inner"]] ="A" : "A"
+>                          : ^^^
+>foo[o["prop.inner"]] : any
+>                     : ^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
+>o["prop.inner"] : "a"
+>                : ^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"prop.inner" : "prop.inner"
+>             : ^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+foo[o.prop.inner] = "B";
+>foo[o.prop.inner] = "B" : "B"
+>                        : ^^^
+>foo[o.prop.inner] : string
+>                  : ^^^^^^
+>foo : typeof foo
+>    : ^^^^^^^^^^
+>o.prop.inner : "b"
+>             : ^^^
+>o.prop : { readonly inner: "b"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : { readonly inner: "b"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : "b"
+>      : ^^^
+>"B" : "B"
+>    : ^^^
+
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    [o["prop.inner"]] ="A"
+>[o["prop.inner"]] : string
+>                  : ^^^^^^
+>o["prop.inner"] : "a"
+>                : ^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"prop.inner" : "prop.inner"
+>             : ^^^^^^^^^^^^
+>"A"    [o.prop.inner] = "B" : "B"
+>                            : ^^^
+>"A"    [o.prop.inner] : any
+>                      : ^^^
+>"A" : "A"
+>    : ^^^
+
+    [o.prop.inner] = "B"
+>o.prop.inner : "b"
+>             : ^^^
+>o.prop : { readonly inner: "b"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : { readonly inner: "b"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : "b"
+>      : ^^^
+>"B" : "B"
+>    : ^^^
+}
+
+export let oo = {
+>oo : { a: string; b: string; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [o['prop.inner']]:"A",    [o.prop.inner]: "B",} : { a: string; b: string; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [o['prop.inner']]:"A",
+>[o['prop.inner']] : string
+>                  : ^^^^^^
+>o['prop.inner'] : "a"
+>                : ^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'prop.inner' : "prop.inner"
+>             : ^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+    [o.prop.inner]: "B",
+>[o.prop.inner] : string
+>               : ^^^^^^
+>o.prop.inner : "b"
+>             : ^^^
+>o.prop : { readonly inner: "b"; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { readonly "prop.inner": "a"; readonly prop: { readonly inner: "b"; }; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>prop : { readonly inner: "b"; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^
+>inner : "b"
+>      : ^^^
+>"B" : "B"
+>    : ^^^
+}

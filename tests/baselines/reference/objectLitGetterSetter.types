@@ -31,7 +31,7 @@
 >get : () => number
 >    : ^^^^^^^^^^^^
 >function () {                    eval("public = 1;");                    return 11;                } : () => number
->                                                                                                     :             
+>                                                                                                     : ^^^^^^^^^^^^
 
                     eval("public = 1;");
 >eval("public = 1;") : any
@@ -49,7 +49,7 @@
 >set : (v: any) => void
 >    : ^ ^^^^^^^^^^^^^^
 >function (v) {                } : (v: any) => void
->                                :                 
+>                                : ^ ^^^^^^^^^^^^^^
 >v : any
                 }
             }))

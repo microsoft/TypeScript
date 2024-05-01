@@ -44,7 +44,7 @@ namespace SourceMapDecoder {
 namespace SourceMapSpanWriter {
     let sourceMapRecorder: Compiler.WriterAggregator;
     let sourceMapSources: string[];
-    let sourceMapNames: string[] | null | undefined;
+    let sourceMapNames: string[] | null | undefined; // eslint-disable-line no-restricted-syntax
 
     let jsFile: documents.TextDocument;
     let jsLineMap: readonly number[];

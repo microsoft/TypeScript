@@ -17,7 +17,7 @@ const removeF = <TX>({ f, ...rest }: TestGeneric<TX>) => {
 >removeF : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
 >        : ^  ^^              ^^               ^^^^^^^^^^^^^^^
 ><TX>({ f, ...rest }: TestGeneric<TX>) => {  return rest} : <TX>({ f, ...rest }: TestGeneric<TX>) => { g: TX; }
->                                                         :                                                    
+>                                                         : ^  ^^              ^^               ^^^^^^^^^^^^^^^
 >f : string
 >  : ^^^^^^
 >rest : { g: TX; }

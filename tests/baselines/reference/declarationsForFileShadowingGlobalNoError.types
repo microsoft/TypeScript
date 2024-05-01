@@ -29,7 +29,7 @@ export const mixin = (Base: Constructor) => {
 >mixin : (Base: Constructor) => typeof (Anonymous class)
 >      : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(Base: Constructor) => {  return class extends Base {    get(domNode: DOMNode) {}  }} : (Base: Constructor) => typeof (Anonymous class)
->                                                                                      :                                                
+>                                                                                      : ^    ^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : Constructor
 >     : ^^^^^^^^^^^
 

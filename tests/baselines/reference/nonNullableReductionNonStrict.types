@@ -52,7 +52,7 @@ function f1<T>(x: T | (string extends T ? null | undefined : never)) {
 >z : T | (string extends T ? null : never)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x! : T | (string extends T ? null : never)
->   : ^^^^^                               ^
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : T | (string extends T ? null : never)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

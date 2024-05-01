@@ -1,7 +1,8 @@
 circularReferenceInReturnType2.ts(39,7): error TS7022: 'A' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+circularReferenceInReturnType2.ts(41,3): error TS7023: 'fields' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
 
 
-==== circularReferenceInReturnType2.ts (1 errors) ====
+==== circularReferenceInReturnType2.ts (2 errors) ====
     type ObjectType<Source> = {
       kind: "object";
       __source: (source: Source) => void;
@@ -45,6 +46,8 @@ circularReferenceInReturnType2.ts(39,7): error TS7022: 'A' implicitly has type '
 !!! error TS7022: 'A' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
       name: "A",
       fields: () => ({
+      ~~~~~~
+!!! error TS7023: 'fields' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
         a: field({
           type: A,
           resolve() {

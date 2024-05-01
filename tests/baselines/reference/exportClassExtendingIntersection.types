@@ -40,7 +40,7 @@ export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & C
 
     return class extends base {
 >class extends base {        mixinProperty: string;    } : { new (...args: any[]): (Anonymous class); prototype: MyMixin<any>.(Anonymous class); } & T
->                                                        : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                        : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >base : MyBaseClass<any>
 >     : ^^^^^^^^^^^^^^^^
 

@@ -5,7 +5,7 @@ export const f = <T>(x: T, y: NoInfer<T>) => x;
 >f : <T>(x: T, y: NoInfer<T>) => T
 >  : ^ ^^ ^^ ^^ ^^          ^^^^^^
 ><T>(x: T, y: NoInfer<T>) => x : <T>(x: T, y: NoInfer<T>) => T
->                              :                              
+>                              : ^ ^^ ^^ ^^ ^^          ^^^^^^
 >x : T
 >  : ^
 >y : NoInfer<T>
@@ -26,5 +26,5 @@ export const g = f;
 >g : <T>(x: T, y: NoInfer<T>) => T
 >  : ^ ^^ ^^ ^^ ^^          ^^^^^^
 >f : <T>(x: T, y: NoInfer<T>) => T
->  :                              
+>  : ^ ^^ ^^ ^^ ^^          ^^^^^^
 

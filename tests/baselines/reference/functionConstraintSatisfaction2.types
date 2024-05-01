@@ -83,7 +83,7 @@ var r = foo2(new Function());
 >r : (x: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >foo2(new Function()) : (x: string) => string
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >new Function() : Function
@@ -95,7 +95,7 @@ var r2 = foo2((x: string[]) => x);
 >r2 : (x: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >foo2((x: string[]) => x) : (x: string) => string
->                         :                      
+>                         : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >(x: string[]) => x : (x: string[]) => string[]
@@ -109,7 +109,7 @@ var r6 = foo2(C);
 >r6 : (x: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >foo2(C) : (x: string) => string
->        :                      
+>        : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >C : typeof C
@@ -119,7 +119,7 @@ var r7 = foo2(b);
 >r7 : (x: string) => string
 >   : ^ ^^      ^^^^^^^^^^^
 >foo2(b) : (x: string) => string
->        :                      
+>        : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >b : new (x: string) => string
@@ -129,7 +129,7 @@ var r8 = foo2(<U>(x: U) => x); // no error expected
 >r8 : <U>(x: U) => U
 >   : ^ ^^ ^^ ^^^^^^
 >foo2(<U>(x: U) => x) : <U>(x: U) => U
->                     :               
+>                     : ^ ^^ ^^ ^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 ><U>(x: U) => x : <U>(x: U) => U
@@ -143,7 +143,7 @@ var r11 = foo2(<U, V>(x: U, y: V) => x);
 >r11 : (x: string) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >foo2(<U, V>(x: U, y: V) => x) : (x: string) => string
->                              :                      
+>                              : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
@@ -159,7 +159,7 @@ var r13 = foo2(C2);
 >r13 : (x: string) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >foo2(C2) : (x: string) => string
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >C2 : typeof C2
@@ -169,7 +169,7 @@ var r14 = foo2(b2);
 >r14 : (x: string) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >foo2(b2) : (x: string) => string
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >b2 : new <T>(x: T) => T
@@ -187,7 +187,7 @@ var r16 = foo2(f2);
 >r16 : (x: string) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >foo2(f2) : (x: string) => string
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >foo2 : <T extends (x: string) => string>(x: T) => T
 >     : ^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^^ ^^ ^^^^^^
 >f2 : F2

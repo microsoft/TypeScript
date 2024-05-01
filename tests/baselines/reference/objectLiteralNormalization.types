@@ -275,7 +275,7 @@ let c1 = !true ? {} : opts;
 >c1 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!true ? {} : opts : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->                  :      ^                         ^                         ^                        
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!true : false
 >      : ^^^^^
 >true : true
@@ -289,7 +289,7 @@ let c2 = !true ? opts : {};
 >c2 : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!true ? opts : {} : { foo?: string | undefined; bar?: string | undefined; baz?: boolean | undefined; }
->                  :      ^                         ^                         ^                        
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >!true : false
 >      : ^^^^^
 >true : true
@@ -485,7 +485,7 @@ let e1 = f({ a: 1, b: 2 }, { a: "abc" }, {});
 >e1 : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({ a: 1, b: 2 }, { a: "abc" }, {}) : { a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }
->                                    :                          ^^^              ^              ^^^   ^              ^              
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
 >  : ^ ^^^^^     ^^   ^^^^^^
 >{ a: 1, b: 2 } : { a: number; b: number; }
@@ -511,7 +511,7 @@ let e2 = f({}, { a: "abc" }, { a: 1, b: 2 });
 >e2 : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({}, { a: "abc" }, { a: 1, b: 2 }) : { a?: undefined; b?: undefined; } | { a: string; b?: undefined; } | { a: number; b: number; }
->                                    :    ^              ^              ^^^              ^              ^^^                         
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
 >  : ^ ^^^^^     ^^   ^^^^^^
 >{} : {}
@@ -537,7 +537,7 @@ let e3 = f(data, { a: 2 });
 >e3 : { a: 1; b: "abc"; c: true; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f(data, { a: 2 }) : { a: 1; b: "abc"; c: true; }
->                  :                             
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
 >  : ^ ^^^^^     ^^   ^^^^^^
 >data : { a: 1; b: "abc"; c: true; }
@@ -553,7 +553,7 @@ let e4 = f({ a: 2 }, data);
 >e4 : { a: 1; b: "abc"; c: true; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f({ a: 2 }, data) : { a: 1; b: "abc"; c: true; }
->                  :                             
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T>(...items: T[]) => T
 >  : ^ ^^^^^     ^^   ^^^^^^
 >{ a: 2 } : { a: 2; }

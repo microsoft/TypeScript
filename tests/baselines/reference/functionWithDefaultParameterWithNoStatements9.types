@@ -7,7 +7,7 @@ function foo(a = console.log) { }
 >a : (...data: any[]) => void
 >  : ^^^^    ^^     ^^^^^^^^^
 >console.log : (...data: any[]) => void
->            :  ^^^                    
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
@@ -19,7 +19,7 @@ function bar(a = console.log) {
 >a : (...data: any[]) => void
 >  : ^^^^    ^^     ^^^^^^^^^
 >console.log : (...data: any[]) => void
->            :  ^^^                    
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void

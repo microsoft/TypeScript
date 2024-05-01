@@ -13,7 +13,7 @@ var messenger = {
 >messenger : { message: string; start: () => void; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     }} : { message: string; start: () => void; }
->                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
@@ -25,7 +25,7 @@ var messenger = {
 >start : () => void
 >      : ^^^^^^^^^^
 >function() {        var _self = this;        setTimeout(function() {            _self.message.toString();         }, 3000);     } : () => void
->                                                                                                                                  :           
+>                                                                                                                                  : ^^^^^^^^^^
 
         var _self = this;
 >_self : any

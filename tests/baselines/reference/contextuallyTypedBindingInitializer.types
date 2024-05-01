@@ -79,7 +79,7 @@ function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >show : (v: number) => string
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >v => v.toString() : (v: number) => string
->                  :                      
+>                  : ^ ^^^^^^^^^^^^^^^^^^^
 >v : number
 >  : ^^^^^^
 >v.toString() : string
@@ -144,7 +144,7 @@ let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x =>
 >stringIdentity : (x: string) => string
 >               : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x : (x: string) => string
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x : string

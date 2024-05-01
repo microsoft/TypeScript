@@ -17,7 +17,7 @@ const q = func("x" as "x" | "y", ["x"]);
 >q : (ab: "x") => void
 >  : ^  ^^^^^^^^^^^^^^
 >func("x" as "x" | "y", ["x"]) : (ab: "x") => void
->                              :                  
+>                              : ^  ^^^^^^^^^^^^^^
 >func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
 >     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^   ^^^^^^  ^^     ^^^^^^^^^
 >"x" as "x" | "y" : "x" | "y"

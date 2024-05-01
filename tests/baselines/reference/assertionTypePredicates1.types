@@ -927,7 +927,7 @@ function f20(x: unknown) {
 >assert : (value: unknown) => asserts value
 >       : ^     ^^       ^^^^^             
 >(value: unknown): asserts value => {} : (value: unknown) => asserts value
->                                      :                                  
+>                                      : ^     ^^       ^^^^^             
 >value : unknown
 >      : ^^^^^^^
 
@@ -949,7 +949,7 @@ function f20(x: unknown) {
 >a : ((value: unknown) => asserts value)[]
 >  : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^
 >[assert] : ((value: unknown) => asserts value)[]
->         : ^                                 ^^^
+>         : ^^     ^^       ^^^^^^^^^^^^^^^^^^^^^
 >assert : (value: unknown) => asserts value
 >       : ^     ^^       ^^^^^^^^^^^^^^^^^^
 

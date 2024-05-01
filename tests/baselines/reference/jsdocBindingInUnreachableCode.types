@@ -12,7 +12,7 @@ if (false) {
 >x : (s: string) => void
 >  : ^ ^^      ^^^^^^^^^
 >function (s) {    } : (s: string) => void
->                    :                    
+>                    : ^ ^^      ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 

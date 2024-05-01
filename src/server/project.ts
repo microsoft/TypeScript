@@ -7,6 +7,7 @@ import {
     arrayToMap,
     BuilderState,
     CachedDirectoryStructureHost,
+    changeExtension,
     changesAffectModuleResolution,
     clearMap,
     cloneCompilerOptions,
@@ -16,7 +17,6 @@ import {
     comparePaths,
     CompilerHost,
     CompilerOptions,
-    concatenate,
     containsPath,
     createCacheableExportInfoMap,
     createLanguageService,
@@ -50,6 +50,7 @@ import {
     getAutomaticTypeDirectiveNames,
     getBaseFileName,
     GetCanonicalFileName,
+    getCommonSourceDirectoryOfConfig,
     getDeclarationEmitOutputFilePathWorker,
     getDefaultCompilerOptions,
     getDefaultLibFileName,
@@ -60,6 +61,7 @@ import {
     getEntrypointsFromPackageJsonInfo,
     getNormalizedAbsolutePath,
     getOrUpdate,
+    getOutputDeclarationFileName,
     GetPackageJsonEntrypointsHost,
     getStringComparer,
     HasInvalidatedLibResolutions,
@@ -79,6 +81,7 @@ import {
     map,
     mapDefined,
     maybeBind,
+    memoize,
     ModuleResolutionCache,
     ModuleResolutionHost,
     noop,
@@ -1317,6 +1320,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    markAutoImportProviderAsDirty() {
+        if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
+        this.autoImportProviderHost?.markAsDirty();
+    }
+
+    /** @internal */
     onAutoImportProviderSettingsChanged() {
         if (this.autoImportProviderHost === false) {
             this.autoImportProviderHost = undefined;
@@ -1400,8 +1409,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.projectProgramVersion++;
         }
         if (hasAddedorRemovedFiles) {
-            if (!this.autoImportProviderHost) this.autoImportProviderHost = undefined;
-            this.autoImportProviderHost?.markAsDirty();
+            this.markAutoImportProviderAsDirty();
         }
         if (isFirstProgramLoad) {
             // Preload auto import provider so it's not created during completions request
@@ -2439,7 +2447,7 @@ export class AutoImportProviderProject extends Project {
 
         const start = timestamp();
         let dependencyNames: Set<string> | undefined;
-        let rootNames: string[] | undefined;
+        let rootNames: Set<string> | undefined;
         const rootFileName = combinePaths(hostProject.currentDirectory, inferredTypesContainingFile);
         const packageJsons = hostProject.getPackageJsonsForAutoImport(combinePaths(hostProject.currentDirectory, rootFileName));
         for (const packageJson of packageJsons) {
@@ -2471,8 +2479,7 @@ export class AutoImportProviderProject extends Project {
                 if (packageJson) {
                     const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache);
                     if (entrypoints) {
-                        rootNames = concatenate(rootNames, entrypoints);
-                        dependenciesAdded += entrypoints.length ? 1 : 0;
+                        dependenciesAdded += addRootNames(entrypoints);
                         continue;
                     }
                 }
@@ -2490,8 +2497,7 @@ export class AutoImportProviderProject extends Project {
                         );
                         if (typesPackageJson) {
                             const entrypoints = getRootNamesFromPackageJson(typesPackageJson, program, symlinkCache);
-                            rootNames = concatenate(rootNames, entrypoints);
-                            dependenciesAdded += entrypoints?.length ? 1 : 0;
+                            dependenciesAdded += addRootNames(entrypoints);
                             return true;
                         }
                     }
@@ -2504,16 +2510,56 @@ export class AutoImportProviderProject extends Project {
                 //    package and load the JS.
                 if (packageJson && compilerOptions.allowJs && compilerOptions.maxNodeModuleJsDepth) {
                     const entrypoints = getRootNamesFromPackageJson(packageJson, program, symlinkCache, /*resolveJs*/ true);
-                    rootNames = concatenate(rootNames, entrypoints);
-                    dependenciesAdded += entrypoints?.length ? 1 : 0;
+                    dependenciesAdded += addRootNames(entrypoints);
                 }
             }
         }
 
-        if (rootNames?.length) {
-            hostProject.log(`AutoImportProviderProject: found ${rootNames.length} root files in ${dependenciesAdded} dependencies in ${timestamp() - start} ms`);
+        const references = program.getResolvedProjectReferences();
+        let referencesAddded = 0;
+        if (references?.length && hostProject.projectService.getHostPreferences().includeCompletionsForModuleExports) {
+            // Add direct referenced projects to rootFiles names
+            references.forEach(ref => {
+                if (ref?.commandLine.options.outFile) {
+                    referencesAddded += addRootNames(filterEntrypoints([
+                        changeExtension(ref.commandLine.options.outFile, ".d.ts"),
+                    ]));
+                }
+                else if (ref) {
+                    const getCommonSourceDirectory = memoize(() =>
+                        getCommonSourceDirectoryOfConfig(
+                            ref.commandLine,
+                            !hostProject.useCaseSensitiveFileNames(),
+                        )
+                    );
+                    referencesAddded += addRootNames(filterEntrypoints(mapDefined(
+                        ref.commandLine.fileNames,
+                        fileName =>
+                            !isDeclarationFileName(fileName) &&
+                                !fileExtensionIs(fileName, Extension.Json) &&
+                                !program.getSourceFile(fileName) ?
+                                getOutputDeclarationFileName(
+                                    fileName,
+                                    ref.commandLine,
+                                    !hostProject.useCaseSensitiveFileNames(),
+                                    getCommonSourceDirectory,
+                                ) : undefined,
+                    )));
+                }
+            });
         }
-        return rootNames || ts.emptyArray;
+
+        if (rootNames?.size) {
+            hostProject.log(`AutoImportProviderProject: found ${rootNames.size} root files in ${dependenciesAdded} dependencies ${referencesAddded} referenced projects in ${timestamp() - start} ms`);
+        }
+        return rootNames ? arrayFrom(rootNames.values()) : ts.emptyArray;
+
+        function addRootNames(entrypoints: readonly string[] | undefined) {
+            if (!entrypoints?.length) return 0;
+            rootNames ??= new Set();
+            entrypoints.forEach(entry => rootNames!.add(entry));
+            return 1;
+        }
 
         function addDependency(dependency: string) {
             if (!startsWith(dependency, "@types/")) {
@@ -2540,13 +2586,17 @@ export class AutoImportProviderProject extends Project {
                     });
                 }
 
-                return mapDefined(entrypoints, entrypoint => {
-                    const resolvedFileName = isSymlink ? entrypoint.replace(packageJson.packageDirectory, real!) : entrypoint;
-                    if (!program.getSourceFile(resolvedFileName) && !(isSymlink && program.getSourceFile(entrypoint))) {
-                        return resolvedFileName;
-                    }
-                });
+                return filterEntrypoints(entrypoints, isSymlink ? entrypoint => entrypoint.replace(packageJson.packageDirectory, real!) : undefined);
             }
+        }
+
+        function filterEntrypoints(entrypoints: readonly string[] | undefined, symlinkName?: (entrypoint: string) => string) {
+            return mapDefined(entrypoints, entrypoint => {
+                const resolvedFileName = symlinkName ? symlinkName(entrypoint) : entrypoint;
+                if (!program!.getSourceFile(resolvedFileName) && !(symlinkName && program!.getSourceFile(entrypoint))) {
+                    return resolvedFileName;
+                }
+            });
         }
     }
 

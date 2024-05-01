@@ -244,7 +244,7 @@ var i11Ori21: I11 | I21 = { // Like i1
 >commonMethodDifferentReturnType : (a: string, b: number) => string
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {        var z = a.charAt(b);        return z;    } : (a: string, b: number) => string
->                                                              :                                 
+>                                                              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -280,7 +280,7 @@ var i11Ori21: I11 | I21 = { // Like i2
 >commonMethodDifferentReturnType : (a: string, b: number) => number
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >(a, b) => {        var z = a.charCodeAt(b);        return z;    } : (a: string, b: number) => number
->                                                                  :                                 
+>                                                                  : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number
@@ -320,7 +320,7 @@ var i11Ori21: I11 | I21 = { // Like i1 and i2 both
 >commonMethodDifferentReturnType : (a: string, b: number) => string | number
 >                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(a, b) => strOrNumber : (a: string, b: number) => string | number
->                      :                                          
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number

@@ -42,7 +42,7 @@ const post = <PATH extends PostPath>(
 >post : <PATH extends "/login" | "/user">(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
 >     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^                    ^^                                                     ^^^^^^^^^
 ><PATH extends PostPath>(    path: PATH,    {body, ...options}: Omit<RequestInit, 'body'> & {body: PostBody<PATH>}) => {} : <PATH extends "/login" | "/user">(path: PATH, { body, ...options }: Omit<RequestInit, "body"> & { body: PostBody<PATH>; }) => void
->                                                                                                                         :                                                                                                                                   
+>                                                                                                                         : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^                    ^^                                                     ^^^^^^^^^
 
     path: PATH,
 >path : PATH
@@ -63,7 +63,7 @@ const tmp = <PATH extends PostPath>(
 >tmp : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
 >    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^    ^^              ^^^^^^^^^
 ><PATH extends PostPath>(  path: PATH,  body: PostBody<PATH>) => {  post<PATH>(path, { body })} : <PATH extends "/login" | "/user">(path: PATH, body: PostBody<PATH>) => void
->                                                                                               :                                                                            
+>                                                                                               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^    ^^              ^^^^^^^^^
 
   path: PATH,
 >path : PATH

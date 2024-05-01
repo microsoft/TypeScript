@@ -259,7 +259,7 @@ export async function adaptSession(input: GatewayPayload) {
 >input : GatewayPayloadStructure<GatewayOpcode.DISPATCH, "MESSAGE_CREATE", { a: 1; }>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : { a: 1; }
->  :          
+>  : ^^^^^^^^^
     }
 }
 

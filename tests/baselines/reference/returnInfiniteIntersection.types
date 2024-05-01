@@ -9,11 +9,11 @@ function recursive() {
 >x : <T>(subkey: T) => any & { p: any; }
 >  : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^
 ><T>(subkey: T) => recursive() : <T>(subkey: T) => any & { p: any; }
->                              :                                    
+>                              : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >subkey : T
 >       : ^
 >recursive() : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
->            : ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^           
+>            : ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 >          : ^^^^^^^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -31,7 +31,7 @@ let result = recursive()(1)
 >result : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 >       : ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >recursive()(1) : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
->               : ^                                   ^^^^           
+>               : ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >recursive() : (<T>(subkey: T) => any & { p: any; }) & { p: any; }
 >            : ^^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >recursive : () => (<T>(subkey: T) => any & { p: any; }) & { p: any; }

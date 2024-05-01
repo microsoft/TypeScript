@@ -5,13 +5,13 @@ var a = {
 >a : { x: <T>(y: T) => T; }
 >  : ^^^^^^ ^^ ^^ ^^^^^ ^^^
 >{   x: function <T>(y: T): T { return null; }} : { x: <T>(y: T) => T; }
->                                               : ^^^^^              ^^^
+>                                               : ^^^^^^ ^^ ^^ ^^^^^ ^^^
 
    x: function <T>(y: T): T { return null; }
 >x : <T>(y: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >function <T>(y: T): T { return null; } : <T>(y: T) => T
->                                       :               
+>                                       : ^ ^^ ^^ ^^^^^ 
 >y : T
 >  : ^
 }
@@ -19,13 +19,13 @@ var a2 = {
 >a2 : { x: (y: any) => any; }
 >   : ^^^^^^ ^^   ^^^^^   ^^^
 >{   x: function (y: any): any { return null; }} : { x: (y: any) => any; }
->                                                : ^^^^^               ^^^
+>                                                : ^^^^^^ ^^   ^^^^^   ^^^
 
    x: function (y: any): any { return null; }
 >x : (y: any) => any
 >  : ^ ^^   ^^^^^   
 >function (y: any): any { return null; } : (y: any) => any
->                                        :                
+>                                        : ^ ^^   ^^^^^   
 >y : any
 }
 export interface I {

@@ -36,7 +36,7 @@ var r = foo({ a: moduleA });
 >r : { a: typeof moduleA; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo({ a: moduleA }) : { a: typeof moduleA; }
->                    :                       
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >{ a: moduleA } : { a: typeof moduleA; }
@@ -50,7 +50,7 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 >r2 : { a: IHasVisualizationModel; }
 >   : ^^^^^                      ^^^
 >foo({ a: <IHasVisualizationModel>null }) : { a: IHasVisualizationModel; }
->                                         :                               
+>                                         : ^^^^^                      ^^^
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
 >{ a: <IHasVisualizationModel>null } : { a: IHasVisualizationModel; }
