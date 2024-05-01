@@ -3,19 +3,19 @@
 === typeGuardNarrowsToLiteralType.ts ===
 declare function isFoo(value: string) : value is "foo";
 >isFoo : (value: string) => value is "foo"
->      : ^^^^^^^^      ^^^^^              
+>      : ^     ^^      ^^^^^              
 >value : string
 >      : ^^^^^^
 
 declare function doThis(value: "foo"): void;
 >doThis : (value: "foo") => void
->       : ^^^^^^^^     ^^^^^    
+>       : ^     ^^     ^^^^^    
 >value : "foo"
 >      : ^^^^^
 
 declare function doThat(value: string) : void;
 >doThat : (value: string) => void
->       : ^^^^^^^^      ^^^^^    
+>       : ^     ^^      ^^^^^    
 >value : string
 >      : ^^^^^^
 
@@ -27,7 +27,7 @@ if (isFoo(value)) {
 >isFoo(value) : boolean
 >             : ^^^^^^^
 >isFoo : (value: string) => value is "foo"
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^      ^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -35,7 +35,7 @@ if (isFoo(value)) {
 >doThis(value) : void
 >              : ^^^^
 >doThis : (value: "foo") => void
->       : ^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^     ^^^^^^^^^
 >value : "foo"
 >      : ^^^^^
 
@@ -44,7 +44,7 @@ if (isFoo(value)) {
 >doThat(value) : void
 >              : ^^^^
 >doThat : (value: string) => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^     ^^      ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 }

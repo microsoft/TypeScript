@@ -65,7 +65,7 @@ export class Argument extends Base {
      */
     static parse(tokeniser) {
 >parse : (tokeniser: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^         ^^^^^^^^^^^^^^
 >tokeniser : any
 
         return;
@@ -85,6 +85,6 @@ export class Argument extends Base {
      */
     *validate(defs) { }
 >validate : (defs: any) => Generator<never, void, unknown>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defs : any
 }

@@ -3,6 +3,6 @@
 === typeParameterDoesntBlockParameterLookup.ts ===
 declare function f<Foo extends Bar, Bar>(Bar: any): void
 >f : <Foo extends Bar, Bar>(Bar: any) => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^    
+>  : ^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    
 >Bar : any
 

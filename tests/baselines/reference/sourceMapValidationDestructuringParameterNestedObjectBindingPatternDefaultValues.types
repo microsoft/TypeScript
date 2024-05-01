@@ -3,11 +3,11 @@
 === sourceMapValidationDestructuringParameterNestedObjectBindingPatternDefaultValues.ts ===
 declare var console: {
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^      ^^^    ^^^
+>        : ^^^^^^   ^^      ^^^    ^^^
 
     log(msg: string): void;
 >log : (msg: string) => void
->    : ^^^^^^      ^^^^^    
+>    : ^   ^^      ^^^^^    
 >msg : string
 >    : ^^^^^^
 }
@@ -54,7 +54,7 @@ var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "no
 
 function foo1(
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                                                        ^^^     ^^^^^^^^^
     {
         skills: {
 >skills : any
@@ -96,17 +96,17 @@ function foo1(
 >console.log(primaryA) : void
 >                      : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >primaryA : string
 >         : ^^^^^^
 }
 function foo2(
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^                                                                     ^^^     ^^^^^^^^^
     {
         name: nameC = "name",
 >name : any
@@ -156,17 +156,17 @@ function foo2(
 >console.log(secondaryB) : void
 >                        : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >secondaryB : string
 >           : ^^^^^^
 }
 function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA) {
 >foo3 : ({ skills }?: Robot) => void
->     : ^^^^^^^^^^^^^^     ^^^^^^^^^
+>     : ^          ^^^     ^^^^^^^^^
 >skills : { primary?: string; secondary?: string; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
@@ -186,11 +186,11 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >console.log(skills.primary) : void
 >                            : ^^^^
 >console.log : (msg: string) => void
->            : ^^^^^^^^^^^^^^^^^^^^^
+>            : ^   ^^      ^^^^^^^^^
 >console : { log(msg: string): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^      ^^^^^^^^^^
 >log : (msg: string) => void
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^      ^^^^^^^^^
 >skills.primary : string
 >               : ^^^^^^
 >skills : { primary?: string; secondary?: string; }
@@ -203,7 +203,7 @@ foo1(robotA);
 >foo1(robotA) : void
 >             : ^^^^
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                                        ^^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -211,7 +211,7 @@ foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >foo1({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 >                                                                                     : ^^^^
 >foo1 : ({ skills: { primary: primaryA, secondary: secondaryA } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                                        ^^^     ^^^^^^^^^
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -235,7 +235,7 @@ foo2(robotA);
 >foo2(robotA) : void
 >             : ^^^^
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                                                     ^^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -243,7 +243,7 @@ foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >foo2({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 >                                                                                     : ^^^^
 >foo2 : ({ name: nameC, skills: { primary: primaryB, secondary: secondaryB } }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^                                                                     ^^^     ^^^^^^^^^
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string
@@ -267,7 +267,7 @@ foo3(robotA);
 >foo3(robotA) : void
 >             : ^^^^
 >foo3 : ({ skills }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^          ^^^     ^^^^^^^^^
 >robotA : Robot
 >       : ^^^^^
 
@@ -275,7 +275,7 @@ foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" 
 >foo3({ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }) : void
 >                                                                                     : ^^^^
 >foo3 : ({ skills }?: Robot) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^          ^^^     ^^^^^^^^^
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >name : string

@@ -63,11 +63,11 @@ console.log(X.now()) // works as expected
 >console.log(X.now()) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >X.now() : {}
 >        : ^^
 >X.now : () => {}
@@ -81,11 +81,11 @@ console.log(Y.now()) // works as expected
 >console.log(Y.now()) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Y.now() : string
 >        : ^^^^^^
 >Y.now : () => string

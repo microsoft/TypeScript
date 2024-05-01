@@ -121,15 +121,15 @@ t = [1, "hello", 2];  // Error
 
 var tf: [string, (x: string) => number] = ["hello", x => x.length];
 >tf : [string, (x: string) => number]
->   : ^^^^^^^^^^^^^      ^^^^^      ^
+>   : ^^^^^^^^^^ ^^      ^^^^^      ^
 >x : string
 >  : ^^^^^^
 >["hello", x => x.length] : [string, (x: string) => number]
->                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -141,11 +141,11 @@ var tf: [string, (x: string) => number] = ["hello", x => x.length];
 
 declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
 >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
->   : ^ ^^ ^^^^^ ^^^^^                ^^^^^ 
+>   : ^ ^^ ^^ ^^ ^^ ^^                ^^^^^ 
 >a : T
 >  : ^
 >b : [T, (x: T) => U]
->  : ^^^^^^^^ ^^^^^ ^
+>  : ^^^^^ ^^ ^^^^^ ^
 >x : T
 >  : ^
 
@@ -155,15 +155,15 @@ var ff1 = ff("hello", ["foo", x => x.length]);
 >ff("hello", ["foo", x => x.length]) : number
 >                                    : ^^^^^^
 >ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^ ^^ ^^                ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >["foo", x => x.length] : [string, (x: string) => number]
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 >x => x.length : (x: string) => number
->              : ^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -179,7 +179,7 @@ var ff1: number;
 
 function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
->       : ^  ^^  ^^^^^^^^^  ^^^^^^^^^  ^^^^^        
+>       : ^  ^^  ^^     ^^  ^^     ^^  ^^^^^        
 >item0 : T0
 >      : ^^
 >item1 : T1
@@ -200,7 +200,7 @@ var tt = tuple2(1, "string");
 >tuple2(1, "string") : [number, string]
 >                    : ^^^^^^^^^^^^^^^^
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^  ^^     ^^  ^^     ^^  ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >"string" : "string"
@@ -256,7 +256,7 @@ tt = tuple2(1, undefined);
 >tuple2(1, undefined) : [number, any]
 >                     : ^^^^^^^^^^^^^
 >tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^  ^^  ^^     ^^  ^^     ^^  ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >undefined : undefined

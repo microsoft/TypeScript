@@ -12,7 +12,7 @@ export const x = add(import("./sub"));
 >add(import("./sub")) : typeof import("sub")
 >                     : ^^^^^^^^^^^^^^^^^^^^
 >add : <T>(x: Promise<T>) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^          ^^^^^^
 >import("./sub") : Promise<typeof import("sub")>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./sub" : "./sub"
@@ -24,7 +24,7 @@ export * as Q from "./sub";
 
 declare function add<T>(x: Promise<T>): T;
 >add : <T>(x: Promise<T>) => T
->    : ^ ^^^^^          ^^^^^ 
+>    : ^ ^^ ^^          ^^^^^ 
 >x : Promise<T>
 >  : ^^^^^^^^^^
 

@@ -4,7 +4,7 @@
 // Error missing basic JavaScript objects
 function f(x: number, y: number, z: number) {
 >f : (x: number, y: number, z: number) => any
->  : ^^^^      ^^^^^      ^^^^^      ^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -29,7 +29,7 @@ f(1, 2, 3);
 >f(1, 2, 3) : any
 >           : ^^^
 >f : (x: number, y: number, z: number) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^ ^^      ^^ ^^      ^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

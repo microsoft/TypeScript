@@ -11,11 +11,11 @@ console.log(Bebra.constructor)
 >console.log(Bebra.constructor) : void
 >                               : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.constructor : any
 >                  : ^^^
 >Bebra : typeof Bebra
@@ -27,11 +27,11 @@ console.log(Bebra.hasOwnProperty)
 >console.log(Bebra.hasOwnProperty) : void
 >                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.hasOwnProperty : any
 >                     : ^^^
 >Bebra : typeof Bebra
@@ -43,11 +43,11 @@ console.log(Bebra.isPrototypeOf)
 >console.log(Bebra.isPrototypeOf) : void
 >                                 : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.isPrototypeOf : any
 >                    : ^^^
 >Bebra : typeof Bebra
@@ -59,11 +59,11 @@ console.log(Bebra.propertyIsEnumerable)
 >console.log(Bebra.propertyIsEnumerable) : void
 >                                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.propertyIsEnumerable : any
 >                           : ^^^
 >Bebra : typeof Bebra
@@ -75,11 +75,11 @@ console.log(Bebra.toLocaleString)
 >console.log(Bebra.toLocaleString) : void
 >                                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.toLocaleString : any
 >                     : ^^^
 >Bebra : typeof Bebra
@@ -91,11 +91,11 @@ console.log(Bebra.toString)
 >console.log(Bebra.toString) : void
 >                            : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.toString : any
 >               : ^^^
 >Bebra : typeof Bebra
@@ -107,11 +107,11 @@ console.log(Bebra.valueOf)
 >console.log(Bebra.valueOf) : void
 >                           : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >Bebra.valueOf : any
 >              : ^^^
 >Bebra : typeof Bebra

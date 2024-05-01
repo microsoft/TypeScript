@@ -13,7 +13,7 @@ interface TypeMap {
 }
 declare const f: <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0];
 >f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
->  : ^  ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^           
+>  : ^  ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^           
 >x : T0
 >  : ^^
 
@@ -26,8 +26,8 @@ type F1 = <T1 extends "a" | "b">(x: `${T1}`) => TypeMap[T1];
 const f1: F1 = f; 
 >f1 : F1
 >   : ^^
->f : <T0 extends "a" | "b">(x: T0) => TypeMap[T0]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
+>  : ^  ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^
 
 type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
 >F2 : F2
@@ -38,12 +38,12 @@ type F2 = <T2 extends 'a' | 'b'>(x: `${T2}`) => TypeMap[`${T2}`]
 const f2: F2 = f
 >f2 : F2
 >   : ^^
->f : <T0 extends "a" | "b">(x: T0) => TypeMap[T0]
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : <T0 extends "a" | "b">(x: `${T0}`) => TypeMap[T0]
+>  : ^  ^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^
 
 function f3<T3 extends "a" | "b">(x: T3) {
 >f3 : <T3 extends "a" | "b">(x: T3) => void
->   : ^  ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^
+>   : ^  ^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^
 >x : T3
 >  : ^^
 

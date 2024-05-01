@@ -20,7 +20,7 @@ module TypeScript {
 
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                     : ^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >typeLinks : TypeLink[]
 >          : ^^^^^^^^^^
 >scope : SymbolScope
@@ -194,7 +194,7 @@ module TypeScript {
 
         public resolveBases(scope: SymbolScope, type: Type) {
 >resolveBases : (scope: SymbolScope, type: Type) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >type : Type
@@ -212,11 +212,11 @@ module TypeScript {
 >this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : Type[]
 >                                                        : ^^^^^^
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >type.extendsTypeLinks : any
 >                      : ^^^
 >type : Type
@@ -452,11 +452,11 @@ module TypeScript {
 >this.resolveBaseTypeLinks(type.implementsTypeLinks, scope) : Type[]
 >                                                           : ^^^^^^
 >this.resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveBaseTypeLinks : (typeLinks: TypeLink[], scope: SymbolScope) => Type[]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^         ^^          ^^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >type.implementsTypeLinks : any
 >                         : ^^^
 >type : Type
@@ -589,7 +589,7 @@ module TypeScript {
 
         public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >signatureGroup : SignatureGroup
 >               : ^^^^^^^^^^^^^^
 >scope : SymbolScope
@@ -732,11 +732,11 @@ module TypeScript {
 >this.bindSymbol(scope, signature.parameters[j]) : void
 >                                                : ^^^^
 >this.bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >signature.parameters[j] : any
@@ -887,7 +887,7 @@ module TypeScript {
 
         public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^    
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >type : Type
@@ -903,11 +903,11 @@ module TypeScript {
 >this.bindType(scope, instanceType, null) : void
 >                                         : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >instanceType : Type
@@ -1115,11 +1115,11 @@ module TypeScript {
 >this.bind(agg, type.members.allMembers) : void
 >                                        : ^^^^
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bind : (scope: SymbolScope, table: IHashTable) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >agg : any
 >    : ^^^
 >type.members.allMembers : any
@@ -1141,11 +1141,11 @@ module TypeScript {
 >this.bind(agg, typeMembers.allMembers) : void
 >                                       : ^^^^
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bind : (scope: SymbolScope, table: IHashTable) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >agg : any
 >    : ^^^
 >typeMembers.allMembers : any
@@ -1163,11 +1163,11 @@ module TypeScript {
 >this.bind(agg, ambientMembers.allMembers) : void
 >                                          : ^^^^
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bind : (scope: SymbolScope, table: IHashTable) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >agg : any
 >    : ^^^
 >ambientMembers.allMembers : any
@@ -1185,11 +1185,11 @@ module TypeScript {
 >this.bind(agg, ambientTypeMembers.allMembers) : void
 >                                              : ^^^^
 >this.bind : (scope: SymbolScope, table: IHashTable) => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bind : (scope: SymbolScope, table: IHashTable) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >agg : any
 >    : ^^^
 >ambientTypeMembers.allMembers : any
@@ -1243,11 +1243,11 @@ module TypeScript {
 >this.resolveBases(scope, type) : void
 >                               : ^^^^
 >this.resolveBases : (scope: SymbolScope, type: Type) => void
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveBases : (scope: SymbolScope, type: Type) => void
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >type : Type
@@ -1265,11 +1265,11 @@ module TypeScript {
 >this.resolveSignatureGroup(type.construct, scope, instanceType) : void
 >                                                                : ^^^^
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >type.construct : any
 >               : ^^^
 >type : Type
@@ -1293,11 +1293,11 @@ module TypeScript {
 >this.resolveSignatureGroup(type.call, scope, null) : void
 >                                                   : ^^^^
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >type.call : any
 >          : ^^^
 >type : Type
@@ -1319,11 +1319,11 @@ module TypeScript {
 >this.resolveSignatureGroup(type.index, scope, null) : void
 >                                                    : ^^^^
 >this.resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >resolveSignatureGroup : (signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) => void
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^              ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^            ^^^^^^^^^^^^^^^
 >type.index : any
 >           : ^^^
 >type : Type
@@ -1345,11 +1345,11 @@ module TypeScript {
 >this.bindType(scope, type.elementType, null) : void
 >                                             : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >type.elementType : any
@@ -1363,7 +1363,7 @@ module TypeScript {
 
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
 >bindSymbol : (scope: SymbolScope, symbol: Symbol) => void
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^
+>           : ^     ^^^^^^^^^^^^^^^      ^^      ^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >symbol : Symbol
@@ -1641,7 +1641,7 @@ module TypeScript {
 >filename : any
 >         : ^^^
 >(id) => scope.find(id, false, true) : (id: any) => any
->                                    : ^^^^^^^^^^^^^^^^
+>                                    : ^  ^^^^^^^^^^^^^
 >id : any
 >   : ^^^
 >scope.find(id, false, true) : any
@@ -1715,11 +1715,11 @@ module TypeScript {
 >this.bindType(scope, typeSymbol.type, typeSymbol.instanceType) : void
 >                                                               : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >typeSymbol.type : any
@@ -1778,11 +1778,11 @@ module TypeScript {
 >this.bindType(scope, typeSymbol.expansions[i], typeSymbol.instanceType) : void
 >                                                                        : ^^^^
 >this.bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >bindType : (scope: SymbolScope, type: Type, instanceType: Type) => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^^^^^^^^^^^^^    ^^^^^^^^            ^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >typeSymbol.expansions[i] : any
@@ -1925,7 +1925,7 @@ module TypeScript {
 
         public bind(scope: SymbolScope, table: IHashTable) {
 >bind : (scope: SymbolScope, table: IHashTable) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^
 >scope : SymbolScope
 >      : ^^^^^^^^^^^
 >table : IHashTable
@@ -1943,7 +1943,7 @@ module TypeScript {
 
                 (key, sym, binder) => {
 >(key, sym, binder) => {                    binder.bindSymbol(scope, sym);                } : (key: any, sym: any, binder: any) => void
->                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                           : ^   ^^^^^^^   ^^^^^^^      ^^^^^^^^^^^^^^
 >key : any
 >    : ^^^
 >sym : any

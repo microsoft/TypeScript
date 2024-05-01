@@ -64,7 +64,7 @@ E.A.toString();
 >E.A.toString() : string
 >               : ^^^^^^
 >E.A.toString : (radix?: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >E.A : E.A
 >    : ^^^
 >E : typeof E
@@ -72,13 +72,13 @@ E.A.toString();
 >A : E.A
 >  : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E.B.toString();
 >E.B.toString() : string
 >               : ^^^^^^
 >E.B.toString : (radix?: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >E.B : E.B
 >    : ^^^
 >E : typeof E
@@ -86,13 +86,13 @@ E.B.toString();
 >B : E.B
 >  : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E.C.toString();
 >E.C.toString() : string
 >               : ^^^^^^
 >E.C.toString : (radix?: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >E.C : E.C
 >    : ^^^
 >E : typeof E
@@ -100,13 +100,13 @@ E.C.toString();
 >C : E.C
 >  : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E.D.toString();
 >E.D.toString() : string
 >               : ^^^^^^
 >E.D.toString : (radix?: number) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^^^^^^^
 >E.D : E.C
 >    : ^^^
 >E : typeof E
@@ -114,13 +114,13 @@ E.D.toString();
 >D : E.C
 >  : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E["A"].toString();
 >E["A"].toString() : string
 >                  : ^^^^^^
 >E["A"].toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >E["A"] : E.A
 >       : ^^^
 >E : typeof E
@@ -128,13 +128,13 @@ E["A"].toString();
 >"A" : "A"
 >    : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E["B"].toString();
 >E["B"].toString() : string
 >                  : ^^^^^^
 >E["B"].toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >E["B"] : E.B
 >       : ^^^
 >E : typeof E
@@ -142,13 +142,13 @@ E["B"].toString();
 >"B" : "B"
 >    : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E["C"].toString();
 >E["C"].toString() : string
 >                  : ^^^^^^
 >E["C"].toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >E["C"] : E.C
 >       : ^^^
 >E : typeof E
@@ -156,13 +156,13 @@ E["C"].toString();
 >"C" : "C"
 >    : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E["D"].toString();
 >E["D"].toString() : string
 >                  : ^^^^^^
 >E["D"].toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >E["D"] : E.C
 >       : ^^^
 >E : typeof E
@@ -170,13 +170,13 @@ E["D"].toString();
 >"D" : "D"
 >    : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 
 E["E"].toString();
 >E["E"].toString() : string
 >                  : ^^^^^^
 >E["E"].toString : (radix?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^     ^^^      ^^^^^^^^^^^
 >E["E"] : E.E
 >       : ^^^
 >E : typeof E
@@ -184,5 +184,5 @@ E["E"].toString();
 >"E" : "E"
 >    : ^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 

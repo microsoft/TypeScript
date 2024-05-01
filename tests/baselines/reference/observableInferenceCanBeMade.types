@@ -5,13 +5,13 @@
 
 declare function of<T>(a: T): Observable<T>;
 >of : <T>(a: T) => Observable<T>
->   : ^ ^^^^^ ^^^^^             
+>   : ^ ^^ ^^ ^^^^^             
 >a : T
 >  : ^
 
 declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^                              
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                              
 >input : O
 >      : ^
 
@@ -22,13 +22,13 @@ type ObservedValueOf<O> = O extends ObservableInput<infer T> ? T : never;
 interface Subscribable<T> {
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 >subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
->          : ^^^^^^^^                  ^^^^^^^^^^                    ^^^^^^^^^^^^^          ^^^^^    
+>          : ^    ^^^                  ^^     ^^^                    ^^        ^^^          ^^^^^    
 >next : ((value: T) => void) | undefined
->     : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
+>     : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 >error : ((error: any) => void) | undefined
->      : ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>      : ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >error : any
 >complete : (() => void) | undefined
 >         : ^^^^^^^    ^^^^^^^^^^^^^
@@ -44,13 +44,13 @@ declare class Observable<T> implements Subscribable<T> {
 
     subscribe(next?: (value: T) => void, error?: (error: any) => void, complete?: () => void): void;
 >subscribe : (next?: (value: T) => void, error?: (error: any) => void, complete?: () => void) => void
->          : ^^^^^^^^                  ^^^^^^^^^^                    ^^^^^^^^^^^^^          ^^^^^    
+>          : ^    ^^^                  ^^     ^^^                    ^^        ^^^          ^^^^^    
 >next : ((value: T) => void) | undefined
->     : ^^^^^^^^^ ^^^^^    ^^^^^^^^^^^^^
+>     : ^^     ^^ ^^^^^    ^^^^^^^^^^^^^
 >value : T
 >      : ^
 >error : ((error: any) => void) | undefined
->      : ^^^^^^^^^   ^^^^^    ^^^^^^^^^^^^^
+>      : ^^     ^^   ^^^^^    ^^^^^^^^^^^^^
 >error : any
 >complete : (() => void) | undefined
 >         : ^^^^^^^    ^^^^^^^^^^^^^
@@ -58,7 +58,7 @@ declare class Observable<T> implements Subscribable<T> {
 
 function asObservable(input: string | ObservableInput<string>): Observable<string> {
 >asObservable : (input: string | ObservableInput<string>) => Observable<string>
->             : ^^^^^^^^                                ^^^^^                  
+>             : ^     ^^                                ^^^^^                  
 >input : string | ObservableInput<string>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -76,13 +76,13 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 >of(input) : Observable<string>
 >          : ^^^^^^^^^^^^^^^^^^
 >of : <T>(a: T) => Observable<T>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >input : string
 >      : ^^^^^^
 >from(input) : Observable<string>
 >            : ^^^^^^^^^^^^^^^^^^
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : ObservableInput<string>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 }

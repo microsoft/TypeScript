@@ -10,7 +10,7 @@
   interface $ {
       addClass(className: string): $;
 >addClass : (className: string) => $
->         : ^^^^^^^^^^^^      ^^^^^ 
+>         : ^         ^^      ^^^^^ 
 >className : string
 >          : ^^^^^^
   }
@@ -22,7 +22,7 @@
     }
     export function ajax(options: AjaxSettings) { }
 >ajax : (options: AjaxSettings) => void
->     : ^^^^^^^^^^            ^^^^^^^^^
+>     : ^       ^^            ^^^^^^^^^
 >options : AjaxSettings
 >        : ^^^^^^^^^^^^
   }
@@ -32,7 +32,7 @@
 >$('.foo').addClass('bar') : $
 >                          : ^
 >$('.foo').addClass : (className: string) => $
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^         ^^      ^^^^^^
 >$('.foo') : $
 >          : ^
 >$ : typeof $
@@ -40,7 +40,7 @@
 >'.foo' : ".foo"
 >       : ^^^^^^
 >addClass : (className: string) => $
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^         ^^      ^^^^^^
 >'bar' : "bar"
 >      : ^^^^^
 

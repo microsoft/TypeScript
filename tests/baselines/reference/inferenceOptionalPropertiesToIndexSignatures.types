@@ -3,7 +3,7 @@
 === inferenceOptionalPropertiesToIndexSignatures.ts ===
 declare function foo<T>(obj: { [x: string]: T }): T;
 >foo : <T>(obj: { [x: string]: T; }) => T
->    : ^ ^^^^^^^                   ^^^^^ 
+>    : ^ ^^   ^^                   ^^^^^ 
 >obj : { [x: string]: T; }
 >    : ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -47,7 +47,7 @@ let a1 = foo(x1);  // string | number
 >foo(x1) : string | number
 >        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^                   ^^^^^^
 >x1 : { a: string; b: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -57,7 +57,7 @@ let a2 = foo(x2);  // string | number | undefined
 >foo(x2) : string | number | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^                   ^^^^^^
 >x2 : { a: string; b: number | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -67,7 +67,7 @@ let a3 = foo(x3);  // string | number
 >foo(x3) : string | number
 >        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^                   ^^^^^^
 >x3 : { a: string; b?: number | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,7 +77,7 @@ let a4 = foo(x4);  // string | number
 >foo(x4) : string | number
 >        : ^^^^^^^^^^^^^^^
 >foo : <T>(obj: { [x: string]: T; }) => T
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^   ^^                   ^^^^^^
 >x4 : { a: string; b?: number | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -136,28 +136,28 @@ const query = Object.entries(obj).map(
 >      : ^^^^^^
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join('&') : string
 >                                                                                   : ^^^^^^
->Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : (separator?: string | undefined) => string
->                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`).join : (separator?: string) => string
+>                                                                              : ^         ^^^      ^^^^^^^^^^^
 >Object.entries(obj).map(    ([k, v]) => `${k}=${encodeURIComponent(v)}`) : string[]
 >                                                                         : ^^^^^^^^
 >Object.entries(obj).map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >Object.entries(obj) : [string, string][]
 >                    : ^^^^^^^^^^^^^^^^^^
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^ ^^ ^^                                  ^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^^^^
 >obj : { param2?: string | undefined; param1: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >map : <U>(callbackfn: (value: [string, string], index: number, array: [string, string][]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 
     ([k, v]) => `${k}=${encodeURIComponent(v)}`
 >([k, v]) => `${k}=${encodeURIComponent(v)}` : ([k, v]: [string, string]) => string
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >k : string
 >  : ^^^^^^
 >v : string
@@ -169,13 +169,13 @@ const query = Object.entries(obj).map(
 >encodeURIComponent(v) : string
 >                      : ^^^^^^
 >encodeURIComponent : (uriComponent: string | number | boolean) => string
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^            ^^                         ^^^^^^^^^^^
 >v : string
 >  : ^^^^^^
 
 ).join('&');
->join : (separator?: string | undefined) => string
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^^^^^^^
 >'&' : "&"
 >    : ^^^
 

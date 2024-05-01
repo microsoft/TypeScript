@@ -8,7 +8,7 @@ async function bar(): Promise<void> {
   // 'await' here is an identifier, and not a yield expression.
   async function foo(a = await): Promise<void> {
 >foo : (a?: any) => Promise<void>
->    : ^^^^^^^^^^^^^             
+>    : ^ ^^^^^^^^^^^             
 >a : any
 >  : ^^^
 >await : any

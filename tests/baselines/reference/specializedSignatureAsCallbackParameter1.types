@@ -3,31 +3,31 @@
 === specializedSignatureAsCallbackParameter1.ts ===
 function x3(a: number, cb: (x: number) => number);
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
->   : ^^^^^^      ^^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                     ^^^^^^^^^ ^^      ^^  ^^                     ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >cb : (x: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
 function x3(a: string, cb: (x: number) => number);
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^                     ^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                     ^^^^^^^^^ ^^      ^^  ^^                     ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >cb : (x: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
 function x3(a: any, cb: (x: number) => number) {
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                     ^^^^^^^^^ ^^      ^^  ^^                     ^^^^^^^^^
 >a : any
 >  : ^^^
 >cb : (x: number) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ function x3(a: any, cb: (x: number) => number) {
 >cb(a) : number
 >      : ^^^^^^
 >cb : (x: number) => number
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^      ^^^^^^^^^^^
 >a : any
 >  : ^^^
 }
@@ -44,11 +44,11 @@ x3(1, (x: string) => 1);
 >x3(1, (x: string) => 1) : any
 >                        : ^^^
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                     ^^^^^^^^^ ^^      ^^  ^^                     ^^^^^^^^^
 >1 : 1
 >  : ^
 >(x: string) => 1 : (x: string) => number
->                 : ^^^^      ^^^^^^^^^^^
+>                 : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >1 : 1
@@ -58,11 +58,11 @@ x3(1, (x: 'hm') => 1);
 >x3(1, (x: 'hm') => 1) : any
 >                      : ^^^
 >x3 : { (a: number, cb: (x: number) => number): any; (a: string, cb: (x: number) => number): any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^ ^^      ^^  ^^                     ^^^^^^^^^ ^^      ^^  ^^                     ^^^^^^^^^
 >1 : 1
 >  : ^
->(x: 'hm') => 1 : (x: 'hm') => number
->               : ^^^^    ^^^^^^^^^^^
+>(x: 'hm') => 1 : (x: "hm") => number
+>               : ^ ^^    ^^^^^^^^^^^
 >x : "hm"
 >  : ^^^^
 >1 : 1

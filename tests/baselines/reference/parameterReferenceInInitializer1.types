@@ -3,11 +3,11 @@
 === parameterReferenceInInitializer1.ts ===
 function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
 >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
->   : ^ ^^^^^ ^^^^^^^                         ^^^^^ 
+>   : ^ ^^ ^^ ^^   ^^                         ^^^^^ 
 >y : Y
 >  : ^
 >set : (y: Y, x: number) => void
->    : ^^^^ ^^^^^      ^^^^^    
+>    : ^ ^^ ^^ ^^      ^^^^^    
 >y : Y
 >  : ^
 >x : number
@@ -36,11 +36,11 @@ class C {
 >fn(y, (y, x) => y.x = x) : unknown
 >                         : ^^^^^^^
 >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^ ^^ ^^   ^^                         ^^^^^^
 >y : Y
 >  : ^
 >(y, x) => y.x = x : (y: Y, x: number) => number
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^ ^^^^^ ^^^^^^^^^^^^^^^^^^^
 >y : Y
 >  : ^
 >x : number

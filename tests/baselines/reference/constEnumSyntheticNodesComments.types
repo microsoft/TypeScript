@@ -15,7 +15,7 @@ const enum En { A, B, C, D }
 
 function assert<T>(x: T) {
 >assert : <T>(x: T) => T
->       : ^ ^^^^^ ^^^^^^
+>       : ^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
@@ -26,7 +26,7 @@ function assert<T>(x: T) {
 
 function verify(a: En) {
 >verify : (a: En) => 0 | 1 | 2 | 3
->       : ^^^^  ^^^^^^^^^^^^^^^^^^
+>       : ^ ^^  ^^^^^^^^^^^^^^^^^^
 >a : En
 >  : ^^
 
@@ -46,7 +46,7 @@ function verify(a: En) {
 >assert<0>(a) : 0
 >             : ^
 >assert : <T>(x: T) => T
->       : ^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^^^^^
 >a : En.A
 >  : ^^^^
 
@@ -62,7 +62,7 @@ function verify(a: En) {
 >assert<1>(a) : 1
 >             : ^
 >assert : <T>(x: T) => T
->       : ^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^^^^^
 >a : En.B
 >  : ^^^^
 
@@ -78,7 +78,7 @@ function verify(a: En) {
 >assert<2>(a) : 2
 >             : ^
 >assert : <T>(x: T) => T
->       : ^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^^^^^
 >a : En.C
 >  : ^^^^
 
@@ -94,7 +94,7 @@ function verify(a: En) {
 >assert<3>(a) : 3
 >             : ^
 >assert : <T>(x: T) => T
->       : ^^^^^^^^^^^^^^
+>       : ^ ^^ ^^ ^^^^^^
 >a : En.D
 >  : ^^^^
     }

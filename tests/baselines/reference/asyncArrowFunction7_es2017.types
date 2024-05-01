@@ -10,9 +10,9 @@ var bar = async (): Promise<void> => {
   // 'await' here is an identifier, and not an await expression.
   var foo = async (a = await): Promise<void> => {
 >foo : (a?: any) => Promise<void>
->    : ^^^^^^^^^^^^^             
+>    : ^ ^^^^^^^^^^^             
 >async (a = await): Promise<void> => {  } : (a?: any) => Promise<void>
->                                         : ^^^^^^^^^^^^^             
+>                                         : ^ ^^^^^^^^^^^             
 >a : any
 >  : ^^^
 >await : any

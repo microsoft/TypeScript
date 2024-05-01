@@ -3,7 +3,7 @@
 === computedEnumTypeWidening.ts ===
 declare function computed(x: number): number;
 >computed : (x: number) => number
->         : ^^^^      ^^^^^      
+>         : ^ ^^      ^^^^^      
 >x : number
 >  : ^^^^^^
 
@@ -17,7 +17,7 @@ enum E {
 >computed(0) : number
 >            : ^^^^^^
 >computed : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -27,7 +27,7 @@ enum E {
 >computed(1) : number
 >            : ^^^^^^
 >computed : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -37,7 +37,7 @@ enum E {
 >computed(2) : number
 >            : ^^^^^^
 >computed : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -47,7 +47,7 @@ enum E {
 >computed(3) : number
 >            : ^^^^^^
 >computed : (x: number) => number
->         : ^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^      ^^^^^^^^^^^
 >3 : 3
 >  : ^
 }
@@ -119,7 +119,7 @@ function f1() {
 
 function f2(cond: boolean) {
 >f2 : (cond: boolean) => void
->   : ^^^^^^^       ^^^^^^^^^
+>   : ^    ^^       ^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
 

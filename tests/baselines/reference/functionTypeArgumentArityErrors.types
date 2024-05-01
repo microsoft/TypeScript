@@ -46,11 +46,11 @@ f2<number, number, number, number>();
 // Overloaded non-generic functions
 declare function f3(): void;
 >f3 : { (): void; (a: any): void; }
->   : ^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^    ^^^ ^^^^^^^^^^^^^^^
 
 declare function f3(a): void;
 >f3 : { (): void; (a: any): void; }
->   : ^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>   : ^^^^^^^^^^^^^ ^^^^^^^^    ^^^
 >a : any
 >  : ^^^
 
@@ -58,7 +58,7 @@ f3<number>();
 >f3<number>() : void
 >             : ^^^^
 >f3 : { (): void; (a: any): void; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^
 
 // Generic function with default type parameters
 declare function f4<A, B, C = any>(): void;

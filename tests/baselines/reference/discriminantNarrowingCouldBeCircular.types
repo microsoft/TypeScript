@@ -4,7 +4,7 @@
 // #57705, 57690
 declare function is<T>(v: T): v is T;
 >is : <T>(v: T) => v is T
->   : ^ ^^^^^ ^^^^^      
+>   : ^ ^^ ^^ ^^^^^      
 >v : T
 >  : ^
 
@@ -38,7 +38,7 @@ if (o) {
 >is<string>(value) : boolean
 >                  : ^^^^^^^
 >is : <T>(v: T) => v is T
->   : ^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
     }
@@ -59,13 +59,13 @@ declare const kPresentationInheritanceParents: { [tagName: string]: string[] };
 
 declare function parentElementOrShadowHost(element: SomeRecord): SomeRecord | undefined;
 >parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
->                          : ^^^^^^^^^^          ^^^^^                      
+>                          : ^       ^^          ^^^^^                      
 >element : SomeRecord
 >        : ^^^^^^^^^^
 
 function getImplicitAriaRole(element: SomeRecord) {
 >getImplicitAriaRole : (element: SomeRecord) => void
->                    : ^^^^^^^^^^          ^^^^^^^^^
+>                    : ^       ^^          ^^^^^^^^^
 >element : SomeRecord
 >        : ^^^^^^^^^^
 
@@ -85,7 +85,7 @@ function getImplicitAriaRole(element: SomeRecord) {
 >parentElementOrShadowHost(ancestor) : SomeRecord | undefined
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^
 >parentElementOrShadowHost : (element: SomeRecord) => SomeRecord | undefined
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^       ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ancestor : SomeRecord
 >         : ^^^^^^^^^^
 
@@ -120,12 +120,12 @@ function getImplicitAriaRole(element: SomeRecord) {
 >                            : ^^^^^^^
 >parents.includes(parent.a) : boolean
 >                           : ^^^^^^^
->parents.includes : (searchElement: string, fromIndex?: number | undefined) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>parents.includes : (searchElement: string, fromIndex?: number) => boolean
+>                 : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^^
 >parents : string[]
 >        : ^^^^^^^^
->includes : (searchElement: string, fromIndex?: number | undefined) => boolean
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>includes : (searchElement: string, fromIndex?: number) => boolean
+>         : ^             ^^^^^^^^^^         ^^^      ^^^^^^^^^^^^
 >parent.a : string
 >         : ^^^^^^
 >parent : SomeRecord
@@ -146,7 +146,7 @@ function getImplicitAriaRole(element: SomeRecord) {
 
 declare function isPlainObject2<T>(
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^^^^^^^       ^^^^^                                    
+>               : ^^^^    ^^       ^^^^^                                    
 
     data: unknown,
 >data : unknown
@@ -162,7 +162,7 @@ declare function isPlainObject2<T>(
 >isPlainObject2(myObj2) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >myObj2 : unknown
 >       : ^^^^^^^
 
@@ -196,17 +196,17 @@ declare function isPlainObject2<T>(
 >isPlainObject2(deeper) : boolean
 >                       : ^^^^^^^
 >isPlainObject2 : <T>(data: unknown) => data is Record<PropertyKey, unknown>
->               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^^^^    ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >deeper : unknown
 >       : ^^^^^^^
 >Object.keys(deeper) : string[]
 >                    : ^^^^^^^^
 >Object.keys : { (o: object): string[]; (o: {}): string[]; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >keys : { (o: object): string[]; (o: {}): string[]; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^      ^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^
 >deeper : Record<PropertyKey, unknown>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[] : never[]

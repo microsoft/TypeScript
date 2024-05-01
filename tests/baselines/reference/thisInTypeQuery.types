@@ -5,7 +5,7 @@
 
 function assert(condition: unknown): asserts condition {
 >assert : (condition: unknown) => asserts condition
->       : ^^^^^^^^^^^^       ^^^^^                 
+>       : ^         ^^       ^^^^^                 
 >condition : unknown
 >          : ^^^^^^^
 
@@ -60,7 +60,7 @@ class MyClass {
 >assert(params) : void
 >               : ^^^^
 >assert : (condition: unknown) => asserts condition
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >params : { a: { key: string; }; } | null
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

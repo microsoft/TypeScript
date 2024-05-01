@@ -158,8 +158,8 @@ new Intl.NumberFormat('en-GB', { useGrouping: 'always' });
 new Intl.NumberFormat('en-GB').formatRange(10, 100);
 >new Intl.NumberFormat('en-GB').formatRange(10, 100) : string
 >                                                    : ^^^^^^
->new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint, end: number | bigint) => string
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>                                           : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -170,8 +170,8 @@ new Intl.NumberFormat('en-GB').formatRange(10, 100);
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
->formatRange : (start: number | bigint, end: number | bigint) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>            : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >100 : 100
@@ -180,8 +180,8 @@ new Intl.NumberFormat('en-GB').formatRange(10, 100);
 new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
 >new Intl.NumberFormat('en-GB').formatRange(10n, 1000n) : string
 >                                                       : ^^^^^^
->new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint, end: number | bigint) => string
->                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>                                           : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -192,8 +192,8 @@ new Intl.NumberFormat('en-GB').formatRange(10n, 1000n);
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
->formatRange : (start: number | bigint, end: number | bigint) => string
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>            : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
 >10n : 10n
 >    : ^^^
 >1000n : 1000n
@@ -204,8 +204,8 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
 >                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000) : Intl.NumberRangeFormatPart[]
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -216,8 +216,8 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10, 1000)[0];
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
->formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 >1000 : 1000
@@ -230,8 +230,8 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 >                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n) : Intl.NumberRangeFormatPart[]
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new Intl.NumberFormat('en-GB') : Intl.NumberFormat
 >                               : ^^^^^^^^^^^^^^^^^
 >Intl.NumberFormat : Intl.NumberFormatConstructor
@@ -242,12 +242,137 @@ new Intl.NumberFormat('en-GB').formatRangeToParts(10n, 1000n)[0];
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en-GB' : "en-GB"
 >        : ^^^^^^^
->formatRangeToParts : (start: number | bigint, end: number | bigint) => Intl.NumberRangeFormatPart[]
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >10n : 10n
 >    : ^^^
 >1000n : 1000n
 >      : ^^^^^
 >0 : 0
 >  : ^
+
+// Arbitrary-precision string arguments
+new Intl.NumberFormat('en-GB').format('-12.3E-4');
+>new Intl.NumberFormat('en-GB').format('-12.3E-4') : string
+>                                                  : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>'-12.3E-4' : "-12.3E-4"
+>           : ^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8');
+>new Intl.NumberFormat('en-GB').formatRange('123.4', '567.8') : string
+>                                                             : ^^^^^^
+>new Intl.NumberFormat('en-GB').formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>                                           : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRange : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => string
+>            : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^
+>'123.4' : "123.4"
+>        : ^^^^^^^
+>'567.8' : "567.8"
+>        : ^^^^^^^
+
+new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
+>new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8') : Intl.NumberRangeFormatPart[]
+>                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB').formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                                                  : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>formatRangeToParts : (start: number | bigint | StringNumericLiteral, end: number | bigint | StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                                      ^^   ^^                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'123E-4' : "123E-4"
+>         : ^^^^^^^^
+>'567E8' : "567E8"
+>        : ^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('Infinity');
+>new Intl.NumberFormat('en-GB').format('Infinity') : string
+>                                                  : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>'Infinity' : "Infinity"
+>           : ^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('-Infinity');
+>new Intl.NumberFormat('en-GB').format('-Infinity') : string
+>                                                   : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>'-Infinity' : "-Infinity"
+>            : ^^^^^^^^^^^
+
+new Intl.NumberFormat('en-GB').format('+Infinity');
+>new Intl.NumberFormat('en-GB').format('+Infinity') : string
+>                                                   : ^^^^^^
+>new Intl.NumberFormat('en-GB').format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>                                      : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>new Intl.NumberFormat('en-GB') : Intl.NumberFormat
+>                               : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'en-GB' : "en-GB"
+>        : ^^^^^^^
+>format : { (value: number): string; (value: number | bigint): string; (value: number | bigint | StringNumericLiteral): string; }
+>       : ^^^     ^^      ^^^^^^^^^^^^     ^^               ^^^^^^^^^^^^     ^^                                      ^^^^^^^^^^^^
+>'+Infinity' : "+Infinity"
+>            : ^^^^^^^^^^^
 

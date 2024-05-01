@@ -5,7 +5,7 @@
 
 export function main(a: string[] | undefined) {
 >main : (a: string[] | undefined) => void
->     : ^^^^                    ^^^^^^^^^
+>     : ^ ^^                    ^^^^^^^^^
 >a : string[] | undefined
 >  : ^^^^^^^^^^^^^^^^^^^^
 

@@ -37,13 +37,13 @@ y = x;
 
 declare function f<T, U>(x: Pair<T, U>);
 >f : <T, U>(x: Pair<T, U>) => any
->  : ^ ^^ ^^^^^          ^^^^^^^^
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >x : Pair<T, U>
 >  : ^^^^^^^^^^
 
 declare function f2<T, U>(x: { first: T; second: U; });
 >f2 : <T, U>(x: { first: T; second: U; }) => any
->   : ^ ^^ ^^^^^                        ^^^^^^^^
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >x : { first: T; second: U; }
 >  : ^^^^^^^^^ ^^^^^^^^^^ ^^^
 >first : T
@@ -54,28 +54,28 @@ declare function f2<T, U>(x: { first: T; second: U; });
 f(x);
 >f(x) : any
 >f : <T, U>(x: Pair<T, U>) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >x : Pair<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 f(y);
 >f(y) : any
 >f : <T, U>(x: Pair<T, U>) => any
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^          ^^^^^^^^
 >y : { first: string; second: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 f2(x);
 >f2(x) : any
 >f2 : <T, U>(x: { first: T; second: U; }) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >x : Pair<string, number>
 >  : ^^^^^^^^^^^^^^^^^^^^
 
 f2(y);
 >f2(y) : any
 >f2 : <T, U>(x: { first: T; second: U; }) => any
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^ ^^ ^^                        ^^^^^^^^
 >y : { first: string; second: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

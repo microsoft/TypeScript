@@ -124,7 +124,7 @@ class Cls2 { static b = "b" as const; }
 >    : ^^^
 
 declare const obj1: { c: 'c' }
->obj1 : { c: 'c'; }
+>obj1 : { c: "c"; }
 >     : ^^^^^   ^^^
 >c : "c"
 >  : ^^^

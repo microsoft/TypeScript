@@ -1,11 +1,10 @@
 //// [tests/cases/compiler/styledComponentsInstantiaionLimitNotReached.ts] ////
 
 === Performance Stats ===
-Identity cache: 200 / 200 (nearest 100)
-Assignability cache: 13,300 / 13,500 (nearest 100)
-Type Count: 27,300 / 27,600 (nearest 100)
-Instantiation count: 374,500 / 375,500 (nearest 500)
-Symbol count: 92,000 / 92,000 (nearest 500)
+Assignability cache: 10,000
+Type Count: 25,000
+Instantiation count: 250,000 -> 500,000
+Symbol count: 100,000
 
 === styledComponentsInstantiaionLimitNotReached.ts ===
 /// <reference path="react16.d.ts" />
@@ -448,7 +447,7 @@ export interface StyledComponentBase<
 
     withComponent<WithC extends AnyStyledComponent>(
 >withComponent : { <WithC extends AnyStyledComponent>(component: WithC): StyledComponent<StyledComponentInnerComponent<WithC>, T, O & StyledComponentInnerOtherProps<WithC>, A | StyledComponentInnerAttrs<WithC>>; <WithC_1 extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC_1): StyledComponent<WithC_1, T, O, A>; }
->              : ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                                                                                                                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^     ^^^                                                                                                                                         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         component: WithC,
 >component : WithC
@@ -462,7 +461,7 @@ export interface StyledComponentBase<
     >;
     withComponent<WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(
 >withComponent : { <WithC_1 extends AnyStyledComponent>(component: WithC_1): StyledComponent<StyledComponentInnerComponent<WithC_1>, T, O & StyledComponentInnerOtherProps<WithC_1>, A | StyledComponentInnerAttrs<WithC_1>>; <WithC extends keyof JSX.IntrinsicElements | React.ComponentType<any>>(component: WithC): StyledComponent<WithC, T, O, A>; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^                               ^^^
+>              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^     ^^^                               ^^^
 >JSX : any
 >    : ^^^
 >React : any

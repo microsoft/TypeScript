@@ -54,7 +54,7 @@ var unused3 = { b: 1, ...abq }
 
 function g(obj: { x: number | undefined }) {
 >g : (obj: { x: number | undefined; }) => { x: number | undefined; }
->  : ^^^^^^                          ^^^^^^^^^^                  ^^^
+>  : ^   ^^                          ^^^^^^^^^^                  ^^^
 >obj : { x: number | undefined; }
 >    : ^^^^^                  ^^^
 >x : number
@@ -72,7 +72,7 @@ function g(obj: { x: number | undefined }) {
 }
 function h(obj: { x: number }) {
 >h : (obj: { x: number; }) => { x: number; }
->  : ^^^^^^              ^^^^^^^^^^      ^^^
+>  : ^   ^^              ^^^^^^^^^^      ^^^
 >obj : { x: number; }
 >    : ^^^^^      ^^^
 >x : number

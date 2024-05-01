@@ -31,16 +31,16 @@ if (value.foo !== null) {
     value.foo.toExponential()
 >value.foo.toExponential() : string
 >                          : ^^^^^^
->value.foo.toExponential : (fractionDigits?: number | undefined) => string
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value.foo.toExponential : (fractionDigits?: number) => string
+>                        : ^              ^^^      ^^^^^^^^^^^
 >value.foo : number
 >          : ^^^^^^
 >value : A
 >      : ^
 >foo : number
 >    : ^^^^^^
->toExponential : (fractionDigits?: number | undefined) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toExponential : (fractionDigits?: number) => string
+>              : ^              ^^^      ^^^^^^^^^^^
 
     value.other // should still be number | null
 >value.other : number | null

@@ -68,7 +68,7 @@ function f1() {
 
 function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 >f2 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
->   : ^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : YesNo
 >  : ^^^^^
 >b : UnknownYesNo
@@ -103,7 +103,7 @@ function f2(a: YesNo, b: UnknownYesNo, c: Choice) {
 
 function f3(a: Choice.Yes, b: YesNo) {
 >f3 : (a: Choice.Yes, b: YesNo) => void
->   : ^^^^          ^^^^^     ^^^^^^^^^
+>   : ^ ^^          ^^ ^^     ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >Choice : any
@@ -298,7 +298,7 @@ function f3(a: Choice.Yes, b: YesNo) {
 
 function f4(a: Choice.Yes, b: YesNo) {
 >f4 : (a: Choice.Yes, b: YesNo) => void
->   : ^^^^          ^^^^^     ^^^^^^^^^
+>   : ^ ^^          ^^ ^^     ^^^^^^^^^
 >a : Choice.Yes
 >  : ^^^^^^^^^^
 >Choice : any
@@ -321,7 +321,7 @@ function f4(a: Choice.Yes, b: YesNo) {
 
 declare function g(x: Choice.Yes): string;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^          ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^      ^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >x : Choice.Yes
 >  : ^^^^^^^^^^
 >Choice : any
@@ -329,7 +329,7 @@ declare function g(x: Choice.Yes): string;
 
 declare function g(x: Choice.No): boolean;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^       ^^^ ^^      ^^^^^^^^^^^^
 >x : Choice.No
 >  : ^^^^^^^^^
 >Choice : any
@@ -337,13 +337,13 @@ declare function g(x: Choice.No): boolean;
 
 declare function g(x: Choice): number;
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^      ^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^      ^^^
 >x : Choice
 >  : ^^^^^^
 
 function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >f5 : (a: YesNo, b: UnknownYesNo, c: Choice) => void
->   : ^^^^     ^^^^^            ^^^^^      ^^^^^^^^^
+>   : ^ ^^     ^^ ^^            ^^ ^^      ^^^^^^^^^
 >a : YesNo
 >  : ^^^^^
 >b : UnknownYesNo
@@ -357,7 +357,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >g(Choice.Yes) : string
 >              : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >Choice.Yes : Choice.Yes
 >           : ^^^^^^^^^^
 >Choice : typeof Choice
@@ -371,7 +371,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >g(Choice.No) : boolean
 >             : ^^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >Choice.No : Choice.No
 >          : ^^^^^^^^^
 >Choice : typeof Choice
@@ -385,7 +385,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >g(a) : number
 >     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >a : YesNo
 >  : ^^^^^
 
@@ -395,7 +395,7 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >g(b) : number
 >     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >b : UnknownYesNo
 >  : ^^^^^^^^^^^^
 
@@ -405,14 +405,14 @@ function f5(a: YesNo, b: UnknownYesNo, c: Choice) {
 >g(c) : number
 >     : ^^^^^^
 >g : { (x: Choice.Yes): string; (x: Choice.No): boolean; (x: Choice): number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^ ^^          ^^^^^^^^^^^^ ^^         ^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >c : Choice
 >  : ^^^^^^
 }
 
 function assertNever(x: never): never {
 >assertNever : (x: never) => never
->            : ^^^^     ^^^^^     
+>            : ^ ^^     ^^^^^     
 >x : never
 >  : ^^^^^
 
@@ -427,7 +427,7 @@ function assertNever(x: never): never {
 
 function f10(x: YesNo) {
 >f10 : (x: YesNo) => "true" | "false"
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^
 >x : YesNo
 >  : ^^^^^
 
@@ -459,7 +459,7 @@ function f10(x: YesNo) {
 
 function f11(x: YesNo) {
 >f11 : (x: YesNo) => "true" | "false"
->    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^     ^^^^^^^^^^^^^^^^^^^^^
 >x : YesNo
 >  : ^^^^^
 
@@ -491,14 +491,14 @@ function f11(x: YesNo) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 }
 
 function f12(x: UnknownYesNo) {
 >f12 : (x: UnknownYesNo) => void
->    : ^^^^            ^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >x : UnknownYesNo
 >  : ^^^^^^^^^^^^
 
@@ -519,7 +519,7 @@ function f12(x: UnknownYesNo) {
 
 function f13(x: UnknownYesNo) {
 >f13 : (x: UnknownYesNo) => void
->    : ^^^^            ^^^^^^^^^
+>    : ^ ^^            ^^^^^^^^^
 >x : UnknownYesNo
 >  : ^^^^^^^^^^^^
 
@@ -568,7 +568,7 @@ type Item =
 
 function f20(x: Item) {
 >f20 : (x: Item) => string
->    : ^^^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -612,7 +612,7 @@ function f20(x: Item) {
 
 function f21(x: Item) {
 >f21 : (x: Item) => string
->    : ^^^^    ^^^^^^^^^^^
+>    : ^ ^^    ^^^^^^^^^^^
 >x : Item
 >  : ^^^^
 
@@ -656,7 +656,7 @@ function f21(x: Item) {
 >assertNever(x) : never
 >               : ^^^^^
 >assertNever : (x: never) => never
->            : ^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^     ^^^^^^^^^^
 >x : never
 >  : ^^^^^
 }

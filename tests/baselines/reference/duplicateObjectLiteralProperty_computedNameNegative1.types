@@ -5,7 +5,7 @@
 
 function bar(props: { x?: string; y?: string }) {
 >bar : (props: { x?: string; y?: string; }) => { [x: string]: number; }
->    : ^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : { x?: string; y?: string; }
 >      : ^^^^^^      ^^^^^^      ^^^
 >x : string | undefined
@@ -50,7 +50,7 @@ function bar(props: { x?: string; y?: string }) {
 
 function foo({ x = "", y = "" }: { x?: string; y?: string }) {
 >foo : ({ x, y }: { x?: string; y?: string; }) => { [x: string]: number; }
->    : ^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^        ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""

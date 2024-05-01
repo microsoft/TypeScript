@@ -13,21 +13,21 @@ declare module D_M {
     // No implicit-'any' errors.
     function dm_f2(x): void;
 >dm_f2 : (x: any) => void
->      : ^^^^^^^^^^^^    
+>      : ^ ^^^^^^^^^^    
 >x : any
 >  : ^^^
 
     // No implicit-'any' errors.
     function dm_f3(x: any): void;
 >dm_f3 : (x: any) => void
->      : ^^^^   ^^^^^    
+>      : ^ ^^   ^^^^^    
 >x : any
 >  : ^^^
 
     // No implicit-'any' errors.
     function dm_f4(x, y, z): void;
 >dm_f4 : (x: any, y: any, z: any) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^    
 >x : any
 >  : ^^^
 >y : any
@@ -38,7 +38,7 @@ declare module D_M {
     // No implicit-'any' errors.
     function dm_f5(x, y: any, z): void;
 >dm_f5 : (x: any, y: any, z: any) => void
->      : ^^^^^^^^^^^^   ^^^^^^^^^^^^^    
+>      : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^    
 >x : any
 >  : ^^^
 >y : any
@@ -49,14 +49,14 @@ declare module D_M {
     // No implicit-'any' errors.
     function dm_f6(...r): void;
 >dm_f6 : (...r: any[]) => void
->      : ^^^^^^^^^^^^^^^^^    
+>      : ^^^^ ^^^^^^^^^^^^    
 >r : any[]
 >  : ^^^^^
 
     // No implicit-'any' errors.
     function dm_f7(x, ...r): void;
 >dm_f7 : (x: any, ...r: any[]) => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^    
+>      : ^ ^^^^^^^^^^ ^^^^^^^^^^^^    
 >x : any
 >  : ^^^
 >r : any[]
@@ -65,7 +65,7 @@ declare module D_M {
     // No implicit-'any' errors.
     function dm_f8(x1, y1: number): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^^^^^^^^^^^^^^      ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^   ^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^^^^^^^
 >x1 : any
 >   : ^^^
 >y1 : number
@@ -73,7 +73,7 @@ declare module D_M {
 
     function dm_f8(x2: string, y2): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^   ^^^  ^^^^^^^  ^^^^^^^^^^^^^^
 >x2 : string
 >   : ^^^^^^
 >y2 : any
@@ -81,7 +81,7 @@ declare module D_M {
 
     function dm_f8(x3, y3): any;
 >dm_f8 : { (x1: any, y1: number): any; (x2: string, y2: any): any; (x3: any, y3: any): any; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
+>      : ^^^  ^^^^^^^  ^^      ^^^^^^^^^  ^^      ^^  ^^^^^^^^^^^^^^  ^^^^^^^  ^^^^^^^^   ^^^
 >x3 : any
 >   : ^^^
 >y3 : any
@@ -95,14 +95,14 @@ declare module D_M {
     // No implicit-'any' errors.
     var dm_f10: (x) => string;
 >dm_f10 : (x: any) => string
->       : ^^^^^^^^^^^^      
+>       : ^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 
     // No implicit-'any' errors.
     var dm_f11: (x, y, z) => string;
 >dm_f11 : (x: any, y: any, z: any) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>       : ^ ^^^^^^^ ^^^^^^^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 >y : any
@@ -113,7 +113,7 @@ declare module D_M {
     // No implicit-'any' errors.
     var dm_f12: (x, y: any, z) => string;
 >dm_f12 : (x: any, y: any, z: any) => string
->       : ^^^^^^^^^^^^   ^^^^^^^^^^^^^      
+>       : ^ ^^^^^^^ ^^   ^^ ^^^^^^^^^^      
 >x : any
 >  : ^^^
 >y : any
@@ -124,14 +124,14 @@ declare module D_M {
     // No implicit-'any' errors.
     var dm_f13: (...r) => string;
 >dm_f13 : (...r: any[]) => string
->       : ^^^^^^^^^^^^^^^^^      
+>       : ^^^^ ^^^^^^^^^^^^      
 >r : any[]
 >  : ^^^^^
 
     // No implicit-'any' errors.
     var dm_f14: (x, ...r) => string;
 >dm_f14 : (x: any, ...r: any[]) => string
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^      
+>       : ^ ^^^^^^^^^^ ^^^^^^^^^^^^      
 >x : any
 >  : ^^^
 >r : any[]

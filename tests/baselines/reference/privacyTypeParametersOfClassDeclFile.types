@@ -17,7 +17,7 @@ export class publicClassWithPrivateTypeParameters<T extends privateClass> { // E
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -33,7 +33,7 @@ export class publicClassWithPublicTypeParameters<T extends publicClass> {
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -49,7 +49,7 @@ class privateClassWithPrivateTypeParameters<T extends privateClass> {
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -65,7 +65,7 @@ class privateClassWithPublicTypeParameters<T extends publicClass> {
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -81,7 +81,7 @@ export class publicClassWithPublicTypeParametersWithoutExtends<T> {
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -97,7 +97,7 @@ class privateClassWithPublicTypeParametersWithoutExtends<T> {
 
     myMethod(val: T): T { 
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -115,7 +115,7 @@ export class publicClassWithTypeParametersFromPrivateModule<T extends privateMod
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -133,7 +133,7 @@ class privateClassWithTypeParametersFromPrivateModule<T extends privateModule.pu
 
     myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -163,7 +163,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -179,7 +179,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -195,7 +195,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -211,7 +211,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -227,7 +227,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -243,7 +243,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -261,7 +261,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -279,7 +279,7 @@ export module publicModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -310,7 +310,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -326,7 +326,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -342,7 +342,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -358,7 +358,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -374,7 +374,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 
@@ -390,7 +390,7 @@ module privateModule {
 
         myMethod(val: T): T {
 >myMethod : (val: T) => T
->         : ^^^^^^ ^^^^^ 
+>         : ^   ^^ ^^^^^ 
 >val : T
 >    : ^
 

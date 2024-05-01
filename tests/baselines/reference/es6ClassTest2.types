@@ -15,7 +15,7 @@ class BasicMonster {
 
     attack(target) {
 >attack : (target: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^^^^^^
 >target : any
 
       // WScript.Echo("Attacks " + target);
@@ -56,11 +56,11 @@ m1.attack(m2);
 >m1.attack(m2) : void
 >              : ^^^^
 >m1.attack : (target: any) => void
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^^^^^^^^^^^^^
 >m1 : BasicMonster
 >   : ^^^^^^^^^^^^
 >attack : (target: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^^^^^^
 >m2 : BasicMonster
 >   : ^^^^^^^^^^^^
 
@@ -80,11 +80,11 @@ console.log((<any>m5.isAlive).toString());
 >console.log((<any>m5.isAlive).toString()) : void
 >                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >(<any>m5.isAlive).toString() : any
 >(<any>m5.isAlive).toString : any
 >(<any>m5.isAlive) : any
@@ -113,7 +113,7 @@ class GetSetMonster {
 
     attack(target) {
 >attack : (target: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^^^^^^
 >target : any
 
       // WScript.Echo("Attacks " + target);
@@ -203,11 +203,11 @@ m3.attack(m4);
 >m3.attack(m4) : void
 >              : ^^^^
 >m3.attack : (target: any) => void
->          : ^^^^^^^^^^^^^^^^^^^^^
+>          : ^      ^^^^^^^^^^^^^^
 >m3 : BasicMonster
 >   : ^^^^^^^^^^^^
 >attack : (target: any) => void
->       : ^^^^^^^^^^^^^^^^^^^^^
+>       : ^      ^^^^^^^^^^^^^^
 >m4 : BasicMonster
 >   : ^^^^^^^^^^^^
 
@@ -257,16 +257,16 @@ class OverloadedMonster {
 
     attack();
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 
     attack(a: any);
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^^^^   ^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >a : any
 
     attack(target?) {
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >target : any
 
         //WScript.Echo("Attacks " + target);
@@ -302,11 +302,11 @@ var m6 = new OverloadedMonster("2");
 m5.attack(m6);
 >m5.attack(m6) : any
 >m5.attack : { (): any; (a: any): any; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m5 : OverloadedMonster
 >   : ^^^^^^^^^^^^^^^^^
 >attack : { (): any; (a: any): any; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >m6 : OverloadedMonster
 >   : ^^^^^^^^^^^^^^^^^
 
@@ -348,7 +348,7 @@ class SplatMonster {
 
     roar(name: string, ...args: number[]) { }
 >roar : (name: string, ...args: number[]) => void
->     : ^^^^^^^      ^^^^^^^^^^^        ^^^^^^^^^
+>     : ^    ^^      ^^^^^    ^^        ^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >args : number[]
@@ -397,7 +397,7 @@ class SuperParent {
 
     b(b: string) {
 >b : (b: string) => void
->  : ^^^^      ^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
@@ -434,11 +434,11 @@ class SuperChild extends SuperParent {
 >super.b('str') : void
 >               : ^^^^
 >super.b : (b: string) => void
->        : ^^^^^^^^^^^^^^^^^^^
+>        : ^ ^^      ^^^^^^^^^
 >super : SuperParent
 >      : ^^^^^^^^^^^
 >b : (b: string) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^
 >'str' : "str"
 >      : ^^^^^
     }

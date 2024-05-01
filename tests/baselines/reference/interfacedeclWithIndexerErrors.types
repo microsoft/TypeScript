@@ -42,7 +42,7 @@ interface a0 {
 
     p5: (s: number) =>string;
 >p5 : (s: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >s : number
 >  : ^^^^^^
 
@@ -56,13 +56,13 @@ interface a0 {
 
     f3(a: string): number;
 >f3 : (a: string) => number
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
 
     f4? (s: number): string;
 >f4 : (s: number) => string
->   : ^^^^      ^^^^^      
+>   : ^ ^^      ^^^^^      
 >s : number
 >  : ^^^^^^
 }

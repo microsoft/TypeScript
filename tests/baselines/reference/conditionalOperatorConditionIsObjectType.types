@@ -122,9 +122,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >((a: string) => a.length) ? exprAny1 : exprAny2 : any
 >                                                : ^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -142,9 +142,9 @@ condObject ? exprString1 : exprBoolean1; // union
 >((a: string) => a.length) ? exprBoolean1 : exprBoolean2 : boolean
 >                                                        : ^^^^^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -390,9 +390,9 @@ var resultIsAny2 = ((a: string) => a.length) ? exprAny1 : exprAny2;
 >((a: string) => a.length) ? exprAny1 : exprAny2 : any
 >                                                : ^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number
@@ -412,9 +412,9 @@ var resultIsBoolean2 = ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
 >((a: string) => a.length) ? exprBoolean1 : exprBoolean2 : boolean
 >                                                        : ^^^^^^^
 >((a: string) => a.length) : (a: string) => number
->                          : ^^^^      ^^^^^^^^^^^
+>                          : ^ ^^      ^^^^^^^^^^^
 >(a: string) => a.length : (a: string) => number
->                        : ^^^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >a.length : number

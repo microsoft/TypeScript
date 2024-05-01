@@ -3,7 +3,7 @@
 === genericUnboundedTypeParamAssignability.ts ===
 function f1<T>(o: T) {
 >f1 : <T>(o: T) => void
->   : ^ ^^^^^ ^^^^^^^^^
+>   : ^ ^^ ^^ ^^^^^^^^^
 >o : T
 >  : ^
 
@@ -20,7 +20,7 @@ function f1<T>(o: T) {
 
 function f2<T extends {}>(o: T) {
 >f2 : <T extends {}>(o: T) => void
->   : ^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >o : T
 >  : ^
 
@@ -37,7 +37,7 @@ function f2<T extends {}>(o: T) {
 
 function f3<T extends Record<string, any>>(o: T) {
 >f3 : <T extends Record<string, any>>(o: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
 >o : T
 >  : ^
 
@@ -54,7 +54,7 @@ function f3<T extends Record<string, any>>(o: T) {
 
 function user<T>(t: T) {
 >user : <T>(t: T) => void
->     : ^ ^^^^^ ^^^^^^^^^
+>     : ^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -62,7 +62,7 @@ function user<T>(t: T) {
 >f1(t) : void
 >      : ^^^^
 >f1 : <T_1>(o: T_1) => void
->   : ^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^ ^^   ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -70,7 +70,7 @@ function user<T>(t: T) {
 >f2(t) : void
 >      : ^^^^
 >f2 : <T_1 extends {}>(o: T_1) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -78,7 +78,7 @@ function user<T>(t: T) {
 >f3(t) : void
 >      : ^^^^
 >f3 : <T_1 extends Record<string, any>>(o: T_1) => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >t : T
 >  : ^
 

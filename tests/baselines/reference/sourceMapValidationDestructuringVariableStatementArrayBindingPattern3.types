@@ -3,11 +3,11 @@
 === sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.ts ===
 declare var console: {
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^   ^^^    ^^^
+>        : ^^^^^^   ^^   ^^^    ^^^
 
     log(msg: any): void;
 >log : (msg: any) => void
->    : ^^^^^^   ^^^^^    
+>    : ^   ^^   ^^^^^    
 >msg : any
 }
 type Robot = [number, string, string];
@@ -484,11 +484,11 @@ if (nameA == nameB) {
 >console.log(skillB) : void
 >                    : ^^^^
 >console.log : (msg: any) => void
->            : ^^^^^^^^^^^^^^^^^^
+>            : ^   ^^   ^^^^^^^^^
 >console : { log(msg: any): void; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^   ^^   ^^^^^^^^^^
 >log : (msg: any) => void
->    : ^^^^^^^^^^^^^^^^^^
+>    : ^   ^^   ^^^^^^^^^
 >skillB : string
 >       : ^^^^^^
 }

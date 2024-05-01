@@ -33,9 +33,9 @@ const f3 = async function * yield() {
 === awaitParameterIsError.ts ===
 const f4 = async function * (await) {
 >f4 : (await: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (await) {} : (await: any) => AsyncGenerator<never, void, unknown>
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >await : any
 >      : ^^^
 
@@ -43,9 +43,9 @@ const f4 = async function * (await) {
 === yieldParameterIsError.ts ===
 const f5 = async function * (yield) {
 >f5 : (yield: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (yield) {} : (yield: any) => AsyncGenerator<never, void, unknown>
->                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield : any
 >      : ^^^
 
@@ -53,9 +53,9 @@ const f5 = async function * (yield) {
 === awaitInParameterInitializerIsError.ts ===
 const f6 = async function * (a = await 1) {
 >f6 : (a?: number) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (a = await 1) {} : (a?: number) => AsyncGenerator<never, void, unknown>
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >await 1 : 1
@@ -67,9 +67,9 @@ const f6 = async function * (a = await 1) {
 === yieldInParameterInitializerIsError.ts ===
 const f7 = async function * (a = yield) {
 >f7 : (a?: any) => AsyncGenerator<never, void, unknown>
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async function * (a = yield) {} : (a?: any) => AsyncGenerator<never, void, unknown>
->                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >yield : any

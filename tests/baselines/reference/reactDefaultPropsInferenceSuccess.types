@@ -1,12 +1,10 @@
 //// [tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx] ////
 
 === Performance Stats ===
-Subtype cache: 100 / 100 (nearest 100)
-Identity cache: 200 / 200 (nearest 100)
-Assignability cache: 2,500 / 2,500 (nearest 100)
-Type Count: 8,600 / 8,600 (nearest 100)
-Instantiation count: 93,000 / 93,000 (nearest 500)
-Symbol count: 67,500 / 67,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 100,000
+Symbol count: 50,000
 
 === reactDefaultPropsInferenceSuccess.tsx ===
 /// <reference path="react16.d.ts" />
@@ -18,7 +16,7 @@ import React from 'react';
 interface BaseProps {
   when?: ((value: string) => boolean) | "a" | "b";
 >when : "a" | "b" | ((value: string) => boolean) | undefined
->     : ^^^^^^^^^^^^^^^^^^^^^      ^^^^^       ^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -81,9 +79,9 @@ const Test1 = () => <FieldFeedback when={value => !!value} />;
 >FieldFeedback : typeof FieldFeedback
 >              : ^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^^^^
 >value => !!value : (value: string) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >!!value : boolean
@@ -104,19 +102,19 @@ const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 >FieldFeedback : typeof FieldFeedback
 >              : ^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^
 >value => console.log(value) : (value: string) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 
@@ -171,9 +169,9 @@ const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</Field
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^^^^
 >value => !!value : (value: string) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >!!value : boolean
@@ -198,19 +196,19 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 >FieldFeedbackBeta : typeof FieldFeedbackBeta
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^
 >value => console.log(value) : (value: string) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >error : true
@@ -221,7 +219,7 @@ const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error
 interface MyPropsProps extends Props {
   when: (value: string) => boolean;
 >when : (value: string) => boolean
->     : ^^^^^^^^      ^^^^^       
+>     : ^     ^^      ^^^^^       
 >value : string
 >      : ^^^^^^
 }
@@ -289,9 +287,9 @@ const Test3 = () => <FieldFeedback2 when={value => !!value} />;
 >FieldFeedback2 : typeof FieldFeedback2
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^^^^
 >value => !!value : (value: string) => boolean
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^     ^^^^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >!!value : boolean
@@ -312,19 +310,19 @@ const Test4 = () => <FieldFeedback2 when={value => console.log(value)} />;
 >FieldFeedback2 : typeof FieldFeedback2
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >when : (value: string) => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^     ^^^^^^^^^^^^^^^^^
 >value => console.log(value) : (value: string) => void
->                            : ^^^^^^^^^^^^^^^^^^^^^^^
+>                            : ^     ^^^^^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 >console.log(value) : void
 >                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >value : string
 >      : ^^^^^^
 

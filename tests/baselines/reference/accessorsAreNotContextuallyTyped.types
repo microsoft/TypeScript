@@ -9,20 +9,20 @@ class C {
 
     set x(v: (a: string) => string) {
 >x : (a: string) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >v : (a: string) => string
->  : ^^^^      ^^^^^      
+>  : ^ ^^      ^^^^^      
 >a : string
 >  : ^^^^^^
     }
 
     get x() {
 >x : (a: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 
         return (x: string) => "";
 >(x: string) => "" : (x: string) => string
->                  : ^^^^      ^^^^^^^^^^^
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >"" : ""
@@ -40,11 +40,11 @@ var r = c.x(''); // string
 >c.x('') : string
 >        : ^^^^^^
 >c.x : (a: string) => string
->    : ^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^^^^^^^
 >c : C
 >  : ^
 >x : (a: string) => string
->  : ^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^      ^^^^^^^^^^^
 >'' : ""
 >   : ^^
 

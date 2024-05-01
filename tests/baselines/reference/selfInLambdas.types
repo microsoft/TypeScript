@@ -18,7 +18,7 @@ declare var window: Window;
 interface Window {
     onmousemove: (ev: MouseEvent) => any;
 >onmousemove : (ev: MouseEvent) => any
->            : ^^^^^          ^^^^^   
+>            : ^  ^^          ^^^^^   
 >ev : MouseEvent
 >   : ^^^^^^^^^^
     
@@ -45,11 +45,11 @@ var o = {
 >window.onmousemove = () => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                                       : ^^^^^^^^^^
 >window.onmousemove : (ev: MouseEvent) => any
->                   : ^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^  ^^          ^^^^^^^^
 >window : Window
 >       : ^^^^^^
 >onmousemove : (ev: MouseEvent) => any
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^          ^^^^^^^^
 >() => {            this.counter++            var f = () => this.counter;        } : () => void
 >                                                                                  : ^^^^^^^^^^
 

@@ -42,7 +42,7 @@ namespace Test1 {
 
     let a2: Color.Red["toString"];
 >a2 : (radix?: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^      ^^^^^^^^^^^
 >Color : any
 >      : ^^^
 
@@ -54,7 +54,7 @@ namespace Test1 {
     //let b2: (typeof Color).Red["toString"];
     let b3: (typeof Color)["Red"]["toString"];
 >b3 : (radix?: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^      ^^^^^^^^^^^
 >Color : typeof Color
 >      : ^^^^^^^^^^^^
 
@@ -92,5 +92,5 @@ namespace Test1 {
 
     let d3: C2["Red"]["toString"];
 >d3 : (radix?: number) => string
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^^      ^^^^^^^^^^^
 }

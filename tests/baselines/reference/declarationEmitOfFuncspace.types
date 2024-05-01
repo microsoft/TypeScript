@@ -4,7 +4,7 @@
 // #27032
 function ExpandoMerge(n: number) {
 >ExpandoMerge : (n: number) => number
->             : ^^^^      ^^^^^^^^^^^
+>             : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 

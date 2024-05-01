@@ -7,7 +7,7 @@ class IFoo<T> {
 
     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -21,7 +21,7 @@ class IntFooBad implements IFoo<number> {
 
     foo<string>(x: string): string { return null; }
 >foo : <string>(x: string) => string
->    : ^^^^^^^^^^^^      ^^^^^      
+>    : ^^^^^^^^^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 }
@@ -32,7 +32,7 @@ class StringFoo2 implements IFoo<string> {
 
     foo<string>(x: string): string { return null; }
 >foo : <string>(x: string) => string
->    : ^^^^^^^^^^^^      ^^^^^      
+>    : ^^^^^^^^^ ^^      ^^^^^      
 >x : string
 >  : ^^^^^^
 }
@@ -43,7 +43,7 @@ class StringFoo3 implements IFoo<string> {
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->    : ^ ^^^^^ ^^^^^ 
+>    : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }

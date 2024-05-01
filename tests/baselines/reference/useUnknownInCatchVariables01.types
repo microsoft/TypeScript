@@ -53,11 +53,11 @@ catch (e) {
 >console.log(e.toUpperCase()) : void
 >                             : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >e.toUpperCase() : string
 >                : ^^^^^^
 >e.toUpperCase : () => string
@@ -103,11 +103,11 @@ catch (e) {
 >e.toExponential() : string
 >                  : ^^^^^^
 >e.toExponential : (fractionDigits?: number) => string
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^              ^^^      ^^^^^^^^^^^
 >e : number
 >  : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^^^^^^^
 
         e++;
 >e++ : number

@@ -8,7 +8,7 @@
  */
 function foo(𝑚, 𝑀) {
 >foo : (𝑚: number, 𝑀: number) => void
->    : ^^^^^      ^^^^^^      ^^^^^^^^^
+>    : ^  ^^      ^^  ^^      ^^^^^^^^^
 >𝑚 : number
 >   : ^^^^^^
 >𝑀 : number
@@ -18,11 +18,11 @@ function foo(𝑚, 𝑀) {
 >console.log(𝑀 + 𝑚) : void
 >                     : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >𝑀 + 𝑚 : number
 >        : ^^^^^^
 >𝑀 : number

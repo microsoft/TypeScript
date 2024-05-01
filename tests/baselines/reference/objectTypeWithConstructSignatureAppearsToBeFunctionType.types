@@ -29,17 +29,17 @@ var r2b: number = new i();
 
 var r2c: (x: any, y?: any) => any = i.apply;
 >r2c : (x: any, y?: any) => any
->    : ^^^^   ^^^^^^   ^^^^^   
+>    : ^ ^^   ^^ ^^^   ^^^^^   
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 >i.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >i : I
 >  : ^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 
 var b: {
 >b : new () => number
@@ -66,15 +66,15 @@ var r4b: number = new b();
 
 var r4c: (x: any, y?: any) => any = b.apply;
 >r4c : (x: any, y?: any) => any
->    : ^^^^   ^^^^^^   ^^^^^   
+>    : ^ ^^   ^^ ^^^   ^^^^^   
 >x : any
 >  : ^^^
 >y : any
 >  : ^^^
 >b.apply : (this: Function, thisArg: any, argArray?: any) => any
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 >b : new () => number
 >  : ^^^^^^^^^^^^^^^^
 >apply : (this: Function, thisArg: any, argArray?: any) => any
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^    ^^        ^^       ^^   ^^        ^^^   ^^^^^^^^
 

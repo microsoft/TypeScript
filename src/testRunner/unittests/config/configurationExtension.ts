@@ -186,7 +186,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 "dev/configs/third.json": jsonToReadableText({
                     extends: "./second",
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                     },
                     include: ["../supplemental.*"],
                 }),
@@ -195,7 +195,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     compilerOptions: {
                         module: "system",
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/fifth.json": jsonToReadableText({
@@ -228,7 +228,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                 }),
                 "dev/configs/extendsArrayThird.json": jsonToReadableText({
                     compilerOptions: {
-                        module: null, // eslint-disable-line no-null/no-null
+                        module: null, // eslint-disable-line no-restricted-syntax
                         noImplicitAny: false,
                     },
                     extends: "./extendsArrayFirst",
@@ -239,7 +239,7 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                         module: "system",
                         strictNullChecks: false,
                     },
-                    include: null, // eslint-disable-line no-null/no-null
+                    include: null, // eslint-disable-line no-restricted-syntax
                     files: ["../main.ts"],
                 }),
                 "dev/configs/extendsArrayFifth.json": jsonToReadableText({
@@ -253,6 +253,46 @@ function createFileSystem(ignoreCase: boolean, cwd: string, root: string) {
                     },
                 }),
                 "dev/extendsArrayFails2.json": jsonToReadableText({ extends: [42] }),
+                "dev/configs/template.json": jsonToReadableText({
+                    include: ["${configDir}/../supplemental.*"], // eslint-disable-line no-template-curly-in-string
+                    files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string,
+                    compilerOptions: {
+                        declarationDir: "${configDir}/decls", // eslint-disable-line no-template-curly-in-string
+                        rootDirs: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+                        paths: {
+                            "something": ["${configDir}/something"], // eslint-disable-line no-template-curly-in-string
+                            "something/*": ["${configDir}/something/*"], // eslint-disable-line no-template-curly-in-string
+                            "other/*": ["./other/*"],
+                        },
+                    },
+                }),
+
+                "dev/configs/templateandextends.json": jsonToReadableText({
+                    extends: "./first/templateextends.json",
+                    compilerOptions: {
+                        strict: true,
+                        baseUrl: "./src",
+                    },
+                }),
+                "dev/configs/first/templateextends.json": jsonToReadableText({
+                    extends: "../second/templateextends.json",
+                    include: ["${configDir}/../supplemental.*"], // eslint-disable-line no-template-curly-in-string
+                    compilerOptions: {
+                        rootDirs: ["root1", "${configDir}/root2", "root3"], // eslint-disable-line no-template-curly-in-string
+                    },
+                }),
+                "dev/configs/second/templateextends.json": jsonToReadableText({
+                    files: ["${configDir}/main.ts"], // eslint-disable-line no-template-curly-in-string,
+                    compilerOptions: {
+                        outDir: "./insecond",
+                        declarationDir: "${configDir}/decls", // eslint-disable-line no-template-curly-in-string
+                        paths: {
+                            "something": ["${configDir}/something"], // eslint-disable-line no-template-curly-in-string
+                            "something/*": ["${configDir}/something/*"], // eslint-disable-line no-template-curly-in-string
+                            "other/*": ["./other/*"],
+                        },
+                    },
+                }),
             },
         },
     });
@@ -302,6 +342,9 @@ describe("unittests:: config:: configurationExtension", () => {
         baselineParsedCommandLine("can report missing configurations", "extendsArrayFails.json");
         baselineParsedCommandLine("can error when 'extends' is not a string or Array2", "extendsArrayFails2.json");
 
+        baselineParsedCommandLine("handle configDir template", "configs/template.json");
+        baselineParsedCommandLine("handle configDir template", "configs/templateandextends.json");
+
         baselineParseConfig({
             scenario: "configurationExtension",
             subScenario: testName,
@@ -317,7 +360,7 @@ describe("unittests:: config:: configurationExtension", () => {
                         baseline.push("CompilerOptions::");
                         baseline.push(jsonToReadableText(parsed.options));
                         baseline.push("FileNames::");
-                        baseline.push(parsed.fileNames.join());
+                        baseline.push(...parsed.fileNames);
                     },
                 })),
             skipFs: true,

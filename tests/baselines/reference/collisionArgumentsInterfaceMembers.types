@@ -47,7 +47,7 @@ interface i2NoError {
 interface i3 {
     foo(i: number, ...arguments); // no error - no code gen
 >foo : (i: number, ...arguments: any[]) => any
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -55,7 +55,7 @@ interface i3 {
 
     foo1(arguments: number, ...rest); // no error - no code gen
 >foo1 : (arguments: number, ...rest: any[]) => any
->     : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^         ^^      ^^^^^    ^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >rest : any[]
@@ -63,7 +63,7 @@ interface i3 {
 
     fooNoError(arguments: number);  // no error
 >fooNoError : (arguments: number) => any
->           : ^^^^^^^^^^^^      ^^^^^^^^
+>           : ^         ^^      ^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 }

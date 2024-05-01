@@ -32,7 +32,7 @@ type BB = {
 
 function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
 >foo : (x: A | B | C, A: AA, B: BB, AB: AA | BB) => void
->    : ^^^^         ^^^^^  ^^^^^  ^^^^^^       ^^^^^^^^^
+>    : ^ ^^         ^^ ^^  ^^ ^^  ^^  ^^       ^^^^^^^^^
 >x : A | B | C
 >  : ^^^^^^^^^
 >A : AA
@@ -97,7 +97,7 @@ function foo(x: A | B | C, A: AA, B: BB, AB: AA | BB) {
 
 function bar(target: any, Promise: any) {
 >bar : (target: any, Promise: any) => void
->    : ^^^^^^^^^   ^^^^^^^^^^^   ^^^^^^^^^
+>    : ^      ^^   ^^       ^^   ^^^^^^^^^
 >target : any
 >Promise : any
 
@@ -127,7 +127,7 @@ class PersonMixin extends Function {
 
     public check(o: any) {
 >check : (o: any) => o is Person
->      : ^^^^   ^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^^^^^^^^^^^^^^^
 >o : any
 
         return typeof o === "object" && o !== null && o instanceof Person;
@@ -171,11 +171,11 @@ class Person {
 >console.log("work") : void
 >                    : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"work" : "work"
 >       : ^^^^^^
 
@@ -185,11 +185,11 @@ class Person {
 >console.log("Hi") : void
 >                  : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Hi" : "Hi"
 >     : ^^^^
 }
@@ -204,18 +204,18 @@ class Car {
 >console.log("Wof Wof") : void
 >                       : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Wof Wof" : "Wof Wof"
 >          : ^^^^^^^^^
 }
 
 function test(o: Person | Car) {
 >test : (o: Person | Car) => void
->     : ^^^^            ^^^^^^^^^
+>     : ^ ^^            ^^^^^^^^^
 >o : Person | Car
 >  : ^^^^^^^^^^^^
 
@@ -231,11 +231,11 @@ function test(o: Person | Car) {
 >console.log("Is Person") : void
 >                         : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Is Person" : "Is Person"
 >            : ^^^^^^^^^^^
 
@@ -258,11 +258,11 @@ function test(o: Person | Car) {
 >console.log("Is Car") : void
 >                      : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^^^^^
 >"Is Car" : "Is Car"
 >         : ^^^^^^^^
 

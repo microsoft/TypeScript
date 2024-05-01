@@ -35,7 +35,7 @@ class BaseCollection<T extends Base> {
 
         (item: Thing) => { return [item.Components]; };
 >(item: Thing) => { return [item.Components]; } : (item: Thing) => ComponentCollection<any>[]
->                                               : ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : Thing
 >     : ^^^^^
 >[item.Components] : ComponentCollection<any>[]
@@ -72,7 +72,7 @@ class ComponentCollection<T> {
 
     private static sortComponents(p: Foo) {
 >sortComponents : (p: Foo) => GenericType<string>
->               : ^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Foo
 >  : ^^^
 

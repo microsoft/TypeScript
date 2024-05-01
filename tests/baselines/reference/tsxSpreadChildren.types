@@ -28,7 +28,7 @@ interface TodoListProps {
 }
 function Todo(prop: { key: number, todo: string }) {
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
->     : ^^^^^^^                              ^^^^^^^^^^^^^^^^
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >prop : { key: number; todo: string; }
 >     : ^^^^^^^      ^^^^^^^^      ^^^
 >key : number
@@ -46,7 +46,7 @@ function Todo(prop: { key: number, todo: string }) {
 >prop.key.toString() : string
 >                    : ^^^^^^
 >prop.key.toString : (radix?: number) => string
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^     ^^^      ^^^^^^^^^^^
 >prop.key : number
 >         : ^^^^^^
 >prop : { key: number; todo: string; }
@@ -54,7 +54,7 @@ function Todo(prop: { key: number, todo: string }) {
 >key : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^^^^^^^
 >prop.todo : string
 >          : ^^^^^^
 >prop : { key: number; todo: string; }
@@ -66,7 +66,7 @@ function Todo(prop: { key: number, todo: string }) {
 }
 function TodoList({ todos }: TodoListProps) {
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
->         : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 
@@ -80,19 +80,19 @@ function TodoList({ todos }: TodoListProps) {
 >todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>) : JSX.Element[]
 >                                                          : ^^^^^^^^^^^^^
 >todos.map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todos : TodoProp[]
 >      : ^^^^^^^^^^
 >map : <U>(callbackfn: (value: TodoProp, index: number, array: TodoProp[]) => U, thisArg?: any) => U[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >todo => <Todo key={todo.id} todo={todo.todo}/> : (todo: TodoProp) => JSX.Element
->                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                               : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >todo : TodoProp
 >     : ^^^^^^^^
 ><Todo key={todo.id} todo={todo.todo}/> : JSX.Element
 >                                       : ^^^^^^^^^^^
 >Todo : (prop: { key: number; todo: string; }) => JSX.Element
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^                              ^^^^^^^^^^^^^^^^
 >key : number
 >    : ^^^^^^
 >todo.id : number
@@ -122,7 +122,7 @@ let x: TodoListProps;
 ><TodoList {...x}/> : JSX.Element
 >                   : ^^^^^^^^^^^
 >TodoList : ({ todos }: TodoListProps) => JSX.Element
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^         ^^             ^^^^^^^^^^^^^^^^
 >x : TodoListProps
 >  : ^^^^^^^^^^^^^
 

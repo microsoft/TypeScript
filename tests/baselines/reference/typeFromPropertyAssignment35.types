@@ -4,7 +4,7 @@
 /** @param {Emu.D} x */
 function ollKorrect(x) {
 >ollKorrect : (x: D) => void
->           : ^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^^^^
 >x : D
 >  : ^
 

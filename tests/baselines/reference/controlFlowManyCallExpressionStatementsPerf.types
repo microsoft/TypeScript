@@ -3,7 +3,7 @@
 === controlFlowManyCallExpressionStatementsPerf.ts ===
 function test(x: boolean): boolean { return x; }
 >test : (x: boolean) => boolean
->     : ^^^^       ^^^^^       
+>     : ^ ^^       ^^^^^       
 >x : boolean
 >  : ^^^^^^^
 >x : boolean
@@ -23,7 +23,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -35,7 +35,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -47,7 +47,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -59,7 +59,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -71,7 +71,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -83,7 +83,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -95,7 +95,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -107,7 +107,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -119,7 +119,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -131,7 +131,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -143,7 +143,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -155,7 +155,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -167,7 +167,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -179,7 +179,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -191,7 +191,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -203,7 +203,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -215,7 +215,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -227,7 +227,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -239,7 +239,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -251,7 +251,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -263,7 +263,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -275,7 +275,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -287,7 +287,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -299,7 +299,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -311,7 +311,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -323,7 +323,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -335,7 +335,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -347,7 +347,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -359,7 +359,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -371,7 +371,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -383,7 +383,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -395,7 +395,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -407,7 +407,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -419,7 +419,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -431,7 +431,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -443,7 +443,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -455,7 +455,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -467,7 +467,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -479,7 +479,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -491,7 +491,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -503,7 +503,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -515,7 +515,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -527,7 +527,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -539,7 +539,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -551,7 +551,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -563,7 +563,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -575,7 +575,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -587,7 +587,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -599,7 +599,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -611,7 +611,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -623,7 +623,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -635,7 +635,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -647,7 +647,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -659,7 +659,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -671,7 +671,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true
@@ -683,7 +683,7 @@ if (state) {
 >test(state as any && state) : boolean
 >                            : ^^^^^^^
 >test : (x: boolean) => boolean
->     : ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^       ^^^^^^^^^^^^
 >state as any && state : any
 >state as any : any
 >state : true

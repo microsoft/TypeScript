@@ -8,7 +8,7 @@ interface Boolean {
 
     doOtherStuff<T>(x: T): T;
 >doOtherStuff : <T>(x: T) => T
->             : ^ ^^^^^ ^^^^^ 
+>             : ^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 }
@@ -37,11 +37,11 @@ var b: string = x.doOtherStuff('hm');
 >x.doOtherStuff('hm') : "hm"
 >                     : ^^^^
 >x.doOtherStuff : <T>(x: T) => T
->               : ^^^^^^^^^^^^^^
+>               : ^ ^^ ^^ ^^^^^^
 >x : true
 >  : ^^^^
 >doOtherStuff : <T>(x: T) => T
->             : ^^^^^^^^^^^^^^
+>             : ^ ^^ ^^ ^^^^^^
 >'hm' : "hm"
 >     : ^^^^
 
@@ -63,7 +63,7 @@ var d: string = x['doOtherStuff']('hm');
 >x['doOtherStuff']('hm') : "hm"
 >                        : ^^^^
 >x['doOtherStuff'] : <T>(x: T) => T
->                  : ^^^^^^^^^^^^^^
+>                  : ^ ^^ ^^ ^^^^^^
 >x : true
 >  : ^^^^
 >'doOtherStuff' : "doOtherStuff"

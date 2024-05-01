@@ -7,7 +7,7 @@ class A1 {
 
     #method(param: string): string {
 >#method : (param: string) => string
->        : ^^^^^^^^      ^^^^^      
+>        : ^     ^^      ^^^^^      
 >param : string
 >      : ^^^^^^
 
@@ -23,7 +23,7 @@ class A1 {
 >this.#method("") : string
 >                 : ^^^^^^
 >this.#method : (param: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >"" : ""
@@ -33,7 +33,7 @@ class A1 {
 >this.#method(1) : string
 >                : ^^^^^^
 >this.#method : (param: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >1 : 1
@@ -43,7 +43,7 @@ class A1 {
 >this.#method() : string
 >               : ^^^^^^
 >this.#method : (param: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^      ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 

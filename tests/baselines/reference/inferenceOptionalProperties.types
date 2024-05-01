@@ -3,7 +3,7 @@
 === inferenceOptionalProperties.ts ===
 declare function test<T>(x: { [key: string]: T }): T;
 >test : <T>(x: { [key: string]: T; }) => T
->     : ^ ^^^^^                     ^^^^^ 
+>     : ^ ^^ ^^                     ^^^^^ 
 >x : { [key: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >key : string
@@ -31,7 +31,7 @@ const y1 = test(x1);
 >test(x1) : string | number
 >         : ^^^^^^^^^^^^^^^
 >test : <T>(x: { [key: string]: T; }) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                     ^^^^^^
 >x1 : { a?: string; b?: number; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ const y2 = test(x2);
 >test(x2) : string | number | undefined
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T>(x: { [key: string]: T; }) => T
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^ ^^                     ^^^^^^
 >x2 : { a?: string; b?: number | undefined; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

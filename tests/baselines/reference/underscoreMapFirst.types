@@ -33,7 +33,7 @@ declare module _ {
     }
     export function pluck<T extends {}>(
 >pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
->      : ^ ^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^      ^^^^^     
+>      : ^ ^^^^^^^^^^^^^    ^^             ^^            ^^      ^^^^^     
 
         list: Collection<T>,
 >list : Collection<T>
@@ -45,7 +45,7 @@ declare module _ {
 
     export function map<T, TResult>(
 >map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
->    : ^ ^^       ^^^^^^^^       ^^^^^^^^^^^^                        ^^^^^^^^^^^^   ^^^^^         
+>    : ^ ^^       ^^    ^^       ^^        ^^                        ^^       ^^^   ^^^^^         
 
         list: List<T>,
 >list : List<T>
@@ -60,7 +60,7 @@ declare module _ {
 
     export function first<T>(array: List<T>): T;
 >first : <T>(array: List<T>) => T
->      : ^ ^^^^^^^^^       ^^^^^ 
+>      : ^ ^^     ^^       ^^^^^ 
 >array : List<T>
 >      : ^^^^^^^
 }
@@ -120,12 +120,12 @@ class MyView extends View {
 >          : ^^^^^^^^^^^
 >_.pluck(data, "series") : any[]
 >                        : ^^^^^
->_.pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
+>        : ^ ^^^^^^^^^^^^^    ^^             ^^            ^^      ^^^^^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
->pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
+>      : ^ ^^^^^^^^^^^^^    ^^             ^^            ^^      ^^^^^^^^^^
 >data : IData[]
 >     : ^^^^^^^
 >"series" : "series"
@@ -134,20 +134,20 @@ class MyView extends View {
         return _.map(allSeries, _.first);
 >_.map(allSeries, _.first) : ISeries[]
 >                          : ^^^^^^^^^
->_.map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
+>      : ^ ^^       ^^    ^^       ^^        ^^                        ^^       ^^^   ^^^^^^^^^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
->map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : <T, TResult>(list: List<T>, iterator: ListIterator<T, TResult>, context?: any) => TResult[]
+>    : ^ ^^       ^^    ^^       ^^        ^^                        ^^       ^^^   ^^^^^^^^^^^^^^
 >allSeries : ISeries[][]
 >          : ^^^^^^^^^^^
->_.first : <T>(array: _.List<T>) => T
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_.first : <T>(array: List<T>) => T
+>        : ^ ^^     ^^       ^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
->first : <T>(array: _.List<T>) => T
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>first : <T>(array: List<T>) => T
+>      : ^ ^^     ^^       ^^^^^^
     }
 }
 

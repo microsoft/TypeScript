@@ -31,7 +31,7 @@ function isMissingReturnExpression4(): void {
 
 function isMissingReturnExpression5(x) {
 >isMissingReturnExpression5 : (x: any) => number
->                           : ^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >  : ^^^
 

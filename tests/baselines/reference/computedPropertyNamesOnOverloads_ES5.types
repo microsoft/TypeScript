@@ -19,7 +19,7 @@ class C {
 
     [methodName](v: string);
 >[methodName] : (v: string) => any
->             : ^^^^      ^^^^^^^^
+>             : ^ ^^      ^^^^^^^^
 >methodName : string
 >           : ^^^^^^
 >v : string
@@ -33,7 +33,7 @@ class C {
 
     [methodName](v?: string) { }
 >[methodName] : (v?: string) => void
->             : ^^^^^      ^^^^^^^^^
+>             : ^ ^^^      ^^^^^^^^^
 >methodName : string
 >           : ^^^^^^
 >v : string

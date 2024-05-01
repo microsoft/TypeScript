@@ -16,7 +16,7 @@ var sid = s => s + "!";
 >sid : Sid
 >    : ^^^
 >s => s + "!" : (s: string) => string
->             : ^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s + "!" : string
@@ -32,7 +32,7 @@ var noreturn = obj => void obj.title
 >noreturn : NoReturn
 >         : ^^^^^^^^
 >obj => void obj.title : (obj: { e: number; m: number; title: string; }) => any
->                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : { e: number; m: number; title: string; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >void obj.title : undefined

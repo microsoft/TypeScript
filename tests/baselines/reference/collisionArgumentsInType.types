@@ -3,7 +3,7 @@
 === collisionArgumentsInType.ts ===
 var v1: (i: number, ...arguments) => void; // no error - no code gen
 >v1 : (i: number, ...arguments: any[]) => void
->   : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>   : ^ ^^      ^^^^^         ^^^^^^^^^^^^    
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -11,7 +11,7 @@ var v1: (i: number, ...arguments) => void; // no error - no code gen
 
 var v12: (arguments: number, ...restParameters) => void; // no error - no code gen
 >v12 : (arguments: number, ...restParameters: any[]) => void
->    : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^         ^^      ^^^^^              ^^^^^^^^^^^^    
 >arguments : number
 >          : ^^^^^^
 >restParameters : any[]
@@ -19,7 +19,7 @@ var v12: (arguments: number, ...restParameters) => void; // no error - no code g
 
 var v2: {
 >v2 : { (arguments: number, ...restParameters: any[]): any; new (arguments: number, ...restParameters: any[]): any; foo(arguments: number, ...restParameters: any[]): any; prop: (arguments: number, ...restParameters: any) => void; }
->   : ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^         ^^^
+>   : ^^^         ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^^         ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^         ^^      ^^^^^              ^^^^^^^^^^^^^^^^^^^^^                                       ^^^         ^^^
 
     (arguments: number, ...restParameters); // no error - no code gen
 >arguments : number
@@ -35,7 +35,7 @@ var v2: {
 
     foo(arguments: number, ...restParameters); // no error - no code gen
 >foo : (arguments: number, ...restParameters: any[]) => any
->    : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^         ^^      ^^^^^              ^^^^^^^^^^^^^^^
 >arguments : number
 >          : ^^^^^^
 >restParameters : any[]
@@ -43,7 +43,7 @@ var v2: {
 
     prop: (arguments: number, ...restParameters) => void; // no error - no code gen
 >prop : (arguments: number, ...restParameters: any[]) => void
->     : ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^         ^^      ^^^^^              ^^^^^^^^^^^^    
 >arguments : number
 >          : ^^^^^^
 >restParameters : any[]
@@ -51,7 +51,7 @@ var v2: {
 }
 var v21: {
 >v21 : { (i: number, ...arguments: any[]): any; new (i: number, ...arguments: any[]): any; foo(i: number, ...arguments: any[]): any; prop: (i: number, ...arguments: any) => void; }
->    : ^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                          ^^^         ^^^
+>    : ^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^         ^^^^^^^^^^^^^^^^^^^^^                          ^^^         ^^^
 
     (i: number, ...arguments); // no error - no code gen
 >i : number
@@ -67,7 +67,7 @@ var v21: {
 
     foo(i: number, ...arguments); // no error - no code gen
 >foo : (i: number, ...arguments: any[]) => any
->    : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^      ^^^^^         ^^^^^^^^^^^^^^^
 >i : number
 >  : ^^^^^^
 >arguments : any[]
@@ -75,7 +75,7 @@ var v21: {
 
     prop: (i: number, ...arguments) => void; // no error - no code gen
 >prop : (i: number, ...arguments: any[]) => void
->     : ^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>     : ^ ^^      ^^^^^         ^^^^^^^^^^^^    
 >i : number
 >  : ^^^^^^
 >arguments : any[]

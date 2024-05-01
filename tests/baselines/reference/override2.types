@@ -7,19 +7,19 @@ abstract class AB {
 
     abstract foo(v: string): void;
 >foo : (v: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >v : string
 >  : ^^^^^^
 
     abstract bar(v: string): void;
 >bar : (v: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >v : string
 >  : ^^^^^^
 
     abstract baz(v: string): void;
 >baz : (v: string) => void
->    : ^^^^      ^^^^^    
+>    : ^ ^^      ^^^^^    
 >v : string
 >  : ^^^^^^
 }
@@ -39,8 +39,8 @@ abstract class AD2 extends AB {
 >   : ^^
 
     abstract foo(v: ''): void // need override?
->foo : (v: '') => void
->    : ^^^^  ^^^^^    
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
 >  : ^^
 }
@@ -52,8 +52,8 @@ abstract class AD3 extends AB {
 >   : ^^
 
     override foo(v: ''): void { } // need override?
->foo : (v: '') => void
->    : ^^^^  ^^^^^    
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
 >  : ^^
 
@@ -73,14 +73,14 @@ class D4 extends AB {
 >   : ^^
 
     override foo(v: ''): void {}
->foo : (v: '') => void
->    : ^^^^  ^^^^^    
+>foo : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
 >  : ^^
 
     override bar(v: ''): void {}
->bar : (v: '') => void
->    : ^^^^  ^^^^^    
+>bar : (v: "") => void
+>    : ^ ^^  ^^^^^    
 >v : ""
 >  : ^^
 

@@ -27,12 +27,12 @@ let magnitude = m.getLength(v);
 >          : ^^^^^^
 >m.getLength(v) : number
 >               : ^^^^^^
->m.getLength : (p: m.Vector) => number
->            : ^^^^^^^^^^^^^^^^^^^^^^^
+>m.getLength : (p: Vector) => number
+>            : ^ ^^      ^^^^^^^^^^^
 >m : typeof m
 >  : ^^^^^^^^
->getLength : (p: m.Vector) => number
->          : ^^^^^^^^^^^^^^^^^^^^^^^
+>getLength : (p: Vector) => number
+>          : ^ ^^      ^^^^^^^^^^^
 >v : m.Vector
 >  : ^^^^^^^^
 
@@ -44,11 +44,11 @@ let p: m.Point = v.translate(5, 5);
 >v.translate(5, 5) : m.Vector
 >                  : ^^^^^^^^
 >v.translate : (dx: number, dy: number) => m.Vector
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 >v : m.Vector
 >  : ^^^^^^^^
 >translate : (dx: number, dy: number) => m.Vector
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^  ^^      ^^  ^^      ^^^^^^^^^^^^^
 >5 : 5
 >  : ^
 >5 : 5
@@ -113,7 +113,7 @@ export class Vector implements Point {
 
 	translate(dx: number, dy: number): Vector;
 >translate : (dx: number, dy: number) => Vector
->          : ^^^^^      ^^^^^^      ^^^^^      
+>          : ^  ^^      ^^  ^^      ^^^^^      
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -122,7 +122,7 @@ export class Vector implements Point {
 
 export function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
->          : ^^^^      ^^^^^      
+>          : ^ ^^      ^^^^^      
 >p : Vector
 >  : ^^^^^^
 
