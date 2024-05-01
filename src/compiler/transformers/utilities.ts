@@ -68,6 +68,7 @@ import {
     map,
     MethodDeclaration,
     ModifierFlags,
+    NamedExportBindings,
     NamedImportBindings,
     NamespaceExport,
     Node,
@@ -109,14 +110,16 @@ export interface ExternalModuleInfo {
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
 
-function containsDefaultReference(node: NamedImportBindings | undefined) {
+function containsDefaultReference(node: NamedImportBindings | NamedExportBindings | undefined) {
     if (!node) return false;
-    if (!isNamedImports(node)) return false;
+    if (!isNamedImports(node) && !isNamedExports(node)) return false;
     return some(node.elements, isNamedDefaultReference);
 }
 
-function isNamedDefaultReference(e: ImportSpecifier): boolean {
-    return e.propertyName !== undefined && e.propertyName.escapedText === InternalSymbolName.Default;
+function isNamedDefaultReference(e: ImportSpecifier | ExportSpecifier): boolean {
+    return e.propertyName !== undefined ?
+        e.propertyName.escapedText === InternalSymbolName.Default :
+        e.name.escapedText === InternalSymbolName.Default;
 }
 
 /** @internal */
@@ -216,6 +219,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                         externalImports.push(node as ExportDeclaration);
                         if (isNamedExports((node as ExportDeclaration).exportClause!)) {
                             addExportedNamesForExportDeclaration(node as ExportDeclaration);
+                            hasImportDefault ||= containsDefaultReference((node as ExportDeclaration).exportClause);
                         }
                         else {
                             const name = ((node as ExportDeclaration).exportClause as NamespaceExport).name;

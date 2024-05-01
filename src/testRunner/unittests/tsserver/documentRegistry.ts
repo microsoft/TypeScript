@@ -1,10 +1,6 @@
-import {
-    reportDocumentRegistryStats,
-} from "../../../harness/incrementalUtils";
+import { reportDocumentRegistryStats } from "../../../harness/incrementalUtils";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselineTsserverLogs,
     closeFilesForSession,

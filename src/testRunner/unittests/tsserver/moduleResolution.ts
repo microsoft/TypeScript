@@ -1,22 +1,14 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
 } from "../helpers/alternateResult";
-import {
-    libContent,
-} from "../helpers/contents";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import { libContent } from "../helpers/contents";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder";
 import {
     baselineTsserverLogs,
     openFilesForSession,
@@ -76,14 +68,16 @@ describe("unittests:: tsserver:: moduleResolution", () => {
             const { host, session, packageFile, verifyErr } = setup(jsonToReadableText({ name: "app", version: "1.0.0" }));
 
             session.logger.info("Modify package json file to add type module");
-            host.writeFile(
+            host.modifyFile(
                 packageFile.path,
                 jsonToReadableText({
                     name: "app",
                     version: "1.0.0",
                     type: "module",
                 }),
+                { ignoreWatches: true },
             );
+            host.invokeFsWatches(packageFile.path, "rename", packageFile.path, /*useTildeSuffix*/ undefined); // Create event instead of change
             host.runQueuedTimeoutCallbacks(); // Failed lookup updates
             host.runQueuedTimeoutCallbacks(); // Actual update
             verifyErr();

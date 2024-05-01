@@ -379,7 +379,6 @@ export declare namespace SpecializedWidget {
     function createWidget2(): Widget2;
 }
 //// [privacyFunctionReturnTypeDeclFile_exporter.d.ts]
-/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
 import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
 import Widgets1 = require("GlobalWidgets");
 export declare function createExportedWidget1(): Widgets.Widget1;
@@ -387,7 +386,6 @@ export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widge
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
 //// [privacyFunctionReturnTypeDeclFile_consumer.d.ts]
-/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
 export declare class publicClassWithWithPrivateParmeterTypes {
     static myPublicStaticMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
     private static myPrivateStaticMethod;
@@ -408,3 +406,84 @@ export declare class publicClassWithPrivateModuleReturnTypes {
 }
 export declare function publicFunctionWithPrivateModuleReturnTypes(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
 export declare function publicFunctionWithPrivateModuleReturnTypes1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+
+
+//// [DtsFileErrors]
+
+
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(6,44): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(8,31): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(12,75): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(16,44): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(17,31): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+privacyFunctionReturnTypeDeclFile_consumer.d.ts(20,79): error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+
+
+==== privacyFunctionReturnTypeDeclFile_consumer.d.ts (6 errors) ====
+    export declare class publicClassWithWithPrivateParmeterTypes {
+        static myPublicStaticMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+        private static myPrivateStaticMethod;
+        myPublicMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+        private myPrivateMethod;
+        static myPublicStaticMethod1(): import("GlobalWidgets").Widget3;
+                                               ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private static myPrivateStaticMethod1;
+        myPublicMethod1(): import("GlobalWidgets").Widget3;
+                                  ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        private myPrivateMethod1;
+    }
+    export declare function publicFunctionWithPrivateParmeterTypes(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+    export declare function publicFunctionWithPrivateParmeterTypes1(): import("GlobalWidgets").Widget3;
+                                                                              ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    export declare class publicClassWithPrivateModuleReturnTypes {
+        static myPublicStaticMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+        myPublicMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+        static myPublicStaticMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                                               ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+        myPublicMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                                  ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    }
+    export declare function publicFunctionWithPrivateModuleReturnTypes(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+    export declare function publicFunctionWithPrivateModuleReturnTypes1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+                                                                                  ~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'GlobalWidgets' or its corresponding type declarations.
+    
+==== privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts (0 errors) ====
+    declare module "GlobalWidgets" {
+        class Widget3 {
+            name: string;
+        }
+        function createWidget3(): Widget3;
+        namespace SpecializedGlobalWidget {
+            class Widget4 {
+                name: string;
+            }
+            function createWidget4(): Widget4;
+        }
+    }
+    
+==== privacyFunctionReturnTypeDeclFile_Widgets.d.ts (0 errors) ====
+    export declare class Widget1 {
+        name: string;
+    }
+    export declare function createWidget1(): Widget1;
+    export declare namespace SpecializedWidget {
+        class Widget2 {
+            name: string;
+        }
+        function createWidget2(): Widget2;
+    }
+    
+==== privacyFunctionReturnTypeDeclFile_exporter.d.ts (0 errors) ====
+    import Widgets = require("./privacyFunctionReturnTypeDeclFile_Widgets");
+    import Widgets1 = require("GlobalWidgets");
+    export declare function createExportedWidget1(): Widgets.Widget1;
+    export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
+    export declare function createExportedWidget3(): Widgets1.Widget3;
+    export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+    

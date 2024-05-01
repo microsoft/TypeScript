@@ -12,17 +12,26 @@
 /** @type {Foo} */
 export default { a: 1, b: 1, c: 1 };
 >{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 >c : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 === b.js ===
 import a from "./a";
 >a : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 
 a;
 >a : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 

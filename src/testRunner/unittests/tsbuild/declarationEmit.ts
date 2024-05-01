@@ -1,22 +1,12 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    FileSet,
-} from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    libContent,
-} from "../helpers/contents";
+import { dedent } from "../../_namespaces/Utils";
+import { FileSet } from "../../_namespaces/vfs";
+import { jsonToReadableText } from "../helpers";
+import { libContent } from "../helpers/contents";
 import {
     noChangeOnlyRuns,
     verifyTsc,
 } from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: declarationEmit", () => {
     function getFiles(): FileSet {
@@ -66,7 +56,7 @@ export function getVar(): keyof typeof variable {
                 include: ["./nominal.ts"],
             }),
             "/src/solution/src/common/nominal.ts": dedent`
-/// <reference path="./types.d.ts" />
+/// <reference path="./types.d.ts" preserve="true" />
 export declare type Nominal<T, Name extends string> = MyNominal<T, Name>;`,
             "/src/solution/src/common/types.d.ts": dedent`
 declare type MyNominal<T, Name extends string> = T & {
