@@ -39,7 +39,7 @@ f("a", {
 >cb : (p: number) => number
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >p => p : (p: number) => number
->       :                      
+>       : ^ ^^^^^^^^^^^^^^^^^^^
 >p : number
 >  : ^^^^^^
 >p : number

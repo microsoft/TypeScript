@@ -15,7 +15,7 @@ const fn1 = (s: { a: true }) => {};
 >fn1 : (s: { a: true; }) => void
 >    : ^ ^^            ^^^^^^^^^
 >(s: { a: true }) => {} : (s: { a: true; }) => void
->                       :                          
+>                       : ^ ^^            ^^^^^^^^^
 >s : { a: true; }
 >  : ^^^^^    ^^^
 >a : true

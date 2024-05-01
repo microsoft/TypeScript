@@ -15,7 +15,7 @@ var r5 = foo3((x: number) => ''); // error
 >r5 : (x: number) => number
 >   : ^ ^^      ^^^^^^^^^^^
 >foo3((x: number) => '') : (x: number) => number
->                        :                      
+>                        : ^ ^^      ^^^^^^^^^^^
 >foo3 : (cb: (x: number) => number) => (x: number) => number
 >     : ^  ^^                     ^^^^^^ ^^      ^^^^^^^^^^^
 >(x: number) => '' : (x: number) => string

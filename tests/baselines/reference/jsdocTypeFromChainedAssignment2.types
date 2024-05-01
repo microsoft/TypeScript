@@ -71,7 +71,7 @@ exports.f = exports.g = function fg(n) {
 >f : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >exports.g = function fg(n) {    return n + 1} : (n: number) => number
->                                              :                      
+>                                              : ^ ^^      ^^^^^^^^^^^
 >exports.g : (n: number) => number
 >          : ^ ^^      ^^^^^^^^^^^
 >exports : typeof import("mod")
@@ -79,7 +79,7 @@ exports.f = exports.g = function fg(n) {
 >g : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function fg(n) {    return n + 1} : (n: number) => number
->                                  :                      
+>                                  : ^ ^^      ^^^^^^^^^^^
 >fg : (n: number) => number
 >   : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -108,7 +108,7 @@ module.exports.h = module.exports.i = function hi(mom) {
 >h : (mom: string) => string
 >  : ^   ^^      ^^^^^^^^^^^
 >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
->                                                                :                        
+>                                                                : ^   ^^      ^^^^^^^^^^^
 >module.exports.i : (mom: string) => string
 >                 : ^   ^^      ^^^^^^^^^^^
 >module.exports : typeof module.exports
@@ -120,7 +120,7 @@ module.exports.h = module.exports.i = function hi(mom) {
 >i : (mom: string) => string
 >  : ^   ^^      ^^^^^^^^^^^
 >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
->                                             :                        
+>                                             : ^   ^^      ^^^^^^^^^^^
 >hi : (mom: string) => string
 >   : ^   ^^      ^^^^^^^^^^^
 >mom : string

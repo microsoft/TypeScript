@@ -833,3 +833,21 @@ type U3 = [...[string, number], boolean];
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
 type AnyArr = [...any];
+
+
+!!!! File variadicTuples1.d.ts differs from original emit in noCheck emit
+//// [variadicTuples1.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -17,9 +17,9 @@
+ declare const tc2: [string, number];
+ declare const tc3: [number, number, number, ...string[]];
+ declare const tc4: [...string[], number, number, number];
+ declare function concat2<T extends readonly unknown[], U extends readonly unknown[]>(t: T, u: U): (T[number] | U[number])[];
+-declare const tc5: (2 | 4 | 1 | 3 | 6 | 5)[];
++declare const tc5: (1 | 2 | 3 | 6 | 4 | 5)[];
+ declare function foo1(a: number, b: string, c: boolean, ...d: number[]): void;
+ declare function foo2(t1: [number, string], t2: [boolean], a1: number[]): void;
+ declare function foo3<T extends unknown[]>(x: number, ...args: [...T, number]): T;
+ declare function foo4<U extends unknown[]>(u: U): void;

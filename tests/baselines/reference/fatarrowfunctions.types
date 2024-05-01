@@ -228,7 +228,7 @@ var y = x => x*x;
 >y : (x: any) => number
 >  : ^ ^^^^^^^^^^^^^^^^
 >x => x*x : (x: any) => number
->         :                   
+>         : ^ ^^^^^^^^^^^^^^^^
 >x : any
 >x*x : number
 >    : ^^^^^^
@@ -239,7 +239,7 @@ var z = (x:number) => x*x;
 >z : (x: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >(x:number) => x*x : (x: number) => number
->                  :                      
+>                  : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x*x : number
@@ -253,7 +253,7 @@ var w = () => 3;
 >w : () => number
 >  : ^^^^^^^^^^^^
 >() => 3 : () => number
->        :             
+>        : ^^^^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -267,7 +267,7 @@ function ternaryTest(isWhile:boolean) {
 >f : (n: any) => boolean
 >  : ^ ^^^^^^^^^^^^^^^^^
 >isWhile ? function (n) { return n > 0; } : function (n) { return n === 0; } : (n: any) => boolean
->                                                                            :                    
+>                                                                            : ^ ^^^^^^^^^^^^^^^^^
 >isWhile : boolean
 >        : ^^^^^^^
 >function (n) { return n > 0; } : (n: any) => boolean
@@ -301,7 +301,7 @@ var messenger = {
 >messenger : { message: string; start: () => void; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    message: "Hello World",    start: function() {        setTimeout(() => { this.message.toString(); }, 3000);    }} : { message: string; start: () => void; }
->                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^
+>                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     message: "Hello World",
 >message : string
@@ -313,7 +313,7 @@ var messenger = {
 >start : () => void
 >      : ^^^^^^^^^^
 >function() {        setTimeout(() => { this.message.toString(); }, 3000);    } : () => void
->                                                                               :           
+>                                                                               : ^^^^^^^^^^
 
         setTimeout(() => { this.message.toString(); }, 3000);
 >setTimeout(() => { this.message.toString(); }, 3000) : number

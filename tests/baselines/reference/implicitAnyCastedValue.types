@@ -5,7 +5,7 @@ var x = function () {
 >x : () => any
 >  : ^^^^^^   
 >function () {    return <any>0;  // this should not be an error} : () => any
->                                                                 :          
+>                                                                 : ^^^^^^   
 
     return <any>0;  // this should not be an error
 ><any>0 : any

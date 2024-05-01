@@ -3,7 +3,10 @@ description: 'Create a report to help us improve TypeScript'
 body:
   - type: markdown
     attributes:
-      value: Please fill in each section completely. Thank you!
+      value: |
+        🔍 Please [search thoroughly in GitHub](https://github.com/Microsoft/TypeScript/search?type=Issues) or by the query `site:github.com/microsoft/TypeScript <your keywords>` in your favorite search engine before reporting a new bug as most bugs are very likely to find precedents.
+
+        Please fill in each section completely. Thank you!
   - type: textarea
     id: search_terms
     attributes:

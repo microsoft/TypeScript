@@ -70,8 +70,8 @@ import {
     isObjectLiteralExpression,
     isOptionalTypeNode,
     isParameter,
-    isParameterDeclaration,
     isParenthesizedTypeNode,
+    isPartOfParameterDeclaration,
     isPrefixUnaryExpression,
     isPropertyAccessExpression,
     isPropertyDeclaration,
@@ -899,7 +899,7 @@ export function provideInlayHints(context: InlayHintsContext): InlayHint[] {
     }
 
     function isHintableDeclaration(node: VariableDeclaration | ParameterDeclaration) {
-        if ((isParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
+        if ((isPartOfParameterDeclaration(node) || isVariableDeclaration(node) && isVarConst(node)) && node.initializer) {
             const initializer = skipParentheses(node.initializer);
             return !(isHintableLiteral(initializer) || isNewExpression(initializer) || isObjectLiteralExpression(initializer) || isAssertionExpression(initializer));
         }

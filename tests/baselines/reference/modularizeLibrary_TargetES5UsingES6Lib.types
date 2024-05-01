@@ -259,7 +259,7 @@ var p = new Proxy(t, {});
 >p : {}
 >  : ^^
 >new Proxy(t, {}) : {}
->                 :   
+>                 : ^^
 >Proxy : ProxyConstructor
 >      : ^^^^^^^^^^^^^^^^
 >t : {}

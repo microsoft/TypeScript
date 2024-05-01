@@ -25,7 +25,7 @@ const f = <A extends string, B extends string, R>(x: { [K in A]: Field<B, R> }):
 >f : <A extends string, B extends string, R>(x: { [K in A]: Field<B, R>; }) => R
 >  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^                          ^^^^^ 
 ><A extends string, B extends string, R>(x: { [K in A]: Field<B, R> }): R => ({} as any) : <A extends string, B extends string, R>(x: { [K in A]: Field<B, R>; }) => R
->                                                                                        :                                                                            
+>                                                                                        : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^                          ^^^^^ 
 >x : { [K in A]: Field<B, R>; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({} as any) : any
@@ -47,7 +47,7 @@ const g = <A extends string, B extends string, R>(x: Field<A, Field<B, R>>): R =
 >g : <A extends string, B extends string, R>(x: Field<A, Field<B, R>>) => R
 >  : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^                     ^^^^^ 
 ><A extends string, B extends string, R>(x: Field<A, Field<B, R>>): R => ({} as any) : <A extends string, B extends string, R>(x: Field<A, Field<B, R>>) => R
->                                                                                    :                                                                       
+>                                                                                    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^                     ^^^^^ 
 >x : Field<A, Field<B, R>>
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >({} as any) : any

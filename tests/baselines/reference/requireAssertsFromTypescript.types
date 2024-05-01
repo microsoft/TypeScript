@@ -14,7 +14,7 @@ const artoo = require('./ex2')
 >artoo : (value: any, message?: string | Error) => asserts value
 >      : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
 >require('./ex2') : (value: any, message?: string | Error) => asserts value
->                 :                     ^                                  
+>                 : ^     ^^   ^^       ^^^              ^^^^^^^^^^^^^^^^^^
 >require : any
 >'./ex2' : "./ex2"
 >        : ^^^^^^^

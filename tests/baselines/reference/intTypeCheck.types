@@ -285,7 +285,7 @@ var obj1: i1 = {
 >p3 : () => any
 >   : ^^^^^^   
 >function ():any { return 0; } : () => any
->                              :          
+>                              : ^^^^^^   
 >0 : 0
 >  : ^
 
@@ -293,7 +293,7 @@ var obj1: i1 = {
 >p6 : (pa1: any) => any
 >   : ^   ^^^^^^^^^^   
 >function (pa1):any { return 0; } : (pa1: any) => any
->                                 :                  
+>                                 : ^   ^^^^^^^^^^   
 >pa1 : any
 >    : ^^^
 >0 : 0
@@ -303,7 +303,7 @@ var obj1: i1 = {
 >p7 : (pa1: any, pa2: any) => any
 >   : ^   ^^^^^^^   ^^^^^^^^^^   
 >function (pa1, pa2):any { return 0; } : (pa1: any, pa2: any) => any
->                                      :                            
+>                                      : ^   ^^^^^^^   ^^^^^^^^^^   
 >pa1 : any
 >    : ^^^
 >pa2 : any

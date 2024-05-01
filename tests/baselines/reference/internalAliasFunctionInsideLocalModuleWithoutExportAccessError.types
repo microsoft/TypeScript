@@ -43,7 +43,7 @@ export module c {
 >bVal2 : (x: number) => number
 >      : ^ ^^      ^^^^^^^^^^^
 >b : (x: number) => number
->  :                      
+>  : ^ ^^      ^^^^^^^^^^^
 }
 var d = c.b(11);
 >d : any

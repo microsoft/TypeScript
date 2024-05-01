@@ -10,7 +10,7 @@ class Foo<T> {
 >a : (n: T) => void
 >  : ^ ^^^^^^^^^^^^
 >(n: T) => { } : (n: T) => void
->              :               
+>              : ^ ^^^^^^^^^^^^
 >n : T
 >  : ^
 
@@ -50,7 +50,7 @@ class Foo<T> {
 >e : (x: T) => any
 >  : ^ ^^^^^^^^^^^
 >function (x: T) { return null; } : (x: T) => any
->                                 :              
+>                                 : ^ ^^^^^^^^^^^
 >x : T
 >  : ^
 

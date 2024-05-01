@@ -25,7 +25,7 @@ conforms({ foo: (v: string) => false })({ foo: "hello" });
 >foo : (v: string) => false
 >    : ^ ^^      ^^^^^^^^^^
 >(v: string) => false : (v: string) => false
->                     :                     
+>                     : ^ ^^      ^^^^^^^^^^
 >v : string
 >  : ^^^^^^
 >false : false

@@ -221,7 +221,7 @@ foo<CoolArray<any>>(foo);  // Error
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
 >    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    :                                                    
+>    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
 
 function bar<T extends any[]>(...args: T): T {
 >bar : <T extends any[]>(...args: T) => T

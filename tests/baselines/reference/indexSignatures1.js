@@ -680,3 +680,21 @@ type Rec1 = {
 type Rec2 = Record<Id, number>;
 type K1 = keyof Rec1;
 type K2 = keyof Rec2;
+
+
+!!!! File indexSignatures1.d.ts differs from original emit in noCheck emit
+//// [indexSignatures1.d.ts]
+===================================================================
+--- Expected	The full check baseline
++++ Actual	with noCheck set
+@@ -118,9 +118,9 @@
+     [x: symbol]: 4 | 5;
+     [sym]: 4;
+ };
+ declare const obj13: {
+-    [x: string]: 0 | 2 | 1 | 3;
++    [x: string]: 0 | 1 | 2 | 3;
+     [x: number]: 2 | 3;
+     [x: symbol]: 4 | 5;
+     x: 0;
+     1: 2;

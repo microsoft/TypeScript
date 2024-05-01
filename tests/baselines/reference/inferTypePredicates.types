@@ -127,7 +127,7 @@ const isTruthy = (x: number | null) => !!x;
 >isTruthy : (x: number | null) => boolean
 >         : ^ ^^             ^^^^^^^^^^^^
 >(x: number | null) => !!x : (x: number | null) => boolean
->                          :                              
+>                          : ^ ^^             ^^^^^^^^^^^^
 >x : number | null
 >  : ^^^^^^^^^^^^^
 >!!x : boolean
@@ -306,7 +306,7 @@ const myGuard = (o: string | undefined): o is string => !!o;
 >myGuard : (o: string | undefined) => o is string
 >        : ^ ^^                  ^^^^^           
 >(o: string | undefined): o is string => !!o : (o: string | undefined) => o is string
->                                            :                                       
+>                                            : ^ ^^                  ^^^^^           
 >o : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >!!o : boolean
@@ -320,7 +320,7 @@ const mySecondGuard = (o: string | undefined) => myGuard(o);
 >mySecondGuard : (o: string | undefined) => o is string
 >              : ^ ^^                  ^^^^^^^^^^^^^^^^
 >(o: string | undefined) => myGuard(o) : (o: string | undefined) => o is string
->                                      :                                       
+>                                      : ^ ^^                  ^^^^^^^^^^^^^^^^
 >o : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >myGuard(o) : boolean
@@ -365,13 +365,13 @@ const result = myArray
 >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^      ^                        ^^^^^^^^^^       ^^^   ^^^^^^^^
+>              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >myArray : MyArray
 >        : ^^^^^^^
 
   .map((arr) => arr.list)
 >map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^      ^                        ^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
 >                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arr : { list?: MyObj[] | undefined; }
@@ -479,13 +479,13 @@ const result2 = myArray
 >myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >myArray  .map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^      ^                        ^^^^^^^^^^       ^^^   ^^^^^^^^
+>              : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >myArray : MyArray
 >        : ^^^^^^^
 
   .map((arr) => arr.list)
 >map : <U>(callbackfn: (value: { list?: MyObj[] | undefined; }, index: number, array: { list?: MyObj[] | undefined; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^      ^                        ^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >(arr) => arr.list : (arr: { list?: MyObj[] | undefined; }) => MyObj[] | undefined
 >                  : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arr : { list?: MyObj[] | undefined; }
@@ -1127,7 +1127,7 @@ const booleanIdentity = (x: boolean) => x;
 >booleanIdentity : (x: boolean) => boolean
 >                : ^ ^^       ^^^^^^^^^^^^
 >(x: boolean) => x : (x: boolean) => boolean
->                  :                        
+>                  : ^ ^^       ^^^^^^^^^^^^
 >x : boolean
 >  : ^^^^^^^
 >x : boolean
@@ -1138,7 +1138,7 @@ const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
 >numOrBoolean : (x: number | boolean) => x is number | true
 >             : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^^^
 >(x: number | boolean) => typeof x === 'number' || x : (x: number | boolean) => x is number | true
->                                                    :                                            
+>                                                    : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
 >typeof x === 'number' || x : boolean
@@ -1546,7 +1546,7 @@ const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
 >noInferenceFromRest : (f_0: "a" | "b") => boolean
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(...f: ["a" | "b"]) => f[0] === "a" : (f_0: "a" | "b") => boolean
->                                    :                            
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : ["a" | "b"]
 >  : ^^^^^^^^^^^
 >f[0] === "a" : boolean
@@ -1564,7 +1564,7 @@ const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
 >noInferenceFromImpossibleRest : () => boolean
 >                              : ^^^^^^^^^^^^^
 >(...f: []) => typeof f === "undefined" : () => boolean
->                                       :              
+>                                       : ^^^^^^^^^^^^^
 >f : []
 >  : ^^
 >typeof f === "undefined" : boolean
@@ -1616,7 +1616,7 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 >foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
 >           : ^  ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
->                                         :                                                           
+>                                         : ^  ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }

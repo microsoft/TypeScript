@@ -39,7 +39,7 @@ export async function myFunction(param: T1) {
 >awaited : 1 | T1[]
 >        : ^^^^^^^^
 >await param : 1 | T1[]
->            : ^^^^    
+>            : ^^^^^^^^
 >param : T1
 >      : ^^
 }

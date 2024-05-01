@@ -313,7 +313,7 @@ const funcs: Funcs = {
 >sfoo : (x: string) => number
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x.length : (x: string) => number
->              :                      
+>              : ^ ^^^^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x.length : number
@@ -327,7 +327,7 @@ const funcs: Funcs = {
 >nfoo : (x: number) => number
 >     : ^ ^^^^^^^^^^^^^^^^^^^
 >x => x * 2 : (x: number) => number
->           :                      
+>           : ^ ^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x * 2 : number
@@ -1353,7 +1353,7 @@ let case1 = foo({
 >directive : unique symbol
 >          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
->                     :                     
+>                     : ^ ^^      ^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >'str' : "str"
@@ -1363,7 +1363,7 @@ let case1 = foo({
 >addOne : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1377,7 +1377,7 @@ let case1 = foo({
 >double : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + x : number
@@ -1403,7 +1403,7 @@ let case2 = foo({
 >addOne : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1417,7 +1417,7 @@ let case2 = foo({
 >double : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + x : number
@@ -1433,7 +1433,7 @@ let case2 = foo({
 >directive : unique symbol
 >          : ^^^^^^^^^^^^^
 >(x: string) => 'str' : (x: string) => "str"
->                     :                     
+>                     : ^ ^^      ^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >'str' : "str"
@@ -1463,7 +1463,7 @@ let case3 = foo({
 >addOne : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + 1 : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + 1 : number
@@ -1477,7 +1477,7 @@ let case3 = foo({
 >double : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x + x : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x + x : number

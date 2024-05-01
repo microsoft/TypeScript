@@ -82,7 +82,7 @@ class Vec2_T<A>
 >f : Vec2_T<(a: A) => B>
 >  : ^^^^^^^^ ^^ ^^^^^^^
 >x : (a: A) => B
->  :            
+>  : ^ ^^ ^^^^^^
 >this.x : A
 >       : ^
 >this : this
@@ -100,7 +100,7 @@ class Vec2_T<A>
 >f : Vec2_T<(a: A) => B>
 >  : ^^^^^^^^ ^^ ^^^^^^^
 >y : (a: A) => B
->  :            
+>  : ^ ^^ ^^^^^^
 >this.y : A
 >       : ^
 >this : this

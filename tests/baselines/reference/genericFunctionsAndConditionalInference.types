@@ -129,7 +129,7 @@ const ok = <F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)})
 >ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><F extends Target>(at: Ops<F>) => ({lr: at.lr(at.str, at.num)}) : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
->                                                                :                                                                                        
+>                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : Ops<F>
 >   : ^^^^^^
 >({lr: at.lr(at.str, at.num)}) : { lr: Result<F, LR<F, string, number>>; }
@@ -163,7 +163,7 @@ const orphaned = <F extends Target>(at: Ops<F>) => at.dict(ok(at))
 >orphaned : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><F extends Target>(at: Ops<F>) => at.dict(ok(at)) : <F extends keyof Targets<any>>(at: Ops<F>) => Result<F, { lr: LR<F, string, number>; }>
->                                                  :                                                                                        
+>                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >at : Ops<F>
 >   : ^^^^^^
 >at.dict(ok(at)) : Result<F, { lr: LR<F, string, number>; }>
@@ -185,7 +185,7 @@ const leftOk = ok(left)
 >leftOk : { lr: string; }
 >       : ^^^^^^^^^^^^^^^
 >ok(left) : { lr: string; }
->         :                
+>         : ^^^^^^^^^^^^^^^
 >ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >left : Ops<"left">
@@ -205,7 +205,7 @@ const rightOk = ok(right)
 >rightOk : { lr: number; }
 >        : ^^^^^^^^^^^^^^^
 >ok(right) : { lr: number; }
->          :                
+>          : ^^^^^^^^^^^^^^^
 >ok : <F extends keyof Targets<any>>(at: Ops<F>) => { lr: Result<F, LR<F, string, number>>; }
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >right : Ops<"right">

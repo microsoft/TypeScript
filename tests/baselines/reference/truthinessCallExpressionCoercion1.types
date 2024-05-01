@@ -174,13 +174,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(() => { test(); }) : void
 >                                        : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >() => { test(); } : () => void
 >                  : ^^^^^^^^^^
 >test() : boolean
@@ -203,13 +203,13 @@ function onlyErrorsWhenUnusedInBody() {
 >[() => null].forEach(test => { test() }) : void
 >                                         : ^^^^
 >[() => null].forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>                     : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >[() => null] : (() => null)[]
 >             : ^^^^^^^^^^^^^^
 >() => null : () => null
 >           : ^^^^^^^^^^
 >forEach : (callbackfn: (value: () => null, index: number, array: (() => null)[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^          ^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >test => { test() } : (test: () => null) => void
 >                   : ^    ^^^^^^^^^^^^^^^^^^^^^
 >test : () => null
@@ -290,7 +290,7 @@ function checksPropertyAccess() {
 >bar : () => boolean
 >    : ^^^^^^^^^^^^^
 >x.foo.bar : () => boolean
->          :              
+>          : ^^^^^^^^^^^^^
 >x.foo : { bar(): boolean; }
 >      : ^^^^^^^^^^^^^^^^^^^
 >x : { foo: { bar(): boolean; }; }
@@ -306,13 +306,13 @@ function checksPropertyAccess() {
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        platformKeys: {            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        }    } : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
->                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^
+>                                                                                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         platformKeys: {
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{            subtleCrypto() {                return {                    sign() {},                    exportKey() { return true }                }            }        } : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
->                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^                                       ^^^
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             subtleCrypto() {
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
@@ -348,7 +348,7 @@ function checksPropertyAccess() {
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
->             : ^^^^^^^^^^^^^^^^^^                                       ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exportKey : () => boolean
@@ -366,7 +366,7 @@ function checksPropertyAccess() {
 >chrome : { platformKeys: { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >platformKeys : { subtleCrypto(): { sign(): void; exportKey(): boolean; }; }
->             : ^^^^^^^^^^^^^^^^^^                                       ^^^
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >subtleCrypto : () => { sign(): void; exportKey(): boolean; }
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exportKey : () => boolean

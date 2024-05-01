@@ -55,7 +55,7 @@ const isNumClass = <Item extends NumClass<number> | StrClass<string>> (
 >isNumClass : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
 >           : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^                                    
 ><Item extends NumClass<number> | StrClass<string>> (        item: Item    ): item is Extract<Item, NumClass<any>> => {        return (item instanceof NumClass);    } : <Item extends NumClass<number> | StrClass<string>>(item: Item) => item is Extract<Item, NumClass<any>>
->                                                                                                                                                                      :                                                                                                       
+>                                                                                                                                                                      : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^                                    
 
         item: Item
 >item : Item

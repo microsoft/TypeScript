@@ -5,7 +5,7 @@ var f = function <T, S extends T>(x: T, y: S): void {
 >f : <T, S extends T>(x: T, y: S) => void
 >  : ^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^    
 >function <T, S extends T>(x: T, y: S): void {    x = y} : <T, S extends T>(x: T, y: S) => void
->                                                        :                                     
+>                                                        : ^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 >y : S
@@ -24,7 +24,7 @@ var g = function <T, S>(x: T, y: S): void { }
 >g : <T, S>(x: T, y: S) => void
 >  : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^    
 >function <T, S>(x: T, y: S): void { } : <T, S>(x: T, y: S) => void
->                                      :                           
+>                                      : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^    
 >x : T
 >  : ^
 >y : S

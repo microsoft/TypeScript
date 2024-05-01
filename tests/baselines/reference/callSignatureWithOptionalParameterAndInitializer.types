@@ -15,7 +15,7 @@ var f = function foo(x?: number = 1) { }
 >f : (x?: number) => void
 >  : ^ ^^^      ^^^^^^^^^
 >function foo(x?: number = 1) { } : (x?: number) => void
->                                 :   ^                 
+>                                 : ^ ^^^      ^^^^^^^^^
 >foo : (x?: number) => void
 >    : ^ ^^^      ^^^^^^^^^
 >x : number
@@ -27,7 +27,7 @@ var f2 = (x: number, y? = 1) => { }
 >f2 : (x: number, y?: number) => void
 >   : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >(x: number, y? = 1) => { } : (x: number, y?: number) => void
->                           :              ^                 
+>                           : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : number
@@ -241,7 +241,7 @@ var b = {
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: any) => void; }
 >  : ^^^^^^ ^^^      ^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^^^^^
 >{    foo(x?: number = 1) { },    a: function foo(x: number, y?: number = '') { },    b: (x?: any = '') => { }} : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: any) => void; }
->                                                                                                               : ^^^^^^ ^^^      ^^^^^^^^^^^^             ^                 ^^^^^  ^              ^^^
+>                                                                                                               : ^^^^^^ ^^^      ^^^^^^^^^^^^^ ^^      ^^ ^^^      ^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^^^^^
 
     foo(x?: number = 1) { },
 >foo : (x?: number) => void
@@ -255,7 +255,7 @@ var b = {
 >a : (x: number, y?: number) => void
 >  : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >function foo(x: number, y?: number = '') { } : (x: number, y?: number) => void
->                                             :              ^                 
+>                                             : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >foo : (x: number, y?: number) => void
 >    : ^ ^^      ^^ ^^^      ^^^^^^^^^
 >x : number
@@ -269,7 +269,7 @@ var b = {
 >b : (x?: any) => void
 >  : ^ ^^^   ^^^^^^^^^
 >(x?: any = '') => { } : (x?: any) => void
->                      :   ^              
+>                      : ^ ^^^   ^^^^^^^^^
 >x : any
 >  : ^^^
 >'' : ""

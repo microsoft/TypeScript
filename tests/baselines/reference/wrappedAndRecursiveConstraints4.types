@@ -37,7 +37,7 @@ var c = new C({ length: 2 });
 >c : C<{ length: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >new C({ length: 2 }) : C<{ length: number; }>
->                     : ^^                   ^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 >{ length: 2 } : { length: number; }
@@ -51,13 +51,13 @@ var r = c.foo('');
 >r : <V extends string>(x: V) => V
 >  : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >c.foo('') : <V extends string>(x: V) => V
->          :                              
+>          : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >c.foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >c : C<{ length: number; }>
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >foo : <U extends { length: number; }>(x: U) => <V extends U>(x: V) => V
->    : ^^^^^^^^^^^                   ^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -77,7 +77,7 @@ var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
 >charAt : (x: number) => void
 >       : ^ ^^      ^^^^^^^^^
 >(x: number) => { '' } : (x: number) => void
->                      :                    
+>                      : ^ ^^      ^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >'' : ""

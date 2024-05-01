@@ -53,7 +53,7 @@ var a: any = function f() {
 >x : () => any
 >  : ^^^^^^^^^
 >f : () => any
->  :          
+>  : ^^^^^^^^^
 
     return x;
 >x : () => any
@@ -388,7 +388,7 @@ function opt2(n = { x: null, y: undefined }) {
 >m : { x: any; y: any; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >n : { x: any; y: any; }
->  :                    
+>  : ^^^^^^^^^^^^^^^^^^^
 
     var m: { x: any; y: any };
 >m : { x: any; y: any; }
