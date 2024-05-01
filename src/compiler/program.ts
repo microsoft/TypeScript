@@ -15,6 +15,7 @@ import {
     changesAffectingProgramStructure,
     changesAffectModuleResolution,
     combinePaths,
+    commandLineOptionOfCustomType,
     CommentDirective,
     CommentDirectivesMap,
     compareDataObjects,
@@ -1550,6 +1551,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
+    for (const option of commandLineOptionOfCustomType) {
+        if (hasProperty(options, option.name)) {
+            if (typeof options[option.name] === "string") throw new Error(`Found option: ${option.name} that is string and expected number/enum value.`);
+        }
+    }
 
     const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
 

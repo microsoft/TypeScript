@@ -317,7 +317,7 @@ describe("unittests:: Public APIs:: createProgram", () => {
             /*setParentNodes*/ undefined,
             sys,
         );
-        assert.doesNotThrow(() =>
+        (useJsonParsingApi ? assert.doesNotThrow : assert.throws)(() =>
             ts.createProgram({
                 rootNames: commandLine.fileNames,
                 options: useJsonParsingApi ? commandLine.options : config.compilerOptions,
