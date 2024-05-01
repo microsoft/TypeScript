@@ -3,9 +3,11 @@
 === parser509546_2.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 export class Logger { 
 >Logger : Logger
+>       : ^^^^^^
 
      public
 >public : any

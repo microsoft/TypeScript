@@ -62,7 +62,7 @@ describe("unittests:: services:: Transpile", () => {
                     oldTranspileDiagnostics = undefined!;
                 });
 
-                /* eslint-disable no-null/no-null */
+                /* eslint-disable no-restricted-syntax */
                 it("Correct errors for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".errors.txt"), transpileResult.diagnostics!.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, transpileResult.diagnostics!));
                 });
@@ -72,7 +72,7 @@ describe("unittests:: services:: Transpile", () => {
                         Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ".oldTranspile.errors.txt"), oldTranspileDiagnostics.length === 0 ? null : Harness.Compiler.getErrorBaseline(toBeCompiled, oldTranspileDiagnostics));
                     });
                 }
-                /* eslint-enable no-null/no-null */
+                /* eslint-enable no-restricted-syntax */
 
                 it("Correct output for " + justName, () => {
                     Harness.Baseline.runBaseline(justName.replace(/\.tsx?$/, ts.Extension.Js), transpileResult.outputText);

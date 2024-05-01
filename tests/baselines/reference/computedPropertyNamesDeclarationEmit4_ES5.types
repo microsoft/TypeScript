@@ -3,10 +3,15 @@
 === computedPropertyNamesDeclarationEmit4_ES5.ts ===
 var v: {
 >v : {}
+>  : ^^
 
     ["" + ""](): void;
 >["" + ""] : () => void
+>          : ^^^^^^    
 >"" + "" : string
+>        : ^^^^^^
 >"" : ""
+>   : ^^
 >"" : ""
+>   : ^^
 }

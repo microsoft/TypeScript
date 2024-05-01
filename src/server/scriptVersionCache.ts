@@ -9,9 +9,7 @@ import {
     TextSpan,
     unchangedTextChangeRange,
 } from "./_namespaces/ts";
-import {
-    emptyArray,
-} from "./_namespaces/ts.server";
+import { emptyArray } from "./_namespaces/ts.server";
 import * as protocol from "./protocol";
 
 const lineCollectionCapacity = 4;
@@ -593,7 +591,7 @@ export class LineNode implements LineCollection {
         if (children.length) this.updateCounts();
     }
 
-    isLeaf() {
+    isLeaf(): this is LineLeaf {
         return false;
     }
 
@@ -841,7 +839,7 @@ export class LineLeaf implements LineCollection {
     constructor(public text: string) {
     }
 
-    isLeaf() {
+    isLeaf(): this is LineLeaf {
         return true;
     }
 

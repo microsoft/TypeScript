@@ -7,7 +7,6 @@
 // @Filename: /user.ts
 ////import { x, y } from "./a";
 ////import { x as x2 } from "./a";
-////import { y as y2 } from "./a";
 ////import {} from "./a";
 
 verify.moveToNewFile({
@@ -24,7 +23,6 @@ verify.moveToNewFile({
 `import { x } from "./a";
 import { y } from "./y";
 import { x as x2 } from "./a";
-import { y as y2 } from "./y";
 import {} from "./a";`,
     },
 });

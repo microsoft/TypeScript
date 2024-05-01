@@ -1,9 +1,5 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    getServerHostForLibResolution,
-} from "../helpers/libraryResolution";
+import { jsonToReadableText } from "../helpers";
+import { getServerHostForLibResolution } from "../helpers/libraryResolution";
 import {
     baselineTsserverLogs,
     openFilesForSession,

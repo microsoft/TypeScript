@@ -41,8 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /jsconfig.json :: Config file name: /jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /jsconfig.json ProjectRootPath: undefined:: Result: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -229,8 +228,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a.js 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /a.js :: Config file name: /jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a.js ProjectRootPath: undefined:: Result: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 

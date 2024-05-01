@@ -511,7 +511,7 @@ export declare const m: typeof mod;
 /a/lib/tsc.js -w -p tests --traceResolution --explainFiles
 Output::
 >> Screen clear
-[[90m12:01:16 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 File '/user/username/projects/sample1/tests/package.json' does not exist.
 File '/user/username/projects/sample1/package.json' does not exist.
@@ -580,7 +580,7 @@ logic/index.d.ts
 tests/index.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90m12:01:17 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -986,7 +986,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:51 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
@@ -1034,7 +1034,7 @@ logic/index.d.ts
 tests/index.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90m12:01:58 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -1369,7 +1369,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:02:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 File '/user/username/projects/sample1/tests/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/sample1/package.json' does not exist according to earlier cached lookups.
@@ -1424,7 +1424,7 @@ logic/decls/index.d.ts
 tests/index.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90m12:02:27 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 

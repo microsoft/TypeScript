@@ -3,8 +3,10 @@
 === parserErrorRecovery_SourceUnit1.ts ===
 class C {
 >C : C
+>  : ^
 }
 }
 class D {
 >D : D
+>  : ^
 }
