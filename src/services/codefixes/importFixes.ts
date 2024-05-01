@@ -404,6 +404,15 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                         entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
                         break;
                     case ImportKind.CommonJS:
+                        if (compilerOptions.verbatimModuleSyntax) {
+                            const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
+                            entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
+                        }
+                        else {
+                            Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
+                            entry.namespaceLikeImport = { importKind, name: symbolName, addAsTypeOnly };
+                        }
+                        break;
                     case ImportKind.Namespace:
                         Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
                         entry.namespaceLikeImport = { importKind, name: symbolName, addAsTypeOnly };

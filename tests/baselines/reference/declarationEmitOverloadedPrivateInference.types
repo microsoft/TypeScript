@@ -63,13 +63,13 @@ export class Wrapper {
 >Proxies : { Failure: (options?: unknown) => string; Success: (options: string) => string; }
 >        : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
 >{        Failure: this.proxy(noArgs, true),        Success: this.proxy(oneArg),    } : { Failure: (options?: unknown) => string; Success: (options: string) => string; }
->                                                                                     : ^^^^^^^^^^^        ^                    ^^^^^^^^^^^                           ^^^
+>                                                                                     : ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^
 
         Failure: this.proxy(noArgs, true),
 >Failure : (options?: unknown) => string
 >        : ^       ^^^^^^^^^^^^^^^^^^^^^
 >this.proxy(noArgs, true) : (options?: unknown) => string
->                         :         ^                    
+>                         : ^       ^^^^^^^^^^^^^^^^^^^^^
 >this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
 >           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
 >this : this
@@ -85,7 +85,7 @@ export class Wrapper {
 >Success : (options: string) => string
 >        : ^       ^^^^^^^^^^^^^^^^^^^
 >this.proxy(oneArg) : (options: string) => string
->                   :                            
+>                   : ^       ^^^^^^^^^^^^^^^^^^^
 >this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
 >           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
 >this : this

@@ -20,7 +20,7 @@ const Elem = <T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div>;
 >Elem : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
 >     : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 ><T,U=never>(p: { prop: T, children: (t: T) => T }) => <div></div> : <T, U = never>(p: { prop: T; children: (t: T) => T; }) => JSX.Element
->                                                                  :                                                                      
+>                                                                  : ^ ^^^^^^^^^^^^^ ^^                                   ^^^^^^^^^^^^^^^^
 >p : { prop: T; children: (t: T) => T; }
 >  : ^^^^^^^^ ^^^^^^^^^^^^           ^^^
 >prop : T
@@ -54,7 +54,7 @@ Elem({prop: {a: "x"}, children: i => ({a: "z"})});
 >children : (i: { a: string; }) => { a: string; }
 >         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i => ({a: "z"}) : (i: { a: string; }) => { a: string; }
->                :                                      
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >i : { a: string; }
 >  : ^^^^^^^^^^^^^^
 >({a: "z"}) : { a: string; }
@@ -138,7 +138,7 @@ const ElemLit = <T extends string>(p: LitProps<T>) => <div></div>;
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
 >        : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^^^^^^^^
 ><T extends string>(p: LitProps<T>) => <div></div> : <T extends string>(p: LitProps<T>) => JSX.Element
->                                                  :                                                  
+>                                                  : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^^^^^^^^
 >p : LitProps<T>
 >  : ^^^^^^^^^^^
 ><div></div> : JSX.Element
@@ -162,7 +162,7 @@ ElemLit({prop: "x", children: () => "x"});
 >children : () => "x"
 >         : ^^^^^^^^^
 >() => "x" : () => "x"
->          :          
+>          : ^^^^^^^^^
 >"x" : "x"
 >    : ^^^
 

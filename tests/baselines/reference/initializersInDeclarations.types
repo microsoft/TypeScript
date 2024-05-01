@@ -53,7 +53,7 @@ declare module M1 {
 >v1 : () => boolean
 >   : ^^^^^^^^^^^^^
 >() => false : () => boolean
->            :              
+>            : ^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 }

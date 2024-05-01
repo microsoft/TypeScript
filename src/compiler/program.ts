@@ -126,6 +126,7 @@ import {
     getLineStarts,
     getMatchedFileSpec,
     getMatchedIncludeSpec,
+    getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getNormalizedAbsolutePathWithoutRoot,
@@ -307,12 +308,12 @@ import {
     SyntaxKind,
     sys,
     System,
-    targetOptionDeclaration,
     toFileNameLowerCase,
     tokenToString,
     toPath as ts_toPath,
     trace,
     tracing,
+    tryCast,
     TsConfigSourceFile,
     TypeChecker,
     typeDirectiveIsEqualTo,
@@ -1618,6 +1619,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     // Map storing if there is emit blocking diagnostics for given input
     const hasEmitBlockingDiagnostics = new Map<string, boolean>();
     let _compilerOptionsObjectLiteralSyntax: ObjectLiteralExpression | false | undefined;
+    let _compilerOptionsPropertySyntax: PropertyAssignment | false | undefined;
 
     let moduleResolutionCache: ModuleResolutionCache | undefined;
     let actualResolveModuleNamesWorker: (
@@ -2698,12 +2700,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Before falling back to the host
                 return host.fileExists(f);
             },
+            realpath: maybeBind(host, host.realpath),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getBuildInfo: () => program.getBuildInfo?.(),
             getSourceFileFromReference: (file, ref) => program.getSourceFileFromReference(file, ref),
             redirectTargetsMap,
             getFileIncludeReasons: program.getFileIncludeReasons,
             createHash: maybeBind(host, host.createHash),
+            getModuleResolutionCache: () => program.getModuleResolutionCache(),
+            trace: maybeBind(host, host.trace),
         };
     }
 
@@ -3457,7 +3462,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
         function collectDynamicImportOrRequireOrJsDocImportCalls(file: SourceFile) {
             const r = /import|require/g;
-            while (r.exec(file.text) !== null) { // eslint-disable-line no-null/no-null
+            while (r.exec(file.text) !== null) { // eslint-disable-line no-restricted-syntax
                 const node = getNodeAtPosition(file, r.lastIndex);
                 if (isJavaScriptFile && isRequireCall(node, /*requireStringLiteralLikeArgument*/ true)) {
                     setParentRecursive(node, /*incremental*/ false); // we need parent data on imports before the program is fully bound, so we ensure it's set here
@@ -4101,7 +4106,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 }
 
                 const isFromNodeModulesSearch = resolution.isExternalLibraryImport;
-                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension);
+                // If this is js file source of project reference, dont treat it as js file but as d.ts
+                const isJsFile = !resolutionExtensionIsTSOrJson(resolution.extension) && !getProjectReferenceRedirectProject(resolution.resolvedFileName);
                 const isJsFileFromNodeModules = isFromNodeModulesSearch && isJsFile && (!resolution.originalPath || pathContainsNodeModules(resolution.resolvedFileName));
                 const resolvedFileName = resolution.resolvedFileName;
 
@@ -4226,6 +4232,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (options.isolatedModules || options.verbatimModuleSyntax) {
             if (options.outFile) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "outFile", options.verbatimModuleSyntax ? "verbatimModuleSyntax" : "isolatedModules");
+            }
+        }
+
+        if (options.isolatedDeclarations) {
+            if (getAllowJSCompilerOption(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "allowJs", "isolatedDeclarations");
+            }
+            if (!getEmitDeclarations(options)) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "isolatedDeclarations", "declaration", "composite");
             }
         }
 
@@ -4397,7 +4412,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         if (options.checkJs && !getAllowJSCompilerOption(options)) {
-            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs"));
+            createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "checkJs", "allowJs");
         }
 
         if (options.emitDeclarationOnly) {
@@ -4407,6 +4422,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
             if (options.noEmit) {
                 createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "emitDeclarationOnly", "noEmit");
+            }
+        }
+
+        if (options.noCheck) {
+            if (options.noEmit) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_with_option_1, "noCheck", "noEmit");
+            }
+            if (!options.emitDeclarationOnly) {
+                createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1, "noCheck", "emitDeclarationOnly");
             }
         }
 
@@ -4766,7 +4790,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     message = Diagnostics.File_is_library_specified_here;
                     break;
                 }
-                const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+                const target = getNameOfScriptTarget(getEmitScriptTarget(options));
                 configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
                 message = Diagnostics.File_is_default_library_for_target_specified_here;
                 break;
@@ -4820,7 +4844,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4842,7 +4866,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
         });
         if (needCompilerDiagnostic) {
-            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+            createCompilerOptionsDiagnostic(message, ...args);
         }
     }
 
@@ -4890,25 +4914,50 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             !createOptionDiagnosticInObjectLiteralSyntax(compilerOptionsObjectLiteralSyntax, onKey, option1, option2, message, ...args);
 
         if (needCompilerDiagnostic) {
+            createCompilerOptionsDiagnostic(message, ...args);
+        }
+    }
+
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessageChain): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void;
+    function createCompilerOptionsDiagnostic(message: DiagnosticMessage | DiagnosticMessageChain, ...args: DiagnosticArguments): void {
+        const compilerOptionsProperty = getCompilerOptionsPropertySyntax();
+        if (compilerOptionsProperty) {
             // eslint-disable-next-line local/no-in-operator
             if ("messageText" in message) {
-                programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+                programDiagnostics.add(createDiagnosticForNodeFromMessageChain(options.configFile!, compilerOptionsProperty.name, message));
             }
             else {
-                programDiagnostics.add(createCompilerDiagnostic(message, ...args));
+                programDiagnostics.add(createDiagnosticForNodeInSourceFile(options.configFile!, compilerOptionsProperty.name, message, ...args));
             }
+        }
+        // eslint-disable-next-line local/no-in-operator
+        else if ("messageText" in message) {
+            programDiagnostics.add(createCompilerDiagnosticFromMessageChain(message));
+        }
+        else {
+            programDiagnostics.add(createCompilerDiagnostic(message, ...args));
         }
     }
 
     function getCompilerOptionsObjectLiteralSyntax() {
         if (_compilerOptionsObjectLiteralSyntax === undefined) {
-            _compilerOptionsObjectLiteralSyntax = forEachPropertyAssignment(
-                getTsConfigObjectLiteralExpression(options.configFile),
-                "compilerOptions",
-                prop => isObjectLiteralExpression(prop.initializer) ? prop.initializer : undefined,
-            ) || false;
+            const compilerOptionsProperty = getCompilerOptionsPropertySyntax();
+            _compilerOptionsObjectLiteralSyntax = compilerOptionsProperty ? tryCast(compilerOptionsProperty.initializer, isObjectLiteralExpression) || false : false;
         }
         return _compilerOptionsObjectLiteralSyntax || undefined;
+    }
+
+    function getCompilerOptionsPropertySyntax() {
+        if (_compilerOptionsPropertySyntax === undefined) {
+            _compilerOptionsPropertySyntax = forEachPropertyAssignment(
+                getTsConfigObjectLiteralExpression(options.configFile),
+                "compilerOptions",
+                identity,
+            ) || false;
+        }
+        return _compilerOptionsPropertySyntax || undefined;
     }
 
     function createOptionDiagnosticInObjectLiteralSyntax(objectLiteral: ObjectLiteralExpression, onKey: boolean, key1: string, key2: string | undefined, messageChain: DiagnosticMessageChain): boolean;

@@ -65,7 +65,7 @@ var obj = (n: number) => '';
 >obj : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  :                      
+>                  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -81,7 +81,7 @@ var arr = [(n: number) => ''];
 >arr : ((n: number) => string)[]
 >    : ^^ ^^      ^^^^^^^^^^^^^^
 >[(n: number) => ''] : ((n: number) => string)[]
->                    : ^                     ^^^
+>                    : ^^ ^^      ^^^^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -132,7 +132,7 @@ module M {
 >a : (s: any) => string
 >  : ^ ^^^^^^^^^^^^^^^^
 >(s) => '' : (s: any) => string
->          :                   
+>          : ^ ^^^^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 >'' : ""
@@ -142,7 +142,7 @@ module M {
 >b : (s: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(s) => s : (s: any) => any
->         :                
+>         : ^ ^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 >s : any
@@ -218,7 +218,7 @@ module M2 {
 >obj : (n: number) => string
 >    : ^ ^^      ^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
->                  :                      
+>                  : ^ ^^      ^^^^^^^^^^^
 >n : number
 >  : ^^^^^^
 >'' : ""
@@ -234,7 +234,7 @@ module M2 {
 >arr : ((n: number) => string)[]
 >    : ^^ ^^      ^^^^^^^^^^^^^^
 >[(n: number) => ''] : ((n: number) => string)[]
->                    : ^                     ^^^
+>                    : ^^ ^^      ^^^^^^^^^^^^^^
 >(n: number) => '' : (n: number) => string
 >                  : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -285,7 +285,7 @@ module M2 {
 >a : (s: any) => string
 >  : ^ ^^^^^^^^^^^^^^^^
 >(s) => '' : (s: any) => string
->          :                   
+>          : ^ ^^^^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 >'' : ""
@@ -295,7 +295,7 @@ module M2 {
 >b : (s: any) => any
 >  : ^ ^^^^^^^^^^^^^
 >(s) => s : (s: any) => any
->         :                
+>         : ^ ^^^^^^^^^^^^^
 >s : any
 >  : ^^^
 >s : any
@@ -309,7 +309,7 @@ var generic1 = <T>(n: T) => [n];
 >generic1 : <T>(n: T) => T[]
 >         : ^ ^^ ^^ ^^^^^^^^
 ><T>(n: T) => [n] : <T>(n: T) => T[]
->                 :                 
+>                 : ^ ^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 >[n] : T[]
@@ -327,7 +327,7 @@ var generic2 = <T>(n: T) => { return [n]; };
 >generic2 : <T>(n: T) => T[]
 >         : ^ ^^ ^^ ^^^^^^^^
 ><T>(n: T) => { return [n]; } : <T>(n: T) => T[]
->                             :                 
+>                             : ^ ^^ ^^ ^^^^^^^^
 >n : T
 >  : ^
 >[n] : T[]

@@ -260,13 +260,13 @@ var b = {
 >b : { foo: <U extends A, T extends U>(x: T) => string; }
 >  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    }} : { foo: <U extends A, T extends U>(x: T) => string; }
->                                                                                                                                                     : ^^^^^^^                                          ^^^
+>                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <U extends A, T extends U>(x: T) => {
 >foo : <U extends A, T extends U>(x: T) => string
 >    : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 ><U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends U>(x: T) => string
->                                                                                                                                          :                                           
+>                                                                                                                                          : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 

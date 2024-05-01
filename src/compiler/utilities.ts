@@ -41,6 +41,7 @@ import {
     canHaveLocals,
     canHaveModifiers,
     type CanHaveModuleSpecifier,
+    CanonicalDiagnostic,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -208,6 +209,7 @@ import {
     HasExpressionInitializer,
     hasExtension,
     HasFlowNode,
+    HasInferredType,
     HasInitializer,
     hasInitializer,
     HasJSDoc,
@@ -460,6 +462,7 @@ import {
     Pattern,
     PostfixUnaryExpression,
     PrefixUnaryExpression,
+    PrimitiveLiteral,
     PrinterOptions,
     PrintHandlers,
     PrivateIdentifier,
@@ -528,6 +531,7 @@ import {
     SymbolTable,
     SyntaxKind,
     TaggedTemplateExpression,
+    targetOptionDeclaration,
     TemplateExpression,
     TemplateLiteral,
     TemplateLiteralLikeNode,
@@ -1507,6 +1511,10 @@ export const getScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetF
             es2022: [
                 "at",
             ],
+            esnext: [
+                "isWellFormed",
+                "toWellFormed",
+            ],
         })),
         StringConstructor: new Map(Object.entries({
             es2015: [
@@ -2115,7 +2123,7 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
                 return Debug.assertNever(name.name);
             }
         case SyntaxKind.JSDocMemberName:
-            return entityNameToString(name.left) + entityNameToString(name.right);
+            return entityNameToString(name.left) + "#" + entityNameToString(name.right);
         case SyntaxKind.JsxNamespacedName:
             return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
         default:
@@ -2171,6 +2179,7 @@ export function createFileDiagnosticFromMessageChain(file: SourceFile, start: nu
         category: messageChain.category,
         messageText: messageChain.next ? messageChain : messageChain.messageText,
         relatedInformation,
+        canonicalHead: messageChain.canonicalHead,
     };
 }
 
@@ -2206,6 +2215,14 @@ export function createDiagnosticForRange(sourceFile: SourceFile, range: TextRang
         code: message.code,
         category: message.category,
         messageText: message.message,
+    };
+}
+
+/** @internal */
+export function getCanonicalDiagnostic(message: DiagnosticMessage, ...args: string[]): CanonicalDiagnostic {
+    return {
+        code: message.code,
+        messageText: formatMessage(message, ...args),
     };
 }
 
@@ -2367,6 +2384,17 @@ export function isVarUsing(node: VariableDeclaration | VariableDeclarationList):
  */
 export function isVarConst(node: VariableDeclaration | VariableDeclarationList): boolean {
     return (getCombinedNodeFlags(node) & NodeFlags.BlockScoped) === NodeFlags.Const;
+}
+
+/**
+ * Gets whether a bound `VariableDeclaration` or `VariableDeclarationList` is part of a `const`, `using` or `await using` declaration.
+ * @internal
+ */
+export function isVarConstLike(node: VariableDeclaration | VariableDeclarationList) {
+    const blockScopeKind = getCombinedNodeFlags(node) & NodeFlags.BlockScoped;
+    return blockScopeKind === NodeFlags.Const ||
+        blockScopeKind === NodeFlags.Using ||
+        blockScopeKind === NodeFlags.AwaitUsing;
 }
 
 /**
@@ -5340,10 +5368,6 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
     return node.escapedText === "push" || node.escapedText === "unshift";
 }
 
-// TODO(jakebailey): this function should not be named this. While it does technically
-// return true if the argument is a ParameterDeclaration, it also returns true for nodes
-// that are children of ParameterDeclarations inside binding elements.
-// Probably, this should be called `rootDeclarationIsParameter`.
 /**
  * This function returns true if the this node's root declaration is a parameter.
  * For example, passing a `ParameterDeclaration` will return true, as will passing a
@@ -5353,7 +5377,7 @@ export function isPushOrUnshiftIdentifier(node: Identifier) {
  *
  * @internal
  */
-export function isParameterDeclaration(node: Declaration): boolean {
+export function isPartOfParameterDeclaration(node: Declaration): boolean {
     const root = getRootDeclaration(node);
     return root.kind === SyntaxKind.Parameter;
 }
@@ -5850,6 +5874,9 @@ export function createDiagnosticCollection(): DiagnosticCollection {
         if (result >= 0) {
             return diagnostics[result];
         }
+        if (~result > 0 && diagnosticsEqualityComparer(diagnostic, diagnostics[~result - 1])) {
+            return diagnostics[~result - 1];
+        }
         return undefined;
     }
 
@@ -5873,7 +5900,7 @@ export function createDiagnosticCollection(): DiagnosticCollection {
             diagnostics = nonFileDiagnostics;
         }
 
-        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation);
+        insertSorted(diagnostics, diagnostic, compareDiagnosticsSkipRelatedInformation, diagnosticsEqualityComparer);
     }
 
     function getGlobalDiagnostics(): Diagnostic[] {
@@ -8523,20 +8550,24 @@ export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
 
 /** @internal */
 export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
     return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
         compareValues(d1.start, d2.start) ||
         compareValues(d1.length, d2.length) ||
-        compareValues(d1.code, d2.code) ||
-        compareMessageText(d1.messageText, d2.messageText) ||
+        compareValues(code1, code2) ||
+        compareMessageText(d1, d2) ||
         Comparison.EqualTo;
 }
 
+// A diagnostic with more elaboration should be considered *less than* a diagnostic
+// with less elaboration that is otherwise similar.
 function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     if (!d1.relatedInformation && !d2.relatedInformation) {
         return Comparison.EqualTo;
     }
     if (d1.relatedInformation && d2.relatedInformation) {
-        return compareValues(d1.relatedInformation.length, d2.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
+        return compareValues(d2.relatedInformation.length, d1.relatedInformation.length) || forEach(d1.relatedInformation, (d1i, index) => {
             const d2i = d2.relatedInformation![index];
             return compareDiagnostics(d1i, d2i); // EqualTo is 0, so falsy, and will cause the next item to be compared
         }) || Comparison.EqualTo;
@@ -8544,43 +8575,138 @@ function compareRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
     return d1.relatedInformation ? Comparison.LessThan : Comparison.GreaterThan;
 }
 
-function compareMessageText(t1: string | DiagnosticMessageChain, t2: string | DiagnosticMessageChain): Comparison {
-    if (typeof t1 === "string" && typeof t2 === "string") {
-        return compareStringsCaseSensitive(t1, t2);
+// An diagnostic message with more elaboration should be considered *less than* a diagnostic message
+// with less elaboration that is otherwise similar.
+function compareMessageText(
+    d1: Diagnostic,
+    d2: Diagnostic,
+): Comparison {
+    let headMsg1 = getDiagnosticMessage(d1);
+    let headMsg2 = getDiagnosticMessage(d2);
+    if (typeof headMsg1 !== "string") {
+        headMsg1 = headMsg1.messageText;
     }
-    else if (typeof t1 === "string") {
-        return Comparison.LessThan;
+    if (typeof headMsg2 !== "string") {
+        headMsg2 = headMsg2.messageText;
     }
-    else if (typeof t2 === "string") {
-        return Comparison.GreaterThan;
-    }
-    let res = compareStringsCaseSensitive(t1.messageText, t2.messageText);
+    const chain1 = typeof d1.messageText !== "string" ? d1.messageText.next : undefined;
+    const chain2 = typeof d2.messageText !== "string" ? d2.messageText.next : undefined;
+
+    let res = compareStringsCaseSensitive(headMsg1, headMsg2);
     if (res) {
         return res;
     }
-    if (!t1.next && !t2.next) {
-        return Comparison.EqualTo;
+
+    res = compareMessageChain(chain1, chain2);
+    if (res) {
+        return res;
     }
-    if (!t1.next) {
+
+    if (d1.canonicalHead && !d2.canonicalHead) {
         return Comparison.LessThan;
     }
-    if (!t2.next) {
+    if (d2.canonicalHead && !d1.canonicalHead) {
         return Comparison.GreaterThan;
     }
-    const len = Math.min(t1.next.length, t2.next.length);
-    for (let i = 0; i < len; i++) {
-        res = compareMessageText(t1.next[i], t2.next[i]);
+
+    return Comparison.EqualTo;
+}
+
+// First compare by size of the message chain,
+// then compare by content of the message chain.
+function compareMessageChain(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
+        return Comparison.EqualTo;
+    }
+    if (c1 === undefined) {
+        return Comparison.GreaterThan;
+    }
+    if (c2 === undefined) {
+        return Comparison.LessThan;
+    }
+
+    return compareMessageChainSize(c1, c2) || compareMessageChainContent(c1, c2);
+}
+
+function compareMessageChainSize(
+    c1: DiagnosticMessageChain[] | undefined,
+    c2: DiagnosticMessageChain[] | undefined,
+): Comparison {
+    if (c1 === undefined && c2 === undefined) {
+        return Comparison.EqualTo;
+    }
+    if (c1 === undefined) {
+        return Comparison.GreaterThan;
+    }
+    if (c2 === undefined) {
+        return Comparison.LessThan;
+    }
+
+    let res = compareValues(c2.length, c1.length);
+    if (res) {
+        return res;
+    }
+
+    for (let i = 0; i < c2.length; i++) {
+        res = compareMessageChainSize(c1[i].next, c2[i].next);
         if (res) {
             return res;
         }
     }
-    if (t1.next.length < t2.next.length) {
-        return Comparison.LessThan;
-    }
-    else if (t1.next.length > t2.next.length) {
-        return Comparison.GreaterThan;
+
+    return Comparison.EqualTo;
+}
+
+// Assumes the two chains have the same shape.
+function compareMessageChainContent(
+    c1: DiagnosticMessageChain[],
+    c2: DiagnosticMessageChain[],
+): Comparison {
+    let res;
+    for (let i = 0; i < c2.length; i++) {
+        res = compareStringsCaseSensitive(c1[i].messageText, c2[i].messageText);
+        if (res) {
+            return res;
+        }
+        if (c1[i].next === undefined) {
+            continue;
+        }
+        res = compareMessageChainContent(c1[i].next!, c2[i].next!);
+        if (res) {
+            return res;
+        }
     }
     return Comparison.EqualTo;
+}
+
+/** @internal */
+export function diagnosticsEqualityComparer(d1: Diagnostic, d2: Diagnostic): boolean {
+    const code1 = getDiagnosticCode(d1);
+    const code2 = getDiagnosticCode(d2);
+    const msg1 = getDiagnosticMessage(d1);
+    const msg2 = getDiagnosticMessage(d2);
+    return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) === Comparison.EqualTo &&
+        compareValues(d1.start, d2.start) === Comparison.EqualTo &&
+        compareValues(d1.length, d2.length) === Comparison.EqualTo &&
+        compareValues(code1, code2) === Comparison.EqualTo &&
+        messageTextEqualityComparer(msg1, msg2);
+}
+
+function getDiagnosticCode(d: Diagnostic): number {
+    return d.canonicalHead?.code || d.code;
+}
+
+function getDiagnosticMessage(d: Diagnostic): string | DiagnosticMessageChain {
+    return d.canonicalHead?.messageText || d.messageText;
+}
+
+function messageTextEqualityComparer(m1: string | DiagnosticMessageChain, m2: string | DiagnosticMessageChain): boolean {
+    const t1 = typeof m1 === "string" ? m1 : m1.messageText;
+    const t2 = typeof m2 === "string" ? m2 : m2.messageText;
+    return compareStringsCaseSensitive(t1, t2) === Comparison.EqualTo;
 }
 
 /** @internal */
@@ -8974,6 +9100,11 @@ export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: Str
 }
 
 /** @internal */
+export function getNameOfScriptTarget(scriptTarget: ScriptTarget): string | undefined {
+    return forEachEntry(targetOptionDeclaration.type, (value, key) => value === scriptTarget ? key : undefined);
+}
+
+/** @internal */
 export function getEmitStandardClassFields(compilerOptions: CompilerOptions) {
     return compilerOptions.useDefineForClassFields !== false && getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2022;
 }
@@ -9064,6 +9195,7 @@ export interface SymlinkCache {
     getSymlinkedFiles(): ReadonlyMap<Path, string> | undefined;
     setSymlinkedDirectory(symlink: string, real: SymlinkedDirectory | false): void;
     setSymlinkedFile(symlinkPath: Path, real: string): void;
+    hasAnySymlinks(): boolean;
     /**
      * @internal
      * Uses resolvedTypeReferenceDirectives from program instead of from files, since files
@@ -9079,6 +9211,7 @@ export interface SymlinkCache {
         ) => void,
         typeReferenceDirectives: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>,
     ): void;
+    setSymlinksFromResolution(resolution: ResolvedModuleFull | undefined): void;
     /**
      * @internal
      * Whether `setSymlinksFromResolutions` has already been called.
@@ -9118,7 +9251,15 @@ export function createSymlinkCache(cwd: string, getCanonicalFileName: GetCanonic
             typeReferenceDirectives.forEach(resolution => processResolution(this, resolution.resolvedTypeReferenceDirective));
         },
         hasProcessedResolutions: () => hasProcessedResolutions,
+        setSymlinksFromResolution(resolution) {
+            processResolution(this, resolution);
+        },
+        hasAnySymlinks,
     };
+
+    function hasAnySymlinks() {
+        return !!symlinkedFiles?.size || (!!symlinkedDirectories && !!forEachEntry(symlinkedDirectories, value => !!value));
+    }
 
     function processResolution(cache: SymlinkCache, resolution: ResolvedModuleFull | ResolvedTypeReferenceDirective | undefined) {
         if (!resolution || !resolution.originalPath || !resolution.resolvedFileName) return;
@@ -9938,12 +10079,13 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
     // '/// <reference no-default-lib="true"/>' directive.
     return (options.skipLibCheck && sourceFile.isDeclarationFile ||
         options.skipDefaultLibCheck && sourceFile.hasNoDefaultLib) ||
+        options.noCheck ||
         host.isSourceOfProjectReferenceRedirect(sourceFile.fileName);
 }
 
 /** @internal */
 export function isJsonEqual(a: unknown, b: unknown): boolean {
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
 }
 
@@ -10723,8 +10865,8 @@ export function getNameFromImportAttribute(node: ImportAttribute) {
 }
 
 /** @internal */
-export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false): EvaluatorResult<T> {
-    return { value, isSyntacticallyString, resolvedOtherFiles };
+export function evaluatorResult<T extends string | number | undefined>(value: T, isSyntacticallyString = false, resolvedOtherFiles = false, hasExternalReferences = false): EvaluatorResult<T> {
+    return { value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences };
 }
 
 /** @internal */
@@ -10734,6 +10876,7 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
     function evaluate(expr: Expression, location?: Declaration): EvaluatorResult {
         let isSyntacticallyString = false;
         let resolvedOtherFiles = false;
+        let hasExternalReferences = false;
         // It's unclear when/whether we should consider skipping other kinds of outer expressions.
         // Type assertions intentionally break evaluation when evaluating literal types, such as:
         //     type T = `one ${"two" as any} three`; // string
@@ -10751,14 +10894,15 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.PrefixUnaryExpression:
                 const result = evaluate((expr as PrefixUnaryExpression).operand, location);
                 resolvedOtherFiles = result.resolvedOtherFiles;
+                hasExternalReferences = result.hasExternalReferences;
                 if (typeof result.value === "number") {
                     switch ((expr as PrefixUnaryExpression).operator) {
                         case SyntaxKind.PlusToken:
-                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.MinusToken:
-                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(-result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.TildeToken:
-                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(~result.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                     }
                 }
                 break;
@@ -10767,32 +10911,33 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
                 const right = evaluate((expr as BinaryExpression).right, location);
                 isSyntacticallyString = (left.isSyntacticallyString || right.isSyntacticallyString) && (expr as BinaryExpression).operatorToken.kind === SyntaxKind.PlusToken;
                 resolvedOtherFiles = left.resolvedOtherFiles || right.resolvedOtherFiles;
+                hasExternalReferences = left.hasExternalReferences || right.hasExternalReferences;
                 if (typeof left.value === "number" && typeof right.value === "number") {
                     switch ((expr as BinaryExpression).operatorToken.kind) {
                         case SyntaxKind.BarToken:
-                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value | right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AmpersandToken:
-                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value & right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.GreaterThanGreaterThanToken:
-                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value >> right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.GreaterThanGreaterThanGreaterThanToken:
-                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value >>> right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.LessThanLessThanToken:
-                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value << right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.CaretToken:
-                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value ^ right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AsteriskToken:
-                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value * right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.SlashToken:
-                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value / right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.PlusToken:
-                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value + right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.MinusToken:
-                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value - right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.PercentToken:
-                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value % right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                         case SyntaxKind.AsteriskAsteriskToken:
-                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles);
+                            return evaluatorResult(left.value ** right.value, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
                     }
                 }
                 else if (
@@ -10804,6 +10949,7 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
                         "" + left.value + right.value,
                         isSyntacticallyString,
                         resolvedOtherFiles,
+                        hasExternalReferences,
                     );
                 }
 
@@ -10826,12 +10972,13 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             case SyntaxKind.ElementAccessExpression:
                 return evaluateElementAccessExpression(expr as ElementAccessExpression, location);
         }
-        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles);
+        return evaluatorResult(/*value*/ undefined, isSyntacticallyString, resolvedOtherFiles, hasExternalReferences);
     }
 
     function evaluateTemplateExpression(expr: TemplateExpression, location?: Declaration): EvaluatorResult<string | undefined> {
         let result = expr.head.text;
         let resolvedOtherFiles = false;
+        let hasExternalReferences = false;
         for (const span of expr.templateSpans) {
             const spanResult = evaluate(span.expression, location);
             if (spanResult.value === undefined) {
@@ -10840,11 +10987,13 @@ export function createEvaluator({ evaluateElementAccessExpression, evaluateEntit
             result += spanResult.value;
             result += span.literal.text;
             resolvedOtherFiles ||= spanResult.resolvedOtherFiles;
+            hasExternalReferences ||= spanResult.hasExternalReferences;
         }
         return evaluatorResult(
             result,
             /*isSyntacticallyString*/ true,
             resolvedOtherFiles,
+            hasExternalReferences,
         );
     }
     return evaluate;
@@ -11229,7 +11378,7 @@ export function createNameResolver({
                             lastLocation === (location as BindingElement).name && isBindingPattern(lastLocation)
                         )
                     ) {
-                        if (isParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
+                        if (isPartOfParameterDeclaration(location as BindingElement) && !associatedDeclarationForContainingInitializerOrBindingName) {
                             associatedDeclarationForContainingInitializerOrBindingName = location as BindingElement;
                         }
                     }
@@ -11422,5 +11571,60 @@ export function createNameResolver({
         }
 
         return false;
+    }
+}
+
+/** @internal */
+export function isPrimitiveLiteralValue(node: Expression, includeBigInt = true): node is PrimitiveLiteral {
+    Debug.type<PrimitiveLiteral>(node);
+    switch (node.kind) {
+        case SyntaxKind.TrueKeyword:
+        case SyntaxKind.FalseKeyword:
+        case SyntaxKind.NumericLiteral:
+        case SyntaxKind.StringLiteral:
+        case SyntaxKind.NoSubstitutionTemplateLiteral:
+            return true;
+        case SyntaxKind.BigIntLiteral:
+            return includeBigInt;
+        case SyntaxKind.PrefixUnaryExpression:
+            if (node.operator === SyntaxKind.MinusToken) {
+                return isNumericLiteral(node.operand) || (includeBigInt && isBigIntLiteral(node.operand));
+            }
+            if (node.operator === SyntaxKind.PlusToken) {
+                return isNumericLiteral(node.operand);
+            }
+            return false;
+        default:
+            assertType<never>(node);
+            return false;
+    }
+}
+
+/** @internal */
+export function unwrapParenthesizedExpression(o: Expression) {
+    while (o.kind === SyntaxKind.ParenthesizedExpression) {
+        o = (o as ParenthesizedExpression).expression;
+    }
+    return o;
+}
+
+/** @internal */
+export function hasInferredType(node: Node): node is HasInferredType {
+    Debug.type<HasInferredType>(node);
+    switch (node.kind) {
+        case SyntaxKind.Parameter:
+        case SyntaxKind.PropertySignature:
+        case SyntaxKind.PropertyDeclaration:
+        case SyntaxKind.BindingElement:
+        case SyntaxKind.PropertyAccessExpression:
+        case SyntaxKind.ElementAccessExpression:
+        case SyntaxKind.BinaryExpression:
+        case SyntaxKind.VariableDeclaration:
+        case SyntaxKind.ExportAssignment:
+        case SyntaxKind.PropertyAssignment:
+            return true;
+        default:
+            assertType<never>(node);
+            return false;
     }
 }

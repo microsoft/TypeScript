@@ -34,7 +34,7 @@ var x = foo(new C()).x; // was Error that property x does not exist on type {}
 >x : () => Goo
 >  : ^^^^^^^^^
 >foo(new C()).x : () => Goo
->               :          
+>               : ^^^^^^^^^
 >foo(new C()) : I
 >             : ^
 >foo : <T>(f: { y: T; }) => T

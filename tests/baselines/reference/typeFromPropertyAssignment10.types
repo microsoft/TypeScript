@@ -46,7 +46,7 @@ Outer.app.SomeView = (function () {
 >SomeView : () => void
 >         : ^^^^^^^^^^
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;})() : () => void
->                                                                                                 :           
+>                                                                                                 : ^^^^^^^^^^
 >(function () {    var SomeView = function() {        var me = this;    }    return SomeView;}) : () => () => void
 >                                                                                               : ^^^^^^^^^^^^^^^^
 >function () {    var SomeView = function() {        var me = this;    }    return SomeView;} : () => () => void
@@ -56,7 +56,7 @@ Outer.app.SomeView = (function () {
 >SomeView : () => void
 >         : ^^^^^^^^^^
 >function() {        var me = this;    } : () => void
->                                        :           
+>                                        : ^^^^^^^^^^
 
         var me = this;
 >me : any
@@ -137,7 +137,7 @@ Outer.app.statische = function (k) {
 >statische : (k: number) => number
 >          : ^ ^^      ^^^^^^^^^^^
 >function (k) {    return k ** k;} : (k: number) => number
->                                  :                      
+>                                  : ^ ^^      ^^^^^^^^^^^
 >k : number
 >  : ^^^^^^
 

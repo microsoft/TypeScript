@@ -59,7 +59,7 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
 >ExtendedClass : new () => { f: () => "something"; } & import("deps/BaseClass")
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends({        f: function() {            return "something";        }    }) : new () => { f: () => "something"; } & import("deps/BaseClass")
->                                                                                         :                                                               
+>                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass.extends : <A>(a: A) => new () => A & import("deps/BaseClass")
 >                  : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BaseClass : typeof import("deps/BaseClass")
@@ -73,7 +73,7 @@ define("lib/ExtendedClass", ["deps/BaseClass"],
 >f : () => "something"
 >  : ^^^^^^^^^^^^^^^^^
 >function() {            return "something";        } : () => "something"
->                                                     :                  
+>                                                     : ^^^^^^^^^^^^^^^^^
 
             return "something";
 >"something" : "something"

@@ -34,7 +34,7 @@ for (var x in {}) {
 >fn : () => void
 >   : ^^^^^^^^^^
 >() => {        continue TWO;    } : () => void
->                                  :           
+>                                  : ^^^^^^^^^^
 
         continue TWO;
 >TWO : any

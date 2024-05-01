@@ -648,7 +648,7 @@ var a9b = new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, nu
 >a9b : { a?: number; b?: string; }
 >    : ^^^^^^      ^^^^^^      ^^^
 >new someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null) : { a?: number; b?: string; }
->                                                                          :    ^           ^           
+>                                                                          : ^^^^^^      ^^^^^^      ^^^
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >a : number
@@ -699,7 +699,7 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9e : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window & typeof globalThis; y?: undefined; } | { x: number; y: string; z?: undefined; }
->                                                                   :                                              ^              ^^^                         ^              
+>                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >undefined : undefined
@@ -768,7 +768,7 @@ var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
 >a9d : { x: number; }
 >    : ^^^^^^^^^^^^^^
 >new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 }) : { x: number; }
->                                                :               
+>                                                : ^^^^^^^^^^^^^^
 >someGenerics9 : someGenerics9
 >              : ^^^^^^^^^^^^^
 >{ x: 3 } : { x: number; }

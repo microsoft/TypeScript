@@ -144,8 +144,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/index.ts :: Config file name: /home/src/projects/project1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/index.ts ProjectRootPath: undefined:: Result: /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /home/src/projects/project1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project1/tsconfig.json 2000 undefined Project: /home/src/projects/project1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -473,8 +472,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /home/src/projects/project1
-Info seq  [hh:mm:ss:mss] For info: /home/src/projects/project1/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project1/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (10)
 

@@ -5,7 +5,7 @@ let o = {
 >o : { d: string; m(): number; f: () => number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    d: "bar",    m() {        return this.d.length;    },    f: function() {        return this.d.length;    }} : { d: string; m(): number; f: () => number; }
->                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^^
+>                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     d: "bar",
 >d : string
@@ -34,7 +34,7 @@ let o = {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >function() {        return this.d.length;    } : () => number
->                                               :             
+>                                               : ^^^^^^^^^^^^
 
         return this.d.length;
 >this.d.length : number

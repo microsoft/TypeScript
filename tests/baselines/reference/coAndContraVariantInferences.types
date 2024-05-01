@@ -124,7 +124,7 @@ const printFn = (action: typeof actionA | typeof actionB)=> console.log(action);
 >printFn : (action: typeof actionA | typeof actionB) => void
 >        : ^      ^^                               ^^^^^^^^^
 >(action: typeof actionA | typeof actionB)=> console.log(action) : (action: typeof actionA | typeof actionB) => void
->                                                                :                                                  
+>                                                                : ^      ^^                               ^^^^^^^^^
 >action : Action<"ACTION_A", string> | Action<"ACTION_B", boolean>
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >actionA : Action<"ACTION_A", string>

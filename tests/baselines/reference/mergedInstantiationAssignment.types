@@ -18,7 +18,7 @@ const v1 = new GenericObject() as GenericObject &
 >v1 : GenericObject<number> & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new GenericObject() as GenericObject &  ({ a?: string } | { b?: number }) : GenericObject<number> & ({ a?: string; } | { b?: number; })
->                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^   ^           ^^^   ^           ^
+>                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new GenericObject() : GenericObject<number>
 >                    : ^^^^^^^^^^^^^^^^^^^^^
 >GenericObject : typeof GenericObject
@@ -55,7 +55,7 @@ const v2 = new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &
 >v2 : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new GenericObjectWithoutSetter() as GenericObjectWithoutSetter &  ({ a?: string } | { b?: number }) : GenericObjectWithoutSetter<number> & ({ a?: string; } | { b?: number; })
->                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^           ^^^   ^           ^
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new GenericObjectWithoutSetter() : GenericObjectWithoutSetter<number>
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >GenericObjectWithoutSetter : typeof GenericObjectWithoutSetter
@@ -94,7 +94,7 @@ const v3 = new NormalObject() as NormalObject &
 >v3 : NormalObject & ({ a?: string; } | { b?: number; })
 >   : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new NormalObject() as NormalObject &  ({ a?: string } | { b?: number }) : NormalObject & ({ a?: string; } | { b?: number; })
->                                                                        : ^^^^^^^^^^^^^^^^   ^           ^^^   ^           ^
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^
 >new NormalObject() : NormalObject
 >                   : ^^^^^^^^^^^^
 >NormalObject : typeof NormalObject

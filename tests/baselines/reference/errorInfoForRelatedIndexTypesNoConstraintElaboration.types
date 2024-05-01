@@ -1,10 +1,10 @@
 //// [tests/cases/compiler/errorInfoForRelatedIndexTypesNoConstraintElaboration.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,300 / 2,300 (nearest 100)
-Type Count: 10,100 / 10,100 (nearest 100)
-Instantiation count: 229,000 / 229,000 (nearest 500)
-Symbol count: 105,500 / 105,500 (nearest 500)
+Assignability cache: 2,500
+Type Count: 10,000
+Instantiation count: 250,000
+Symbol count: 100,000
 
 === errorInfoForRelatedIndexTypesNoConstraintElaboration.ts ===
 /// <reference path="react16.d.ts" />

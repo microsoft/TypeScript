@@ -70,7 +70,7 @@ module M.P {
 >w : () => void
 >  : ^^^^^^^^^^
 >M.D.f : () => void
->      :           
+>      : ^^^^^^^^^^
 >M.D : typeof M.D
 >    : ^^^^^^^^^^
 >M : typeof M
@@ -84,7 +84,7 @@ module M.P {
 >x : () => void
 >  : ^^^^^^^^^^
 >M.C.f : () => void
->      :           
+>      : ^^^^^^^^^^
 >M.C : typeof M.C
 >    : ^^^^^^^^^^
 >M : typeof M

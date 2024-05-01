@@ -45,7 +45,7 @@ function* forEachASTNode(node: ts.Node) {
 }
 
 function nodeIsFullySynthetic(node: ts.Node) {
-    return ts.nodeIsSynthesized(node) && !node.original;
+    return ts.nodeIsSynthesized(node) && !ts.getParseTreeNode(node);
 }
 
 const createSyntheticNodeUnderliningPrinter = memoize((): { printer: ts.Printer; writer: ts.EmitTextWriter; underliner: ts.EmitTextWriter; reset(): void; } => {

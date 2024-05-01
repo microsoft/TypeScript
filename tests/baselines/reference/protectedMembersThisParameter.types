@@ -39,7 +39,7 @@ class MessageWrapper {
 >f : (this: T) => void
 >  : ^    ^^ ^^^^^^^^^
 >function(this: T) {      m.secret(); // should error    } : (this: T) => void
->                                                          :                  
+>                                                          : ^    ^^ ^^^^^^^^^
 >this : T
 >     : ^
 

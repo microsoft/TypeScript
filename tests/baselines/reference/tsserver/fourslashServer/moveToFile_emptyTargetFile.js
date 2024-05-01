@@ -30,8 +30,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /source.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /source.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -242,13 +241,13 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to a new file",
-          "description": "Move to a new file",
+          "name": "Move to file",
+          "description": "Move to file",
           "actions": [
             {
-              "name": "Move to a new file",
-              "description": "Move to a new file",
-              "kind": "refactor.move.newFile",
+              "name": "Move to file",
+              "description": "Move to file",
+              "kind": "refactor.move.file",
               "range": {
                 "start": {
                   "line": 1,
@@ -263,13 +262,13 @@ Info seq  [hh:mm:ss:mss] response:
           ]
         },
         {
-          "name": "Move to file",
-          "description": "Move to file",
+          "name": "Move to a new file",
+          "description": "Move to a new file",
           "actions": [
             {
-              "name": "Move to file",
-              "description": "Move to file",
-              "kind": "refactor.move.file",
+              "name": "Move to a new file",
+              "description": "Move to a new file",
+              "kind": "refactor.move.newFile",
               "range": {
                 "start": {
                   "line": 1,

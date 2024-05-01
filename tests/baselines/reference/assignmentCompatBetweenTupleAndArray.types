@@ -40,7 +40,7 @@ emptyObjArray = emptyObjTuple;
 >emptyObjArray : {}[]
 >              : ^^^^
 >emptyObjTuple : [{}]
->              : ^  ^
+>              : ^^^^
 
 emptyObjArray = numStrTuple;
 >emptyObjArray = numStrTuple : [number, string]
@@ -64,7 +64,7 @@ emptyObjArray = numEmptyObjTuple;
 >emptyObjArray : {}[]
 >              : ^^^^
 >numEmptyObjTuple : [number, {}]
->                 : ^^^^^^^^^  ^
+>                 : ^^^^^^^^^^^^
 
 // error
 numArray = numStrTuple;
@@ -81,5 +81,5 @@ emptyObjTuple = emptyObjArray;
 >emptyObjTuple : [{}]
 >              : ^^^^
 >emptyObjArray : {}[]
->              :   ^^
+>              : ^^^^
 

@@ -30,7 +30,7 @@ module ConstructSignature {
 >r : new (x: number) => void
 >  : ^^^^^ ^^      ^^^^^^^^^
 >foo1(rarg1) : new (x: number) => void
->            :                        
+>            : ^^^^^ ^^      ^^^^^^^^^
 >foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >     : ^^^  ^^                       ^^^^^^^^ ^^      ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >rarg1 : new (x: number) => number
@@ -46,7 +46,7 @@ module ConstructSignature {
 >r2 : new (x: number) => void
 >   : ^^^^^ ^^      ^^^^^^^^^
 >foo1(rarg2) : new (x: number) => void
->            :                        
+>            : ^^^^^ ^^      ^^^^^^^^^
 >foo1 : { (cb: new (x: number) => void): new (x: number) => void; (cb: any): any; }
 >     : ^^^  ^^                       ^^^^^^^^ ^^      ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >rarg2 : new <T>(x: T) => string
@@ -81,7 +81,7 @@ module ConstructSignature {
 >r3 : new (x: number, y: number) => void
 >   : ^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >foo2(r3arg1) : new (x: number, y: number) => void
->             :                                   
+>             : ^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >     : ^^^  ^^                                  ^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r3arg1 : new (x: number, y: number) => number
@@ -97,7 +97,7 @@ module ConstructSignature {
 >r4 : new (x: number, y: number) => void
 >   : ^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >foo2(r4arg1) : new (x: number, y: number) => void
->             :                                   
+>             : ^^^^^ ^^      ^^ ^^      ^^^^^^^^^
 >foo2 : { (cb: new (x: number, y: number) => void): new (x: number, y: number) => void; (cb: any): any; }
 >     : ^^^  ^^                                  ^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^  ^^   ^^^^^^^^^
 >r4arg1 : new <T>(x: T) => string
