@@ -3,6 +3,9 @@ import * as fakes from "../_namespaces/fakes";
 import * as Harness from "../_namespaces/Harness";
 import * as ts from "../_namespaces/ts";
 import * as vfs from "../_namespaces/vfs";
+import { jsonToReadableText } from "./helpers";
+import { libContent } from "./helpers/contents";
+import { loadProjectFromFiles } from "./helpers/vfs";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {
@@ -260,5 +263,72 @@ class C {
         assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
         assert.equal(ts.ModifierFlags.Private, ts.getEffectiveModifierFlags(propNode));
         assert.equal(ts.ModifierFlags.None, ts.getSyntacticModifierFlags(propNode));
+    });
+});
+
+describe("unittests:: Public APIs:: createProgram", () => {
+    function verifyAPI(useJsonParsingApi: boolean) {
+        const fs = loadProjectFromFiles({
+            "/src/projects/project/packages/a/index.js": `export const a = 'a';`,
+            "/src/projects/project/packages/a/test/index.js": `import 'a';`,
+            "/src/projects/project/packages/a/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    checkJs: true,
+                    composite: true,
+                    declaration: true,
+                    emitDeclarationOnly: true,
+                    module: "nodenext",
+                    outDir: "types",
+                },
+            }),
+            "/src/projects/project/packages/a/package.json": jsonToReadableText({
+                name: "a",
+                version: "0.0.0",
+                type: "module",
+                exports: {
+                    ".": {
+                        types: "./types/index.d.ts",
+                        default: "./index.js",
+                    },
+                },
+            }),
+            "/lib/lib.esnext.full.d.ts": libContent,
+        }, { cwd: "/src/projects/project", executingFilePath: "/lib/tsc.js" });
+        const sys = new fakes.System(fs, { executingFilePath: "/lib/tsc.js" });
+        const commandLine = ts.getParsedCommandLineOfConfigFile(
+            "/src/projects/project/packages/a/tsconfig.json",
+            /*optionsToExtend*/ undefined,
+            {
+                fileExists: sys.fileExists.bind(sys),
+                getCurrentDirectory: sys.getCurrentDirectory.bind(sys),
+                onUnRecoverableConfigFileDiagnostic: () => {},
+                readDirectory: sys.readDirectory.bind(sys),
+                readFile: sys.readFile.bind(sys),
+                useCaseSensitiveFileNames: sys.useCaseSensitiveFileNames,
+                directoryExists: sys.directoryExists.bind(sys),
+                getDirectories: sys.getDirectories.bind(sys),
+                realpath: sys.realpath.bind(sys),
+            },
+        )!;
+        const config = !useJsonParsingApi ? JSON.parse(fs.readFileSync("/src/projects/project/packages/a/tsconfig.json", "utf-8")) : undefined;
+        // This is really createCompilerHost but we want to use our own sys so simple usage
+        const host = ts.createCompilerHostWorker(
+            useJsonParsingApi ? commandLine.options : config.compilerOptions,
+            /*setParentNodes*/ undefined,
+            sys,
+        );
+        (useJsonParsingApi ? assert.doesNotThrow : assert.throws)(() =>
+            ts.createProgram({
+                rootNames: commandLine.fileNames,
+                options: useJsonParsingApi ? commandLine.options : config.compilerOptions,
+                host,
+            })
+        );
+    }
+    it("when using correct config file API", () => {
+        verifyAPI(/*useJsonParsingApi*/ true);
+    });
+    it("when using direct json read", () => {
+        verifyAPI(/*useJsonParsingApi*/ false);
     });
 });
