@@ -1504,6 +1504,11 @@ export const plainJSErrors = new Set<number>([
     Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
 
+interface LazyProgramDiagnosticExplainingFile {
+    file: SourceFile;
+    diagnostic: DiagnosticMessage;
+    args: DiagnosticArguments | undefined;
+}
 /**
  * Determine if source file needs to be re-created even if its text hasn't changed
  */
@@ -1624,6 +1629,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
      * Otherwise fileProcessingDiagnostics is correct locations so that the diagnostics can be reported in all structure use scenarios
      */
     const programDiagnostics = createDiagnosticCollection();
+    let lazyProgramDiagnosticExplainingFile: LazyProgramDiagnosticExplainingFile[] | undefined = [];
     const currentDirectory = host.getCurrentDirectory();
     const supportedExtensions = getSupportedExtensions(options);
     const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
@@ -2000,26 +2006,44 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     onProgramCreateComplete();
 
-    // Add file processingDiagnostics
-    fileProcessingDiagnostics?.forEach(diagnostic => {
-        switch (diagnostic.kind) {
-            case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
-                return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
-            case FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic:
-                return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
-            case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
-                return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
-            default:
-                Debug.assertNever(diagnostic);
-        }
-    });
-
     verifyCompilerOptions();
     performance.mark("afterProgram");
     performance.measure("Program", "beforeProgram", "afterProgram");
     tracing?.pop();
 
     return program;
+
+    function updateAndGetProgramDiagnostics() {
+        if (lazyProgramDiagnosticExplainingFile) {
+            // Add file processingDiagnostics
+            fileProcessingDiagnostics?.forEach(diagnostic => {
+                switch (diagnostic.kind) {
+                    case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
+                        return programDiagnostics.add(
+                            createDiagnosticExplainingFile(
+                                diagnostic.file && getSourceFileByPath(diagnostic.file),
+                                diagnostic.fileProcessingReason,
+                                diagnostic.diagnostic,
+                                diagnostic.args || emptyArray,
+                            ),
+                        );
+                    case FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic:
+                        return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
+                    case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
+                        return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
+                    default:
+                        Debug.assertNever(diagnostic);
+                }
+            });
+            lazyProgramDiagnosticExplainingFile.forEach(({ file, diagnostic, args }) =>
+                programDiagnostics.add(
+                    createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args),
+                )
+            );
+            lazyProgramDiagnosticExplainingFile = undefined;
+        }
+        return programDiagnostics;
+    }
 
     function filePreprocessingLibreferenceDiagnostic({ reason }: FilePreprocessingLibreferenceDiagnostic) {
         const { file, pos, end } = getReferencedFileLocation(program, reason) as ReferenceFileLocation;
@@ -2900,7 +2924,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return emptyArray;
         }
 
-        const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+        const programDiagnosticsInFile = updateAndGetProgramDiagnostics().getDiagnostics(sourceFile.fileName);
         if (!sourceFile.commentDirectives?.length) {
             return programDiagnosticsInFile;
         }
@@ -3346,16 +3370,16 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getOptionsDiagnostics(): SortedReadonlyArray<Diagnostic> {
         return sortAndDeduplicateDiagnostics(concatenate(
-            programDiagnostics.getGlobalDiagnostics(),
+            updateAndGetProgramDiagnostics().getGlobalDiagnostics(),
             getOptionsDiagnosticsOfConfigFile(),
         ));
     }
 
     function getOptionsDiagnosticsOfConfigFile() {
         if (!options.configFile) return emptyArray;
-        let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
+        let diagnostics = updateAndGetProgramDiagnostics().getDiagnostics(options.configFile.fileName);
         forEachResolvedProjectReference(resolvedRef => {
-            diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
+            diagnostics = concatenate(diagnostics, updateAndGetProgramDiagnostics().getDiagnostics(resolvedRef.sourceFile.fileName));
         });
         return diagnostics;
     }
@@ -4179,7 +4203,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (!sourceFile.isDeclarationFile) {
                 const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                 if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                    addProgramDiagnosticExplainingFile(
+                    addLazyProgramDiagnosticExplainingFile(
                         sourceFile,
                         Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
                         [sourceFile.fileName, rootDirectory],
@@ -4302,7 +4326,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             for (const file of files) {
                 // Ignore file that is not emitted
                 if (sourceFileMayBeEmitted(file, program) && !rootPaths.has(file.path)) {
-                    addProgramDiagnosticExplainingFile(
+                    addLazyProgramDiagnosticExplainingFile(
                         file,
                         Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
                         [file.fileName, options.configFilePath || ""],
@@ -4733,8 +4757,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function addProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
-        programDiagnostics.add(createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args));
+    function addLazyProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
+        lazyProgramDiagnosticExplainingFile!.push({ file, diagnostic, args });
     }
 
     function fileIncludeReasonToRelatedInformation(reason: FileIncludeReason): DiagnosticWithLocation | undefined {
