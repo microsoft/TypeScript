@@ -37,8 +37,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/rootfolder/otherfolder/a/b/project
-Info seq  [hh:mm:ss:mss] For info: /user/username/rootfolder/otherfolder/a/b/project/file1.ts :: Config file name: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/rootfolder/otherfolder/a/b/project/file1.ts ProjectRootPath: undefined:: Result: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -76,6 +75,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/ro
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/project/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/rootfolder/otherfolder/a/b/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -173,12 +177,22 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/rootfolder/otherfolder/a/b/node_modules: *new*
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/a/b/project/node_modules: *new*
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/project/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/a/node_modules: *new*
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/node_modules: *new*
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/rootfolder/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -327,12 +341,22 @@ export class a { }
 PolledWatches::
 /user/username/rootfolder/node_modules:
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/project/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/a/node_modules:
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/node_modules:
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/package.json:
+  {"pollingInterval":2000}
+/user/username/rootfolder/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/rootfolder/otherfolder/a/b/node_modules:
@@ -378,6 +402,7 @@ Info seq  [hh:mm:ss:mss] Running: /user/username/rootfolder/otherfolder/a/b/proj
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/rootfolder/otherfolder/a/b/node_modules/package.json 2000 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/a/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /user/username/rootfolder/otherfolder/node_modules 1 undefined Project: /user/username/rootfolder/otherfolder/a/b/project/tsconfig.json WatchType: Failed Lookup Locations
@@ -435,8 +460,20 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
+/user/username/rootfolder/otherfolder/a/b/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/rootfolder/otherfolder/a/b/package.json:
+  {"pollingInterval":2000}
 /user/username/rootfolder/otherfolder/a/b/project/node_modules:
   {"pollingInterval":500}
+/user/username/rootfolder/otherfolder/a/b/project/package.json:
+  {"pollingInterval":2000}
+/user/username/rootfolder/otherfolder/a/package.json:
+  {"pollingInterval":2000}
+/user/username/rootfolder/otherfolder/package.json:
+  {"pollingInterval":2000}
+/user/username/rootfolder/package.json:
+  {"pollingInterval":2000}
 
 PolledWatches *deleted*::
 /user/username/rootfolder/node_modules:

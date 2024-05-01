@@ -3,20 +3,27 @@
 === thing.d.ts ===
 declare namespace Foo {
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     export interface Bar {}
     export function f(): Bar;
 >f : () => Bar
+>  : ^^^^^^   
 }
 export = Foo;
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
 === index.ts ===
 import { f } from "./thing";
 >f : () => import("thing").Bar
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const thing = f();
 >thing : import("thing").Bar
+>      : ^^^^^^^^^^^^^^^^^^^
 >f() : import("thing").Bar
+>    : ^^^^^^^^^^^^^^^^^^^
 >f : () => import("thing").Bar
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

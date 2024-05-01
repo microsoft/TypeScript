@@ -1849,13 +1849,13 @@ export interface CloseRequest extends FileRequest {
 
 export interface WatchChangeRequest extends Request {
     command: CommandTypes.WatchChange;
-    arguments: WatchChangeRequestArgs;
+    arguments: WatchChangeRequestArgs | readonly WatchChangeRequestArgs[];
 }
-
 export interface WatchChangeRequestArgs {
     id: number;
-    path: string;
-    eventType: "create" | "delete" | "update";
+    created?: string[];
+    deleted?: string[];
+    updated?: string[];
 }
 
 /**
@@ -2656,6 +2656,7 @@ export interface CreateDirectoryWatcherEventBody {
     readonly id: number;
     readonly path: string;
     readonly recursive: boolean;
+    readonly ignoreUpdate?: boolean;
 }
 
 export type CloseFileWatcherEventName = "closeFileWatcher";
@@ -3141,6 +3142,7 @@ export const enum ScriptTarget {
     ES2020 = "es2020",
     ES2021 = "es2021",
     ES2022 = "es2022",
+    ES2023 = "es2023",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,

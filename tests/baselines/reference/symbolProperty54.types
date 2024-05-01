@@ -3,13 +3,20 @@
 === symbolProperty54.ts ===
 var obj = {
 >obj : {}
+>    : ^^
 >{    [Symbol.prototype]: 0} : {}
+>                            : ^^
 
     [Symbol.prototype]: 0
 >[Symbol.prototype] : number
+>                   : ^^^^^^
 >Symbol.prototype : Symbol
+>                 : ^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >prototype : Symbol
+>          : ^^^^^^
 >0 : 0
+>  : ^
 
 };

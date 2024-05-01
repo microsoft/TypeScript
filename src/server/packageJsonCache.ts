@@ -9,9 +9,7 @@ import {
     Ternary,
     tryFileExists,
 } from "./_namespaces/ts";
-import {
-    ProjectService,
-} from "./_namespaces/ts.server";
+import { ProjectService } from "./_namespaces/ts.server";
 
 /** @internal */
 export interface PackageJsonCache {

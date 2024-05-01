@@ -4,7 +4,9 @@
 /// <style requireSemi="on" />
 declare function foo(): void;
 >foo : () => void
+>    : ^^^^^^    
 
 declare function bar(): void;
 >bar : () => void
+>    : ^^^^^^    
 

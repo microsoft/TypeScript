@@ -78,7 +78,6 @@ __exportStar(require("@emotion/core"), exports);
 import { Component } from 'react';
 export declare function getComp(): Component;
 //// [inferred-comp-export.d.ts]
-/// <reference types="react" />
 export declare const obj: {
     comp: import("react").Component;
 };
