@@ -87,6 +87,7 @@ import {
     fileIncludeReasonToDiagnostics,
     FilePreprocessingDiagnostics,
     FilePreprocessingDiagnosticsKind,
+    FilePreprocessingLibreferenceDiagnostic,
     FileReference,
     filter,
     find,
@@ -1191,10 +1192,13 @@ export function getLibraryNameFromLibFileName(libFileName: string) {
     return "@typescript/lib-" + path;
 }
 
+function getLibNameFromLibReference(libReference: FileReference) {
+    return toFileNameLowerCase(libReference.fileName);
+}
+
 function getLibFileNameFromLibReference(libReference: FileReference) {
-    const libName = toFileNameLowerCase(libReference.fileName);
-    const libFileName = libMap.get(libName);
-    return { libName, libFileName };
+    const libName = getLibNameFromLibReference(libReference);
+    return libMap.get(libName);
 }
 
 interface DiagnosticCache<T extends Diagnostic> {
@@ -2001,9 +2005,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         switch (diagnostic.kind) {
             case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
                 return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
-            case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
-                const { file, pos, end } = getReferencedFileLocation(program, diagnostic.reason) as ReferenceFileLocation;
-                return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
+            case FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic:
+                return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
             case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
                 return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
             default:
@@ -2017,6 +2020,22 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     tracing?.pop();
 
     return program;
+
+    function filePreprocessingLibreferenceDiagnostic({ reason }: FilePreprocessingLibreferenceDiagnostic) {
+        const { file, pos, end } = getReferencedFileLocation(program, reason) as ReferenceFileLocation;
+        const libReference = file.libReferenceDirectives[reason.index];
+        const libName = getLibNameFromLibReference(libReference);
+        const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
+        const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
+        return createFileDiagnostic(
+            file,
+            Debug.checkDefined(pos),
+            Debug.checkDefined(end) - pos,
+            suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0,
+            libName,
+            suggestion!,
+        );
+    }
 
     function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
         return resolvedModules?.get(file.path)?.get(moduleName, mode);
@@ -3514,7 +3533,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getLibFileFromReference(ref: FileReference) {
-        const { libFileName } = getLibFileNameFromLibReference(ref);
+        const libFileName = getLibFileNameFromLibReference(ref);
         const actualFileName = libFileName && resolvedLibReferences?.get(libFileName)?.actual;
         return actualFileName !== undefined ? getSourceFile(actualFileName) : undefined;
     }
@@ -4067,21 +4086,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function processLibReferenceDirectives(file: SourceFile) {
         forEach(file.libReferenceDirectives, (libReference, index) => {
-            const { libName, libFileName } = getLibFileNameFromLibReference(libReference);
+            const libFileName = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
                 processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
             }
             else {
-                const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
-                const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
-                const diagnostic = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
-                const args = suggestion ? [libName, suggestion] : [libName];
                 (fileProcessingDiagnostics ||= []).push({
-                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
+                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic,
                     reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index },
-                    diagnostic,
-                    args,
                 });
             }
         });

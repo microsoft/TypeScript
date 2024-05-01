@@ -4608,17 +4608,15 @@ export type FileIncludeReason =
 
 /** @internal */
 export const enum FilePreprocessingDiagnosticsKind {
-    FilePreprocessingReferencedDiagnostic,
+    FilePreprocessingLibreferenceDiagnostic,
     FilePreprocessingFileExplainingDiagnostic,
     ResolutionDiagnostics,
 }
 
 /** @internal */
-export interface FilePreprocessingReferencedDiagnostic {
-    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic;
-    reason: ReferencedFile;
-    diagnostic: DiagnosticMessage;
-    args?: DiagnosticArguments;
+export interface FilePreprocessingLibreferenceDiagnostic {
+    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic;
+    reason: ReferencedFile & { kind: FileIncludeKind.LibReferenceDirective; };
 }
 
 /** @internal */
@@ -4637,7 +4635,7 @@ export interface ResolutionDiagnostics {
 }
 
 /** @internal */
-export type FilePreprocessingDiagnostics = FilePreprocessingReferencedDiagnostic | FilePreprocessingFileExplainingDiagnostic | ResolutionDiagnostics;
+export type FilePreprocessingDiagnostics = FilePreprocessingLibreferenceDiagnostic | FilePreprocessingFileExplainingDiagnostic | ResolutionDiagnostics;
 
 /** @internal */
 export const enum EmitOnly {
