@@ -4,49 +4,69 @@
 export interface INode<T> {
     data: T;
 >data : T
+>     : ^
 }
 
 export function create<T>(): () => INode<T>;
 >create : <T>() => () => INode<T>
+>       : ^ ^^^^^^^              
 
 === lib.d.ts ===
 export type G<T extends string> = { [P in T]: string };
 >G : G<T>
+>  : ^^^^
 
 export enum E {
 >E : E
+>  : ^
 
     A = "a",
 >A : E.A
+>  : ^^^
 >"a" : "a"
+>    : ^^^
 
     B = "b"
 >B : E.B
+>  : ^^^
 >"b" : "b"
+>    : ^^^
 }
 
 export type T = G<E>;
->T : { a: string; b: string; }
+>T : T
+>  : ^
 
 export type Q = G<E.A>;
->Q : { a: string; }
+>Q : Q
+>  : ^
 >E : any
+>  : ^^^
 
 === index.ts ===
 import { T, Q } from "./lib";
 >T : any
+>  : ^^^
 >Q : any
+>  : ^^^
 
 import { create } from "./bbb";
 >create : <T>() => () => import("bbb").INode<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const fun = create<T>();
 >fun : () => import("bbb").INode<T>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create<T>() : () => import("bbb").INode<T>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T>() => () => import("bbb").INode<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const fun2 = create<Q>();
 >fun2 : () => import("bbb").INode<Q>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create<Q>() : () => import("bbb").INode<Q>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >create : <T>() => () => import("bbb").INode<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

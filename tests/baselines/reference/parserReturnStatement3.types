@@ -3,6 +3,7 @@
 === parserReturnStatement3.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
    return;
 }

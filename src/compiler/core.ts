@@ -808,7 +808,13 @@ export function createSortedArray<T>(): SortedArray<T> {
 }
 
 /** @internal */
-export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): boolean {
+export function insertSorted<T>(
+    array: SortedArray<T>,
+    insert: T,
+    compare: Comparer<T>,
+    equalityComparer?: EqualityComparer<T>,
+    allowDuplicates?: boolean,
+): boolean {
     if (array.length === 0) {
         array.push(insert);
         return true;
@@ -816,6 +822,16 @@ export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Compa
 
     const insertIndex = binarySearch(array, insert, identity, compare);
     if (insertIndex < 0) {
+        if (equalityComparer && !allowDuplicates) {
+            const idx = ~insertIndex;
+            if (idx > 0 && equalityComparer(insert, array[idx - 1])) {
+                return false;
+            }
+            if (idx < array.length && equalityComparer(insert, array[idx])) {
+                array.splice(idx, 1, insert);
+                return true;
+            }
+        }
         array.splice(~insertIndex, 0, insert);
         return true;
     }
@@ -849,38 +865,6 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
 }
 
 /** @internal */
-export const enum SortKind {
-    None = 0,
-    CaseSensitive = 1 << 0,
-    CaseInsensitive = 1 << 1,
-    Both = CaseSensitive | CaseInsensitive,
-}
-
-/** @internal */
-export function detectSortCaseSensitivity<T>(
-    array: readonly T[],
-    getString: (element: T) => string,
-    compareStringsCaseSensitive: Comparer<string>,
-    compareStringsCaseInsensitive: Comparer<string>,
-): SortKind {
-    let kind = SortKind.Both;
-    if (array.length < 2) return kind;
-
-    let prevElement = getString(array[0]);
-    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
-        const element = getString(array[i]);
-        if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseSensitive;
-        }
-        if (kind & SortKind.CaseInsensitive && compareStringsCaseInsensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseInsensitive;
-        }
-        prevElement = element;
-    }
-    return kind;
-}
-
-/** @internal */
 export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: readonly T[] | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
     if (!array1 || !array2) {
         return array1 === array2;
@@ -904,9 +888,9 @@ export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: read
  *
  * @internal
  */
-export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[]; // eslint-disable-line no-restricted-syntax
 /** @internal */
-export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[];
+export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[]; // eslint-disable-line no-restricted-syntax
 // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
 /** @internal */
 export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
@@ -1543,8 +1527,8 @@ export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, r
 /** @internal */
 export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[]; false?: Exclude<T, U>[]; };
 /** @internal */
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; }; // eslint-disable-line no-restricted-syntax
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } { // eslint-disable-line no-restricted-syntax
     const result: Record<string, T[]> = {};
     if (values) {
         for (const value of values) {
@@ -2321,7 +2305,7 @@ export function compareBooleans(a: boolean, b: boolean): Comparison {
  *
  * @internal
  */
-export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+export function getSpellingSuggestion<T>(name: string, candidates: Iterable<T>, getName: (candidate: T) => string | undefined): T | undefined {
     const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
     let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
     let bestCandidate: T | undefined;

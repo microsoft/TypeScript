@@ -3,9 +3,11 @@
 === parserObjectType6.ts ===
 var v: {
 >v : { a: B; }
+>  : ^^^^^^^^^
 
    a: B
 >a : B
+>  : ^
 
    [];
 };

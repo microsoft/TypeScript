@@ -3,4 +3,5 @@
 === FunctionDeclaration3.ts ===
 function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 

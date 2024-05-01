@@ -3,7 +3,9 @@
 === /src/projects/file1.ts ===
 import d = require("d.json"); // Should fail
 >d : any
+>  : ^^^
 
 import e = require("e"); // Should fail
 >e : any
+>  : ^^^
 

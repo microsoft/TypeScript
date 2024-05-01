@@ -25,8 +25,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: ^memfs:
-Info seq  [hh:mm:ss:mss] For info: ^memfs:/foo.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: ^memfs:/foo.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Loading global plugin plugin-a
 Info seq  [hh:mm:ss:mss] Enabling plugin plugin-a from candidate paths: /a/lib/tsc.js/../../..
 Info seq  [hh:mm:ss:mss] Dynamically importing plugin-a from /a/lib/tsc.js/../../.. (resolved to /a/lib/tsc.js/../../../node_modules)
@@ -101,3 +100,13 @@ Info seq  [hh:mm:ss:mss] event:
         ]
       }
     }
+after waitForPendingPlugins 
+
+Timeout callback:: count: 1
+1: /dev/null/inferredProject1* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*

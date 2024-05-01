@@ -3,436 +3,735 @@
 === index.js ===
 'use strict';
 >'use strict' : "use strict"
+>             : ^^^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/57435
 
 /** @type {globalThis['structuredClone']} */
 const structuredClone =
->structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
+>structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions) => T
+>                : ^ ^^^^^^^^     ^^ ^^       ^^^                          ^^^^^^
 
   globalThis.structuredClone ??
->globalThis.structuredClone ??  function structuredClone (value, options = undefined) {    if (arguments.length === 0) {      throw new TypeError('missing argument')    }    return value;  } : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
->globalThis.structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
+>globalThis.structuredClone ??  function structuredClone (value, options = undefined) {    if (arguments.length === 0) {      throw new TypeError('missing argument')    }    return value;  } : <T = any>(value: T, options?: StructuredSerializeOptions) => T
+>                                                                                                                                                                                              : ^ ^^^^^^^^     ^^ ^^       ^^^                          ^^^^^^
+>globalThis.structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions) => T
+>                           : ^ ^^^^^^^^     ^^ ^^       ^^^                          ^^^^^^
 >globalThis : typeof globalThis
->structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
+>           : ^^^^^^^^^^^^^^^^^
+>structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions) => T
+>                : ^ ^^^^^^^^     ^^ ^^       ^^^                          ^^^^^^
 
   function structuredClone (value, options = undefined) {
 >function structuredClone (value, options = undefined) {    if (arguments.length === 0) {      throw new TypeError('missing argument')    }    return value;  } : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
+>                                                                                                                                                               : ^^^^^^^^^^     ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >structuredClone : <T = any>(value: T, options?: StructuredSerializeOptions | undefined) => T
+>                : ^^^^^^^^^^     ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : T
+>      : ^
 >options : StructuredSerializeOptions | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
     if (arguments.length === 0) {
 >arguments.length === 0 : boolean
+>                       : ^^^^^^^
 >arguments.length : number
+>                 : ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
       throw new TypeError('missing argument')
 >new TypeError('missing argument') : TypeError
+>                                  : ^^^^^^^^^
 >TypeError : TypeErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >'missing argument' : "missing argument"
+>                   : ^^^^^^^^^^^^^^^^^^
     }
     return value;
 >value : T
+>      : ^
   }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
 const test1 = function(value, options = undefined) {
 >test1 : (a: number, b: boolean | undefined, ...rest: string[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^    ^^        ^^^^^^^^^
 >function(value, options = undefined) {  if (arguments.length === 0) {    throw new TypeError('missing argument')  }} : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>                                                                                                                     : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   if (arguments.length === 0) {
 >arguments.length === 0 : boolean
+>                       : ^^^^^^^
 >arguments.length : number
+>                 : ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 >length : number
+>       : ^^^^^^
 >0 : 0
+>  : ^
 
     throw new TypeError('missing argument')
 >new TypeError('missing argument') : TypeError
+>                                  : ^^^^^^^^^
 >TypeError : TypeErrorConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
 >'missing argument' : "missing argument"
+>                   : ^^^^^^^^^^^^^^^^^^
   }
 }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: string[]) => void} */
 const test2 = function inner(value, options = undefined) {
 >test2 : (a: number, b: boolean | undefined, ...rest: string[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^    ^^        ^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);  inner(1, true, 'hello', 'world');} : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>                                                                                                                         : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 
   inner(1, true, 'hello', 'world');
 >inner(1, true, 'hello', 'world') : void
+>                                 : ^^^^
 >inner : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >true : true
+>     : ^^^^
 >'hello' : "hello"
+>        : ^^^^^^^
 >'world' : "world"
+>        : ^^^^^^^
 }
 
 /** @type {(a: number, b: boolean | undefined) => void} */
 const test3 = function inner(value, options = undefined) {
 >test3 : (a: number, b: boolean | undefined) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options?: boolean | undefined) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: [string?, ...number[]]) => void} */
 const test4 = function inner(value, options = undefined) {
 >test4 : (a: number, b: boolean | undefined, rest_0?: string | undefined, ...rest_1: number[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options?: boolean | undefined, args_0?: string | undefined, ...args_1: number[]) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined, args_0?: string | undefined, ...args_1: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: [string, ...number[]]) => void} */
 const test5 = function inner(value, options = undefined) {
 >test5 : (a: number, b: boolean | undefined, rest_0: string, ...rest_1: number[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, args_0: string, ...args_1: number[]) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, args_0: string, ...args_1: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: [string, ...number[]]) => void} */
 const test6 = function inner(value, options = undefined, third) {
 >test6 : (a: number, b: boolean | undefined, rest_0: string, ...rest_1: number[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string, ...args: number[]) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string, ...args: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string
+>      : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b: boolean | undefined, ...rest: number[]) => void} */
 const test7 = function inner(value, options = undefined, third) {
 >test7 : (a: number, b: boolean | undefined, ...rest: number[]) => void
+>      : ^ ^^      ^^ ^^                   ^^^^^    ^^        ^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: number, ...args: number[]) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: number, ...args: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : number
+>      : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: string[]) => void} */
 const test8 = function inner(value, options = undefined) {
->test8 : (a: number, b?: boolean | undefined, ...rest: string[]) => void
+>test8 : (a: number, b?: boolean, ...rest: string[]) => void
+>      : ^ ^^      ^^ ^^^       ^^^^^    ^^        ^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined, ...args: string[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: string[]) => void} */
 const test9 = function inner(value, options = undefined, third) {
->test9 : (a: number, b?: boolean | undefined, ...rest: string[]) => void
+>test9 : (a: number, b?: boolean, ...rest: string[]) => void
+>      : ^ ^^      ^^ ^^^       ^^^^^    ^^        ^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string, ...args: string[]) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string, ...args: string[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string
+>      : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string, ...number[]]) => void} */
 const test10 = function inner(value, options = undefined) {
->test10 : (a: number, b?: boolean | undefined, rest_0: string, ...rest_1: number[]) => void
+>test10 : (a: number, b?: boolean, rest_0: string, ...rest_1: number[]) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, args_0: string, ...args_1: number[]) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, args_0: string, ...args_1: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string?, ...number[]]) => void} */
 const test11 = function inner(value, options = undefined) {
->test11 : (a: number, b?: boolean | undefined, rest_0?: string | undefined, ...rest_1: number[]) => void
+>test11 : (a: number, b?: boolean, rest_0?: string | undefined, ...rest_1: number[]) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options?: boolean | undefined, args_0?: string | undefined, ...args_1: number[]) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined, args_0?: string | undefined, ...args_1: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string, ...number[]]) => void} */
 const test12 = function inner(value, options = undefined, third) {
->test12 : (a: number, b?: boolean | undefined, rest_0: string, ...rest_1: number[]) => void
+>test12 : (a: number, b?: boolean, rest_0: string, ...rest_1: number[]) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string, ...args: number[]) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string, ...args: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string
+>      : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string?, ...number[]]) => void} */
 const test13 = function inner(value, options = undefined, third) {
->test13 : (a: number, b?: boolean | undefined, rest_0?: string | undefined, ...rest_1: number[]) => void
+>test13 : (a: number, b?: boolean, rest_0?: string | undefined, ...rest_1: number[]) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string | undefined, ...args: number[]) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string | undefined, ...args: number[]) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string?, string?]) => void} */
 const test14 = function inner(value, options = undefined) {
->test14 : (a: number, b?: boolean | undefined, rest_0?: string | undefined, rest_1?: string | undefined) => void
+>test14 : (a: number, b?: boolean, rest_0?: string | undefined, rest_1?: string | undefined) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options?: boolean | undefined, args_0?: string | undefined, args_1?: string | undefined) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options?: boolean | undefined, args_0?: string | undefined, args_1?: string | undefined) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string?, string?]) => void} */
 const test15 = function inner(value, options = undefined, third) {
->test15 : (a: number, b?: boolean | undefined, rest_0?: string | undefined, rest_1?: string | undefined) => void
+>test15 : (a: number, b?: boolean, rest_0?: string | undefined, rest_1?: string | undefined) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string | undefined, args_0?: string | undefined) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string | undefined, args_0?: string | undefined) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
 const test16 = function inner(value, options = undefined) {
->test16 : (a: number, b?: boolean | undefined, rest_0: string, rest_1: string) => void
+>test16 : (a: number, b?: boolean, rest_0: string, rest_1: string) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, args_0: string, args_1: string) => void
+>                                                                                      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, args_0: string, args_1: string) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
 const test17 = function inner(value, options = undefined, third) {
->test17 : (a: number, b?: boolean | undefined, rest_0: string, rest_1: string) => void
+>test17 : (a: number, b?: boolean, rest_0: string, rest_1: string) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: number, options: boolean | undefined, third: string, args_0: string) => void
+>                                                                                             : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: number, options: boolean | undefined, third: string, args_0: string) => void
+>      : ^     ^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : number
+>      : ^^^^^^
 >options : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : string
+>      : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 const test18 = function inner(value, options = undefined) {
 >test18 : (value: any, options?: undefined, ...args: any[]) => void
+>       : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined) {  const args = [].slice.call(arguments);} : (value: any, options?: undefined, ...args: any[]) => void
+>                                                                                      : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: any, options?: undefined, ...args: any[]) => void
+>      : ^     ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 >options : undefined
+>        : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 const test19 = function inner(value, options = undefined, third) {
 >test19 : (value: any, options: undefined, third: any, ...args: any[]) => void
+>       : ^     ^^^^^^^       ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function inner(value, options = undefined, third) {  const args = [].slice.call(arguments);} : (value: any, options: undefined, third: any, ...args: any[]) => void
+>                                                                                             : ^     ^^^^^^^       ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >inner : (value: any, options: undefined, third: any, ...args: any[]) => void
+>      : ^     ^^^^^^^       ^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : any
+>      : ^^^
 >options : undefined
+>        : ^^^^^^^^^
 >undefined : undefined
+>          : ^^^^^^^^^
 >third : any
+>      : ^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /**
@@ -440,39 +739,65 @@ const test19 = function inner(value, options = undefined, third) {
  */
 function test20(a, b = 10, c) {
 >test20 : (a: any, b?: number | undefined, c: any, ...args: any[]) => void
+>       : ^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >10 : 10
+>   : ^^
 >c : any
+>  : ^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 /** @type {(a: number, b?: boolean, ...rest: [string, string]) => void} */
 function test21(a, b = true, c) {
 >test21 : (a: number, b?: boolean, rest_0: string, rest_1: string) => void
+>       : ^ ^^      ^^ ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >a : number
+>  : ^^^^^^
 >b : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >c : string
+>  : ^^^^^^
 
   const args = [].slice.call(arguments);
 >args : any[]
+>     : ^^^^^
 >[].slice.call(arguments) : never[]
+>                         : ^^^^^^^
 >[].slice.call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
->[].slice : (start?: number | undefined, end?: number | undefined) => never[]
+>              : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
+>[].slice : (start?: number, end?: number) => never[]
+>         : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >[] : never[]
->slice : (start?: number | undefined, end?: number | undefined) => never[]
+>   : ^^^^^^^
+>slice : (start?: number, end?: number) => never[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^
 >call : <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A) => R
+>     : ^ ^^ ^^^^^^^^^^^^^^^^ ^^    ^^                          ^^       ^^ ^^^^^    ^^ ^^^^^^
 >arguments : IArguments
+>          : ^^^^^^^^^^
 }
 
 export {}

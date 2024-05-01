@@ -15,9 +15,9 @@ function getParsedCommandJson(
     return ts.parseJsonConfigFileContent(
         parsed.config,
         host,
-        basePath ?? host.sys.getCurrentDirectory(),
+        basePath ?? ts.getNormalizedAbsolutePath(ts.getDirectoryPath(configFileName), host.sys.getCurrentDirectory()),
         existingOptions,
-        configFileName,
+        ts.getNormalizedAbsolutePath(configFileName, host.sys.getCurrentDirectory()),
         /*resolutionStack*/ undefined,
         /*extraFileExtensions*/ undefined,
         /*extendedConfigCache*/ undefined,
@@ -37,9 +37,9 @@ function getParsedCommandJsonSourceFile(
     return ts.parseJsonSourceFileConfigFileContent(
         parsed,
         host,
-        basePath ?? host.sys.getCurrentDirectory(),
+        basePath ?? ts.getNormalizedAbsolutePath(ts.getDirectoryPath(configFileName), host.sys.getCurrentDirectory()),
         existingOptions,
-        configFileName,
+        ts.getNormalizedAbsolutePath(configFileName, host.sys.getCurrentDirectory()),
         /*resolutionStack*/ undefined,
         /*extraFileExtensions*/ undefined,
         /*extendedConfigCache*/ undefined,

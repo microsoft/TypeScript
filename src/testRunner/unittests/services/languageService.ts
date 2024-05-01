@@ -1,11 +1,7 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     createServerHost,
     File,

@@ -3,6 +3,7 @@
 === commentsAtEndOfFile1.ts ===
 Input:
 >Input : any
+>      : ^^^
 
 ;
 //Testing two

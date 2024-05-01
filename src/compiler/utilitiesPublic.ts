@@ -49,6 +49,7 @@ import {
     Decorator,
     Diagnostic,
     Diagnostics,
+    diagnosticsEqualityComparer,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -304,13 +305,15 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 }
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
-    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
     switch (getEmitScriptTarget(options)) {
         case ScriptTarget.ESNext:
             return "lib.esnext.full.d.ts";
+        case ScriptTarget.ES2023:
+            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
             return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:

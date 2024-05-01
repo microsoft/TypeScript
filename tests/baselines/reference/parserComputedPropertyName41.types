@@ -3,12 +3,19 @@
 === parserComputedPropertyName41.ts ===
 var v = {
 >v : {}
+>  : ^^
 >{    [0 in []]: true} : {}
+>                      : ^^
 
     [0 in []]: true
 >[0 in []] : boolean
+>          : ^^^^^^^
 >0 in [] : boolean
+>        : ^^^^^^^
 >0 : 0
+>  : ^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 }
