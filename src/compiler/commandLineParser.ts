@@ -583,6 +583,27 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
     defaultValueDescription: undefined,
 };
 
+/** @internal */
+export const moduleResolutionOptionDeclaration: CommandLineOptionOfCustomType = {
+    name: "moduleResolution",
+    type: new Map(Object.entries({
+        // N.B. The first entry specifies the value shown in `tsc --init`
+        node10: ModuleResolutionKind.Node10,
+        node: ModuleResolutionKind.Node10,
+        classic: ModuleResolutionKind.Classic,
+        node16: ModuleResolutionKind.Node16,
+        nodenext: ModuleResolutionKind.NodeNext,
+        bundler: ModuleResolutionKind.Bundler,
+    })),
+    deprecatedKeys: new Set(["node"]),
+    affectsSourceFile: true,
+    affectsModuleResolution: true,
+    paramType: Diagnostics.STRATEGY,
+    category: Diagnostics.Modules,
+    description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
+    defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
+};
+
 const commandOptionsWithoutBuild: CommandLineOption[] = [
     // CommandLine only options
     {
@@ -1028,25 +1049,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
     },
 
     // Module Resolution
-    {
-        name: "moduleResolution",
-        type: new Map(Object.entries({
-            // N.B. The first entry specifies the value shown in `tsc --init`
-            node10: ModuleResolutionKind.Node10,
-            node: ModuleResolutionKind.Node10,
-            classic: ModuleResolutionKind.Classic,
-            node16: ModuleResolutionKind.Node16,
-            nodenext: ModuleResolutionKind.NodeNext,
-            bundler: ModuleResolutionKind.Bundler,
-        })),
-        deprecatedKeys: new Set(["node"]),
-        affectsSourceFile: true,
-        affectsModuleResolution: true,
-        paramType: Diagnostics.STRATEGY,
-        category: Diagnostics.Modules,
-        description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
-    },
+    moduleResolutionOptionDeclaration,
     {
         name: "baseUrl",
         type: "string",

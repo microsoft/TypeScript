@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.moduleResolution.node10.ts] ////
+
+=== typeScriptSettings.moduleResolution.node10.ts ===
+type moduleResolution = TypeScriptSettings["moduleResolution"];
+>moduleResolution : Symbol(moduleResolution, Decl(typeScriptSettings.moduleResolution.node10.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.customConditions.1.ts] ////
+
+=== typeScriptSettings.customConditions.1.ts ===
+type customConditions = TypeScriptSettings["customConditions"];
+>customConditions : Symbol(customConditions, Decl(typeScriptSettings.customConditions.1.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

@@ -186,7 +186,7 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
     if (flags & SymbolFlags.Signature) return ScriptElementKind.indexSignatureElement;
 
     if (flags & SymbolFlags.Property) {
-        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).links.checkFlags & CheckFlags.Synthetic) {
+        if (flags & SymbolFlags.Transient && (symbol as TransientSymbol).links.checkFlags & CheckFlags.SyntheticMember) {
             // If union property is result of union of non method (property/accessors/variables), it is labeled as property
             const unionPropertyKind = forEach(typeChecker.getRootSymbols(symbol), rootSymbol => {
                 const rootSymbolFlags = rootSymbol.getFlags();
@@ -223,6 +223,10 @@ function getNormalizedSymbolModifiers(symbol: Symbol) {
         if (modifiers) {
             return modifiers.split(",");
         }
+    }
+    else if (symbol.flags & SymbolFlags.Interface) {
+        // Synthetic interface produced by checker, such as 'TypeScriptSettings'
+        return [ScriptElementKindModifier.ambientModifier];
     }
     return [];
 }

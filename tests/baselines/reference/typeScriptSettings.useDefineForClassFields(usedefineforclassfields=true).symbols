@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.useDefineForClassFields.ts] ////
+
+=== typeScriptSettings.useDefineForClassFields.ts ===
+type useDefineForClassFields = TypeScriptSettings["useDefineForClassFields"];
+>useDefineForClassFields : Symbol(useDefineForClassFields, Decl(typeScriptSettings.useDefineForClassFields.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

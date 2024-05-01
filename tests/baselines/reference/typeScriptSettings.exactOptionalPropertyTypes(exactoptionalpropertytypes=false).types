@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.exactOptionalPropertyTypes.ts] ////
+
+=== typeScriptSettings.exactOptionalPropertyTypes.ts ===
+type exactOptionalPropertyTypes = TypeScriptSettings["exactOptionalPropertyTypes"];
+>exactOptionalPropertyTypes : false
+>                           : ^^^^^
+

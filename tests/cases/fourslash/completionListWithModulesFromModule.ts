@@ -267,12 +267,11 @@ verify.completions(
         ], { noLib: true }),
     }, {
         marker: ["shadowNamespaceWithNoExportType", "shadowNamespaceWithExportType"],
-        unsorted: completion.typeKeywordsPlus([
-            completion.globalThisEntry,
+        unsorted: completion.globalTypesPlus([
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
             ...commonTypes,
-        ]),
+        ], { noLib: true }),
     },
     {
         marker: "namespaceWithImport",
@@ -288,13 +287,12 @@ verify.completions(
     },
     {
         marker: "namespaceWithImportType",
-        unsorted: completion.typeKeywordsPlus([
-            completion.globalThisEntry,
+        unsorted: completion.globalTypesPlus([
             "Mod1",
             "iMod1",
             ...commonTypes,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
-        ]),
+        ], { noLib: true }),
     }
 );

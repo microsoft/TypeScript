@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.target.ts] ////
+
+=== typeScriptSettings.target.ts ===
+type target = TypeScriptSettings["target"];
+>target : Symbol(target, Decl(typeScriptSettings.target.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

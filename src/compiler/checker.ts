@@ -337,6 +337,9 @@ import {
     getNameFromIndexInfo,
     getNameOfDeclaration,
     getNameOfExpando,
+    getNameOfModuleKind,
+    getNameOfModuleResolutionKind,
+    getNameOfScriptTarget,
     getNamespaceDeclarationNode,
     getNewTargetContainer,
     getNonAugmentationDeclaration,
@@ -1089,6 +1092,8 @@ import {
     VariableLikeDeclaration,
     VariableStatement,
     VarianceFlags,
+    version,
+    versionMajorMinor,
     visitEachChild,
     visitNode,
     visitNodes,
@@ -1473,6 +1478,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var compilerOptions = host.getCompilerOptions();
     var languageVersion = getEmitScriptTarget(compilerOptions);
     var moduleKind = getEmitModuleKind(compilerOptions);
+    var moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
     var legacyDecorators = !!compilerOptions.experimentalDecorators;
     var useDefineForClassFields = getUseDefineForClassFields(compilerOptions);
     var emitStandardClassFields = getEmitStandardClassFields(compilerOptions);
@@ -1485,6 +1491,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
+    var noUncheckedIndexedAccess = compilerOptions.noUncheckedIndexedAccess;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -2330,6 +2337,28 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         [".jsx", ".jsx"],
         [".json", ".json"],
     ];
+
+    var typeScriptSettingsSymbol = createSymbol(SymbolFlags.Interface, "TypeScriptSettings" as __String, CheckFlags.SyntheticInterface);
+    typeScriptSettingsSymbol.declarations = [];
+    typeScriptSettingsSymbol.members = createSymbolTable([
+        createProperty("version" as __String, getStringLiteralType(version), CheckFlags.Readonly),
+        createProperty("versionMajorMinor" as __String, getStringLiteralType(versionMajorMinor), CheckFlags.Readonly),
+        createProperty("locale" as __String, compilerOptions.locale ? getStringLiteralType(compilerOptions.locale) : undefinedType, CheckFlags.Readonly),
+        createProperty("target" as __String, getStringLiteralType(getNameOfScriptTarget(languageVersion) ?? ""), CheckFlags.Readonly),
+        createProperty("module" as __String, getStringLiteralType(getNameOfModuleKind(moduleKind) ?? ""), CheckFlags.Readonly),
+        createProperty("moduleResolution" as __String, getStringLiteralType(getNameOfModuleResolutionKind(moduleResolutionKind) ?? ""), CheckFlags.Readonly),
+        createProperty("customConditions" as __String, createTupleType(compilerOptions.customConditions?.map(cond => getStringLiteralType(cond)) ?? emptyArray, /*elementFlags*/ undefined, /*readonly*/ true), CheckFlags.Readonly),
+        createProperty("esModuleInterop" as __String, getESModuleInterop(compilerOptions) ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("exactOptionalPropertyTypes" as __String, exactOptionalPropertyTypes ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("noImplicitAny" as __String, noImplicitAny ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("noUncheckedIndexedAccess" as __String, noUncheckedIndexedAccess ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("strictBindCallApply" as __String, strictBindCallApply ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("strictFunctionTypes" as __String, strictFunctionTypes ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("strictNullChecks" as __String, strictNullChecks ? trueType : falseType, CheckFlags.Readonly),
+        createProperty("useDefineForClassFields" as __String, useDefineForClassFields ? trueType : falseType, CheckFlags.Readonly),
+    ]);
+    globals.set(typeScriptSettingsSymbol.escapedName, typeScriptSettingsSymbol);
+
     /* eslint-enable no-var */
 
     initializeTypeChecker();
@@ -2542,8 +2571,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return symbol;
     }
 
-    function createProperty(name: __String, type: Type) {
-        const symbol = createSymbol(SymbolFlags.Property, name);
+    function createProperty(name: __String, type: Type, checkFlags?: CheckFlags) {
+        const symbol = createSymbol(SymbolFlags.Property, name, checkFlags);
         symbol.links.type = type;
         return symbol;
     }
@@ -12079,6 +12108,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     // The outer type parameters are those defined by enclosing generic classes, methods, or functions.
     function getOuterTypeParametersOfClassOrInterface(symbol: Symbol): TypeParameter[] | undefined {
+        if (getCheckFlags(symbol) & CheckFlags.SyntheticInterface) {
+            return undefined;
+        }
         const declaration = (symbol.flags & SymbolFlags.Class || symbol.flags & SymbolFlags.Function)
             ? symbol.valueDeclaration
             : symbol.declarations?.find(decl => {
@@ -18483,7 +18515,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         // In noUncheckedIndexedAccess mode, indexed access operations that occur in an expression in a read position and resolve to
         // an index signature have 'undefined' included in their type.
-        if (compilerOptions.noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
+        if (noUncheckedIndexedAccess && accessFlags & AccessFlags.ExpressionPosition) accessFlags |= AccessFlags.IncludeUndefined;
         // If the index type is generic, or if the object type is generic and doesn't originate in an expression and
         // the operation isn't exclusively indexing the fixed (non-variadic) portion of a tuple type, we are performing
         // a higher-order index access where we cannot meaningfully access the properties of the object type. Note that
@@ -23923,7 +23955,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     // Invoke the callback for each underlying property symbol of the given symbol and return the first
     // value that isn't undefined.
     function forEachProperty<T>(prop: Symbol, callback: (p: Symbol) => T): T | undefined {
-        if (getCheckFlags(prop) & CheckFlags.Synthetic) {
+        if (getCheckFlags(prop) & CheckFlags.SyntheticMember) {
             // NOTE: cast to TransientSymbol should be safe because only TransientSymbols can have CheckFlags.Synthetic
             for (const t of (prop as TransientSymbol).links.containingType!.types) {
                 const p = getPropertyOfType(t, prop.escapedName);
@@ -24340,7 +24372,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return propType;
         }
         if (everyType(type, isTupleType)) {
-            return getTupleElementTypeOutOfStartCount(type, index, compilerOptions.noUncheckedIndexedAccess ? undefinedType : undefined);
+            return getTupleElementTypeOutOfStartCount(type, index, noUncheckedIndexedAccess ? undefinedType : undefined);
         }
         return undefined;
     }
@@ -27007,7 +27039,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function includeUndefinedInIndexSignature(type: Type | undefined): Type | undefined {
         if (!type) return type;
-        return compilerOptions.noUncheckedIndexedAccess ?
+        return noUncheckedIndexedAccess ?
             getUnionType([type, missingType]) :
             type;
     }
@@ -33132,7 +33164,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             propType = indexInfo.type;
-            if (compilerOptions.noUncheckedIndexedAccess && getAssignmentTargetKind(node) !== AssignmentKind.Definite) {
+            if (noUncheckedIndexedAccess && getAssignmentTargetKind(node) !== AssignmentKind.Definite) {
                 propType = getUnionType([propType, missingType]);
             }
             if (compilerOptions.noPropertyAccessFromIndexSignature && isPropertyAccessExpression(node)) {
@@ -38321,7 +38353,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // present (aka the tuple element property). This call also checks that the parentType is in
         // fact an iterable or array (depending on target language).
         const possiblyOutOfBoundsType = checkIteratedTypeOrElementType(IterationUse.Destructuring | IterationUse.PossiblyOutOfBounds, sourceType, undefinedType, node) || errorType;
-        let inBoundsType: Type | undefined = compilerOptions.noUncheckedIndexedAccess ? undefined : possiblyOutOfBoundsType;
+        let inBoundsType: Type | undefined = noUncheckedIndexedAccess ? undefined : possiblyOutOfBoundsType;
         for (let i = 0; i < elements.length; i++) {
             let type = possiblyOutOfBoundsType;
             if (node.elements[i].kind === SyntaxKind.SpreadElement) {
@@ -43513,7 +43545,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const uplevelIteration = languageVersion >= ScriptTarget.ES2015;
         const downlevelIteration = !uplevelIteration && compilerOptions.downlevelIteration;
-        const possibleOutOfBounds = compilerOptions.noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
+        const possibleOutOfBounds = noUncheckedIndexedAccess && !!(use & IterationUse.PossiblyOutOfBounds);
 
         // Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015
         // or higher, when inside of an async generator or for-await-if, or when
@@ -43590,7 +43622,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const arrayElementType = getIndexTypeOfType(arrayType, numberType);
         if (hasStringConstituent && arrayElementType) {
             // This is just an optimization for the case where arrayOrStringType is string | string[]
-            if (arrayElementType.flags & TypeFlags.StringLike && !compilerOptions.noUncheckedIndexedAccess) {
+            if (arrayElementType.flags & TypeFlags.StringLike && !noUncheckedIndexedAccess) {
                 return stringType;
             }
 
@@ -45352,7 +45384,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (basePropertyFlags && derivedPropertyFlags) {
                     // property/accessor is overridden with property/accessor
                     if (
-                        (getCheckFlags(base) & CheckFlags.Synthetic
+                        (getCheckFlags(base) & CheckFlags.SyntheticMember
                             ? base.declarations?.some(d => isPropertyAbstractOrInterface(d, baseDeclarationFlags))
                             : base.declarations?.every(d => isPropertyAbstractOrInterface(d, baseDeclarationFlags)))
                         || getCheckFlags(base) & CheckFlags.Mapped
@@ -48101,7 +48133,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return roots ? flatMap(roots, getRootSymbols) : [symbol];
     }
     function getImmediateRootSymbols(symbol: Symbol): readonly Symbol[] | undefined {
-        if (getCheckFlags(symbol) & CheckFlags.Synthetic) {
+        if (getCheckFlags(symbol) & CheckFlags.SyntheticMember) {
             return mapDefined(getSymbolLinks(symbol).containingType!.types, type => getPropertyOfType(type, symbol.escapedName));
         }
         else if (symbol.flags & SymbolFlags.Transient) {

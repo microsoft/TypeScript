@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.customConditions.0.ts] ////
+
+=== typeScriptSettings.customConditions.0.ts ===
+type customConditions = TypeScriptSettings["customConditions"];
+>customConditions : readonly []
+>                 : ^^^^^^^^^^^
+

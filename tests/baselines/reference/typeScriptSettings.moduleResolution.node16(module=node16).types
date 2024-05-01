@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.moduleResolution.node16.ts] ////
+
+=== typeScriptSettings.moduleResolution.node16.ts ===
+type moduleResolution = TypeScriptSettings["moduleResolution"];
+>moduleResolution : "node16"
+>                 : ^^^^^^^^
+

@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.strictFunctionTypes.ts] ////
+
+=== typeScriptSettings.strictFunctionTypes.ts ===
+type strictFunctionTypes = TypeScriptSettings["strictFunctionTypes"];
+>strictFunctionTypes : Symbol(strictFunctionTypes, Decl(typeScriptSettings.strictFunctionTypes.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

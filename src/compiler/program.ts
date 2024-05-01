@@ -4790,8 +4790,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     message = Diagnostics.File_is_library_specified_here;
                     break;
                 }
-                const target = getNameOfScriptTarget(getEmitScriptTarget(options));
-                configFileNode = target ? getOptionsSyntaxByValue("target", target) : undefined;
+                const target = getEmitScriptTarget(options);
+                const targetText = getNameOfScriptTarget(target);
+                configFileNode = target === ScriptTarget.ES2015 ? getOptionsSyntaxByValue("target", "es2015") ?? getOptionsSyntaxByValue("target", "es6") :
+                    targetText ? getOptionsSyntaxByValue("target", targetText) :
+                    undefined;
                 message = Diagnostics.File_is_default_library_for_target_specified_here;
                 break;
             default:

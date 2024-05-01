@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.noUncheckedIndexedAccess.ts] ////
+
+=== typeScriptSettings.noUncheckedIndexedAccess.ts ===
+type noUncheckedIndexedAccess = TypeScriptSettings["noUncheckedIndexedAccess"];
+>noUncheckedIndexedAccess : true
+>                         : ^^^^
+

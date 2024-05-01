@@ -5981,7 +5981,8 @@ export const enum CheckFlags {
     Mapped            = 1 << 18,        // Property of mapped type
     StripOptional     = 1 << 19,        // Strip optionality in mapped property
     Unresolved        = 1 << 20,        // Unresolved type alias symbol
-    Synthetic = SyntheticProperty | SyntheticMethod,
+    SyntheticInterface = 1 << 21,       // Synthetic interface
+    SyntheticMember = SyntheticProperty | SyntheticMethod,
     Discriminant = HasNonUniformType | HasLiteralType,
     Partial = ReadPartial | WritePartial,
 }

@@ -6,5 +6,5 @@
 
 verify.completions({
     marker: "",
-    exact: completion.typeKeywordsPlus(["T", completion.globalThisEntry]),
+    exact: completion.globalTypesPlus(["T"], { noLib: true }),
 });

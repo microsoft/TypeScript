@@ -1111,6 +1111,8 @@ export namespace Completion {
         return combineExpectedCompletionEntries("typeKeywordsPlus", typeKeywords, plus);
     }
 
+    const typeScriptSettingsEntry = interfaceEntry("TypeScriptSettings");
+
     const globalTypeDecls: readonly ExpectedCompletionEntryObject[] = [
         interfaceEntry("Symbol"),
         typeEntry("PropertyKey"),
@@ -1238,11 +1240,19 @@ export namespace Completion {
         kind: "module",
         sortText: SortText.GlobalsOrKeywords,
     };
+    
     export const globalTypes = globalTypesPlus([]);
-    export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[]) {
+    export const globalTypesNoLib = globalTypesPlus([], { noLib: true });
+
+    export function globalTypesPlus(plus: readonly ExpectedCompletionEntry[], options?: { noLib?: boolean; }) {
         return combineExpectedCompletionEntries(
             "globalTypesPlus",
-            [globalThisEntry, ...globalTypeDecls, ...typeKeywords],
+            [
+                globalThisEntry,
+                typeScriptSettingsEntry,
+                ...typeKeywords,
+                ...options?.noLib ? [] : globalTypeDecls,
+            ],
             plus,
         );
     }

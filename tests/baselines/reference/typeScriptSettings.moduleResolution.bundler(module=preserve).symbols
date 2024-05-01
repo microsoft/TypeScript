@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.moduleResolution.bundler.ts] ////
+
+=== typeScriptSettings.moduleResolution.bundler.ts ===
+type moduleResolution = TypeScriptSettings["moduleResolution"];
+>moduleResolution : Symbol(moduleResolution, Decl(typeScriptSettings.moduleResolution.bundler.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

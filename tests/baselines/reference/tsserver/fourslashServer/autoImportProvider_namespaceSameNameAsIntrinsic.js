@@ -1095,6 +1095,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "TypeScriptSettings",
+            "kind": "interface",
+            "kindModifiers": "declare",
+            "sortText": "15"
+          },
+          {
             "name": "Uint8Array",
             "kind": "var",
             "kindModifiers": "declare",

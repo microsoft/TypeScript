@@ -421,7 +421,9 @@ import {
     ModuleDeclaration,
     ModuleDetectionKind,
     ModuleKind,
+    moduleOptionDeclaration,
     ModuleResolutionKind,
+    moduleResolutionOptionDeclaration,
     moduleResolutionOptionDeclarations,
     MultiMap,
     NamedDeclaration,
@@ -7808,7 +7810,7 @@ export function getDeclarationModifierFlagsFromSymbol(s: Symbol, isWrite = false
         const flags = getCombinedModifierFlags(declaration);
         return s.parent && s.parent.flags & SymbolFlags.Class ? flags : flags & ~ModifierFlags.AccessibilityModifier;
     }
-    if (getCheckFlags(s) & CheckFlags.Synthetic) {
+    if (getCheckFlags(s) & CheckFlags.SyntheticMember) {
         // NOTE: potentially unchecked cast to TransientSymbol
         const checkFlags = (s as TransientSymbol).links.checkFlags;
         const accessModifier = checkFlags & CheckFlags.ContainsPrivate ? ModifierFlags.Private :
@@ -9101,7 +9103,23 @@ export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: Str
 
 /** @internal */
 export function getNameOfScriptTarget(scriptTarget: ScriptTarget): string | undefined {
-    return forEachEntry(targetOptionDeclaration.type, (value, key) => value === scriptTarget ? key : undefined);
+    const entries = [...targetOptionDeclaration.type].reverse();
+    return forEach(entries, ([key, value]) => value === scriptTarget ? key : undefined);
+}
+
+/** @internal */
+export function getNameOfModuleKind(moduleKind: ModuleKind): string | undefined {
+    const entries = [...moduleOptionDeclaration.type].reverse();
+    return forEach(entries, ([key, value]) => value === moduleKind ? key : undefined);
+}
+
+/** @internal */
+export function getNameOfModuleResolutionKind(moduleResolution: ModuleResolutionKind): string | undefined {
+    if (moduleResolution === ModuleResolutionKind.Node10) {
+        return "node10";
+    }
+    const entries = [...moduleResolutionOptionDeclaration.type].reverse();
+    return forEach(entries, ([key, value]) => value === moduleResolution ? key : undefined);
 }
 
 /** @internal */

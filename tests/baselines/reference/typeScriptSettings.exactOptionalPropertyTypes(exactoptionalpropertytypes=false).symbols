@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.exactOptionalPropertyTypes.ts] ////
+
+=== typeScriptSettings.exactOptionalPropertyTypes.ts ===
+type exactOptionalPropertyTypes = TypeScriptSettings["exactOptionalPropertyTypes"];
+>exactOptionalPropertyTypes : Symbol(exactOptionalPropertyTypes, Decl(typeScriptSettings.exactOptionalPropertyTypes.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

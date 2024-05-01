@@ -174,7 +174,7 @@ Info seq  [hh:mm:ss:mss] event:
         "configFile": "/a/b/tsconfig.json",
         "diagnostics": [
           {
-            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es6'",
+            "text": "File '/a/lib/lib.es6.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es2015'",
             "code": 6053,
             "category": "error",
             "relatedInformation": [

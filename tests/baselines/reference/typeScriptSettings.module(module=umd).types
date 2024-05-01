@@ -1,0 +1,11 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.module.ts] ////
+
+=== typeScriptSettings.module.ts ===
+type module = TypeScriptSettings["module"];
+>module : "umd"
+>       : ^^^^^
+
+type moduleResolution = TypeScriptSettings["moduleResolution"];
+>moduleResolution : "classic"
+>                 : ^^^^^^^^^
+

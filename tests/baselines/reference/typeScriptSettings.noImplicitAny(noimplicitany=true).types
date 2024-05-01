@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.noImplicitAny.ts] ////
+
+=== typeScriptSettings.noImplicitAny.ts ===
+type noImplicitAny = TypeScriptSettings["noImplicitAny"];
+>noImplicitAny : true
+>              : ^^^^
+

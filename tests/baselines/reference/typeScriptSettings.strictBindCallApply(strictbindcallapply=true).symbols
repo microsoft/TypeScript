@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.strictBindCallApply.ts] ////
+
+=== typeScriptSettings.strictBindCallApply.ts ===
+type strictBindCallApply = TypeScriptSettings["strictBindCallApply"];
+>strictBindCallApply : Symbol(strictBindCallApply, Decl(typeScriptSettings.strictBindCallApply.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

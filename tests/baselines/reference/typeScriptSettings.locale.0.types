@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.locale.0.ts] ////
+
+=== typeScriptSettings.locale.0.ts ===
+type locale = TypeScriptSettings["locale"];
+>locale : undefined
+>       : ^^^^^^^^^
+

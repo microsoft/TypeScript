@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.strictNullChecks.ts] ////
+
+=== typeScriptSettings.strictNullChecks.ts ===
+type strictNullChecks = TypeScriptSettings["strictNullChecks"];
+>strictNullChecks : Symbol(strictNullChecks, Decl(typeScriptSettings.strictNullChecks.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

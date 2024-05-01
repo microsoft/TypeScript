@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.moduleResolution.nodenext.ts] ////
+
+=== typeScriptSettings.moduleResolution.nodenext.ts ===
+type moduleResolution = TypeScriptSettings["moduleResolution"];
+>moduleResolution : "nodenext"
+>                 : ^^^^^^^^^^
+

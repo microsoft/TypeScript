@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.esModuleInterop.ts] ////
+
+=== typeScriptSettings.esModuleInterop.ts ===
+type esModuleInterop = TypeScriptSettings["esModuleInterop"];
+>esModuleInterop : Symbol(esModuleInterop, Decl(typeScriptSettings.esModuleInterop.ts, 0, 0))
+>TypeScriptSettings : Symbol(TypeScriptSettings)
+

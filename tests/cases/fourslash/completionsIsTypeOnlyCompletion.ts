@@ -12,7 +12,7 @@
 verify.completions({
     marker: "",
     // Should not have an import completion for 'Abc', should use the local one
-    exact: completion.typeKeywordsPlus(["Abc"]),
+    exact: completion.globalTypesPlus(["Abc"], { noLib: true }),
     preferences: {
         includeCompletionsForModuleExports: true,
     },

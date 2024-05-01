@@ -1,0 +1,7 @@
+//// [tests/cases/conformance/types/typeScriptSettings/typeScriptSettings.target.ts] ////
+
+=== typeScriptSettings.target.ts ===
+type target = TypeScriptSettings["target"];
+>target : "es2018"
+>       : ^^^^^^^^
+

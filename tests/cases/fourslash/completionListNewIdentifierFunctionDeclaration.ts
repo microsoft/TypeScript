@@ -6,6 +6,6 @@
 
 verify.completions({
     marker: "1",
-    exact: completion.typeKeywords,
+    exact: completion.globalTypesNoLib,
     isNewIdentifierLocation: true,
 });

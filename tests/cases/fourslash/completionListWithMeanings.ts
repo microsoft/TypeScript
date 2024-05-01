@@ -26,11 +26,10 @@ const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = comple
 ], { noLib: true });
 
 const types: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = completion.sorted([
-    completion.globalThisEntry,
+    ...completion.globalTypesNoLib,
     { name: "m", text: "namespace m" },
     { name: "m3", text: "namespace m3" },
     { name: "point", text: "interface point" },
-    ...completion.typeKeywords,
 ]);
 
 const filterValuesByName = (name: string) => {
