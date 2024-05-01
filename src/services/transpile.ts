@@ -25,6 +25,7 @@ import {
     normalizePath,
     optionDeclarations,
     parseCustomTypeOption,
+    ScriptTarget,
     toPath,
     transpileOptionValueCompilerOptions,
 } from "./_namespaces/ts";
@@ -51,14 +52,65 @@ const optionsRedundantWithVerbatimModuleSyntax = new Set([
 
 /*
  * This function will compile source text from 'input' argument using specified compiler options.
- * If not options are provided - it will use a set of default compiler options.
+ * If no options are provided - it will use a set of default compiler options.
  * Extra compiler options that will unconditionally be used by this function are:
  * - isolatedModules = true
  * - allowNonTsExtensions = true
  * - noLib = true
  * - noResolve = true
+ * - declaration = false
  */
 export function transpileModule(input: string, transpileOptions: TranspileOptions): TranspileOutput {
+    return transpileWorker(input, transpileOptions, /*declaration*/ false);
+}
+
+/*
+ * This function will create a declaration file from 'input' argument using specified compiler options.
+ * If no options are provided - it will use a set of default compiler options.
+ * Extra compiler options that will unconditionally be used by this function are:
+ * - isolatedDeclarations = true
+ * - isolatedModules = true
+ * - allowNonTsExtensions = true
+ * - noLib = true
+ * - noResolve = true
+ * - declaration = true
+ * - emitDeclarationOnly = true
+ * - noCheck = true
+ * Note that this declaration file may differ from one produced by a full program typecheck,
+ * in that only types in the single input file are available to be used in the generated declarations.
+ */
+export function transpileDeclaration(input: string, transpileOptions: TranspileOptions): TranspileOutput {
+    return transpileWorker(input, transpileOptions, /*declaration*/ true);
+}
+
+// Declaration emit works without a `lib`, but some local inferences you'd expect to work won't without
+//  at least a minimal `lib` available, since the checker will `any` their types without these defined.
+//  Late bound symbol names, in particular, are impossible to define without `Symbol` at least partially defined.
+// TODO: This should *probably* just load the full, real `lib` for the `target`.
+const barebonesLibContent = `/// <reference no-default-lib="true"/>
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number {}
+interface Object {}
+interface RegExp {}
+interface String {}
+interface Array<T> { length: number; [n: number]: T; }
+interface SymbolConstructor {
+    (desc?: string | number): symbol;
+    for(name: string): symbol;
+    readonly toStringTag: symbol;
+}
+declare var Symbol: SymbolConstructor;
+interface Symbol {
+    readonly [Symbol.toStringTag]: string;
+}`;
+const barebonesLibName = "lib.d.ts";
+const barebonesLibSourceFile = createSourceFile(barebonesLibName, barebonesLibContent, { languageVersion: ScriptTarget.Latest });
+
+function transpileWorker(input: string, transpileOptions: TranspileOptions, declaration?: boolean): TranspileOutput {
     const diagnostics: Diagnostic[] = [];
 
     const options: CompilerOptions = transpileOptions.compilerOptions ? fixupCompilerOptions(transpileOptions.compilerOptions, diagnostics) : {};
@@ -86,10 +138,20 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     // Filename can be non-ts file.
     options.allowNonTsExtensions = true;
 
+    if (declaration) {
+        options.declaration = true;
+        options.emitDeclarationOnly = true;
+        options.isolatedDeclarations = true;
+        options.noCheck = true;
+    }
+    else {
+        options.declaration = false;
+    }
+
     const newLine = getNewLineCharacter(options);
     // Create a compilerHost object to allow the compiler to read and write files
     const compilerHost: CompilerHost = {
-        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : undefined,
+        getSourceFile: fileName => fileName === normalizePath(inputFileName) ? sourceFile : fileName === normalizePath(barebonesLibName) ? barebonesLibSourceFile : undefined,
         writeFile: (name, text) => {
             if (fileExtensionIs(name, ".map")) {
                 Debug.assertEqual(sourceMapText, undefined, "Unexpected multiple source map outputs, file:", name);
@@ -100,12 +162,12 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
                 outputText = text;
             }
         },
-        getDefaultLibFileName: () => "lib.d.ts",
+        getDefaultLibFileName: () => barebonesLibName,
         useCaseSensitiveFileNames: () => false,
         getCanonicalFileName: fileName => fileName,
         getCurrentDirectory: () => "",
         getNewLine: () => newLine,
-        fileExists: (fileName): boolean => fileName === inputFileName,
+        fileExists: (fileName): boolean => fileName === inputFileName || (!!declaration && fileName === barebonesLibName),
         readFile: () => "",
         directoryExists: () => true,
         getDirectories: () => [],
@@ -135,14 +197,17 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
     let outputText: string | undefined;
     let sourceMapText: string | undefined;
 
-    const program = createProgram([inputFileName], options, compilerHost);
+    const inputs = declaration ? [inputFileName, barebonesLibName] : [inputFileName];
+    const program = createProgram(inputs, options, compilerHost);
 
     if (transpileOptions.reportDiagnostics) {
         addRange(/*to*/ diagnostics, /*from*/ program.getSyntacticDiagnostics(sourceFile));
         addRange(/*to*/ diagnostics, /*from*/ program.getOptionsDiagnostics());
     }
     // Emit
-    program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ undefined, transpileOptions.transformers);
+    const result = program.emit(/*targetSourceFile*/ undefined, /*writeFile*/ undefined, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ declaration, transpileOptions.transformers, /*forceDtsEmit*/ declaration);
+
+    addRange(/*to*/ diagnostics, /*from*/ result.diagnostics);
 
     if (outputText === undefined) return Debug.fail("Output generation failed");
 

@@ -4,7 +4,7 @@ import {
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
 
-export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project";
+export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "transpile";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-server";
 
