@@ -2123,7 +2123,7 @@ export function entityNameToString(name: EntityNameOrEntityNameExpression | JSDo
                 return Debug.assertNever(name.name);
             }
         case SyntaxKind.JSDocMemberName:
-            return entityNameToString(name.left) + entityNameToString(name.right);
+            return entityNameToString(name.left) + "#" + entityNameToString(name.right);
         case SyntaxKind.JsxNamespacedName:
             return entityNameToString(name.namespace) + ":" + entityNameToString(name.name);
         default:
