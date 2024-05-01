@@ -1240,7 +1240,7 @@ export namespace Completion {
         kind: "module",
         sortText: SortText.GlobalsOrKeywords,
     };
-    
+
     export const globalTypes = globalTypesPlus([]);
     export const globalTypesNoLib = globalTypesPlus([], { noLib: true });
 
