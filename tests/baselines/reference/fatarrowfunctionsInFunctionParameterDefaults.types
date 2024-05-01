@@ -7,7 +7,7 @@ function fn(x = () => this, y = x()) {
 >x : () => any
 >  : ^^^^^^^^^
 >() => this : () => any
->           :          
+>           : ^^^^^^^^^
 >this : any
 >y : any
 >x() : any

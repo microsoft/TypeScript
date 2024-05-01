@@ -200,9 +200,9 @@ import {
     isOptionalChain,
     isOptionalChainRoot,
     isOutermostOptionalChain,
-    isParameterDeclaration,
     isParameterPropertyDeclaration,
     isParenthesizedExpression,
+    isPartOfParameterDeclaration,
     isPartOfTypeQuery,
     isPrefixUnaryExpression,
     isPrivateIdentifier,
@@ -3647,7 +3647,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             else if (isBlockOrCatchScoped(node)) {
                 bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable, SymbolFlags.BlockScopedVariableExcludes);
             }
-            else if (isParameterDeclaration(node)) {
+            else if (isPartOfParameterDeclaration(node)) {
                 // It is safe to walk up parent chain to find whether the node is a destructuring parameter declaration
                 // because its parent chain has already been set up, since parents are set before descending into children.
                 //

@@ -79,6 +79,7 @@
         "esnext.collection",
         "esnext.array",
         "esnext.regexp",
+        "esnext.string",
         "decorators",
         "decorators.legacy",
         // Default libraries

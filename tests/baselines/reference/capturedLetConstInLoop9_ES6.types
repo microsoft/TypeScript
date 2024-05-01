@@ -424,7 +424,7 @@ class C {
 >f : () => number
 >  : ^^^^^^^^^^^^
 >() => this.N * i : () => number
->                 :             
+>                 : ^^^^^^^^^^^^
 >this.N * i : number
 >           : ^^^^^^
 >this.N : number

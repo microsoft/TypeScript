@@ -11,7 +11,7 @@ let g = f || (abc => { void abc.toLowerCase() })
 >g : (x: string) => void
 >  : ^ ^^      ^^^^^^^^^
 >f || (abc => { void abc.toLowerCase() }) : (x: string) => void
->                                         :                    
+>                                         : ^ ^^      ^^^^^^^^^
 >f : ((x: string) => void) | null
 >  : ^^ ^^      ^^^^^^^^^^^^^^^^^
 >(abc => { void abc.toLowerCase() }) : (abc: string) => void
@@ -35,7 +35,7 @@ let gg = f ?? (abc => { void abc.toLowerCase() })
 >gg : (x: string) => void
 >   : ^ ^^      ^^^^^^^^^
 >f ?? (abc => { void abc.toLowerCase() }) : (x: string) => void
->                                         :                    
+>                                         : ^ ^^      ^^^^^^^^^
 >f : ((x: string) => void) | null
 >  : ^^ ^^      ^^^^^^^^^^^^^^^^^
 >(abc => { void abc.toLowerCase() }) : (abc: string) => void

@@ -7,7 +7,7 @@ const fn1 = (options: { headers?: {} }) => { };
 >fn1 : (options: { headers?: {}; }) => void
 >    : ^       ^^                 ^^^^^^^^^
 >(options: { headers?: {} }) => { } : (options: { headers?: {}; }) => void
->                                   :                                     
+>                                   : ^       ^^                 ^^^^^^^^^
 >options : { headers?: {}; }
 >        : ^^^^^^^^^^^^  ^^^
 >headers : {}
@@ -33,7 +33,7 @@ const fn2 = ({ headers = {} }) => { };
 >fn2 : ({ headers }: { headers?: {}; }) => void
 >    : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({ headers = {} }) => { } : ({ headers }: { headers?: {}; }) => void
->                          :                        ^                
+>                          : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >headers : {}
 >        : ^^
 >{} : {}

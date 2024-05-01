@@ -117,7 +117,7 @@ let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >Funk : (_props: ComponentProps) => JSX.Element
 >     : ^      ^^              ^^^^^^^^^^^^^^^^
 >(_props: ComponentProps) => <div>Hello</div> : (_props: ComponentProps) => JSX.Element
->                                             :                                        
+>                                             : ^      ^^              ^^^^^^^^^^^^^^^^
 >_props : ComponentProps
 >       : ^^^^^^^^^^^^^^
 ><div>Hello</div> : JSX.Element
@@ -131,7 +131,7 @@ let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
 >Fail1 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={true} /> : () => JSX.Element
->                                                           :                  
+>                                                           : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={true} /> : JSX.Element
 >                                                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
@@ -149,7 +149,7 @@ let Fail2 = () => <Funk mandatoryFn={() => { }} optionalBool={true as true} />
 >Fail2 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={true as true} /> : () => JSX.Element
->                                                                   :                  
+>                                                                   : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={true as true} /> : JSX.Element
 >                                                             : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
@@ -181,7 +181,7 @@ let Fail3 = () => <Funk mandatoryFn={() => { }} optionalBool={True} />
 >Fail3 : () => JSX.Element
 >      : ^^^^^^^^^^^^^^^^^
 >() => <Funk mandatoryFn={() => { }} optionalBool={True} /> : () => JSX.Element
->                                                           :                  
+>                                                           : ^^^^^^^^^^^^^^^^^
 ><Funk mandatoryFn={() => { }} optionalBool={True} /> : JSX.Element
 >                                                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element
@@ -199,7 +199,7 @@ let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 >attrs2 : { optionalBool: true; mandatoryFn: () => void; }
 >       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ optionalBool: true as true, mandatoryFn: () => { } } : { optionalBool: true; mandatoryFn: () => void; }
->                                                       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^          ^^^
+>                                                       : ^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >optionalBool : true
 >             : ^^^^
 >true as true : true
@@ -211,13 +211,13 @@ let attrs2 = { optionalBool: true as true, mandatoryFn: () => { } }
 >mandatoryFn : () => void
 >            : ^^^^^^^^^^
 >() => { } : () => void
->          :           
+>          : ^^^^^^^^^^
 
 let Success = () => <Funk {...attrs2} />
 >Success : () => JSX.Element
 >        : ^^^^^^^^^^^^^^^^^
 >() => <Funk {...attrs2} /> : () => JSX.Element
->                           :                  
+>                           : ^^^^^^^^^^^^^^^^^
 ><Funk {...attrs2} /> : JSX.Element
 >                     : ^^^^^^^^^^^
 >Funk : (_props: ComponentProps) => JSX.Element

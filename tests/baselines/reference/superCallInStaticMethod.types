@@ -67,7 +67,7 @@ class Other extends Doing {
 >a : () => void
 >  : ^^^^^^^^^^
 >() => {                super.staticMethod();            } : () => void
->                                                          :           
+>                                                          : ^^^^^^^^^^
 
                 super.staticMethod();
 >super.staticMethod() : void

@@ -210,7 +210,7 @@ Point.prototype = {
 >add : (dx: number, dy: number) => Point
 >    : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
->                                                                           :                                  
+>                                                                           : ^  ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
 >dx : number
 >   : ^^^^^^
 >dy : number
@@ -351,7 +351,7 @@ C.prototype =
 >C1M1 : (c: number, d: number) => any
 >     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
->                                                                :                              
+>                                                                : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
 >d : number

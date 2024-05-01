@@ -1127,7 +1127,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1175,7 +1175,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1256,7 +1256,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1337,7 +1337,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1418,7 +1418,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1499,7 +1499,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                             }
                         };
                     `;
-                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                    assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                     assert.throws(() => main(/*value*/ undefined));
                     assert.throws(() => main(123));
                     assert.throws(() => main("abc"));
@@ -1575,7 +1575,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1624,7 +1624,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1660,7 +1660,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1696,7 +1696,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1750,7 +1750,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1817,7 +1817,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1830,7 +1830,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1843,7 +1843,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });
@@ -1856,7 +1856,7 @@ describe("unittests:: evaluation:: esDecorators", () => {
                         }
                     };
                 `;
-                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-null/no-null
+                assert.throws(() => main(/*value*/ null)); // eslint-disable-line no-restricted-syntax
                 assert.throws(() => main(1));
                 assert.throws(() => main("abc"));
             });

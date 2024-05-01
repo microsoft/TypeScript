@@ -97,7 +97,7 @@ do{
 >fn : () => void
 >   : ^^^^^^^^^^
 >function () { } : () => void
->                :           
+>                : ^^^^^^^^^^
 
     continue EIGHT;
 >EIGHT : any

@@ -95,15 +95,43 @@ export function foo() {}
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "command": "open",
+      "command": "configure",
       "arguments": {
-        "file": "e:/myproject/src/app.js"
+        "preferences": {
+          "includePackageJsonAutoImports": "auto",
+          "includeCompletionsForModuleExports": true,
+          "includeCompletionsWithInsertText": true
+        }
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: e:/myproject/src
-Info seq  [hh:mm:ss:mss] For info: e:/myproject/src/app.js :: No config files found.
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "responseRequired": false
+    }
+After request
+
+Before request
+
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "command": "open",
+      "arguments": {
+        "file": "e:/myproject/src/app.js"
+      },
+      "seq": 2,
+      "type": "request"
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: e:/myproject/src/app.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/myproject/src/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -412,11 +440,9 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "file": "e:/myproject/src/app.js",
         "line": 5,
-        "offset": 1,
-        "includeExternalModuleExports": true,
-        "includeInsertTextCompletions": true
+        "offset": 1
       },
-      "seq": 2,
+      "seq": 3,
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *

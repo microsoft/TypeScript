@@ -101,8 +101,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/a.ts :: Config file name: /user/username/projects/a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {

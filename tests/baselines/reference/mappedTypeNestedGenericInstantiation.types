@@ -27,7 +27,7 @@ const square = (x: number) => x * x;
 >square : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >(x: number) => x * x : (x: number) => number
->                     :                      
+>                     : ^ ^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x * x : number
@@ -41,7 +41,7 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >v : { a: number; b: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}).mapValues(square).value() : { a: number; b: number; }
->                                              :                          
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}).mapValues(square).value : () => { a: number; b: number; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >chain({a: 1, b: 2}).mapValues(square) : Chainable<{ a: number; b: number; }>
@@ -67,5 +67,5 @@ const v = chain({a: 1, b: 2}).mapValues(square).value();
 >square : (x: number) => number
 >       : ^ ^^      ^^^^^^^^^^^
 >value : () => { a: number; b: number; }
->      : ^^^^^^                         
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

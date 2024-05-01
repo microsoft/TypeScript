@@ -21,7 +21,7 @@ const fn = <
 >fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
 >   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^          ^^^^^      
 ><  A extends ObjA,  B extends ObjB = ObjB>(opts:Opts<A, B>):string => 'Z' : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
->                                                                          :                                                                    
+>                                                                          : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^    ^^          ^^^^^      
 
   A extends ObjA,
   B extends ObjB = ObjB

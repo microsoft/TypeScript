@@ -48,7 +48,7 @@ let x = pick({ a: 10, b: 20, c: 30 }, ["a", "c"]);
 >x : Pick<{ a: number; b: number; c: number; }, "a" | "c">
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick({ a: 10, b: 20, c: 30 }, ["a", "c"]) : Pick<{ a: number; b: number; c: number; }, "a" | "c">
->                                          : ^^^^^                                    ^^^^^^^^^^^^
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pick : <T, K extends keyof T>(obj: T, propNames: K[]) => Pick<T, K>
 >     : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^         ^^   ^^^^^^^^^^^^^^^
 >{ a: 10, b: 20, c: 30 } : { a: number; b: number; c: number; }

@@ -24,7 +24,7 @@ var f2 = (x: number) => { return null; }
 >f2 : (x: number) => any
 >   : ^ ^^      ^^^^^^^^
 >(x: number) => { return null; } : (x: number) => any
->                                :                   
+>                                : ^ ^^      ^^^^^^^^
 >x : number
 >  : ^^^^^^
 

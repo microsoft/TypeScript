@@ -21,7 +21,7 @@ var g = (x: string) => x + "blah";
 >g : (x: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(x: string) => x + "blah" : (x: string) => string
->                          :                      
+>                          : ^ ^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >x + "blah" : string
@@ -35,7 +35,7 @@ var x = () => g;
 >x : () => (x: string) => string
 >  : ^^^^^^^ ^^      ^^^^^^^^^^^
 >() => g : () => (x: string) => string
->        :                            
+>        : ^^^^^^^ ^^      ^^^^^^^^^^^
 >g : (x: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 

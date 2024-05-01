@@ -125,7 +125,7 @@ var ResultIsNumber7 = --{ x: "", y: (s: string) => { return s; } };
 >y : (s: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string
@@ -169,7 +169,7 @@ var ResultIsNumber10 = { x: "", y: (s: string) => { return s; } }--;
 >y : (s: string) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(s: string) => { return s; } : (s: string) => string
->                             :                      
+>                             : ^ ^^      ^^^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >s : string

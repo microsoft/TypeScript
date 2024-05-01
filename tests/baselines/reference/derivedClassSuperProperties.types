@@ -332,7 +332,7 @@ class DerivedWithArrowFunctionParameter extends Base {
 >lambda : (param?: this) => void
 >       : ^     ^^^^^^^^^^^^^^^^
 >(param = this) => {} : (param?: this) => void
->                     :       ^               
+>                     : ^     ^^^^^^^^^^^^^^^^
 >param : this
 >      : ^^^^
 >this : this
@@ -920,7 +920,7 @@ class DerivedWithDerivedClassExpression extends Base {
 >bar : () => this
 >    : ^^^^^^^^^^
 >() => this : () => this
->           :           
+>           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 

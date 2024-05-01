@@ -6,7 +6,7 @@ var mod1 = require('./mod1')
 >mod1 : { (): void; f: (a: number) => void; }
 >     : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >require('./mod1') : { (): void; f: (a: number) => void; }
->                  : ^^^^^^^^^^^^^^^                   ^^^
+>                  : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >require : (name: string) => any
 >        : ^    ^^      ^^^^^^^^
 >'./mod1' : "./mod1"
@@ -51,7 +51,7 @@ module.exports = function () { }
 >module : { exports: { (): void; f: (a: number) => void; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >exports : { (): void; f: (a: number) => void; }
->        : ^^^^^^^^^^^^^^^                   ^^^
+>        : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >function () { } : () => void
 >                : ^^^^^^^^^^
 
@@ -66,11 +66,11 @@ module.exports.f = function (a) { }
 >module : { exports: { (): void; f: (a: number) => void; }; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^^
 >exports : { (): void; f: (a: number) => void; }
->        : ^^^^^^^^^^^^^^^                   ^^^
+>        : ^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >f : (a: number) => void
 >  : ^ ^^      ^^^^^^^^^
 >function (a) { } : (a: number) => void
->                 :                    
+>                 : ^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 

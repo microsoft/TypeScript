@@ -24,7 +24,7 @@ var f = (x: IHasVisualizationModel) => x;
 >f : (x: IHasVisualizationModel) => IHasVisualizationModel
 >  : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x: IHasVisualizationModel) => x : (x: IHasVisualizationModel) => IHasVisualizationModel
->                                 :                                                      
+>                                 : ^ ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IHasVisualizationModel
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 >x : IHasVisualizationModel

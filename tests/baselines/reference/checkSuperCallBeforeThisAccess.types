@@ -52,7 +52,7 @@ class C1 extends A {
 >a4 : () => this
 >   : ^^^^^^^^^^
 >() => this : () => this
->           :           
+>           : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 
@@ -60,7 +60,7 @@ class C1 extends A {
 >a5 : () => number
 >   : ^^^^^^^^^^^^
 >() => this.x : () => number
->             :             
+>             : ^^^^^^^^^^^^
 >this.x : number
 >       : ^^^^^^
 >this : this
@@ -72,7 +72,7 @@ class C1 extends A {
 >a6 : () => number
 >   : ^^^^^^^^^^^^
 >() => super.x : () => number
->              :             
+>              : ^^^^^^^^^^^^
 >super.x : number
 >        : ^^^^^^
 >super : A

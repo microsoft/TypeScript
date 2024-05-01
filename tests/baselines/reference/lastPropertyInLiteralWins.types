@@ -38,7 +38,7 @@ test({ // Should error, as last one wins, and is wrong type
 >thunk : (str: string) => void
 >      : ^   ^^      ^^^^^^^^^
 >(str: string) => {} : (str: string) => void
->                    :                      
+>                    : ^   ^^      ^^^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -64,7 +64,7 @@ test({ // Should be OK.  Last 'thunk' is of correct type
 >thunk : (num: number) => void
 >      : ^   ^^      ^^^^^^^^^
 >(num: number) => {} : (num: number) => void
->                    :                      
+>                    : ^   ^^      ^^^^^^^^^
 >num : number
 >    : ^^^^^^
 

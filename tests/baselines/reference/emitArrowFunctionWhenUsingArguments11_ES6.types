@@ -16,7 +16,7 @@ function f(arguments) {
 >a : () => () => any
 >  : ^^^^^^^^^^^^^^^
 >() => () => arguments : () => () => any
->                      :                
+>                      : ^^^^^^^^^^^^^^^
 >() => arguments : () => any
 >                : ^^^^^^^^^
 >arguments : any

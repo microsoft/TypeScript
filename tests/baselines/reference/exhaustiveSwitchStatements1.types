@@ -668,7 +668,7 @@ const doSomethingWithLevel = (level: Level) => {
 >doSomethingWithLevel : (level: Level) => Level
 >                     : ^     ^^     ^^^^^^^^^^
 >(level: Level) => {  let next: Level;  switch (level) {    case Level.One:      next = Level.Two;      break;    case Level.Two:      next = Level.One;      break;  }  return next;} : (level: Level) => Level
->                                                                                                                                                                                      :                        
+>                                                                                                                                                                                      : ^     ^^     ^^^^^^^^^^
 >level : Level
 >      : ^^^^^
 

@@ -67,7 +67,7 @@ const x1 = map(typeClass);
 >x1 : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
 >   : ^^^^^^^ ^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^
 >map(typeClass) : <A, B>(a: T<A>, f: (a: A) => B) => T<B>
->               :                                        
+>               : ^^^^^^^ ^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^
 >map : <F extends TypeLambda>(F: TypeClass<F>) => <A, B>(a: Apply<F, A>, f: (a: A) => B) => Apply<F, B>
 >    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^            ^^^^^^ ^^ ^^ ^^           ^^ ^^           ^^^^^^^^^^^^^^^^
 >typeClass : TypeClass<TTypeLambda>

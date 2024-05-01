@@ -95,7 +95,7 @@ var i2_i_foo = i2_i.foo;
 >i2_i_foo : (b: number) => string
 >         : ^ ^^      ^^^^^^^^^^^
 >i2_i.foo : (b: number) => string
->         :                      
+>         : ^ ^^      ^^^^^^^^^^^
 >i2_i : i2
 >     : ^^
 >foo : (b: number) => string
@@ -155,7 +155,7 @@ var i2_i_nc_foo = i2_i.nc_foo;
 >i2_i_nc_foo : (b: number) => string
 >            : ^ ^^      ^^^^^^^^^^^
 >i2_i.nc_foo : (b: number) => string
->            :                      
+>            : ^ ^^      ^^^^^^^^^^^
 >i2_i : i2
 >     : ^^
 >nc_foo : (b: number) => string
@@ -191,7 +191,7 @@ var i2_i_fnfoo = i2_i.fnfoo;
 >i2_i_fnfoo : (b: number) => string
 >           : ^ ^^      ^^^^^^^^^^^
 >i2_i.fnfoo : (b: number) => string
->           :                      
+>           : ^ ^^      ^^^^^^^^^^^
 >i2_i : i2
 >     : ^^
 >fnfoo : (b: number) => string
@@ -215,7 +215,7 @@ var i2_i_nc_fnfoo = i2_i.nc_fnfoo;
 >i2_i_nc_fnfoo : (b: number) => string
 >              : ^ ^^      ^^^^^^^^^^^
 >i2_i.nc_fnfoo : (b: number) => string
->              :                      
+>              : ^ ^^      ^^^^^^^^^^^
 >i2_i : i2
 >     : ^^
 >nc_fnfoo : (b: number) => string
@@ -287,7 +287,7 @@ i3_i = {
 >f : (a: number) => string
 >  : ^ ^^      ^^^^^^^^^^^
 >(/**i3_i a*/a: number) => "Hello" + a : (a: number) => string
->                                      :                      
+>                                      : ^ ^^      ^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >"Hello" + a : string

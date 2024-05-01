@@ -34,7 +34,7 @@ Wagon.circle = function (wagons) {
 >circle : (wagons?: Wagon[] | undefined) => number
 >       : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >function (wagons) {    return wagons ? wagons.length : 3.14;} : (wagons?: Wagon[] | undefined) => number
->                                                              :        ^                                
+>                                                              : ^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^
 >wagons : Wagon[]
 >       : ^^^^^^^
 

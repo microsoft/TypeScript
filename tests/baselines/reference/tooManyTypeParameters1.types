@@ -15,7 +15,7 @@ var x = <T>() => {};
 >x : <T>() => void
 >  : ^^^^^^^^^^^^^
 ><T>() => {} : <T>() => void
->            :              
+>            : ^^^^^^^^^^^^^
 
 x<number,number>();
 >x<number,number>() : void
