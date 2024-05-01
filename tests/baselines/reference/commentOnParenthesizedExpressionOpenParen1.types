@@ -6,6 +6,7 @@ var j;
 
 var f: () => any;
 >f : () => any
+>  : ^^^^^^   
 
 <any>( /* Preserve */ j = f());
 ><any>( /* Preserve */ j = f()) : any
@@ -14,4 +15,5 @@ var f: () => any;
 >j : any
 >f() : any
 >f : () => any
+>  : ^^^^^^^^^
 

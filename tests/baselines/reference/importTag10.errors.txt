@@ -1,0 +1,11 @@
+/foo.js(2,11): error TS1109: Expression expected.
+
+
+==== /foo.js (1 errors) ====
+    /**
+     * @import
+              
+     */
+    
+!!! error TS1109: Expression expected.
+    

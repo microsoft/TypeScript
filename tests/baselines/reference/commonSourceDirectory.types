@@ -4,26 +4,36 @@
 /// <reference path="../types/bar.d.ts" preserve="true" />
 import { x } from "foo";
 >x : 0
+>  : ^
 
 import { y } from "bar";
 >y : 0
+>  : ^
 
 x + y;
 >x + y : number
+>      : ^^^^^^
 >x : 0
+>  : ^
 >y : 0
+>  : ^
 
 === /node_modules/foo/index.ts ===
 export const x = 0;
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 
 === /types/bar.d.ts ===
 declare module "bar" {
 >"bar" : typeof import("bar")
+>      : ^^^^^^^^^^^^^^^^^^^^
 
     export const y = 0;
 >y : 0
+>  : ^
 >0 : 0
+>  : ^
 }
 

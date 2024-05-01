@@ -1,24 +1,20 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { dedent } from "../../_namespaces/Utils";
+import { jsonToReadableText } from "../helpers";
 import {
     FsContents,
+    getProjectConfigWithNodeNext,
 } from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
+import { loadProjectFromFiles } from "./vfs";
 import {
     createServerHost,
     createWatchedSystem,
     libFile,
 } from "./virtualFileSystemWithWatch";
 
-export function getFsContentsForSampleProjectReferencesLogicConfig() {
+export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean) {
     return jsonToReadableText({
         compilerOptions: {
+            ...getProjectConfigWithNodeNext(withNodeNext),
             composite: true,
             declaration: true,
             sourceMap: true,
@@ -30,11 +26,12 @@ export function getFsContentsForSampleProjectReferencesLogicConfig() {
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(): FsContents {
+export function getFsContentsForSampleProjectReferences(withNodeNext?: boolean): FsContents {
     return {
         [libFile.path]: libFile.content,
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 declarationMap: true,
@@ -48,7 +45,7 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
         `,
         "/user/username/projects/sample1/core/some_decl.d.ts": `declare const dts: any;`,
         "/user/username/projects/sample1/core/anotherModule.ts": `export const World = "hello";`,
-        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(),
+        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext),
         "/user/username/projects/sample1/logic/index.ts": dedent`
             import * as c from '../core/index';
             export function getSecondsInDay() {
@@ -64,6 +61,7 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
             ],
             files: ["index.ts"],
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 forceConsistentCasingInFileNames: true,
@@ -93,9 +91,9 @@ export function getFsForSampleProjectReferences() {
     );
 }
 
-export function getSysForSampleProjectReferences() {
+export function getSysForSampleProjectReferences(withNodeNext?: boolean) {
     return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(),
+        getFsContentsForSampleProjectReferences(withNodeNext),
         {
             currentDirectory: "/user/username/projects/sample1",
         },

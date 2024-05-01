@@ -3,6 +3,7 @@
 === classWithSemicolonClassElement2.ts ===
 class C {
 >C : C
+>  : ^
 
     ;
     ;

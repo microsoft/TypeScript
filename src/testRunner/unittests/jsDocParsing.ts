@@ -205,6 +205,34 @@ describe("unittests:: JSDocParsing", () => {
             );
 
             parsesCorrectly(
+                "importTag1",
+                `/**
+  * @import foo from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag2",
+                `/**
+  * @import { foo } from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag3",
+                `/**
+  * @import * as types from 'foo'
+  */`,
+            );
+
+            parsesCorrectly(
+                "importTag4",
+                `/**
+  * @import * as types from 'foo' comment part
+  */`,
+            );
+
+            parsesCorrectly(
                 "returnTag1",
                 `/**
   * @return {number}
@@ -513,6 +541,23 @@ oh.no
         it("doesn't create a 1-element array with missing type parameter in jsDoc", () => {
             const doc = ts.parseIsolatedJSDocComment("/**\n    @template\n*/");
             assert.equal((doc?.jsDoc.tags?.[0] as ts.JSDocTemplateTag).typeParameters.length, 0);
+        });
+    });
+    describe("getTextOfJSDocComment", () => {
+        it("should preserve hash in string representation of JsDocMemberName", () => {
+            const sourceText = `
+/**
+ *
+ * @see {@link foo#bar label}
+ */
+class Foo  {};
+`;
+
+            const root = ts.createSourceFile("foo.ts", sourceText, ts.ScriptTarget.ES5, /*setParentNodes*/ true);
+            const [classDecl] = root.statements;
+            const [seeTag] = ts.getJSDocTags(classDecl);
+
+            assert.equal(ts.getTextOfJSDocComment(seeTag.comment), "{@link foo#bar label}");
         });
     });
 });

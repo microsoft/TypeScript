@@ -5,9 +5,13 @@
 >(function a() { } as any)().foo() : any
 >(function a() { } as any)().foo : any
 >(function a() { } as any)() : any
+>                            : ^^^
 >(function a() { } as any) : any
 >function a() { } as any : any
 >function a() { } : () => void
+>                 : ^^^^^^^^^^
 >a : () => void
+>  : ^^^^^^^^^^
 >foo : any
+>    : ^^^
 

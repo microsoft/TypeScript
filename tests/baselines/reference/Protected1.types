@@ -3,4 +3,5 @@
 === Protected1.ts ===
 protected class C {
 >C : C
+>  : ^
 }

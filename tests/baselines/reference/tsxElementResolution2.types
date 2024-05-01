@@ -6,16 +6,21 @@ declare module JSX {
 	interface IntrinsicElements {
 	    [x: string]: any;
 >x : string
+>  : ^^^^^^
 	}
 }
 
 // OK
 <div />;
 ><div /> : JSX.Element
+>        : ^^^^^^^^^^^
 >div : any
+>    : ^^^
 
 // OK
 <span />;
 ><span /> : JSX.Element
+>         : ^^^^^^^^^^^
 >span : any
+>     : ^^^
 

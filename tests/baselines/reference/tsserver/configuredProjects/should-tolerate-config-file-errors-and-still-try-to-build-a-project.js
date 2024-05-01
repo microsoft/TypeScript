@@ -22,12 +22,12 @@ interface Array<T> { length: number; [n: number]: T; }
 
 //// [/a/b/tsconfig.json]
 {
-                    "compilerOptions": {
-                        "target": "es6",
-                        "allowAnything": true
-                    },
-                    "someOtherProperty": {}
-                }
+  "compilerOptions": {
+    "target": "es6",
+    "allowAnything": true
+  },
+  "someOtherProperty": {}
+}
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -39,8 +39,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/commonFile1.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/commonFile1.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -151,11 +150,11 @@ Info seq  [hh:mm:ss:mss] event:
                 "span": {
                   "start": {
                     "line": 3,
-                    "offset": 35
+                    "offset": 15
                   },
                   "end": {
                     "line": 3,
-                    "offset": 40
+                    "offset": 20
                   },
                   "file": "/a/b/tsconfig.json"
                 },
@@ -208,11 +207,11 @@ Info seq  [hh:mm:ss:mss] event:
           {
             "start": {
               "line": 4,
-              "offset": 25
+              "offset": 5
             },
             "end": {
               "line": 4,
-              "offset": 40
+              "offset": 20
             },
             "text": "Unknown compiler option 'allowAnything'.",
             "code": 5023,

@@ -1,0 +1,13 @@
+unicodeExtendedEscapesInRegularExpressions07.ts(3,13): error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+unicodeExtendedEscapesInRegularExpressions07.ts(3,22): error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+
+
+==== unicodeExtendedEscapesInRegularExpressions07.ts (2 errors) ====
+    // ES6 Spec - 10.1.1 Static Semantics: UTF16Encoding (cp)
+    //  1. Assert: 0 ≤ cp ≤ 0x10FFFF.
+    var x = /\u{110000}/gu;
+                ~~~~~~
+!!! error TS1198: An extended Unicode escape value must be between 0x0 and 0x10FFFF inclusive.
+                         ~
+!!! error TS1501: This regular expression flag is only available when targeting 'es6' or later.
+    

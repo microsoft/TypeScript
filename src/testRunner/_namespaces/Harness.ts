@@ -7,6 +7,7 @@ export { Parallel };
 
 export * from "../fourslashRunner";
 export * from "../compilerRunner";
+export * from "../transpileRunner";
 export * from "../runner";
 
 // If running as emitted CJS, don't start executing the tests here; instead start in runner.ts.

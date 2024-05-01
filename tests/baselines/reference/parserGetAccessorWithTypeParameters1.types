@@ -3,7 +3,9 @@
 === parserGetAccessorWithTypeParameters1.ts ===
 class C {
 >C : C
+>  : ^
 
   get foo<T>() { }
 >foo : void
+>    : ^^^^
 }

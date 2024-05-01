@@ -1,10 +1,6 @@
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers";
+import { FsContents } from "../helpers/contents";
 import {
     getFsContentsForSampleProjectReferences,
     getFsContentsForSampleProjectReferencesLogicConfig,

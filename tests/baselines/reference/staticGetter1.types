@@ -4,12 +4,15 @@
 // once caused stack overflow
 class C {
 >C : C
+>  : ^
 
     static get x() {
 >x : typeof C
+>  : ^^^^^^^^
 
         return this;
 >this : typeof C
+>     : ^^^^^^^^
     }
 }
 

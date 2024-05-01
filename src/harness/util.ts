@@ -38,7 +38,7 @@ export function dedent(array: TemplateStringsArray, ...args: any[]) {
     const lineTerminatorRegExp = /\r\n?|\n/g;
     const lines: string[] = [];
     const lineTerminators: string[] = [];
-    let match: RegExpExecArray | null;
+    let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
     let lineStart = 0;
     while (match = lineTerminatorRegExp.exec(text)) {
         if (lineStart !== match.index || lines.length > 0) {
