@@ -27698,8 +27698,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (!flowNode) {
             return declaredType;
         }
-        declaredType = isNoInferType(declaredType) ? (declaredType as SubstitutionType).baseType : declaredType;
-        initialType = isNoInferType(initialType) ? (initialType as SubstitutionType).baseType : initialType;
         flowInvocationCount++;
         const sharedFlowStart = sharedFlowCount;
         const evolvedType = getTypeFromFlowType(getTypeAtFlowNode(flowNode));
@@ -28851,7 +28849,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Narrow the given type based on the given expression having the assumed boolean value. The returned type
         // will be a subtype or the same type as the argument.
         function narrowType(type: Type, expr: Expression, assumeTrue: boolean): Type {
-            type = isNoInferType(type) ? (type as SubstitutionType).baseType : type;
             // for `a?.b`, we emulate a synthetic `a !== null && a !== undefined` condition for `a`
             if (
                 isExpressionOfOptionalChainRoot(expr) ||
@@ -29151,6 +29148,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNarrowableTypeForReference(type: Type, reference: Node, checkMode?: CheckMode) {
+        if (isNoInferType(type)) {
+            type = (type as SubstitutionType).baseType;
+        }
         // When the type of a reference is or contains an instantiable type with a union type constraint, and
         // when the reference is in a constraint position (where it is known we'll obtain the apparent type) or
         // has a contextual type containing no top-level instantiables (meaning constraints will determine
