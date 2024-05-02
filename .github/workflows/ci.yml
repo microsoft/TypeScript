@@ -29,21 +29,13 @@ jobs:
           - windows-latest
           - macos-14
         node-version:
-          - '22'
-          - '20'
-          - '18'
-          - '16'
-          - '14'
+          - 23-nightly
         bundle:
           - 'true'
         include:
-          - node-version: 'lts/*'
+          - node-version: 23-nightly
             bundle: false
             os: ubuntu-latest
-        exclude:
-          # No Node 14 on ARM macOS
-          - node-version: '14'
-            os: macos-14
 
     runs-on: ${{ matrix.os }}
     name: Test Node ${{ matrix.node-version }} on ${{ matrix.os }}${{ (!matrix.bundle && ' with --no-bundle') || '' }}
@@ -55,12 +47,20 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           check-latest: true
+
+      - run: |
+          echo "value=--no-warnings=ExperimentalWarning --experimental-require-module" >> "$GITHUB_OUTPUT"
+        name: Enable require(ESM)
+        id: node-options
+
       - run: npm ci
 
       - name: Tests
         id: test
         # run tests, but lint separately
         run: npm run test -- --no-lint --bundle=${{ matrix.bundle }}
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
@@ -68,6 +68,8 @@ jobs:
           npx hereby baseline-accept
           git add tests/baselines/reference
           git diff --staged --exit-code
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
   coverage:
     runs-on:
@@ -83,11 +85,20 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
+
+      - run: |
+          echo "value=--no-warnings=ExperimentalWarning --experimental-require-module" >> "$GITHUB_OUTPUT"
+        name: Enable require(ESM)
+        id: node-options
+
       - run: npm ci
 
       - name: Run tests with coverage
         run: npm test -- --no-lint --coverage
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@834a144ee995460fba8ed112a2fc961b36a5ec5a # v4.3.6
@@ -108,7 +119,8 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
       - run: npm ci
 
       - name: Linter
@@ -134,7 +146,8 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
       - run: npm ci
 
       - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
@@ -154,7 +167,8 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
       - run: npm ci
 
       - name: Installing browsers
@@ -170,7 +184,8 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
       - run: npm ci
 
       - name: Build src
@@ -184,7 +199,14 @@ jobs:
 
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
+
+      - run: |
+          echo "value=--no-warnings=ExperimentalWarning --experimental-require-module" >> "$GITHUB_OUTPUT"
+        name: Enable require(ESM)
+        id: node-options
+
       - run: |
           npm --version
           # corepack enable npm
@@ -194,12 +216,16 @@ jobs:
       - run: npm ci
 
       - run: npx hereby lkg
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
       - run: |
           node ./scripts/addPackageJsonGitHead.mjs package.json
           npm pack
           mv typescript*.tgz typescript.tgz
           echo "package=$PWD/typescript.tgz" >> "$GITHUB_OUTPUT"
         id: pack
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Smoke test
         run: |
@@ -215,6 +241,8 @@ jobs:
 
           node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript
           node $GITHUB_WORKSPACE/scripts/checkModuleFormat.mjs typescript/lib/tsserverlibrary
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
   package-size:
     runs-on: ubuntu-latest
@@ -232,7 +260,8 @@ jobs:
 
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: '23-nightly'
+          check-latest: true
       - run: |
           npm --version
           # corepack enable npm
@@ -265,7 +294,8 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: 23-nightly
+          check-latest: true
       - run: npm ci
 
       - name: Build scripts
@@ -281,17 +311,30 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: 23-nightly
+          check-latest: true
+
+      - run: |
+          echo "value=--no-warnings=ExperimentalWarning --experimental-require-module" >> "$GITHUB_OUTPUT"
+        name: Enable require(ESM)
+        id: node-options
+
       - run: npm ci
 
       - name: Build tsc
         run: npx hereby tsc
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Clean
         run: npx hereby clean-src
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Self build
         run: npx hereby build-src --built
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
   baselines:
     runs-on: ubuntu-latest
@@ -300,7 +343,14 @@ jobs:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4.0.3
         with:
-          node-version: 'lts/*'
+          node-version: 23-nightly
+          check-latest: true
+
+      - run: |
+          echo "value=--no-warnings=ExperimentalWarning --experimental-require-module" >> "$GITHUB_OUTPUT"
+        name: Enable require(ESM)
+        id: node-options
+
       - run: npm ci
 
       - name: Remove all baselines
@@ -308,11 +358,15 @@ jobs:
 
       - name: Run tests
         run: npm test &> /dev/null || exit 0
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Accept baselines
         run: |
           npx hereby baseline-accept
           git add tests/baselines/reference
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Check baselines
         id: check-baselines
@@ -331,6 +385,8 @@ jobs:
             git diff --staged > fix_baselines.patch
             exit 1
           fi
+        env:
+          NODE_OPTIONS: ${{ steps.node-options.outputs.value }}
 
       - name: Upload baseline diff artifact
         if: ${{ failure() && steps.check-baselines.conclusion == 'failure' }}
