@@ -5377,6 +5377,13 @@ export const enum UnionReduction {
     Subtype,
 }
 
+/** @internal */
+export const enum IntersectionFlags {
+    None = 0,
+    NoSupertypeReduction = 1 << 0,
+    NoConstraintReduction = 1 << 1,
+}
+
 // dprint-ignore
 /** @internal */
 export const enum ContextFlags {
