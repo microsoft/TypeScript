@@ -17,7 +17,7 @@ function pipeExists(name: string): boolean {
     return fs.existsSync(name);
 }
 
-export function createCancellationToken(args: string[]): ServerCancellationToken {
+function createCancellationToken(args: string[]): ServerCancellationToken {
     let cancellationPipeName: string | undefined;
     for (let i = 0; i < args.length - 1; i++) {
         if (args[i] === "--cancellationPipeName") {
@@ -66,4 +66,4 @@ export function createCancellationToken(args: string[]): ServerCancellationToken
         };
     }
 }
-export default createCancellationToken;
+export = createCancellationToken;
