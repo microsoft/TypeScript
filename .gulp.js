@@ -1,5 +1,9 @@
-const cp = require("child_process");
-const path = require("path");
+import cp from "child_process";
+import path from "path";
+import url from "url";
+
+const __filename = url.fileURLToPath(new URL(import.meta.url));
+const __dirname = path.dirname(__filename);
 
 const argv = process.argv.slice(2);
 
