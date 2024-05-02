@@ -446,6 +446,7 @@ import {
     InterfaceType,
     InterfaceTypeWithDeclaredMembers,
     InternalSymbolName,
+    IntersectionFlags,
     IntersectionType,
     IntersectionTypeNode,
     intrinsicTagNameToString,
@@ -1104,7 +1105,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    IntersectionFlags,
 } from "./_namespaces/ts";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers";
 import * as performance from "./_namespaces/ts.performance";
