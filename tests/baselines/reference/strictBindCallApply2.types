@@ -20,10 +20,10 @@ type Test = ThisParameterType<typeof fn>;
 >   : ^    ^^   ^^^^^^^^^
 
 const fb = fn.bind({ blub: "blub" });
->fb : (...args: []) => void
->   : ^^^^    ^^^^^^^^^^^^^
->fn.bind({ blub: "blub" }) : (...args: []) => void
->                          : ^^^^    ^^^^^^^^^^^^^
+>fb : () => void
+>   : ^^^^^^^^^^
+>fn.bind({ blub: "blub" }) : () => void
+>                          : ^^^^^^^^^^
 >fn.bind : { <T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T>; <T, A extends any[], B extends any[], R>(this: (this: T, ...args: [...A, ...B]) => R, thisArg: T, ...args: A): (...args: B) => R; }
 >        : ^^^ ^^    ^^ ^^       ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^ ^^    ^^                                     ^^       ^^ ^^^^^    ^^ ^^^^^^^    ^^ ^^^^^^^^^
 >fn : (this: Foo) => void

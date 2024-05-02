@@ -38,5 +38,5 @@ function f2() {
 
 
 //// [spreadParameterTupleType.d.ts]
-declare function f1(): (...args: [s: string, s: string]) => void;
-declare function f2(): (...args: [a: string, a: string, b: string, a: string, b: string, b: string, a: string, c: string]) => void;
+declare function f1(): (s: string, s_1: string) => void;
+declare function f2(): (a: string, a_1: string, b: string, a_2: string, b_1: string, b_2: string, a_3: string, c: string) => void;

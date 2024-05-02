@@ -26,10 +26,10 @@ declare const t1: [number, boolean, string];
 (function (...x){})(...t1);
 >(function (...x){})(...t1) : void
 >                           : ^^^^
->(function (...x){}) : (...x: [number, boolean, string]) => void
->                    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (...x){} : (...x: [number, boolean, string]) => void
->                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, x_2: string) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, x_2: string) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >...t1 : string | number | boolean
@@ -40,10 +40,10 @@ declare const t1: [number, boolean, string];
 (function (a, ...x){})(...t1);
 >(function (a, ...x){})(...t1) : void
 >                              : ^^^^
->(function (a, ...x){}) : (a: number, ...x: [boolean, string]) => void
->                       : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, ...x){} : (a: number, ...x: [boolean, string]) => void
->                     : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, x_1: string) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, x_1: string) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, string]
@@ -56,10 +56,10 @@ declare const t1: [number, boolean, string];
 (function (a, b, ...x){})(...t1);
 >(function (a, b, ...x){})(...t1) : void
 >                                 : ^^^^
->(function (a, b, ...x){}) : (a: number, b: boolean, ...x: [string]) => void
->                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->function (a, b, ...x){} : (a: number, b: boolean, ...x: [string]) => void
->                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(function (a, b, ...x){}) : (a: number, b: boolean, x_0: string) => void
+>                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, b, ...x){} : (a: number, b: boolean, x_0: string) => void
+>                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -74,10 +74,10 @@ declare const t1: [number, boolean, string];
 (function (a, b, c, ...x){})(...t1);
 >(function (a, b, c, ...x){})(...t1) : void
 >                                    : ^^^^
->(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string, ...x: []) => void
->                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^
->function (a, b, c, ...x){} : (a: number, b: boolean, c: string, ...x: []) => void
->                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c: string) => void
+>                             : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>function (a, b, c, ...x){} : (a: number, b: boolean, c: string) => void
+>                           : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -94,8 +94,8 @@ declare const t1: [number, boolean, string];
 declare function f1(cb: (...args: typeof t1) => void): void;
 >f1 : (cb: (...args: typeof t1) => void) => void
 >   : ^  ^^                            ^^^^^    
->cb : (...args: typeof t1) => void
->   : ^^^^    ^^         ^^^^^    
+>cb : (args_0: number, args_1: boolean, args_2: string) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, string]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >t1 : [number, boolean, string]
@@ -120,8 +120,8 @@ f1((...x) => {})
 >                 : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(...x) => {} : (...x: [number, boolean, string]) => void
->             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {} : (x_0: number, x_1: boolean, x_2: string) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, string]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -130,8 +130,8 @@ f1((a, ...x) => {})
 >                    : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(a, ...x) => {} : (a: number, ...x: [boolean, string]) => void
->                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a, ...x) => {} : (a: number, x_0: boolean, x_1: string) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, string]
@@ -142,8 +142,8 @@ f1((a, b, ...x) => {})
 >                       : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(a, b, ...x) => {} : (a: number, b: boolean, ...x: [string]) => void
->                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
+>(a, b, ...x) => {} : (a: number, b: boolean, x_0: string) => void
+>                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -156,8 +156,8 @@ f1((a, b, c, ...x) => {})
 >                          : ^^^^
 >f1 : (cb: (...args: typeof t1) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: []) => void
->                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^
+>(a, b, c, ...x) => {} : (a: number, b: boolean, c: string) => void
+>                      : ^ ^^^^^^^^^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : boolean
@@ -192,10 +192,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (...x){})(...t2);
 >(function (...x){})(...t2) : void
 >                           : ^^^^
->(function (...x){}) : (...x: [number, boolean, ...string[]]) => void
->                    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (...x){} : (...x: [number, boolean, ...string[]]) => void
->                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >...t2 : string | number | boolean
@@ -206,10 +206,10 @@ declare const t2: [number, boolean, ...string[]];
 (function (a, ...x){})(...t2);
 >(function (a, ...x){})(...t2) : void
 >                              : ^^^^
->(function (a, ...x){}) : (a: number, ...x: [boolean, ...string[]]) => void
->                       : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, ...x){} : (a: number, ...x: [boolean, ...string[]]) => void
->                     : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -260,8 +260,8 @@ declare const t2: [number, boolean, ...string[]];
 declare function f2(cb: (...args: typeof t2) => void): void;
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^    
->cb : (...args: typeof t2) => void
->   : ^^^^    ^^         ^^^^^    
+>cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >args : [number, boolean, ...string[]]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >t2 : [number, boolean, ...string[]]
@@ -286,8 +286,8 @@ f2((...x) => {})
 >                 : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(...x) => {} : (...x: [number, boolean, ...string[]]) => void
->             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -296,8 +296,8 @@ f2((a, ...x) => {})
 >                    : ^^^^
 >f2 : (cb: (...args: typeof t2) => void) => void
 >   : ^  ^^                            ^^^^^^^^^
->(a, ...x) => {} : (a: number, ...x: [boolean, ...string[]]) => void
->                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -360,10 +360,10 @@ declare const t3: [boolean, ...string[]];
 (function (...x){})(1, ...t3);
 >(function (...x){})(1, ...t3) : void
 >                              : ^^^^
->(function (...x){}) : (...x: [number, boolean, ...string[]]) => void
->                    : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (...x){} : (...x: [number, boolean, ...string[]]) => void
->                  : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -376,10 +376,10 @@ declare const t3: [boolean, ...string[]];
 (function (a, ...x){})(1, ...t3);
 >(function (a, ...x){})(1, ...t3) : void
 >                                 : ^^^^
->(function (a, ...x){}) : (a: number, ...x: [boolean, ...string[]]) => void
->                       : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->function (a, ...x){} : (a: number, ...x: [boolean, ...string[]]) => void
->                     : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -436,8 +436,8 @@ declare const t3: [boolean, ...string[]];
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >   : ^  ^^                                       ^^^^^    
->cb : (x: number, ...args: typeof t3) => void
->   : ^ ^^      ^^^^^    ^^         ^^^^^    
+>cb : (x: number, args_0: boolean, ...args_1: string[]) => void
+>   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
 >x : number
 >  : ^^^^^^
 >args : [boolean, ...string[]]
@@ -464,8 +464,8 @@ f3((...x) => {})
 >                 : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >   : ^  ^^                                       ^^^^^^^^^
->(...x) => {} : (...x: [x: number, boolean, ...string[]]) => void
->             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {} : (x: number, x_1: boolean, ...x_2: string[]) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [x: number, boolean, ...string[]]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -474,8 +474,8 @@ f3((a, ...x) => {})
 >                    : ^^^^
 >f3 : (cb: (x: number, ...args: typeof t3) => void) => void
 >   : ^  ^^                                       ^^^^^^^^^
->(a, ...x) => {} : (a: number, ...x: [boolean, ...string[]]) => void
->                : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(a, ...x) => {} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [boolean, ...string[]]
@@ -552,10 +552,10 @@ function f4<T extends any[]>(t: T) {
     (function(a, ...x){})(1, 2, ...t);
 >(function(a, ...x){})(1, 2, ...t) : void
 >                                  : ^^^^
->(function(a, ...x){}) : (a: number, ...x: [number, ...T]) => void
->                      : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
->function(a, ...x){} : (a: number, ...x: [number, ...T]) => void
->                    : ^ ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>(function(a, ...x){}) : (a: number, x_0: number, ...x_1: T) => void
+>                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(a, ...x){} : (a: number, x_0: number, ...x_1: T) => void
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >x : [number, ...T]
@@ -584,8 +584,8 @@ function f4<T extends any[]>(t: T) {
 >                : ^^^^
 >f : (cb: (x: number, ...args: T) => void) => void
 >  : ^  ^^                               ^^^^^^^^^
->(...x) => {} : (...x: [x: number, ...args: T]) => void
->             : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {} : (x: number, ...args: T) => void
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [x: number, ...args: T]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -627,10 +627,10 @@ declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U
 >     : ^
 
 let g0 = f5(() => "hello");
->g0 : (...args: []) => string
->   : ^^^^    ^^^^^^^^^^^^^^^
->f5(() => "hello") : (...args: []) => string
->                  : ^^^^    ^^^^^^^^^^^^^^^
+>g0 : () => string
+>   : ^^^^^^^^^^^^
+>f5(() => "hello") : () => string
+>                  : ^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
 >   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
 >() => "hello" : () => string
@@ -639,10 +639,10 @@ let g0 = f5(() => "hello");
 >        : ^^^^^^^
 
 let g1 = f5((x, y) => 42);
->g1 : (...args: [x: any, y: any]) => number
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f5((x, y) => 42) : (...args: [x: any, y: any]) => number
->                 : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g1 : (x: any, y: any) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5((x, y) => 42) : (x: any, y: any) => number
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
 >   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
 >(x, y) => 42 : (x: any, y: any) => number
@@ -655,10 +655,10 @@ let g1 = f5((x, y) => 42);
 >   : ^^
 
 let g2 = f5((x: number, y) => 42);
->g2 : (...args: [x: number, y: any]) => number
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f5((x: number, y) => 42) : (...args: [x: number, y: any]) => number
->                         : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g2 : (x: number, y: any) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5((x: number, y) => 42) : (x: number, y: any) => number
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
 >   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
 >(x: number, y) => 42 : (x: number, y: any) => number
@@ -671,10 +671,10 @@ let g2 = f5((x: number, y) => 42);
 >   : ^^
 
 let g3 = f5((x: number, y: number) => x + y);
->g3 : (...args: [x: number, y: number]) => number
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->f5((x: number, y: number) => x + y) : (...args: [x: number, y: number]) => number
->                                    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g3 : (x: number, y: number) => number
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f5((x: number, y: number) => x + y) : (x: number, y: number) => number
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f5 : <T extends any[], U>(f: (...args: T) => U) => (...args: T) => U
 >   : ^ ^^^^^^^^^^^^^^^^ ^^ ^^                 ^^^^^^^^^    ^^ ^^^^^^
 >(x: number, y: number) => x + y : (x: number, y: number) => number
@@ -719,10 +719,10 @@ declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => 
 >     : ^
 
 let g5 = pipe(() => true, b => 42);
->g5 : (...args: []) => number
->   : ^^^^    ^^^^^^^^^^^^^^^
->pipe(() => true, b => 42) : (...args: []) => number
->                          : ^^^^    ^^^^^^^^^^^^^^^
+>g5 : () => number
+>   : ^^^^^^^^^^^^
+>pipe(() => true, b => 42) : () => number
+>                          : ^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
 >     : ^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
 >() => true : () => boolean
@@ -737,10 +737,10 @@ let g5 = pipe(() => true, b => 42);
 >   : ^^
 
 let g6 = pipe(x => "hello", s => s.length);
->g6 : (...args: [x: any]) => number
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^
->pipe(x => "hello", s => s.length) : (...args: [x: any]) => number
->                                  : ^^^^    ^^^^^^^^^^^^^^^^^^^^^
+>g6 : (x: any) => number
+>   : ^^^^^^^^^^^^^^^^^^
+>pipe(x => "hello", s => s.length) : (x: any) => number
+>                                  : ^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
 >     : ^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
 >x => "hello" : (x: any) => string
@@ -761,10 +761,10 @@ let g6 = pipe(x => "hello", s => s.length);
 >       : ^^^^^^
 
 let g7 = pipe((x, y) => 42, x => "" + x);
->g7 : (...args: [x: any, y: any]) => string
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pipe((x, y) => 42, x => "" + x) : (...args: [x: any, y: any]) => string
->                                : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g7 : (x: any, y: any) => string
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe((x, y) => 42, x => "" + x) : (x: any, y: any) => string
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
 >     : ^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
 >(x, y) => 42 : (x: any, y: any) => number
@@ -787,10 +787,10 @@ let g7 = pipe((x, y) => 42, x => "" + x);
 >  : ^^^^^^
 
 let g8 = pipe((x: number, y: string) => 42, x => "" + x);
->g8 : (...args: [x: number, y: string]) => string
->   : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->pipe((x: number, y: string) => 42, x => "" + x) : (...args: [x: number, y: string]) => string
->                                                : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g8 : (x: number, y: string) => string
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>pipe((x: number, y: string) => 42, x => "" + x) : (x: number, y: string) => string
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pipe : <A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C) => (...args: A) => C
 >     : ^ ^^^^^^^^^^^^^^^^ ^^ ^^ ^^                 ^^ ^^           ^^^^^^^^^    ^^ ^^^^^^
 >(x: number, y: string) => 42 : (x: number, y: string) => number
@@ -853,10 +853,10 @@ declare function take(cb: (a: number, b: string) => void): void;
 >                                 : ^^^^
 >function foo(...rest){}(1, '') : void
 >                               : ^^^^
->function foo(...rest){} : (...rest: [number, string]) => void
->                        : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->foo : (...rest: [number, string]) => void
->    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function foo(...rest){} : (rest_0: number, rest_1: string) => void
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (rest_0: number, rest_1: string) => void
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [number, string]
 >     : ^^^^^^^^^^^^^^^^
 >1 : 1
@@ -869,8 +869,8 @@ take(function(...rest){});
 >                          : ^^^^
 >take : (cb: (a: number, b: string) => void) => void
 >     : ^  ^^                              ^^^^^^^^^
->function(...rest){} : (...rest: [a: number, b: string]) => void
->                    : ^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function(...rest){} : (a: number, b: string) => void
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rest : [a: number, b: string]
 >     : ^^^^^^^^^^^^^^^^^^^^^^
 

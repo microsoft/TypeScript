@@ -2,10 +2,10 @@
 
 === v1.ts ===
 export const v1 = (...a: [n: "n", a: "a"]): {
->v1 : (...a: [n: "n", a: "a"]) => { a: typeof a; }
->   : ^^^^ ^^                ^^^^^                
->(...a: [n: "n", a: "a"]): {    /** r rest param */    a: typeof a,} => {    return null!} : (...a: [n: "n", a: "a"]) => { a: typeof a; }
->                                                                                          : ^^^^ ^^                ^^^^^                
+>v1 : (n: "n", a: "a") => { a: [n: "n", a: "a"]; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...a: [n: "n", a: "a"]): {    /** r rest param */    a: typeof a,} => {    return null!} : (n: "n", a: "a") => { a: [n: "n", a: "a"]; }
+>                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : [n: "n", a: "a"]
 >  : ^^^^^^^^^^^^^^^^
 
@@ -32,10 +32,10 @@ const n = Symbol();
 >       : ^^^^^^^^^^^^^^^^^
 
 export const v2 = (...a: [n: "n", a: "a"]): {
->v2 : (...a: [n: "n", a: "a"]) => { a: typeof a; n: typeof n; }
->   : ^^^^ ^^                ^^^^^                             
->(...a: [n: "n", a: "a"]): {    /** r rest param */    a: typeof a,    /** module var */    n: typeof n,} => {    return null!} : (...a: [n: "n", a: "a"]) => { a: typeof a; n: typeof n; }
->                                                                                                                               : ^^^^ ^^                ^^^^^                             
+>v2 : (n: "n", a: "a") => { a: [n: "n", a: "a"]; n: unique symbol; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...a: [n: "n", a: "a"]): {    /** r rest param */    a: typeof a,    /** module var */    n: typeof n,} => {    return null!} : (n: "n", a: "a") => { a: [n: "n", a: "a"]; n: unique symbol; }
+>                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : [n: "n", a: "a"]
 >  : ^^^^^^^^^^^^^^^^
 
