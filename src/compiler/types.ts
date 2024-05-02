@@ -4622,10 +4622,10 @@ export interface FilePreprocessingLibreferenceDiagnostic {
 /** @internal */
 export interface FilePreprocessingFileExplainingDiagnostic {
     kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic;
-    file?: Path;
+    file: Path | undefined;
     fileProcessingReason: FileIncludeReason;
     diagnostic: DiagnosticMessage;
-    args?: DiagnosticArguments;
+    args: DiagnosticArguments;
 }
 
 /** @internal */

@@ -1540,7 +1540,7 @@ export const plainJSErrors = new Set<number>([
 interface LazyProgramDiagnosticExplainingFile {
     file: SourceFile;
     diagnostic: DiagnosticMessage;
-    args: DiagnosticArguments | undefined;
+    args: DiagnosticArguments;
 }
 /**
  * Determine if source file needs to be re-created even if its text hasn't changed
@@ -4754,9 +4754,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments | undefined): Diagnostic {
+    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments): Diagnostic {
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
-        let relatedInfo: Diagnostic[] | undefined;
+        let relatedInfo: DiagnosticWithLocation[] | undefined;
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
         if (file) fileReasons.get(file.path)?.forEach(processReason);
         if (fileProcessingReason) processReason(fileProcessingReason);
@@ -4764,15 +4764,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
         const location = locationReason && getReferencedFileLocation(program, locationReason);
         const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-        const optionsForFile = file && getCompilerOptionsForFile(file) || options;
-        const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, optionsForFile);
+        const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, getCompilerOptionsForFile(file));
         const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
         return location && isReferenceFileLocation(location) ?
             createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
             createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
 
         function processReason(reason: FileIncludeReason) {
-            (fileIncludeReasons ||= []).push(fileIncludeReasonToDiagnostics(program, reason));
+            (fileIncludeReasons ??= []).push(fileIncludeReasonToDiagnostics(program, reason));
             if (!locationReason && isReferencedFile(reason)) {
                 // Report error at first reference file or file currently in processing and dont report in related information
                 locationReason = reason;
@@ -4785,7 +4784,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
     }
 
-    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
+    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args: DiagnosticArguments) {
         (fileProcessingDiagnostics ||= []).push({
             kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic,
             file: file && file.path,
@@ -4795,7 +4794,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function addLazyProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
+    function addLazyProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args: DiagnosticArguments) {
         lazyProgramDiagnosticExplainingFile!.push({ file, diagnostic, args });
     }
 
