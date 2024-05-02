@@ -6143,7 +6143,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 approximateLength: 0,
                 trackedSymbols: undefined,
                 bundled: !!compilerOptions.outFile && !!enclosingDeclaration && isExternalOrCommonJsModule(getSourceFileOfNode(enclosingDeclaration)),
-                mapper: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -7213,12 +7212,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], oldContext: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
-
             let typeParameters: TypeParameterDeclaration[] | undefined;
             let typeArguments: TypeNode[] | undefined;
-            
-            const signatureParameters = signature.parameters;
-            const { context, cleanup } = enterNewScope(oldContext, signature.declaration, signature.parameters, signature.typeParameters, signature.parameters, signature.mapper);
+
+            const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
+            const { context, cleanup } = enterNewScope(oldContext, signature.declaration, expandedParams, signature.typeParameters, signature.parameters);
             context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
 
             if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -7228,11 +7226,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
             }
 
-
             const flags = context.flags;
             context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // SuppressAnyReturnType should only apply to the signature `return` position
             // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
-            const parameters = (some(signatureParameters, p => p !== signatureParameters[signatureParameters.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : signatureParameters).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
+            const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
             const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
             if (thisParameter) {
                 parameters.unshift(thisParameter);
@@ -7299,7 +7296,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             expandedParams: readonly Symbol[] | undefined,
             typeParameters: readonly TypeParameter[] | undefined,
             originalParameters?: readonly Symbol[] | undefined,
-            mapper?: TypeMapper,
         ) {
             const context = cloneNodeBuilderContext(originalContext);
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
@@ -7316,9 +7312,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // function's parameters visible.
             let cleanupParams: (() => void) | undefined;
             let cleanupTypeParams: (() => void) | undefined;
-            if(mapper) {
-                context.mapper = mapper;
-            }
             if (context.enclosingDeclaration && declaration) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7336,14 +7329,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Note that we only check the most immediate enclosingDeclaration; the only place we
                 // could potentially add another fake scope into the chain is right here, so we don't
                 // traverse all ancestors.
-                cleanupParams = pushFakeScope(
+                cleanupParams = !some(expandedParams) ? undefined : pushFakeScope(
                     "params",
                     add => {
                         if (!expandedParams) return;
                         for (let pIndex = 0; pIndex < expandedParams.length; pIndex++) {
                             const param = expandedParams[pIndex];
-                            if (originalParameters && (originalParameters.length < pIndex || originalParameters[pIndex] !== param)) {
+                            const originalParam = originalParameters?.[pIndex];
+                            if (originalParameters && originalParam !== param) {
+                                // Can't reference parameters that come from an expansion
                                 add(param.escapedName, unknownSymbol);
+                                // Can't reference the original expanded parameter either
+                                if (originalParam) {
+                                    add(originalParam.escapedName, unknownSymbol);
+                                }
                             }
                             else if (
                                 !forEach(param.declarations, d => {
@@ -7379,7 +7378,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     },
                 );
 
-                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
+                if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams && some(typeParameters)) {
                     cleanupTypeParams = pushFakeScope(
                         "typeParams",
                         add => {
@@ -7417,7 +7416,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         locals.set(name, symbol);
                     });
 
-                    
                     if (!existingFakeScope) {
                         // Use a Block for this; the type of the node doesn't matter so long as it
                         // has locals, and this is cheaper/easier than using a function-ish Node.
@@ -7431,11 +7429,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return function undo() {
                         forEach(newLocals, s => locals.delete(s));
                         forEach(oldLocals, s => locals.set(s.name, s.oldSymbol));
-                    }
+                    };
                 }
             }
-            
-            return { 
+
+            return {
                 context,
                 cleanup: () => {
                     originalContext.approximateLength = context.approximateLength;
@@ -51252,7 +51250,6 @@ interface NodeBuilderContext {
     remappedSymbolReferences?: Map<SymbolId, Symbol>;
     reverseMappedStack?: ReverseMappedSymbol[];
     bundled?: boolean;
-    mapper: TypeMapper | undefined;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {

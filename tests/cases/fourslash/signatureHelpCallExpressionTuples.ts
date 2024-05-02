@@ -12,7 +12,7 @@
 //// var fnNoParamsWrapped = wrap(fnNoParams);
 //// fnNoParamsWrapped/*7*/(/*8*/);
 
-verify.quickInfoAt("3", "var fnWrapped: (...a: [str: string, num: number]) => void");
+verify.quickInfoAt("3", "var fnWrapped: (str: string, num: number) => void");
 verify.signatureHelp(
     {
         marker: "1",
@@ -28,7 +28,7 @@ verify.signatureHelp(
     },
 );
 
-verify.quickInfoAt("4", "var fnVariadicWrapped: (...a: [str: string, ...num: number[]]) => void");
+verify.quickInfoAt("4", "var fnVariadicWrapped: (str: string, ...num: number[]) => void");
 verify.signatureHelp(
     {
         marker: "5",
@@ -46,7 +46,7 @@ verify.signatureHelp(
     },
 );
 
-verify.quickInfoAt("7", "var fnNoParamsWrapped: (...a: []) => void");
+verify.quickInfoAt("7", "var fnNoParamsWrapped: () => void");
 verify.signatureHelp(
     {
         marker: "8",
