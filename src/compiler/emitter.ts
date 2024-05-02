@@ -2125,13 +2125,9 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitComputedPropertyName(node: ComputedPropertyName) {
-        const savedPrivateNameTempFlags = privateNameTempFlags;
-        const savedReservedMemberNames = reservedPrivateNames;
-        popPrivateNameGenerationScope();
         writePunctuation("[");
         emitExpression(node.expression, parenthesizer.parenthesizeExpressionOfComputedPropertyName);
         writePunctuation("]");
-        pushPrivateNameGenerationScope(savedPrivateNameTempFlags, savedReservedMemberNames);
     }
 
     //
@@ -2351,16 +2347,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitTypeLiteral(node: TypeLiteralNode) {
-        // Type literals don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
 
         writePunctuation("{");
         const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
         emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
         writePunctuation("}");
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitArrayType(node: ArrayTypeNode) {
@@ -2569,9 +2563,8 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
-        // Object literals don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
+
         forEach(node.properties, generateMemberNames);
 
         const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
@@ -2587,7 +2580,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             decreaseIndent();
         }
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitPropertyAccessExpression(node: PropertyAccessExpression) {
@@ -3428,7 +3421,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
 
         forEach(node.members, generateMemberNames);
 
@@ -3456,13 +3449,11 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             decreaseIndent();
         }
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitInterfaceDeclaration(node: InterfaceDeclaration) {
-        // Interfaces don't have private names, but we need to push a new scope so that
-        // we can step out of it when emitting a computed property.
-        pushPrivateNameGenerationScope(TempFlags.Auto, /*newReservedMemberNames*/ undefined);
+        pushNameGenerationScope(node);
 
         emitDecoratorsAndModifiers(node, node.modifiers, /*allowDecorators*/ false);
         writeKeyword("interface");
@@ -3475,7 +3466,7 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
         emitList(node, node.members, ListFormat.InterfaceMembers);
         writePunctuation("}");
 
-        popPrivateNameGenerationScope();
+        popNameGenerationScope(node);
     }
 
     function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
@@ -5172,9 +5163,14 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Push a new name generation scope.
      */
     function pushNameGenerationScope(node: Node | undefined) {
+        privateNameTempFlagsStack.push(privateNameTempFlags);
+        privateNameTempFlags = TempFlags.Auto;
+        reservedPrivateNamesStack.push(reservedPrivateNames);
+
         if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
             return;
         }
+
         tempFlagsStack.push(tempFlags);
         tempFlags = TempFlags.Auto;
         formattedNameTempFlagsStack.push(formattedNameTempFlags);
@@ -5186,9 +5182,13 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
      * Pop the current name generation scope.
      */
     function popNameGenerationScope(node: Node | undefined) {
+        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
+        reservedPrivateNames = reservedPrivateNamesStack.pop();
+
         if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
             return;
         }
+
         tempFlags = tempFlagsStack.pop()!;
         formattedNameTempFlags = formattedNameTempFlagsStack.pop();
         reservedNames = reservedNamesStack.pop();
@@ -5199,24 +5199,6 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
             reservedNames = new Set();
         }
         reservedNames.add(name);
-    }
-
-    /**
-     * Push a new member name generation scope.
-     */
-    function pushPrivateNameGenerationScope(newPrivateNameTempFlags: TempFlags, newReservedMemberNames: Set<string> | undefined) {
-        privateNameTempFlagsStack.push(privateNameTempFlags);
-        privateNameTempFlags = newPrivateNameTempFlags;
-        reservedPrivateNamesStack.push(reservedNames);
-        reservedPrivateNames = newReservedMemberNames;
-    }
-
-    /**
-     * Pop the current member name generation scope.
-     */
-    function popPrivateNameGenerationScope() {
-        privateNameTempFlags = privateNameTempFlagsStack.pop()!;
-        reservedPrivateNames = reservedPrivateNamesStack.pop();
     }
 
     function reservePrivateNameInNestedScopes(name: string) {
@@ -5372,7 +5354,30 @@ export function createPrinter(printerOptions: PrinterOptions = {}, handlers: Pri
     }
 
     function isReservedName(name: string, privateName: boolean): boolean {
-        return privateName ? !!reservedPrivateNames?.has(name) : !!reservedNames?.has(name);
+        let set: Set<string> | undefined;
+        let stack: (Set<string> | undefined)[];
+        if (privateName) {
+            set = reservedPrivateNames;
+            stack = reservedPrivateNamesStack;
+        }
+        else {
+            set = reservedNames;
+            stack = reservedNamesStack;
+        }
+
+        if (set?.has(name)) {
+            return true;
+        }
+        for (let i = stack.length - 1; i >= 0; i--) {
+            if (set === stack[i]) {
+                continue;
+            }
+            set = stack[i];
+            if (set?.has(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
