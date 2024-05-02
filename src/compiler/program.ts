@@ -6,6 +6,7 @@ import {
     append,
     arrayIsEqualTo,
     AsExpression,
+    AutomaticTypeDirectiveFile,
     BuilderProgram,
     CancellationToken,
     canHaveDecorators,
@@ -214,6 +215,7 @@ import {
     JsonSourceFile,
     JsxEmit,
     length,
+    LibFile,
     libMap,
     LibResolution,
     libs,
@@ -247,6 +249,7 @@ import {
     OperationCanceledException,
     optionsHaveChanges,
     PackageId,
+    packageIdIsEqual,
     packageIdToPackageName,
     packageIdToString,
     PackageJsonInfoCache,
@@ -285,6 +288,7 @@ import {
     resolveTypeReferenceDirective,
     returnFalse,
     returnUndefined,
+    RootFile,
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
@@ -1204,6 +1208,35 @@ function getLibFileNameFromLibReference(libReference: FileReference) {
 interface DiagnosticCache<T extends Diagnostic> {
     perFile?: Map<Path, readonly T[]>;
     allDiagnostics?: readonly T[];
+}
+
+function fileIncludeReasonIsEqual(a: FileIncludeReason, b: FileIncludeReason): boolean {
+    if (a === b) return true;
+    if (a.kind !== b.kind) return false;
+
+    switch (a.kind) {
+        case FileIncludeKind.RootFile:
+            Debug.type<RootFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.LibFile:
+            Debug.type<LibFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.SourceFromProjectReference:
+        case FileIncludeKind.OutputFromProjectReference:
+            Debug.type<ProjectReferenceFile>(b);
+            return a.index === b.index;
+        case FileIncludeKind.Import:
+        case FileIncludeKind.ReferenceFile:
+        case FileIncludeKind.TypeReferenceDirective:
+        case FileIncludeKind.LibReferenceDirective:
+            Debug.type<ReferencedFile>(b);
+            return a.file === b.file && a.index === b.index;
+        case FileIncludeKind.AutomaticTypeDirectiveFile:
+            Debug.type<AutomaticTypeDirectiveFile>(b);
+            return a.typeReference === b.typeReference && packageIdIsEqual(a.packageId, b.packageId);
+        default:
+            return Debug.assertNever(a);
+    }
 }
 
 /** @internal */
@@ -3848,7 +3881,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason) {
-        if (file) fileReasons.add(file.path, reason);
+        if (file) {
+            const existing = fileReasons.get(file.path);
+            if (!some(existing, r => fileIncludeReasonIsEqual(r, reason))) {
+                fileReasons.add(file.path, reason);
+            }
+        }
     }
 
     function addFileToFilesByName(file: SourceFile | undefined, path: Path, fileName: string, redirectedPath: Path | undefined) {
