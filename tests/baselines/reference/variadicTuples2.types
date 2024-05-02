@@ -613,8 +613,8 @@ pipe("foo", 123, true, (...x) => {
 >    : ^^^
 >true : true
 >     : ^^^^
->(...x) => {    x;  // [string, number, boolean]} : (x_0: string, x_1: number, x_2: boolean) => void
->                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...x) => {    x;  // [string, number, boolean]} : (...x: [string, number, boolean]) => void
+>                                                 : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : [string, number, boolean]
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 

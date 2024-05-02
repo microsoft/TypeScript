@@ -44,8 +44,8 @@ const a: Xps = ['should-not-work']; // works, but shouldn't
 >                  : ^^^^^^^^^^^^^^^^^
 
 function t(...args: Xps) {} // should work
->t : (a: number) => void
->  : ^^^^^^^^^^^^^^^^^^^
+>t : (...args: Xps) => void
+>  : ^^^^    ^^   ^^^^^^^^^
 >args : [a: number]
 >     : ^^^^^^^^^^^
 

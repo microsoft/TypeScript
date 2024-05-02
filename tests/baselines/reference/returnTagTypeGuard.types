@@ -107,7 +107,7 @@ function f(chunk) {
  */
 function isBoolean(value) {
 >isBoolean : (value: any) => value is boolean
->          : ^     ^^   ^^^^^                
+>          : ^     ^^   ^^^^^^^^^^^^^^^^^^^^^
 >value : any
 
     return typeof value === "boolean";
@@ -150,7 +150,7 @@ function foo(val) {
 /** @type {Cb} */
 function isNumber(x) { return typeof x === "number" }
 >isNumber : (x: unknown) => x is number
->         : ^ ^^       ^^^^^           
+>         : ^ ^^       ^^^^^^^^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 >typeof x === "number" : boolean

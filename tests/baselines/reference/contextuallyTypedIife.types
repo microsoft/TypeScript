@@ -169,10 +169,10 @@
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
 >                                                   : ^^^^^^^
->((...numbers) => numbers.every(n => n > 0)) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
->                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
->                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((...numbers) => numbers.every(n => n > 0)) : (...numbers: [number, number, number]) => boolean
+>                                            : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...numbers) => numbers.every(n => n > 0) : (...numbers: [number, number, number]) => boolean
+>                                          : ^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >numbers : [number, number, number]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >numbers.every(n => n > 0) : boolean
@@ -203,10 +203,10 @@
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
 >                                                        : ^^^^^^^
->((...mixed) => mixed.every(n => !!n)) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
->                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((...mixed) => mixed.every(n => !!n)) : (...mixed: [number, string, string]) => boolean
+>                                      : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...mixed) => mixed.every(n => !!n) : (...mixed: [number, string, string]) => boolean
+>                                    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed : [number, string, string]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >mixed.every(n => !!n) : boolean
@@ -237,10 +237,10 @@
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
 >                                                 : ^^^^^^^
->((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
->                                               : ^^^^^^^^^^^^^
->(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
->                                             : ^^^^^^^^^^^^^
+>((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: []) => boolean
+>                                               : ^^^^         ^^^^^^^^^^^^^^^^
+>(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: []) => boolean
+>                                             : ^^^^         ^^^^^^^^^^^^^^^^
 >noNumbers : []
 >          : ^^
 >noNumbers.some(n => n > 0) : boolean
@@ -265,10 +265,10 @@
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
 >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
 >                                                                : ^^^^^^^^^
->((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
->                                                        : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
->                                                      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, ...rest: [number, number]) => boolean[]
+>                                                        : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, ...rest: [number, number]) => boolean[]
+>                                                      : ^     ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >first : number
 >      : ^^^^^^
 >rest : [number, number]

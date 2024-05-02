@@ -18,8 +18,8 @@ export type M = (this: Foo) => void;
 export const f1 = function() {
 >f1 : import("/types").M
 >   : ^^^^^^^^^^^^^^^^^^
->function() {    this.test();} : (this: Foo) => void
->                              : ^    ^^   ^^^^^^^^^
+>function() {    this.test();} : (this: import("/types").Foo) => void
+>                              : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     this.test();
 >this.test() : any
@@ -34,8 +34,8 @@ export const f1 = function() {
 
 /** @type {import('./types').M} */
 export function f2() {
->f2 : (this: Foo) => void
->   : ^    ^^   ^^^^^^^^^
+>f2 : (this: import("/types").Foo) => void
+>   : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     this.test();
 >this.test() : any

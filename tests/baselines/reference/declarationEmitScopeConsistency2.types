@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/declarationEmitScopeConsistency2.ts] ////
+
+=== g.ts ===
+const p = Symbol();
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+=== a.ts ===
+export const f = (x: {[p]: ""}) => x as {[p]: ""};
+>f : (x: { [p]: ""; }) => { [p]: ""; }
+>  : ^ ^^            ^^^^^            
+>(x: {[p]: ""}) => x as {[p]: ""} : (x: { [p]: ""; }) => { [p]: ""; }
+>                                 : ^ ^^            ^^^^^            
+>x : { [p]: ""; }
+>  : ^^^^^^^  ^^^
+>[p] : ""
+>    : ^^
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+>x as {[p]: ""} : { [p]: ""; }
+>               : ^^^^^^^  ^^^
+>x : { [p]: ""; }
+>  : ^^^^^^^^^^^^
+>[p] : ""
+>    : ^^
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+
+=== b.ts ===
+import { f } from "./a";
+>f : (x: { [p]: ""; }) => { [p]: ""; }
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const p = Symbol();
+>p : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+export const g = f;
+>g : (x: { [p]: ""; }) => { [p]: ""; }
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (x: { [p]: ""; }) => { [p]: ""; }
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

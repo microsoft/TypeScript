@@ -328,7 +328,7 @@ declare const qq: ActionObject<{
 }>;
 declare let Anon: {
     new <out T>(): {
-        foo(): InstanceType<(typeof Anon<T>)>;
+        foo(): any;
     };
 };
 declare let OuterC: {

@@ -10,12 +10,12 @@ export const yThen = y.map(item => item.length);
 >      : ^^^^^^^^
 >y.map(item => item.length) : number[]
 >                           : ^^^^^^^^
->y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
->      : ^^^^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^
+>y.map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>      : ^^^^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : never[] | string[]
 >  : ^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: string, index: number, array: string[]) => U_1, thisArg?: any) => U_1[])
->    : ^^^^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^
+>map : (<U>(callbackfn: (value: never, index: number, array: never[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[])
+>    : ^^^^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >item => item.length : (item: string) => number
 >                    : ^    ^^^^^^^^^^^^^^^^^^^
 >item : string
@@ -37,12 +37,12 @@ export const yThen = y.map(item => item.length);
 >      : ^^^^^^^^
 >y.map(item => item.length) : number[]
 >                           : ^^^^^^^^
->y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
->      : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^
+>y.map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
+>      : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >y : string[] | number[][]
 >  : ^^^^^^^^^^^^^^^^^^^^^
->map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U_1>(callbackfn: (value: number[], index: number, array: number[][]) => U_1, thisArg?: any) => U_1[])
->    : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^
+>map : (<U>(callbackfn: (value: string, index: number, array: string[]) => U, thisArg?: any) => U[]) | (<U>(callbackfn: (value: number[], index: number, array: number[][]) => U, thisArg?: any) => U[])
+>    : ^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
 >item => item.length : (item: string | number[]) => number
 >                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >item : string | number[]
@@ -76,8 +76,8 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 >               : ^^^^^^^^^^^^^^
 >new ResizeObserver(([entry]) => {    entry}) : ResizeObserver
 >                                             : ^^^^^^^^^^^^^^
->ResizeObserver : { new (callback: ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
->               : ^^^^^^^        ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ResizeObserver : { new (callback: globalThis.ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
+>               : ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >([entry]) => {    entry} : ([entry]: ResizeObserverEntry[]) => void
 >                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entry : ResizeObserverEntry

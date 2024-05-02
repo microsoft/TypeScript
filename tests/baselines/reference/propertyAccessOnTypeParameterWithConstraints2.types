@@ -196,8 +196,8 @@ var r2b = i.foo['foo']();
 >      : ^^^^^
 
 var a: {
->a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^ ^^   ^^ ^^   ^^^   ^^^
+>a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^ ^^^
 
     <U extends A, T extends A>(): U;
     <U extends A, T extends A>(x: U): U;
@@ -224,8 +224,8 @@ var r3 = a<A, A>().foo();
 >              : ^^^^^^^^^^^^
 >a<A, A>() : A
 >          : ^
->a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^
 >foo : () => string
 >    : ^^^^^^^^^^^^
 
@@ -238,8 +238,8 @@ var r3b = a()['foo']();
 >           : ^^^^^^^^^^^^
 >a() : A
 >    : ^
->a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -261,8 +261,8 @@ var r3c = a(aB, aB).foo();
 >              : ^^^^^^^^^^^^
 >a(aB, aB) : B
 >          : ^
->a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^
 >aB : B
 >   : ^
 >aB : B
@@ -279,8 +279,8 @@ var r3d = a(aB, aB)['foo']();
 >                 : ^^^^^^^^^^^^
 >a(aB, aB) : B
 >          : ^
->a : { <U extends A, T extends A>(): U; <U_1 extends A, T_1 extends A>(x: U_1): U_1; <U_2 extends A, T_2 extends A>(x: U_2, y: T_2): U_2; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^   ^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends A>(): U; <U extends A, T extends A>(x: U): U; <U extends A, T extends A>(x: U, y: T): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^
 >aB : B
 >   : ^
 >aB : B

@@ -2806,7 +2806,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         if (meaning) {
             const symbol = getMergedSymbol(symbols.get(name));
             if (symbol) {
-                Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
                 if (symbol.flags & meaning) {
                     return symbol;
                 }
@@ -4443,7 +4442,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             Debug.assertNever(name, "Unknown entity name kind.");
         }
-        Debug.assert((getCheckFlags(symbol) & CheckFlags.Instantiated) === 0, "Should never get an instantiated symbol here.");
         if (!nodeIsSynthesized(name) && isEntityName(name) && (symbol.flags & SymbolFlags.Alias || name.parent.kind === SyntaxKind.ExportAssignment)) {
             markSymbolOfAliasDeclarationIfTypeOnly(getAliasDeclarationFromName(name), symbol, /*finalTarget*/ undefined, /*overwriteEmpty*/ true);
         }
@@ -6145,6 +6143,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 approximateLength: 0,
                 trackedSymbols: undefined,
                 bundled: !!compilerOptions.outFile && !!enclosingDeclaration && isExternalOrCommonJsModule(getSourceFileOfNode(enclosingDeclaration)),
+                mapper: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -7213,12 +7212,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             questionToken?: QuestionToken;
         }
 
-        function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
-            const flags = context.flags;
-            context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // SuppressAnyReturnType should only apply to the signature `return` position
-            context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
+        function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], oldContext: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
+
             let typeParameters: TypeParameterDeclaration[] | undefined;
             let typeArguments: TypeNode[] | undefined;
+            
+            const signatureParameters = signature.parameters;
+            const { context, cleanup } = enterNewScope(oldContext, signature.declaration, signature.parameters, signature.typeParameters, signature.parameters, signature.mapper);
+            context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
+
             if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
                 typeArguments = signature.target.typeParameters.map(parameter => typeToTypeNodeHelper(instantiateType(parameter, signature.mapper), context));
             }
@@ -7226,11 +7228,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameters = signature.typeParameters && signature.typeParameters.map(parameter => typeParameterToDeclaration(parameter, context));
             }
 
-            const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
-            const cleanup = enterNewScope(context, signature.declaration, expandedParams, signature.typeParameters);
 
+            const flags = context.flags;
+            context.flags &= ~NodeBuilderFlags.SuppressAnyReturnType; // SuppressAnyReturnType should only apply to the signature `return` position
             // If the expanded parameter list had a variadic in a non-trailing position, don't expand it
-            const parameters = (some(expandedParams, p => p !== expandedParams[expandedParams.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : expandedParams).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
+            const parameters = (some(signatureParameters, p => p !== signatureParameters[signatureParameters.length - 1] && !!(getCheckFlags(p) & CheckFlags.RestParameter)) ? signature.parameters : signatureParameters).map(parameter => symbolToParameterDeclaration(parameter, context, kind === SyntaxKind.Constructor));
             const thisParameter = context.flags & NodeBuilderFlags.OmitThisParameter ? undefined : tryGetThisParameterDeclaration(signature, context);
             if (thisParameter) {
                 parameters.unshift(thisParameter);
@@ -7288,10 +7290,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function getParametersInScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
-            return isFunctionLike(node) || isJSDocSignature(node) ? getExpandedParameters(getSignatureFromDeclaration(node), /*skipUnionExpanding*/ true)[0] : undefined;
+            return isFunctionLike(node) || isJSDocSignature(node) ? getSignatureFromDeclaration(node).parameters : undefined;
         }
 
-        function enterNewScope(context: NodeBuilderContext, declaration: IntroducesNewScopeNode | ConditionalTypeNode | undefined, expandedParams: readonly Symbol[] | undefined, typeParameters: readonly TypeParameter[] | undefined) {
+        function enterNewScope(
+            originalContext: NodeBuilderContext,
+            declaration: IntroducesNewScopeNode | ConditionalTypeNode | undefined,
+            expandedParams: readonly Symbol[] | undefined,
+            typeParameters: readonly TypeParameter[] | undefined,
+            originalParameters?: readonly Symbol[] | undefined,
+            mapper?: TypeMapper,
+        ) {
+            const context = cloneNodeBuilderContext(originalContext);
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
             // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
             // the declaration that the arrow function / function expression is assigned to.
@@ -7304,17 +7314,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // accessible to the current enclosing declaration, or gain access to symbols not accessible to the current
             // enclosing declaration. To keep this chain accurate, insert a fake scope into the chain which makes the
             // function's parameters visible.
-            //
-            // If the declaration is in a JS file, then we don't need to do this at all, as there are no annotations besides
-            // JSDoc, which are always outside the function declaration, so are not in the parameter scope.
-            let cleanup: (() => void) | undefined;
-            if (
-                context.enclosingDeclaration
-                && declaration
-                && declaration !== context.enclosingDeclaration
-                && !isInJSFile(declaration)
-                && (some(expandedParams) || some(typeParameters))
-            ) {
+            let cleanupParams: (() => void) | undefined;
+            let cleanupTypeParams: (() => void) | undefined;
+            if(mapper) {
+                context.mapper = mapper;
+            }
+            if (context.enclosingDeclaration && declaration) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
                 // if we don't do this, then we spend all of our time adding more and more
@@ -7331,11 +7336,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Note that we only check the most immediate enclosingDeclaration; the only place we
                 // could potentially add another fake scope into the chain is right here, so we don't
                 // traverse all ancestors.
-                pushFakeScope(
+                cleanupParams = pushFakeScope(
                     "params",
                     add => {
-                        for (const param of expandedParams ?? emptyArray) {
-                            if (
+                        if (!expandedParams) return;
+                        for (let pIndex = 0; pIndex < expandedParams.length; pIndex++) {
+                            const param = expandedParams[pIndex];
+                            if (originalParameters && (originalParameters.length < pIndex || originalParameters[pIndex] !== param)) {
+                                add(param.escapedName, unknownSymbol);
+                            }
+                            else if (
                                 !forEach(param.declarations, d => {
                                     if (isParameter(d) && isBindingPattern(d.name)) {
                                         bindPattern(d.name);
@@ -7370,8 +7380,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 );
 
                 if (context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams) {
-                    // TODO(jakebailey): should this instead be done before walking type parameters?
-                    pushFakeScope(
+                    cleanupTypeParams = pushFakeScope(
                         "typeParams",
                         add => {
                             for (const typeParam of typeParameters ?? emptyArray) {
@@ -7381,8 +7390,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         },
                     );
                 }
-
-                return cleanup;
 
                 function pushFakeScope(kind: "params" | "typeParams", addAll: (addSymbol: (name: __String, symbol: Symbol) => void) => void) {
                     // We only ever need to look two declarations upward.
@@ -7398,41 +7405,47 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
                     const locals = existingFakeScope?.locals ?? createSymbolTable();
                     let newLocals: __String[] | undefined;
+                    let oldLocals: { name: __String; oldSymbol: Symbol; }[] | undefined;
                     addAll((name, symbol) => {
-                        if (!locals.has(name)) {
+                        const oldSymbol = locals.get(name);
+                        if (!oldSymbol) {
                             newLocals = append(newLocals, name);
-                            locals.set(name, symbol);
                         }
+                        else {
+                            oldLocals = append(oldLocals, { name, oldSymbol });
+                        }
+                        locals.set(name, symbol);
                     });
-                    if (!newLocals) return;
 
-                    const oldCleanup = cleanup;
-                    function undo() {
-                        forEach(newLocals, s => locals.delete(s));
-                        oldCleanup?.();
-                    }
-
-                    if (existingFakeScope) {
-                        cleanup = undo;
-                    }
-                    else {
+                    
+                    if (!existingFakeScope) {
                         // Use a Block for this; the type of the node doesn't matter so long as it
                         // has locals, and this is cheaper/easier than using a function-ish Node.
                         const fakeScope = parseNodeFactory.createBlock(emptyArray);
                         getNodeLinks(fakeScope).fakeScopeForSignatureDeclaration = kind;
                         fakeScope.locals = locals;
 
-                        const saveEnclosingDeclaration = context.enclosingDeclaration;
-                        setParent(fakeScope, saveEnclosingDeclaration);
+                        setParent(fakeScope, context.enclosingDeclaration);
                         context.enclosingDeclaration = fakeScope;
-
-                        cleanup = () => {
-                            context.enclosingDeclaration = saveEnclosingDeclaration;
-                            undo();
-                        };
+                    }
+                    return function undo() {
+                        forEach(newLocals, s => locals.delete(s));
+                        forEach(oldLocals, s => locals.set(s.name, s.oldSymbol));
                     }
                 }
             }
+            
+            return { 
+                context,
+                cleanup: () => {
+                    originalContext.approximateLength = context.approximateLength;
+                    originalContext.truncating = context.truncating;
+                    originalContext.reportedDiagnostic = context.reportedDiagnostic;
+                    originalContext.encounteredError = context.encounteredError;
+                    cleanupParams?.();
+                    cleanupTypeParams?.();
+                },
+            };
         }
 
         function tryGetThisParameterDeclaration(signature: Signature, context: NodeBuilderContext) {
@@ -8266,13 +8279,32 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
             }
             sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
+            if (sym === unknownSymbol) {
+                // When we create a fake scope some parameters may actually not be usable
+                // either because they are the expanded rest parameter,
+                // or because they are the newly added parameters from the tuple, which might have different meanings in teh original context
+                // So we add unknownSymbol for these, and we fall back to inference when we encounter them
+                introducesError = true;
+                return { introducesError, node, sym };
+            }
+            if (
+                context.enclosingDeclaration &&
+                (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration))
+            ) {
+                const symAtLocation = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, context.enclosingDeclaration);
+                if ((symAtLocation !== sym && (!symAtLocation || !isTransientSymbol(symAtLocation) || symAtLocation.links.target !== sym)) || symAtLocation === unknownSymbol) {
+                    introducesError = true;
+                    return { introducesError, node, sym };
+                }
+            }
+
             if (sym) {
                 // If a parameter is resolvable in the current context it is also visible, so no need to go to symbol accesibility
                 if (
                     sym.flags & SymbolFlags.FunctionScopedVariable
                     && sym.valueDeclaration
                 ) {
-                    if (isPartOfParameterDeclaration(sym.valueDeclaration)) {
+                    if (isPartOfParameterDeclaration(sym.valueDeclaration) || isJSDocParameterTag(sym.valueDeclaration)) {
                         return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
                     }
                 }
@@ -8339,15 +8371,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function onEnterNewScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
-                const oldContex = context;
-                context = cloneNodeBuilderContext(context);
-                const cleanup = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
+                const oldContext = context;
+                const scope = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
+                context = scope.context;
 
                 return onExitNewScope;
 
                 function onExitNewScope() {
-                    cleanup?.();
-                    context = oldContex;
+                    scope.cleanup?.();
+                    context = oldContext;
                 }
             }
 
@@ -51220,6 +51252,7 @@ interface NodeBuilderContext {
     remappedSymbolReferences?: Map<SymbolId, Symbol>;
     reverseMappedStack?: ReverseMappedSymbol[];
     bundled?: boolean;
+    mapper: TypeMapper | undefined;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {

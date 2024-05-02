@@ -182,8 +182,8 @@ function fn12<T extends List<any>>();
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn12() { }
->fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 //Function overloads that differ by accessibility
 class cls {
@@ -333,8 +333,8 @@ function fn15<T extends List<any>>(): T;
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^
 
 function fn15() {
->fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return undefined;
 >undefined : undefined

@@ -40,7 +40,7 @@ declare function forceMatch2<T>(matched: {
 >forceMatch2 : <T>(matched: { [key in keyof T]: ({ key }: { key: key; }) => void; }) => void
 >            : ^ ^^       ^^                                                       ^^^^^    
 >matched : { [key in keyof T]: ({ key }: { key: key; }) => void; }
->        : ^^^   ^^^^^^^^^^^^^^^       ^^             ^^^^^    ^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^    ^^^
 
   [key in keyof T]: ({ key }: { key: key }) => void;
 >key : key

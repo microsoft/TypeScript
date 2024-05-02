@@ -55,7 +55,7 @@ function assertIsString(x) {
 */
 function assert2(check) {
 >assert2 : (check: boolean) => asserts check
->        : ^     ^^       ^^^^^             
+>        : ^     ^^       ^^^^^^^^^^^^^^^^^^
 >check : boolean
 >      : ^^^^^^^
 

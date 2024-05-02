@@ -32,10 +32,10 @@ var funcExp3 = (function (...rest) { })()
 >         : ^^^^
 >(function (...rest) { })() : void
 >                           : ^^^^
->(function (...rest) { }) : () => void
->                         : ^^^^^^^^^^
->function (...rest) { } : () => void
->                       : ^^^^^^^^^^
+>(function (...rest) { }) : (...rest: []) => void
+>                         : ^^^^    ^^^^^^^^^^^^^
+>function (...rest) { } : (...rest: []) => void
+>                       : ^^^^    ^^^^^^^^^^^^^
 >rest : []
 >     : ^^
 

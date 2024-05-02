@@ -12989,12 +12989,12 @@ module Harness {
             Compiler.compileString(code, unitName, function (res) {
 >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
 >                                                                                                                      : ^^^^
->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->                       : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
+>Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
+>                       : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^                           ^^^^^^^^^
 >Compiler : typeof Compiler
 >         : ^^^^^^^^^^^^^^^
->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
+>              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^                           ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >unitName : string

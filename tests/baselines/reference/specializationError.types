@@ -11,8 +11,8 @@ interface Promise<T> {
 
 interface Bar {
     bar(value: "Menu"): Promise<string>;
->bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T_1>(value: string): Promise<T_1>; }
->    : ^^^     ^^      ^^^               ^^^^^^     ^^      ^^       ^^      ^^^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^
+>bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
+>    : ^^^     ^^      ^^^               ^^^^^^     ^^      ^^       ^^      ^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
 >value : "Menu"
 >      : ^^^^^^
 
