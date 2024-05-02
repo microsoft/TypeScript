@@ -18,13 +18,12 @@ exports.a = Symbol();
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fn = void 0;
+exports.fn = fn;
 var a_1 = require("./a");
 function fn(_a) {
     var _b = a_1.a, value = _a[_b];
     return value;
 }
-exports.fn = fn;
 
 
 //// [a.d.ts]

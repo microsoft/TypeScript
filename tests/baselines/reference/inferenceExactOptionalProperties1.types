@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/inferenceExactOptionalProperties1.ts] ////
+
+=== inferenceExactOptionalProperties1.ts ===
+type Test1 = { prop?: never } extends { prop?: infer T } ? T : false; // never
+>Test1 : never
+>      : ^^^^^
+>prop : undefined
+>     : ^^^^^^^^^
+>prop : T | undefined
+>     : ^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+

@@ -5,13 +5,17 @@
 namespace JSX {}
 class Component {
 >Component : Component
+>          : ^^^^^^^^^
 
     render() {
 >render : () => any
+>       : ^^^^^^^^^
 
         return <div>
 ><div>            {/* missing */}            {null/* preserved */}            {                // ??? 1            }            { // ??? 2            }            {// ??? 3            }            {                // ??? 4            /* ??? 5 */}        </div> : any
+>                                                                                                                                                                                                                                                                    : ^^^
 >div : any
+>    : ^^^
 
             {/* missing */}
             {null/* preserved */}
@@ -27,5 +31,6 @@ class Component {
             /* ??? 5 */}
         </div>;
 >div : any
+>    : ^^^
     }
 }

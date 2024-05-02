@@ -1,9 +1,5 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    getFsContentsForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
+import { jsonToReadableText } from "../helpers";
+import { getFsContentsForSampleProjectReferences } from "../helpers/sampleProjectReferences";
 import {
     baselineTsserverLogs,
     openFilesForSession,

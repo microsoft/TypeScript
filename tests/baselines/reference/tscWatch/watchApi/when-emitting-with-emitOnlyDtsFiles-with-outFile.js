@@ -36,7 +36,7 @@ interface Array<T> { length: number; [n: number]: T; }
 
 /a/lib/tsc.js --w --extendedDiagnostics
 Output::
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 Current directory: /user/username/projects/myproject CaseSensitiveFileNames: false
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/tsconfig.json 2000 undefined Config file
@@ -47,6 +47,8 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
+FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
@@ -56,7 +58,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m1[0m export const y: 10 = 20;
 [7m [0m [91m             ~[0m
 
-[[90m12:00:24 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -64,8 +66,12 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 PolledWatches::
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
@@ -123,7 +129,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 Synchronizing program
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 CreatingProgramWith::
   roots: ["/user/username/projects/myproject/a.ts","/user/username/projects/myproject/b.ts"]
@@ -140,27 +146,10 @@ declare module "b" {
 
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./a.ts","./b.ts"],"dts":{"sections":[{"pos":0,"end":96,"kind":"text"}],"hash":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":1},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts","pendingEmit":1},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./a.ts",
-      "./b.ts"
-    ],
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 96,
-          "kind": "text"
-        }
-      ],
-      "hash": "-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n"
-    }
-  },
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
@@ -168,9 +157,30 @@ declare module "b" {
       "./b.ts"
     ],
     "fileInfos": {
-      "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./a.ts": "-10726455937-export const x = 10;",
-      "./b.ts": "-13729955264-export const y = 10;"
+      "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-10726455937-export const x = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-10726455937-export const x = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-13729955264-export const y = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -196,25 +206,8 @@ declare module "b" {
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1094
+  "size": 928
 }
-
-//// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/myproject/outFile.js
-======================================================================
-======================================================================
-File:: /user/username/projects/myproject/outFile.d.ts
-----------------------------------------------------------------------
-text: (0-96)
-declare module "a" {
-    export const x = 10;
-}
-declare module "b" {
-    export const y = 10;
-}
-
-======================================================================
 
 
 
@@ -257,37 +250,10 @@ Change:: Emit all files
 
 Input::
 //// [/user/username/projects/myproject/outFile.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./a.ts","./b.ts"],"js":{"sections":[{"pos":0,"end":398,"kind":"text"}],"hash":"8148223380-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 10;\n});\n"},"dts":{"sections":[{"pos":0,"end":96,"kind":"text"}],"hash":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","-10726455937-export const x = 10;","-13729955264-export const y = 10;"],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./a.ts","./b.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","impliedFormat":1},{"version":"-10726455937-export const x = 10;","impliedFormat":1},{"version":"-13729955264-export const y = 10;","impliedFormat":1}],"root":[2,3],"options":{"composite":true,"module":2,"noEmitOnError":true,"outFile":"./outFile.js"},"outSignature":"-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n","latestChangedDtsFile":"./outFile.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/outFile.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./a.ts",
-      "./b.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 398,
-          "kind": "text"
-        }
-      ],
-      "hash": "8148223380-define(\"a\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.x = void 0;\n    exports.x = 10;\n});\ndefine(\"b\", [\"require\", \"exports\"], function (require, exports) {\n    \"use strict\";\n    Object.defineProperty(exports, \"__esModule\", { value: true });\n    exports.y = void 0;\n    exports.y = 10;\n});\n"
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 96,
-          "kind": "text"
-        }
-      ],
-      "hash": "-4206946595-declare module \"a\" {\n    export const x = 10;\n}\ndeclare module \"b\" {\n    export const y = 10;\n}\n"
-    }
-  },
   "program": {
     "fileNames": [
       "../../../../a/lib/lib.d.ts",
@@ -295,9 +261,30 @@ Input::
       "./b.ts"
     ],
     "fileInfos": {
-      "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./a.ts": "-10726455937-export const x = 10;",
-      "./b.ts": "-13729955264-export const y = 10;"
+      "../../../../a/lib/lib.d.ts": {
+        "original": {
+          "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+          "impliedFormat": 1
+        },
+        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "impliedFormat": "commonjs"
+      },
+      "./a.ts": {
+        "original": {
+          "version": "-10726455937-export const x = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-10726455937-export const x = 10;",
+        "impliedFormat": "commonjs"
+      },
+      "./b.ts": {
+        "original": {
+          "version": "-13729955264-export const y = 10;",
+          "impliedFormat": 1
+        },
+        "version": "-13729955264-export const y = 10;",
+        "impliedFormat": "commonjs"
+      }
     },
     "root": [
       [
@@ -319,40 +306,8 @@ Input::
     "latestChangedDtsFile": "./outFile.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1583
+  "size": 912
 }
-
-//// [/user/username/projects/myproject/outFile.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /user/username/projects/myproject/outFile.js
-----------------------------------------------------------------------
-text: (0-398)
-define("a", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.x = void 0;
-    exports.x = 10;
-});
-define("b", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.y = void 0;
-    exports.y = 10;
-});
-
-======================================================================
-======================================================================
-File:: /user/username/projects/myproject/outFile.d.ts
-----------------------------------------------------------------------
-text: (0-96)
-declare module "a" {
-    export const x = 10;
-}
-declare module "b" {
-    export const y = 10;
-}
-
-======================================================================
 
 //// [/user/username/projects/myproject/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {

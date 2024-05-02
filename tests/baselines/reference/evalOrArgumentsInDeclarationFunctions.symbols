@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/evalOrArgumentsInDeclarationFunctions.ts] ////
+
+=== /a.d.ts ===
+declare global {
+>global : Symbol(global, Decl(a.d.ts, 0, 0))
+
+    export namespace ns {
+>ns : Symbol(ns, Decl(a.d.ts, 0, 16))
+
+        export function eval(): void;
+>eval : Symbol(eval, Decl(a.d.ts, 1, 25))
+
+        export function arguments(): void;
+>arguments : Symbol(arguments, Decl(a.d.ts, 2, 37))
+    }
+}
+
+declare function eval(): void;
+>eval : Symbol(eval, Decl(a.d.ts, 5, 1))
+
+declare function arguments(): void;
+>arguments : Symbol(arguments, Decl(a.d.ts, 7, 30))
+
+export {}
+

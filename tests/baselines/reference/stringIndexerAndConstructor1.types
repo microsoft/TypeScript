@@ -4,7 +4,9 @@
 interface I {
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 
     "": string;
 >"" : string
+>   : ^^^^^^
 }

@@ -5,9 +5,7 @@ import * as ts from "./_namespaces/ts";
 import * as Utils from "./_namespaces/Utils";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import {
-    LoggerWithInMemoryLogs,
-} from "./tsserverLogger";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
 
@@ -3979,8 +3977,8 @@ export class TestState {
         };
     }
 
-    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string) {
-        let refactors = this.getApplicableRefactorsAtSelection(triggerReason);
+    public verifyRefactorAvailable(negative: boolean, triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        let refactors = this.getApplicableRefactorsAtSelection(triggerReason, kind, preferences, includeInteractiveActions);
         refactors = refactors.filter(r => r.name === name);
 
         if (actionName !== undefined) {
@@ -4445,8 +4443,8 @@ export class TestState {
         test(renameKeys(newFileContents, key => pathUpdater(key) || key), "with file moved");
     }
 
-    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions) {
-        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind);
+    private getApplicableRefactorsAtSelection(triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        return this.getApplicableRefactorsWorker(this.getSelection(), this.activeFile.fileName, preferences, triggerReason, kind, includeInteractiveActions);
     }
     private getApplicableRefactors(rangeOrMarker: Range | Marker, preferences = ts.emptyOptions, triggerReason: ts.RefactorTriggerReason = "implicit", kind?: string, includeInteractiveActions?: boolean): readonly ts.ApplicableRefactorInfo[] {
         return this.getApplicableRefactorsWorker("position" in rangeOrMarker ? rangeOrMarker.position : rangeOrMarker, rangeOrMarker.fileName, preferences, triggerReason, kind, includeInteractiveActions); // eslint-disable-line local/no-in-operator

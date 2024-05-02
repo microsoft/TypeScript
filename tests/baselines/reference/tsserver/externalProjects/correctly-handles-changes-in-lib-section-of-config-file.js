@@ -33,8 +33,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/app.ts :: Config file name: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/app.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

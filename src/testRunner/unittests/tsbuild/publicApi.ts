@@ -1,9 +1,7 @@
 import * as fakes from "../../_namespaces/fakes";
 import * as ts from "../../_namespaces/ts";
 import * as vfs from "../../_namespaces/vfs";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     baselinePrograms,
     commandLineCallbacks,
@@ -13,9 +11,7 @@ import {
     TscCompileSystem,
     verifyTscBaseline,
 } from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { loadProjectFromFiles } from "../helpers/vfs";
 
 describe("unittests:: tsbuild:: Public API with custom transformers when passed to build", () => {
     let sys: TscCompileSystem;
@@ -52,6 +48,7 @@ export function f22() { } // trailing`,
 
         // Create system
         sys = new fakes.System(fs, { executingFilePath: "/lib/tsc" }) as TscCompileSystem;
+        sys.storeSignatureInfo = true;
         fakes.patchHostForBuildInfoReadWrite(sys);
         const commandLineArgs = ["--b", "/src/tsconfig.json"];
         sys.write(`${sys.getExecutingFilePath()} ${commandLineArgs.join(" ")}\n`);
@@ -73,7 +70,6 @@ export function f22() { } // trailing`,
             (errorCount, filesInError) => sys.write(ts.getErrorSummaryText(errorCount, filesInError, sys.newLine, sys)),
         );
         buildHost.afterProgramEmitAndDiagnostics = cb;
-        buildHost.afterEmitBundle = cb;
         const builder = ts.createSolutionBuilder(buildHost, [commandLineArgs[1]], { verbose: true });
         const exitStatus = builder.build(/*project*/ undefined, /*cancellationToken*/ undefined, /*writeFile*/ undefined, getCustomTransformers);
         sys.exit(exitStatus);
