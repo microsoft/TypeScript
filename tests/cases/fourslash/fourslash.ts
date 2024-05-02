@@ -451,7 +451,6 @@ declare namespace FourSlashInterface {
                 pasteLocations: { pos: number, end: number }[];
                 copiedFrom?: { file: string, range: { pos: number, end: number }[] };
             }
-            fixId?: string;
         }): void;
     }
     class edit {

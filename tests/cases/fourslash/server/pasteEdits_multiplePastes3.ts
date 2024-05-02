@@ -50,6 +50,5 @@ const u = 1;
 const c = 3;
 export const k = r + m;
 const d = 4;`
-    },
-    fixId: "providePostPasteEdits"
+    }
 });

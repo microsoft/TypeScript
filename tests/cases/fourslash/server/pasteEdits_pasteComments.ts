@@ -30,6 +30,5 @@ const b = 10;/**
 * line 4
 */
 const c = 10;`
-    },
-    fixId: "providePostPasteEdits"
+    }
 });

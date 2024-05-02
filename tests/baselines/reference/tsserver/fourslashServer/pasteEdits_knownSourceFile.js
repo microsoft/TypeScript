@@ -228,7 +228,7 @@ Info seq  [hh:mm:ss:mss] request:
         ],
         "copiedFrom": {
           "file": "file2.ts",
-          "range": [
+          "spans": [
             {
               "start": {
                 "line": 3,

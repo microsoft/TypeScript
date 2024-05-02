@@ -40,6 +40,5 @@ const c = 3;
 const g = p + q;
 const f = r + s;
 const d = 4;`
-    },
-    fixId: "providePostPasteEdits"
+    }
 });

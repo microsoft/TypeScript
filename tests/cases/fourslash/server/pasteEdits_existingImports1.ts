@@ -34,6 +34,5 @@ import { t3 } from "./other3";
 const a = t + 1;
 const m = t3 + t2 + 1;
 const c = 10;`
-    },
-    fixId: "providePostPasteEdits"
+    }
 });

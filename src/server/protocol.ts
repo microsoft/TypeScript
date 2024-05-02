@@ -636,9 +636,14 @@ export interface GetPasteEditsRequest extends Request {
 }
 
 export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+    /** The text that gets pasted in a file.  */
     pastedText: string[];
+    /** Locations of where the `pastedText` gets added in a file. If the length of the `pastedText` and `pastedLocations` are not the same,
+     *  then the `pastedText` is combined into one and added at all the `pastedLocations`.
+     */
     pasteLocations: TextSpan[];
-    copiedFrom?: { file: string; range: TextSpan[]; };
+    /** The source location of each `pastedText`. If present, the length of `spans` must be equal to the length of `pastedText`. */
+    copiedFrom?: { file: string; spans: TextSpan[]; };
 }
 
 export interface GetPasteEditsResponse extends Response {

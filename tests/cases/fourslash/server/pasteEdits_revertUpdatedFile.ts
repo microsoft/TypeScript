@@ -33,8 +33,7 @@ const m = t2 + 1;
 type T = number;
 var x;
 var y = x as `
-    },
-    fixId: "providePostPasteEdits"
+    }
 });
 verify.completions({ marker: "1", includes: "T" });
 

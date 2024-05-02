@@ -42,6 +42,5 @@ const c = 3;
 export const t = aa + bb + r + s;
 const u = 1;
 const d = 4;`
-    },
-    fixId: "providePostPasteEdits"
+    }
 });

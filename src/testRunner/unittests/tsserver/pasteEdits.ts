@@ -8,6 +8,7 @@ import {
 import {
     createServerHost,
     File,
+    libFile,
 } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: pasteEdits", () => {
@@ -26,7 +27,7 @@ const c = 3;`,
 function e();
 const f = r + s;`;
 
-        const host = createServerHost([target, tsconfig]);
+        const host = createServerHost([target, tsconfig, libFile]);
         const session = new TestSession(host);
         openFilesForSession([target], session);
 
@@ -38,7 +39,7 @@ const f = r + s;`;
                 pasteLocations: [{ start: { line: 2, offset: 0 }, end: { line: 2, offset: 0 } }],
             },
         });
-        baselineTsserverLogs("pasteEdits", "adds paste edits", session);
         verifyGetErrRequest({ session, files: [target.path] });
+        baselineTsserverLogs("pasteEdits", "adds paste edits", session);
     });
 });

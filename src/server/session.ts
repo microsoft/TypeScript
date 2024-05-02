@@ -2801,7 +2801,7 @@ export class Session<TMessage = string> implements EventSender {
     private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
         const { file, project } = this.getFileAndProject(args);
         const copiedFrom = args.copiedFrom
-            ? { file: args.copiedFrom.file, range: args.copiedFrom.range.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
+            ? { file: args.copiedFrom.file, range: args.copiedFrom.spans.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
             : undefined;
         const result = project.getLanguageService().getPasteEdits(
             {
