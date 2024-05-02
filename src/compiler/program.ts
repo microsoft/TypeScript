@@ -1542,6 +1542,11 @@ interface LazyProgramDiagnosticExplainingFile {
     diagnostic: DiagnosticMessage;
     args: DiagnosticArguments;
 }
+interface FileReasonToChainCache {
+    fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
+    redirectInfo: DiagnosticMessageChain[] | undefined;
+    details?: DiagnosticMessageChain[];
+}
 /**
  * Determine if source file needs to be re-created even if its text hasn't changed
  */
@@ -1612,6 +1617,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let classifiableNames: Set<__String>;
     const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
+    let fileReasonsToChain: Map<Path, FileReasonToChainCache> | undefined;
+    let reasonToRelatedInfo: Map<FileIncludeReason, DiagnosticWithLocation | false> | undefined;
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
     const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
@@ -2074,6 +2081,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 )
             );
             lazyProgramDiagnosticExplainingFile = undefined;
+            fileReasonsToChain = undefined;
+            reasonToRelatedInfo = undefined;
         }
         return programDiagnostics;
     }
@@ -4755,32 +4764,117 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments): Diagnostic {
+        let seenReasons: Set<FileIncludeReason> | undefined;
+        const reasons = file && fileReasons.get(file.path);
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
         let relatedInfo: DiagnosticWithLocation[] | undefined;
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
-        if (file) fileReasons.get(file.path)?.forEach(processReason);
+        let fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
+        let redirectInfo: DiagnosticMessageChain[] | undefined;
+        let cachedChain = file && fileReasonsToChain?.get(file.path);
+        let chain: DiagnosticMessageChain | undefined;
+        if (cachedChain) {
+            if (cachedChain.fileIncludeReasonDetails) {
+                seenReasons = new Set(reasons);
+                reasons?.forEach(populateRelatedInfo);
+            }
+            else {
+                reasons?.forEach(processReason);
+            }
+            redirectInfo = cachedChain.redirectInfo;
+        }
+        else {
+            reasons?.forEach(processReason);
+            redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, getCompilerOptionsForFile(file));
+        }
+
         if (fileProcessingReason) processReason(fileProcessingReason);
+        const processedExtraReason = seenReasons?.size !== reasons?.length;
+
         // If we have location and there is only one reason file is in which is the location, dont add details for file include
-        if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
+        if (locationReason && seenReasons?.size === 1) seenReasons = undefined;
+
+        if (seenReasons && cachedChain) {
+            if (cachedChain.details && !processedExtraReason) {
+                chain = chainDiagnosticMessages(cachedChain.details, diagnostic, ...args || emptyArray);
+            }
+            else if (cachedChain.fileIncludeReasonDetails) {
+                if (!processedExtraReason) {
+                    if (!cachedFileIncludeDetailsHasProcessedExtraReason()) {
+                        fileIncludeReasonDetails = cachedChain.fileIncludeReasonDetails;
+                    }
+                    else {
+                        fileIncludeReasons = cachedChain.fileIncludeReasonDetails.next!.slice(0, reasons!.length);
+                    }
+                }
+                else {
+                    if (!cachedFileIncludeDetailsHasProcessedExtraReason()) {
+                        fileIncludeReasons = [...cachedChain.fileIncludeReasonDetails.next!, fileIncludeReasons![0]];
+                    }
+                    else {
+                        fileIncludeReasons = append(cachedChain.fileIncludeReasonDetails.next!.slice(0, reasons!.length), fileIncludeReasons![0]);
+                    }
+                }
+            }
+        }
+
+        if (!chain) {
+            if (!fileIncludeReasonDetails) fileIncludeReasonDetails = seenReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
+            chain = chainDiagnosticMessages(
+                redirectInfo ?
+                    fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo :
+                    fileIncludeReasonDetails,
+                diagnostic,
+                ...args || emptyArray,
+            );
+        }
+
+        // This is chain's next contains:
+        //   - File is in program because:
+        //      - Files reasons listed
+        //      - extra reason if its not already processed - this happens in case sensitive file system where files differ in casing and we are giving reasons for two files so reason is not in file's reason
+        //     fyi above whole secton is ommited if we have single reason and we are reporting at that reason's location
+        //   - redirect and additional information about file
+        // So cache result if we havent ommited file include reasons
+        if (file) {
+            if (cachedChain) {
+                // Cache new fileIncludeDetails if we have update
+                // Or if we had cached with more details than the reasons
+                if (!cachedChain.fileIncludeReasonDetails || (!processedExtraReason && fileIncludeReasonDetails)) {
+                    cachedChain.fileIncludeReasonDetails = fileIncludeReasonDetails;
+                }
+            }
+            else {
+                (fileReasonsToChain ??= new Map()).set(file.path, cachedChain = { fileIncludeReasonDetails, redirectInfo });
+            }
+            // If we didnt compute extra file include reason , cache the details to use directly
+            if (!cachedChain.details && !processedExtraReason) cachedChain.details = chain.next;
+        }
+
         const location = locationReason && getReferencedFileLocation(program, locationReason);
-        const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-        const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, getCompilerOptionsForFile(file));
-        const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
         return location && isReferenceFileLocation(location) ?
             createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
             createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
 
         function processReason(reason: FileIncludeReason) {
+            if (seenReasons?.has(reason)) return;
+            (seenReasons ??= new Set()).add(reason);
             (fileIncludeReasons ??= []).push(fileIncludeReasonToDiagnostics(program, reason));
+            populateRelatedInfo(reason);
+        }
+
+        function populateRelatedInfo(reason: FileIncludeReason) {
             if (!locationReason && isReferencedFile(reason)) {
                 // Report error at first reference file or file currently in processing and dont report in related information
                 locationReason = reason;
             }
             else if (locationReason !== reason) {
-                relatedInfo = append(relatedInfo, fileIncludeReasonToRelatedInformation(reason));
+                relatedInfo = append(relatedInfo, getFileIncludeReasonToRelatedInformation(reason));
             }
-            // Remove fileProcessingReason if its already included in fileReasons of the program
-            if (reason === fileProcessingReason) fileProcessingReason = undefined;
+        }
+
+        function cachedFileIncludeDetailsHasProcessedExtraReason() {
+            return cachedChain!.fileIncludeReasonDetails!.next?.length !== reasons?.length;
         }
     }
 
@@ -4796,6 +4890,12 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function addLazyProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args: DiagnosticArguments) {
         lazyProgramDiagnosticExplainingFile!.push({ file, diagnostic, args });
+    }
+
+    function getFileIncludeReasonToRelatedInformation(reason: FileIncludeReason) {
+        let relatedInfo = reasonToRelatedInfo?.get(reason);
+        if (relatedInfo === undefined) (reasonToRelatedInfo ??= new Map()).set(reason, relatedInfo = fileIncludeReasonToRelatedInformation(reason) ?? false);
+        return relatedInfo || undefined;
     }
 
     function fileIncludeReasonToRelatedInformation(reason: FileIncludeReason): DiagnosticWithLocation | undefined {
