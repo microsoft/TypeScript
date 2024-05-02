@@ -893,10 +893,6 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     }
 }
 
-function isFutureSymbolExportInfoArray(info: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[]): info is readonly FutureSymbolExportInfo[] {
-    return info[0].moduleSymbol === undefined;
-}
-
 function getImportFixes(
     exportInfos: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[],
     usagePosition: number | undefined,
@@ -910,7 +906,7 @@ function getImportFixes(
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
     const checker = program.getTypeChecker();
-    const existingImports = importMap && !isFutureSymbolExportInfoArray(exportInfos) ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
+    const existingImports = importMap ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
     const useNamespace = usagePosition !== undefined && tryUseExistingNamespaceImport(existingImports, usagePosition);
     const addToExisting = tryAddToExistingImport(existingImports, isValidTypeOnlyUseSite, checker, program.getCompilerOptions());
     if (addToExisting) {
@@ -1092,7 +1088,7 @@ function createExistingImportMap(importingFile: SourceFile, program: Program) {
     }
 
     return {
-        getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo): readonly FixAddToExistingImportInfo[] => {
+        getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo | FutureSymbolExportInfo): readonly FixAddToExistingImportInfo[] => {
             const matchingDeclarations = importMap?.get(getSymbolId(moduleSymbol));
             if (!matchingDeclarations) return emptyArray;
 

@@ -1,6 +1,7 @@
 import { addRange } from "../compiler/core";
 import {
     CancellationToken,
+    Program,
     SourceFile,
     Statement,
     SymbolFlags,
@@ -79,7 +80,7 @@ function pasteEdits(
         newText = actualPastedText ? newText.slice(0, pos) + actualPastedText[0] + newText.slice(end) : newText.slice(0, pos) + pastedText[i] + newText.slice(end);
     }
 
-    host.runWithTemporaryFileUpdate?.(targetFile.fileName, newText, (updatedProgram, originalProgram, updatedFile) => {
+    Debug.checkDefined(host.runWithTemporaryFileUpdate).call(host, targetFile.fileName, newText, (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => {
         const importAdder = codefix.createImportAdder(updatedFile, updatedProgram, preferences, host);
         if (copiedFrom?.range) {
             Debug.assert(copiedFrom.range.length === pastedText.length);
