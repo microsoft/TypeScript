@@ -31,8 +31,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
@@ -114,6 +113,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -128,8 +129,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 ScriptInfos::
@@ -182,8 +181,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of temp file:: Content of /a/b/app.ts:: const y = 42
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -225,8 +222,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -239,8 +234,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/app.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a/b
-Info seq  [hh:mm:ss:mss] For info: /a/b/app.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
@@ -275,6 +269,13 @@ FsWatches::
 FsWatches *deleted*::
 /a/b/app.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    isOrphan: false *changed*
 
 ScriptInfos::
 /a/b/app.ts (Open) *changed*
@@ -321,6 +322,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 
 ScriptInfos::
 /a/b/app.ts *changed*
@@ -334,8 +337,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -378,8 +379,6 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of temp file:: Content of /a/b/app.ts:: const y = 42
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -421,5 +420,3 @@ ScriptInfos::
         /dev/null/inferredProject1*
 
 contents of closed file:: Content of /a/b/app.ts:: let x = 1
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false
-info:: /a/b/app.ts:: 

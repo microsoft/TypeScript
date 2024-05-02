@@ -24,8 +24,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /app.js :: Config file name: /jsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /app.js ProjectRootPath: undefined:: Result: /jsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /jsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /jsconfig.json 2000 undefined Project: /jsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -163,6 +162,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 0
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Got install request
     {
@@ -391,13 +391,14 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 1 *changed*
+    dirty: false *changed*
 
 Before running PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -433,6 +434,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 TI:: [hh:mm:ss:mss] Installed typings ["@types/jquery@tsFakeMajor.Minor"]
 TI:: [hh:mm:ss:mss] Installed typing files ["/tmp/node_modules/@types/jquery/index.d.ts"]
@@ -672,6 +674,7 @@ Projects::
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /app.js (Open)

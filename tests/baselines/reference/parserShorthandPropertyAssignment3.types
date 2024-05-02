@@ -3,7 +3,11 @@
 === parserShorthandPropertyAssignment3.ts ===
 var v = { "" };
 >v : { "": any; }
+>  : ^^^^^^^^^^^^
 >{ "" } : { "": any; }
+>       : ^^^^^^^^^^^^
 >"" : any
+>   : ^^^
 > : any
+> : ^^^
 

@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/visibilityOfCrossModuleTypeUsage.ts] ////
 
 //// [visibilityOfCrossModuleTypeUsage_commands.ts]
-//visibilityOfCrossModuleTypeUsage
-
 import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 import server = require('./visibilityOfCrossModuleTypeUsage_server');
 
@@ -30,7 +28,6 @@ function run(configuration: commands.IConfiguration) {
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [visibilityOfCrossModuleTypeUsage_commands.js]
 "use strict";
-//visibilityOfCrossModuleTypeUsage
 Object.defineProperty(exports, "__esModule", { value: true });
 //// [visibilityOfCrossModuleTypeUsage_fs.js]
 "use strict";

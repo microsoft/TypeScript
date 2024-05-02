@@ -5,35 +5,51 @@
 
 function MakeClass<T>(someStuff: T) {
 >MakeClass : <T>(someStuff: T) => typeof (Anonymous class)
+>          : ^ ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someStuff : T
+>          : ^
 
   return class {
 >class {    someStuff = someStuff;  } : typeof (Anonymous class)
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
 
     someStuff = someStuff;
 >someStuff : T
+>          : ^
 >someStuff : T
+>          : ^
 
   };
 }
 
 const MadeClassNumber = MakeClass(123);
 >MadeClassNumber : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 >MakeClass(123) : typeof (Anonymous class)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
 >MakeClass : <T>(someStuff: T) => typeof (Anonymous class)
+>          : ^ ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >123 : 123
+>    : ^^^
 
 declare const someInstance: unknown;
 >someInstance : unknown
+>             : ^^^^^^^
 
 if (someInstance instanceof MadeClassNumber) {
 >someInstance instanceof MadeClassNumber : boolean
+>                                        : ^^^^^^^
 >someInstance : unknown
+>             : ^^^^^^^
 >MadeClassNumber : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   someInstance.someStuff;
 >someInstance.someStuff : number
+>                       : ^^^^^^
 >someInstance : MakeClass<number>.(Anonymous class)
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someStuff : number
+>          : ^^^^^^
 }
 

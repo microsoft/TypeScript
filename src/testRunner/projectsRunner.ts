@@ -282,7 +282,7 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // eslint-disable-line no-restricted-syntax
                 }
                 catch (e) {
                     errs.push(e);
@@ -383,7 +383,7 @@ class ProjectTestCase {
                 }
                 rootFiles.unshift(sourceFile.fileName);
             }
-            else if (!(compilerOptions.outFile || compilerOptions.out)) {
+            else if (!(compilerOptions.outFile)) {
                 let emitOutputFilePathWithoutExtension: string | undefined;
                 if (compilerOptions.outDir) {
                     let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
@@ -402,7 +402,7 @@ class ProjectTestCase {
                 }
             }
             else {
-                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile) + ts.Extension.Dts;
                 const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                 if (!ts.contains(allInputFiles, outputDtsFile)) {
                     allInputFiles.unshift(outputDtsFile);

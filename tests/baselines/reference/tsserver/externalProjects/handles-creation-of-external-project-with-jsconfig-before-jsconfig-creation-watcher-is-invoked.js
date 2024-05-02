@@ -211,8 +211,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/javascript.js :: Config file name: /user/username/projects/myproject/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/javascript.js ProjectRootPath: undefined:: Result: /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -705,6 +704,8 @@ Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
 /user/username/projects/myproject/jsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -723,5 +724,3 @@ ScriptInfos::
     containingProjects: 1 *changed*
         /user/username/projects/myproject/jsconfig.json *default* *new*
         /dev/null/inferredProject1* *deleted*
-
-Inferred project: /dev/null/inferredProject1* isOrphan:: true isClosed: false

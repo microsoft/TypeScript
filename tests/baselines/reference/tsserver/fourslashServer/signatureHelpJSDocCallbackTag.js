@@ -43,8 +43,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /tests/cases/fourslash/server
-Info seq  [hh:mm:ss:mss] For info: /tests/cases/fourslash/server/jsdocCallbackTag.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/jsdocCallbackTag.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -243,7 +242,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -259,7 +258,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],
@@ -432,7 +431,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -448,7 +447,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],
@@ -621,7 +620,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "string",
+                    "text": "number",
                     "kind": "keyword"
                   },
                   {
@@ -637,7 +636,7 @@ Info seq  [hh:mm:ss:mss] response:
                     "kind": "space"
                   },
                   {
-                    "text": "number",
+                    "text": "string",
                     "kind": "keyword"
                   }
                 ],

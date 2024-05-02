@@ -50,8 +50,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/src
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/src/fileA.ts :: Config file name: /user/username/projects/myproject/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/src/fileA.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -244,11 +243,11 @@ ScriptInfos::
         /user/username/projects/myproject/src/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Modify package json file to add type module
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] Scheduled: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 1:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /user/username/projects/myproject/package.json 0:: WatchInfo: /user/username/projects/myproject/package.json 250 undefined WatchType: package.json file
 Before running Timeout callback:: count: 1
 1: /user/username/projects/myproject/src/tsconfig.jsonFailedLookupInvalidation
 //// [/user/username/projects/myproject/package.json]
@@ -275,6 +274,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 2: /user/username/projects/myproject/src/tsconfig.json
@@ -342,6 +342,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 Before request
 
@@ -457,6 +458,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 2
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 6: /user/username/projects/myproject/src/tsconfig.json
@@ -524,6 +526,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 3 *changed*
+    dirty: false *changed*
 
 Before request
 
@@ -649,6 +652,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
     projectProgramVersion: 3
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 10: /user/username/projects/myproject/src/tsconfig.json
@@ -745,6 +749,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 4
     projectProgramVersion: 4 *changed*
+    dirty: false *changed*
 
 Before request
 
@@ -873,6 +878,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 5 *changed*
     projectProgramVersion: 4
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 14: /user/username/projects/myproject/src/tsconfig.json
@@ -969,6 +975,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 5
     projectProgramVersion: 5 *changed*
+    dirty: false *changed*
 
 Before request
 
@@ -1077,6 +1084,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 6 *changed*
     projectProgramVersion: 5
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 18: /user/username/projects/myproject/src/tsconfig.json
@@ -1179,6 +1187,7 @@ Projects::
 /user/username/projects/myproject/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 6
     projectProgramVersion: 6 *changed*
+    dirty: false *changed*
 
 Before request
 

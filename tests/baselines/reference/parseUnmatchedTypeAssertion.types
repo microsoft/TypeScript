@@ -3,7 +3,10 @@
 === parseUnmatchedTypeAssertion.ts ===
 @<[[import(obju2c77,
 > : any
+> : ^^^
 ><[[import(obju2c77, : [[any]]
+>                    : ^^^^^^^
 
 > : any
+> : ^^^
 

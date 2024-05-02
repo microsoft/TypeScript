@@ -57,8 +57,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/app1
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/app1/app.ts :: Config file name: /user/username/projects/myproject/app1/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/app1/app.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/app1/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app1/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app1/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -228,8 +227,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/app2
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/app2/app.ts :: Config file name: /user/username/projects/myproject/app2/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/app2/app.ts ProjectRootPath: undefined:: Result: /user/username/projects/myproject/app2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/app2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/app2/tsconfig.json 2000 undefined Project: /user/username/projects/myproject/app2/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -417,8 +415,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/myproject/core/core.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/myproject/core
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/myproject/core/core.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/myproject/core/core.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/app1/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -509,6 +506,7 @@ Projects::
 /user/username/projects/myproject/app1/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 /user/username/projects/myproject/app2/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
@@ -559,9 +557,11 @@ Projects::
 /user/username/projects/myproject/app1/tsconfig.json (Configured)
     projectStateVersion: 2
     projectProgramVersion: 1
+    dirty: true
 /user/username/projects/myproject/app2/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -583,8 +583,6 @@ ScriptInfos::
         /user/username/projects/myproject/app1/tsconfig.json *default*
         /user/username/projects/myproject/app2/tsconfig.json
 
-Project1 is dirty: true
-Project2 is dirty: true
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -668,5 +666,12 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-Project1 is dirty: false
-Project2 is dirty: false
+Projects::
+/user/username/projects/myproject/app1/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+/user/username/projects/myproject/app2/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*

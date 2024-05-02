@@ -66,8 +66,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project/app.js :: Config file name: /user/username/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/app.js ProjectRootPath: undefined:: Result: /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/tsconfig.json 2000 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -365,7 +364,7 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/jquery@ts5.4"
+  "@types/jquery@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
@@ -466,6 +465,7 @@ Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
+    dirty: true *changed*
 
 Before running Timeout callback:: count: 2
 1: /user/username/projects/project/tsconfig.json
@@ -610,6 +610,7 @@ Projects::
 /user/username/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
+    dirty: false *changed*
 
 ScriptInfos::
 /a/data/node_modules/@types/jquery/index.d.ts *new*
@@ -672,6 +673,12 @@ FsWatchesRecursive::
 /user/username/projects/project:
   {}
 
+Projects::
+/user/username/projects/project/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 2
+    noOpenRef: true *changed*
+
 ScriptInfos::
 /a/data/node_modules/@types/jquery/index.d.ts
     version: Text-1
@@ -698,8 +705,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/project2
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/project2/app.js :: Config file name: /user/username/projects/project2/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project2/app.js ProjectRootPath: undefined:: Result: /user/username/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project2/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project2/tsconfig.json 2000 undefined Project: /user/username/projects/project2/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -978,13 +984,15 @@ FsWatchesRecursive *deleted*::
 
 PendingInstalls callback:: count: 1
 2: #2 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
 
 Projects::
 /user/username/projects/project/tsconfig.json (Configured) *deleted*
     projectStateVersion: 2
     projectProgramVersion: 2
+    isClosed: true *changed*
+    noOpenRef: true
 /user/username/projects/project2/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1

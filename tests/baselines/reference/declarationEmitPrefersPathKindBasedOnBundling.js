@@ -22,11 +22,10 @@ export default {
 //// [scalar.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.scalar = void 0;
+exports.scalar = scalar;
 function scalar(value) {
     return null;
 }
-exports.scalar = scalar;
 //// [spacing.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

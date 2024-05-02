@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /lib
-Info seq  [hh:mm:ss:mss] For info: /lib/tsconfig.json :: Config file name: /lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/tsconfig.json ProjectRootPath: undefined:: Result: /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/tsconfig.json 2000 undefined Project: /lib/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -159,6 +158,7 @@ Projects::
 /lib/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    noOpenRef: true
 
 ScriptInfos::
 /lib.d.ts *new*
@@ -195,8 +195,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /lib/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /lib
-Info seq  [hh:mm:ss:mss] For info: /lib/index.ts :: Config file name: /lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /lib/index.ts ProjectRootPath: undefined:: Result: /lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/lib/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -228,6 +227,15 @@ watchedFiles *deleted*::
 watchedDirectoriesRecursive::
 /lib:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/lib/tsconfig.json (Configured) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    noOpenRef: false *changed*
 
 ScriptInfos::
 /lib.d.ts
@@ -264,8 +272,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /src
-Info seq  [hh:mm:ss:mss] For info: /src/index.ts :: Config file name: /src/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /src/index.ts ProjectRootPath: undefined:: Result: /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /src/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /src/tsconfig.json 2000 undefined Project: /src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

@@ -3,5 +3,7 @@
 === YieldExpression2_es6.ts ===
 yield foo;
 >yield foo : any
+>          : ^^^
 >foo : any
+>    : ^^^
 

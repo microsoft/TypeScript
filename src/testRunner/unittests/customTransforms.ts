@@ -159,7 +159,7 @@ describe("unittests:: customTransforms", () => {
                     }, ts.isSourceFile);
                 return {
                     transformSourceFile,
-                    transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),
+                    transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile)),
                 };
             },
         ],

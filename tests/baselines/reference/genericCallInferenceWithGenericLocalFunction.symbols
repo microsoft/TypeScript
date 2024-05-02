@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/genericCallInferenceWithGenericLocalFunction.ts] ////
+
+=== genericCallInferenceWithGenericLocalFunction.ts ===
+// https://github.com/microsoft/TypeScript/issues/43961
+
+const createTransform = <I, O>(tr: (from: I) => O) => tr;
+>createTransform : Symbol(createTransform, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 5))
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 25))
+>O : Symbol(O, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 27))
+>tr : Symbol(tr, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 31))
+>from : Symbol(from, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 36))
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 25))
+>O : Symbol(O, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 27))
+>tr : Symbol(tr, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 31))
+
+function withP2<P>(p: P) {
+>withP2 : Symbol(withP2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 57))
+>P : Symbol(P, Decl(genericCallInferenceWithGenericLocalFunction.ts, 4, 16))
+>p : Symbol(p, Decl(genericCallInferenceWithGenericLocalFunction.ts, 4, 19))
+>P : Symbol(P, Decl(genericCallInferenceWithGenericLocalFunction.ts, 4, 16))
+
+  const m = <I,>(from: I) => ({ ...from, ...p });
+>m : Symbol(m, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 7))
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 13))
+>from : Symbol(from, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 17))
+>I : Symbol(I, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 13))
+>from : Symbol(from, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 17))
+>p : Symbol(p, Decl(genericCallInferenceWithGenericLocalFunction.ts, 4, 19))
+
+  return createTransform(m);
+>createTransform : Symbol(createTransform, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 5))
+>m : Symbol(m, Decl(genericCallInferenceWithGenericLocalFunction.ts, 5, 7))
+}
+
+const addP2 = withP2({ foo: 1 });
+>addP2 : Symbol(addP2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 9, 5))
+>withP2 : Symbol(withP2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 2, 57))
+>foo : Symbol(foo, Decl(genericCallInferenceWithGenericLocalFunction.ts, 9, 22))
+
+const added2 = addP2({ bar: 2 });
+>added2 : Symbol(added2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 5))
+>addP2 : Symbol(addP2, Decl(genericCallInferenceWithGenericLocalFunction.ts, 9, 5))
+>bar : Symbol(bar, Decl(genericCallInferenceWithGenericLocalFunction.ts, 10, 22))
+
