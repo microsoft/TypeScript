@@ -29393,9 +29393,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         const isAlias = localOrExportSymbol.flags & SymbolFlags.Alias;
 
-        // We only narrow variables and parameters occurring in a non-assignment position. For all other
+        // We only narrow variables, parameters and functions occurring in a non-assignment position. For all other
         // entities we simply return the declared type.
-        if (localOrExportSymbol.flags & SymbolFlags.Variable) {
+        if (localOrExportSymbol.flags & (SymbolFlags.Variable | SymbolFlags.Function)) {
             if (assignmentKind === AssignmentKind.Definite) {
                 return isInCompoundLikeAssignment(node) ? getBaseTypeOfLiteralType(type) : type;
             }
@@ -29443,7 +29443,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only look for uninitialized variables in strict null checking mode, and only when we can analyze
         // the entire control flow graph from the variable's declaration (i.e. when the flow container and
         // declaration container are the same).
-        const assumeInitialized = isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
+        const assumeInitialized = localOrExportSymbol.flags & SymbolFlags.Function || isParameter || isAlias || isOuterVariable || isSpreadDestructuringAssignmentTarget || isModuleExports || isSameScopedBindingElement(node, declaration) ||
             type !== autoType && type !== autoArrayType && (!strictNullChecks || (type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.Void)) !== 0 ||
                     isInTypeQuery(node) || isInAmbientOrTypeNode(node) || node.parent.kind === SyntaxKind.ExportSpecifier) ||
             node.parent.kind === SyntaxKind.NonNullExpression ||

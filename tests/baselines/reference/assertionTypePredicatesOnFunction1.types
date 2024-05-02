@@ -1,0 +1,97 @@
+//// [tests/cases/conformance/controlFlow/assertionTypePredicatesOnFunction1.ts] ////
+
+=== assertionTypePredicatesOnFunction1.ts ===
+// https://github.com/microsoft/TypeScript/issues/41232
+
+interface LabelledFunction {
+  label: string;
+>label : string
+>      : ^^^^^^
+}
+
+declare function assignLabel<T extends (...args: never) => unknown>(
+>assignLabel : <T extends (...args: never) => unknown>(fn: T, label: string) => asserts fn is T & LabelledFunction
+>            : ^ ^^^^^^^^^^^^^    ^^     ^^^^^       ^^  ^^ ^^     ^^      ^^^^^                                  
+>args : never
+>     : ^^^^^
+
+  fn: T,
+>fn : T
+>   : ^
+
+  label: string,
+>label : string
+>      : ^^^^^^
+
+): asserts fn is T & LabelledFunction;
+
+function a() {}
+>a : () => void
+>  : ^^^^^^^^^^
+
+assignLabel(a, "a");
+>assignLabel(a, "a") : void
+>                    : ^^^^
+>assignLabel : <T extends (...args: never) => unknown>(fn: T, label: string) => asserts fn is T & LabelledFunction
+>            : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^  ^^ ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : () => void
+>  : ^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+a.label;
+>a.label : string
+>        : ^^^^^^
+>a : (() => void) & LabelledFunction
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>label : string
+>      : ^^^^^^
+
+const b = function () {};
+>b : () => void
+>  : ^^^^^^^^^^
+>function () {} : () => void
+>               : ^^^^^^^^^^
+
+assignLabel(b, "b");
+>assignLabel(b, "b") : void
+>                    : ^^^^
+>assignLabel : <T extends (...args: never) => unknown>(fn: T, label: string) => asserts fn is T & LabelledFunction
+>            : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^  ^^ ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : () => void
+>  : ^^^^^^^^^^
+>"b" : "b"
+>    : ^^^
+
+b.label;
+>b.label : string
+>        : ^^^^^^
+>b : (() => void) & LabelledFunction
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>label : string
+>      : ^^^^^^
+
+const c = () => {};
+>c : () => void
+>  : ^^^^^^^^^^
+>() => {} : () => void
+>         : ^^^^^^^^^^
+
+assignLabel(c, "c");
+>assignLabel(c, "c") : void
+>                    : ^^^^
+>assignLabel : <T extends (...args: never) => unknown>(fn: T, label: string) => asserts fn is T & LabelledFunction
+>            : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^  ^^ ^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>c : () => void
+>  : ^^^^^^^^^^
+>"c" : "c"
+>    : ^^^
+
+c.label;
+>c.label : string
+>        : ^^^^^^
+>c : (() => void) & LabelledFunction
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>label : string
+>      : ^^^^^^
+
