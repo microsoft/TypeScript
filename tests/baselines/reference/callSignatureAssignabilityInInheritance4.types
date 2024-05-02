@@ -112,8 +112,8 @@ interface A { // T
 >  : ^
 
     a17: {
->a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T_1 extends Base>(x: (a: T_1) => T_1): T_1[]; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^ ^^           ^^^   ^^^   ^^^^^^^^^^^^^^^ ^^               ^^^     ^^^
+>a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^ ^^           ^^^   ^^^ ^^^^^^^^^^^^^^^ ^^           ^^^   ^^^
 
         <T extends Derived>(x: (a: T) => T): T[];
 >x : (a: T) => T
@@ -133,8 +133,8 @@ interface A { // T
 >    : ^^^ ^^                                                            ^^^     ^^^ ^^                                                             ^^^     ^^^
 
         (x: {
->x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
             <T extends Derived>(a: T): T;
 >a : T
@@ -146,8 +146,8 @@ interface A { // T
 
         }): any[];
         (x: {
->x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
             <T extends Derived2>(a: T): T;
 >a : T
