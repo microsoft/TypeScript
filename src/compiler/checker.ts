@@ -6143,6 +6143,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 approximateLength: 0,
                 trackedSymbols: undefined,
                 bundled: !!compilerOptions.outFile && !!enclosingDeclaration && isExternalOrCommonJsModule(getSourceFileOfNode(enclosingDeclaration)),
+                truncating: false,
+                usedSymbolNames: undefined,
+                remappedSymbolNames: undefined,
+                remappedSymbolReferences: undefined,
+                reverseMappedStack: undefined,
+                mustCreateTypeParameterSymbolList: true,
+                typeParameterSymbolList: undefined,
+                mustCreateTypeParametersNamesLookups: true,
+                typeParameterNames: undefined,
+                typeParameterNamesByText: undefined,
+                typeParameterNamesByTextNextNameCount: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -7211,12 +7222,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             questionToken?: QuestionToken;
         }
 
-        function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], oldContext: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
+        function signatureToSignatureDeclarationHelper(signature: Signature, kind: SignatureDeclaration["kind"], context: NodeBuilderContext, options?: SignatureToSignatureDeclarationOptions): SignatureDeclaration {
             let typeParameters: TypeParameterDeclaration[] | undefined;
             let typeArguments: TypeNode[] | undefined;
 
             const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
-            const { context, cleanup } = enterNewScope(oldContext, signature.declaration, expandedParams, signature.typeParameters, signature.parameters);
+            const cleanup = enterNewScope(context, signature.declaration, expandedParams, signature.typeParameters, signature.parameters);
             context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
 
             if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -7291,13 +7302,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function enterNewScope(
-            originalContext: NodeBuilderContext,
+            context: NodeBuilderContext,
             declaration: IntroducesNewScopeNode | ConditionalTypeNode | undefined,
             expandedParams: readonly Symbol[] | undefined,
             typeParameters: readonly TypeParameter[] | undefined,
             originalParameters?: readonly Symbol[] | undefined,
         ) {
-            const context = cloneNodeBuilderContext(originalContext);
+            const cleanupContext = cloneNodeBuilderContext(context);
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
             // so this is a no-op, but for arrow functions and function expressions, the enclosing declaration will be
             // the declaration that the arrow function / function expression is assigned to.
@@ -7312,6 +7323,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // function's parameters visible.
             let cleanupParams: (() => void) | undefined;
             let cleanupTypeParams: (() => void) | undefined;
+            const oldEnclosingDecl = context.enclosingDeclaration;
             if (context.enclosingDeclaration && declaration) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7406,12 +7418,15 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     let newLocals: __String[] | undefined;
                     let oldLocals: { name: __String; oldSymbol: Symbol; }[] | undefined;
                     addAll((name, symbol) => {
-                        const oldSymbol = locals.get(name);
-                        if (!oldSymbol) {
-                            newLocals = append(newLocals, name);
-                        }
-                        else {
-                            oldLocals = append(oldLocals, { name, oldSymbol });
+                        // Add cleanup information only if we don't own the fake scope
+                        if (existingFakeScope) {
+                            const oldSymbol = locals.get(name);
+                            if (!oldSymbol) {
+                                newLocals = append(newLocals, name);
+                            }
+                            else {
+                                oldLocals = append(oldLocals, { name, oldSymbol });
+                            }
                         }
                         locals.set(name, symbol);
                     });
@@ -7426,23 +7441,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         setParent(fakeScope, context.enclosingDeclaration);
                         context.enclosingDeclaration = fakeScope;
                     }
-                    return function undo() {
-                        forEach(newLocals, s => locals.delete(s));
-                        forEach(oldLocals, s => locals.set(s.name, s.oldSymbol));
-                    };
+                    else {
+                        // We did not create the current scope, so we have to clean it up
+                        return function undo() {
+                            forEach(newLocals, s => locals.delete(s));
+                            forEach(oldLocals, s => locals.set(s.name, s.oldSymbol));
+                        };
+                    }
                 }
             }
 
-            return {
-                context,
-                cleanup: () => {
-                    originalContext.approximateLength = context.approximateLength;
-                    originalContext.truncating = context.truncating;
-                    originalContext.reportedDiagnostic = context.reportedDiagnostic;
-                    originalContext.encounteredError = context.encounteredError;
-                    cleanupParams?.();
-                    cleanupTypeParams?.();
-                },
+            return () => {
+                cleanupParams?.();
+                cleanupTypeParams?.();
+                cleanupContext();
+                context.enclosingDeclaration = oldEnclosingDecl;
             };
         }
 
@@ -7676,7 +7689,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (context.typeParameterSymbolList?.has(symbolId)) {
                 return undefined;
             }
-            (context.typeParameterSymbolList || (context.typeParameterSymbolList = new Set())).add(symbolId);
+            if (context.mustCreateTypeParameterSymbolList) {
+                context.mustCreateTypeParameterSymbolList = false;
+                context.typeParameterSymbolList = new Set(context.typeParameterSymbolList);
+            }
+            context.typeParameterSymbolList!.add(symbolId);
             let typeParameterNodes: readonly TypeNode[] | readonly TypeParameterDeclaration[] | undefined;
             if (context.flags & NodeBuilderFlags.WriteTypeParametersInQualifiedName && index < (chain.length - 1)) {
                 const parentSymbol = symbol;
@@ -7961,11 +7978,17 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     result = factory.createIdentifier(text);
                     setIdentifierTypeArguments(result, typeArguments);
                 }
+                if (context.mustCreateTypeParametersNamesLookups) {
+                    context.mustCreateTypeParametersNamesLookups = false;
+                    context.typeParameterNames = new Map(context.typeParameterNames);
+                    context.typeParameterNamesByTextNextNameCount = new Map(context.typeParameterNamesByTextNextNameCount);
+                    context.typeParameterNamesByText = new Set(context.typeParameterNamesByText);
+                }
                 // avoiding iterations of the above loop turns out to be worth it when `i` starts to get large, so we cache the max
                 // `i` we've used thus far, to save work later
-                (context.typeParameterNamesByTextNextNameCount ||= new Map()).set(rawtext, i);
-                (context.typeParameterNames ||= new Map()).set(getTypeId(type), result);
-                (context.typeParameterNamesByText ||= new Set()).add(text);
+                context.typeParameterNamesByTextNextNameCount!.set(rawtext, i);
+                context.typeParameterNames!.set(getTypeId(type), result);
+                context.typeParameterNamesByText!.add(text);
             }
             return result;
         }
@@ -8108,8 +8131,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        function cloneNodeBuilderContext(context: NodeBuilderContext): NodeBuilderContext {
-            const initial: NodeBuilderContext = { ...context };
+        function cloneNodeBuilderContext(context: NodeBuilderContext) {
             // Make type parameters created within this context not consume the name outside this context
             // The symbol serializer ends up creating many sibling scopes that all need "separate" contexts when
             // it comes to naming things - within a normal `typeToTypeNode` call, the node builder only ever descends
@@ -8122,20 +8144,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // we write it out like that, rather than as
             // export const x: <T>(x: T) => T
             // export const y: <T_1>(x: T_1) => T_1
-            if (initial.typeParameterNames) {
-                initial.typeParameterNames = new Map(initial.typeParameterNames);
-            }
-            if (initial.typeParameterNamesByText) {
-                initial.typeParameterNamesByText = new Set(initial.typeParameterNamesByText);
-            }
-            if (initial.typeParameterSymbolList) {
-                initial.typeParameterSymbolList = new Set(initial.typeParameterSymbolList);
-            }
-            if (initial.typeParameterNamesByTextNextNameCount) {
-                initial.typeParameterNamesByTextNextNameCount = new Map(initial.typeParameterNamesByTextNextNameCount);
-            }
-            initial.tracker = new SymbolTrackerImpl(initial, initial.tracker.inner, initial.tracker.moduleResolverHost);
-            return initial;
+            const oldMustCreateTypeParameterSymbolList = context.mustCreateTypeParameterSymbolList;
+            const oldMustCreateTypeParametersNamesLookups = context.mustCreateTypeParametersNamesLookups;
+            context.mustCreateTypeParameterSymbolList = true;
+            context.mustCreateTypeParametersNamesLookups = true;
+            const oldTypeParameterNames = context.typeParameterNames;
+            const oldTypeParameterNamesByText = context.typeParameterNamesByText;
+            const oldTypeParameterNamesByTextNextNameCount = context.typeParameterNamesByTextNextNameCount;
+            const oldTypeParameterSymbolList = context.typeParameterSymbolList;
+            return () => {
+                context.typeParameterNames = oldTypeParameterNames;
+                context.typeParameterNamesByText = oldTypeParameterNamesByText;
+                context.typeParameterNamesByTextNextNameCount = oldTypeParameterNamesByTextNextNameCount;
+                context.typeParameterSymbolList = oldTypeParameterSymbolList;
+                context.mustCreateTypeParameterSymbolList = oldMustCreateTypeParameterSymbolList;
+                context.mustCreateTypeParametersNamesLookups = oldMustCreateTypeParametersNamesLookups;
+            };
         }
 
         function getDeclarationWithTypeAnnotation(symbol: Symbol, enclosingDeclaration: Node | undefined) {
@@ -8369,16 +8393,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function onEnterNewScope(node: IntroducesNewScopeNode | ConditionalTypeNode) {
-                const oldContext = context;
-                const scope = enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
-                context = scope.context;
-
-                return onExitNewScope;
-
-                function onExitNewScope() {
-                    scope.cleanup?.();
-                    context = oldContext;
-                }
+                return enterNewScope(context, node, getParametersInScope(node), getTypeParametersInScope(node));
             }
 
             function visitExistingNodeTreeSymbolsWorker(node: Node): Node | undefined {
@@ -8838,17 +8853,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 // Only actually serialize symbols within the correct enclosing declaration, otherwise do nothing with the out-of-context symbol
                 const skipMembershipCheck = !isPrivate; // We only call this on exported symbols when we know they're in the correct scope
                 if (skipMembershipCheck || (!!length(symbol.declarations) && some(symbol.declarations, d => !!findAncestor(d, n => n === enclosingDeclaration)))) {
-                    const oldContext = context;
-                    context = cloneNodeBuilderContext(context);
+                    const scopeCleanup = cloneNodeBuilderContext(context);
                     serializeSymbolWorker(symbol, isPrivate, propertyAsAlias);
-                    if (context.reportedDiagnostic) {
-                        oldcontext.reportedDiagnostic = context.reportedDiagnostic; // hoist diagnostic result into outer context
-                    }
-                    if (context.trackedSymbols) {
-                        if (!oldContext.trackedSymbols) oldContext.trackedSymbols = context.trackedSymbols;
-                        else Debug.assert(context.trackedSymbols === oldContext.trackedSymbols);
-                    }
-                    context = oldContext;
+                    scopeCleanup();
                 }
             }
 
@@ -51240,16 +51247,18 @@ interface NodeBuilderContext {
     symbolDepth: Map<string, number> | undefined;
     inferTypeParameters: TypeParameter[] | undefined;
     approximateLength: number;
-    truncating?: boolean;
-    typeParameterSymbolList?: Set<number>;
-    typeParameterNames?: Map<TypeId, Identifier>;
-    typeParameterNamesByText?: Set<string>;
-    typeParameterNamesByTextNextNameCount?: Map<string, number>;
-    usedSymbolNames?: Set<string>;
-    remappedSymbolNames?: Map<SymbolId, string>;
-    remappedSymbolReferences?: Map<SymbolId, Symbol>;
-    reverseMappedStack?: ReverseMappedSymbol[];
-    bundled?: boolean;
+    truncating: boolean;
+    mustCreateTypeParameterSymbolList: boolean;
+    typeParameterSymbolList: Set<number> | undefined;
+    mustCreateTypeParametersNamesLookups: boolean;
+    typeParameterNames: Map<TypeId, Identifier> | undefined;
+    typeParameterNamesByText: Set<string> | undefined;
+    typeParameterNamesByTextNextNameCount: Map<string, number> | undefined;
+    usedSymbolNames: Set<string> | undefined;
+    remappedSymbolNames: Map<SymbolId, string> | undefined;
+    remappedSymbolReferences: Map<SymbolId, Symbol> | undefined;
+    reverseMappedStack: ReverseMappedSymbol[] | undefined;
+    bundled: boolean;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {
