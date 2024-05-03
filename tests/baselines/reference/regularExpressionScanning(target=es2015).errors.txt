@@ -157,8 +157,8 @@ regularExpressionScanning.ts(37,61): error TS1508: Unexpected '}'. Did you mean 
 regularExpressionScanning.ts(37,63): error TS1517: Range out of order in character class.
 regularExpressionScanning.ts(37,76): error TS1535: This character cannot be escaped in a regular expression.
 regularExpressionScanning.ts(38,8): error TS1005: '--' expected.
-regularExpressionScanning.ts(38,9): error TS1520: Expected a class set oprand.
-regularExpressionScanning.ts(38,11): error TS1520: Expected a class set oprand.
+regularExpressionScanning.ts(38,9): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(38,11): error TS1520: Expected a class set operand.
 regularExpressionScanning.ts(38,12): error TS1005: '--' expected.
 regularExpressionScanning.ts(38,15): error TS1522: A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(38,20): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
@@ -166,15 +166,15 @@ regularExpressionScanning.ts(38,28): error TS1519: Operators must not be mixed w
 regularExpressionScanning.ts(38,40): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
 regularExpressionScanning.ts(38,47): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
 regularExpressionScanning.ts(38,49): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
-regularExpressionScanning.ts(38,50): error TS1520: Expected a class set oprand.
+regularExpressionScanning.ts(38,50): error TS1520: Expected a class set operand.
 regularExpressionScanning.ts(38,55): error TS1511: '\q' is only available inside character class.
 regularExpressionScanning.ts(38,57): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(38,61): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(38,66): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
 regularExpressionScanning.ts(38,67): error TS1005: '--' expected.
-regularExpressionScanning.ts(38,70): error TS1520: Expected a class set oprand.
+regularExpressionScanning.ts(38,70): error TS1520: Expected a class set operand.
 regularExpressionScanning.ts(38,75): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
-regularExpressionScanning.ts(38,85): error TS1520: Expected a class set oprand.
+regularExpressionScanning.ts(38,85): error TS1520: Expected a class set operand.
 regularExpressionScanning.ts(38,87): error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
 regularExpressionScanning.ts(39,56): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
 regularExpressionScanning.ts(39,67): error TS1005: '&&' expected.
@@ -561,9 +561,9 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	      
 !!! error TS1005: '--' expected.
     	       
-!!! error TS1520: Expected a class set oprand.
+!!! error TS1520: Expected a class set operand.
     	         
-!!! error TS1520: Expected a class set oprand.
+!!! error TS1520: Expected a class set operand.
     	          
 !!! error TS1005: '--' expected.
     	             ~~
@@ -579,7 +579,7 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	                                               ~
 !!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
     	                                                
-!!! error TS1520: Expected a class set oprand.
+!!! error TS1520: Expected a class set operand.
     	                                                     ~~
 !!! error TS1511: '\q' is only available inside character class.
     	                                                       ~
@@ -591,11 +591,11 @@ regularExpressionScanning.ts(47,101): error TS1501: This regular expression flag
     	                                                                 
 !!! error TS1005: '--' expected.
     	                                                                    
-!!! error TS1520: Expected a class set oprand.
+!!! error TS1520: Expected a class set operand.
     	                                                                         ~
 !!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
     	                                                                                   
-!!! error TS1520: Expected a class set oprand.
+!!! error TS1520: Expected a class set operand.
     	                                                                                     ~
 !!! error TS1501: This regular expression flag is only available when targeting 'esnext' or later.
     	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,

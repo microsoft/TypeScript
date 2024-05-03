@@ -5022,6 +5022,8 @@ export interface TypeChecker {
     getBaseTypeOfLiteralType(type: Type): Type;
     getWidenedType(type: Type): Type;
     /** @internal */
+    getWidenedLiteralType(type: Type): Type;
+    /** @internal */
     getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
     /** @internal */
     getAwaitedType(type: Type): Type | undefined;
@@ -5375,6 +5377,13 @@ export const enum UnionReduction {
     None = 0,
     Literal,
     Subtype,
+}
+
+/** @internal */
+export const enum IntersectionFlags {
+    None = 0,
+    NoSupertypeReduction = 1 << 0,
+    NoConstraintReduction = 1 << 1,
 }
 
 // dprint-ignore
@@ -5916,7 +5925,6 @@ export interface SymbolLinks {
     inferredClassSymbol?: Map<SymbolId, TransientSymbol>; // Symbol of an inferred ES5 constructor function
     mapper?: TypeMapper;                        // Type mapper for instantiation alias
     referenced?: boolean;                       // True if alias symbol has been referenced as a value that can be emitted
-    constEnumReferenced?: boolean;              // True if alias symbol resolves to a const enum and is referenced as a value ('referenced' will be false)
     containingType?: UnionOrIntersectionType;   // Containing union or intersection type for synthetic property
     leftSpread?: Symbol;                        // Left source for synthetic spread property
     rightSpread?: Symbol;                       // Right source for synthetic spread property
@@ -7636,6 +7644,7 @@ export type CommandLineOption = CommandLineOptionOfCustomType | CommandLineOptio
 // dprint-ignore
 /** @internal */
 export const enum CharacterCodes {
+    EOF = -1,
     nullCharacter = 0,
     maxAsciiCharacter = 0x7F,
 

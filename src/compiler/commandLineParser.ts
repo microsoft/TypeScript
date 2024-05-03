@@ -1639,6 +1639,12 @@ export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOpti
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
 
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
+
 // Build related options
 /** @internal */
 export const optionsForBuild: CommandLineOption[] = [
