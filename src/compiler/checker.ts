@@ -1542,7 +1542,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         onSuccessfullyResolvedSymbol,
     });
 
-    var inFullCheckAfterPartial = true;
+    var inFullCheckAfterPartial = false;
 
     var resolveNameForSymbolSuggestion = createNameResolver({
         compilerOptions,
