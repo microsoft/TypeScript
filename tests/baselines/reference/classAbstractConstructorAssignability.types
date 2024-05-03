@@ -59,3 +59,120 @@ new CC;
 >CC : typeof C
 >   : ^^^^^^^^
 
+// https://github.com/microsoft/TypeScript/issues/57412
+
+// private methods have parameters stripped away in the generated declaration files
+abstract class GeneratedConstructable {
+>GeneratedConstructable : GeneratedConstructable
+>                       : ^^^^^^^^^^^^^^^^^^^^^^
+
+  private constructor() {}
+}
+
+class MyPrivateClass {
+>MyPrivateClass : MyPrivateClass
+>               : ^^^^^^^^^^^^^^
+
+  private privateVal: boolean;
+>privateVal : boolean
+>           : ^^^^^^^
+
+  private constructor(
+    public readonly foo: string,
+>foo : string
+>    : ^^^^^^
+
+    public readonly bar: string,
+>bar : string
+>    : ^^^^^^
+
+  ) {
+    this.privateVal = true;
+>this.privateVal = true : true
+>                       : ^^^^
+>this.privateVal : boolean
+>                : ^^^^^^^
+>this : this
+>     : ^^^^
+>privateVal : boolean
+>           : ^^^^^^^
+>true : true
+>     : ^^^^
+  }
+}
+
+export const funcThatAcceptsAnyGeneratedClass = (
+>funcThatAcceptsAnyGeneratedClass : (clazz: typeof GeneratedConstructable) => void
+>                                 : ^     ^^                             ^^^^^^^^^
+>(  clazz: typeof GeneratedConstructable,) => {} : (clazz: typeof GeneratedConstructable) => void
+>                                                : ^     ^^                             ^^^^^^^^^
+
+  clazz: typeof GeneratedConstructable,
+>clazz : typeof GeneratedConstructable
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>GeneratedConstructable : typeof GeneratedConstructable
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+) => {};
+
+funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+>funcThatAcceptsAnyGeneratedClass(MyPrivateClass) : void
+>                                                 : ^^^^
+>funcThatAcceptsAnyGeneratedClass : (clazz: typeof GeneratedConstructable) => void
+>                                 : ^     ^^                             ^^^^^^^^^
+>MyPrivateClass : typeof MyPrivateClass
+>               : ^^^^^^^^^^^^^^^^^^^^^
+
+abstract class AbstractClass1 {
+>AbstractClass1 : AbstractClass1
+>               : ^^^^^^^^^^^^^^
+
+  private constructor(arg: string) {}
+>arg : string
+>    : ^^^^^^
+}
+
+class SomeClass1 {
+>SomeClass1 : SomeClass1
+>           : ^^^^^^^^^^
+
+  private constructor(arg: number) {}
+>arg : number
+>    : ^^^^^^
+}
+
+const test1: typeof AbstractClass1 = SomeClass1;
+>test1 : typeof AbstractClass1
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>AbstractClass1 : typeof AbstractClass1
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>SomeClass1 : typeof SomeClass1
+>           : ^^^^^^^^^^^^^^^^^
+
+abstract class AbstractClass2 {
+>AbstractClass2 : AbstractClass2
+>               : ^^^^^^^^^^^^^^
+
+  private constructor() {}
+  private test = 10;
+>test : number
+>     : ^^^^^^
+>10 : 10
+>   : ^^
+}
+
+class SomeClass2 {
+>SomeClass2 : SomeClass2
+>           : ^^^^^^^^^^
+
+  constructor() {}
+}
+
+const test2: typeof AbstractClass2 = SomeClass2;
+>test2 : typeof AbstractClass2
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>AbstractClass2 : typeof AbstractClass2
+>               : ^^^^^^^^^^^^^^^^^^^^^
+>SomeClass2 : typeof SomeClass2
+>           : ^^^^^^^^^^^^^^^^^
+

@@ -15,7 +15,53 @@ new AA;
 new BB;
 new CC;
 
+// https://github.com/microsoft/TypeScript/issues/57412
+
+// private methods have parameters stripped away in the generated declaration files
+abstract class GeneratedConstructable {
+  private constructor() {}
+}
+
+class MyPrivateClass {
+  private privateVal: boolean;
+  private constructor(
+    public readonly foo: string,
+    public readonly bar: string,
+  ) {
+    this.privateVal = true;
+  }
+}
+
+export const funcThatAcceptsAnyGeneratedClass = (
+  clazz: typeof GeneratedConstructable,
+) => {};
+
+funcThatAcceptsAnyGeneratedClass(MyPrivateClass);
+
+abstract class AbstractClass1 {
+  private constructor(arg: string) {}
+}
+
+class SomeClass1 {
+  private constructor(arg: number) {}
+}
+
+const test1: typeof AbstractClass1 = SomeClass1;
+
+abstract class AbstractClass2 {
+  private constructor() {}
+  private test = 10;
+}
+
+class SomeClass2 {
+  constructor() {}
+}
+
+const test2: typeof AbstractClass2 = SomeClass2;
+
+
 //// [classAbstractConstructorAssignability.js]
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -31,6 +77,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.funcThatAcceptsAnyGeneratedClass = void 0;
 var A = /** @class */ (function () {
     function A() {
     }
@@ -56,3 +104,44 @@ var CC = B;
 new AA;
 new BB;
 new CC;
+// https://github.com/microsoft/TypeScript/issues/57412
+// private methods have parameters stripped away in the generated declaration files
+var GeneratedConstructable = /** @class */ (function () {
+    function GeneratedConstructable() {
+    }
+    return GeneratedConstructable;
+}());
+var MyPrivateClass = /** @class */ (function () {
+    function MyPrivateClass(foo, bar) {
+        this.foo = foo;
+        this.bar = bar;
+        this.privateVal = true;
+    }
+    return MyPrivateClass;
+}());
+var funcThatAcceptsAnyGeneratedClass = function (clazz) { };
+exports.funcThatAcceptsAnyGeneratedClass = funcThatAcceptsAnyGeneratedClass;
+(0, exports.funcThatAcceptsAnyGeneratedClass)(MyPrivateClass);
+var AbstractClass1 = /** @class */ (function () {
+    function AbstractClass1(arg) {
+    }
+    return AbstractClass1;
+}());
+var SomeClass1 = /** @class */ (function () {
+    function SomeClass1(arg) {
+    }
+    return SomeClass1;
+}());
+var test1 = SomeClass1;
+var AbstractClass2 = /** @class */ (function () {
+    function AbstractClass2() {
+        this.test = 10;
+    }
+    return AbstractClass2;
+}());
+var SomeClass2 = /** @class */ (function () {
+    function SomeClass2() {
+    }
+    return SomeClass2;
+}());
+var test2 = SomeClass2;
