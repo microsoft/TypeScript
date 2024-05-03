@@ -594,6 +594,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
             });
             parsedConfigs = undefined;
         }
+        builderProgram = undefined!;
     }
 
     function getResolutionCache() {
