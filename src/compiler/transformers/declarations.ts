@@ -1006,14 +1006,12 @@ export function transformDeclarations(context: TransformationContext) {
                 ) {
                     context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }
-                if (isEntityNameExpression(input.name.expression)) {
+                if (!isEntityNameExpression(input.name.expression)) {
                     // A.B.C that is not late bound - usually this means the expression did not resolve.
                     // Check the entity name, and copy the declaration, rather than elide it (there's
                     // probably a checker error in the input, but this is most likely the desired output).
-                    checkEntityNameVisibility(input.name.expression, enclosingDeclaration);
-                    return visitEachChild(input, visitDeclarationSubtree, context);
+                    return;
                 }
-                return;
             }
         }
 
