@@ -6,25 +6,20 @@ import {
     virtualFileSystemRoot,
 } from "./_namespaces/Harness";
 import * as ts from "./_namespaces/ts";
-import {
-    getNewLineCharacter,
-} from "./_namespaces/ts";
+import { getNewLineCharacter } from "./_namespaces/ts";
 import * as vfs from "./_namespaces/vfs";
 import * as vpath from "./_namespaces/vpath";
-import {
-    incrementalVerifier,
-} from "./incrementalUtils";
+import { incrementalVerifier } from "./incrementalUtils";
+import { patchServiceForStateBaseline } from "./projectServiceStateLogger";
 import {
     createLoggerWithInMemoryLogs,
     HarnessLSCouldNotResolveModule,
     LoggerWithInMemoryLogs,
 } from "./tsserverLogger";
-import {
-    createWatchUtils,
-} from "./watchUtils";
+import { createWatchUtils } from "./watchUtils";
 
 export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+    const proxy = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
     const langSvc: any = info.languageService;
     for (const k of Object.keys(langSvc)) {
         // eslint-disable-next-line local/only-arrow-functions
@@ -391,7 +386,12 @@ class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
     useCaseSensitiveFileNames = false;
-    watchUtils = createWatchUtils<ServerHostFileWatcher, ServerHostDirectoryWatcher>("watchedFiles", "watchedDirectories");
+    watchUtils = createWatchUtils<ServerHostFileWatcher, ServerHostDirectoryWatcher>(
+        "watchedFiles",
+        "watchedDirectories",
+        ts.createGetCanonicalFileName(this.useCaseSensitiveFileNames),
+        this,
+    );
 
     constructor(private host: NativeLanguageServiceHost) {
         this.newLine = this.host.getNewLine();
@@ -591,6 +591,7 @@ class SessionServerHost implements ts.server.ServerHost {
 class FourslashSession extends ts.server.Session {
     constructor(opts: ts.server.SessionOptions, readonly baselineHost: (when: string) => void) {
         super(opts);
+        patchServiceForStateBaseline(this.projectService);
     }
     getText(fileName: string) {
         return ts.getSnapshotText(this.projectService.getDefaultProjectForFile(ts.server.toNormalizedPath(fileName), /*ensureProject*/ true)!.getScriptSnapshot(fileName)!);
@@ -604,6 +605,10 @@ class FourslashSession extends ts.server.Session {
         this.baselineHost("Before Request");
         super.onMessage(message);
         this.baselineHost("After Request");
+    }
+
+    getProjectService() {
+        return this.projectService;
     }
 }
 
@@ -638,6 +643,10 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
             if (baseline.length) {
                 this.logger.log(when);
                 baseline.forEach(s => this.logger.log(s));
+                this.server.getProjectService().baseline();
+            }
+            else {
+                this.server.getProjectService().baseline(when);
             }
         });
 

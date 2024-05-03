@@ -20,7 +20,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ESNext"
+          "target": "esnext"
         }
       },
       "seq": 1,
@@ -41,7 +41,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ES2015"
+          "target": "es2015"
         },
         "projectRootPath": "/a"
       },
@@ -69,11 +69,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -88,6 +87,17 @@ TI:: Creating typing installer
 PolledWatches::
 /a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/a/file1.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
 
 TI:: [hh:mm:ss:mss] Global cache location '/a/data', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
@@ -128,12 +138,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -224,6 +230,11 @@ PolledWatches::
 /a/node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -238,10 +249,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 4,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /A
-Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /A/file2.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -275,12 +285,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -356,6 +362,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 2 *changed*
+
+ScriptInfos::
+/A/file2.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -370,11 +391,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/file2.ts ProjectRootPath: /b:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject2*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject2* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject2* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject2*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/file2.ts SVC-1-0 "let x = 3;"
@@ -404,12 +424,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/b",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -513,6 +529,28 @@ PolledWatches::
 /b/node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/dev/null/inferredProject2* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -526,11 +564,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 6,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/file3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/file3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject3*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject3* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject3* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject3*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/c/file3.ts SVC-1-0 "let z = 4;"
@@ -560,12 +597,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -679,6 +712,35 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 2
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/c/file3.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -738,6 +800,38 @@ FsWatches::
 /a/file1.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2
+    dirty: true *changed*
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/c/file3.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -792,10 +886,43 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/A/file2.ts: *new*
+  {}
 /a/file1.ts:
   {}
-/a/file2.ts: *new*
-  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject2* *default*
+/c/file3.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -849,12 +976,47 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject2* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/dev/null/inferredProject3* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject2* *deleted*
+/c/file3.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject3* *default*
 
 Before request
 
@@ -906,14 +1068,51 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 3
+    projectProgramVersion: 2
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject2* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject3* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject3* *deleted*
 
 Before request
 
@@ -930,10 +1129,9 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 3 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -963,12 +1161,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1112,14 +1306,53 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
+/dev/null/inferredProject2* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+/dev/null/inferredProject3* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+
+ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*
+/b/file2.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *deleted*
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 
 Before request
 
@@ -1135,10 +1368,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 12,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /A
-Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /A/file2.ts ProjectRootPath: /A:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 4 projectProgramVersion: 3 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -1172,12 +1404,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1253,6 +1481,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 4 *changed*
+    projectProgramVersion: 4 *changed*
+
+ScriptInfos::
+/A/file2.ts (Open) *new*
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1267,11 +1510,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 13,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/file2.ts ProjectRootPath: /b:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject4*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject4* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject4* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject4* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject4*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/file2.ts SVC-2-0 "let x = 3;"
@@ -1301,12 +1543,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/b",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1410,6 +1648,28 @@ PolledWatches::
 /b/node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 4
+    projectProgramVersion: 4
+/dev/null/inferredProject4* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open) *new*
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject4* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1423,11 +1683,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 14,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/file3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/file3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject5*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject5* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject5* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject5* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject5*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/c/file3.ts SVC-2-0 "let z = 4;"
@@ -1457,12 +1716,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1576,6 +1831,35 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 4
+    projectProgramVersion: 4
+/dev/null/inferredProject4* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject5* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject4* *default*
+/c/file3.ts (Open) *new*
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject5* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1635,6 +1919,38 @@ FsWatches::
 /a/file1.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 5 *changed*
+    projectProgramVersion: 4
+    dirty: true *changed*
+/dev/null/inferredProject4* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject5* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject4* *default*
+/c/file3.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject5* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1689,10 +2005,43 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/A/file2.ts: *new*
+  {}
 /a/file1.ts:
   {}
-/a/file2.ts: *new*
-  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 4
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject4* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject5* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts *changed*
+    open: false *changed*
+    version: SVC-2-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject4* *default*
+/c/file3.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject5* *default*
 
 Before request
 
@@ -1746,12 +2095,47 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 5
+    projectProgramVersion: 4
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject4* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/dev/null/inferredProject5* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts *changed*
+    open: false *changed*
+    version: SVC-2-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject4* *deleted*
+/c/file3.ts (Open)
+    version: SVC-2-0
+    containingProjects: 1
+        /dev/null/inferredProject5* *default*
 
 Before request
 
@@ -1803,14 +2187,51 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 5
+    projectProgramVersion: 4
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject4* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject5* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *changed*
+    open: false *changed*
+    version: SVC-2-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject5* *deleted*
 
 Before request
 
@@ -1820,7 +2241,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "options": {
           "allowJs": true,
-          "target": "ES2017"
+          "target": "es2017"
         },
         "projectRootPath": "/A"
       },
@@ -1853,12 +2274,11 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es2017.full.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 5 projectProgramVersion: 4 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -1888,12 +2308,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2039,14 +2455,53 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 5
+    projectProgramVersion: 5 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
+/dev/null/inferredProject4* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+/dev/null/inferredProject5* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+
+ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*
+/b/file2.ts *deleted*
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *deleted*
+    version: SVC-2-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 
 Before request
 
@@ -2062,10 +2517,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 21,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /A
-Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /A/file2.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 6 projectProgramVersion: 5 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -2099,12 +2553,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2180,6 +2630,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 6 *changed*
+    projectProgramVersion: 6 *changed*
+
+ScriptInfos::
+/A/file2.ts (Open) *new*
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2194,11 +2659,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 22,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/file2.ts ProjectRootPath: /b:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject6*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject6* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject6* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject6* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject6*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/file2.ts SVC-3-0 "let x = 3;"
@@ -2228,12 +2692,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/b",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2337,6 +2797,28 @@ PolledWatches::
 /b/node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 6
+    projectProgramVersion: 6
+/dev/null/inferredProject6* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open) *new*
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject6* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2350,11 +2832,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 23,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/file3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/file3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject7*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject7* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject7* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject7* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject7*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/c/file3.ts SVC-3-0 "let z = 4;"
@@ -2384,12 +2865,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2503,6 +2980,35 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 6
+    projectProgramVersion: 6
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject7* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject6* *default*
+/c/file3.ts (Open) *new*
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject7* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2562,6 +3068,38 @@ FsWatches::
 /a/file1.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 7 *changed*
+    projectProgramVersion: 6
+    dirty: true *changed*
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject7* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject6* *default*
+/c/file3.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject7* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -2616,10 +3154,43 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/A/file2.ts: *new*
+  {}
 /a/file1.ts:
   {}
-/a/file2.ts: *new*
-  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 6
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject7* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts *changed*
+    open: false *changed*
+    version: SVC-3-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject6* *default*
+/c/file3.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject7* *default*
 
 Before request
 
@@ -2673,12 +3244,47 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 7
+    projectProgramVersion: 6
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject6* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/dev/null/inferredProject7* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts *changed*
+    open: false *changed*
+    version: SVC-3-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject6* *deleted*
+/c/file3.ts (Open)
+    version: SVC-3-0
+    containingProjects: 1
+        /dev/null/inferredProject7* *default*
 
 Before request
 
@@ -2730,14 +3336,51 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 7
+    projectProgramVersion: 6
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject6* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject7* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *changed*
+    open: false *changed*
+    version: SVC-3-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject7* *deleted*
 
 Before request
 
@@ -2754,10 +3397,9 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/file1.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/file1.ts ProjectRootPath: /a:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 7 projectProgramVersion: 6 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -2787,12 +3429,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2936,14 +3574,53 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches *deleted*::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts:
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 7
+    projectProgramVersion: 7 *changed*
+    dirty: false *changed*
+    isOrphan: false *changed*
+/dev/null/inferredProject6* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+/dev/null/inferredProject7* (Inferred) *deleted*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isClosed: true *changed*
+    isOrphan: true
+
+ScriptInfos::
+/A/file2.ts *deleted*
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts (Open) *changed*
+    open: true *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: false *changed*
+    containingProjects: 1 *changed*
+        /dev/null/inferredProject1* *default* *new*
+/b/file2.ts *deleted*
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *deleted*
+    version: SVC-3-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
 
 Before request
 
@@ -2959,10 +3636,9 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 29,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /A
-Info seq  [hh:mm:ss:mss] For info: /A/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /A/file2.ts ProjectRootPath: /A:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 8 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 8 projectProgramVersion: 7 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/a/file1.ts SVC-1-0 "let x = 1;"
@@ -2996,12 +3672,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/a",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3077,6 +3749,21 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 8 *changed*
+    projectProgramVersion: 8 *changed*
+
+ScriptInfos::
+/A/file2.ts (Open) *new*
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3091,11 +3778,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 30,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /b
-Info seq  [hh:mm:ss:mss] For info: /b/file2.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /b/file2.ts ProjectRootPath: /b:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject8*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject8* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject8* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject8* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject8*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/b/file2.ts SVC-4-0 "let x = 3;"
@@ -3125,12 +3811,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/b",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3234,6 +3916,28 @@ PolledWatches::
 /b/node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 8
+    projectProgramVersion: 8
+/dev/null/inferredProject8* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open) *new*
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject8* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3247,11 +3951,10 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 31,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /c
-Info seq  [hh:mm:ss:mss] For info: /c/file3.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /c/file3.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject9*
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.esnext.full.d.ts 500 undefined Project: /dev/null/inferredProject9* WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject9* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject9* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject9*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 	/c/file3.ts SVC-4-0 "let z = 4;"
@@ -3281,12 +3984,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/",
-      "cachePath": "/a/data",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/a/data', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/a/data'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3400,6 +4099,35 @@ PolledWatches::
 /node_modules: *new*
   {"pollingInterval":500}
 
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 8
+    projectProgramVersion: 8
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/b/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject8* *default*
+/c/file3.ts (Open) *new*
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject9* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3459,6 +4187,38 @@ FsWatches::
 /a/file1.ts: *new*
   {}
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 9 *changed*
+    projectProgramVersion: 8
+    dirty: true *changed*
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/a/file1.ts *changed*
+    open: false *changed*
+    version: SVC-1-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/b/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject8* *default*
+/c/file3.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject9* *default*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -3513,10 +4273,43 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
+/A/file2.ts: *new*
+  {}
 /a/file1.ts:
   {}
-/a/file2.ts: *new*
-  {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 9
+    projectProgramVersion: 8
+    dirty: true
+    isOrphan: true *changed*
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/dev/null/inferredProject9* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts *changed*
+    open: false *changed*
+    version: SVC-4-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject8* *default*
+/c/file3.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject9* *default*
 
 Before request
 
@@ -3570,12 +4363,47 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 9
+    projectProgramVersion: 8
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject8* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+/dev/null/inferredProject9* (Inferred)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-4-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts *changed*
+    open: false *changed*
+    version: SVC-4-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject8* *deleted*
+/c/file3.ts (Open)
+    version: SVC-4-0
+    containingProjects: 1
+        /dev/null/inferredProject9* *default*
 
 Before request
 
@@ -3627,11 +4455,48 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/a/file1.ts:
+/A/file2.ts:
   {}
-/a/file2.ts:
+/a/file1.ts:
   {}
 /b/file2.ts:
   {}
 /c/file3.ts: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred)
+    projectStateVersion: 9
+    projectProgramVersion: 8
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject8* (Inferred)
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: true
+    isOrphan: true
+/dev/null/inferredProject9* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    isOrphan: true *changed*
+
+ScriptInfos::
+/A/file2.ts
+    version: SVC-4-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/a/file1.ts
+    version: SVC-1-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/b/file2.ts
+    version: SVC-4-0
+    pendingReloadFromDisk: true
+    containingProjects: 0
+/c/file3.ts *changed*
+    open: false *changed*
+    version: SVC-4-0
+    pendingReloadFromDisk: true *changed*
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject9* *deleted*

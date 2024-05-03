@@ -1,0 +1,51 @@
+//// [tests/cases/compiler/intersectionReductionGenericStringLikeType.ts] ////
+
+=== intersectionReductionGenericStringLikeType.ts ===
+// https://github.com/microsoft/TypeScript/issues/57736
+
+type obj = {
+>obj : obj
+>    : ^^^
+
+    foo: 1;
+>foo : 1
+>    : ^
+
+    bar: 2;
+>bar : 2
+>    : ^
+
+};
+
+type keyContaining1<
+>keyContaining1 : keyContaining1<str, keys>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    str extends string,
+    keys extends keyof obj = keyof obj,
+> = keys extends infer key extends keyof obj
+    ? key extends `${string}${str}${string}`
+    ? obj[key]
+    : never
+    : never;
+
+type _1 = keyContaining1<"foo">;  // 1
+>_1 : 1
+>   : ^
+
+type keyContaining2<
+>keyContaining2 : keyContaining2<str, keys>
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    str extends string,
+    keys extends keyof obj = keyof obj,
+> = keys extends keys
+    ? keys extends `${string}${str}${string}`
+    ? obj[keys]
+    : never
+    : never;
+
+type _2 = keyContaining2<"foo">;  // 1
+>_2 : 1
+>   : ^
+

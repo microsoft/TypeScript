@@ -39,7 +39,7 @@ CompilerOptions::
     "lib.es2015.core.d.ts",
     "lib.es2015.symbol.d.ts"
   ],
-  "configFilePath": "jsconfig.json"
+  "configFilePath": "/apath/jsconfig.json"
 }
 Errors::
 

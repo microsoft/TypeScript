@@ -4,17 +4,23 @@
 
 var x:number[];
 >x : number[]
+>  : ^^^^^^^^
 
 
 var y = x; 
 >y : number[]
+>  : ^^^^^^^^
 >x : number[]
+>  : ^^^^^^^^
 
 function map<U>() {
 >map : <U>() => void
+>    : ^^^^^^^^^^^^^
 
     var ys: U[] = [];
 >ys : U[]
+>   : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 }
 

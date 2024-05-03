@@ -1,5 +1,4 @@
 import {
-    __String,
     CharacterCodes,
     Comparer,
     Comparison,
@@ -286,7 +285,7 @@ export function filter<T>(array: T[], f: (x: T) => boolean): T[];
 /** @internal */
 export function filter<T, U extends T>(array: readonly T[], f: (x: T) => x is U): readonly U[];
 /** @internal */
-export function filter<T, U extends T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
+export function filter<T>(array: readonly T[], f: (x: T) => boolean): readonly T[];
 /** @internal */
 export function filter<T, U extends T>(array: T[] | undefined, f: (x: T) => x is U): U[] | undefined;
 /** @internal */
@@ -294,7 +293,7 @@ export function filter<T>(array: T[] | undefined, f: (x: T) => boolean): T[] | u
 /** @internal */
 export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => x is U): readonly U[] | undefined;
 /** @internal */
-export function filter<T, U extends T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
+export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined;
 /** @internal */
 export function filter<T>(array: readonly T[] | undefined, f: (x: T) => boolean): readonly T[] | undefined {
     if (array) {
@@ -809,7 +808,13 @@ export function createSortedArray<T>(): SortedArray<T> {
 }
 
 /** @internal */
-export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>, allowDuplicates?: boolean): boolean {
+export function insertSorted<T>(
+    array: SortedArray<T>,
+    insert: T,
+    compare: Comparer<T>,
+    equalityComparer?: EqualityComparer<T>,
+    allowDuplicates?: boolean,
+): boolean {
     if (array.length === 0) {
         array.push(insert);
         return true;
@@ -817,6 +822,16 @@ export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Compa
 
     const insertIndex = binarySearch(array, insert, identity, compare);
     if (insertIndex < 0) {
+        if (equalityComparer && !allowDuplicates) {
+            const idx = ~insertIndex;
+            if (idx > 0 && equalityComparer(insert, array[idx - 1])) {
+                return false;
+            }
+            if (idx < array.length && equalityComparer(insert, array[idx])) {
+                array.splice(idx, 1, insert);
+                return true;
+            }
+        }
         array.splice(~insertIndex, 0, insert);
         return true;
     }
@@ -830,7 +845,7 @@ export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Compa
 }
 
 /** @internal */
-export function sortAndDeduplicate<T>(array: readonly string[]): SortedReadonlyArray<string>;
+export function sortAndDeduplicate(array: readonly string[]): SortedReadonlyArray<string>;
 /** @internal */
 export function sortAndDeduplicate<T>(array: readonly T[], comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
 /** @internal */
@@ -847,38 +862,6 @@ export function arrayIsSorted<T>(array: readonly T[], comparer: Comparer<T>) {
         }
     }
     return true;
-}
-
-/** @internal */
-export const enum SortKind {
-    None = 0,
-    CaseSensitive = 1 << 0,
-    CaseInsensitive = 1 << 1,
-    Both = CaseSensitive | CaseInsensitive,
-}
-
-/** @internal */
-export function detectSortCaseSensitivity<T>(
-    array: readonly T[],
-    getString: (element: T) => string,
-    compareStringsCaseSensitive: Comparer<string>,
-    compareStringsCaseInsensitive: Comparer<string>,
-): SortKind {
-    let kind = SortKind.Both;
-    if (array.length < 2) return kind;
-
-    let prevElement = getString(array[0]);
-    for (let i = 1, len = array.length; i < len && kind !== SortKind.None; i++) {
-        const element = getString(array[i]);
-        if (kind & SortKind.CaseSensitive && compareStringsCaseSensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseSensitive;
-        }
-        if (kind & SortKind.CaseInsensitive && compareStringsCaseInsensitive(prevElement, element) > 0) {
-            kind &= ~SortKind.CaseInsensitive;
-        }
-        prevElement = element;
-    }
-    return kind;
 }
 
 /** @internal */
@@ -905,9 +888,9 @@ export function arrayIsEqualTo<T>(array1: readonly T[] | undefined, array2: read
  *
  * @internal
  */
-export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[]; // eslint-disable-line no-restricted-syntax
 /** @internal */
-export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[];
+export function compact<T>(array: readonly (T | undefined | null | false | 0 | "")[]): readonly T[]; // eslint-disable-line no-restricted-syntax
 // ESLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
 /** @internal */
 export function compact<T>(array: T[]): T[]; // eslint-disable-line @typescript-eslint/unified-signatures
@@ -1544,8 +1527,8 @@ export function group<T, K>(values: readonly T[], getGroupId: (value: T) => K, r
 /** @internal */
 export function groupBy<T, U extends T>(values: readonly T[] | undefined, keySelector: (value: T) => value is U): { true?: U[]; false?: Exclude<T, U>[]; };
 /** @internal */
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; };
-export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } {
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; }; // eslint-disable-line no-restricted-syntax
+export function groupBy<T, K extends string | number | boolean | null | undefined>(values: readonly T[] | undefined, keySelector: (value: T) => K): { [P in K as `${P}`]?: T[]; } { // eslint-disable-line no-restricted-syntax
     const result: Record<string, T[]> = {};
     if (values) {
         for (const value of values) {
@@ -2253,7 +2236,7 @@ const createUIStringComparer = (() => {
     function createIntlCollatorStringComparer(locale: string | undefined): Comparer<string> {
         // Intl.Collator.prototype.compare is bound to the collator. See NOTE in
         // http://www.ecma-international.org/ecma-402/2.0/#sec-Intl.Collator.prototype.compare
-        const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant" }).compare;
+        const comparer = new Intl.Collator(locale, { usage: "sort", sensitivity: "variant", numeric: true }).compare;
         return (a, b) => compareWithCallback(a, b, comparer);
     }
 })();
@@ -2322,7 +2305,7 @@ export function compareBooleans(a: boolean, b: boolean): Comparison {
  *
  * @internal
  */
-export function getSpellingSuggestion<T>(name: string, candidates: T[], getName: (candidate: T) => string | undefined): T | undefined {
+export function getSpellingSuggestion<T>(name: string, candidates: Iterable<T>, getName: (candidate: T) => string | undefined): T | undefined {
     const maximumLengthDifference = Math.max(2, Math.floor(name.length * 0.34));
     let bestDistance = Math.floor(name.length * 0.4) + 1; // If the best result is worse than this, don't bother.
     let bestCandidate: T | undefined;
@@ -2400,9 +2383,13 @@ function levenshteinWithMax(s1: string, s2: string, max: number): number | undef
 }
 
 /** @internal */
-export function endsWith(str: string, suffix: string): boolean {
+export function endsWith(str: string, suffix: string, ignoreCase?: boolean): boolean {
     const expectedPos = str.length - suffix.length;
-    return expectedPos >= 0 && str.indexOf(suffix, expectedPos) === expectedPos;
+    return expectedPos >= 0 && (
+        ignoreCase
+            ? equateStringsCaseInsensitive(str.slice(expectedPos), suffix)
+            : str.indexOf(suffix, expectedPos) === expectedPos
+    );
 }
 
 /** @internal */
@@ -2579,8 +2566,10 @@ export function findBestPatternMatch<T>(values: readonly T[], getPattern: (value
 }
 
 /** @internal */
-export function startsWith(str: string, prefix: string): boolean {
-    return str.lastIndexOf(prefix, 0) === 0;
+export function startsWith(str: string, prefix: string, ignoreCase?: boolean): boolean {
+    return ignoreCase
+        ? equateStringsCaseInsensitive(str.slice(0, prefix.length), prefix)
+        : str.lastIndexOf(prefix, 0) === 0;
 }
 
 /** @internal */
@@ -2738,12 +2727,8 @@ export function skipWhile<T, U extends T>(array: readonly T[] | undefined, predi
 export function isNodeLikeSystem(): boolean {
     // This is defined here rather than in sys.ts to prevent a cycle from its
     // use in performanceCore.ts.
-    //
-    // We don't use the presence of `require` to check if we are in Node;
-    // when bundled using esbuild, this function will be rewritten to `__require`
-    // and definitely exist.
     return typeof process !== "undefined"
         && !!process.nextTick
         && !(process as any).browser
-        && typeof module === "object";
+        && typeof require !== "undefined";
 }

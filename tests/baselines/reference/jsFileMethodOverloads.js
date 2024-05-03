@@ -112,13 +112,13 @@ declare class Example<T> {
      * @param {Example<number>} this
      * @returns {'number'}
      */
-    getTypeName(this: Example<number>): 'number';
+    getTypeName(this: Example<number>): "number";
     /**
      * @overload
      * @param {Example<string>} this
      * @returns {'string'}
      */
-    getTypeName(this: Example<string>): 'string';
+    getTypeName(this: Example<string>): "string";
     /**
      * @template U
      * @overload

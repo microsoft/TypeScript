@@ -28,9 +28,9 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w -p .
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -43,23 +43,29 @@ exports.x = 10;
 
 
 PolledWatches::
+/user/username/projects/myproject/Project/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/Project/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types: *new*
-  {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts: *new*
   {}
-/user/username/projects/myproject/project/file1.ts: *new*
+/user/username/projects/myproject/Project/file1.ts: *new*
   {}
-/user/username/projects/myproject/project/tsconfig.json: *new*
+/user/username/projects/myproject/Project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/project: *new*
+/user/username/projects/myproject/Project: *new*
   {}
 
 Program root files: [
@@ -101,9 +107,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -116,25 +122,31 @@ exports.y = 10;
 
 
 PolledWatches::
+/user/username/projects/myproject/Project/node_modules/@types:
+  {"pollingInterval":500}
+/user/username/projects/myproject/Project/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/myproject/node_modules/@types:
   {"pollingInterval":500}
-/user/username/projects/myproject/project/node_modules/@types:
-  {"pollingInterval":500}
+/user/username/projects/myproject/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatches::
 /a/lib/lib.d.ts:
   {}
-/user/username/projects/myproject/project/file1.ts:
+/user/username/projects/myproject/Project/file1.ts:
   {}
-/user/username/projects/myproject/project/file2.ts: *new*
+/user/username/projects/myproject/Project/file2.ts: *new*
   {}
-/user/username/projects/myproject/project/tsconfig.json:
+/user/username/projects/myproject/Project/tsconfig.json:
   {}
 
 FsWatchesRecursive::
-/user/username/projects/myproject/project:
+/user/username/projects/myproject/Project:
   {}
 
 

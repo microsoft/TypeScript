@@ -3,8 +3,11 @@
 === test.d.ts ===
 declare var S: typeof A; // no error
 >S : number
+>  : ^^^^^^
 >A : number
+>  : ^^^^^^
 
 declare const A: number;  
 >A : number
+>  : ^^^^^^
 

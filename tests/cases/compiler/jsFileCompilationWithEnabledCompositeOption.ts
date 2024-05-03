@@ -1,5 +1,5 @@
 // @allowJs: true
-// @out: out.js
+// @outFile: out.js
 // @composite: true
 // @filename: a.ts
 class c {

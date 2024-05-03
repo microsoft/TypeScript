@@ -5,6 +5,7 @@ import {
     ArrayBindingElement,
     ArrayBindingOrAssignmentElement,
     ArrayBindingOrAssignmentPattern,
+    ArrowFunction,
     AssertionExpression,
     AssignmentDeclarationKind,
     AssignmentPattern,
@@ -31,8 +32,10 @@ import {
     ClassLikeDeclaration,
     ClassStaticBlockDeclaration,
     combinePaths,
+    CommentRange,
     compareDiagnostics,
     CompilerOptions,
+    concatenate,
     ConciseBody,
     ConstructorDeclaration,
     ConstructorTypeNode,
@@ -46,6 +49,7 @@ import {
     Decorator,
     Diagnostic,
     Diagnostics,
+    diagnosticsEqualityComparer,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -61,9 +65,11 @@ import {
     filter,
     find,
     flatMap,
+    forEach,
     ForInitializer,
     ForInOrOfStatement,
     FunctionBody,
+    FunctionExpression,
     FunctionLikeDeclaration,
     FunctionTypeNode,
     GeneratedIdentifier,
@@ -79,6 +85,10 @@ import {
     getJSDocCommentsAndTags,
     getJSDocRoot,
     getJSDocTypeParameterDeclarations,
+    getLeadingCommentRanges,
+    getLeadingCommentRangesOfNode,
+    getSourceFileOfNode,
+    getTrailingCommentRanges,
     hasAccessorModifier,
     HasDecorators,
     hasDecorators,
@@ -119,6 +129,7 @@ import {
     isExportSpecifier,
     isFunctionBlock,
     isFunctionExpression,
+    isFunctionExpressionOrArrowFunction,
     isFunctionTypeNode,
     isIdentifier,
     isImportSpecifier,
@@ -201,6 +212,7 @@ import {
     JsxTagNameExpression,
     KeywordSyntaxKind,
     LabeledStatement,
+    last,
     lastOrUndefined,
     LeftHandSideExpression,
     length,
@@ -255,9 +267,11 @@ import {
     setUILocale,
     SignatureDeclaration,
     skipOuterExpressions,
+    skipTrivia,
     some,
     sortAndDeduplicate,
     SortedReadonlyArray,
+    SourceFile,
     Statement,
     StringLiteral,
     StringLiteralLike,
@@ -280,8 +294,6 @@ import {
     TypeParameterDeclaration,
     TypeReferenceType,
     UnaryExpression,
-    UnparsedNode,
-    UnparsedTextLike,
     VariableDeclaration,
 } from "./_namespaces/ts";
 
@@ -293,13 +305,15 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 }
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
-    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
     switch (getEmitScriptTarget(options)) {
         case ScriptTarget.ESNext:
             return "lib.esnext.full.d.ts";
+        case ScriptTarget.ES2023:
+            return "lib.es2023.full.d.ts";
         case ScriptTarget.ES2022:
             return "lib.es2022.full.d.ts";
         case ScriptTarget.ES2021:
@@ -1384,24 +1398,6 @@ export function isNamedExportBindings(node: Node): node is NamedExportBindings {
     return node.kind === SyntaxKind.NamespaceExport || node.kind === SyntaxKind.NamedExports;
 }
 
-/** @deprecated */
-export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
-    switch (node.kind) {
-        case SyntaxKind.UnparsedText:
-        case SyntaxKind.UnparsedInternalText:
-            return true;
-        default:
-            return false;
-    }
-}
-
-/** @deprecated */
-export function isUnparsedNode(node: Node): node is UnparsedNode {
-    return isUnparsedTextLike(node) ||
-        node.kind === SyntaxKind.UnparsedPrologue ||
-        node.kind === SyntaxKind.UnparsedSyntheticReference;
-}
-
 export function isJSDocPropertyLikeTag(node: Node): node is JSDocPropertyLikeTag {
     return node.kind === SyntaxKind.JSDocPropertyTag || node.kind === SyntaxKind.JSDocParameterTag;
 }
@@ -1928,8 +1924,8 @@ export function isPropertyAccessOrQualifiedName(node: Node): node is PropertyAcc
 }
 
 /** @internal */
-export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | SignatureDeclaration {
-    return isCallLikeExpression(node) || isFunctionLike(node);
+export function isCallLikeOrFunctionLikeExpression(node: Node): node is CallLikeExpression | FunctionExpression | ArrowFunction {
+    return isCallLikeExpression(node) || isFunctionExpressionOrArrowFunction(node);
 }
 
 export function isCallLikeExpression(node: Node): node is CallLikeExpression {
@@ -2373,7 +2369,6 @@ export function isDeclaration(node: Node): node is NamedDeclaration {
     return isDeclarationKind(node.kind);
 }
 
-/** @internal */
 export function isDeclarationStatement(node: Node): node is DeclarationStatement {
     return isDeclarationStatementKind(node.kind);
 }
@@ -2602,4 +2597,33 @@ export function hasRestParameter(s: SignatureDeclaration | JSDocSignature): bool
 export function isRestParameter(node: ParameterDeclaration | JSDocParameterTag): boolean {
     const type = isJSDocParameterTag(node) ? (node.typeExpression && node.typeExpression.type) : node.type;
     return (node as ParameterDeclaration).dotDotDotToken !== undefined || !!type && type.kind === SyntaxKind.JSDocVariadicType;
+}
+
+function hasInternalAnnotation(range: CommentRange, sourceFile: SourceFile) {
+    const comment = sourceFile.text.substring(range.pos, range.end);
+    return comment.includes("@internal");
+}
+
+export function isInternalDeclaration(node: Node, sourceFile?: SourceFile) {
+    sourceFile ??= getSourceFileOfNode(node);
+    const parseTreeNode = getParseTreeNode(node);
+    if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+        const paramIdx = (parseTreeNode.parent as SignatureDeclaration).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+        const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as SignatureDeclaration).parameters[paramIdx - 1] : undefined;
+        const text = sourceFile.text;
+        const commentRanges = previousSibling
+            ? concatenate(
+                // to handle
+                // ... parameters, /** @internal */
+                // public param: string
+                getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true)),
+                getLeadingCommentRanges(text, node.pos),
+            )
+            : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true));
+        return some(commentRanges) && hasInternalAnnotation(last(commentRanges), sourceFile);
+    }
+    const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, sourceFile);
+    return !!forEach(leadingCommentRanges, range => {
+        return hasInternalAnnotation(range, sourceFile);
+    });
 }

@@ -21,7 +21,7 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js -w /a/b/commonFile1.ts
 Output::
 >> Screen clear
-[[90m12:00:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96ma/b/commonFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/commonFile2.ts' not found.
 
@@ -33,7 +33,7 @@ Output::
 [7m2[0m                     let x = y
 [7m [0m [91m                            ~[0m
 
-[[90m12:00:16 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -44,11 +44,11 @@ var x = y;
 
 
 PolledWatches::
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts: *new*
+/a/b/commonFile1.ts: *new*
   {}
 /a/lib/lib.d.ts: *new*
   {}
@@ -82,11 +82,11 @@ let y = 1
 
 
 PolledWatches *deleted*::
-/a/b/commonfile2.ts:
+/a/b/commonFile2.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
 /a/lib/lib.d.ts:
   {}
@@ -100,9 +100,9 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:19 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:25 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -113,9 +113,9 @@ var y = 1;
 
 
 FsWatches::
-/a/b/commonfile1.ts:
+/a/b/commonFile1.ts:
   {}
-/a/b/commonfile2.ts: *new*
+/a/b/commonFile2.ts: *new*
   {}
 /a/lib/lib.d.ts:
   {}

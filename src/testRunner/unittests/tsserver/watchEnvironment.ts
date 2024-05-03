@@ -3,9 +3,7 @@ import {
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
 import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { jsonToReadableText } from "../helpers";
 import {
     commonFile1,
     commonFile2,
@@ -24,6 +22,7 @@ import {
     createServerHost,
     File,
     libFile,
+    TestServerHostOsFlavor,
     Tsc_WatchDirectory,
 } from "../helpers/virtualFileSystemWithWatch";
 
@@ -52,7 +51,7 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watchD
             const files = [index, file1, configFile, libFile];
             const environmentVariables = new Map<string, string>();
             environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-            const host = createServerHost(files, { environmentVariables });
+            const host = createServerHost(files, { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables });
             const session = new TestSession(host);
             openFilesForSession([index], session);
             session.executeCommandSeq<ts.server.protocol.CompletionsRequest>({
@@ -119,91 +118,98 @@ describe("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem Watche
     verifyWatchedDirectories("files not at root", "c:/", /*useProjectAtRoot*/ false);
 });
 
-it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive watch directory implementation does not watch files/directories in node_modules starting with "."`, () => {
-    const projectFolder = "/a/username/project";
-    const projectSrcFolder = `${projectFolder}/src`;
-    const configFile: File = {
-        path: `${projectFolder}/tsconfig.json`,
-        content: "{}",
-    };
-    const index: File = {
-        path: `${projectSrcFolder}/index.ts`,
-        content: `import {} from "file"`,
-    };
-    const file1: File = {
-        path: `${projectSrcFolder}/file1.ts`,
-        content: "",
-    };
-    const nodeModulesExistingUnusedFile: File = {
-        path: `${projectFolder}/node_modules/someFile.d.ts`,
-        content: "",
-    };
-    const environmentVariables = new Map<string, string>();
-    environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-    const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
-    const session = new TestSession(host);
-    openFilesForSession([index], session);
+describe("unittests:: tsserver:: watchEnvironment:: recursiveWatchDirectory", () => {
+    it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive watch directory implementation does not watch files/directories in node_modules starting with "."`, () => {
+        const projectFolder = "/a/username/project";
+        const projectSrcFolder = `${projectFolder}/src`;
+        const configFile: File = {
+            path: `${projectFolder}/tsconfig.json`,
+            content: "{}",
+        };
+        const index: File = {
+            path: `${projectSrcFolder}/index.ts`,
+            content: `import {} from "file"`,
+        };
+        const file1: File = {
+            path: `${projectSrcFolder}/file1.ts`,
+            content: "",
+        };
+        const nodeModulesExistingUnusedFile: File = {
+            path: `${projectFolder}/node_modules/someFile.d.ts`,
+            content: "",
+        };
+        const environmentVariables = new Map<string, string>();
+        environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        const host = createServerHost(
+            [index, file1, configFile, libFile, nodeModulesExistingUnusedFile],
+            { osFlavor: TestServerHostOsFlavor.Linux, environmentVariables },
+        );
+        const session = new TestSession(host);
+        openFilesForSession([index], session);
 
-    const nodeModulesIgnoredFileFromIgnoreDirectory: File = {
-        path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
-        content: "",
-    };
+        const nodeModulesIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
+            content: "",
+        };
 
-    const nodeModulesIgnoredFile: File = {
-        path: `${projectFolder}/node_modules/.cacheFile.ts`,
-        content: "",
-    };
+        const nodeModulesIgnoredFile: File = {
+            path: `${projectFolder}/node_modules/.cacheFile.ts`,
+            content: "",
+        };
 
-    const gitIgnoredFileFromIgnoreDirectory: File = {
-        path: `${projectFolder}/.git/someFile.d.ts`,
-        content: "",
-    };
+        const gitIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/.git/someFile.d.ts`,
+            content: "",
+        };
 
-    const gitIgnoredFile: File = {
-        path: `${projectFolder}/.gitCache.d.ts`,
-        content: "",
-    };
-    const emacsIgnoredFileFromIgnoreDirectory: File = {
-        path: `${projectFolder}/src/.#field.ts`,
-        content: "",
-    };
+        const gitIgnoredFile: File = {
+            path: `${projectFolder}/.gitCache.d.ts`,
+            content: "",
+        };
+        const emacsIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/src/.#field.ts`,
+            content: "",
+        };
 
-    [
-        nodeModulesIgnoredFileFromIgnoreDirectory,
-        nodeModulesIgnoredFile,
-        gitIgnoredFileFromIgnoreDirectory,
-        gitIgnoredFile,
-        emacsIgnoredFileFromIgnoreDirectory,
-    ].forEach(ignoredEntity => {
-        host.ensureFileOrFolder(ignoredEntity);
-        session.host.baselineHost("After writing ignored file or folder");
+        [
+            nodeModulesIgnoredFileFromIgnoreDirectory,
+            nodeModulesIgnoredFile,
+            gitIgnoredFileFromIgnoreDirectory,
+            gitIgnoredFile,
+            emacsIgnoredFileFromIgnoreDirectory,
+        ].forEach(ignoredEntity => {
+            host.ensureFileOrFolder(ignoredEntity);
+            session.host.baselineHost("After writing ignored file or folder");
+        });
+
+        baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
     });
-
-    baselineTsserverLogs("watchEnvironment", `recursive directory does not watch files starting with dot in node_modules`, session);
 });
 
-it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
-    const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // Special handling to ensure same logger is used
-    verifyFilePathStyle("c:/myprojects/project/x.js", logger);
-    verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js", logger);
-    verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js", logger);
-    verifyFilePathStyle("c:/users/username/myprojects/project/x.js", logger);
-    verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js", logger);
-    baselineTsserverLogs("watchEnvironment", `watching files with network style paths`, { logger });
+describe("unittests:: tsserver:: watchEnvironment:: networkStylePaths", () => {
+    it("unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem watching files with network style paths", () => {
+        const logger = createLoggerWithInMemoryLogs(/*host*/ undefined!); // Special handling to ensure same logger is used
+        verifyFilePathStyle("c:/myprojects/project/x.js", logger);
+        verifyFilePathStyle("//vda1cs4850/myprojects/project/x.js", logger);
+        verifyFilePathStyle("//vda1cs4850/c$/myprojects/project/x.js", logger);
+        verifyFilePathStyle("c:/users/username/myprojects/project/x.js", logger);
+        verifyFilePathStyle("//vda1cs4850/c$/users/username/myprojects/project/x.js", logger);
+        baselineTsserverLogs("watchEnvironment", `watching files with network style paths`, { logger });
 
-    function verifyFilePathStyle(path: string, logger: LoggerWithInMemoryLogs) {
-        const windowsStyleRoot = path.substring(0, ts.getRootLength(path));
-        const file: File = { path, content: "const x = 10" };
-        const host = createServerHost(
-            [libFile, file],
-            { windowsStyleRoot },
-        );
-        logger.host = host;
-        logger.info(`For files of style ${path}`);
-        logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
-        const session = new TestSession({ host, logger });
-        openFilesForSession([file], session);
-    }
+        function verifyFilePathStyle(path: string, logger: LoggerWithInMemoryLogs) {
+            const windowsStyleRoot = path.substring(0, ts.getRootLength(path));
+            const file: File = { path, content: "const x = 10" };
+            const host = createServerHost(
+                [libFile, file],
+                { windowsStyleRoot },
+            );
+            logger.host = host;
+            logger.info(`For files of style ${path}`);
+            logger.log(`currentDirectory:: ${host.getCurrentDirectory()} useCaseSensitiveFileNames: ${host.useCaseSensitiveFileNames}`);
+            const session = new TestSession({ host, logger });
+            openFilesForSession([file], session);
+        }
+    });
 });
 
 describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler options", () => {
@@ -233,7 +239,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -253,7 +259,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             content: "{}",
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -293,7 +299,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([{ file: commonFile1, projectRootPath: "/a/b" }], session);
         baselineTsserverLogs("watchEnvironment", `with watchDirectory option in configFile`, session);
@@ -309,7 +315,7 @@ describe("unittests:: tsserver:: watchEnvironment:: handles watch compiler optio
             }),
         };
         const files = [libFile, commonFile2, configFile];
-        const host = createServerHost(files.concat(commonFile1), { runWithoutRecursiveWatches: true, runWithFallbackPolling: true });
+        const host = createServerHost(files.concat(commonFile1), { osFlavor: TestServerHostOsFlavor.Linux, runWithFallbackPolling: true });
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,
@@ -511,7 +517,7 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
             path: "/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts",
             content: `export function randomSeed(): string;`,
         };
-        const host = createServerHost([config, main, randomSeed, libFile], { inodeWatching: true, runWithoutRecursiveWatches: true });
+        const host = createServerHost([config, main, randomSeed, libFile], { osFlavor: TestServerHostOsFlavor.Linux });
         const session = new TestSession(host);
         openFilesForSession([main], session);
         verifyGetErrRequest({ session, files: [main] });
@@ -525,5 +531,21 @@ describe("unittests:: tsserver:: watchEnvironment:: watching at workspaces codes
         verifyGetErrRequest({ session, files: [main], existingTimeouts: true });
         host.runQueuedTimeoutCallbacks();
         baselineTsserverLogs("watchEnvironment", "watching npm install in codespaces where workspaces folder is hosted at root", session);
+    });
+});
+
+describe("unittests:: tsserver:: watchEnvironment:: perVolumeCasing", () => {
+    it("new file addition", () => {
+        const host = createServerHost([libFile]);
+        // Make /Volumes case sensitive
+        host.getCanonicalFileName = s => ts.startsWith(s, "/Volumes/") ? s : ts.toFileNameLowerCase(s);
+        host.ensureFileOrFolder({ path: "/Volumes/git/projects/project/foo.ts", content: `export const foo = "foo";` });
+        host.writeFile("/Volumes/git/projects/project/tsconfig.json", "{ }");
+        host.writeFile("/Volumes/git/projects/project/package.json", jsonToReadableText({ name: "project", version: "1.0.0" }));
+        const session = new TestSession(host);
+        openFilesForSession(["/Volumes/git/projects/project/foo.ts"], session);
+        host.writeFile("/Volumes/git/projects/project/Bar.ts", `export const bar = "bar";`);
+        host.runQueuedTimeoutCallbacks();
+        baselineTsserverLogs("watchEnvironment", "perVolumeCasing and new file addition", session);
     });
 });

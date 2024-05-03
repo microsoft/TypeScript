@@ -4,21 +4,29 @@
 interface I {
     p: number
 >p : number
+>  : ^^^^^^
 }
 interface B extends I { }
 class B { }
 >B : B
+>  : ^
 
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     get p() { return 1 }
 >p : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     set p(value) { }
 >p : number
+>  : ^^^^^^
 >value : number
+>      : ^^^^^^
 }
 

@@ -7,5 +7,7 @@ declare var React: any;
 <foo data/>
 ><foo data/> : error
 >foo : any
+>    : ^^^
 >data : true
+>     : ^^^^
 

@@ -27,23 +27,22 @@ export function Foo() { };
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96ma/b/referenceFile1.ts[0m:[93m2[0m:[93m16[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Foo'.
 
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:22 AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -57,9 +56,9 @@ exports.x = Foo();
 
 
 FsWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
-/a/b/referencefile1.ts: *new*
+/a/b/referenceFile1.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -111,7 +110,7 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:24 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96ma/b/referenceFile1.ts[0m:[93m1[0m:[93m22[0m - [91merror[0m[90m TS6053: [0mFile '/a/b/moduleFile1.ts' not found.
 
@@ -123,18 +122,18 @@ Output::
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90m12:00:28 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/a/b/referenceFile1.js] file written with same contents
 
 PolledWatches::
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/a/b/referencefile1.ts:
+/a/b/referenceFile1.ts:
   {}
 /a/b/tsconfig.json:
   {}
@@ -142,7 +141,7 @@ FsWatches::
   {}
 
 FsWatches *deleted*::
-/a/b/modulefile1.ts:
+/a/b/moduleFile1.ts:
   {}
 
 FsWatchesRecursive::

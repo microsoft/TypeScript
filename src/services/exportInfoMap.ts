@@ -8,10 +8,12 @@ import {
     createMultiMap,
     Debug,
     emptyArray,
+    ensureTrailingDirectorySeparator,
     findIndex,
     firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
+    FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
     getDirectoryPath,
@@ -20,8 +22,8 @@ import {
     getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
-    getPatternFromSpec,
     getRegexFromPattern,
+    getSubPatternFromSpec,
     getSymbolId,
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
@@ -43,6 +45,7 @@ import {
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
+    pathContainsNodeModules,
     Program,
     skipAlias,
     skipOuterExpressions,
@@ -87,6 +90,12 @@ export interface SymbolExportInfo {
     /** True if export was only found via the package.json AutoImportProvider (for telemetry). */
     isFromPackageJson: boolean;
 }
+
+/**
+ * @internal
+ * ExportInfo for an export that does not exist yet, so does not have a symbol.
+ */
+export type FutureSymbolExportInfo = Omit<SymbolExportInfo, "symbol"> & { readonly symbol?: undefined; };
 
 interface CachedSymbolExportInfo {
     // Used to rehydrate `symbol` and `moduleSymbol` when transient
@@ -423,16 +432,16 @@ export function forEachExternalModuleToImportFrom(
     const excludePatterns = preferences.autoImportFileExcludePatterns && mapDefined(preferences.autoImportFileExcludePatterns, spec => {
         // The client is expected to send rooted path specs since we don't know
         // what directory a relative path is relative to.
-        const pattern = getPatternFromSpec(spec, "", "exclude");
+        const pattern = getSubPatternFromSpec(spec, "", "exclude");
         return pattern ? getRegexFromPattern(pattern, useCaseSensitiveFileNames) : undefined;
     });
 
-    forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
+    forEachExternalModule(program.getTypeChecker(), program.getSourceFiles(), excludePatterns, host, (module, file) => cb(module, file, program, /*isFromPackageJson*/ false));
     const autoImportProvider = useAutoImportProvider && host.getPackageJsonAutoImportProvider?.();
     if (autoImportProvider) {
         const start = timestamp();
         const checker = program.getTypeChecker();
-        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, (module, file) => {
+        forEachExternalModule(autoImportProvider.getTypeChecker(), autoImportProvider.getSourceFiles(), excludePatterns, host, (module, file) => {
             if (file && !program.getSourceFile(file.fileName) || !file && !checker.resolveName(module.name, /*location*/ undefined, SymbolFlags.Module, /*excludeGlobals*/ false)) {
                 // The AutoImportProvider filters files already in the main program out of its *root* files,
                 // but non-root files can still be present in both programs, and already in the export info map
@@ -445,22 +454,37 @@ export function forEachExternalModuleToImportFrom(
     }
 }
 
-function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
-    const isExcluded = excludePatterns && ((fileName: string) => excludePatterns.some(p => p.test(fileName)));
+function forEachExternalModule(checker: TypeChecker, allSourceFiles: readonly SourceFile[], excludePatterns: readonly RegExp[] | undefined, host: LanguageServiceHost, cb: (module: Symbol, sourceFile: SourceFile | undefined) => void) {
+    const realpathsWithSymlinks = host.getSymlinkCache?.().getSymlinkedDirectoriesByRealpath();
+    const isExcluded = excludePatterns && (({ fileName, path }: SourceFile) => {
+        if (excludePatterns.some(p => p.test(fileName))) return true;
+        if (realpathsWithSymlinks?.size && pathContainsNodeModules(fileName)) {
+            let dir = getDirectoryPath(fileName);
+            return forEachAncestorDirectory(getDirectoryPath(path), dirPath => {
+                const symlinks = realpathsWithSymlinks.get(ensureTrailingDirectorySeparator(dirPath));
+                if (symlinks) {
+                    return symlinks.some(s => excludePatterns.some(p => p.test(fileName.replace(dir, s))));
+                }
+                dir = getDirectoryPath(dir);
+            }) ?? false;
+        }
+        return false;
+    });
+
     for (const ambient of checker.getAmbientModules()) {
-        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile().fileName)))) {
+        if (!ambient.name.includes("*") && !(excludePatterns && ambient.declarations?.every(d => isExcluded!(d.getSourceFile())))) {
             cb(ambient, /*sourceFile*/ undefined);
         }
     }
     for (const sourceFile of allSourceFiles) {
-        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile.fileName)) {
+        if (isExternalOrCommonJsModule(sourceFile) && !isExcluded?.(sourceFile)) {
             cb(checker.getMergedSymbol(sourceFile.symbol), sourceFile);
         }
     }
 }
 
 /** @internal */
-export function getExportInfoMap(importingFile: SourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
+export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, host: LanguageServiceHost, program: Program, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): ExportInfoMap {
     const start = timestamp();
     // Pulling the AutoImportProvider project will trigger its updateGraph if pending,
     // which will invalidate the export map cache if things change, so pull it before

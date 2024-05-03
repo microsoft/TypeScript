@@ -18,8 +18,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/a/b
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/a/b/app.js :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/b/app.js ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
@@ -33,6 +32,11 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/b/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/a/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /dev/null/inferredProject1* WatchType: Missing file
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/b/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
@@ -40,7 +44,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/node_modules/commander/index.js Text-1 "module.exports = 0"
@@ -64,6 +68,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/b/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json: *new*
@@ -72,14 +78,37 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/a/package.json: *new*
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types: *new*
   {"pollingInterval":500}
+/user/username/projects/node_modules/commander/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatchesRecursive::
 /user/username/projects/node_modules: *new*
   {}
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 0
+
+ScriptInfos::
+/user/username/projects/a/b/app.js (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/node_modules/commander/index.js *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
 TI:: [hh:mm:ss:mss] Global cache location '/user/username/projects/a/cache', safe file path '/safeList.json', types map path /typesMap.json
 TI:: [hh:mm:ss:mss] Processing cache location '/user/username/projects/a/cache'
@@ -135,12 +164,8 @@ TI:: [hh:mm:ss:mss] Got install request
         "commander"
       ],
       "projectRootPath": "/user/username/projects/a/b",
-      "cachePath": "/user/username/projects/a/cache",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/user/username/projects/a/cache', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/user/username/projects/a/cache'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["commander"]
@@ -213,6 +238,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/b/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
@@ -221,10 +248,18 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/node_modules/commander/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
 
 FsWatchesRecursive::
 /user/username/projects/node_modules:
@@ -232,8 +267,13 @@ FsWatchesRecursive::
 
 PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
-  "@types/commander@ts5.4"
+  "@types/commander@tsFakeMajor.Minor"
 ] *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 1
+    projectProgramVersion: 1 *changed*
 
 Before running PendingInstalls callback:: count: 1
 1: #1 with arguments:: [
@@ -334,6 +374,12 @@ Timeout callback:: count: 2
 1: /dev/null/inferredProject1* *new*
 2: *ensureProjectForOpenFiles* *new*
 
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+
 Before running Timeout callback:: count: 2
 1: /dev/null/inferredProject1*
 2: *ensureProjectForOpenFiles*
@@ -342,7 +388,9 @@ Info seq  [hh:mm:ss:mss] Running: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/a/cache/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* Version: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/commander/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/node_modules/package.json 2000 undefined Project: /dev/null/inferredProject1* WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 	/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts Text-1 ""
@@ -378,12 +426,8 @@ TI:: [hh:mm:ss:mss] Got install request
       },
       "unresolvedImports": [],
       "projectRootPath": "/user/username/projects/a/b",
-      "cachePath": "/user/username/projects/a/cache",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Request specifies cache path '/user/username/projects/a/cache', loading cached information...
-TI:: [hh:mm:ss:mss] Processing cache location '/user/username/projects/a/cache'
-TI:: [hh:mm:ss:mss] Cache location was already processed...
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -461,6 +505,8 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/b/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/b/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/a/b/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/a/jsconfig.json:
@@ -469,10 +515,20 @@ PolledWatches::
   {"pollingInterval":500}
 /user/username/projects/a/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/a/package.json:
+  {"pollingInterval":2000}
 /user/username/projects/a/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/node_modules/@types:
   {"pollingInterval":500}
+/user/username/projects/package.json:
+  {"pollingInterval":2000}
+
+PolledWatches *deleted*::
+/user/username/projects/node_modules/commander/package.json:
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/package.json:
+  {"pollingInterval":2000}
 
 FsWatchesRecursive::
 /user/username/projects/a/cache/node_modules: *new*
@@ -484,3 +540,22 @@ Timeout callback:: count: 2
 2: *ensureProjectForOpenFiles* *deleted*
 3: /dev/null/inferredProject1* *new*
 4: *ensureProjectForOpenFiles* *new*
+
+Projects::
+/dev/null/inferredProject1* (Inferred) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 2 *changed*
+    dirty: true
+
+ScriptInfos::
+/user/username/projects/a/b/app.js (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /dev/null/inferredProject1* *default*
+/user/username/projects/a/cache/node_modules/@types/commander/index.d.ts *new*
+    version: Text-1
+    containingProjects: 0
+/user/username/projects/node_modules/commander/index.js *changed*
+    version: Text-1
+    containingProjects: 0 *changed*
+        /dev/null/inferredProject1* *deleted*

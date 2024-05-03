@@ -1,13 +1,9 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
+import { dedent } from "../../_namespaces/Utils";
 import {
     getFsContentsForDemoProjectReferencesCoreConfig,
     getSysForDemoProjectReferences,
 } from "../helpers/demoProjectReferences";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { verifyTscWatch } from "../helpers/tscWatch";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
     verifyTscWatch({

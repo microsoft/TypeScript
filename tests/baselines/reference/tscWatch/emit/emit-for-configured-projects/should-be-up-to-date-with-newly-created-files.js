@@ -35,18 +35,17 @@ interface Array<T> { length: number; [n: number]: T; }
 /a/lib/tsc.js --w -p /a/b/tsconfig.json
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:34 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = void 0;
-function Foo() { }
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -75,15 +74,15 @@ exports.Foo4 = 10;
 
 
 FsWatches::
-/a/b/file1consumer1.ts: *new*
+/a/b/file1Consumer1.ts: *new*
   {}
-/a/b/file1consumer2.ts: *new*
+/a/b/file1Consumer2.ts: *new*
   {}
-/a/b/globalfile3.ts: *new*
+/a/b/globalFile3.ts: *new*
   {}
-/a/b/modulefile1.ts: *new*
+/a/b/moduleFile1.ts: *new*
   {}
-/a/b/modulefile2.ts: *new*
+/a/b/moduleFile2.ts: *new*
   {}
 /a/b/tsconfig.json: *new*
   {}
@@ -152,18 +151,18 @@ Before running Timeout callback:: count: 1
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:40 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:52 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/a/b/moduleFile1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = exports.T = void 0;
-function Foo() { }
+exports.T = void 0;
 exports.Foo = Foo;
+function Foo() { }
 ;
 
 
@@ -178,17 +177,17 @@ var y = (0, moduleFile1_1.Foo)();
 
 
 FsWatches::
-/a/b/file1consumer1.ts:
+/a/b/file1Consumer1.ts:
   {}
-/a/b/file1consumer2.ts:
+/a/b/file1Consumer2.ts:
   {}
-/a/b/file1consumer3.ts: *new*
+/a/b/file1Consumer3.ts: *new*
   {}
-/a/b/globalfile3.ts:
+/a/b/globalFile3.ts:
   {}
-/a/b/modulefile1.ts:
+/a/b/moduleFile1.ts:
   {}
-/a/b/modulefile2.ts:
+/a/b/moduleFile2.ts:
   {}
 /a/b/tsconfig.json:
   {}

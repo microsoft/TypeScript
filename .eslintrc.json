@@ -17,9 +17,7 @@
     ],
     "plugins": [
         "@typescript-eslint",
-        "no-null",
-        "eslint-plugin-local",
-        "simple-import-sort"
+        "eslint-plugin-local"
     ],
     "ignorePatterns": [
         "**/node_modules/**",
@@ -61,6 +59,18 @@
         "prefer-object-spread": "error",
         "unicode-bom": ["error", "never"],
 
+        "no-restricted-syntax": [
+            "error",
+            {
+                "selector": "Literal[raw=null]",
+                "message": "Avoid using null; use undefined instead."
+            },
+            {
+                "selector": "TSNullKeyword",
+                "message": "Avoid using null; use undefined instead."
+            }
+        ],
+
         // Enabled in eslint:recommended, but not applicable here
         "no-extra-boolean-cast": "off",
         "no-case-declarations": "off",
@@ -81,6 +91,10 @@
             { "selector": "enumMember", "format": ["camelCase", "PascalCase"], "leadingUnderscore": "allow", "filter": { "regex": "^[A-Za-z]+_[A-Za-z]+$", "match": false } },
             { "selector": "property", "format": null }
         ],
+
+        "@typescript-eslint/unified-signatures": "error",
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": ["error", { "allowTernary": true }],
 
         // Rules enabled in typescript-eslint configs that are not applicable here
         "@typescript-eslint/ban-ts-comment": "off",
@@ -105,9 +119,15 @@
                 }
             }
         ],
-
-        // Todo: For each of these, investigate whether we want to enable them ✨
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                // Ignore: (solely underscores | starting with exactly one underscore)
+                "argsIgnorePattern": "^(_+$|_[^_])",
+                "varsIgnorePattern": "^(_+$|_[^_])"
+            }
+        ],
+        "@typescript-eslint/no-inferrable-types": "off",
 
         // Pending https://github.com/typescript-eslint/typescript-eslint/issues/4820
         "@typescript-eslint/prefer-optional-chain": "off",
@@ -124,14 +144,7 @@
         "local/no-in-operator": "error",
         "local/debug-assert": "error",
         "local/no-keywords": "error",
-        "local/jsdoc-format": "error",
-
-        // eslint-plugin-no-null
-        "no-null/no-null": "error",
-
-        // eslint-plugin-simple-import-sort
-        "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "local/jsdoc-format": "error"
     },
     "overrides": [
         // By default, the ESLint CLI only looks at .js files. But, it will also look at
@@ -157,14 +170,6 @@
                     { "name": "module" },
                     { "name": "exports" }
                 ]
-            }
-        },
-        {
-            // These files contain imports in a specific order that are generally unsafe to modify.
-            "files": ["**/_namespaces/**"],
-            "rules": {
-                "simple-import-sort/imports": "off",
-                "simple-import-sort/exports": "off"
             }
         }
     ]
