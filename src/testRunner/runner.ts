@@ -271,5 +271,5 @@ startTestEnvironment();
 // If running as emitted CJS, we want to start the tests here after startTestEnvironment.
 // If running bundled, we will do this in Harness.ts.
 if (__filename.endsWith("runner.js")) {
-    require("./tests");
+    require("./tests.js");
 }
