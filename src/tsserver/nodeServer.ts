@@ -339,7 +339,6 @@ export function initializeNodeSystem(): StartInput {
 
     let cancellationToken: ts.server.ServerCancellationToken;
     try {
-        // TODO(jakebailey): fix this
         const factory = require("./cancellationToken");
         cancellationToken = factory(sys.args);
     }
