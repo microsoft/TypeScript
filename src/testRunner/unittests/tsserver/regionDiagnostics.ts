@@ -4,9 +4,7 @@ import {
     TestSession,
     TestSessionConstructorOptions,
 } from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
 describe("unittests:: tsserver:: regionDiagnostics", () => {
     it("diagnostics for select nodes", () => {
