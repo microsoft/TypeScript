@@ -115,7 +115,7 @@ giant.ts(293,16): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(293,20): error TS1005: '{' expected.
 giant.ts(318,5): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(318,6): error TS2304: Cannot find name 'p'.
-giant.ts(318,6): error TS4025: Exported variable 'eV' has or is using private name 'p'.
+giant.ts(318,6): error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
 giant.ts(319,5): error TS1021: An index signature must have a type annotation.
 giant.ts(320,6): error TS1096: An index signature must have exactly one parameter.
 giant.ts(333,5): error TS2386: Overload signatures must all be optional or required.
@@ -163,7 +163,7 @@ giant.ts(436,20): error TS2300: Duplicate identifier 'tgF'.
 giant.ts(436,24): error TS1005: '{' expected.
 giant.ts(461,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(461,10): error TS2304: Cannot find name 'p'.
-giant.ts(461,10): error TS4025: Exported variable 'eV' has or is using private name 'p'.
+giant.ts(461,10): error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
 giant.ts(462,9): error TS1021: An index signature must have a type annotation.
 giant.ts(463,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(476,9): error TS2386: Overload signatures must all be optional or required.
@@ -224,7 +224,7 @@ giant.ts(560,21): error TS1183: An implementation cannot be declared in ambient 
 giant.ts(562,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(586,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(586,10): error TS2304: Cannot find name 'p'.
-giant.ts(586,10): error TS4025: Exported variable 'V' has or is using private name 'p'.
+giant.ts(586,10): error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
 giant.ts(587,9): error TS1021: An index signature must have a type annotation.
 giant.ts(588,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(601,9): error TS2386: Overload signatures must all be optional or required.
@@ -242,7 +242,7 @@ giant.ts(625,21): error TS1183: An implementation cannot be declared in ambient 
 giant.ts(627,21): error TS1183: An implementation cannot be declared in ambient contexts.
 giant.ts(652,9): error TS1169: A computed property name in an interface must refer to an expression whose type is a literal type or a 'unique symbol' type.
 giant.ts(652,10): error TS2304: Cannot find name 'p'.
-giant.ts(652,10): error TS4025: Exported variable 'eV' has or is using private name 'p'.
+giant.ts(652,10): error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
 giant.ts(653,9): error TS1021: An index signature must have a type annotation.
 giant.ts(654,10): error TS1096: An index signature must have exactly one parameter.
 giant.ts(667,9): error TS2386: Overload signatures must all be optional or required.
@@ -805,7 +805,7 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
          ~
 !!! error TS2304: Cannot find name 'p'.
          ~
-!!! error TS4025: Exported variable 'eV' has or is using private name 'p'.
+!!! error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
         [p1: string];
         ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1044,7 +1044,7 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
              ~
 !!! error TS2304: Cannot find name 'p'.
              ~
-!!! error TS4025: Exported variable 'eV' has or is using private name 'p'.
+!!! error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1291,7 +1291,7 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
              ~
 !!! error TS2304: Cannot find name 'p'.
              ~
-!!! error TS4025: Exported variable 'V' has or is using private name 'p'.
+!!! error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
@@ -1393,7 +1393,7 @@ giant.ts(675,30): error TS1183: An implementation cannot be declared in ambient 
              ~
 !!! error TS2304: Cannot find name 'p'.
              ~
-!!! error TS4025: Exported variable 'eV' has or is using private name 'p'.
+!!! error TS4033: Property '[p]' of exported interface has or is using private name 'p'.
             [p1: string];
             ~~~~~~~~~~~~~
 !!! error TS1021: An index signature must have a type annotation.
