@@ -549,11 +549,11 @@ function processEvents<K extends keyof DocumentEventMap>(events: Ev<K>[]) {
 >document.addEventListener(event.name, (ev) => event.callback(ev), { once: event.once }) : void
 >                                                                                        : ^^^^
 >document.addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
->                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^        ^^^    ^^        ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
+>                          : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
 >document : Document
 >         : ^^^^^^^^
 >addEventListener : { <K_1 extends keyof DocumentEventMap>(type: K_1, listener: (this: Document, ev: DocumentEventMap[K_1]) => any, options?: boolean | AddEventListenerOptions): void; (type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void; }
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^        ^^^    ^^        ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
+>                 : ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^        ^^                                                  ^^       ^^^                                 ^^^^^^^^^^    ^^      ^^        ^^                                  ^^       ^^^                                 ^^^^^^^^^^
 >event.name : K
 >           : ^
 >event : Ev<K>

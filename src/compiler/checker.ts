@@ -8311,7 +8311,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (
                 context.enclosingDeclaration &&
-                (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration))
+                (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration)) &&
+                !(sym && sym.flags & SymbolFlags.TypeParameter)
             ) {
                 const symAtLocation = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, context.enclosingDeclaration);
                 if ((symAtLocation !== sym && (!symAtLocation || !isTransientSymbol(symAtLocation) || symAtLocation.links.target !== sym)) || symAtLocation === unknownSymbol) {
@@ -8331,7 +8332,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 if (
-                    !(sym.flags & SymbolFlags.TypeParameter) && // Type parameters are visible in the curent context if they are are resolvable
+                    !(sym.flags & SymbolFlags.TypeParameter) && // Type parameters are visible in the current context if they are are resolvable
                     !isDeclarationName(node) &&
                     isSymbolAccessible(sym, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible
                 ) {
