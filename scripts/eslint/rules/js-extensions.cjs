@@ -35,6 +35,9 @@ module.exports = createRule({
                 source = node.source;
             }
 
+            // This is not 100% accurate; this could point to a nested package, or to a directory
+            // containing an index.js file. But we don't have anything like that in our repo,
+            // so this check is good enough. Replicate this logic at your own risk.
             if (source?.value.startsWith(".") && !/\.[cm]?js$/.test(source.value)) {
                 const quote = source.raw[0];
                 context.report({
