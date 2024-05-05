@@ -1,3 +1,13 @@
+# Notes on this Buildless TypeScript fork
+
+I hope that at some point this buildless feature can become a native part of TypeScript, but I also understand that this may not happen for a while, if ever. As such, this fork is designed with the understanding that I may be maintaining this thing for a while, and constantly merging in changes from upstream. To help out with this:
+* I've been trying to clearly mark areas of code that I've added or modified with `// BUILDLESS: added` or `// BUILDLESS: modified` comments. You'll also see XML-looking variants of those comments if I want to note that a section of code was added or modified, e.g. `// BUILDLESS: <added> ...some code... /// BUILDLESS: </added>`.
+* I don't want to modify too many places in this project so as to avoid merge conflicts. There's already a lot more changes in this project than what I was hoping to ever have. There's some feature requests that I may turn down, not because they wouldn't be nice to have, but because I'm worried about creating and maintaining too many modifications to this codebase.
+
+Anyways, that's the gist of it. Everything below this point came from the original TypeScript repo, and has some useful information to get up-and-running with this codebase.
+
+---
+
 # Instructions for Logging Issues
 
 ## 1. Read the FAQ
