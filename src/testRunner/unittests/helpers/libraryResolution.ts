@@ -91,3 +91,46 @@ export function getCommandLineArgsForLibResolution(withoutConfig: true | undefin
         ["project1/core.d.ts", "project1/utils.d.ts", "project1/file.ts", "project1/index.ts", "project1/file2.ts", "--lib", "es5,dom", "--traceResolution", "--explainFiles"] :
         ["-p", "project1", "--explainFiles"];
 }
+
+function getFsContentsForLibResolutionUnknown(): FsContents {
+    return {
+        "/home/src/projects/project1/utils.d.ts": `export const y = 10;`,
+        "/home/src/projects/project1/file.ts": `export const file = 10;`,
+        "/home/src/projects/project1/core.d.ts": `export const core = 10;`,
+        "/home/src/projects/project1/index.ts": `export const x = "type1";`,
+        "/home/src/projects/project1/file2.ts": dedent`
+            /// <reference lib="webworker2"/>
+            /// <reference lib="unknownlib"/>
+            /// <reference lib="scripthost"/>
+        `,
+        "/home/src/projects/project1/tsconfig.json": jsonToReadableText({
+            compilerOptions: {
+                composite: true,
+                traceResolution: true,
+            },
+        }),
+        "/home/src/lib/lib.d.ts": libContent,
+        "/home/src/lib/lib.webworker.d.ts": "interface WebWorkerInterface { }",
+        "/home/src/lib/lib.scripthost.d.ts": "interface ScriptHostInterface { }",
+    };
+}
+
+export function getFsForLibResolutionUnknown() {
+    return loadProjectFromFiles(
+        getFsContentsForLibResolutionUnknown(),
+        {
+            cwd: "/home/src/projects",
+            executingFilePath: "/home/src/lib/tsc.js",
+        },
+    );
+}
+
+export function getSysForLibResolutionUnknown() {
+    return createWatchedSystem(
+        getFsContentsForLibResolutionUnknown(),
+        {
+            currentDirectory: "/home/src/projects",
+            executingFilePath: "/home/src/lib/tsc.js",
+        },
+    );
+}
