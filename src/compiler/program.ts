@@ -88,7 +88,7 @@ import {
     fileIncludeReasonToDiagnostics,
     FilePreprocessingDiagnostics,
     FilePreprocessingDiagnosticsKind,
-    FilePreprocessingLibreferenceDiagnostic,
+    FilePreprocessingLibReferenceDiagnostic,
     FileReference,
     filter,
     find,
@@ -2067,7 +2067,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                                 diagnostic.args || emptyArray,
                             ),
                         );
-                    case FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic:
+                    case FilePreprocessingDiagnosticsKind.FilePreprocessingLibReferenceDiagnostic:
                         return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
                     case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
                         return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
@@ -2087,7 +2087,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return programDiagnostics;
     }
 
-    function filePreprocessingLibreferenceDiagnostic({ reason }: FilePreprocessingLibreferenceDiagnostic) {
+    function filePreprocessingLibreferenceDiagnostic({ reason }: FilePreprocessingLibReferenceDiagnostic) {
         const { file, pos, end } = getReferencedFileLocation(program, reason) as ReferenceFileLocation;
         const libReference = file.libReferenceDirectives[reason.index];
         const libName = getLibNameFromLibReference(libReference);
@@ -4164,7 +4164,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             }
             else {
                 (fileProcessingDiagnostics ||= []).push({
-                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingLibreferenceDiagnostic,
+                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingLibReferenceDiagnostic,
                     reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index },
                 });
             }
