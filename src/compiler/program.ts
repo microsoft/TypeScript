@@ -6,7 +6,6 @@ import {
     append,
     arrayIsEqualTo,
     AsExpression,
-    AutomaticTypeDirectiveFile,
     BuilderProgram,
     CancellationToken,
     canHaveDecorators,
@@ -215,7 +214,6 @@ import {
     JsonSourceFile,
     JsxEmit,
     length,
-    LibFile,
     libMap,
     LibResolution,
     libs,
@@ -249,7 +247,6 @@ import {
     OperationCanceledException,
     optionsHaveChanges,
     PackageId,
-    packageIdIsEqual,
     packageIdToPackageName,
     packageIdToString,
     PackageJsonInfoCache,
@@ -288,7 +285,6 @@ import {
     resolveTypeReferenceDirective,
     returnFalse,
     returnUndefined,
-    RootFile,
     SatisfiesExpression,
     ScriptKind,
     ScriptTarget,
@@ -1210,35 +1206,6 @@ interface DiagnosticCache<T extends Diagnostic> {
     allDiagnostics?: readonly T[];
 }
 
-function fileIncludeReasonIsEqual(a: FileIncludeReason, b: FileIncludeReason): boolean {
-    if (a === b) return true;
-    if (a.kind !== b.kind) return false;
-
-    switch (a.kind) {
-        case FileIncludeKind.RootFile:
-            Debug.type<RootFile>(b);
-            return a.index === b.index;
-        case FileIncludeKind.LibFile:
-            Debug.type<LibFile>(b);
-            return a.index === b.index;
-        case FileIncludeKind.SourceFromProjectReference:
-        case FileIncludeKind.OutputFromProjectReference:
-            Debug.type<ProjectReferenceFile>(b);
-            return a.index === b.index;
-        case FileIncludeKind.Import:
-        case FileIncludeKind.ReferenceFile:
-        case FileIncludeKind.TypeReferenceDirective:
-        case FileIncludeKind.LibReferenceDirective:
-            Debug.type<ReferencedFile>(b);
-            return a.file === b.file && a.index === b.index;
-        case FileIncludeKind.AutomaticTypeDirectiveFile:
-            Debug.type<AutomaticTypeDirectiveFile>(b);
-            return a.typeReference === b.typeReference && packageIdIsEqual(a.packageId, b.packageId);
-        default:
-            return Debug.assertNever(a);
-    }
-}
-
 /** @internal */
 export function isReferencedFile(reason: FileIncludeReason | undefined): reason is ReferencedFile {
     switch (reason?.kind) {
@@ -1617,6 +1584,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let classifiableNames: Set<__String>;
     const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
+    let filesWithReferencesProcessed: Set<Path> | undefined;
     let fileReasonsToChain: Map<Path, FileReasonToChainCache> | undefined;
     let reasonToRelatedInfo: Map<FileIncludeReason, DiagnosticWithLocation | false> | undefined;
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
@@ -1916,6 +1884,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
+        filesWithReferencesProcessed = undefined;
     }
 
     // Release any files we have acquired in the old program but are
@@ -3751,10 +3720,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const originalFileName = fileName;
         if (filesByName.has(path)) {
             const file = filesByName.get(path);
-            addFileIncludeReason(file || undefined, reason);
+            const addedReason = addFileIncludeReason(file || undefined, reason, /*checkExisting*/ true);
             // try to check if we've already seen this file but with a different casing in path
             // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-            if (file && !(options.forceConsistentCasingInFileNames === false)) {
+            if (file && addedReason && !(options.forceConsistentCasingInFileNames === false)) {
                 const checkedName = file.fileName;
                 const isRedirect = toPath(checkedName) !== toPath(fileName);
                 if (isRedirect) {
@@ -3831,7 +3800,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                 redirectTargetsMap.add(fileFromPackageId.path, fileName);
                 addFileToFilesByName(dupFile, path, fileName, redirectedPath);
-                addFileIncludeReason(dupFile, reason);
+                addFileIncludeReason(dupFile, reason, /*checkExisting*/ false);
                 sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                 processingOtherFiles!.push(dupFile);
                 return dupFile;
@@ -3852,7 +3821,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             file.originalFileName = originalFileName;
             file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
             file.packageJsonScope = sourceFileOptions.packageJsonScope;
-            addFileIncludeReason(file, reason);
+            addFileIncludeReason(file, reason, /*checkExisting*/ false);
 
             if (host.useCaseSensitiveFileNames()) {
                 const pathLowerCase = toFileNameLowerCase(path);
@@ -3885,17 +3854,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             else {
                 processingOtherFiles!.push(file);
             }
+            (filesWithReferencesProcessed ??= new Set()).add(file.path);
         }
         return file;
     }
 
-    function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason) {
-        if (file) {
-            const existing = fileReasons.get(file.path);
-            if (!some(existing, r => fileIncludeReasonIsEqual(r, reason))) {
-                fileReasons.add(file.path, reason);
-            }
+    function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason, checkExisting: boolean) {
+        if (file && (!checkExisting || !isReferencedFile(reason) || !filesWithReferencesProcessed?.has(reason.file))) {
+            fileReasons.add(file.path, reason);
+            return true;
         }
+        return false;
     }
 
     function addFileToFilesByName(file: SourceFile | undefined, path: Path, fileName: string, redirectedPath: Path | undefined) {

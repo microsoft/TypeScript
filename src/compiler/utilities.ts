@@ -828,8 +828,7 @@ export function createModuleNotFoundChain(sourceFile: SourceFile, host: TypeChec
     return result;
 }
 
-/** @internal */
-export function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
+function packageIdIsEqual(a: PackageId | undefined, b: PackageId | undefined): boolean {
     return a === b || !!a && !!b && a.name === b.name && a.subModuleName === b.subModuleName && a.version === b.version && a.peerDependencies === b.peerDependencies;
 }
 
