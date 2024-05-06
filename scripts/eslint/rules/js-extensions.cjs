@@ -1,7 +1,5 @@
 const { createRule } = require("./utils.cjs");
 
-/** @typedef {import("@typescript-eslint/utils").TSESTree.ImportDeclaration | import("@typescript-eslint/utils").TSESTree.ExportAllDeclaration | import("@typescript-eslint/utils").TSESTree.ExportNamedDeclaration | import("@typescript-eslint/utils").TSESTree.TSImportEqualsDeclaration} ImportOrExport */
-
 module.exports = createRule({
     name: "js-extensions",
     meta: {
@@ -9,7 +7,7 @@ module.exports = createRule({
             description: ``,
         },
         messages: {
-            missingJsExtension: `This relative import is missing a '.js' extension`,
+            missingJsExtension: `This relative module reference is missing a '.js' extension`,
         },
         schema: [],
         type: "suggestion",
@@ -18,7 +16,15 @@ module.exports = createRule({
     defaultOptions: [],
 
     create(context) {
-        /** @type {(node: ImportOrExport) => void} */
+        /** @type {(
+         *      node:
+         *          | import("@typescript-eslint/utils").TSESTree.ImportDeclaration
+         *          | import("@typescript-eslint/utils").TSESTree.ExportAllDeclaration
+         *          | import("@typescript-eslint/utils").TSESTree.ExportNamedDeclaration
+         *          | import("@typescript-eslint/utils").TSESTree.TSImportEqualsDeclaration
+         *          | import("@typescript-eslint/utils").TSESTree.TSModuleDeclaration
+         *  ) => void}
+         */
         const check = node => {
             let source;
             if (node.type === "TSImportEqualsDeclaration") {
@@ -29,6 +35,11 @@ module.exports = createRule({
                     && typeof moduleReference.expression.value === "string"
                 ) {
                     source = moduleReference.expression;
+                }
+            }
+            else if (node.type === "TSModuleDeclaration") {
+                if (node.kind === "module" && node.id.type === "Literal") {
+                    source = node.id;
                 }
             }
             else {
@@ -53,6 +64,7 @@ module.exports = createRule({
             ExportAllDeclaration: check,
             ExportNamedDeclaration: check,
             TSImportEqualsDeclaration: check,
+            TSModuleDeclaration: check,
         };
     },
 });
