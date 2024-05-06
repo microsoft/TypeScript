@@ -918,7 +918,7 @@ function replaceFirstIdentifierOfEntityName(name: EntityName, newIdentifier: Ide
     return factory.createQualifiedName(replaceFirstIdentifierOfEntityName(name.left, newIdentifier), name.right);
 }
 
-function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
+export function importSymbols(importAdder: ImportAdder, symbols: readonly Symbol[]) {
     symbols.forEach(s => importAdder.addImportFromExportedSymbol(s, /*isValidTypeOnlyUseSite*/ true));
 }
 
