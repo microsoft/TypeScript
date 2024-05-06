@@ -109,68 +109,40 @@ declare const e: AnyExtension;
 >e : Symbol(e, Decl(signatureCombiningRestParameters4.ts, 40, 13))
 >AnyExtension : Symbol(AnyExtension, Decl(signatureCombiningRestParameters4.ts, 37, 41))
 
-type Primitive = null | undefined | string | number | boolean | symbol | bigint;
->Primitive : Symbol(Primitive, Decl(signatureCombiningRestParameters4.ts, 40, 30))
-
-type MaybeThisParameterType<T> = Exclude<T, Primitive> extends (
->MaybeThisParameterType : Symbol(MaybeThisParameterType, Decl(signatureCombiningRestParameters4.ts, 42, 80))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 44, 28))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 44, 28))
->Primitive : Symbol(Primitive, Decl(signatureCombiningRestParameters4.ts, 40, 30))
-
-  ...args: any
->args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 44, 64))
-
-) => any
-  ? ThisParameterType<Exclude<T, Primitive>>
->ThisParameterType : Symbol(ThisParameterType, Decl(lib.es5.d.ts, --, --))
->Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 44, 28))
->Primitive : Symbol(Primitive, Decl(signatureCombiningRestParameters4.ts, 40, 30))
-
-  : any;
-
 type RemoveThis<T> = T extends (...args: any) => any
->RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 48, 8))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 50, 16))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 50, 16))
->args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 50, 32))
+>RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 40, 30))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
+>args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 42, 32))
 
   ? (...args: Parameters<T>) => ReturnType<T>
->args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+>args : Symbol(args, Decl(signatureCombiningRestParameters4.ts, 43, 5))
 >Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 50, 16))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
 >ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 50, 16))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
 
   : T;
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 50, 16))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 42, 16))
 
 declare function getExtensionField<T = any>(
->getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 52, 6))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 54, 35))
+>getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 44, 6))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 46, 35))
 
   extension: AnyExtension,
->extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 54, 44))
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 46, 44))
 >AnyExtension : Symbol(AnyExtension, Decl(signatureCombiningRestParameters4.ts, 37, 41))
 
   field: string,
->field : Symbol(field, Decl(signatureCombiningRestParameters4.ts, 55, 26))
-
-  context?: Omit<MaybeThisParameterType<T>, "parent">,
->context : Symbol(context, Decl(signatureCombiningRestParameters4.ts, 56, 16))
->Omit : Symbol(Omit, Decl(lib.es5.d.ts, --, --))
->MaybeThisParameterType : Symbol(MaybeThisParameterType, Decl(signatureCombiningRestParameters4.ts, 42, 80))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 54, 35))
+>field : Symbol(field, Decl(signatureCombiningRestParameters4.ts, 47, 26))
 
 ): RemoveThis<T>;
->RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 48, 8))
->T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 54, 35))
+>RemoveThis : Symbol(RemoveThis, Decl(signatureCombiningRestParameters4.ts, 40, 30))
+>T : Symbol(T, Decl(signatureCombiningRestParameters4.ts, 46, 35))
 
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
->extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 60, 5))
->getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 52, 6))
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+>getExtensionField : Symbol(getExtensionField, Decl(signatureCombiningRestParameters4.ts, 44, 6))
 >AnyConfig : Symbol(AnyConfig, Decl(signatureCombiningRestParameters4.ts, 35, 1))
 
   e,
@@ -180,15 +152,15 @@ const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
 );
 
 declare const extension: Mark<any>;
->extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 65, 13))
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 56, 13))
 >Mark : Symbol(Mark, Decl(signatureCombiningRestParameters4.ts, 18, 1))
 
 if (extendMarkSchema) {
->extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 60, 5))
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
 
   extendMarkSchema(extension); // error
->extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 60, 5))
->extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 65, 13))
+>extendMarkSchema : Symbol(extendMarkSchema, Decl(signatureCombiningRestParameters4.ts, 51, 5))
+>extension : Symbol(extension, Decl(signatureCombiningRestParameters4.ts, 56, 13))
 }
 
 export {};

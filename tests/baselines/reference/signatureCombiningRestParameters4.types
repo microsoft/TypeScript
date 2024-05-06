@@ -105,22 +105,6 @@ declare const e: AnyExtension;
 >e : AnyExtension
 >  : ^^^^^^^^^^^^
 
-type Primitive = null | undefined | string | number | boolean | symbol | bigint;
->Primitive : Primitive
->          : ^^^^^^^^^
-
-type MaybeThisParameterType<T> = Exclude<T, Primitive> extends (
->MaybeThisParameterType : MaybeThisParameterType<T>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-  ...args: any
->args : any
->     : ^^^
-
-) => any
-  ? ThisParameterType<Exclude<T, Primitive>>
-  : any;
-
 type RemoveThis<T> = T extends (...args: any) => any
 >RemoveThis : RemoveThis<T>
 >           : ^^^^^^^^^^^^^
@@ -134,8 +118,8 @@ type RemoveThis<T> = T extends (...args: any) => any
   : T;
 
 declare function getExtensionField<T = any>(
->getExtensionField : <T = any>(extension: AnyExtension, field: string, context?: Omit<MaybeThisParameterType<T>, "parent">) => RemoveThis<T>
->                  : ^ ^^^^^^^^         ^^            ^^     ^^      ^^       ^^^                                         ^^^^^             
+>getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
+>                  : ^ ^^^^^^^^         ^^            ^^     ^^      ^^^^^             
 
   extension: AnyExtension,
 >extension : AnyExtension
@@ -145,10 +129,6 @@ declare function getExtensionField<T = any>(
 >field : string
 >      : ^^^^^^
 
-  context?: Omit<MaybeThisParameterType<T>, "parent">,
->context : Omit<MaybeThisParameterType<T>, "parent"> | undefined
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 ): RemoveThis<T>;
 
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
@@ -156,8 +136,8 @@ const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getExtensionField<AnyConfig["extendMarkSchema"]>(  e,  "extendMarkSchema",) : ((extension: Node<any>) => Record<string, any>) | ((extension: Mark<any>) => Record<string, any>) | null | undefined
 >                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->getExtensionField : <T = any>(extension: AnyExtension, field: string, context?: Omit<MaybeThisParameterType<T>, "parent">) => RemoveThis<T>
->                  : ^ ^^^^^^^^         ^^            ^^     ^^      ^^       ^^^                                         ^^^^^^^^^^^^^^^^^^
+>getExtensionField : <T = any>(extension: AnyExtension, field: string) => RemoveThis<T>
+>                  : ^^^^^^^^^^         ^^            ^^     ^^      ^^^^^^^^^^^^^^^^^^
 
   e,
 >e : AnyExtension

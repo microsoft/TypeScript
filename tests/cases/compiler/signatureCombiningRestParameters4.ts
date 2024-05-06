@@ -43,14 +43,6 @@ type AnyExtension = Node | Mark;
 
 declare const e: AnyExtension;
 
-type Primitive = null | undefined | string | number | boolean | symbol | bigint;
-
-type MaybeThisParameterType<T> = Exclude<T, Primitive> extends (
-  ...args: any
-) => any
-  ? ThisParameterType<Exclude<T, Primitive>>
-  : any;
-
 type RemoveThis<T> = T extends (...args: any) => any
   ? (...args: Parameters<T>) => ReturnType<T>
   : T;
@@ -58,7 +50,6 @@ type RemoveThis<T> = T extends (...args: any) => any
 declare function getExtensionField<T = any>(
   extension: AnyExtension,
   field: string,
-  context?: Omit<MaybeThisParameterType<T>, "parent">,
 ): RemoveThis<T>;
 
 const extendMarkSchema = getExtensionField<AnyConfig["extendMarkSchema"]>(
