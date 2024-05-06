@@ -107,7 +107,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Default library for target 'es5'
 	node_modules/bar/foo.d.ts
 	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
-	  Imported via "./foo" from file 'node_modules/bar/index.d.ts'
 	  Root file specified for compilation
 	node_modules/bar/index.d.ts
 	  Imported via "bar" from file 'src/main.ts'
