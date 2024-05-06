@@ -21,16 +21,14 @@ function * foo2() {
 >  : ^
 
     yield */*comment4*/ [4];
->yield */*comment4*/ [4] : void
->                        : ^^^^
+>yield */*comment4*/ [4] : any
 >[4] : number[]
 >    : ^^^^^^^^
 >4 : 4
 >  : ^
 
     yield /*comment5*/* [5];
->yield /*comment5*/* [5] : void
->                        : ^^^^
+>yield /*comment5*/* [5] : any
 >[5] : number[]
 >    : ^^^^^^^^
 >5 : 5

@@ -46,8 +46,8 @@ function* g003() { // Generator<any (implicit), void, unknown>
     // NOTE: In strict mode, `[]` produces the type `never[]`.
     //       In non-strict mode, `[]` produces the type `undefined[]` which is implicitly any.
     yield* [];
->yield* [] : void
->          : ^^^^
+>yield* [] : any
+>          : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 }

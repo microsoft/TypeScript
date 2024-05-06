@@ -22,8 +22,8 @@ function* g(): IterableIterator<Foo> {
 >      : ^^^^^^^
 
     yield * [new Baz];
->yield * [new Baz] : void
->                  : ^^^^
+>yield * [new Baz] : any
+>                  : ^^^
 >[new Baz] : Baz[]
 >          : ^^^^^
 >new Baz : Baz

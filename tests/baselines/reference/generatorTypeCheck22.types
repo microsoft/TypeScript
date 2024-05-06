@@ -43,8 +43,7 @@ function* g3() {
 >    : ^^^^^^^^^^
 
     yield *[new Bar];
->yield *[new Bar] : void
->                 : ^^^^
+>yield *[new Bar] : any
 >[new Bar] : Bar[]
 >          : ^^^^^
 >new Bar : Bar
@@ -53,8 +52,7 @@ function* g3() {
 >    : ^^^^^^^^^^
 
     yield *[new Baz];
->yield *[new Baz] : void
->                 : ^^^^
+>yield *[new Baz] : any
 >[new Baz] : Baz[]
 >          : ^^^^^
 >new Baz : Baz

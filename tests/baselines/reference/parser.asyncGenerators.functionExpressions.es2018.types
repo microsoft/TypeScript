@@ -194,8 +194,8 @@ const f16 = async function * () {
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield * [];
->yield * [] : void
->           : ^^^^
+>yield * [] : any
+>           : ^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 

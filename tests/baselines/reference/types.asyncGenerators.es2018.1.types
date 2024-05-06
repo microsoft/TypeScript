@@ -65,8 +65,7 @@ async function * inferReturnType6() {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -79,8 +78,7 @@ async function * inferReturnType7() {
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -152,8 +150,7 @@ const assignability3: () => AsyncIterableIterator<number> = async function * () 
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -169,8 +166,7 @@ const assignability4: () => AsyncIterableIterator<number> = async function * () 
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -247,8 +243,7 @@ const assignability8: () => AsyncIterable<number> = async function * () {
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -264,8 +259,7 @@ const assignability9: () => AsyncIterable<number> = async function * () {
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -342,8 +336,7 @@ const assignability13: () => AsyncIterator<number> = async function * () {
 >                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -359,8 +352,7 @@ const assignability14: () => AsyncIterator<number> = async function * () {
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -429,8 +421,7 @@ async function * explicitReturnType3(): AsyncIterableIterator<number> {
 >                    : ^^^^^^                             
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -443,8 +434,7 @@ async function * explicitReturnType4(): AsyncIterableIterator<number> {
 >                    : ^^^^^^                             
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -509,8 +499,7 @@ async function * explicitReturnType8(): AsyncIterable<number> {
 >                    : ^^^^^^                     
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -523,8 +512,7 @@ async function * explicitReturnType9(): AsyncIterable<number> {
 >                    : ^^^^^^                     
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
@@ -589,8 +577,7 @@ async function * explicitReturnType13(): AsyncIterator<number> {
 >                     : ^^^^^^                     
 
     yield* [1, 2];
->yield* [1, 2] : void
->              : ^^^^
+>yield* [1, 2] : any
 >[1, 2] : number[]
 >       : ^^^^^^^^
 >1 : 1
@@ -603,8 +590,7 @@ async function * explicitReturnType14(): AsyncIterator<number> {
 >                     : ^^^^^^                     
 
     yield* [Promise.resolve(1)];
->yield* [Promise.resolve(1)] : void
->                            : ^^^^
+>yield* [Promise.resolve(1)] : any
 >[Promise.resolve(1)] : Promise<number>[]
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>

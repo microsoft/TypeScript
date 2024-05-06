@@ -5199,8 +5199,7 @@ export interface TypeChecker {
     /** @internal */ createPromiseType(type: Type): Type;
     /** @internal */ getPromiseType(): Type;
     /** @internal */ getPromiseLikeType(): Type;
-    /** @internal */ getAsyncIterableType(): Type | undefined;
-    /** @internal */ createTypeReference(target: Type, typeArguments: readonly Type[] | undefined): Type | undefined;
+    /** @internal */ getAnyAsyncIterableType(): Type | undefined;
 
     /**
      * Returns true if the "source" type is assignable to the "target" type.

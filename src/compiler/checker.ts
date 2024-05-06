@@ -1788,18 +1788,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getOptionalType: () => optionalType,
         getPromiseType: () => getGlobalPromiseType(/*reportErrors*/ false),
         getPromiseLikeType: () => getGlobalPromiseLikeType(/*reportErrors*/ false),
-        getAsyncIterableType: () => {
+        getAnyAsyncIterableType: () => {
             const type = getGlobalAsyncIterableType(/*reportErrors*/ false);
             if (type === emptyGenericType) return undefined;
-            return type;
-        },
-        createTypeReference: (target, typeArguments) => {
-            if (target !== emptyGenericType && getObjectFlags(target) & ObjectFlags.ClassOrInterface) {
-                const interfaceType = target as InterfaceType;
-                if (some(interfaceType.typeParameters)) {
-                    return createTypeReference(interfaceType as GenericType, typeArguments);
-                }
-            }
+            return createTypeReference(type, [anyType, anyType, anyType]);
         },
         isSymbolAccessible,
         isArrayType,
@@ -6850,7 +6842,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 ) {
                                     while (typeParameterCount > 0) {
                                         const typeArgument = typeArguments[typeParameterCount - 1];
-                                        const defaultType = getDefaultFromTypeParameter(type.target.typeParameters[typeParameterCount - 1]);
+                                        const typeParameter = type.target.typeParameters[typeParameterCount - 1];
+                                        const defaultType = getDefaultFromTypeParameter(typeParameter);
                                         if (!defaultType || !isTypeIdenticalTo(typeArgument, defaultType)) {
                                             break;
                                         }
@@ -12480,7 +12473,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
             // If typeNode is missing, we will error in checkJSDocTypedefTag.
             let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
-
             if (popTypeResolution()) {
                 const typeParameters = getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol);
                 if (typeParameters) {
@@ -12489,6 +12481,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.typeParameters = typeParameters;
                     links.instantiations = new Map<string, Type>();
                     links.instantiations.set(getTypeListId(typeParameters), type);
+                }
+                if (type === intrinsicMarkerType && symbol.escapedName === "BuiltinIteratorReturn") {
+                    type = compilerOptions.noUncheckedIndexedAccess ? undefinedType : anyType;
                 }
             }
             else {
@@ -45492,7 +45487,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-            if (!intrinsicTypeKinds.has(node.name.escapedText as string) || length(node.typeParameters) !== 1) {
+            if (
+                !(node.name.escapedText === "BuiltinIteratorReturn" && length(node.typeParameters) === 0) &&
+                !(intrinsicTypeKinds.has(node.name.escapedText as string) && length(node.typeParameters) === 1)
+            ) {
                 error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
             }
         }
