@@ -257,7 +257,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "outDir": "",
             "rootDir": "",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

@@ -145,7 +145,8 @@ Info seq  [hh:mm:ss:mss] event:
             "target": "es6",
             "module": "es6",
             "baseUrl": "",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

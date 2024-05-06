@@ -86,7 +86,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "allowUnusedLabels": true
+            "allowUnusedLabels": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

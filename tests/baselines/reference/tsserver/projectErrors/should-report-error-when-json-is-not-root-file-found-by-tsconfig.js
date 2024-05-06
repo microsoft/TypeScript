@@ -133,7 +133,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "resolveJsonModule": true,
             "composite": true,
-            "outDir": ""
+            "outDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

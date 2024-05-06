@@ -102,7 +102,8 @@ Info seq  [hh:mm:ss:mss] event:
             "types": [
               ""
             ],
-            "typeRoots": []
+            "typeRoots": [],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

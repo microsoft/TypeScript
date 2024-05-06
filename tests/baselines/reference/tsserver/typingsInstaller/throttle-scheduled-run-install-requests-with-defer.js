@@ -131,7 +131,9 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "allowJS": true,
-            "moduleResolution": "node10"
+            "moduleResolution": "node10",
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": true,
@@ -268,7 +270,9 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "allowJS": true,
-            "moduleResolution": "node10"
+            "moduleResolution": "node10",
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
           },
           "typeAcquisition": {
             "enable": true,

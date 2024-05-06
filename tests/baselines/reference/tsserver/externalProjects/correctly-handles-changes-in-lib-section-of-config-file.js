@@ -117,7 +117,8 @@ Info seq  [hh:mm:ss:mss] event:
             "sourceMap": false,
             "lib": [
               "es5"
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

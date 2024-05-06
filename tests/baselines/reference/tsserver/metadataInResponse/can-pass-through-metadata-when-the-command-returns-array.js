@@ -103,7 +103,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "plugins": [
               ""
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

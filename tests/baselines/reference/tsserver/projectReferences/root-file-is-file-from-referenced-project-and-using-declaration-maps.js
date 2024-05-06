@@ -421,7 +421,8 @@ Info seq  [hh:mm:ss:mss] event:
             "declarationMap": true,
             "outDir": "",
             "baseUrl": "",
-            "disableSourceOfProjectReferenceRedirect": true
+            "disableSourceOfProjectReferenceRedirect": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -658,7 +659,8 @@ Info seq  [hh:mm:ss:mss] event:
             "baseUrl": "",
             "paths": "",
             "tsBuildInfoFile": "",
-            "disableSourceOfProjectReferenceRedirect": true
+            "disableSourceOfProjectReferenceRedirect": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

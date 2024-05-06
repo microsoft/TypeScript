@@ -144,7 +144,8 @@ Info seq  [hh:mm:ss:mss] event:
             "module": "commonjs",
             "outDir": "",
             "rootDir": "",
-            "baseUrl": ""
+            "baseUrl": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

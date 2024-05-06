@@ -442,7 +442,8 @@ Info seq  [hh:mm:ss:mss] event:
               "es5",
               "dom"
             ],
-            "traceResolution": true
+            "traceResolution": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

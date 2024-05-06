@@ -223,7 +223,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "traceResolution": true
+            "traceResolution": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

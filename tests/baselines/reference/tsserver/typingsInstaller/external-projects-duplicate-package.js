@@ -220,7 +220,10 @@ Info seq  [hh:mm:ss:mss] event:
             "deferred": 0,
             "deferredSize": 0
           },
-          "compilerOptions": {},
+          "compilerOptions": {
+            "allowNonTsExtensions": true,
+            "noEmitForJsFiles": true
+          },
           "typeAcquisition": {
             "enable": true,
             "include": false,

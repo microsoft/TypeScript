@@ -174,7 +174,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "composite": true,
             "module": "none",
-            "disableSolutionSearching": true
+            "disableSolutionSearching": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

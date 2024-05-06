@@ -162,7 +162,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "outFile": ""
+            "outFile": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -327,7 +328,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "composite": true,
-            "outFile": ""
+            "outFile": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

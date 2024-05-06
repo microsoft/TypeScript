@@ -128,7 +128,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "outDir": "",
             "noEmitOnError": true,
-            "declaration": true
+            "declaration": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

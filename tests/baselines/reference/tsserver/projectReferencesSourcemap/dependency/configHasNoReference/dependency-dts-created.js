@@ -321,7 +321,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "composite": true,
             "declarationMap": true,
-            "declarationDir": ""
+            "declarationDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -490,7 +491,9 @@ Info seq  [hh:mm:ss:mss] event:
             "deferred": 0,
             "deferredSize": 0
           },
-          "compilerOptions": {},
+          "compilerOptions": {
+            "allowNonTsExtensions": true
+          },
           "typeAcquisition": {
             "enable": false,
             "include": false,

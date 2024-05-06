@@ -203,7 +203,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "outDir": "",
-            "rootDir": ""
+            "rootDir": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

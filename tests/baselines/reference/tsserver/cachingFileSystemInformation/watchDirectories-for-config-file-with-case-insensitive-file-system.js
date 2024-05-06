@@ -201,7 +201,8 @@ Info seq  [hh:mm:ss:mss] event:
               ""
             ],
             "baseUrl": "",
-            "paths": ""
+            "paths": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

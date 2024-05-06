@@ -268,7 +268,8 @@ Info seq  [hh:mm:ss:mss] event:
           },
           "compilerOptions": {
             "outDir": "",
-            "baseUrl": ""
+            "baseUrl": "",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -363,7 +364,8 @@ Info seq  [hh:mm:ss:mss] event:
             "composite": true,
             "outDir": "",
             "baseUrl": "",
-            "disableReferencedProjectLoad": true
+            "disableReferencedProjectLoad": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

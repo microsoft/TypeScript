@@ -402,7 +402,8 @@ Info seq  [hh:mm:ss:mss] event:
             "outDir": "",
             "rootDir": "",
             "composite": true,
-            "preserveSymlinks": true
+            "preserveSymlinks": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

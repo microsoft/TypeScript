@@ -324,7 +324,8 @@ Info seq  [hh:mm:ss:mss] event:
             "types": [],
             "declaration": true,
             "outDir": "",
-            "traceResolution": true
+            "traceResolution": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

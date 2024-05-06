@@ -253,7 +253,8 @@ Info seq  [hh:mm:ss:mss] event:
             "composite": true,
             "declaration": true,
             "forceConsistentCasingInFileNames": true,
-            "skipDefaultLibCheck": true
+            "skipDefaultLibCheck": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

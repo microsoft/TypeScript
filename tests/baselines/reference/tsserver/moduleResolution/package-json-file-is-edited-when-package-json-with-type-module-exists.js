@@ -157,7 +157,8 @@ Info seq  [hh:mm:ss:mss] event:
             "target": "es2016",
             "module": "node16",
             "outDir": "",
-            "traceResolution": true
+            "traceResolution": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

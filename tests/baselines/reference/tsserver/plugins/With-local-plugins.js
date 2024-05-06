@@ -221,7 +221,8 @@ Info seq  [hh:mm:ss:mss] event:
               "",
               "",
               ""
-            ]
+            ],
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

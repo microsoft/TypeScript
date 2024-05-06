@@ -106,7 +106,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "module": "none"
+            "module": "none",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

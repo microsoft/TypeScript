@@ -188,7 +188,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "disableReferencedProjectLoad": true
+            "disableReferencedProjectLoad": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

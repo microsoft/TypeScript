@@ -139,7 +139,8 @@ Info seq  [hh:mm:ss:mss] event:
           "compilerOptions": {
             "forceConsistentCasingInFileNames": true,
             "outFile": "",
-            "module": "system"
+            "module": "system",
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,

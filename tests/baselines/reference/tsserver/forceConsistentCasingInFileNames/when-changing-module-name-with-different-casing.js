@@ -122,7 +122,8 @@ Info seq  [hh:mm:ss:mss] event:
             "deferredSize": 0
           },
           "compilerOptions": {
-            "forceConsistentCasingInFileNames": true
+            "forceConsistentCasingInFileNames": true,
+            "allowNonTsExtensions": true
           },
           "typeAcquisition": {
             "enable": false,
