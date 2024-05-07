@@ -59,7 +59,7 @@
         "chokidar": "^3.6.0",
         "diff": "^5.2.0",
         "dprint": "^0.45.1",
-        "esbuild": "^0.21.0",
+        "esbuild": "^0.21.1",
         "eslint": "^8.57.0",
         "eslint-formatter-autolinkable-stylish": "^1.3.0",
         "eslint-plugin-local": "^4.2.2",
