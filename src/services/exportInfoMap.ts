@@ -1,6 +1,7 @@
 import {
     __String,
     addToSeen,
+    append,
     arrayIsEqualTo,
     CancellationToken,
     CompilerOptions,
@@ -10,15 +11,15 @@ import {
     emptyArray,
     ensureTrailingDirectorySeparator,
     findIndex,
-    firstDefined,
     forEachAncestorDirectory,
     forEachEntry,
     FutureSourceFile,
     getBaseFileName,
     GetCanonicalFileName,
+    getDefaultLikeExportNameFromDeclaration,
     getDirectoryPath,
+    getEmitScriptTarget,
     getLocalSymbolForExportDefault,
-    getNameForExportedSymbol,
     getNamesForExportedSymbol,
     getNodeModulePathParts,
     getPackageNameFromTypesPackageName,
@@ -28,12 +29,9 @@ import {
     hostGetCanonicalFileName,
     hostUsesCaseSensitiveFileNames,
     InternalSymbolName,
-    isExportAssignment,
-    isExportSpecifier,
     isExternalModuleNameRelative,
     isExternalModuleSymbol,
     isExternalOrCommonJsModule,
-    isIdentifier,
     isKnownSymbol,
     isNonGlobalAmbientModule,
     isPrivateIdentifierSymbol,
@@ -42,13 +40,13 @@ import {
     ModuleSpecifierCache,
     ModuleSpecifierResolutionHost,
     moduleSpecifiers,
+    moduleSymbolToValidIdentifier,
     nodeModulesPathPart,
     PackageJsonImportFilter,
     Path,
     pathContainsNodeModules,
     Program,
     skipAlias,
-    skipOuterExpressions,
     SourceFile,
     startsWith,
     Statement,
@@ -56,7 +54,6 @@ import {
     Symbol,
     SymbolFlags,
     timestamp,
-    tryCast,
     TypeChecker,
     unescapeLeadingUnderscores,
     unmangleScopedPackageName,
@@ -502,14 +499,13 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
     }
 
     host.log?.("getExportInfoMap: cache miss or empty; calculating new results");
-    const compilerOptions = program.getCompilerOptions();
     let moduleCount = 0;
     try {
         forEachExternalModuleToImportFrom(program, host, preferences, /*useAutoImportProvider*/ true, (moduleSymbol, moduleFile, program, isFromPackageJson) => {
             if (++moduleCount % 100 === 0) cancellationToken?.throwIfCancellationRequested();
             const seenExports = new Map<__String, true>();
             const checker = program.getTypeChecker();
-            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+            const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
             // Note: I think we shouldn't actually see resolved module symbols here, but weird merges
             // can cause it to happen: see 'completionsImport_mergedReExport.ts'
             if (defaultInfo && isImportableSymbol(defaultInfo.symbol, checker)) {
@@ -551,61 +547,49 @@ export function getExportInfoMap(importingFile: SourceFile | FutureSourceFile, h
 }
 
 /** @internal */
-export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions) {
-    const exported = getDefaultLikeExportWorker(moduleSymbol, checker);
-    if (!exported) return undefined;
-    const { symbol, exportKind } = exported;
-    const info = getDefaultExportInfoWorker(symbol, checker, compilerOptions);
-    return info && { symbol, exportKind, ...info };
-}
-
-function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
-    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
-}
-
-function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol; readonly exportKind: ExportKind; } | undefined {
+export function getDefaultLikeExportInfo(moduleSymbol: Symbol, checker: TypeChecker) {
     const exportEquals = checker.resolveExternalModuleSymbol(moduleSymbol);
     if (exportEquals !== moduleSymbol) return { symbol: exportEquals, exportKind: ExportKind.ExportEquals };
     const defaultExport = checker.tryGetMemberInModuleExports(InternalSymbolName.Default, moduleSymbol);
     if (defaultExport) return { symbol: defaultExport, exportKind: ExportKind.Default };
 }
 
-/** @internal */
-export function getDefaultExportInfoWorker(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions): { readonly resolvedSymbol: Symbol; readonly name: string; } | undefined {
-    const localSymbol = getLocalSymbolForExportDefault(defaultExport);
-    if (localSymbol) return { resolvedSymbol: localSymbol, name: localSymbol.name };
-
-    const name = getNameForExportDefault(defaultExport);
-    if (name !== undefined) return { resolvedSymbol: defaultExport, name };
-
-    if (defaultExport.flags & SymbolFlags.Alias) {
-        const aliased = checker.getImmediateAliasedSymbol(defaultExport);
-        if (aliased && aliased.parent) {
-            // - `aliased` will be undefined if the module is exporting an unresolvable name,
-            //    but we can still offer completions for it.
-            // - `aliased.parent` will be undefined if the module is exporting `globalThis.something`,
-            //    or another expression that resolves to a global.
-            return getDefaultExportInfoWorker(aliased, checker, compilerOptions);
-        }
-    }
-
-    if (
-        defaultExport.escapedName !== InternalSymbolName.Default &&
-        defaultExport.escapedName !== InternalSymbolName.ExportEquals
-    ) {
-        return { resolvedSymbol: defaultExport, name: defaultExport.getName() };
-    }
-    return { resolvedSymbol: defaultExport, name: getNameForExportedSymbol(defaultExport, compilerOptions.target) };
+function isImportableSymbol(symbol: Symbol, checker: TypeChecker) {
+    return !checker.isUndefinedSymbol(symbol) && !checker.isUnknownSymbol(symbol) && !isKnownSymbol(symbol) && !isPrivateIdentifierSymbol(symbol);
 }
 
-function getNameForExportDefault(symbol: Symbol): string | undefined {
-    return symbol.declarations && firstDefined(symbol.declarations, declaration => {
-        if (isExportAssignment(declaration)) {
-            return tryCast(skipOuterExpressions(declaration.expression), isIdentifier)?.text;
+/**
+ * @internal
+ * May call `cb` multiple times with the same name.
+ * Terminates when `cb` returns a truthy value.
+ */
+export function forEachNameOfDefaultExport<T>(defaultExport: Symbol, checker: TypeChecker, compilerOptions: CompilerOptions, preferCapitalizedNames: boolean, cb: (name: string) => T | undefined): T | undefined {
+    let chain: Symbol[] | undefined;
+    let current: Symbol | undefined = defaultExport;
+
+    while (current) {
+        // The predecessor to this function also looked for a name on the `localSymbol`
+        // of default exports, but I think `getDefaultLikeExportNameFromDeclaration`
+        // accomplishes the same thing via syntax - no tests failed when I removed it.
+        const fromDeclaration = getDefaultLikeExportNameFromDeclaration(current);
+        if (fromDeclaration) {
+            const final = cb(fromDeclaration);
+            if (final) return final;
         }
-        else if (isExportSpecifier(declaration)) {
-            Debug.assert(declaration.name.text === InternalSymbolName.Default, "Expected the specifier to be a default export");
-            return declaration.propertyName && declaration.propertyName.text;
+
+        if (current.escapedName !== InternalSymbolName.Default && current.escapedName !== InternalSymbolName.ExportEquals) {
+            const final = cb(current.name);
+            if (final) return final;
         }
-    });
+
+        chain = append(chain, current);
+        current = current.flags & SymbolFlags.Alias ? checker.getImmediateAliasedSymbol(current) : undefined;
+    }
+
+    for (const symbol of chain ?? emptyArray) {
+        if (symbol.parent && isExternalModuleSymbol(symbol.parent)) {
+            const final = cb(moduleSymbolToValidIdentifier(symbol.parent, getEmitScriptTarget(compilerOptions), preferCapitalizedNames));
+            if (final) return final;
+        }
+    }
 }

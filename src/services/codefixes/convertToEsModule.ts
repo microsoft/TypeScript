@@ -54,6 +54,7 @@ import {
     mapIterator,
     MethodDeclaration,
     Modifier,
+    moduleSpecifierToValidIdentifier,
     Node,
     NodeArray,
     NodeFlags,
@@ -77,7 +78,6 @@ import {
 } from "../_namespaces/ts";
 import {
     createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
     registerCodeFix,
 } from "../_namespaces/ts.codefix";
 

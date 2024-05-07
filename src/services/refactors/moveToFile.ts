@@ -118,6 +118,7 @@ import {
     ModifierLike,
     ModuleDeclaration,
     ModuleKind,
+    moduleSpecifierToValidIdentifier,
     NamedImportBindings,
     Node,
     NodeFlags,
@@ -392,7 +393,7 @@ function updateNamespaceLikeImport(
     oldImportNode: SupportedImport,
     quotePreference: QuotePreference,
 ): void {
-    const preferredNewNamespaceName = codefix.moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
+    const preferredNewNamespaceName = moduleSpecifierToValidIdentifier(newModuleSpecifier, ScriptTarget.ESNext);
     let needUniqueName = false;
     const toChange: Identifier[] = [];
     FindAllReferences.Core.eachSymbolReferenceInFile(oldImportId, checker, sourceFile, ref => {
