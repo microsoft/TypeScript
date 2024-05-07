@@ -91,7 +91,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/app.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /A/B/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -162,23 +161,6 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/A/B/tsconfig.json",
-        "configFile": "/A/B/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "No inputs were found in config file '/A/B/tsconfig.json'. Specified 'include' paths were '[]' and 'exclude' paths were '[]'.",
-            "code": 18003,
-            "category": "error"
-          }
-        ]
       }
     }
 Info seq  [hh:mm:ss:mss] event:

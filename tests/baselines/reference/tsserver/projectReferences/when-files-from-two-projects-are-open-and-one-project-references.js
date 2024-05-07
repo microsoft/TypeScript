@@ -963,6 +963,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/indirect/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/indirect/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/coreRef1/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1049,6 +1060,17 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/coreRef1/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/coreRef1/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json
@@ -1140,6 +1162,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/indirectDisabledChildLoad1/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1227,6 +1260,17 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/indirectDisabledChildLoad2/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/refToCoreRef3/tsconfig.json
@@ -1317,6 +1361,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/refToCoreRef3/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/refToCoreRef3/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/myproject/coreRef3/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -1403,6 +1458,17 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/coreRef3/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/coreRef3/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/core/src/file1.d.ts 2000 undefined Project: /user/username/projects/myproject/core/tsconfig.json WatchType: Missing generated file
