@@ -8301,21 +8301,25 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 return { introducesError, node: attachSymbolToLeftmostIdentifier(node) as T };
             }
             sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
-            if (sym === unknownSymbol) {
-                // When we create a fake scope some parameters may actually not be usable
-                // either because they are the expanded rest parameter,
-                // or because they are the newly added parameters from the tuple, which might have different meanings in teh original context
-                // So we add unknownSymbol for these, and we fall back to inference when we encounter them
-                introducesError = true;
-                return { introducesError, node, sym };
-            }
             if (
                 context.enclosingDeclaration &&
                 (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration)) &&
                 !(sym && sym.flags & SymbolFlags.TypeParameter)
             ) {
+                // Some declarations may be transplanted to a new location.
+                // When this happens we need to make sure that the name has the same meaning at both locations
+                // We also check for the unknownSymbol because when we create a fake scope some parameters may actually not be usable
+                // either because they are the expanded rest parameter,
+                // or because they are the newly added parameters from the tuple, which might have different meanings in the original context
                 const symAtLocation = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, context.enclosingDeclaration);
-                if ((symAtLocation !== sym && (!symAtLocation || !isTransientSymbol(symAtLocation) || symAtLocation.links.target !== sym)) || symAtLocation === unknownSymbol) {
+                if (
+                    // Check for unusable parameters symbols
+                    symAtLocation === unknownSymbol ||
+                    // If the symbol is not found, but was not found in the original scope either we probably have an error, don't reuse the node
+                    (symAtLocation === undefined && sym !== undefined) ||
+                    // If the symbol is found both in declaration scope and in current scope then it shoudl point to the same reference
+                    (symAtLocation && sym && !getSymbolIfSameReference(symAtLocation, sym))
+                ) {
                     introducesError = true;
                     return { introducesError, node, sym };
                 }
