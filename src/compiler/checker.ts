@@ -3651,7 +3651,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // Declaration files (and ambient modules)
         if (!file || file.isDeclarationFile) {
             // Unambiguously ESM files do not have a synthetic default
-            if (file?.impliedNodeFormat === ModuleKind.ESNext) {
+            if (file && host.getImpliedNodeFormatForEmit(file) === ModuleKind.ESNext) {
                 return false;
             }
             // Definitely cannot have a synthetic default if they have a syntactic default member specified
