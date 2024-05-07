@@ -2845,7 +2845,6 @@ export class ConfiguredProject extends Project {
      */
     override updateGraph(): boolean {
         if (this.deferredClose) return false;
-        const isInitialLoad = this.isInitialLoadPending();
         this.isInitialLoadPending = returnFalse;
         const updateLevel = this.pendingUpdateLevel;
         this.pendingUpdateLevel = ProgramUpdateLevel.Update;
@@ -2859,7 +2858,7 @@ export class ConfiguredProject extends Project {
                 this.openFileWatchTriggered.clear();
                 const reason = Debug.checkDefined(this.pendingUpdateReason);
                 this.pendingUpdateReason = undefined;
-                this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
+                this.projectService.reloadConfiguredProject(this, reason, /*clearSemanticCache*/ false);
                 result = true;
                 break;
             default:

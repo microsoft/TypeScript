@@ -667,7 +667,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 5,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Reloading configured project /users/username/projects/project/A/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

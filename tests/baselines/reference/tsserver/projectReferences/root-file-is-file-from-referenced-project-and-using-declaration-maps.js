@@ -541,7 +541,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

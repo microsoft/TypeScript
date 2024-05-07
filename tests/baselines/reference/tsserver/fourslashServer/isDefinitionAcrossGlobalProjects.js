@@ -309,7 +309,6 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "references-full"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /a/index.ts position 35 in project /a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

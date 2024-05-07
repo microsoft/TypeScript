@@ -225,7 +225,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

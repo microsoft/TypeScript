@@ -939,7 +939,6 @@ Projects::
         /user/username/projects/myproject/main/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -2045,7 +2044,6 @@ Projects::
     noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -2569,7 +2567,6 @@ Projects::
     noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -3230,7 +3227,6 @@ Projects::
     noOpenRef: true
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/main/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/main/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -3858,7 +3854,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -4609,7 +4604,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -5465,7 +5459,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -5953,7 +5946,6 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/dependency/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/dependency/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

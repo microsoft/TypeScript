@@ -338,7 +338,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/compiler/program.ts position 110 in project /user/username/projects/solution/compiler/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

@@ -428,7 +428,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/solution/shared/src/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/solution/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] Finding references to /user/username/projects/solution/shared/src/index.ts position 21 in project /user/username/projects/solution/shared/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/solution/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

@@ -661,7 +661,6 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/container/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

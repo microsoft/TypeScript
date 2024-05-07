@@ -478,7 +478,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -582,7 +581,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -769,7 +767,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -942,7 +939,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1158,7 +1154,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -1251,7 +1246,6 @@ Info seq  [hh:mm:ss:mss] event:
       }
     }
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

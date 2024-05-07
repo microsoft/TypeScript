@@ -405,7 +405,6 @@ Projects::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.jsonFailedLookupInvalidation
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -645,7 +644,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/c/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /user/username/projects/myproject/c/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

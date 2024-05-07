@@ -2885,22 +2885,20 @@ export class ProjectService {
      *
      * @internal
      */
-    reloadConfiguredProject(project: ConfiguredProject, reason: string, isInitialLoad: boolean, clearSemanticCache: boolean) {
+    reloadConfiguredProject(project: ConfiguredProject, reason: string, clearSemanticCache: boolean) {
         // At this point, there is no reason to not have configFile in the host
         const host = project.getCachedDirectoryStructureHost();
         if (clearSemanticCache) this.clearSemanticCache(project);
 
         // Clear the cache since we are reloading the project from disk
         host.clearCache();
-        const configFileName = project.getConfigFilePath();
-        this.logger.info(`${isInitialLoad ? "Loading" : "Reloading"} configured project ${configFileName}`);
 
         // Load project from the disk
         this.loadConfiguredProject(project, reason);
         project.skipConfigDiagEvent = true;
         project.updateGraph();
 
-        this.sendConfigFileDiagEvent(project, configFileName);
+        this.sendConfigFileDiagEvent(project, project.getConfigFilePath());
     }
 
     /** @internal */
@@ -3697,7 +3695,7 @@ export class ProjectService {
         const updatedProjects = new Set<ConfiguredProject>();
         const reloadChildProject = (child: ConfiguredProject) => {
             if (tryAddToSet(updatedProjects, child)) {
-                this.reloadConfiguredProject(child, reason, /*isInitialLoad*/ false, /*clearSemanticCache*/ true);
+                this.reloadConfiguredProject(child, reason, /*clearSemanticCache*/ true);
             }
         };
         // try to reload config file for all open files
@@ -3716,7 +3714,7 @@ export class ProjectService {
                 const project = this.findConfiguredProjectByProjectName(configFileName) || this.createConfiguredProject(configFileName);
                 if (tryAddToSet(updatedProjects, project)) {
                     // reload from the disk
-                    this.reloadConfiguredProject(project, reason, /*isInitialLoad*/ false, /*clearSemanticCache*/ true);
+                    this.reloadConfiguredProject(project, reason, /*clearSemanticCache*/ true);
                     // If this project does not contain this file directly, reload the project till the reloaded project contains the script info directly
                     if (!projectContainsInfoDirectly(project, info)) {
                         const referencedProject = forEachResolvedProjectReferenceProject(
