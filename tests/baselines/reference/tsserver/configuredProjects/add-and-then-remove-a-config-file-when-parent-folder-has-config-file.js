@@ -332,7 +332,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/folder/commonFile2.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": []
       }
@@ -2419,7 +2419,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/folder/commonFile2.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": []
       }
@@ -3031,7 +3031,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/folder/commonFile2.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": []
       }
@@ -3814,7 +3814,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/myproject/tsconfig.json",
+        "triggerFile": "/user/username/projects/myproject/folder/commonFile2.ts",
         "configFile": "/user/username/projects/myproject/tsconfig.json",
         "diagnostics": []
       }

@@ -198,7 +198,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "configFileName": "/user/username/projects/a/tsconfig.json",
         "diagnostics": [],
-        "triggerFile": "/user/username/projects/a/tsconfig.json"
+        "triggerFile": "/user/username/projects/a/a.ts"
       }
     }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/a/tsconfig.json' (Configured)

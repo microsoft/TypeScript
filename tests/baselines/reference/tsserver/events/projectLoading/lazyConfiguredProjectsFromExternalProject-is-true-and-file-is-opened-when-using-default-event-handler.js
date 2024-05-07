@@ -199,7 +199,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/a/tsconfig.json",
+        "triggerFile": "/user/username/projects/a/a.ts",
         "configFile": "/user/username/projects/a/tsconfig.json",
         "diagnostics": []
       }

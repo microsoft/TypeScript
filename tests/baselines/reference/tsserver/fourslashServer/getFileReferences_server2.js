@@ -143,6 +143,17 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/server/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -199,6 +210,28 @@ Info seq  [hh:mm:ss:mss] event:
         "projectName": "/packages/server/tsconfig.json"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/packages/server/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/packages/server/index.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          },
+          {
+            "text": "Cannot write file '/packages/server/router.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/shared/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -238,6 +271,17 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/shared/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/tsconfig.json",
+        "configFile": "/packages/shared/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/client/tsconfig.json
@@ -283,50 +327,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/packages/client/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/tsconfig.json",
-        "diagnostics": []
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/packages/server/tsconfig.json",
-        "diagnostics": [
-          {
-            "text": "Cannot write file '/packages/server/index.js' because it would overwrite input file.",
-            "code": 5055,
-            "category": "error"
-          },
-          {
-            "text": "Cannot write file '/packages/server/router.js' because it would overwrite input file.",
-            "code": 5055,
-            "category": "error"
-          }
-        ]
-      }
-    }
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "configFileDiag",
-      "body": {
-        "triggerFile": "/tsconfig.json",
-        "configFile": "/packages/shared/tsconfig.json",
-        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] event:

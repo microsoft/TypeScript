@@ -550,6 +550,17 @@ Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
+        "configFile": "/user/username/projects/container/lib/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
       "event": "projectLoadingStart",
       "body": {
         "projectName": "/user/username/projects/container/tsconfig.json",
@@ -744,6 +755,17 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/exec/tsconfig.json",
+        "configFile": "/user/username/projects/container/exec/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json

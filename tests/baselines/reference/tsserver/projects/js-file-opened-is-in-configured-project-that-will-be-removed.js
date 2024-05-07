@@ -417,6 +417,23 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/apps/editor/scripts/createConfigVariable.js",
+        "configFile": "/user/username/projects/myproject/apps/editor/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "Cannot write file '/user/username/projects/myproject/apps/editor/src/src.js' because it would overwrite input file.",
+            "code": 5055,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
