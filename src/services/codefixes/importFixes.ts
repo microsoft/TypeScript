@@ -1,4 +1,10 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,
     AnyImportSyntax,
@@ -148,13 +154,7 @@ import {
     TypeOnlyAliasDeclaration,
     UserPreferences,
     VariableDeclarationInitializedTo,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const importFixName = "import";

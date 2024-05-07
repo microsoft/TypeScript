@@ -9,7 +9,7 @@ import {
     SortedArray,
     SortedReadonlyArray,
     TextSpan,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const emptyArray: never[] = [] as never[];

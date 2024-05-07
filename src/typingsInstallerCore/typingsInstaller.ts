@@ -18,7 +18,7 @@ import {
     Version,
     version,
     versionMajorMinor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionPackageInstalled,
     ActionSet,
@@ -39,7 +39,7 @@ import {
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
     WatchTypingLocations,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 interface NpmConfig {
     devDependencies: MapLike<any>;

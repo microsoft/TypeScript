@@ -1,9 +1,9 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { TscCompileSystem } from "./tsc";
-import { TestServerHost } from "./virtualFileSystemWithWatch";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { TscCompileSystem } from "./tsc.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
 export type CommandLineProgram = [ts.Program, ts.BuilderProgram?];
 export interface CommandLineCallbacks {

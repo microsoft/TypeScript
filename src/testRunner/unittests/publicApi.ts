@@ -1,11 +1,11 @@
-import * as documents from "../_namespaces/documents";
-import * as fakes from "../_namespaces/fakes";
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as vfs from "../_namespaces/vfs";
-import { jsonToReadableText } from "./helpers";
-import { libContent } from "./helpers/contents";
-import { loadProjectFromFiles } from "./helpers/vfs";
+import * as documents from "../_namespaces/documents.js";
+import * as fakes from "../_namespaces/fakes.js";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as vfs from "../_namespaces/vfs.js";
+import { jsonToReadableText } from "./helpers.js";
+import { libContent } from "./helpers/contents.js";
+import { loadProjectFromFiles } from "./helpers/vfs.js";
 
 describe("unittests:: Public APIs", () => {
     function verifyApi(fileName: string) {

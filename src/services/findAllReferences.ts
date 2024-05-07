@@ -1,4 +1,16 @@
 import {
+    createImportTracker,
+    ExportInfo,
+    ExportKind,
+    findModuleReferences,
+    getExportInfo,
+    getImportOrExportSymbol,
+    ImportExport,
+    ImportsResult,
+    ImportTracker,
+    ModuleReference,
+} from "./_namespaces/ts.FindAllReferences.js";
+import {
     __String,
     addToSeen,
     append,
@@ -253,19 +265,7 @@ import {
     TypeChecker,
     TypeLiteralNode,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import {
-    createImportTracker,
-    ExportInfo,
-    ExportKind,
-    findModuleReferences,
-    getExportInfo,
-    getImportOrExportSymbol,
-    ImportExport,
-    ImportsResult,
-    ImportTracker,
-    ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface SymbolAndEntries {

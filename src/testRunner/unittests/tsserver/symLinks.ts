@@ -1,11 +1,11 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     buildMonorepoSymlinkedSiblingPackage1,
     cleanMonorepoSymlinkedSiblingPackage1,
     getMonorepoSymlinkedSiblingPackagesSys,
-} from "../helpers/monorepoSymlinkedSiblingPackages";
+} from "../helpers/monorepoSymlinkedSiblingPackages.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -13,7 +13,7 @@ import {
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
@@ -22,7 +22,7 @@ import {
     SymLink,
     TestServerHost,
     TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: symLinks::", () => {
     it("rename in common file renames all project", () => {

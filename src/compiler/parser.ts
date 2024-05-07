@@ -397,8 +397,8 @@ import {
     WhileStatement,
     WithStatement,
     YieldExpression,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 const enum SignatureFlags {
     None = 0,

@@ -1,13 +1,13 @@
 import {
     CommandLineOption,
     optionDeclarations,
-} from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+} from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     noChangeRun,
     verifyTsc,
-} from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+} from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 function verifyNoCheckFlag(variant: string) {
     function verifyNoCheckWorker(subScenario: string, declAText: string, commandLineArgs: readonly string[]) {

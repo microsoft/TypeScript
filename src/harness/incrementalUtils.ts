@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry) {
     const str: string[] = [];

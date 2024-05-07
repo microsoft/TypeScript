@@ -1,24 +1,24 @@
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
-import { ensureErrorFreeBuild } from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { ensureErrorFreeBuild } from "../helpers/solutionBuilder.js";
 import {
     commonFile1,
     commonFile2,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: ConfiguredProjects", () => {
     it("create configured project without file list", () => {
