@@ -17,7 +17,7 @@ import {
     SourceFile,
     textChanges,
     UserPreferences,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     addNewFileToTsconfig,
     createNewFileName,
@@ -26,7 +26,7 @@ import {
     getUsageInfo,
     registerRefactor,
     ToMove,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Move to a new file";
 const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);

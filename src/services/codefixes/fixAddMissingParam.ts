@@ -1,4 +1,13 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    ImportAdder,
+    importSymbols,
+    registerCodeFix,
+    tryGetAutoImportableReferenceFromTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     ArrowFunction,
     CodeFixAction,
@@ -44,16 +53,7 @@ import {
     TypeChecker,
     TypeNode,
     UserPreferences,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    ImportAdder,
-    importSymbols,
-    registerCodeFix,
-    tryGetAutoImportableReferenceFromTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const addMissingParamFixId = "addMissingParam";
 const addOptionalParamFixId = "addOptionalParam";

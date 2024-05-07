@@ -73,8 +73,8 @@ import {
     TodoComment,
     TodoCommentDescriptor,
     UserPreferences,
-} from "./_namespaces/ts";
-import { protocol } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { protocol } from "./_namespaces/ts.server.js";
 
 export interface SessionClientHost extends LanguageServiceHost {
     writeMessage(message: string): void;

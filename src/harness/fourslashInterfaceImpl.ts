@@ -1,5 +1,5 @@
-import * as FourSlash from "./_namespaces/FourSlash";
-import * as ts from "./_namespaces/ts";
+import * as FourSlash from "./_namespaces/FourSlash.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class Test {
     constructor(private state: FourSlash.TestState) {

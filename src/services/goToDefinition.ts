@@ -1,3 +1,4 @@
+import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences.js";
 import {
     AssignmentDeclarationKind,
     AssignmentExpression,
@@ -105,8 +106,7 @@ import {
     TypeFlags,
     TypeReference,
     unescapeLeadingUnderscores,
-} from "./_namespaces/ts";
-import { isContextWithStartAndEndNode } from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getDefinitionAtPosition(program: Program, sourceFile: SourceFile, position: number, searchOtherFilesOnly?: boolean, stopAtAlias?: boolean): readonly DefinitionInfo[] | undefined {

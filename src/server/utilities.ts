@@ -5,13 +5,13 @@ import {
     identity,
     perfLogger,
     SortedArray,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     Logger,
     LogLevel,
     NormalizedPath,
     ServerHost,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 /** @internal */
 export class ThrottledOperations {

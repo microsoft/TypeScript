@@ -1,10 +1,10 @@
-import { jsonToReadableText } from "../helpers";
-import { libContent } from "../helpers/contents";
-import { verifyTscWatch } from "../helpers/tscWatch";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "../helpers/contents.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmit", () => {
     verifyTscWatch({

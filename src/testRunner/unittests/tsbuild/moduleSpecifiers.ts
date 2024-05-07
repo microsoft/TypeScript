@@ -1,8 +1,8 @@
-import * as Utils from "../../_namespaces/Utils";
-import { symbolLibContent } from "../helpers/contents";
-import { verifyTsc } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
-import { libFile } from "../helpers/virtualFileSystemWithWatch";
+import * as Utils from "../../_namespaces/Utils.js";
+import { symbolLibContent } from "../helpers/contents.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { libFile } from "../helpers/virtualFileSystemWithWatch.js";
 
 // https://github.com/microsoft/TypeScript/issues/31696
 describe("unittests:: tsbuild:: moduleSpecifiers:: synthesized module specifiers to referenced projects resolve correctly", () => {

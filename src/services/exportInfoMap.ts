@@ -61,7 +61,7 @@ import {
     unescapeLeadingUnderscores,
     unmangleScopedPackageName,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const enum ImportKind {

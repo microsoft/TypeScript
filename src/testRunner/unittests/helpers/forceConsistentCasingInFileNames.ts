@@ -1,10 +1,10 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     FsContents,
     libContent,
-} from "./contents";
-import { libFile } from "./virtualFileSystemWithWatch";
+} from "./contents.js";
+import { libFile } from "./virtualFileSystemWithWatch.js";
 
 export function getFsContentsForMultipleErrorsForceConsistentCasingInFileNames(): FsContents {
     return {
