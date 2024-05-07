@@ -1,0 +1,250 @@
+//// [tests/cases/compiler/isolatedDeclarationsLiterals.ts] ////
+
+=== file1.ts ===
+export const constObject = {
+>constObject : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} as const : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    array: [1, -1, 1n, -1n],    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** Value Of "1" */    oneStrDoubleQuote: "1",    /** Value Of '1' */    oneStrSingleQuote: '1',    /** Value Of `1` */    oneStrTemplate: `1`,    /** A method */    method(): void {    },} : { readonly one: 1; readonly oneOctal: 1; readonly oneHex: 1; readonly pOne: 1; readonly mOne: -1; readonly array: readonly [1, -1, 1n, -1n]; readonly onen: 1n; readonly mOnen: -1n; readonly oneStrDoubleQuote: "1"; readonly oneStrSingleQuote: "1"; readonly oneStrTemplate: "1"; readonly method: () => void; }
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+
+    /** Value Of 1 */
+    one: 1,
+>one : 1
+>    : ^
+>1 : 1
+>  : ^
+
+    /** Value Of 0o1 */
+    oneOctal: 0o1,
+>oneOctal : 1
+>         : ^
+>0o1 : 1
+>    : ^
+
+    /** Value Of 0x1 */
+    oneHex: 0x1,
+>oneHex : 1
+>       : ^
+>0x1 : 1
+>    : ^
+
+    /** Value Of +1 */
+    pOne: +1,
+>pOne : 1
+>     : ^
+>+1 : 1
+>   : ^
+>1 : 1
+>  : ^
+
+    /** Value Of -1 */
+    mOne: -1,
+>mOne : -1
+>     : ^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+    array: [1, -1, 1n, -1n],
+>array : readonly [1, -1, 1n, -1n]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, -1, 1n, -1n] : readonly [1, -1, 1n, -1n]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+>1n : 1n
+>   : ^^
+>-1n : -1n
+>    : ^^^
+>1n : 1n
+>   : ^^
+
+    /** Value Of 1n */
+    onen: 1n,
+>onen : 1n
+>     : ^^
+>1n : 1n
+>   : ^^
+
+    /** Value Of -1n */
+    mOnen: -1n,
+>mOnen : -1n
+>      : ^^^
+>-1n : -1n
+>    : ^^^
+>1n : 1n
+>   : ^^
+
+    /** Value Of "1" */
+    oneStrDoubleQuote: "1",
+>oneStrDoubleQuote : "1"
+>                  : ^^^
+>"1" : "1"
+>    : ^^^
+
+    /** Value Of '1' */
+    oneStrSingleQuote: '1',
+>oneStrSingleQuote : "1"
+>                  : ^^^
+>'1' : "1"
+>    : ^^^
+
+    /** Value Of `1` */
+    oneStrTemplate: `1`,
+>oneStrTemplate : "1"
+>               : ^^^
+>`1` : "1"
+>    : ^^^
+
+    /** A method */
+    method(): void {
+>method : () => void
+>       : ^^^^^^    
+
+    },
+} as const;
+
+export const one = 1;
+>one : 1
+>    : ^
+>1 : 1
+>  : ^
+
+export const oneOctal = 0o1;
+>oneOctal : 1
+>         : ^
+>0o1 : 1
+>    : ^
+
+export const oneHex = 0x1;
+>oneHex : 1
+>       : ^
+>0x1 : 1
+>    : ^
+
+export const pOne = +1;
+>pOne : 1
+>     : ^
+>+1 : 1
+>   : ^
+>1 : 1
+>  : ^
+
+export const mOne = -1;
+>mOne : -1
+>     : ^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+export const onen = 1n;
+>onen : 1n
+>     : ^^
+>1n : 1n
+>   : ^^
+
+export const mOnen = -1n;
+>mOnen : -1n
+>      : ^^^
+>-1n : -1n
+>    : ^^^
+>1n : 1n
+>   : ^^
+
+export const oneStrDoubleQuote = "1";
+>oneStrDoubleQuote : "1"
+>                  : ^^^
+>"1" : "1"
+>    : ^^^
+
+export const oneStrSingleQuote = '1';
+>oneStrSingleQuote : "1"
+>                  : ^^^
+>'1' : "1"
+>    : ^^^
+
+export const oneStrTemplate = `1`;
+>oneStrTemplate : "1"
+>               : ^^^
+>`1` : "1"
+>    : ^^^
+
+export const mutableObject = {
+>mutableObject : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method(): void; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+>{    /** Value Of 1 */    one: 1,    /** Value Of 0o1 */    oneOctal: 0o1,    /** Value Of 0x1 */    oneHex: 0x1,    /** Value Of +1 */    pOne: +1,    /** Value Of -1 */    mOne: -1,    /** Value Of 1n */    onen: 1n,    /** Value Of -1n */    mOnen: -1n,    /** A method */    method(): void {    },} : { one: number; oneOctal: number; oneHex: number; pOne: number; mOne: number; onen: bigint; mOnen: bigint; method(): void; }
+>                                                                                                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^
+
+    /** Value Of 1 */
+    one: 1,
+>one : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+
+    /** Value Of 0o1 */
+    oneOctal: 0o1,
+>oneOctal : number
+>         : ^^^^^^
+>0o1 : 1
+>    : ^
+
+    /** Value Of 0x1 */
+    oneHex: 0x1,
+>oneHex : number
+>       : ^^^^^^
+>0x1 : 1
+>    : ^
+
+    /** Value Of +1 */
+    pOne: +1,
+>pOne : number
+>     : ^^^^^^
+>+1 : 1
+>   : ^
+>1 : 1
+>  : ^
+
+    /** Value Of -1 */
+    mOne: -1,
+>mOne : number
+>     : ^^^^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+
+    /** Value Of 1n */
+    onen: 1n,
+>onen : bigint
+>     : ^^^^^^
+>1n : 1n
+>   : ^^
+
+    /** Value Of -1n */
+    mOnen: -1n,
+>mOnen : bigint
+>      : ^^^^^^
+>-1n : -1n
+>    : ^^^
+>1n : 1n
+>   : ^^
+
+    /** A method */
+    method(): void {
+>method : () => void
+>       : ^^^^^^    
+
+    },
+};
+
+
+

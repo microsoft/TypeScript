@@ -44,9 +44,9 @@ import {
     FileWatcher,
     filter,
     find,
+    findIndex,
     flattenDiagnosticMessageText,
     forEach,
-    forEachEntry,
     ForegroundColorEscapeSequences,
     formatColorAndReset,
     formatDiagnostic,
@@ -56,7 +56,9 @@ import {
     getDefaultLibFileName,
     getDirectoryPath,
     getEmitScriptTarget,
+    getImpliedNodeFormatForEmitWorker,
     getLineAndCharacterOfPosition,
+    getNameOfScriptTarget,
     getNewLineCharacter,
     getNormalizedAbsolutePath,
     getParsedCommandLineOfConfigFile,
@@ -77,7 +79,6 @@ import {
     ModuleKind,
     noop,
     normalizePath,
-    outFile,
     packageIdToString,
     ParseConfigFileHost,
     ParsedCommandLine,
@@ -94,7 +95,6 @@ import {
     sourceMapCommentRegExpDontCareLineStart,
     sys,
     System,
-    targetOptionDeclaration,
     WatchCompilerHost,
     WatchCompilerHostOfConfigFile,
     WatchCompilerHostOfFilesAndCompilerOptions,
@@ -106,7 +106,7 @@ import {
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),
@@ -353,13 +353,14 @@ export function explainFiles(program: Program, write: (s: string) => void) {
     for (const file of program.getSourceFiles()) {
         write(`${toFileName(file, relativeFileName)}`);
         reasons.get(file.path)?.forEach(reason => write(`  ${fileIncludeReasonToDiagnostics(program, reason, relativeFileName).messageText}`));
-        explainIfFileIsRedirectAndImpliedFormat(file, relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
+        explainIfFileIsRedirectAndImpliedFormat(file, program.getCompilerOptionsForFile(file), relativeFileName)?.forEach(d => write(`  ${d.messageText}`));
     }
 }
 
 /** @internal */
 export function explainIfFileIsRedirectAndImpliedFormat(
     file: SourceFile,
+    options: CompilerOptions,
     fileNameConvertor?: (fileName: string) => string,
 ): DiagnosticMessageChain[] | undefined {
     let result: DiagnosticMessageChain[] | undefined;
@@ -378,7 +379,7 @@ export function explainIfFileIsRedirectAndImpliedFormat(
         ));
     }
     if (isExternalOrCommonJsModule(file)) {
-        switch (file.impliedNodeFormat) {
+        switch (getImpliedNodeFormatForEmitWorker(file, options)) {
             case ModuleKind.ESNext:
                 if (file.packageJsonScope) {
                     (result ??= []).push(chainDiagnosticMessages(
@@ -417,7 +418,8 @@ export function getMatchedFileSpec(program: Program, fileName: string) {
 
     const filePath = program.getCanonicalFileName(fileName);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
-    return find(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    const index = findIndex(configFile.configFileSpecs.validatedFilesSpec, fileSpec => program.getCanonicalFileName(getNormalizedAbsolutePath(fileSpec, basePath)) === filePath);
+    return index !== -1 ? configFile.configFileSpecs.validatedFilesSpecBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */
@@ -431,11 +433,12 @@ export function getMatchedIncludeSpec(program: Program, fileName: string) {
     const isJsonFile = fileExtensionIs(fileName, Extension.Json);
     const basePath = getDirectoryPath(getNormalizedAbsolutePath(configFile.fileName, program.getCurrentDirectory()));
     const useCaseSensitiveFileNames = program.useCaseSensitiveFileNames();
-    return find(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
+    const index = findIndex(configFile?.configFileSpecs?.validatedIncludeSpecs, includeSpec => {
         if (isJsonFile && !endsWith(includeSpec, Extension.Json)) return false;
         const pattern = getPatternFromSpec(includeSpec, basePath, "files");
         return !!pattern && getRegexFromPattern(`(${pattern})$`, useCaseSensitiveFileNames).test(fileName);
     });
+    return index !== -1 ? configFile.configFileSpecs.validatedIncludeSpecsBeforeSubstitution![index] : undefined;
 }
 
 /** @internal */
@@ -515,7 +518,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
             const referencedResolvedRef = Debug.checkDefined(program.getResolvedProjectReferences()?.[reason.index]);
             return chainDiagnosticMessages(
                 /*details*/ undefined,
-                outFile(options) ?
+                options.outFile ?
                     isOutput ?
                         Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                         Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
@@ -538,7 +541,7 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
         }
         case FileIncludeKind.LibFile: {
             if (reason.index !== undefined) return chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Library_0_specified_in_compilerOptions, options.lib![reason.index]);
-            const target = forEachEntry(targetOptionDeclaration.type, (value, key) => value === getEmitScriptTarget(options) ? key : undefined);
+            const target = getNameOfScriptTarget(getEmitScriptTarget(options));
             const messageAndArgs: DiagnosticAndArguments = target ? [Diagnostics.Default_library_for_target_0, target] : [Diagnostics.Default_library];
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }
@@ -744,7 +747,6 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
     const compilerHost: CompilerHost = {
         getSourceFile: createGetSourceFile(
             (fileName, encoding) => !encoding ? compilerHost.readFile(fileName) : host.readFile(fileName, encoding),
-            getCompilerOptions,
             /*setParentNodes*/ undefined,
         ),
         getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
@@ -767,7 +769,7 @@ export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCom
         getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
         createHash: maybeBind(host, host.createHash),
         readDirectory: maybeBind(host, host.readDirectory),
-        storeFilesChangingSignatureDuringEmit: host.storeFilesChangingSignatureDuringEmit,
+        storeSignatureInfo: host.storeSignatureInfo,
         jsDocParsingMode: host.jsDocParsingMode,
     };
     return compilerHost;
@@ -849,7 +851,7 @@ export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiag
         writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
         createHash: maybeBind(system, system.createHash),
         createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>,
-        storeFilesChangingSignatureDuringEmit: system.storeFilesChangingSignatureDuringEmit,
+        storeSignatureInfo: system.storeSignatureInfo,
         now: maybeBind(system, system.now),
     };
 }

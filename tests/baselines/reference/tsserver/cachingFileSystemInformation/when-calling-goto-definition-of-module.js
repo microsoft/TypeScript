@@ -49,8 +49,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a/b/controllers/vessels
-Info seq  [hh:mm:ss:mss] For info: /a/b/controllers/vessels/client.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/controllers/vessels/client.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/tsconfig.json 2000 undefined Project: /a/b/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -87,8 +86,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /a/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/utils/db.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/utils/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/models/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/controllers/vessels/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/b/controllers/package.json 2000 undefined Project: /a/b/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.es6.d.ts 500 undefined Project: /a/b/tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /a/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	/a/b/utils/db.ts Text-1 "export class Bookshelf { }"
@@ -250,6 +253,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/b/controllers/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/controllers/vessels/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/models/package.json: *new*
+  {"pollingInterval":2000}
+/a/b/utils/package.json: *new*
+  {"pollingInterval":2000}
 /a/lib/lib.es6.d.ts: *new*
   {"pollingInterval":500}
 
@@ -264,6 +275,25 @@ FsWatches::
 FsWatchesRecursive::
 /a/b: *new*
   {}
+
+Projects::
+/a/b/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+
+ScriptInfos::
+/a/b/controllers/vessels/client.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/models/vessel.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
+/a/b/utils/db.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Before request
 
@@ -313,8 +343,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/b/models/vessel.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a/b/models
-Info seq  [hh:mm:ss:mss] For info: /a/b/models/vessel.ts :: Config file name: /a/b/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/b/models/vessel.ts ProjectRootPath: undefined:: Result: /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/a/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -331,6 +360,14 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
+/a/b/controllers/package.json:
+  {"pollingInterval":2000}
+/a/b/controllers/vessels/package.json:
+  {"pollingInterval":2000}
+/a/b/models/package.json:
+  {"pollingInterval":2000}
+/a/b/utils/package.json:
+  {"pollingInterval":2000}
 /a/lib/lib.es6.d.ts:
   {"pollingInterval":500}
 
@@ -347,6 +384,21 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /a/b:
   {}
+
+ScriptInfos::
+/a/b/controllers/vessels/client.ts (Open)
+    version: SVC-1-0
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/models/vessel.ts (Open) *changed*
+    open: true *changed*
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json *default*
+/a/b/utils/db.ts
+    version: Text-1
+    containingProjects: 1
+        /a/b/tsconfig.json
 
 Info seq  [hh:mm:ss:mss] fileExists:: [
   {

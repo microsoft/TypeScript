@@ -1,15 +1,11 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "../helpers/contents";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
 import {
     getFsContentsForSampleProjectReferences,
     getFsContentsForSampleProjectReferencesLogicConfig,
     getSysForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
+} from "../helpers/sampleProjectReferences.js";
 import {
     commonFile1,
     commonFile2,
@@ -19,12 +15,12 @@ import {
     runWatchBaseline,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
     verifyTscWatch({
@@ -182,7 +178,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
 
     verifyTscWatch({
         scenario: "programUpdates",
-        subScenario: "when referenced using prepend builds referencing project even for non local change",
+        subScenario: "with outFile and non local change",
         commandLineArgs: ["-b", "-w", "sample1/logic"],
         sys: () =>
             createWatchedSystem({
@@ -192,8 +188,8 @@ describe("unittests:: tsbuildWatch:: watchMode:: program updates", () => {
                 }),
                 "/user/username/projects/sample1/core/index.ts": `function foo() { return 10; }`,
                 "/user/username/projects/sample1/logic/tsconfig.json": jsonToReadableText({
-                    compilerOptions: { ignoreDeprecations: "5.0", composite: true, declaration: true, outFile: "index.js" },
-                    references: [{ path: "../core", prepend: true }],
+                    compilerOptions: { composite: true, declaration: true, outFile: "index.js" },
+                    references: [{ path: "../core" }],
                 }),
                 "/user/username/projects/sample1/logic/index.ts": `function bar() { return foo() + 1 };`,
             }, { currentDirectory: "/user/username/projects" }),

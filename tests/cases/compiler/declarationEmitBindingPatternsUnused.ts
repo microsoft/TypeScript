@@ -3,6 +3,18 @@
 // @skipLibCheck: false
 
 type Named = { name: string }
+
+// Resons we can't remove aliases that are not used in the function signature: 
+
+// 1.Causes duplicate identifier if we remove alias
+function duplicateIndetifiers({ name: alias, name: alias2 }: Named) { }
+function duplicateIndetifiers2(name: string, { name: alias }: Named) { }
+function duplicateIndetifiers3({ name: alias }: Named, { name: alias2 }: Named) { }
+
+let value = "";
+// 2.Can change in meaning for typeof value if we remove alias
+function shadowedVariable({ value: alias }: { value: string }): typeof value { return value }
+
 function notReferenced({ name: alias }: Named) {
 
 }
@@ -10,8 +22,6 @@ function notReferencedNestedAlias({ p: { name: alias } }: { p: Named }) {
 }
 function notReferencedArrayAlias([a, b, { name: alias }]: Named[]) {
 }
-
-
 
 function referencedInCode({ name: alias }: Named) {
     return alias;

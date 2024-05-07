@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: file1.ts
 
 import * as a from "a";
@@ -29,6 +29,7 @@ File: file2.ts
 
 
 
+File 'package.json' does not exist.
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -51,6 +52,8 @@ File 'node_modules/a.jsx' does not exist.
 File 'node_modules/a/index.js' does not exist.
 File 'node_modules/a/index.jsx' does not exist.
 ======== Module name 'a' was not resolved. ========
+File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: [
   "lib.d.ts"
@@ -60,7 +63,7 @@ file1.ts(2,20): error TS2307: Cannot find module 'a' or its corresponding type d
 
 
 
-Program Reused:: SafeModules
+Program 2 Reused:: SafeModules
 File: node_modules/a/index.d.ts
 
 export declare let x: number;
@@ -93,6 +96,9 @@ File: file2.ts
 
 
 
+File 'package.json' does not exist.
+File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'a' from 'file1.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -105,6 +111,10 @@ File 'node_modules/a/index.ts' does not exist.
 File 'node_modules/a/index.tsx' does not exist.
 File 'node_modules/a/index.d.ts' exists - use it as a name resolution result.
 ======== Module name 'a' was successfully resolved to 'node_modules/a/index.d.ts'. ========
+File 'node_modules/a/package.json' does not exist according to earlier cached lookups.
+File 'node_modules/package.json' does not exist.
+File 'package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist according to earlier cached lookups.
 
 MissingPaths:: []
 

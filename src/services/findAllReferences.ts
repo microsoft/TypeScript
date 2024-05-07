@@ -1,4 +1,16 @@
 import {
+    createImportTracker,
+    ExportInfo,
+    ExportKind,
+    findModuleReferences,
+    getExportInfo,
+    getImportOrExportSymbol,
+    ImportExport,
+    ImportsResult,
+    ImportTracker,
+    ModuleReference,
+} from "./_namespaces/ts.FindAllReferences.js";
+import {
     __String,
     addToSeen,
     append,
@@ -65,7 +77,6 @@ import {
     getLocalSymbolForExportDefault,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
-    getModeForUsageLocation,
     getNameOfDeclaration,
     getNameTable,
     getNextJSDocCommentLocation,
@@ -234,6 +245,7 @@ import {
     StringLiteralLike,
     stripQuotes,
     SuperContainer,
+    SwitchStatement,
     Symbol,
     SymbolDisplay,
     SymbolDisplayPart,
@@ -253,19 +265,7 @@ import {
     TypeChecker,
     TypeLiteralNode,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import {
-    createImportTracker,
-    ExportInfo,
-    ExportKind,
-    findModuleReferences,
-    getExportInfo,
-    getImportOrExportSymbol,
-    ImportExport,
-    ImportsResult,
-    ImportTracker,
-    ModuleReference,
-} from "./_namespaces/ts.FindAllReferences";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface SymbolAndEntries {
@@ -406,7 +406,7 @@ function getContextNodeForNodeEntry(node: Node): ContextNode | undefined {
 }
 
 /** @internal */
-export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | undefined): ContextNode | undefined {
+export function getContextNode(node: NamedDeclaration | BinaryExpression | ForInOrOfStatement | SwitchStatement | undefined): ContextNode | undefined {
     if (!node) return undefined;
     switch (node.kind) {
         case SyntaxKind.VariableDeclaration:
@@ -451,14 +451,18 @@ export function getContextNode(node: NamedDeclaration | BinaryExpression | ForIn
                     findAncestor(node.parent, node => isBinaryExpression(node) || isForInOrOfStatement(node)) as BinaryExpression | ForInOrOfStatement,
                 ) :
                 node;
-
+        case SyntaxKind.SwitchStatement:
+            return {
+                start: find(node.getChildren(node.getSourceFile()), node => node.kind === SyntaxKind.SwitchKeyword)!,
+                end: (node as SwitchStatement).caseBlock,
+            };
         default:
             return node;
     }
 }
 
 /** @internal */
-export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context?: ContextNode): { contextSpan: TextSpan; } | undefined {
+export function toContextSpan(textSpan: TextSpan, sourceFile: SourceFile, context: ContextNode | undefined): { contextSpan: TextSpan; } | undefined {
     if (!context) return undefined;
     const contextSpan = isContextWithStartAndEndNode(context) ?
         getTextSpan(context.start, sourceFile, context.end) :
@@ -874,6 +878,9 @@ function getTextSpan(node: Node, sourceFile: SourceFile, endNode?: Node): TextSp
         start += 1;
         end -= 1;
     }
+    if (endNode?.kind === SyntaxKind.CaseBlock) {
+        end = endNode.getFullStart();
+    }
     return createTextSpanFromBounds(start, end);
 }
 
@@ -1015,7 +1022,7 @@ export namespace Core {
             if (!options.implementations && isStringLiteralLike(node)) {
                 if (isModuleSpecifierLike(node)) {
                     const fileIncludeReasons = program.getFileIncludeReasons();
-                    const referencedFileName = program.getResolvedModule(node.getSourceFile(), node.text, getModeForUsageLocation(node.getSourceFile(), node))?.resolvedModule?.resolvedFileName;
+                    const referencedFileName = program.getResolvedModuleFromModuleSpecifier(node)?.resolvedModule?.resolvedFileName;
                     const referencedFile = referencedFileName ? program.getSourceFile(referencedFileName) : undefined;
                     if (referencedFile) {
                         return [{ definition: { type: DefinitionKind.String, node }, references: getReferencesForNonModule(referencedFile, fileIncludeReasons, program) || emptyArray }];
@@ -2383,7 +2390,7 @@ export namespace Core {
             // If we have a 'super' container, we must have an enclosing class.
             // Now make sure the owning class is the same as the search-space
             // and has the same static qualifier as the original 'super's owner.
-            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode!.symbol ? nodeEntry(node) : undefined;
+            return container && isStatic(container) === !!staticFlag && container.parent.symbol === searchSpaceNode.symbol ? nodeEntry(node) : undefined;
         });
 
         return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];

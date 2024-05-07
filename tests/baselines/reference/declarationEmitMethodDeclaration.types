@@ -3,13 +3,17 @@
 === /a.js ===
 export default {
 >{    methods: {        foo() { }    }} : { methods: { foo(): void; }; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     methods: {
 >methods : { foo(): void; }
+>        : ^^^^^^^^^^^^^^^^
 >{        foo() { }    } : { foo(): void; }
+>                        : ^^^^^^^^^^^^^^^^
 
         foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 

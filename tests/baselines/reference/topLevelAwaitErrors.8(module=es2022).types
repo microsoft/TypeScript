@@ -4,11 +4,14 @@
 // await disallowed in default import
 import await from "./other";
 >await : any
+>      : ^^^
 
 === other.ts ===
 declare const _await: any;
 >_await : any
+>       : ^^^
 
 export default _await;
 >_await : any
+>       : ^^^
 

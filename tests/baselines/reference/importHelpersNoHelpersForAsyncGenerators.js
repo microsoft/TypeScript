@@ -14,7 +14,7 @@ export {}
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 var tslib_1 = require("tslib");
 function f() {
     return tslib_1.__asyncGenerator(this, arguments, function f_1() {
@@ -36,4 +36,3 @@ function f() {
         });
     });
 }
-exports.f = f;

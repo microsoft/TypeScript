@@ -104,7 +104,7 @@ module.exports = MainThreadTasks;
 
 
 //// [module.d.ts]
-export type TaskGroupIds = 'parseHTML' | 'styleLayout';
+export type TaskGroupIds = "parseHTML" | "styleLayout";
 export type TaskGroup = {
     id: TaskGroupIds;
     label: string;
@@ -120,16 +120,10 @@ export type TaskGroup = {
 /**
  * @type {{[P in TaskGroupIds]: {id: P, label: string}}}
  */
-export const taskGroups: {
-    parseHTML: {
-        id: "parseHTML";
-        label: string;
-    };
-    styleLayout: {
-        id: "styleLayout";
-        label: string;
-    };
-};
+export const taskGroups: { [P in TaskGroupIds]: {
+    id: P;
+    label: string;
+}; };
 /** @type {Object<string, TaskGroup>} */
 export const taskNameToGroup: {
     [x: string]: TaskGroup;
@@ -154,7 +148,7 @@ declare class MainThreadTasks {
 declare namespace MainThreadTasks {
     export { TaskGroup, TaskNode, PriorTaskData };
 }
-type TaskGroup = import('./module.js').TaskGroup;
+type TaskGroup = import("./module.js").TaskGroup;
 type TaskNode = {
     children: TaskNode[];
     parent: TaskNode | undefined;

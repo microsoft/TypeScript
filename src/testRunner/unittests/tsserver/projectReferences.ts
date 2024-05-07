@@ -1,28 +1,23 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    solutionBuildWithBaseline,
-} from "../helpers/solutionBuilder";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
+    closeFilesForSession,
     createHostWithSolutionBuild,
     openFilesForSession,
     protocolFileLocationFromSubstring,
     protocolLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
     SymLink,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with project references and tsbuild", () => {
     describe("with container project", () => {
@@ -53,14 +48,13 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/exec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/exec.js",
                     },
                     files: [
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -78,7 +72,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                 path: "/user/username/projects/container/compositeExec/tsconfig.json",
                 content: jsonToReadableText({
                     compilerOptions: {
-                        ignoreDeprecations: "5.0",
                         outFile: "../built/local/compositeExec.js",
                         composite: true,
                         declarationMap: true,
@@ -87,7 +80,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                         "index.ts",
                     ],
                     references: [
-                        { path: "../lib", prepend: true },
+                        { path: "../lib" },
                     ],
                 }),
             };
@@ -121,12 +114,16 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
 
         it("does not error on container only project", () => {
             const { files, session, containerConfig } = setup();
-            const service = session.getProjectService();
-            service.openExternalProjects([{
-                projectFileName: "/user/username/projects/container/container",
-                rootFiles: files.map(f => ({ fileName: f.path })),
-                options: {},
-            }]);
+            session.executeCommandSeq<ts.server.protocol.OpenExternalProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.OpenExternalProjects,
+                arguments: {
+                    projects: [{
+                        projectFileName: "/user/username/projects/container/container",
+                        rootFiles: files.map(f => ({ fileName: f.path })),
+                        options: {},
+                    }],
+                },
+            });
             files.forEach(f => {
                 const args: ts.server.protocol.FileRequestArgs = {
                     file: f.path,
@@ -141,7 +138,7 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
                     arguments: args,
                 });
             });
-            const containerProject = service.configuredProjects.get(containerConfig.path)!;
+            const containerProject = session.getProjectService().configuredProjects.get(containerConfig.path)!;
             session.executeCommandSeq<ts.server.protocol.CompilerOptionsDiagnosticsRequest>({
                 command: ts.server.protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName },
@@ -168,7 +165,6 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             };
             const { session, containerCompositeExecIndex } = setup(tempFile);
             openFilesForSession([containerCompositeExecIndex], session);
-            const service = session.getProjectService();
 
             // Open temp file and verify all projects alive
             openFilesForSession([tempFile], session);
@@ -184,12 +180,11 @@ describe("unittests:: tsserver:: with project references and tsbuild", () => {
             });
 
             // Open temp file and verify all projects alive
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([tempFile], session);
             openFilesForSession([tempFile], session);
 
             // Close all files and open temp file, only inferred project should be alive
-            service.closeClientFile(containerCompositeExecIndex.path);
-            service.closeClientFile(tempFile.path);
+            closeFilesForSession([containerCompositeExecIndex, tempFile], session);
             openFilesForSession([tempFile], session);
             baselineTsserverLogs("projectReferences", `ancestor and project ref management`, session);
         });
@@ -344,6 +339,35 @@ function foo() {
         assert.isTrue(projectA.dirty);
         projectA.updateGraph();
         baselineTsserverLogs("projectReferences", "reusing d.ts files from composite and non composite projects", session);
+    });
+
+    it("referencing const enum from referenced project with preserveConstEnums", () => {
+        const projectLocation = `/user/username/projects/project`;
+        const utilsIndex: File = {
+            path: `${projectLocation}/src/utils/index.ts`,
+            content: "export const enum E { A = 1 }",
+        };
+        const utilsDeclaration: File = {
+            path: `${projectLocation}/src/utils/index.d.ts`,
+            content: "export declare const enum E { A = 1 }",
+        };
+        const utilsConfig: File = {
+            path: `${projectLocation}/src/utils/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { composite: true, declaration: true, preserveConstEnums: true } }),
+        };
+        const projectIndex: File = {
+            path: `${projectLocation}/src/project/index.ts`,
+            content: `import { E } from "../utils"; E.A;`,
+        };
+        const projectConfig: File = {
+            path: `${projectLocation}/src/project/tsconfig.json`,
+            content: jsonToReadableText({ compilerOptions: { isolatedModules: true }, references: [{ path: "../utils" }] }),
+        };
+        const host = createServerHost([libFile, utilsIndex, utilsDeclaration, utilsConfig, projectIndex, projectConfig]);
+        const session = new TestSession(host);
+        openFilesForSession([projectIndex], session);
+        verifyGetErrRequest({ session, files: [projectIndex] });
+        baselineTsserverLogs("projectReferences", `referencing const enum from referenced project with preserveConstEnums`, session);
     });
 
     describe("when references are monorepo like with symlinks", () => {
@@ -1044,54 +1068,71 @@ export function bar() {}`,
                 ...additionalFiles,
             ]);
             const session = new TestSession(host);
-            const service = session.getProjectService();
-            service.openClientFile(main.path);
-            return { session, service, host };
+            openFilesForSession([main], session);
+            return { session, host };
         }
 
         function verifySolutionScenario(input: Setup) {
-            const { session, service } = setup(input);
+            const { session, host } = setup(input);
 
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
+            const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
+            const defaultProject = info.getDefaultProject();
             session.logger.startGroup();
-            session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)!.projectName}`);
+            session.logger.info(`getDefaultProject for ${main.path}: ${defaultProject.projectName}`);
+            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)!.projectName}`);
             session.logger.endGroup();
 
             // Verify errors
             verifyGetErrRequest({ session, files: [main] });
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
-            service.openClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
+            closeFilesForSession([dummyFilePath], session);
+            openFilesForSession([dummyFilePath], session);
+
+            // Verify that tsconfig can be deleted and watched
+            if (ts.server.isConfiguredProject(defaultProject)) {
+                closeFilesForSession([dummyFilePath], session);
+                const config = defaultProject.projectName;
+                const content = host.readFile(config)!;
+                host.deleteFile(config);
+                host.runQueuedTimeoutCallbacks();
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+
+                host.deleteFile(config);
+                openFilesForSession([dummyFilePath], session);
+
+                host.writeFile(config, content);
+                host.runQueuedTimeoutCallbacks();
+            }
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
 
             // Find all refs
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(main, "foo", { index: 1 }),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
+            closeFilesForSession([main, dummyFilePath], session);
 
             // Verify when declaration map references the file
-            service.openClientFile(fileResolvingToMainDts.path);
+            openFilesForSession([fileResolvingToMainDts], session);
 
             // Find all refs from dts include
             session.executeCommandSeq<ts.server.protocol.ReferencesRequest>({
                 command: ts.server.protocol.CommandTypes.References,
                 arguments: protocolFileLocationFromSubstring(fileResolvingToMainDts, "foo"),
-            }).response as ts.server.protocol.ReferencesResponseBody;
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 
@@ -1117,25 +1158,24 @@ export function bar() {}`,
         }
 
         function verifyDisableReferencedProjectLoad(input: Setup) {
-            const { session, service } = setup(input);
+            const { session } = setup(input);
 
-            const info = service.getScriptInfoForPath(main.path as ts.Path)!;
+            const info = session.getProjectService().getScriptInfoForPath(main.path as ts.Path)!;
             session.logger.startGroup();
             session.logger.info(`getDefaultProject for ${main.path}: ${info.getDefaultProject().projectName}`);
-            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${service.findDefaultConfiguredProject(info)?.projectName}`);
+            session.logger.info(`findDefaultConfiguredProject for ${main.path}: ${session.getProjectService().findDefaultConfiguredProject(info)?.projectName}`);
             session.logger.endGroup();
 
             // Verify collection of script infos
-            service.openClientFile(dummyFilePath);
+            openFilesForSession([dummyFilePath], session);
 
-            service.closeClientFile(main.path);
-            service.closeClientFile(dummyFilePath);
-            service.openClientFile(dummyFilePath);
-
-            service.openClientFile(main.path);
+            closeFilesForSession([main, dummyFilePath], session);
+            openFilesForSession([dummyFilePath, main], session);
 
             // Verify Reload projects
-            service.reloadProjects();
+            session.executeCommandSeq<ts.server.protocol.ReloadProjectsRequest>({
+                command: ts.server.protocol.CommandTypes.ReloadProjects,
+            });
             baselineTsserverLogs("projectReferences", input.scenario, session);
         }
 

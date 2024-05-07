@@ -1,4 +1,9 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    moduleSpecifierToValidIdentifier,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     arrayFrom,
     ArrowFunction,
@@ -26,7 +31,6 @@ import {
     FunctionDeclaration,
     FunctionExpression,
     getEmitScriptTarget,
-    getModeForUsageLocation,
     getQuotePreference,
     getSynthesizedDeepClone,
     getSynthesizedDeepClones,
@@ -75,12 +79,7 @@ import {
     textChanges,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 registerCodeFix({
     errorCodes: [Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES_module.code],
@@ -107,7 +106,7 @@ function fixImportOfModuleExports(
     quotePreference: QuotePreference,
 ) {
     for (const moduleSpecifier of importingFile.imports) {
-        const imported = program.getResolvedModule(importingFile, moduleSpecifier.text, getModeForUsageLocation(importingFile, moduleSpecifier))?.resolvedModule;
+        const imported = program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
         if (!imported || imported.resolvedFileName !== exportingFile.fileName) {
             continue;
         }

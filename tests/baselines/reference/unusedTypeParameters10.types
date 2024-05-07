@@ -3,8 +3,11 @@
 === unusedTypeParameters10.ts ===
 type Alias<T> = { };
 >Alias : Alias<T>
+>      : ^^^^^^^^
 
 type Alias2<T> = { x: T };
 >Alias2 : Alias2<T>
+>       : ^^^^^^^^^
 >x : T
+>  : ^
 

@@ -3,4 +3,5 @@
 === asyncDeclare_es5.ts ===
 declare async function foo(): Promise<void>;
 >foo : () => Promise<void>
+>    : ^^^^^^             
 

@@ -1,4 +1,10 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    findAncestorMatchingSpan,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     BinaryExpression,
     createTextSpan,
     DiagnosticMessageChain,
@@ -14,13 +20,7 @@ import {
     SyntaxKind,
     textChanges,
     TextSpan,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    findAncestorMatchingSpan,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [
@@ -87,6 +87,6 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, ar
 }
 
 function getSuggestion(messageText: string | DiagnosticMessageChain) {
-    const [_, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/'(.*)'/) || [];
+    const [, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/'(.*)'/) || [];
     return suggestion;
 }

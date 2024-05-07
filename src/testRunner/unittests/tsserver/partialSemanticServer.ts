@@ -1,4 +1,4 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -6,12 +6,12 @@ import {
     protocolFileLocationFromSubstring,
     TestSession,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: Semantic operations on partialSemanticServer", () => {
     function setup() {
@@ -217,6 +217,7 @@ function fooB() { }`,
         const project = service.inferredProjects[0];
         assert.isFalse(project.autoImportProviderHost);
         assert.isUndefined(project.getPackageJsonAutoImportProvider());
+        session.host.baselineHost("After getPackageJsonAutoImportProvider");
         assert.deepEqual(project.getPackageJsonsForAutoImport(), ts.emptyArray);
         baselineTsserverLogs("partialSemanticServer", "should not create autoImportProvider or handle package jsons", session);
     });

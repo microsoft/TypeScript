@@ -3,6 +3,7 @@
 === commonjs.d.ts ===
 declare var module: { exports: any};
 >module : { exports: any; }
+>       : ^^^^^^^^^^^   ^^^
 >exports : any
 
 === mod1.js ===
@@ -12,20 +13,30 @@ declare var module: { exports: any};
 /** @typedef {A | B} Both */
 module.exports = C
 >module.exports = C : typeof C
+>                   : ^^^^^^^^
 >module.exports : typeof C
+>               : ^^^^^^^^
 >module : { exports: typeof C; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >exports : typeof C
+>        : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 
 function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 === mod2.js ===
@@ -36,13 +47,18 @@ function C() {
 
 export function C() {
 >C : typeof C
+>  : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 === mod3.js ===
@@ -53,38 +69,57 @@ export function C() {
 
 exports.C = function() {
 >exports.C = function() {    this.p = 1} : typeof C
+>                                        : ^^^^^^^^
 >exports.C : typeof C
+>          : ^^^^^^^^
 >exports : typeof import("mod3")
+>        : ^^^^^^^^^^^^^^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >function() {    this.p = 1} : typeof C
+>                            : ^^^^^^^^
 
     this.p = 1
 >this.p = 1 : 1
+>           : ^
 >this.p : any
 >this : this
+>     : ^^^^
 >p : any
+>  : ^^^
 >1 : 1
+>  : ^
 }
 
 === use.js ===
 /** @type {import('./mod1').Both} */
 var both1 = { type: 'a', x: 1 };
 >both1 : import("mod1").Both
+>      : ^^^^^^^^^^^^^^^^^^^
 >{ type: 'a', x: 1 } : { type: "a"; x: 1; }
+>                    : ^^^^^^^^^^^^^^^^^^^^
 >type : "a"
+>     : ^^^
 >'a' : "a"
+>    : ^^^
 >x : 1
+>  : ^
 >1 : 1
+>  : ^
 
 /** @type {import('./mod2').Both} */
 var both2 = both1;
 >both2 : import("mod2").Both
+>      : ^^^^^^^^^^^^^^^^^^^
 >both1 : import("mod1").A
+>      : ^^^^^^^^^^^^^^^^
 
 /** @type {import('./mod3').Both} */
 var both3 = both2;
 >both3 : import("mod3").Both
+>      : ^^^^^^^^^^^^^^^^^^^
 >both2 : import("mod2").A
+>      : ^^^^^^^^^^^^^^^^
 
 
 

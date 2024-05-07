@@ -1,17 +1,9 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    commandLineCallbacks,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { commandLineCallbacks } from "../helpers/baseline.js";
+import { libContent } from "../helpers/contents.js";
 import {
     applyEdit,
     createBaseline,
@@ -20,12 +12,12 @@ import {
     runWatchBaseline,
     TscWatchSystem,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
     it("verify that module resolution with json extension works when returned without extension", () => {
@@ -54,7 +46,7 @@ describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolu
             system: sys,
             cb,
         });
-        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, config.path);
+        const parsedCommandResult = ts.parseJsonConfigFileContent(configFileJson, sys, ts.getDirectoryPath(config.path));
         host.resolveModuleNames = (moduleNames, containingFile) =>
             moduleNames.map(m => {
                 const result = ts.resolveModuleName(m, containingFile, parsedCommandResult.options, host);
