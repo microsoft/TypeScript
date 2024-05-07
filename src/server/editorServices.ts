@@ -850,14 +850,11 @@ export function updateProjectIfDirty(project: Project) {
 
 /** Updates the program for triggerFile and returns true if sent configFileDiagEvent */
 function updateWithTriggerFile(project: ConfiguredProject, triggerFile: NormalizedPath, isReload: boolean): boolean {
-    project.triggerFileForConfigFileDiag = triggerFile;
     if (!isReload) {
         project.invalidateResolutionsOfFailedLookupLocations();
-        if (!project.dirty) {
-            project.triggerFileForConfigFileDiag = undefined;
-            return false;
-        }
+        if (!project.dirty) return false;
     }
+    project.triggerFileForConfigFileDiag = triggerFile;
     const updateLevel = project.pendingUpdateLevel;
     project.updateGraph();
     // On full update the event is sent by recursive updateWithTrigger through reloadConfiguredProject
