@@ -56,5 +56,5 @@ import * as textChanges from "./ts.textChanges.js";
 export { textChanges };
 import * as formatting from "./ts.formatting.js";
 export { formatting };
-import * as pasteEdits from "./ts.PasteEdits";
+import * as pasteEdits from "./ts.PasteEdits.js";
 export { pasteEdits };

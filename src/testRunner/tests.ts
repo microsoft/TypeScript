@@ -189,6 +189,7 @@ export * from "./unittests/tsserver/occurences.js";
 export * from "./unittests/tsserver/openFile.js";
 export * from "./unittests/tsserver/packageJsonInfo.js";
 export * from "./unittests/tsserver/partialSemanticServer.js";
+export * from "./unittests/tsserver/pasteEdits.js";
 export * from "./unittests/tsserver/plugins.js";
 export * from "./unittests/tsserver/pluginsAsync.js";
 export * from "./unittests/tsserver/projectErrors.js";

@@ -1,1 +1,1 @@
-export * from "../pasteEdits";
+export * from "../pasteEdits.js";

@@ -1,4 +1,4 @@
-import { addRange } from "../compiler/core";
+import { addRange } from "../compiler/core.js";
 import {
     CancellationToken,
     Program,
@@ -7,8 +7,8 @@ import {
     SymbolFlags,
     TextRange,
     UserPreferences,
-} from "../compiler/types";
-import { getLineOfLocalPosition } from "../compiler/utilities";
+} from "../compiler/types.js";
+import { getLineOfLocalPosition } from "../compiler/utilities.js";
 import {
     codefix,
     Debug,
@@ -18,19 +18,19 @@ import {
     getQuotePreference,
     isIdentifier,
     textChanges,
-} from "./_namespaces/ts";
-import { addTargetFileImports } from "./refactors/helpers";
+} from "./_namespaces/ts.js";
+import { addTargetFileImports } from "./refactors/helpers.js";
 import {
     addExportsInOldFile,
     getExistingLocals,
     getUsageInfo,
-} from "./refactors/moveToFile";
+} from "./refactors/moveToFile.js";
 import {
     CodeFixContextBase,
     FileTextChanges,
     LanguageServiceHost,
     PasteEdits,
-} from "./types";
+} from "./types.js";
 
 const fixId = "providePostPasteEdits";
 /** @internal */
