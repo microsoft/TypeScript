@@ -3419,7 +3419,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createSyntheticImport(text: string, file: SourceFile) {
         const externalHelpersModuleReference = factory.createStringLiteral(text);
-        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*attributes*/ undefined);
+        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
         addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
         setParent(externalHelpersModuleReference, importDecl);
         setParent(importDecl, file);
@@ -3444,11 +3444,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         let ambientModules: string[] | undefined;
 
         // If we are importing helpers, we need to add a synthetic reference to resolve the
-        // helpers library.
-        if (
-            (getIsolatedModules(options) || isExternalModuleFile)
-            && !file.isDeclarationFile
-        ) {
+        // helpers library. (A JavaScript file without `externalModuleIndicator` set might be
+        // a CommonJS module; `commonJsModuleIndicator` doesn't get set until the binder has
+        // run. We synthesize a helpers import for it just in case; it will never be used if
+        // the binder doesn't find and set a `commonJsModuleIndicator`.)
+        if (isJavaScriptFile || (!file.isDeclarationFile && (getIsolatedModules(options) || isExternalModule(file)))) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
                 imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
