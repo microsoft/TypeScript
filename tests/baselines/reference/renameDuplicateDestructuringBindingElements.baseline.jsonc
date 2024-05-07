@@ -1,0 +1,4 @@
+// === findRenameLocations ===
+// === /tests/cases/fourslash/a.ts ===
+// const foo = { a: 1 };
+// <|const { [|a: aRENAME|]/*RENAME*/ } = foo;|>

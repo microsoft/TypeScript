@@ -711,7 +711,18 @@ function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, 
 
 /** @internal */
 export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, providePrefixAndSuffixText: boolean, quotePreference: QuotePreference): RenameLocation {
-    return { ...entryToDocumentSpan(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker, quotePreference)) };
+    return { ...toRenameEntry(entry), ...(providePrefixAndSuffixText && getPrefixAndSuffixText(entry, originalNode, checker, quotePreference)) };
+}
+
+function toRenameEntry(entry: Entry) {
+    if (
+        entry.kind === EntryKind.Node && isIdentifier(entry.node) && isBindingElement(entry.node.parent) &&
+        entry.node.parent.name === entry.node && entry.node.parent.propertyName && isIdentifier(entry.node.parent.propertyName) &&
+        entry.node.escapedText === entry.node.parent.propertyName.escapedText
+    ) {
+        return toDocumentSpan(entry.node.parent, entry.context);
+    }
+    return entryToDocumentSpan(entry);
 }
 
 function toReferencedSymbolEntry(entry: Entry, symbol: Symbol | undefined): ReferencedSymbolEntry {
@@ -741,15 +752,17 @@ function entryToDocumentSpan(entry: Entry): DocumentSpan {
     if (entry.kind === EntryKind.Span) {
         return { textSpan: entry.textSpan, fileName: entry.fileName };
     }
-    else {
-        const sourceFile = entry.node.getSourceFile();
-        const textSpan = getTextSpan(entry.node, sourceFile);
-        return {
-            textSpan,
-            fileName: sourceFile.fileName,
-            ...toContextSpan(textSpan, sourceFile, entry.context),
-        };
-    }
+    return toDocumentSpan(entry.node, entry.context);
+}
+
+function toDocumentSpan(node: Node, context: ContextNode | undefined) {
+    const sourceFile = node.getSourceFile();
+    const textSpan = getTextSpan(node, sourceFile);
+    return {
+        textSpan,
+        fileName: sourceFile.fileName,
+        ...toContextSpan(textSpan, sourceFile, context),
+    };
 }
 
 interface PrefixAndSuffix {
