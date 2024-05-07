@@ -67,7 +67,7 @@ function test() {}`;
         const funcDec = testSourceFile.statements.find(ts.isFunctionDeclaration)!;
         const tags = ts.getJSDocTags(funcDec);
         assert.isDefined(tags[0].comment);
-        assert.isDefined(tags[0].comment![0]);
+        assert.isDefined(tags[0].comment[0]);
         assert.isString(tags[0].comment);
         assert.equal(tags[0].comment as string, "Some\n text\r\n with newlines.");
     });

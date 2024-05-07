@@ -519,7 +519,7 @@ oh.no
             assert.equal(root.kind, ts.SyntaxKind.SourceFile);
             const first = root.getFirstToken();
             assert.isDefined(first);
-            assert.equal(first!.kind, ts.SyntaxKind.VarKeyword);
+            assert.equal(first.kind, ts.SyntaxKind.VarKeyword);
         });
     });
     describe("getLastToken", () => {
@@ -528,7 +528,7 @@ oh.no
             assert.isDefined(root);
             const last = root.getLastToken();
             assert.isDefined(last);
-            assert.equal(last!.kind, ts.SyntaxKind.EndOfFileToken);
+            assert.equal(last.kind, ts.SyntaxKind.EndOfFileToken);
         });
     });
     describe("getStart", () => {
