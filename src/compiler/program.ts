@@ -3394,7 +3394,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // a CommonJS module; `commonJsModuleIndicator` doesn't get set until the binder has
         // run. We synthesize a helpers import for it just in case; it will never be used if
         // the binder doesn't find and set a `commonJsModuleIndicator`.)
-        if (isJavaScriptFile || (getIsolatedModules(options) || isExternalModule(file)) && !file.isDeclarationFile) {
+        if (isJavaScriptFile || (!file.isDeclarationFile && (getIsolatedModules(options) || isExternalModule(file)))) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
                 imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
