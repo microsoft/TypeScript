@@ -8459,7 +8459,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
                 if (isNamedDeclaration(node) && node.name.kind === SyntaxKind.ComputedPropertyName && !isLateBindableName(node.name)) {
-                    return undefined;
+                    if (!(context.flags & NodeBuilderFlags.AllowUnresolvedComputedNames && hasDynamicName(node) && isEntityNameExpression(node.name.expression) && checkComputedPropertyName(node.name).flags & TypeFlags.Any)) {
+                        return undefined;
+                    }
                 }
                 if (
                     (isFunctionLike(node) && !node.type)

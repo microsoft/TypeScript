@@ -233,6 +233,7 @@ const declarationEmitNodeBuilderFlags = NodeBuilderFlags.MultilineObjectLiterals
     NodeBuilderFlags.UseTypeOfFunction |
     NodeBuilderFlags.UseStructuralFallback |
     NodeBuilderFlags.AllowEmptyTuple |
+    NodeBuilderFlags.AllowUnresolvedComputedNames |
     NodeBuilderFlags.GenerateNamesForShadowedTypeParams |
     NodeBuilderFlags.NoTruncation;
 
@@ -1006,7 +1007,12 @@ export function transformDeclarations(context: TransformationContext) {
                 ) {
                     context.addDiagnostic(createDiagnosticForNode(input, Diagnostics.Computed_properties_must_be_number_or_string_literals_variables_or_dotted_expressions_with_isolatedDeclarations));
                 }
-                return;
+                if (!isEntityNameExpression(input.name.expression)) {
+                    return;
+                }
+                // A.B.C that is not late bound - usually this means the expression did not resolve.
+                // Check the entity name, and copy the declaration, rather than elide it (there's
+                // probably a checker error in the input, but this is most likely the desired output).
             }
         }
 
@@ -1778,7 +1784,7 @@ export function transformDeclarations(context: TransformationContext) {
             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNodeName(node);
         }
         errorNameNode = (node as NamedDeclaration).name;
-        Debug.assert(resolver.isLateBound(getParseTreeNode(node) as Declaration)); // Should only be called with dynamic names
+        Debug.assert(hasDynamicName(node as NamedDeclaration)); // Should only be called with dynamic names
         const decl = node as NamedDeclaration as LateBoundDeclaration;
         const entityName = decl.name.expression;
         checkEntityNameVisibility(entityName, enclosingDeclaration);
