@@ -1,9 +1,9 @@
 import {
     getConfigDirExtendsSys,
     modifyFirstExtendedConfigOfConfigDirExtendsSys,
-} from "../helpers/extends";
-import { verifyTscWatch } from "../helpers/tscWatch";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/extends.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: extends::", () => {
     verifyTscWatch({

@@ -9,7 +9,7 @@ import {
     isString,
     noop,
     SourceMapper,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AutoImportProviderProject,
     AuxiliaryProject,
@@ -23,8 +23,8 @@ import {
     ScriptInfo,
     SourceMapFileWatcher,
     TextStorage,
-} from "./_namespaces/ts.server";
-import { LoggerWithInMemoryLogs } from "./tsserverLogger";
+} from "./_namespaces/ts.server.js";
+import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 interface ProjectData {
     projectStateVersion: Project["projectStateVersion"];

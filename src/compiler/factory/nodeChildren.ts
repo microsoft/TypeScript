@@ -2,7 +2,7 @@ import {
     emptyArray,
     isNodeKind,
     Node,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 const nodeChildren = new WeakMap<Node, readonly Node[] | undefined>();
 

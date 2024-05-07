@@ -1,4 +1,4 @@
-import type * as ts from "./_namespaces/ts";
+import type * as ts from "./_namespaces/ts.js";
 import type {
     ApplicableRefactorInfo,
     CompilerOptionsValue,
@@ -21,13 +21,13 @@ import type {
     TodoCommentDescriptor,
     TypeAcquisition,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ClassificationType,
     CompletionTriggerKind,
     OrganizeImportsMode,
     SemicolonPreference,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
 export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };

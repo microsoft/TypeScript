@@ -31,7 +31,7 @@ import {
     Symbol,
     toPath,
     TypeChecker,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getFileEmitOutput(

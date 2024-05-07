@@ -1,20 +1,20 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     protocol,
     updateProjectIfDirty,
-} from "../../_namespaces/ts.server";
-import { jsonToReadableText } from "../helpers";
+} from "../../_namespaces/ts.server.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 const packageJson: File = {
     path: "/package.json",

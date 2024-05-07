@@ -1,10 +1,10 @@
-import { jsonToReadableText } from "../helpers";
-import { getServerHostForLibResolution } from "../helpers/libraryResolution";
+import { jsonToReadableText } from "../helpers.js";
+import { getServerHostForLibResolution } from "../helpers/libraryResolution.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 
 describe("unittests:: tsserver:: libraryResolution", () => {
     it("with config", () => {

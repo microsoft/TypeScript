@@ -1,6 +1,6 @@
-import { getDirectoryPath } from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { libContent } from "./contents";
+import { getDirectoryPath } from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { libContent } from "./contents.js";
 
 export interface FsOptions {
     libContentToAppend?: string;

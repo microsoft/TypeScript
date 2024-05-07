@@ -137,7 +137,7 @@ import {
     unmangleScopedPackageName,
     version,
     WithMetadata,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AuxiliaryProject,
     CloseFileWatcherEvent,
@@ -181,8 +181,8 @@ import {
     stringifyIndented,
     toNormalizedPath,
     updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 interface StackTraceError extends Error {
     stack?: string;

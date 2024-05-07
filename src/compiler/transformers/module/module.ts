@@ -161,7 +161,7 @@ import {
     VisitResult,
     WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {

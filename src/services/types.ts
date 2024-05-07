@@ -41,9 +41,9 @@ import {
     TextRange,
     TextSpan,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Node {
         getSourceFile(): SourceFile;
@@ -73,21 +73,21 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Identifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface PrivateIdentifier {
         readonly text: string;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Symbol {
         readonly name: string;
@@ -104,7 +104,7 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Type {
         getFlags(): TypeFlags;
@@ -136,14 +136,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface TypeReference {
         typeArguments?: readonly Type[];
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface Signature {
         getDeclaration(): SignatureDeclaration;
@@ -156,7 +156,7 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFile {
         /** @internal */ version: string;
@@ -175,14 +175,14 @@ declare module "../compiler/types" {
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 }
 
-declare module "../compiler/types" {
+declare module "../compiler/types.js" {
     // Module transform: converted from interface augmentation
     export interface SourceMapSource {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;

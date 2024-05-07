@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AnyFunction,
     AssertionLevel,
@@ -91,7 +91,7 @@ import {
     unescapeLeadingUnderscores,
     VarianceFlags,
     zipWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum LogLevel {
