@@ -18,11 +18,10 @@
 ////{ "files": ["target.ts", "other.ts", "other2.ts"] }
 
 const range = test.ranges();
-format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
     args: {
         pastedText: [ `const m = t2 + 1;`],
-    pasteLocations: [{ pos: range[0].pos, end: range[0].end }],
+    pasteLocations: [range[0]],
     },
     newFileContents: {
         "/target.ts":

@@ -19,7 +19,6 @@
 
 const range = test.ranges();
 const t = range[0];
-format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({ 
     args: {
         pastedText: [ `const c = a + b;

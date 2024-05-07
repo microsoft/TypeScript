@@ -1010,8 +1010,9 @@ export class SessionClient implements LanguageService {
 
     getPasteEdits(
         { targetFile, pastedText, pasteLocations, copiedFrom }: PasteEditsArgs,
-        _formatOptions: FormatCodeSettings,
+        formatOptions: FormatCodeSettings,
     ): PasteEdits {
+        this.setFormattingOptions(formatOptions);
         const args: protocol.GetPasteEditsRequestArgs = {
             file: targetFile,
             pastedText,

@@ -15,7 +15,6 @@
 ////{ "files": ["file1.ts", "file2.ts"] }
 
 const range = test.ranges();
-format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
     args: {
         pastedText: [ `interface Testing {

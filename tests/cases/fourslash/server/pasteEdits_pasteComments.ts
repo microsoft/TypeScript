@@ -9,7 +9,6 @@
 ////{ "files": ["target.ts"] }
 
 const range = test.ranges();
-format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
     args: {
         pastedText: [ `/**

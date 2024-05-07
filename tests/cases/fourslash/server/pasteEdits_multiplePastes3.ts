@@ -25,7 +25,6 @@
 ////{ "files": ["file1.ts", "target.ts", "other.ts"] }
 
 const range = test.ranges();
-format.setOption("insertSpaceAfterSemicolonInForStatements", true);
 verify.pasteEdits({
     args: {
         pastedText: [ `export const t = aa + bb + r + s;
