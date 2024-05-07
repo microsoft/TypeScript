@@ -9077,13 +9077,6 @@ export function emitModuleKindIsNonNodeESM(moduleKind: ModuleKind) {
 }
 
 /** @internal */
-export function shouldComputeImpliedNodeFormat(compilerOptions: CompilerOptions) {
-    const moduleResolution = getEmitModuleResolutionKind(compilerOptions);
-    return ModuleResolutionKind.Node16 <= moduleResolution && moduleResolution <= ModuleResolutionKind.NodeNext
-        || getModuleFormatInteropKind(compilerOptions) !== ModuleFormatInteropKind.Bundler;
-}
-
-/** @internal */
 export function hasJsonModuleEmitEnabled(options: CompilerOptions) {
     switch (getEmitModuleKind(options)) {
         case ModuleKind.None:
