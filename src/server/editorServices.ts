@@ -3914,7 +3914,6 @@ export class ProjectService {
         let project: ConfiguredProject | ExternalProject | undefined = this.findExternalProjectContainingOpenScriptInfo(info);
         let retainProjects: ConfiguredProject[] | ConfiguredProject | undefined;
         let projectForConfigFileDiag: ConfiguredProject | undefined;
-        let defaultConfigProjectIsCreated = false;
         let sentConfigDiag: Set<ConfiguredProject> | undefined;
         if (!project && this.serverMode === LanguageServiceMode.Semantic) { // Checking semantic mode is an optimization
             configFileName = this.getConfigFileNameForFile(info);
@@ -3922,7 +3921,6 @@ export class ProjectService {
                 project = this.findConfiguredProjectByProjectName(configFileName);
                 if (!project) {
                     project = this.createLoadAndUpdateConfiguredProject(configFileName, `Creating possible configured project for ${info.fileName} to open`, info.fileName);
-                    defaultConfigProjectIsCreated = true;
                     (sentConfigDiag ??= new Set()).add(project);
                 }
                 // Ensure project is ready to check if it contains opened script info
@@ -3970,10 +3968,7 @@ export class ProjectService {
                 // Send the event only if the project got created as part of this open request and info is part of the project
                 if (projectForConfigFileDiag) {
                     configFileName = projectForConfigFileDiag.getConfigFilePath();
-                    // TODO:: sheetal do this irrespective?
-                    if (projectForConfigFileDiag !== project || defaultConfigProjectIsCreated) {
-                        configFileErrors = projectForConfigFileDiag.getAllProjectErrors();
-                    }
+                    configFileErrors = projectForConfigFileDiag.getAllProjectErrors();
                 }
                 else {
                     // Since the file isnt part of configured project, do not send config file info
