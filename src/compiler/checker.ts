@@ -8306,6 +8306,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration)) &&
                 !(sym && sym.flags & SymbolFlags.TypeParameter)
             ) {
+                sym = sym?.exportSymbol ?? sym;
                 // Some declarations may be transplanted to a new location.
                 // When this happens we need to make sure that the name has the same meaning at both locations
                 // We also check for the unknownSymbol because when we create a fake scope some parameters may actually not be usable
@@ -8318,7 +8319,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // If the symbol is not found, but was not found in the original scope either we probably have an error, don't reuse the node
                     (symAtLocation === undefined && sym !== undefined) ||
                     // If the symbol is found both in declaration scope and in current scope then it shoudl point to the same reference
-                    (symAtLocation && sym && !getSymbolIfSameReference(symAtLocation, sym))
+                    (symAtLocation && sym && !getSymbolIfSameReference(symAtLocation?.exportSymbol ?? symAtLocation, sym))
                 ) {
                     introducesError = true;
                     return { introducesError, node, sym };

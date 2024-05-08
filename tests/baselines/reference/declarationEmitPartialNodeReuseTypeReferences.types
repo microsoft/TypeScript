@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/declarationEmitPartialNodeReuseTypeReferences.ts] ////
+
+=== a.ts ===
+export type SpecialString = string;
+>SpecialString : string
+>              : ^^^^^^
+
+type PrivateSpecialString = string;
+>PrivateSpecialString : string
+>                     : ^^^^^^
+
+export namespace N {
+    export type SpecialString = string;
+>SpecialString : string
+>              : ^^^^^^
+}
+export const o = (o: SpecialString) => null! as { foo: SpecialString, bar: PrivateSpecialString, baz: N.SpecialString };
+>o : (o: SpecialString) => { foo: SpecialString; bar: PrivateSpecialString; baz: N.SpecialString; }
+>  : ^ ^^             ^^^^^                                                                        
+>(o: SpecialString) => null! as { foo: SpecialString, bar: PrivateSpecialString, baz: N.SpecialString } : (o: SpecialString) => { foo: SpecialString; bar: PrivateSpecialString; baz: N.SpecialString; }
+>                                                                                                       : ^ ^^             ^^^^^                                                                        
+>o : string
+>  : ^^^^^^
+>null! as { foo: SpecialString, bar: PrivateSpecialString, baz: N.SpecialString } : { foo: SpecialString; bar: PrivateSpecialString; baz: N.SpecialString; }
+>                                                                                 : ^^^^^^^             ^^^^^^^                    ^^^^^^^               ^^^
+>null! : never
+>      : ^^^^^
+>foo : string
+>    : ^^^^^^
+>bar : string
+>    : ^^^^^^
+>baz : string
+>    : ^^^^^^
+>N : any
+>  : ^^^
+
+=== b.ts ===
+import * as a from "./a";
+>a : typeof a
+>  : ^^^^^^^^
+
+export const g = a.o
+>g : (o: string) => { foo: string; bar: string; baz: string; }
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a.o : (o: string) => { foo: string; bar: string; baz: string; }
+>    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : typeof a
+>  : ^^^^^^^^
+>o : (o: string) => { foo: string; bar: string; baz: string; }
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== c.ts ===
+import { o, SpecialString } from "./a";
+>o : (o: SpecialString) => { foo: string; bar: string; baz: string; }
+>  : ^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>SpecialString : any
+>              : ^^^
+
+export const g = o
+>g : (o: SpecialString) => { foo: string; bar: string; baz: string; }
+>  : ^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : (o: SpecialString) => { foo: string; bar: string; baz: string; }
+>  : ^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
