@@ -5,13 +5,13 @@ import {
     identity,
     perfLogger,
     SortedArray,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     Logger,
     LogLevel,
     NormalizedPath,
     ServerHost,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 /** @internal */
 export class ThrottledOperations {
@@ -109,20 +109,4 @@ export function removeSorted<T>(array: SortedArray<T>, remove: T, compare: Compa
     if (removeIndex >= 0) {
         array.splice(removeIndex, 1);
     }
-}
-
-const indentStr = "\n    ";
-
-/** @internal */
-export function indent(str: string): string {
-    return indentStr + str.replace(/\n/g, indentStr);
-}
-
-/**
- * Put stringified JSON on the next line, indented.
- *
- * @internal
- */
-export function stringifyIndented(json: {}): string {
-    return indentStr + JSON.stringify(json);
 }

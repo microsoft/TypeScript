@@ -7,24 +7,30 @@
 // references above.
 foo;
 >foo : number
+>    : ^^^^^^
 
 bar;
 >bar : number
+>    : ^^^^^^
 
 export {};
 === /node_modules/pkg/import.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     var foo: number;
 >foo : number
+>    : ^^^^^^
 }
 === /node_modules/pkg/require.d.ts ===
 export {};
 declare global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     var bar: number;
 >bar : number
+>    : ^^^^^^
 }

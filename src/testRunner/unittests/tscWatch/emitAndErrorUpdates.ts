@@ -1,16 +1,15 @@
-import {
-    libContent,
-} from "../helpers/contents";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
+import { getFsContentsForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
-    getTsBuildProjectFile,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
@@ -19,7 +18,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
     };
     interface VerifyEmitAndErrorUpdates {
         subScenario: string;
-        files: () => File[];
+        files: () => FsContents | readonly File[];
         currentDirectory?: string;
         changes: TscWatchCompileChange[];
     }
@@ -251,7 +250,7 @@ getPoint().c.x;`,
     describe("updates errors when file transitively exported file changes", () => {
         const config: File = {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 files: ["app.ts"],
                 compilerOptions: { baseUrl: "." },
             }),
@@ -370,9 +369,7 @@ export class Data2 {
         verifyEmitAndErrorUpdates({
             subScenario: "with noEmitOnError",
             currentDirectory: `/user/username/projects/noEmitOnError`,
-            files: () =>
-                ["shared/types/db.ts", "src/main.ts", "src/other.ts", "tsconfig.json"]
-                    .map(f => getTsBuildProjectFile("noEmitOnError", f)).concat({ path: libFile.path, content: libContent }),
+            files: getFsContentsForNoEmitOnError,
             changes: [
                 noChange,
                 change(

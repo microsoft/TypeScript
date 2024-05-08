@@ -1,16 +1,12 @@
-import {
-    expect,
-} from "chai";
+import { expect } from "chai";
 
-import {
-    incrementalVerifier,
-} from "../../../harness/incrementalUtils";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { incrementalVerifier } from "../../../harness/incrementalUtils.js";
 import {
     createHasErrorMessageLogger,
     nullLogger,
-} from "../helpers/tsserver";
+} from "../../../harness/tsserverLogger.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 
 let lastWrittenToHost: string;
 const noopFileWatcher: ts.FileWatcher = { close: ts.noop };
@@ -70,7 +66,6 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
             cancellationToken: ts.server.nullCancellationToken,
             useSingleInferredProject: false,
             useInferredProjectPerProjectRoot: false,
-            typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Buffer.byteLength,
             hrtime: process.hrtime,
             logger: nullLogger(),
@@ -234,7 +229,7 @@ describe("unittests:: tsserver:: Session:: General functionality", () => {
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;
-                req.arguments = null; // eslint-disable-line no-null/no-null
+                req.arguments = null; // eslint-disable-line no-restricted-syntax
                 session.onMessage(JSON.stringify(req));
                 req.seq = i;
                 i++;

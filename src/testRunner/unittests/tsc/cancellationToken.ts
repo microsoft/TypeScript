@@ -1,20 +1,21 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineBuildInfo,
     CommandLineProgram,
-} from "../helpers/baseline";
+} from "../helpers/baseline.js";
 import {
     applyEdit,
     createBaseline,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: builder cancellationToken", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
@@ -50,9 +51,9 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             };
             const config: File = {
                 path: `/user/username/projects/myproject/tsconfig.json`,
-                content: JSON.stringify({ compilerOptions: { incremental: true, declaration: true } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, declaration: true } }),
             };
-            const { sys, baseline, oldSnap: originalSnap } = createBaseline(createWatchedSystem(
+            const { sys, baseline } = createBaseline(createWatchedSystem(
                 [aFile, bFile, cFile, dFile, config, libFile],
                 { currentDirectory: "/user/username/projects/myproject" },
             ));
@@ -70,7 +71,6 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             let programs: CommandLineProgram[] = ts.emptyArray;
             let oldPrograms: CommandLineProgram[] = ts.emptyArray;
             let builderProgram: ts.EmitAndSemanticDiagnosticsBuilderProgram = undefined!;
-            let oldSnap = originalSnap;
             let cancel = false;
             const cancellationToken: ts.CancellationToken = {
                 isCancellationRequested: () => cancel,
@@ -87,7 +87,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
 
             // Cancel on first semantic operation
             // Change
-            oldSnap = applyEdit(
+            applyEdit(
                 sys,
                 baseline,
                 sys => sys.appendFile(cFile.path, "export function foo() {}"),
@@ -111,7 +111,6 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                 getPrograms: () => programs,
                 oldPrograms,
                 sys,
-                oldSnap,
             });
 
             // Normal emit again
@@ -125,7 +124,7 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
             Harness.Baseline.runBaseline(`tsc/cancellationToken/${scenario.split(" ").join("-")}.js`, baseline.join("\r\n"));
 
             function noChange(caption: string) {
-                oldSnap = applyEdit(sys, baseline, ts.noop, caption);
+                applyEdit(sys, baseline, ts.noop, caption);
             }
 
             function updatePrograms() {
@@ -159,7 +158,6 @@ describe("unittests:: tsc:: builder cancellationToken", () => {
                     getPrograms: () => programs,
                     oldPrograms,
                     sys,
-                    oldSnap,
                 });
             }
 

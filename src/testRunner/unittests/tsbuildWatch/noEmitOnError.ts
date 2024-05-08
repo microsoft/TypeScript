@@ -1,15 +1,8 @@
-import {
-    libContent,
-} from "../helpers/contents";
+import { getSysForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
-import {
-    createWatchedSystem,
-    getTsBuildProjectFile,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tscWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {
@@ -31,15 +24,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
         scenario: "noEmitOnError",
         subScenario: "does not emit any files on error",
         commandLineArgs: ["-b", "-w", "-verbose"],
-        sys: () =>
-            createWatchedSystem(
-                [
-                    ...["tsconfig.json", "shared/types/db.ts", "src/main.ts", "src/other.ts"]
-                        .map(f => getTsBuildProjectFile("noEmitOnError", f)),
-                    { path: libFile.path, content: libContent },
-                ],
-                { currentDirectory: `/user/username/projects/noEmitOnError` },
-            ),
+        sys: getSysForNoEmitOnError,
         edits: [
             noChange,
             change(

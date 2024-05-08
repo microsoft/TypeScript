@@ -3,27 +3,37 @@
 === main.ts ===
 import { fa } from "ext";
 >fa : () => import("node_modules/ext/ts3.1/index").A
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 import { fb } from "ext/other";
 >fb : () => import("node_modules/ext/ts3.1/other").B
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const va = fa();
 >va : import("node_modules/ext/ts3.1/index").A
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa() : import("node_modules/ext/ts3.1/index").A
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fa : () => import("node_modules/ext/ts3.1/index").A
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const vb = fb();
 >vb : import("node_modules/ext/ts3.1/other").B
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fb() : import("node_modules/ext/ts3.1/other").B
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fb : () => import("node_modules/ext/ts3.1/other").B
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/ext/ts3.1/index.d.ts ===
 export interface A {}
 export function fa(): A;
 >fa : () => A
+>   : ^^^^^^ 
 
 === node_modules/ext/ts3.1/other.d.ts ===
 export interface B {}
 export function fb(): B;
 >fb : () => B
+>   : ^^^^^^ 
 

@@ -5,18 +5,25 @@
 
 var exports = {};
 >exports : {}
+>        : ^^
 >{} : {}
+>   : ^^
 
 /**
  * @typedef {string}
  */
 exports.SomeName;
 >exports.SomeName : any
+>                 : ^^^
 >exports : {}
+>        : ^^
 >SomeName : any
+>         : ^^^
 
 /** @type {exports.SomeName} */
 const myString = 'str';
 >myString : exports.SomeName
+>         : ^^^^^^^^^^^^^^^^
 >'str' : "str"
+>      : ^^^^^
 

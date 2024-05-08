@@ -12,7 +12,7 @@ import {
     TestConfig,
     TestRunnerKind,
     workerCount,
-} from "../_namespaces/Harness";
+} from "../_namespaces/Harness.js";
 import {
     ErrorInfo,
     ParallelClientMessage,
@@ -21,9 +21,9 @@ import {
     Task,
     TaskTimeout,
     TestInfo,
-} from "../_namespaces/Harness.Parallel";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+} from "../_namespaces/Harness.Parallel.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 
 export function start() {
     const Mocha = require("mocha") as typeof import("mocha");
@@ -217,8 +217,7 @@ export function start() {
         console.log("Discovering runner-based tests...");
         const discoverStart = +(new Date());
         for (const runner of runners) {
-            for (const test of runner.getTestFiles()) {
-                const file = typeof test === "string" ? test : test.file;
+            for (const file of runner.getTestFiles()) {
                 let size: number;
                 if (!perfData) {
                     try {
@@ -597,7 +596,7 @@ export function start() {
             consoleReporter.epilogue();
             if (noColors) Base.useColors = savedUseColors;
 
-            // eslint-disable-next-line no-null/no-null
+            // eslint-disable-next-line no-restricted-syntax
             IO.writeFile(perfdataFileName(configOption), JSON.stringify(newPerfData, null, 4));
 
             if (xunitReporter) {

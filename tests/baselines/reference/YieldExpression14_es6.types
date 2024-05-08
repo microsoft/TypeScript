@@ -3,12 +3,16 @@
 === YieldExpression14_es6.ts ===
 class C {
 >C : C
+>  : ^
 
   foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
      yield foo
 >yield foo : any
+>          : ^^^
 >foo : any
+>    : ^^^
   }
 }

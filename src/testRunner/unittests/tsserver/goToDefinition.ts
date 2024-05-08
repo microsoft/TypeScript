@@ -1,15 +1,12 @@
-import {
-    protocol,
-} from "../../_namespaces/ts.server";
+import { protocol } from "../../_namespaces/ts.server.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: services:: goToDefinition", () => {
     it("does not issue errors on jsdoc in TS", () => {
@@ -43,7 +40,7 @@ declare class Stuff {
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,
@@ -110,7 +107,7 @@ declare class Stuff {
             },
         ];
         const host = createServerHost(files);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         // Open files in the two configured projects
         session.executeCommandSeq<protocol.UpdateOpenRequest>({
             command: protocol.CommandTypes.UpdateOpen,

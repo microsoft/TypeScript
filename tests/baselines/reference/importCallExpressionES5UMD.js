@@ -40,9 +40,8 @@ export class D {
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.foo = void 0;
-    function foo() { return "foo"; }
     exports.foo = foo;
+    function foo() { return "foo"; }
 });
 //// [1.js]
 (function (factory) {

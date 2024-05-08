@@ -1,14 +1,13 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
-    createLoggerWithInMemoryLogs,
-    createSession,
     openFilesForSession,
-} from "../helpers/tsserver";
+    TestSession,
+} from "../helpers/tsserver.js";
 import {
     createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: getFileReferences", () => {
     const importA = `import "./a";`;
@@ -39,7 +38,7 @@ describe("unittests:: tsserver:: getFileReferences", () => {
 
     function makeSampleSession() {
         const host = createServerHost([aTs, bTs, cTs, dTs, tsconfig]);
-        const session = createSession(host, { logger: createLoggerWithInMemoryLogs(host) });
+        const session = new TestSession(host);
         openFilesForSession([aTs, bTs, cTs, dTs], session);
         return session;
     }

@@ -23,13 +23,17 @@ interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
 
 //// [/user/username/projects/myproject/tsconfig.json]
-{"compilerOptions":{"forceConsistentCasingInFileNames":true}}
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
 
 
 /a/lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
@@ -69,54 +73,9 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90m12:00:32 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
-
-Program root files: ["/user/username/projects/myproject/moduleA.ts","/user/username/projects/myproject/moduleB.ts","/user/username/projects/myproject/moduleC.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
-Program structureReused: Not
-Program files::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/ModuleC.ts
-/user/username/projects/myproject/moduleA.ts
-/user/username/projects/myproject/moduleB.ts
-
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/ModuleC.ts
-/user/username/projects/myproject/moduleA.ts
-/user/username/projects/myproject/moduleB.ts
-
-Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/user/username/projects/myproject/modulec.ts (used version)
-/user/username/projects/myproject/modulea.ts (used version)
-/user/username/projects/myproject/moduleb.ts (used version)
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
-/user/username/projects/myproject/modulea.ts: *new*
-  {}
-/user/username/projects/myproject/moduleb.ts: *new*
-  {}
-/user/username/projects/myproject/modulec.ts: *new*
-  {}
-/user/username/projects/myproject/tsconfig.json: *new*
-  {}
-
-FsWatchesRecursive::
-/user/username/projects/myproject: *new*
-  {}
-
-exitCode:: ExitStatus.undefined
 
 //// [/user/username/projects/myproject/ModuleC.js]
 "use strict";
@@ -136,6 +95,65 @@ Object.defineProperty(exports, "__esModule", { value: true });
 
 
 
+PolledWatches::
+/user/username/projects/myproject/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/myproject/package.json: *new*
+  {"pollingInterval":2000}
+/user/username/projects/node_modules/@types: *new*
+  {"pollingInterval":500}
+/user/username/projects/package.json: *new*
+  {"pollingInterval":2000}
+
+FsWatches::
+/a/lib/lib.d.ts: *new*
+  {}
+/user/username/projects/myproject/ModuleC.ts: *new*
+  {}
+/user/username/projects/myproject/moduleA.ts: *new*
+  {}
+/user/username/projects/myproject/moduleB.ts: *new*
+  {}
+/user/username/projects/myproject/tsconfig.json: *new*
+  {}
+
+FsWatchesRecursive::
+/user/username/projects/myproject: *new*
+  {}
+
+Program root files: [
+  "/user/username/projects/myproject/moduleA.ts",
+  "/user/username/projects/myproject/moduleB.ts",
+  "/user/username/projects/myproject/moduleC.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/ModuleC.ts
+/user/username/projects/myproject/moduleA.ts
+/user/username/projects/myproject/moduleB.ts
+
+Semantic diagnostics in builder refreshed for::
+/a/lib/lib.d.ts
+/user/username/projects/myproject/ModuleC.ts
+/user/username/projects/myproject/moduleA.ts
+/user/username/projects/myproject/moduleB.ts
+
+Shape signatures in builder refreshed for::
+/a/lib/lib.d.ts (used version)
+/user/username/projects/myproject/modulec.ts (used version)
+/user/username/projects/myproject/modulea.ts (used version)
+/user/username/projects/myproject/moduleb.ts (used version)
+
+exitCode:: ExitStatus.undefined
+
 Change:: Prepend a line to moduleA
 
 Input::
@@ -144,12 +162,16 @@ Input::
                     import a = require("./ModuleC")
 
 
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
+
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
@@ -189,12 +211,25 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-Program root files: ["/user/username/projects/myproject/moduleA.ts","/user/username/projects/myproject/moduleB.ts","/user/username/projects/myproject/moduleC.ts"]
-Program options: {"forceConsistentCasingInFileNames":true,"watch":true,"project":"/user/username/projects/myproject","explainFiles":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
+//// [/user/username/projects/myproject/moduleA.js] file written with same contents
+
+
+Program root files: [
+  "/user/username/projects/myproject/moduleA.ts",
+  "/user/username/projects/myproject/moduleB.ts",
+  "/user/username/projects/myproject/moduleC.ts"
+]
+Program options: {
+  "forceConsistentCasingInFileNames": true,
+  "watch": true,
+  "project": "/user/username/projects/myproject",
+  "explainFiles": true,
+  "configFilePath": "/user/username/projects/myproject/tsconfig.json"
+}
 Program structureReused: Completely
 Program files::
 /a/lib/lib.d.ts
@@ -209,5 +244,3 @@ Shape signatures in builder refreshed for::
 /user/username/projects/myproject/modulea.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
-
-//// [/user/username/projects/myproject/moduleA.js] file written with same contents

@@ -1,0 +1,512 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue5.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue5.ts ===
+type A = { kind: "A", value: number };
+>A : A
+>  : ^
+>kind : "A"
+>     : ^^^
+>value : number
+>      : ^^^^^^
+
+type B = { kind: "B", name: string };
+>B : B
+>  : ^
+>kind : "B"
+>     : ^^^
+>name : string
+>     : ^^^^^^
+
+type C = { kind: "C", cond: boolean };
+>C : C
+>  : ^
+>kind : "C"
+>     : ^^^
+>cond : boolean
+>     : ^^^^^^^
+
+type D = { kind: "D", value: boolean };
+>D : D
+>  : ^
+>kind : "D"
+>     : ^^^
+>value : boolean
+>      : ^^^^^^^
+
+type E = { kind: "E", x: number, y: number };
+>E : E
+>  : ^
+>kind : "E"
+>     : ^^^
+>x : number
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+type All = A | B | C | D | E;
+>All : All
+>    : ^^^
+
+function fn1switch(input: All) {
+>fn1switch : (input: All) => void
+>          : ^     ^^   ^^^^^^^^^
+>input : All
+>      : ^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case input.kind === "A":
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+        case input.kind === "B":
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+            if (input.kind === "A") {
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B"
+>           : ^^^^^^^^^
+>input : A | B
+>      : ^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+                return;
+            }
+
+            input; // Should be B;
+>input : B
+>      : ^
+
+            //  ^?
+
+            // fallthrough
+        case input.kind === "C":
+>input.kind === "C" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"C" : "C"
+>    : ^^^
+
+            input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+            //  ^?
+            break;
+        default:
+            input; // Should be D | E
+>input : D | E
+>      : ^^^^^
+
+            //  ^?
+    }
+
+    input; // Should not be A
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+
+    //  ^?
+}
+
+function fn1ifelse(input: All) {
+>fn1ifelse : (input: All) => void
+>          : ^     ^^   ^^^^^^^^^
+>input : All
+>      : ^^^
+
+    if (input.kind === "A" || input.kind === "B") {
+>input.kind === "A" || input.kind === "B" : boolean
+>                                         : ^^^^^^^
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+>kind : "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+        if (input.kind === "A") {
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B"
+>           : ^^^^^^^^^
+>input : A | B
+>      : ^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+            return;
+        }
+
+        input; // Should be B;
+>input : B
+>      : ^
+
+        //  ^?
+    }
+    if (input.kind === "C" || input.kind === "B") {
+>input.kind === "C" || input.kind === "B" : boolean
+>                                         : ^^^^^^^
+>input.kind === "C" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+>kind : "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"C" : "C"
+>    : ^^^
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^
+>input : B | D | E
+>      : ^^^^^^^^^
+>kind : "B" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+        input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+        //  ^?
+    }
+    else {
+        input; // Should be D | E
+>input : D | E
+>      : ^^^^^
+
+        //  ^?
+    }
+
+    input; // Should not be A
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+
+    //  ^?
+}
+
+function fn2switch(input: All) {
+>fn2switch : (input: All) => void
+>          : ^     ^^   ^^^^^^^^^
+>input : All
+>      : ^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case input.kind === "A":
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+        case input.kind === "B":
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+            if (input.kind === "A") {
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B"
+>           : ^^^^^^^^^
+>input : A | B
+>      : ^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+                return;
+            }
+
+            input; // Should be B;
+>input : B
+>      : ^
+
+            //  ^?
+
+            // fallthrough
+        case input.kind === "C":
+>input.kind === "C" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"C" : "C"
+>    : ^^^
+
+            input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+            //  ^?
+            break;
+        default:
+            input; // Should be D | E
+>input : D | E
+>      : ^^^^^
+
+            //  ^?
+            return;
+    }
+
+    input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+    //  ^?
+}
+
+function fn2ifelse(input: All) {
+>fn2ifelse : (input: All) => void
+>          : ^     ^^   ^^^^^^^^^
+>input : All
+>      : ^^^
+
+    if (input.kind === "A" || input.kind === "B") {
+>input.kind === "A" || input.kind === "B" : boolean
+>                                         : ^^^^^^^
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+>kind : "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+        if (input.kind === "A") {
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B"
+>           : ^^^^^^^^^
+>input : A | B
+>      : ^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+            return;
+        }
+
+        input; // Should be B;
+>input : B
+>      : ^
+
+        //  ^?
+    }
+    if (input.kind === "C" || input.kind === "B") {
+>input.kind === "C" || input.kind === "B" : boolean
+>                                         : ^^^^^^^
+>input.kind === "C" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+>kind : "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^
+>"C" : "C"
+>    : ^^^
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "B" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^
+>input : B | D | E
+>      : ^^^^^^^^^
+>kind : "B" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+        input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+        //  ^?
+    }
+    else {
+        input; // Should be D | E
+>input : D | E
+>      : ^^^^^
+
+        //  ^?
+        return;
+    }
+
+    input; // Should be B | C
+>input : B | C
+>      : ^^^^^
+
+    //  ^?
+}
+
+function fn3switch(input: All) {
+>fn3switch : (input: All) => void
+>          : ^     ^^   ^^^^^^^^^
+>input : All
+>      : ^^^
+
+    switch (true) {
+>true : true
+>     : ^^^^
+
+        case input.kind === "A":
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+        case input.kind === "B":
+>input.kind === "B" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"B" : "B"
+>    : ^^^
+
+            if (input.kind === "A") {
+>input.kind === "A" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B"
+>           : ^^^^^^^^^
+>input : A | B
+>      : ^^^^^
+>kind : "A" | "B"
+>     : ^^^^^^^^^
+>"A" : "A"
+>    : ^^^
+
+                return;
+            }
+
+            input; // Should be B;
+>input : B
+>      : ^
+
+            //  ^?
+
+            // fallthrough
+        default:
+            input; // Should be B | D | E
+>input : B | D | E
+>      : ^^^^^^^^^
+
+            //  ^?
+            break;
+
+        case input.kind === "C":
+>input.kind === "C" : boolean
+>                   : ^^^^^^^
+>input.kind : "A" | "B" | "C" | "D" | "E"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>input : All
+>      : ^^^
+>kind : "A" | "B" | "C" | "D" | "E"
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"C" : "C"
+>    : ^^^
+
+            input; // Should be C
+>input : C
+>      : ^
+
+            //  ^?
+            break;
+    }
+
+    input; // Should not be A
+>input : B | C | D | E
+>      : ^^^^^^^^^^^^^
+
+    //  ^?
+}
+

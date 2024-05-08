@@ -32,10 +32,17 @@ interface Array<T> { length: number; [n: number]: T; }
 
 
 //// [/src/projects/a/tsconfig.json]
-{"compilerOptions":{"strict":true}}
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
 
 //// [/src/projects/b/package.json]
-{"name":"b","type":"module"}
+{
+  "name": "b",
+  "type": "module"
+}
 
 //// [/src/projects/b/src/index.ts]
 import pg from "pg";
@@ -43,13 +50,21 @@ pg.foo();
 
 
 //// [/src/projects/b/tsconfig.json]
-{"compilerOptions":{"strict":true,"module":"node16"}}
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "node16"
+  }
+}
 
 //// [/src/projects/node_modules/@types/pg/index.d.ts]
 export function foo(): void;
 
 //// [/src/projects/node_modules/@types/pg/package.json]
-{"name":"@types/pg","types":"index.d.ts"}
+{
+  "name": "@types/pg",
+  "types": "index.d.ts"
+}
 
 
 
@@ -63,6 +78,11 @@ Output::
 
 [[90m12:00:24 AM[0m] Building project '/src/projects/a/tsconfig.json'...
 
+File '/src/projects/a/src/package.json' does not exist.
+File '/src/projects/a/package.json' does not exist.
+File '/src/projects/package.json' does not exist.
+File '/src/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving type reference directive 'pg', containing file '/src/projects/a/__inferred type names__.ts', root directory '/src/projects/a/node_modules/@types,/src/projects/node_modules/@types,/src/node_modules/@types,/node_modules/@types'. ========
 Resolving with primary search path '/src/projects/a/node_modules/@types, /src/projects/node_modules/@types, /src/node_modules/@types, /node_modules/@types'.
 Directory '/src/projects/a/node_modules/@types' does not exist, skipping all lookups in it.
@@ -73,6 +93,9 @@ Found 'package.json' at '/src/projects/node_modules/@types/pg/package.json'.
 File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
+File '/src/projects/node_modules/@types/pg/package.json' exists according to earlier cached lookups.
+File '/lib/package.json' does not exist.
+File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.d.ts
   Default library for target 'es5'
 src/projects/a/src/index.ts
@@ -110,8 +133,8 @@ File '/src/projects/node_modules/@types/pg/package.json' exists according to ear
 File '/src/projects/node_modules/@types/pg/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/src/projects/node_modules/@types/pg/index.d.ts', result '/src/projects/node_modules/@types/pg/index.d.ts'.
 ======== Type reference directive 'pg' was successfully resolved to '/src/projects/node_modules/@types/pg/index.d.ts', primary: true. ========
-File '/lib/package.json' does not exist.
-File '/package.json' does not exist.
+File '/lib/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 lib/lib.es2022.full.d.ts
   Default library for target 'es2022'
 src/projects/node_modules/@types/pg/index.d.ts

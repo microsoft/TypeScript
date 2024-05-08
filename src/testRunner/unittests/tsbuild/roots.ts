@@ -1,12 +1,7 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import {
-    loadProjectFromFiles,
-} from "../helpers/vfs";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: roots::", () => {
     verifyTsc({
@@ -17,7 +12,7 @@ describe("unittests:: tsbuild:: roots::", () => {
             loadProjectFromFiles({
                 "/src/file1.ts": `export const x = "hello";`,
                 "/src/file2.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -42,7 +37,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 "/src/file2.ts": `export const y = "world";`,
                 "/src/file3.ts": `export const y = "world";`,
                 "/src/file4.ts": `export const y = "world";`,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["*.ts"],
                 }),
@@ -69,7 +64,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random";
                 export const y = "world";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts"],
                 }),
@@ -109,7 +104,7 @@ describe("unittests:: tsbuild:: roots::", () => {
                 import { random } from "./random2";
                 export const nonConsecutive = "hello";
             `,
-                "/src/tsconfig.json": JSON.stringify({
+                "/src/tsconfig.json": jsonToReadableText({
                     compilerOptions: { composite: true },
                     include: ["file*.ts", "nonconsecutive*.ts", "asArray*.ts", "anotherNonConsecutive.ts"],
                 }),

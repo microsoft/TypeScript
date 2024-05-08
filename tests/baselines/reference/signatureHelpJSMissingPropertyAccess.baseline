@@ -1,3 +1,4 @@
+// === SignatureHelp ===
 === /tests/cases/fourslash/test.js ===
 // foo.filter()
 //            ^
@@ -225,7 +226,7 @@
                 },
                 {
                   "text": "value",
-                  "kind": "text"
+                  "kind": "parameterName"
                 },
                 {
                   "text": " ",

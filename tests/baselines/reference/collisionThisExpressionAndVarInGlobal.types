@@ -3,10 +3,15 @@
 === collisionThisExpressionAndVarInGlobal.ts ===
 var _this = 1;
 >_this : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 
 var f = () => this;
 >f : () => typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >() => this : () => typeof globalThis
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 

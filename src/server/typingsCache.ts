@@ -11,12 +11,12 @@ import {
     sort,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     emptyArray,
     Project,
     ProjectService,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
     projectName: string;
@@ -157,7 +157,8 @@ export class TypingsCache {
     }
 
     onProjectClosed(project: Project) {
-        this.perProjectCache.delete(project.getProjectName());
-        this.installer.onProjectClosed(project);
+        if (this.perProjectCache.delete(project.getProjectName())) {
+            this.installer.onProjectClosed(project);
+        }
     }
 }

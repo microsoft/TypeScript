@@ -1,13 +1,10 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     verifyTscWatch({
@@ -63,7 +60,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
                 edit: sys =>
                     sys.writeFile(
                         `/user/username/projects/myproject/tsconfig.json`,
-                        JSON.stringify({
+                        jsonToReadableText({
                             compilerOptions: { composite: true, declaration: true },
                             files: ["a.ts", "b.ts"],
                         }),

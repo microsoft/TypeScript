@@ -1,14 +1,15 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     noopChange,
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function pkgs<T>(cb: (index: number) => T, count: number, startIndex?: number): T[] {
@@ -29,7 +30,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
             },
             {
                 path: `/user/username/projects/myproject/pkg${index}/tsconfig.json`,
-                content: JSON.stringify({
+                content: jsonToReadableText({
                     compilerOptions: { composite: true },
                     references: index === 0 ?
                         undefined :
@@ -41,7 +42,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: projectsBuilding", () => {
     function solution(maxPkgs: number): File {
         return {
             path: `/user/username/projects/myproject/tsconfig.json`,
-            content: JSON.stringify({
+            content: jsonToReadableText({
                 references: pkgs(createPkgReference, maxPkgs),
                 files: [],
             }),

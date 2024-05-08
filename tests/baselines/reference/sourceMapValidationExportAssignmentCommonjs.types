@@ -3,10 +3,12 @@
 === sourceMapValidationExportAssignmentCommonjs.ts ===
 class a {
 >a : a
+>  : ^
 
     public c;
 >c : any
 }
 export = a;
 >a : a
+>  : ^
 

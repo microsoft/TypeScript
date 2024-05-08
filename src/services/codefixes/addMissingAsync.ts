@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrowFunction,
     CodeFixAllContext,
     CodeFixContext,
@@ -28,12 +33,7 @@ import {
     TextSpan,
     textSpanEnd,
     textSpansEqual,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 type ContextualTrackChangesFunction = (cb: (changeTracker: textChanges.ChangeTracker) => void) => FileTextChanges[];
 const fixId = "addMissingAsync";
@@ -87,7 +87,7 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         }
     }
     fixedDeclarations?.add(getNodeId(insertionSite));
-    const cloneWithModifier = factory.updateModifiers(
+    const cloneWithModifier = factory.replaceModifiers(
         getSynthesizedDeepClone(insertionSite, /*includeTrivia*/ true),
         factory.createNodeArray(factory.createModifiersFromModifierFlags(getSyntacticModifierFlags(insertionSite) | ModifierFlags.Async)),
     );

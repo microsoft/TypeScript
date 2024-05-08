@@ -19,22 +19,61 @@ declare const console: { log(msg: any): void; };
 export const a: Unrestricted = 1;
 
 //// [/src/shared/tsconfig-base.json]
-{"include":["./typings-base/"]}
+{
+  "include": [
+    "./typings-base/"
+  ]
+}
 
 //// [/src/shared/tsconfig.json]
-{"extends":"./tsconfig-base.json","compilerOptions":{"composite":true,"outDir":"../target-tsc-build/","rootDir":".."},"files":["./index.ts"]}
+{
+  "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../target-tsc-build/",
+    "rootDir": ".."
+  },
+  "files": [
+    "./index.ts"
+  ]
+}
 
 //// [/src/shared/typings-base/globals.d.ts]
 type Unrestricted = any;
 
 //// [/src/tsconfig.json]
-{"references":[{"path":"./shared/tsconfig.json"},{"path":"./webpack/tsconfig.json"}],"files":[]}
+{
+  "references": [
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./webpack/tsconfig.json"
+    }
+  ],
+  "files": []
+}
 
 //// [/src/webpack/index.ts]
 export const b: Unrestricted = 1;
 
 //// [/src/webpack/tsconfig.json]
-{"extends":"../shared/tsconfig-base.json","compilerOptions":{"composite":true,"outDir":"../target-tsc-build/","rootDir":".."},"files":["./index.ts"],"references":[{"path":"../shared/tsconfig.json"}]}
+{
+  "extends": "../shared/tsconfig-base.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "../target-tsc-build/",
+    "rootDir": ".."
+  },
+  "files": [
+    "./index.ts"
+  ],
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
 
 
 
@@ -74,7 +113,7 @@ exports.a = 1;
 
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22125360210-export const a: Unrestricted = 1;","signature":"115643418-export declare const a: Unrestricted;\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../shared/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-22125360210-export const a: Unrestricted = 1;","signature":"115643418-export declare const a: Unrestricted;\n","impliedFormat":1},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/shared/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -88,28 +127,34 @@ exports.a = 1;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "../../shared/index.ts": {
         "original": {
           "version": "-22125360210-export const a: Unrestricted = 1;",
-          "signature": "115643418-export declare const a: Unrestricted;\n"
+          "signature": "115643418-export declare const a: Unrestricted;\n",
+          "impliedFormat": 1
         },
         "version": "-22125360210-export const a: Unrestricted = 1;",
-        "signature": "115643418-export declare const a: Unrestricted;\n"
+        "signature": "115643418-export declare const a: Unrestricted;\n",
+        "impliedFormat": "commonjs"
       },
       "../../shared/typings-base/globals.d.ts": {
         "original": {
           "version": "4725476611-type Unrestricted = any;",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -128,7 +173,6 @@ exports.a = 1;
       "rootDir": "../.."
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../shared/index.ts",
@@ -137,7 +181,7 @@ exports.a = 1;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1028
+  "size": 1058
 }
 
 //// [/src/target-tsc-build/webpack/index.d.ts]
@@ -152,7 +196,7 @@ exports.b = 1;
 
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14405273073-export const b: Unrestricted = 1;","signature":"-6010538469-export declare const b: Unrestricted;\n"},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"exportedModulesMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../lib/lib.d.ts","../../webpack/index.ts","../../shared/typings-base/globals.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14405273073-export const b: Unrestricted = 1;","signature":"-6010538469-export declare const b: Unrestricted;\n","impliedFormat":1},{"version":"4725476611-type Unrestricted = any;","affectsGlobalScope":true,"impliedFormat":1}],"root":[2,3],"options":{"composite":true,"outDir":"..","rootDir":"../.."},"referencedMap":[],"semanticDiagnosticsPerFile":[1,3,2],"latestChangedDtsFile":"./index.d.ts"},"version":"FakeTSVersion"}
 
 //// [/src/target-tsc-build/webpack/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -166,28 +210,34 @@ exports.b = 1;
       "../../../lib/lib.d.ts": {
         "original": {
           "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       },
       "../../webpack/index.ts": {
         "original": {
           "version": "-14405273073-export const b: Unrestricted = 1;",
-          "signature": "-6010538469-export declare const b: Unrestricted;\n"
+          "signature": "-6010538469-export declare const b: Unrestricted;\n",
+          "impliedFormat": 1
         },
         "version": "-14405273073-export const b: Unrestricted = 1;",
-        "signature": "-6010538469-export declare const b: Unrestricted;\n"
+        "signature": "-6010538469-export declare const b: Unrestricted;\n",
+        "impliedFormat": "commonjs"
       },
       "../../shared/typings-base/globals.d.ts": {
         "original": {
           "version": "4725476611-type Unrestricted = any;",
-          "affectsGlobalScope": true
+          "affectsGlobalScope": true,
+          "impliedFormat": 1
         },
         "version": "4725476611-type Unrestricted = any;",
         "signature": "4725476611-type Unrestricted = any;",
-        "affectsGlobalScope": true
+        "affectsGlobalScope": true,
+        "impliedFormat": "commonjs"
       }
     },
     "root": [
@@ -206,7 +256,6 @@ exports.b = 1;
       "rootDir": "../.."
     },
     "referencedMap": {},
-    "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "../../../lib/lib.d.ts",
       "../../shared/typings-base/globals.d.ts",
@@ -215,6 +264,6 @@ exports.b = 1;
     "latestChangedDtsFile": "./index.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1031
+  "size": 1061
 }
 

@@ -24,6 +24,7 @@ function apply(func, thisArg, ...args) {
 
 export default apply;
 
+
 //// [apply.js]
 define("_apply", ["require", "exports"], function (require, exports) {
     "use strict";

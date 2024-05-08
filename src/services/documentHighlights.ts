@@ -81,7 +81,7 @@ import {
     toPath,
     tryCast,
     TryStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface DocumentHighlights {
     fileName: string;
@@ -178,6 +178,7 @@ export namespace DocumentHighlights {
             case SyntaxKind.YieldKeyword:
                 return highlightSpans(getYieldOccurrences(node));
             case SyntaxKind.InKeyword:
+            case SyntaxKind.OutKeyword:
                 return undefined;
             default:
                 return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))

@@ -1,0 +1,135 @@
+//// [tests/cases/compiler/narrowingPastLastAssignmentInModule.ts] ////
+
+=== narrowingPastLastAssignmentInModule.ts ===
+function action(f: Function) {}
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>f : Function
+>  : ^^^^^^^^
+
+// Narrowings are not preserved for exported mutable variables
+
+export let x1: string | number;
+>x1 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+x1 = "abc";
+>x1 = "abc" : "abc"
+>           : ^^^^^
+>x1 : string | number
+>   : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { x1 /* string | number */ });
+>action(() => { x1 /* string | number */ }) : void
+>                                           : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x1 /* string | number */ } : () => void
+>                                   : ^^^^^^^^^^
+>x1 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+export { x2 };
+>x2 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+let x2: string | number;
+>x2 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+x2 = "abc";
+>x2 = "abc" : "abc"
+>           : ^^^^^
+>x2 : string | number
+>   : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { x2 /* string | number */ });
+>action(() => { x2 /* string | number */ }) : void
+>                                           : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x2 /* string | number */ } : () => void
+>                                   : ^^^^^^^^^^
+>x2 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+export { x3 as foo };
+>x3 : string | number
+>   : ^^^^^^^^^^^^^^^
+>foo : string | number
+>    : ^^^^^^^^^^^^^^^
+
+let x3: string | number;
+>x3 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+x3 = "abc";
+>x3 = "abc" : "abc"
+>           : ^^^^^
+>x3 : string | number
+>   : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { x3 /* string | number */ });
+>action(() => { x3 /* string | number */ }) : void
+>                                           : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x3 /* string | number */ } : () => void
+>                                   : ^^^^^^^^^^
+>x3 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+let x4: string | number;
+>x4 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+x4 = "abc";
+>x4 = "abc" : "abc"
+>           : ^^^^^
+>x4 : string | number
+>   : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { x4 /* string */ });
+>action(() => { x4 /* string */ }) : void
+>                                  : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x4 /* string */ } : () => void
+>                          : ^^^^^^^^^^
+>x4 : string
+>   : ^^^^^^
+
+export default x4;
+>x4 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+let x5: string | number;
+>x5 : string | number
+>   : ^^^^^^^^^^^^^^^
+
+x5 = "abc";
+>x5 = "abc" : "abc"
+>           : ^^^^^
+>x5 : string | number
+>   : ^^^^^^^^^^^^^^^
+>"abc" : "abc"
+>      : ^^^^^
+
+action(() => { x5 /* string */ });
+>action(() => { x5 /* string */ }) : void
+>                                  : ^^^^
+>action : (f: Function) => void
+>       : ^ ^^        ^^^^^^^^^
+>() => { x5 /* string */ } : () => void
+>                          : ^^^^^^^^^^
+>x5 : string
+>   : ^^^^^^
+

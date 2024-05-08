@@ -3,9 +3,13 @@
 === noCollisionThisExpressionAndClassInGlobal.ts ===
 class _this {
 >_this : _this
+>      : ^^^^^
 }
 var f = () => _this;
 >f : () => typeof _this
+>  : ^^^^^^^^^^^^^^^^^^
 >() => _this : () => typeof _this
+>            : ^^^^^^^^^^^^^^^^^^
 >_this : typeof _this
+>      : ^^^^^^^^^^^^
 

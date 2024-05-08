@@ -1,9 +1,9 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a/b/app.ts
 
 import * as fs from 'fs'
 
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -32,15 +32,15 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
+File '/a/b/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/a/b/fs.ts' does not exist.
@@ -69,18 +69,24 @@ File '/a/fs.jsx' does not exist.
 File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+File 'package.json' does not exist.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a/b/app.ts
 
 import * as fs from 'fs'
 var x = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -109,28 +115,33 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare module 'fs' {}
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
+File '/a/b/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 Module 'fs' was resolved as ambient module declared in '/a/b/node.d.ts' since this file was not modified.
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 
 
 
-Program Reused:: Completely
+Program 3 Reused:: Completely
 File: /a/b/app.ts
 
 import * as fs from 'fs'
 var y = 1;
-resolvedModules: 
+resolvedModules:
 fs: {
   "failedLookupLocations": [
     "/a/b/fs.ts",
@@ -159,15 +170,18 @@ fs: {
     "/fs.jsx"
   ]
 }
-resolvedTypeReferenceDirectiveNames: undefined
 
 File: /a/b/node.d.ts
 
 
 declare var process: any
-resolvedModules: undefined
-resolvedTypeReferenceDirectiveNames: undefined
 
+File '/a/b/package.json' does not exist.
+File '/a/package.json' does not exist.
+File '/package.json' does not exist.
+File '/a/b/package.json' does not exist according to earlier cached lookups.
+File '/a/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
 ======== Resolving module 'fs' from '/a/b/app.ts'. ========
 Module resolution kind is not specified, using 'Classic'.
 File '/a/b/fs.ts' does not exist.
@@ -197,7 +211,9 @@ File '/fs.js' does not exist.
 File '/fs.jsx' does not exist.
 ======== Module name 'fs' was not resolved. ========
 
-MissingPaths:: ["lib.d.ts"]
+MissingPaths:: [
+  "lib.d.ts"
+]
 
 /a/b/app.ts(2,21): error TS2792: Cannot find module 'fs'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 

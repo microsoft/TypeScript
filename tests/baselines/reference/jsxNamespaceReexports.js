@@ -25,7 +25,6 @@ function createElement(element, props) {
         children[_i - 2] = arguments[_i];
     }
 }
-exports.createElement = createElement;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

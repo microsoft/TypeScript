@@ -3,8 +3,11 @@
 === for-of2.ts ===
 const v;
 >v : any
+>  : ^^^
 
 for (v of []) { }
 >v : any
+>  : ^^^
 >[] : undefined[]
+>   : ^^^^^^^^^^^
 
