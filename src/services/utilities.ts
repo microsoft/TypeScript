@@ -332,6 +332,7 @@ import {
     SemicolonPreference,
     setConfigFileInOptions,
     setOriginalNode,
+    setParentRecursive,
     setTextRange,
     Signature,
     SignatureDeclaration,
@@ -3172,7 +3173,7 @@ export function getPrecedingNonSpaceCharacterPosition(text: string, position: nu
 export function getSynthesizedDeepClone<T extends Node | undefined>(node: T, includeTrivia = true): T {
     const clone = node && getSynthesizedDeepCloneWorker(node);
     if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-    return clone;
+    return setParentRecursive(clone, /*incremental*/ false);
 }
 
 /** @internal */
