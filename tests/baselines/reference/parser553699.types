@@ -8,7 +8,7 @@ class Foo {
   constructor() { }
   public banana (x: public) { }
 >banana : (x: public) => void
->       : ^ ^^^^^^^^^^^^^^^^^
+>       : ^ ^^      ^^^^^^^^^
 >x : public
 >  : ^^^^^^
 }

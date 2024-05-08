@@ -29,7 +29,7 @@ module TypeScript {
 
     function getBaseTypeLinks(bases: ASTList, baseTypeLinks: TypeLink[]) {
 >getBaseTypeLinks : (bases: ASTList, baseTypeLinks: TypeLink[]) => TypeLink[]
->                 : ^     ^^^^^^^^^^^             ^^          ^^^^^^^^^^^^^^^
+>                 : ^     ^^       ^^             ^^          ^^^^^^^^^^^^^^^
 >bases : ASTList
 >      : ^^^^^^^
 >baseTypeLinks : TypeLink[]
@@ -153,7 +153,7 @@ module TypeScript {
 
     function getBases(type: Type, typeDecl: TypeDeclaration) {
 >getBases : (type: Type, typeDecl: TypeDeclaration) => void
->         : ^    ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^    ^^        ^^               ^^^^^^^^^
 >type : Type
 >     : ^^^^
 >typeDecl : TypeDeclaration
@@ -171,7 +171,7 @@ module TypeScript {
 >getBaseTypeLinks(typeDecl.extendsList, type.extendsTypeLinks) : TypeLink[]
 >                                                              : ^^^^^^^^^^
 >getBaseTypeLinks : (bases: ASTList, baseTypeLinks: TypeLink[]) => TypeLink[]
->                 : ^     ^^^^^^^^^^^             ^^          ^^^^^^^^^^^^^^^
+>                 : ^     ^^       ^^             ^^          ^^^^^^^^^^^^^^^
 >typeDecl.extendsList : any
 >                     : ^^^
 >typeDecl : TypeDeclaration
@@ -197,7 +197,7 @@ module TypeScript {
 >getBaseTypeLinks(typeDecl.implementsList, type.implementsTypeLinks) : TypeLink[]
 >                                                                    : ^^^^^^^^^^
 >getBaseTypeLinks : (bases: ASTList, baseTypeLinks: TypeLink[]) => TypeLink[]
->                 : ^     ^^^^^^^^^^^             ^^          ^^^^^^^^^^^^^^^
+>                 : ^     ^^       ^^             ^^          ^^^^^^^^^^^^^^^
 >typeDecl.implementsList : any
 >                        : ^^^
 >typeDecl : TypeDeclaration
@@ -214,7 +214,7 @@ module TypeScript {
 
     function addPrototypeField(classType: Type, ast: AST, context: TypeCollectionContext) {
 >addPrototypeField : (classType: Type, ast: AST, context: TypeCollectionContext) => void
->                  : ^         ^^^^^^^^   ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^         ^^    ^^   ^^   ^^       ^^                     ^^^^^^^^^
 >classType : Type
 >          : ^^^^
 >ast : AST
@@ -389,7 +389,7 @@ module TypeScript {
 
     export function createNewConstructGroupForType(type: Type) {
 >createNewConstructGroupForType : (type: Type) => void
->                               : ^    ^^^^^^^^^^^^^^^
+>                               : ^    ^^    ^^^^^^^^^
 >type : Type
 >     : ^^^^
 
@@ -480,7 +480,7 @@ module TypeScript {
 
     export function cloneParentConstructGroupForChildType(child: Type, parent: Type) {
 >cloneParentConstructGroupForChildType : (child: Type, parent: Type) => void
->                                      : ^     ^^^^^^^^      ^^^^^^^^^^^^^^^
+>                                      : ^     ^^    ^^      ^^    ^^^^^^^^^
 >child : Type
 >      : ^^^^
 >parent : Type
@@ -518,7 +518,7 @@ module TypeScript {
 >createNewConstructGroupForType(parent) : void
 >                                       : ^^^^
 >createNewConstructGroupForType : (type: Type) => void
->                               : ^    ^^^^^^^^^^^^^^^
+>                               : ^    ^^    ^^^^^^^^^
 >parent : Type
 >       : ^^^^
         }
@@ -748,7 +748,7 @@ module TypeScript {
 
     function findTypeSymbolInScopeChain(name: string, scopeChain: ScopeChain): Symbol {
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^    ^^      ^^          ^^^^^^^^^^^^^^^^^      
+>                           : ^    ^^      ^^          ^^          ^^^^^      
 >name : string
 >     : ^^^^^^
 >scopeChain : ScopeChain
@@ -798,7 +798,7 @@ module TypeScript {
 >findTypeSymbolInScopeChain(name, scopeChain.previous) : Symbol
 >                                                      : ^^^^^^
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^    ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^      ^^          ^^          ^^^^^^^^^^^
 >name : string
 >     : ^^^^^^
 >scopeChain.previous : any
@@ -816,7 +816,7 @@ module TypeScript {
 
     function findSymbolFromAlias(alias: AST, context: IAliasScopeContext): Symbol {
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^                  ^^^^^      
+>                    : ^     ^^   ^^       ^^                  ^^^^^      
 >alias : AST
 >      : ^^^
 >context : IAliasScopeContext
@@ -903,7 +903,7 @@ module TypeScript {
 >findTypeSymbolInScopeChain(name, context.topLevelScope) : Symbol
 >                                                        : ^^^^^^
 >findTypeSymbolInScopeChain : (name: string, scopeChain: ScopeChain) => Symbol
->                           : ^    ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^    ^^      ^^          ^^          ^^^^^^^^^^^
 >name : any
 >     : ^^^
 >context.topLevelScope : ScopeChain
@@ -1001,7 +1001,7 @@ module TypeScript {
 >findSymbolFromAlias(dottedExpr.operand1, context) : Symbol
 >                                                  : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
+>                    : ^     ^^   ^^       ^^                  ^^^^^^^^^^^
 >dottedExpr.operand1 : any
 >                    : ^^^
 >dottedExpr : BinaryExpression
@@ -1033,7 +1033,7 @@ module TypeScript {
 >findSymbolFromAlias(dottedExpr.operand2, context) : Symbol
 >                                                  : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
+>                    : ^     ^^   ^^       ^^                  ^^^^^^^^^^^
 >dottedExpr.operand2 : any
 >                    : ^^^
 >dottedExpr : BinaryExpression
@@ -1110,7 +1110,7 @@ module TypeScript {
 
     export function preCollectImportTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectImportTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                      : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -1171,7 +1171,7 @@ module TypeScript {
 >findSymbolFromAlias(importDecl.alias, { topLevelScope: scopeChain, members: null, tcContext: context }) : Symbol
 >                                                                                                        : ^^^^^^
 >findSymbolFromAlias : (alias: AST, context: IAliasScopeContext) => Symbol
->                    : ^     ^^^^^^^       ^^                  ^^^^^^^^^^^
+>                    : ^     ^^   ^^       ^^                  ^^^^^^^^^^^
 >importDecl.alias : any
 >                 : ^^^
 >importDecl : ImportDeclaration
@@ -1464,7 +1464,7 @@ module TypeScript {
 
     export function preCollectModuleTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectModuleTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                      : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -2586,7 +2586,7 @@ module TypeScript {
 
     export function preCollectClassTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectClassTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                     : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -3140,7 +3140,7 @@ module TypeScript {
 >addPrototypeField(classType, classDecl, context) : void
 >                                                 : ^^^^
 >addPrototypeField : (classType: Type, ast: AST, context: TypeCollectionContext) => void
->                  : ^         ^^^^^^^^   ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^         ^^    ^^   ^^   ^^       ^^                     ^^^^^^^^^
 >classType : Type
 >          : ^^^^
 >classDecl : ClassDeclaration
@@ -3806,7 +3806,7 @@ module TypeScript {
 >createNewConstructGroupForType(classDecl.type) : void
 >                                               : ^^^^
 >createNewConstructGroupForType : (type: Type) => void
->                               : ^    ^^^^^^^^^^^^^^^
+>                               : ^    ^^    ^^^^^^^^^
 >classDecl.type : any
 >               : ^^^
 >classDecl : ClassDeclaration
@@ -3851,7 +3851,7 @@ module TypeScript {
 >getBases(instanceType, classDecl) : void
 >                                  : ^^^^
 >getBases : (type: Type, typeDecl: TypeDeclaration) => void
->         : ^    ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^    ^^        ^^               ^^^^^^^^^
 >instanceType : Type
 >             : ^^^^
 >classDecl : ClassDeclaration
@@ -3892,7 +3892,7 @@ module TypeScript {
 
     export function preCollectInterfaceTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectInterfaceTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                         : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -4244,7 +4244,7 @@ module TypeScript {
 >getBases(interfaceType, interfaceDecl) : void
 >                                       : ^^^^
 >getBases : (type: Type, typeDecl: TypeDeclaration) => void
->         : ^    ^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^    ^^        ^^               ^^^^^^^^^
 >interfaceType : Type
 >              : ^^^^
 >interfaceDecl : InterfaceDeclaration
@@ -4393,7 +4393,7 @@ module TypeScript {
 
     export function preCollectArgDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectArgDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                       : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -4696,7 +4696,7 @@ module TypeScript {
 
     export function preCollectVarDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectVarDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                       : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -5568,7 +5568,7 @@ module TypeScript {
 
     export function preCollectFuncDeclTypes(ast: AST, parent: AST, context: TypeCollectionContext) {
 >preCollectFuncDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                        : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7455,7 +7455,7 @@ module TypeScript {
 
     export function preCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
 >preCollectTypes : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7581,7 +7581,7 @@ module TypeScript {
 >preCollectImportTypes(ast, parent, context) : boolean
 >                                            : ^^^^^^^
 >preCollectImportTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                      : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7637,7 +7637,7 @@ module TypeScript {
 >preCollectModuleTypes(ast, parent, context) : boolean
 >                                            : ^^^^^^^
 >preCollectModuleTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                      : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7669,7 +7669,7 @@ module TypeScript {
 >preCollectClassTypes(ast, parent, context) : boolean
 >                                           : ^^^^^^^
 >preCollectClassTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                     : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7725,7 +7725,7 @@ module TypeScript {
 >preCollectInterfaceTypes(ast, parent, context) : boolean
 >                                               : ^^^^^^^
 >preCollectInterfaceTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                         : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7759,7 +7759,7 @@ module TypeScript {
 >preCollectArgDeclTypes(ast, parent, context) : boolean
 >                                             : ^^^^^^^
 >preCollectArgDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                       : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7791,7 +7791,7 @@ module TypeScript {
 >preCollectVarDeclTypes(ast, parent, context) : boolean
 >                                             : ^^^^^^^
 >preCollectVarDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                       : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7823,7 +7823,7 @@ module TypeScript {
 >preCollectFuncDeclTypes(ast, parent, context) : boolean
 >                                              : ^^^^^^^
 >preCollectFuncDeclTypes : (ast: AST, parent: AST, context: TypeCollectionContext) => boolean
->                        : ^   ^^^^^^^      ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^   ^^   ^^      ^^   ^^       ^^                     ^^^^^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -7896,7 +7896,7 @@ module TypeScript {
 
     export function postCollectTypes(ast: AST, parent: AST, walker: IAstWalker) {
 >postCollectTypes : (ast: AST, parent: AST, walker: IAstWalker) => AST
->                 : ^   ^^^^^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^
+>                 : ^   ^^   ^^      ^^   ^^      ^^          ^^^^^^^^
 >ast : AST
 >    : ^^^
 >parent : AST

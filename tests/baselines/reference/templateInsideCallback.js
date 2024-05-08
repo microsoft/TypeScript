@@ -146,7 +146,7 @@ declare function flatMap(): any;
  * @template T
  * @type {Call<T>}
  */
-declare const identity: any;
+declare const identity: Call<T>;
 type Nested = {
     oh: {
         no: number;
