@@ -142,6 +142,7 @@ class CompilerTest {
         "jsx",
         "module",
         "moduleDetection",
+        "moduleFormatInterop",
         "moduleResolution",
         "noEmit",
         "noImplicitAny",
