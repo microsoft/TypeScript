@@ -94,7 +94,7 @@ import {
     VariableDeclaration,
     VariableStatement,
     walkUpParenthesizedExpressions,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 import {
     createCodeFixAction,
@@ -103,8 +103,8 @@ import {
     eachDiagnostic,
     registerCodeFix,
     typeToAutoImportableTypeNode,
-} from "../_namespaces/ts.codefix";
-import { getIdentifierForNode } from "../refactors/helpers";
+} from "../_namespaces/ts.codefix.js";
+import { getIdentifierForNode } from "../refactors/helpers.js";
 
 const fixId = "fixMissingTypeAnnotationOnExports";
 

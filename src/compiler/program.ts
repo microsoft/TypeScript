@@ -15,6 +15,7 @@ import {
     changesAffectingProgramStructure,
     changesAffectModuleResolution,
     combinePaths,
+    commandLineOptionOfCustomType,
     CommentDirective,
     CommentDirectivesMap,
     compareDataObjects,
@@ -86,6 +87,7 @@ import {
     fileIncludeReasonToDiagnostics,
     FilePreprocessingDiagnostics,
     FilePreprocessingDiagnosticsKind,
+    FilePreprocessingLibReferenceDiagnostic,
     FileReference,
     filter,
     find,
@@ -326,8 +328,8 @@ import {
     WriteFileCallback,
     WriteFileCallbackData,
     writeFileEnsuringDirectories,
-} from "./_namespaces/ts";
-import * as performance from "./_namespaces/ts.performance";
+} from "./_namespaces/ts.js";
+import * as performance from "./_namespaces/ts.performance.js";
 
 export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
     return forEachAncestorDirectory(searchPath, ancestor => {
@@ -1190,10 +1192,13 @@ export function getLibraryNameFromLibFileName(libFileName: string) {
     return "@typescript/lib-" + path;
 }
 
+function getLibNameFromLibReference(libReference: FileReference) {
+    return toFileNameLowerCase(libReference.fileName);
+}
+
 function getLibFileNameFromLibReference(libReference: FileReference) {
-    const libName = toFileNameLowerCase(libReference.fileName);
-    const libFileName = libMap.get(libName);
-    return { libName, libFileName };
+    const libName = getLibNameFromLibReference(libReference);
+    return libMap.get(libName);
 }
 
 interface DiagnosticCache<T extends Diagnostic> {
@@ -1499,6 +1504,16 @@ export const plainJSErrors = new Set<number>([
     Diagnostics.This_condition_will_always_return_0_since_JavaScript_compares_objects_by_reference_not_value.code,
 ]);
 
+interface LazyProgramDiagnosticExplainingFile {
+    file: SourceFile;
+    diagnostic: DiagnosticMessage;
+    args: DiagnosticArguments;
+}
+interface FileReasonToChainCache {
+    fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
+    redirectInfo: DiagnosticMessageChain[] | undefined;
+    details?: DiagnosticMessageChain[];
+}
 /**
  * Determine if source file needs to be re-created even if its text hasn't changed
  */
@@ -1550,6 +1565,13 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const createProgramOptions = isArray(rootNamesOrOptions) ? createCreateProgramOptions(rootNamesOrOptions, _options!, _host, _oldProgram, _configFileParsingDiagnostics) : rootNamesOrOptions; // TODO: GH#18217
     const { rootNames, options, configFileParsingDiagnostics, projectReferences, typeScriptVersion } = createProgramOptions;
     let { oldProgram } = createProgramOptions;
+    for (const option of commandLineOptionOfCustomType) {
+        if (hasProperty(options, option.name)) {
+            if (typeof options[option.name] === "string") {
+                throw new Error(`${option.name} is a string value; tsconfig JSON must be parsed with parseJsonSourceFileConfigFileContent or getParsedCommandLineOfConfigFile before passing to createProgram`);
+            }
+        }
+    }
 
     const reportInvalidIgnoreDeprecations = memoize(() => createOptionValueDiagnostic("ignoreDeprecations", Diagnostics.Invalid_value_for_ignoreDeprecations));
 
@@ -1562,6 +1584,9 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     let classifiableNames: Set<__String>;
     const ambientModuleNameToUnmodifiedFileName = new Map<string, string>();
     let fileReasons = createMultiMap<Path, FileIncludeReason>();
+    let filesWithReferencesProcessed: Set<Path> | undefined;
+    let fileReasonsToChain: Map<Path, FileReasonToChainCache> | undefined;
+    let reasonToRelatedInfo: Map<FileIncludeReason, DiagnosticWithLocation | false> | undefined;
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
     const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
@@ -1612,6 +1637,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
      * Otherwise fileProcessingDiagnostics is correct locations so that the diagnostics can be reported in all structure use scenarios
      */
     const programDiagnostics = createDiagnosticCollection();
+    let lazyProgramDiagnosticExplainingFile: LazyProgramDiagnosticExplainingFile[] | undefined = [];
     const currentDirectory = host.getCurrentDirectory();
     const supportedExtensions = getSupportedExtensions(options);
     const supportedExtensionsWithJsonIfResolveJsonModule = getSupportedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
@@ -1858,6 +1884,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
         processingDefaultLibFiles = undefined;
         processingOtherFiles = undefined;
+        filesWithReferencesProcessed = undefined;
     }
 
     // Release any files we have acquired in the old program but are
@@ -1988,27 +2015,62 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     onProgramCreateComplete();
 
-    // Add file processingDiagnostics
-    fileProcessingDiagnostics?.forEach(diagnostic => {
-        switch (diagnostic.kind) {
-            case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
-                return programDiagnostics.add(createDiagnosticExplainingFile(diagnostic.file && getSourceFileByPath(diagnostic.file), diagnostic.fileProcessingReason, diagnostic.diagnostic, diagnostic.args || emptyArray));
-            case FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic:
-                const { file, pos, end } = getReferencedFileLocation(program, diagnostic.reason) as ReferenceFileLocation;
-                return programDiagnostics.add(createFileDiagnostic(file, Debug.checkDefined(pos), Debug.checkDefined(end) - pos, diagnostic.diagnostic, ...diagnostic.args || emptyArray));
-            case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
-                return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
-            default:
-                Debug.assertNever(diagnostic);
-        }
-    });
-
     verifyCompilerOptions();
     performance.mark("afterProgram");
     performance.measure("Program", "beforeProgram", "afterProgram");
     tracing?.pop();
 
     return program;
+
+    function updateAndGetProgramDiagnostics() {
+        if (lazyProgramDiagnosticExplainingFile) {
+            // Add file processingDiagnostics
+            fileProcessingDiagnostics?.forEach(diagnostic => {
+                switch (diagnostic.kind) {
+                    case FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic:
+                        return programDiagnostics.add(
+                            createDiagnosticExplainingFile(
+                                diagnostic.file && getSourceFileByPath(diagnostic.file),
+                                diagnostic.fileProcessingReason,
+                                diagnostic.diagnostic,
+                                diagnostic.args || emptyArray,
+                            ),
+                        );
+                    case FilePreprocessingDiagnosticsKind.FilePreprocessingLibReferenceDiagnostic:
+                        return programDiagnostics.add(filePreprocessingLibreferenceDiagnostic(diagnostic));
+                    case FilePreprocessingDiagnosticsKind.ResolutionDiagnostics:
+                        return diagnostic.diagnostics.forEach(d => programDiagnostics.add(d));
+                    default:
+                        Debug.assertNever(diagnostic);
+                }
+            });
+            lazyProgramDiagnosticExplainingFile.forEach(({ file, diagnostic, args }) =>
+                programDiagnostics.add(
+                    createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args),
+                )
+            );
+            lazyProgramDiagnosticExplainingFile = undefined;
+            fileReasonsToChain = undefined;
+            reasonToRelatedInfo = undefined;
+        }
+        return programDiagnostics;
+    }
+
+    function filePreprocessingLibreferenceDiagnostic({ reason }: FilePreprocessingLibReferenceDiagnostic) {
+        const { file, pos, end } = getReferencedFileLocation(program, reason) as ReferenceFileLocation;
+        const libReference = file.libReferenceDirectives[reason.index];
+        const libName = getLibNameFromLibReference(libReference);
+        const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
+        const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
+        return createFileDiagnostic(
+            file,
+            Debug.checkDefined(pos),
+            Debug.checkDefined(end) - pos,
+            suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0,
+            libName,
+            suggestion!,
+        );
+    }
 
     function getResolvedModule(file: SourceFile, moduleName: string, mode: ResolutionMode) {
         return resolvedModules?.get(file.path)?.get(moduleName, mode);
@@ -2873,7 +2935,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             return emptyArray;
         }
 
-        const programDiagnosticsInFile = programDiagnostics.getDiagnostics(sourceFile.fileName);
+        const programDiagnosticsInFile = updateAndGetProgramDiagnostics().getDiagnostics(sourceFile.fileName);
         if (!sourceFile.commentDirectives?.length) {
             return programDiagnosticsInFile;
         }
@@ -3319,16 +3381,16 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function getOptionsDiagnostics(): SortedReadonlyArray<Diagnostic> {
         return sortAndDeduplicateDiagnostics(concatenate(
-            programDiagnostics.getGlobalDiagnostics(),
+            updateAndGetProgramDiagnostics().getGlobalDiagnostics(),
             getOptionsDiagnosticsOfConfigFile(),
         ));
     }
 
     function getOptionsDiagnosticsOfConfigFile() {
         if (!options.configFile) return emptyArray;
-        let diagnostics = programDiagnostics.getDiagnostics(options.configFile.fileName);
+        let diagnostics = updateAndGetProgramDiagnostics().getDiagnostics(options.configFile.fileName);
         forEachResolvedProjectReference(resolvedRef => {
-            diagnostics = concatenate(diagnostics, programDiagnostics.getDiagnostics(resolvedRef.sourceFile.fileName));
+            diagnostics = concatenate(diagnostics, updateAndGetProgramDiagnostics().getDiagnostics(resolvedRef.sourceFile.fileName));
         });
         return diagnostics;
     }
@@ -3357,7 +3419,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function createSyntheticImport(text: string, file: SourceFile) {
         const externalHelpersModuleReference = factory.createStringLiteral(text);
-        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference, /*attributes*/ undefined);
+        const importDecl = factory.createImportDeclaration(/*modifiers*/ undefined, /*importClause*/ undefined, externalHelpersModuleReference);
         addInternalEmitFlags(importDecl, InternalEmitFlags.NeverApplyImportHelper);
         setParent(externalHelpersModuleReference, importDecl);
         setParent(importDecl, file);
@@ -3382,11 +3444,11 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         let ambientModules: string[] | undefined;
 
         // If we are importing helpers, we need to add a synthetic reference to resolve the
-        // helpers library.
-        if (
-            (getIsolatedModules(options) || isExternalModuleFile)
-            && !file.isDeclarationFile
-        ) {
+        // helpers library. (A JavaScript file without `externalModuleIndicator` set might be
+        // a CommonJS module; `commonJsModuleIndicator` doesn't get set until the binder has
+        // run. We synthesize a helpers import for it just in case; it will never be used if
+        // the binder doesn't find and set a `commonJsModuleIndicator`.)
+        if (isJavaScriptFile || (!file.isDeclarationFile && (getIsolatedModules(options) || isExternalModule(file)))) {
             if (options.importHelpers) {
                 // synthesize 'import "tslib"' declaration
                 imports = [createSyntheticImport(externalHelpersModuleNameText, file)];
@@ -3506,7 +3568,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getLibFileFromReference(ref: FileReference) {
-        const { libFileName } = getLibFileNameFromLibReference(ref);
+        const libFileName = getLibFileNameFromLibReference(ref);
         const actualFileName = libFileName && resolvedLibReferences?.get(libFileName)?.actual;
         return actualFileName !== undefined ? getSourceFile(actualFileName) : undefined;
     }
@@ -3658,10 +3720,10 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         const originalFileName = fileName;
         if (filesByName.has(path)) {
             const file = filesByName.get(path);
-            addFileIncludeReason(file || undefined, reason);
+            const addedReason = addFileIncludeReason(file || undefined, reason, /*checkExisting*/ true);
             // try to check if we've already seen this file but with a different casing in path
             // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
-            if (file && !(options.forceConsistentCasingInFileNames === false)) {
+            if (file && addedReason && !(options.forceConsistentCasingInFileNames === false)) {
                 const checkedName = file.fileName;
                 const isRedirect = toPath(checkedName) !== toPath(fileName);
                 if (isRedirect) {
@@ -3738,7 +3800,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 const dupFile = createRedirectedSourceFile(fileFromPackageId, file!, fileName, path, toPath(fileName), originalFileName, sourceFileOptions);
                 redirectTargetsMap.add(fileFromPackageId.path, fileName);
                 addFileToFilesByName(dupFile, path, fileName, redirectedPath);
-                addFileIncludeReason(dupFile, reason);
+                addFileIncludeReason(dupFile, reason, /*checkExisting*/ false);
                 sourceFileToPackageName.set(path, packageIdToPackageName(packageId));
                 processingOtherFiles!.push(dupFile);
                 return dupFile;
@@ -3759,7 +3821,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             file.originalFileName = originalFileName;
             file.packageJsonLocations = sourceFileOptions.packageJsonLocations?.length ? sourceFileOptions.packageJsonLocations : undefined;
             file.packageJsonScope = sourceFileOptions.packageJsonScope;
-            addFileIncludeReason(file, reason);
+            addFileIncludeReason(file, reason, /*checkExisting*/ false);
 
             if (host.useCaseSensitiveFileNames()) {
                 const pathLowerCase = toFileNameLowerCase(path);
@@ -3792,12 +3854,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             else {
                 processingOtherFiles!.push(file);
             }
+            (filesWithReferencesProcessed ??= new Set()).add(file.path);
         }
         return file;
     }
 
-    function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason) {
-        if (file) fileReasons.add(file.path, reason);
+    function addFileIncludeReason(file: SourceFile | undefined, reason: FileIncludeReason, checkExisting: boolean) {
+        if (file && (!checkExisting || !isReferencedFile(reason) || !filesWithReferencesProcessed?.has(reason.file))) {
+            fileReasons.add(file.path, reason);
+            return true;
+        }
+        return false;
     }
 
     function addFileToFilesByName(file: SourceFile | undefined, path: Path, fileName: string, redirectedPath: Path | undefined) {
@@ -4059,21 +4126,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
 
     function processLibReferenceDirectives(file: SourceFile) {
         forEach(file.libReferenceDirectives, (libReference, index) => {
-            const { libName, libFileName } = getLibFileNameFromLibReference(libReference);
+            const libFileName = getLibFileNameFromLibReference(libReference);
             if (libFileName) {
                 // we ignore any 'no-default-lib' reference set on this file.
                 processRootFile(pathForLibFile(libFileName), /*isDefaultLib*/ true, /*ignoreNoDefaultLib*/ true, { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index });
             }
             else {
-                const unqualifiedLibName = removeSuffix(removePrefix(libName, "lib."), ".d.ts");
-                const suggestion = getSpellingSuggestion(unqualifiedLibName, libs, identity);
-                const diagnostic = suggestion ? Diagnostics.Cannot_find_lib_definition_for_0_Did_you_mean_1 : Diagnostics.Cannot_find_lib_definition_for_0;
-                const args = suggestion ? [libName, suggestion] : [libName];
                 (fileProcessingDiagnostics ||= []).push({
-                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingReferencedDiagnostic,
+                    kind: FilePreprocessingDiagnosticsKind.FilePreprocessingLibReferenceDiagnostic,
                     reason: { kind: FileIncludeKind.LibReferenceDirective, file: file.path, index },
-                    diagnostic,
-                    args,
                 });
             }
         });
@@ -4158,7 +4219,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             if (!sourceFile.isDeclarationFile) {
                 const absoluteSourceFilePath = host.getCanonicalFileName(getNormalizedAbsolutePath(sourceFile.fileName, currentDirectory));
                 if (absoluteSourceFilePath.indexOf(absoluteRootDirectoryPath) !== 0) {
-                    addProgramDiagnosticExplainingFile(
+                    addLazyProgramDiagnosticExplainingFile(
                         sourceFile,
                         Diagnostics.File_0_is_not_under_rootDir_1_rootDir_is_expected_to_contain_all_source_files,
                         [sourceFile.fileName, rootDirectory],
@@ -4281,7 +4342,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             for (const file of files) {
                 // Ignore file that is not emitted
                 if (sourceFileMayBeEmitted(file, program) && !rootPaths.has(file.path)) {
-                    addProgramDiagnosticExplainingFile(
+                    addLazyProgramDiagnosticExplainingFile(
                         file,
                         Diagnostics.File_0_is_not_listed_within_the_file_list_of_project_1_Projects_must_list_all_files_or_use_an_include_pattern,
                         [file.fileName, options.configFilePath || ""],
@@ -4671,38 +4732,122 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments | undefined): Diagnostic {
+    function createDiagnosticExplainingFile(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason | undefined, diagnostic: DiagnosticMessage, args: DiagnosticArguments): Diagnostic {
+        let seenReasons: Set<FileIncludeReason> | undefined;
+        const reasons = file && fileReasons.get(file.path);
         let fileIncludeReasons: DiagnosticMessageChain[] | undefined;
-        let relatedInfo: Diagnostic[] | undefined;
+        let relatedInfo: DiagnosticWithLocation[] | undefined;
         let locationReason = isReferencedFile(fileProcessingReason) ? fileProcessingReason : undefined;
-        if (file) fileReasons.get(file.path)?.forEach(processReason);
+        let fileIncludeReasonDetails: DiagnosticMessageChain | undefined;
+        let redirectInfo: DiagnosticMessageChain[] | undefined;
+        let cachedChain = file && fileReasonsToChain?.get(file.path);
+        let chain: DiagnosticMessageChain | undefined;
+        if (cachedChain) {
+            if (cachedChain.fileIncludeReasonDetails) {
+                seenReasons = new Set(reasons);
+                reasons?.forEach(populateRelatedInfo);
+            }
+            else {
+                reasons?.forEach(processReason);
+            }
+            redirectInfo = cachedChain.redirectInfo;
+        }
+        else {
+            reasons?.forEach(processReason);
+            redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, getCompilerOptionsForFile(file));
+        }
+
         if (fileProcessingReason) processReason(fileProcessingReason);
+        const processedExtraReason = seenReasons?.size !== reasons?.length;
+
         // If we have location and there is only one reason file is in which is the location, dont add details for file include
-        if (locationReason && fileIncludeReasons?.length === 1) fileIncludeReasons = undefined;
+        if (locationReason && seenReasons?.size === 1) seenReasons = undefined;
+
+        if (seenReasons && cachedChain) {
+            if (cachedChain.details && !processedExtraReason) {
+                chain = chainDiagnosticMessages(cachedChain.details, diagnostic, ...args || emptyArray);
+            }
+            else if (cachedChain.fileIncludeReasonDetails) {
+                if (!processedExtraReason) {
+                    if (!cachedFileIncludeDetailsHasProcessedExtraReason()) {
+                        fileIncludeReasonDetails = cachedChain.fileIncludeReasonDetails;
+                    }
+                    else {
+                        fileIncludeReasons = cachedChain.fileIncludeReasonDetails.next!.slice(0, reasons!.length);
+                    }
+                }
+                else {
+                    if (!cachedFileIncludeDetailsHasProcessedExtraReason()) {
+                        fileIncludeReasons = [...cachedChain.fileIncludeReasonDetails.next!, fileIncludeReasons![0]];
+                    }
+                    else {
+                        fileIncludeReasons = append(cachedChain.fileIncludeReasonDetails.next!.slice(0, reasons!.length), fileIncludeReasons![0]);
+                    }
+                }
+            }
+        }
+
+        if (!chain) {
+            if (!fileIncludeReasonDetails) fileIncludeReasonDetails = seenReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
+            chain = chainDiagnosticMessages(
+                redirectInfo ?
+                    fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo :
+                    fileIncludeReasonDetails,
+                diagnostic,
+                ...args || emptyArray,
+            );
+        }
+
+        // This is chain's next contains:
+        //   - File is in program because:
+        //      - Files reasons listed
+        //      - extra reason if its not already processed - this happens in case sensitive file system where files differ in casing and we are giving reasons for two files so reason is not in file's reason
+        //     fyi above whole secton is ommited if we have single reason and we are reporting at that reason's location
+        //   - redirect and additional information about file
+        // So cache result if we havent ommited file include reasons
+        if (file) {
+            if (cachedChain) {
+                // Cache new fileIncludeDetails if we have update
+                // Or if we had cached with more details than the reasons
+                if (!cachedChain.fileIncludeReasonDetails || (!processedExtraReason && fileIncludeReasonDetails)) {
+                    cachedChain.fileIncludeReasonDetails = fileIncludeReasonDetails;
+                }
+            }
+            else {
+                (fileReasonsToChain ??= new Map()).set(file.path, cachedChain = { fileIncludeReasonDetails, redirectInfo });
+            }
+            // If we didnt compute extra file include reason , cache the details to use directly
+            if (!cachedChain.details && !processedExtraReason) cachedChain.details = chain.next;
+        }
+
         const location = locationReason && getReferencedFileLocation(program, locationReason);
-        const fileIncludeReasonDetails = fileIncludeReasons && chainDiagnosticMessages(fileIncludeReasons, Diagnostics.The_file_is_in_the_program_because_Colon);
-        const optionsForFile = file && getCompilerOptionsForFile(file) || options;
-        const redirectInfo = file && explainIfFileIsRedirectAndImpliedFormat(file, optionsForFile);
-        const chain = chainDiagnosticMessages(redirectInfo ? fileIncludeReasonDetails ? [fileIncludeReasonDetails, ...redirectInfo] : redirectInfo : fileIncludeReasonDetails, diagnostic, ...args || emptyArray);
         return location && isReferenceFileLocation(location) ?
             createFileDiagnosticFromMessageChain(location.file, location.pos, location.end - location.pos, chain, relatedInfo) :
             createCompilerDiagnosticFromMessageChain(chain, relatedInfo);
 
         function processReason(reason: FileIncludeReason) {
-            (fileIncludeReasons ||= []).push(fileIncludeReasonToDiagnostics(program, reason));
+            if (seenReasons?.has(reason)) return;
+            (seenReasons ??= new Set()).add(reason);
+            (fileIncludeReasons ??= []).push(fileIncludeReasonToDiagnostics(program, reason));
+            populateRelatedInfo(reason);
+        }
+
+        function populateRelatedInfo(reason: FileIncludeReason) {
             if (!locationReason && isReferencedFile(reason)) {
                 // Report error at first reference file or file currently in processing and dont report in related information
                 locationReason = reason;
             }
             else if (locationReason !== reason) {
-                relatedInfo = append(relatedInfo, fileIncludeReasonToRelatedInformation(reason));
+                relatedInfo = append(relatedInfo, getFileIncludeReasonToRelatedInformation(reason));
             }
-            // Remove fileProcessingReason if its already included in fileReasons of the program
-            if (reason === fileProcessingReason) fileProcessingReason = undefined;
+        }
+
+        function cachedFileIncludeDetailsHasProcessedExtraReason() {
+            return cachedChain!.fileIncludeReasonDetails!.next?.length !== reasons?.length;
         }
     }
 
-    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
+    function addFilePreprocessingFileExplainingDiagnostic(file: SourceFile | undefined, fileProcessingReason: FileIncludeReason, diagnostic: DiagnosticMessage, args: DiagnosticArguments) {
         (fileProcessingDiagnostics ||= []).push({
             kind: FilePreprocessingDiagnosticsKind.FilePreprocessingFileExplainingDiagnostic,
             file: file && file.path,
@@ -4712,8 +4857,14 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         });
     }
 
-    function addProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args?: DiagnosticArguments) {
-        programDiagnostics.add(createDiagnosticExplainingFile(file, /*fileProcessingReason*/ undefined, diagnostic, args));
+    function addLazyProgramDiagnosticExplainingFile(file: SourceFile, diagnostic: DiagnosticMessage, args: DiagnosticArguments) {
+        lazyProgramDiagnosticExplainingFile!.push({ file, diagnostic, args });
+    }
+
+    function getFileIncludeReasonToRelatedInformation(reason: FileIncludeReason) {
+        let relatedInfo = reasonToRelatedInfo?.get(reason);
+        if (relatedInfo === undefined) (reasonToRelatedInfo ??= new Map()).set(reason, relatedInfo = fileIncludeReasonToRelatedInformation(reason) ?? false);
+        return relatedInfo || undefined;
     }
 
     function fileIncludeReasonToRelatedInformation(reason: FileIncludeReason): DiagnosticWithLocation | undefined {

@@ -8,7 +8,7 @@ import {
     server,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
@@ -39,7 +39,7 @@ import {
     stringifyIndented,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 /** @internal */
 export interface TypingsInstallerWorkerProcess {

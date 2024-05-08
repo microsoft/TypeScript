@@ -60,7 +60,7 @@ import {
     VariableDeclaration,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 interface FlattenContext {
     context: TransformationContext;

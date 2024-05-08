@@ -326,16 +326,16 @@ import {
     updateSourceFile,
     UserPreferences,
     VariableDeclaration,
-} from "./_namespaces/ts";
-import * as NavigateTo from "./_namespaces/ts.NavigateTo";
-import * as NavigationBar from "./_namespaces/ts.NavigationBar";
+} from "./_namespaces/ts.js";
+import * as NavigateTo from "./_namespaces/ts.NavigateTo.js";
+import * as NavigationBar from "./_namespaces/ts.NavigationBar.js";
 import {
     containsJsx,
     createNewFileName,
     getStatementsToMove,
-} from "./_namespaces/ts.refactor";
-import * as classifier from "./classifier";
-import * as classifier2020 from "./classifier2020";
+} from "./_namespaces/ts.refactor.js";
+import * as classifier from "./classifier.js";
+import * as classifier2020 from "./classifier2020.js";
 
 /** The version of the language service API */
 export const servicesVersion = "0.8";
@@ -1596,7 +1596,7 @@ const invalidOperationsInSyntacticMode: readonly (keyof LanguageService)[] = [
 ];
 export function createLanguageService(
     host: LanguageServiceHost,
-    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory()),
+    documentRegistry: DocumentRegistry = createDocumentRegistry(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames(), host.getCurrentDirectory(), host.jsDocParsingMode),
     syntaxOnlyOrLanguageServiceMode?: boolean | LanguageServiceMode,
 ): LanguageService {
     let languageServiceMode: LanguageServiceMode;

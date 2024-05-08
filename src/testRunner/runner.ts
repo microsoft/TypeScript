@@ -1,4 +1,4 @@
-import * as FourSlash from "./_namespaces/FourSlash";
+import * as FourSlash from "./_namespaces/FourSlash.js";
 import {
     CompilerBaselineRunner,
     CompilerTestType,
@@ -12,10 +12,10 @@ import {
     setShards,
     TestRunnerKind,
     TranspileRunner,
-} from "./_namespaces/Harness";
-import * as project from "./_namespaces/project";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as project from "./_namespaces/project.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 /* eslint-disable prefer-const */
 export let runners: RunnerBase[] = [];
@@ -271,5 +271,5 @@ startTestEnvironment();
 // If running as emitted CJS, we want to start the tests here after startTestEnvironment.
 // If running bundled, we will do this in Harness.ts.
 if (__filename.endsWith("runner.js")) {
-    require("./tests");
+    require("./tests.js");
 }

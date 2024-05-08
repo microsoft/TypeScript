@@ -645,7 +645,6 @@ Before running Timeout callback:: count: 2
 3: *ensureProjectForOpenFiles*
 
 Info seq  [hh:mm:ss:mss] Running: /a/b/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

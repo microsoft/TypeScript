@@ -2,8 +2,8 @@ import {
     hasProperty,
     UnionToIntersection,
     Version,
-} from "./_namespaces/ts";
-import { deprecate } from "./deprecate";
+} from "./_namespaces/ts.js";
+import { deprecate } from "./deprecate.js";
 
 /** @internal */
 export interface DeprecationOptions {

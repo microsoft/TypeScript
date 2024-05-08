@@ -246,7 +246,6 @@ Projects::
     deferredClose: undefined *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

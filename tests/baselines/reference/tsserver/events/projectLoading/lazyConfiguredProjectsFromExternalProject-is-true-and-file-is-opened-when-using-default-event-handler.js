@@ -102,7 +102,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/a/a.ts ProjectRootPath: undefined:: Result: /user/username/projects/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/a/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -200,7 +199,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/user/username/projects/a/tsconfig.json",
+        "triggerFile": "/user/username/projects/a/a.ts",
         "configFile": "/user/username/projects/a/tsconfig.json",
         "diagnostics": []
       }

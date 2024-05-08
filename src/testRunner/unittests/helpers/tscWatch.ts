@@ -1,10 +1,10 @@
 import {
     verifyProgramStructure,
     verifyResolutionCache,
-} from "../../../harness/incrementalUtils";
-import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
-import { Baseline } from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+} from "../../../harness/incrementalUtils.js";
+import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes.js";
+import { Baseline } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselinePrograms,
     CommandLineCallbacks,
@@ -12,7 +12,7 @@ import {
     CommandLineProgram,
     generateSourceMapBaselineFiles,
     tscBaselineName,
-} from "./baseline";
+} from "./baseline.js";
 import {
     changeToHostTrackingWrittenFiles,
     File,
@@ -20,7 +20,7 @@ import {
     StateLogger,
     TestServerHost,
     TestServerHostTrackingWrittenFiles,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export const commonFile1: File = {
     path: "/a/b/commonFile1.ts",

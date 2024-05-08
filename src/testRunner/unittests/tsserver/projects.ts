@@ -1,10 +1,10 @@
-import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     commonFile1,
     commonFile2,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
@@ -17,14 +17,14 @@ import {
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
-import { customTypesMap } from "../helpers/typingsInstaller";
+} from "../helpers/tsserver.js";
+import { customTypesMap } from "../helpers/typingsInstaller.js";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projects::", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {

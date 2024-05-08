@@ -49,7 +49,7 @@ import {
     visitEachChild,
     visitNodes,
     VisitResult,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
