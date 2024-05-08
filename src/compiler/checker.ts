@@ -1900,6 +1900,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         getMemberOverrideModifierStatus,
         isTypeParameterPossiblyReferenced,
         typeHasCallOrConstructSignatures,
+        getSymbolFlags,
     };
 
     function getCandidateSignaturesForStringLiteralCompletions(call: CallLikeExpression, editingArgument: Node) {

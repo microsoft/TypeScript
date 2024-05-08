@@ -5361,6 +5361,7 @@ export interface TypeChecker {
     /** @internal */ getMemberOverrideModifierStatus(node: ClassLikeDeclaration, member: ClassElement, memberSymbol: Symbol): MemberOverrideStatus;
     /** @internal */ isTypeParameterPossiblyReferenced(tp: TypeParameter, node: Node): boolean;
     /** @internal */ typeHasCallOrConstructSignatures(type: Type): boolean;
+    /** @internal */ getSymbolFlags(symbol: Symbol): SymbolFlags;
 }
 
 /** @internal */

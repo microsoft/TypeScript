@@ -1,6 +1,5 @@
 import {
     createCodeFixActionWithoutFixAll,
-    moduleSpecifierToValidIdentifier,
     registerCodeFix,
 } from "../_namespaces/ts.codefix.js";
 import {
@@ -59,6 +58,7 @@ import {
     mapIterator,
     MethodDeclaration,
     Modifier,
+    moduleSpecifierToValidIdentifier,
     Node,
     NodeArray,
     NodeFlags,
