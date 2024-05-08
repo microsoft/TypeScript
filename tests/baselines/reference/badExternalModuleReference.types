@@ -7,7 +7,7 @@ import a1 = require("garbage");
 
 export declare var a: {
 >a : { (): a1.connectExport; test1: a1.connectModule; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^^
 
     test1: a1.connectModule;
 >test1 : a1.connectModule

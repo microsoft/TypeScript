@@ -6,7 +6,7 @@ declare namespace lf {
   export interface Transaction {
     attach(query: query.Builder): Promise<Array<Object>>
 >attach : (query: query.Builder) => Promise<Array<Object>>
->       : ^     ^^^^^^^^^^^^^^^^^^^^                      
+>       : ^     ^^             ^^^^^                      
 >query : query.Builder
 >      : ^^^^^^^^^^^^^
 >query : any

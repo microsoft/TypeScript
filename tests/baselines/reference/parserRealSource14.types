@@ -304,7 +304,7 @@ module TypeScript {
 
         public push(ast: TypeScript.AST) {
 >push : (ast: TypeScript.AST) => void
->     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^^^^^^^^
 >ast : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -6838,7 +6838,7 @@ module TypeScript {
 
     export function isValidAstNode(ast: TypeScript.ASTSpan): boolean {
 >isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^       
+>               : ^   ^^                  ^^^^^       
 >ast : TypeScript.ASTSpan
 >    : ^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -6947,7 +6947,7 @@ module TypeScript {
     ///
     export function getAstPathToPosition(script: TypeScript.AST, pos: number, options = GetAstPathOptions.Default): TypeScript.AstPath {
 >getAstPathToPosition : (script: TypeScript.AST, pos: number, options?: GetAstPathOptions) => TypeScript.AstPath
->                     : ^      ^^^^^^^^^^^^^^^^^^   ^^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^                  
+>                     : ^      ^^              ^^   ^^      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^                  
 >script : TypeScript.AST
 >       : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7079,7 +7079,7 @@ module TypeScript {
 >ctx.path.push(comments[i]) : void
 >                           : ^^^^
 >ctx.path.push : (ast: TypeScript.AST) => void
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^              ^^^^^^^^^
 >ctx.path : AstPath
 >         : ^^^^^^^
 >ctx : AstPathContext
@@ -7087,7 +7087,7 @@ module TypeScript {
 >path : AstPath
 >     : ^^^^^^^
 >push : (ast: TypeScript.AST) => void
->     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^^^^^^^^
 >comments[i] : TypeScript.Comment
 >            : ^^^^^^^^^^^^^^^^^^
 >comments : TypeScript.Comment[]
@@ -7101,9 +7101,9 @@ module TypeScript {
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^          ^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          : ^   ^^              ^^      ^^              ^^      ^^          ^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7119,7 +7119,7 @@ module TypeScript {
 >isValidAstNode(cur) : boolean
 >                    : ^^^^^^^
 >isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^   ^^                  ^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 
@@ -7294,7 +7294,7 @@ module TypeScript {
 >ctx.path.push(cur) : void
 >                   : ^^^^
 >ctx.path.push : (ast: TypeScript.AST) => void
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^   ^^              ^^^^^^^^^
 >ctx.path : AstPath
 >         : ^^^^^^^
 >ctx : AstPathContext
@@ -7302,7 +7302,7 @@ module TypeScript {
 >path : AstPath
 >     : ^^^^^^^
 >push : (ast: TypeScript.AST) => void
->     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
                     }
@@ -7432,7 +7432,7 @@ module TypeScript {
 >script : TypeScript.AST
 >       : ^^^^^^^^^^^^^^
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^          ^^^^^^^^^^^^^^^^^^^
 >ctx : AstPathContext
 >    : ^^^^^^^^^^^^^^
 
@@ -7451,7 +7451,7 @@ module TypeScript {
     //
     export function getTokenizationOffset(script: TypeScript.Script, position: number): number {
 >getTokenizationOffset : (script: TypeScript.Script, position: number) => number
->                      : ^      ^^^^^^^^^^^^^^^^^^^^^        ^^      ^^^^^      
+>                      : ^      ^^                 ^^        ^^      ^^^^^      
 >script : TypeScript.Script
 >       : ^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7467,9 +7467,9 @@ module TypeScript {
 
         var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7489,11 +7489,11 @@ module TypeScript {
 >TypeScript.isValidAstNode(cur) : boolean
 >                               : ^^^^^^^
 >TypeScript.isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->                          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                          : ^   ^^                  ^^^^^^^^^^^^
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 >isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^   ^^                  ^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 
@@ -7595,7 +7595,7 @@ module TypeScript {
 >script : TypeScript.Script
 >       : ^^^^^^^^^^^^^^^^^
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 
         return bestOffset;
 >bestOffset : number
@@ -7607,13 +7607,13 @@ module TypeScript {
     ///
     export function walkAST(ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void ): void {
 >walkAST : (ast: TypeScript.AST, callback: (path: AstPath, walker: TypeScript.IAstWalker) => void) => void
->        : ^   ^^^^^^^^^^^^^^^^^^        ^^                                                      ^^^^^    
+>        : ^   ^^              ^^        ^^                                                      ^^^^^    
 >ast : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
 >           : ^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^    ^^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>         : ^    ^^       ^^      ^^                     ^^^^^    
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker
@@ -7623,9 +7623,9 @@ module TypeScript {
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                              : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                              : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7655,11 +7655,11 @@ module TypeScript {
 >path.push(cur) : void
 >               : ^^^^
 >path.push : (ast: TypeScript.AST) => void
->          : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^   ^^              ^^^^^^^^^
 >path : AstPath
 >     : ^^^^^^^
 >push : (ast: TypeScript.AST) => void
->     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 
@@ -7667,7 +7667,7 @@ module TypeScript {
 >callback(path, walker) : void
 >                       : ^^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^    ^^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^    ^^       ^^      ^^                     ^^^^^^^^^
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker
@@ -7679,9 +7679,9 @@ module TypeScript {
         }
         var post = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
 >post : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->     : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                       : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -7748,9 +7748,9 @@ module TypeScript {
 >ast : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >post : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->     : ^   ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
 >path : AstPath
 >     : ^^^^^^^
     }
