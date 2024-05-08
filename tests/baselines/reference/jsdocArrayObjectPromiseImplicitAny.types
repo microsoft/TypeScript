@@ -106,7 +106,7 @@ var paramedObject = {valueOf: 1};
  */
 function returnAnyObject(obj) {
 >returnAnyObject : (obj: any) => any
->                : ^   ^^   ^^^^^   
+>                : ^   ^^^^^^^^^^^^^
 >obj : any
 
   return obj;

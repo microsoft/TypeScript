@@ -40,15 +40,16 @@ export declare const o: (p1: SpecialString, p2: PrivateSpecialString, p3: N.Spec
 };
 export {};
 //// [b.d.ts]
-export declare const g: (p1: string, p2: string, p3: string) => {
-    foo: string;
+import * as a from "./a";
+export declare const g: (p1: a.SpecialString, p2: string, p3: a.N.SpecialString) => {
+    foo: a.SpecialString;
     bar: string;
-    baz: string;
+    baz: a.N.SpecialString;
 };
 //// [c.d.ts]
 import { SpecialString } from "./a";
-export declare const g: (p1: SpecialString, p2: string, p3: string) => {
-    foo: string;
+export declare const g: (p1: SpecialString, p2: string, p3: import("./a").N.SpecialString) => {
+    foo: SpecialString;
     bar: string;
-    baz: string;
+    baz: import("./a").N.SpecialString;
 };

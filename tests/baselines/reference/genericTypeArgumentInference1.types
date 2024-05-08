@@ -41,11 +41,11 @@ var r = _.all([true, 1, null, 'yes'], _.identity);
 >_.all([true, 1, null, 'yes'], _.identity) : string | number | boolean
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >[true, 1, null, 'yes'] : (string | number | true)[]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >true : true
@@ -67,11 +67,11 @@ var r2 = _.all([true], _.identity);
 >_.all([true], _.identity) : boolean
 >                          : ^^^^^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >[true] : true[]
 >       : ^^^^^^
 >true : true
@@ -89,11 +89,11 @@ var r3 = _.all([], _.identity);
 >_.all([], _.identity) : any
 >                      : ^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 >_.identity : <T>(value: T) => T
@@ -109,11 +109,11 @@ var r4 = _.all([<any>true], _.identity);
 >_.all([<any>true], _.identity) : any
 >                               : ^^^
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>      : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^
+>    : ^ ^^    ^^   ^^        ^^^^^^^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^
 >[<any>true] : any[]
 >            : ^^^^^
 ><any>true : any

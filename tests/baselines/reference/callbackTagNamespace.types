@@ -16,7 +16,7 @@ var x = 1;
 /** @type {NS.Nested.Inner} */
 function f(space, peace) {
 >f : (space: any, peace: any) => string | number
->  : ^     ^^   ^^     ^^   ^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^
 >space : any
 >peace : any
 

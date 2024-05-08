@@ -3,7 +3,7 @@
 === /src/a.ts ===
 import { a } from "a";
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 
 import { b } from "b";
 >b : import("/node_modules/a/node_modules/x/index").default
@@ -17,7 +17,7 @@ a(b); // Works
 >a(b) : void
 >     : ^^^^
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 >b : import("/node_modules/a/node_modules/x/index").default
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -25,7 +25,7 @@ a(c); // Error, these are from different versions of the library.
 >a(c) : void
 >     : ^^^^
 >a : (x: import("/node_modules/a/node_modules/x/index").default) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
 >c : import("/node_modules/c/node_modules/x/index").default
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

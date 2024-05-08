@@ -98,7 +98,7 @@ f.self = f;
  */
 function g(a, b) {
 >g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }
@@ -125,7 +125,7 @@ function g(a, b) {
 
 export { g };
 >g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 
 /**
  * @param {{x: string}} a
@@ -133,7 +133,7 @@ export { g };
  */
 function hh(a, b) {
 >hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
->   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: typeof import("index").b; }
@@ -160,9 +160,9 @@ function hh(a, b) {
 
 export { hh as h };
 >hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
->   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 >h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^                   ^^^^^^^  ^   ^^^^^^^^^
 
 export function i() {}
 >i : () => void

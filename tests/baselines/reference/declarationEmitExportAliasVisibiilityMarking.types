@@ -41,11 +41,11 @@ export default (suit: Suit, rank: Rank) => ({suit, rank});
 === index.ts ===
 export let lazyCard = () => import('./Card').then(a => a.default);
 >lazyCard : () => Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
->         : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => import('./Card').then(a => a.default) : () => Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
->                                            : ^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import('./Card').then(a => a.default) : Promise<(suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }>
->                                      : ^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                      : ^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import('./Card').then : <TResult1 = typeof import("Card"), TResult2 = never>(onfulfilled?: (value: typeof import("Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >import('./Card') : Promise<typeof import("Card")>
@@ -55,15 +55,15 @@ export let lazyCard = () => import('./Card').then(a => a.default);
 >then : <TResult1 = typeof import("Card"), TResult2 = never>(onfulfilled?: (value: typeof import("Card")) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a.default : (a: typeof import("Card")) => (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : typeof import("Card")
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >a.default : (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
->          : ^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : typeof import("Card")
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >default : (suit: import("Types").Suit, rank: import("Types").Rank) => { suit: import("Types").Suit; rank: import("Types").Rank; }
->        : ^    ^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^    ^^       ^^^^^^^  ^^^^^^    ^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export { Suit, Rank } from './Types';
 >Suit : any

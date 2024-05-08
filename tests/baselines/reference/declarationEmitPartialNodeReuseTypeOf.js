@@ -42,14 +42,15 @@ export declare const o: (p1: typeof nImported, p2: typeof nNotImported, p3: type
 export {};
 //// [b.d.ts]
 import { nImported } from "./a";
-export declare const g: (p1: typeof nImported, p2: "nNotImported", p3: "private") => {
-    foo: "nImported";
+export declare const g: (p1: typeof nImported, p2: typeof import("./a").nNotImported, p3: "private") => {
+    foo: typeof nImported;
     bar: "private";
-    baz: "nNotImported";
+    baz: typeof import("./a").nNotImported;
 };
 //// [c.d.ts]
-export declare const g: (p1: "nImported", p2: "nNotImported", p3: "private") => {
-    foo: "nImported";
+import * as a from "./a";
+export declare const g: (p1: typeof a.nImported, p2: typeof a.nNotImported, p3: "private") => {
+    foo: typeof a.nImported;
     bar: "private";
-    baz: "nNotImported";
+    baz: typeof a.nNotImported;
 };
