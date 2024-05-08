@@ -392,7 +392,7 @@ function withContext<T>(
                 sourceFile,
                 targetNode,
                 createSatisfiesAsExpression(
-                    getSynthesizedDeepClone(targetNode),
+                    targetNode,
                     typeNode,
                 ),
             );
