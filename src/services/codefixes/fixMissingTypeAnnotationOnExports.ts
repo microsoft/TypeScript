@@ -78,6 +78,7 @@ import {
     PropertyAccessExpression,
     PropertyDeclaration,
     setEmitFlags,
+    setParentRecursive,
     SignatureDeclaration,
     some,
     SourceFile,
@@ -392,7 +393,7 @@ function withContext<T>(
                 sourceFile,
                 targetNode,
                 createSatisfiesAsExpression(
-                    targetNode,
+                    setParentRecursive(getSynthesizedDeepClone(targetNode), /*incremental*/ false),
                     typeNode,
                 ),
             );
