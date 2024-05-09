@@ -404,6 +404,32 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "diagnostics": [
+          {
+            "start": {
+              "line": 12,
+              "offset": 5
+            },
+            "end": {
+              "line": 14,
+              "offset": 6
+            },
+            "text": "File '/user/username/projects/myproject/a' not found.",
+            "code": 6053,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/b/tsconfig.json"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)
@@ -497,6 +523,17 @@ Info seq  [hh:mm:ss:mss] 	Files (5)
 	/user/username/projects/myproject/c/index.ts SVC-1-0 "import {b} from '../b';\nimport {X} from \"@ref/a\";\nb;\nX;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "configFile": "/user/username/projects/myproject/c/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] Running: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Before ensureProjectForOpenFiles:
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/c/tsconfig.json' (Configured)

@@ -13,7 +13,7 @@ var y: asdf;
 
 function foo(x: asdf, y: number): asdf { }
 >foo : (x: asdf, y: number) => asdf
->    : ^ ^^^^^^^^ ^^      ^^^^^^^^^
+>    : ^ ^^    ^^ ^^      ^^^^^^^^^
 >x : asdf
 >  : ^^^^
 >y : number

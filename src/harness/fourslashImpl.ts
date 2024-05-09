@@ -3560,6 +3560,11 @@ export class TestState {
         assert.deepEqual(actualModuleSpecifiers, moduleSpecifiers);
     }
 
+    public verifyPasteEdits(options: FourSlashInterface.PasteEditsOptions): void {
+        const editInfo = this.languageService.getPasteEdits({ targetFile: this.activeFile.fileName, pastedText: options.args.pastedText, pasteLocations: options.args.pasteLocations, copiedFrom: options.args.copiedFrom, preferences: options.args.preferences }, this.formatCodeSettings);
+        this.verifyNewContent({ newFileContent: options.newFileContents }, editInfo.edits);
+    }
+
     public verifyDocCommentTemplate(expected: ts.TextInsertion | undefined, options?: ts.DocCommentTemplateOptions) {
         const name = "verifyDocCommentTemplate";
         const actual = this.languageService.getDocCommentTemplateAtPosition(this.activeFile.fileName, this.currentCaretPosition, options || { generateReturnInDocTemplate: true }, this.formatCodeSettings)!;

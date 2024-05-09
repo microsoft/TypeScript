@@ -2239,6 +2239,18 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     /** @internal */
+    runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
+        const originalProgram = this.program;
+        const originalText = this.program?.getSourceFile(rootFile)?.getText();
+        Debug.assert(this.program && this.program.getSourceFile(rootFile) && originalText);
+
+        this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, updatedText);
+        this.updateGraph();
+        cb(this.program, originalProgram, (this.program?.getSourceFile(rootFile))!);
+        this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, originalText);
+    }
+
+    /** @internal */
     private getCompilerOptionsForNoDtsResolutionProject() {
         return {
             ...this.getCompilerOptions(),
@@ -2741,7 +2753,7 @@ export class AutoImportProviderProject extends Project {
  */
 export class ConfiguredProject extends Project {
     /** @internal */
-    pendingUpdateLevel: ProgramUpdateLevel | undefined;
+    pendingUpdateLevel: ProgramUpdateLevel;
     /** @internal */
     pendingUpdateReason: string | undefined;
 
@@ -2776,10 +2788,10 @@ export class ConfiguredProject extends Project {
     private compilerHost?: CompilerHost;
 
     /** @internal */
-    hasConfigFileDiagnostics?: boolean;
+    configDiagDiagnosticsReported?: number;
 
     /** @internal */
-    skipConfigDiagEvent?: true;
+    triggerFileForConfigFileDiag?: NormalizedPath;
 
     /** @internal */
     deferredClose?: boolean;
@@ -2791,8 +2803,11 @@ export class ConfiguredProject extends Project {
         projectService: ProjectService,
         documentRegistry: DocumentRegistry,
         cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+        pendingUpdateReason: string,
     ) {
         super(configFileName, ProjectKind.Configured, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, /*compilerOptions*/ {}, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, cachedDirectoryStructureHost, getDirectoryPath(configFileName));
+        this.pendingUpdateLevel = ProgramUpdateLevel.Full;
+        this.pendingUpdateReason = pendingUpdateReason;
     }
 
     /** @internal */
@@ -2845,7 +2860,7 @@ export class ConfiguredProject extends Project {
      */
     override updateGraph(): boolean {
         if (this.deferredClose) return false;
-        const isInitialLoad = this.isInitialLoadPending();
+        const isDirty = this.dirty;
         this.isInitialLoadPending = returnFalse;
         const updateLevel = this.pendingUpdateLevel;
         this.pendingUpdateLevel = ProgramUpdateLevel.Update;
@@ -2859,7 +2874,7 @@ export class ConfiguredProject extends Project {
                 this.openFileWatchTriggered.clear();
                 const reason = Debug.checkDefined(this.pendingUpdateReason);
                 this.pendingUpdateReason = undefined;
-                this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
+                this.projectService.reloadConfiguredProject(this, reason, /*clearSemanticCache*/ false);
                 result = true;
                 break;
             default:
@@ -2868,8 +2883,21 @@ export class ConfiguredProject extends Project {
         this.compilerHost = undefined;
         this.projectService.sendProjectLoadingFinishEvent(this);
         this.projectService.sendProjectTelemetry(this);
-        if (!this.skipConfigDiagEvent && !result) { // If new program, send event if diagnostics presence has changed
-            this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined);
+        if (
+            updateLevel === ProgramUpdateLevel.Full || ( // Already sent event through reload
+                result && ( // Not new program
+                    !isDirty ||
+                    !this.triggerFileForConfigFileDiag ||
+                    this.getCurrentProgram()!.structureIsReused === StructureIsReused.Completely
+                )
+            )
+        ) {
+            // Dont send the configFileDiag
+            this.triggerFileForConfigFileDiag = undefined;
+        }
+        else if (!this.triggerFileForConfigFileDiag) {
+            // If we arent tracking to send configFileDiag, send event if diagnostics presence has changed
+            this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined, /*force*/ false);
         }
         return result;
     }

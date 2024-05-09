@@ -6,8 +6,8 @@ var x1: this;
 >   : ^^^
 
 var x2: { a: this };
->x2 : { a: any; }
->   : ^^^^^^^^^^^
+>x2 : { a: this; }
+>   : ^^^^^    ^^^
 >a : any
 >  : ^^^
 
@@ -16,8 +16,8 @@ var x3: this[];
 >   : ^^^^^
 
 function f1(x: this): this {
->f1 : (x: any) => any
->   : ^ ^^^^^^^^^^^^^
+>f1 : (x: this) => any
+>   : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -32,8 +32,8 @@ function f1(x: this): this {
 
 interface I1 {
     a: { x: this };
->a : { x: any; }
->  : ^^^^^^^^^^^
+>a : { x: this; }
+>  : ^^^^^    ^^^
 >x : any
 >  : ^^^
 
@@ -52,10 +52,10 @@ interface I1 {
 >  : ^^^^^^
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->  : ^^^^ ^^^^^^^^^^^^^^
->f : (x: any) => any
->  : ^ ^^^^^^^^^^^^^
+>e : { f(x: this): any; }
+>  : ^^^^ ^^    ^^^^^^^^^
+>f : (x: this) => any
+>  : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 }
@@ -65,8 +65,8 @@ class C1 {
 >   : ^^
 
     a: { x: this };
->a : { x: any; }
->  : ^^^^^^^^^^^
+>a : { x: this; }
+>  : ^^^^^    ^^^
 >x : any
 >  : ^^^
 
@@ -85,10 +85,10 @@ class C1 {
 >  : ^^^^^^
 
     e: { f(x: this): this };
->e : { f(x: any): any; }
->  : ^^^^ ^^^^^^^^^^^^^^
->f : (x: any) => any
->  : ^ ^^^^^^^^^^^^^
+>e : { f(x: this): any; }
+>  : ^^^^ ^^    ^^^^^^^^^
+>f : (x: this) => any
+>  : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 }
@@ -110,8 +110,8 @@ class C2 {
 >          : ^^^^^^^^^
 
     static foo(x: this): this {
->foo : (x: any) => any
->    : ^ ^^^^^^^^^^^^^
+>foo : (x: this) => any
+>    : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -141,14 +141,14 @@ class C3 {
 >   : ^^
 
     x1 = {
->x1 : { g(x: any): any; }
->   : ^^^^ ^^^^^^^^^^^^^^
->{        g(x: this): this {            return undefined;        }    } : { g(x: any): any; }
->                                                                       : ^^^^ ^^^^^^^^^^^^^^
+>x1 : { g(x: this): any; }
+>   : ^^^^ ^^    ^^^^^^^^^
+>{        g(x: this): this {            return undefined;        }    } : { g(x: this): any; }
+>                                                                       : ^^^^ ^^    ^^^^^^^^^
 
         g(x: this): this {
->g : (x: any) => any
->  : ^ ^^^^^^^^^^^^^
+>g : (x: this) => any
+>  : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -162,8 +162,8 @@ class C3 {
 >  : ^^^^^^^^^^
 
         function g(x: this): this {
->g : (x: any) => any
->  : ^ ^^^^^^^^^^^^^
+>g : (x: this) => any
+>  : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 
@@ -172,14 +172,14 @@ class C3 {
 >          : ^^^^^^^^^
         }
         let x2 = {
->x2 : { h(x: any): any; }
->   : ^^^^ ^^^^^^^^^^^^^^
->{            h(x: this): this {                return undefined;            }        } : { h(x: any): any; }
->                                                                                       : ^^^^ ^^^^^^^^^^^^^^
+>x2 : { h(x: this): any; }
+>   : ^^^^ ^^    ^^^^^^^^^
+>{            h(x: this): this {                return undefined;            }        } : { h(x: this): any; }
+>                                                                                       : ^^^^ ^^    ^^^^^^^^^
 
             h(x: this): this {
->h : (x: any) => any
->  : ^ ^^^^^^^^^^^^^
+>h : (x: this) => any
+>  : ^ ^^    ^^^^^^^^
 >x : any
 >  : ^^^
 

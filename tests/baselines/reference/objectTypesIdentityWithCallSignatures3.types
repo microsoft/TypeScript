@@ -62,24 +62,24 @@ function foo3(x: any) { }
 >  : ^^^
 
 function foo4(x: typeof b);
->foo4 : { (x: any): any; (x: any): any; }
->     : ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 >  : ^^^
 >b : any
 >  : ^^^
 
 function foo4(x: typeof b); // error
->foo4 : { (x: any): any; (x: any): any; }
->     : ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 >  : ^^^
 >b : any
 >  : ^^^
 
 function foo4(x: any) { }
->foo4 : { (x: any): any; (x: any): any; }
->     : ^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^
+>foo4 : { (x: typeof b): any; (x: typeof b): any; }
+>     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : any
 >  : ^^^
 

@@ -7,7 +7,7 @@ class C {
 
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : (filter: Iterator<T, boolean>) => Query<T>
->      : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^                    ^^^^^^^^^^^^^
 >filter : Iterator<T, boolean>
 >       : ^^^^^^^^^^^^^^^^^^^^
 

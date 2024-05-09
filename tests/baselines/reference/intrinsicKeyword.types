@@ -7,7 +7,7 @@ let e1: intrinsic;
 
 let e2: { intrinsic: intrinsic };
 >e2 : { intrinsic: intrinsic; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^^^         ^^^
 >intrinsic : intrinsic
 >          : ^^^^^^^^^
 
