@@ -256,22 +256,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
             case SyntaxKind.FunctionDeclaration:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                    exportedFunctions = append(exportedFunctions, node as FunctionDeclaration);
-                    if (hasSyntacticModifier(node, ModifierFlags.Default)) {
-                        // export default function() { }
-                        if (!hasExportDefault) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), context.factory.getDeclarationName(node as FunctionDeclaration));
-                            hasExportDefault = true;
-                        }
-                    }
-                    else {
-                        // export function x() { }
-                        const name = (node as FunctionDeclaration).name!;
-                        if (!uniqueExports.get(idText(name))) {
-                            multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
-                            uniqueExports.set(idText(name), true);
-                        }
-                    }
+                    addExportedFunctionDeclarartion(node as FunctionDeclaration, /*name*/ undefined, hasSyntacticModifier(node, ModifierFlags.Default));
                 }
                 break;
 
@@ -317,11 +302,37 @@ export function collectExternalModuleInfo(context: TransformationContext, source
                     || resolver.getReferencedValueDeclaration(name);
 
                 if (decl) {
+                    if (decl.kind === SyntaxKind.FunctionDeclaration) {
+                        addExportedFunctionDeclarartion(decl as FunctionDeclaration, specifier.name, specifier.name.escapedText === InternalSymbolName.Default);
+                        continue;
+                    }
+
                     multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(decl), specifier.name);
                 }
 
                 uniqueExports.set(idText(specifier.name), true);
                 exportedNames = append(exportedNames, specifier.name);
+            }
+        }
+    }
+
+    function addExportedFunctionDeclarartion(node: FunctionDeclaration, name: Identifier | undefined, isDefault: boolean) {
+        exportedFunctions = append(exportedFunctions, node);
+        if (isDefault) {
+            // export default function() { }
+            // function x() { } + export { x as default };
+            if (!hasExportDefault) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name ?? context.factory.getDeclarationName(node));
+                hasExportDefault = true;
+            }
+        }
+        else {
+            // export function x() { }
+            // function x() { } + export { x }
+            name ??= node.name!;
+            if (!uniqueExports.get(idText(name))) {
+                multiMapSparseArrayAdd(exportedBindings, getOriginalNodeId(node), name);
+                uniqueExports.set(idText(name), true);
             }
         }
     }
