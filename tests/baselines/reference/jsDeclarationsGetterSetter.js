@@ -280,5 +280,5 @@ export class L {
     set x(value: any);
 }
 export class M {
-    set x(value: any);
+    set x(value: boolean);
 }
