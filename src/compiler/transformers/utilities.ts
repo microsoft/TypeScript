@@ -256,7 +256,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
             case SyntaxKind.FunctionDeclaration:
                 if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                    addExportedFunctionDeclarartion(node as FunctionDeclaration, /*name*/ undefined, hasSyntacticModifier(node, ModifierFlags.Default));
+                    addExportedFunctionDeclaration(node as FunctionDeclaration, /*name*/ undefined, hasSyntacticModifier(node, ModifierFlags.Default));
                 }
                 break;
 
@@ -303,7 +303,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
 
                 if (decl) {
                     if (decl.kind === SyntaxKind.FunctionDeclaration) {
-                        addExportedFunctionDeclarartion(decl as FunctionDeclaration, specifier.name, specifier.name.escapedText === InternalSymbolName.Default);
+                        addExportedFunctionDeclaration(decl as FunctionDeclaration, specifier.name, specifier.name.escapedText === InternalSymbolName.Default);
                         continue;
                     }
 
@@ -316,7 +316,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
         }
     }
 
-    function addExportedFunctionDeclarartion(node: FunctionDeclaration, name: Identifier | undefined, isDefault: boolean) {
+    function addExportedFunctionDeclaration(node: FunctionDeclaration, name: Identifier | undefined, isDefault: boolean) {
         exportedFunctions = append(exportedFunctions, node);
         if (isDefault) {
             // export default function() { }
