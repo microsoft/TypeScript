@@ -17,6 +17,9 @@ import {
 } from "../_namespaces/Harness.Parallel.js";
 
 export function start(importTests: () => Promise<unknown>) {
+    // This brings in the tests after we finish setting things up and yield to the event loop.
+    const importTestsPromise = importTests();
+
     function hookUncaughtExceptions() {
         if (!exceptionsHooked) {
             process.on("uncaughtException", handleUncaughtException);
@@ -340,5 +343,4 @@ export function start(importTests: () => Promise<unknown>) {
     }
 
     process.on("message", processHostMessage);
-    const importTestsPromise = importTests();
 }
