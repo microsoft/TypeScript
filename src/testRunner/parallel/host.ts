@@ -25,7 +25,7 @@ import {
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
-export async function start(importTests: () => Promise<unknown>) {
+export function start(importTests: () => Promise<unknown>) {
     const Mocha = require("mocha") as typeof import("mocha");
     const Base = Mocha.reporters.Base;
     const color = Base.color;
@@ -656,6 +656,5 @@ export async function start(importTests: () => Promise<unknown>) {
         shimNoopTestInterface(global);
     }
 
-    await importTests();
-    setTimeout(() => startDelayed(perfData, totalCost), 0);
+    importTests().then(() => startDelayed(perfData, totalCost));
 }
