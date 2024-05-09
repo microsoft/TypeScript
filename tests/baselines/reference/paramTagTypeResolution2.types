@@ -12,7 +12,7 @@ function f(a, b) {
 >a : T
 >  : ^
 >b : { [K in keyof T]: (value: T[K]) => void; }
->  : ^^^ ^^^^^^^^^^^^^^^     ^^    ^^^^^^^^^^^^
+>  : ^^^ ^^^^^^^^^^^^^^^     ^^    ^^^^^    ^^^
 }
 
 f({ x: 42 }, { x(param) { param.toFixed() } });
@@ -35,9 +35,9 @@ f({ x: 42 }, { x(param) { param.toFixed() } });
 >param.toFixed() : string
 >                : ^^^^^^
 >param.toFixed : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >param : number
 >      : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 

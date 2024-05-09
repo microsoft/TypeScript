@@ -21,7 +21,7 @@ function map<T, U>(items: T[], f: (x: T) => U): U[]{
 >map : <U_1>(callbackfn: (value: T, index: number, array: T[]) => U_1, thisArg?: any) => U_1[]
 >    : ^^^^^^          ^^^     ^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
 >f : (x: T) => U
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 
 function identity<T>(x: T) {
@@ -85,7 +85,7 @@ var v1 = map(xs, identity);     // Error if not number[]
 >map(xs, identity) : number[]
 >                  : ^^^^^^^^
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^^^^
+>    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^   
 >xs : number[]
 >   : ^^^^^^^^
 >identity : <T>(x: T) => T
@@ -115,7 +115,7 @@ var v2 = map(xs, singleton);    // Error if not number[][]
 >map(xs, singleton) : number[][]
 >                   : ^^^^^^^^^^
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^^^^
+>    : ^ ^^ ^^     ^^   ^^ ^^           ^^^^^   
 >xs : number[]
 >   : ^^^^^^^^
 >singleton : <T>(x: T) => T[]

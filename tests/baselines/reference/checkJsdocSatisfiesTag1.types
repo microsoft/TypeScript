@@ -72,9 +72,9 @@ const t4 = /** @satisfies {T2} */ ({ a: "a" });
 /** @type {(m: string) => string} */
 const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >t5 : (m: string) => string
->   : ^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^      
 >((m) => m.substring(0)) : (m: string) => string
->                        : ^ ^^      ^^^^^^^^^^^
+>                        : ^ ^^      ^^^^^      
 >(m) => m.substring(0) : (m: string) => string
 >                      : ^ ^^^^^^^^^^^^^^^^^^^
 >m : string
@@ -82,11 +82,11 @@ const t5 = /** @satisfies {T3} */((m) => m.substring(0));
 >m.substring(0) : string
 >               : ^^^^^^
 >m.substring : (start: number, end?: number) => string
->            : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>            : ^     ^^      ^^   ^^^      ^^^^^      
 >m : string
 >  : ^^^^^^
 >substring : (start: number, end?: number) => string
->          : ^     ^^      ^^   ^^^      ^^^^^^^^^^^
+>          : ^     ^^      ^^   ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

@@ -64,11 +64,11 @@ class B {
 >fso.toString() : string
 >               : ^^^^^^
 >fso.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >fso : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
                     }
                 }
             })();

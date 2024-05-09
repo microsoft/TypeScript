@@ -100,7 +100,7 @@ Component = RenderElement;
 >Component = RenderElement : ({ title }: { title: string; }) => JSX.Element
 >                          : ^         ^^                  ^^^^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderElement : ({ title }: { title: string; }) => JSX.Element
 >              : ^         ^^                  ^^^^^^^^^^^^^^^^
 
@@ -142,7 +142,7 @@ Component = RenderString;
 >Component = RenderString : ({ title }: { title: string; }) => string
 >                         : ^         ^^                  ^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderString : ({ title }: { title: string; }) => string
 >             : ^         ^^                  ^^^^^^^^^^^
 
@@ -188,7 +188,7 @@ Component = RenderNumber;
 >Component = RenderNumber : ({ title }: { title: string; }) => number
 >                         : ^         ^^                  ^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderNumber : ({ title }: { title: string; }) => number
 >             : ^         ^^                  ^^^^^^^^^^^
 
@@ -232,7 +232,7 @@ Component = RenderArray;
 >Component = RenderArray : ({ title }: { title: string; }) => string[]
 >                        : ^         ^^                  ^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderArray : ({ title }: { title: string; }) => string[]
 >            : ^         ^^                  ^^^^^^^^^^^^^
 
@@ -275,7 +275,7 @@ Component = RenderPromise;
 >Component = RenderPromise : ({ title }: { title: string; }) => Promise<string>
 >                          : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderPromise : ({ title }: { title: string; }) => Promise<string>
 >              : ^         ^^                  ^^^^^^^^^^^^^^^^^^^^
 
@@ -322,11 +322,11 @@ class RenderStringClass extends React.Component<{ title: string }> {
 >this.props.title : string
 >                 : ^^^^^^
 >this.props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ title: string; }>
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >this : this
 >     : ^^^^
 >props : Readonly<{ children?: React.ReactNode; }> & Readonly<{ title: string; }>
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >title : string
 >      : ^^^^^^
   }
@@ -335,7 +335,7 @@ Component = RenderStringClass;
 >Component = RenderStringClass : typeof RenderStringClass
 >                              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >Component : NewReactJSXElementConstructor<{ title: string; }>
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^
 >RenderStringClass : typeof RenderStringClass
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 

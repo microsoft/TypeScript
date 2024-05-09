@@ -1044,11 +1044,11 @@ module Formatting {
 >this.GetIndentationDelta(token.Span.startPosition(), null) : number
 >                                                           : ^^^^^^
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                         : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
+>                         : ^                  ^^      ^^                       ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                    : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
+>                    : ^                  ^^      ^^                       ^^      ^^^^^      
 >token.Span.startPosition() : any
 >                           : ^^^
 >token.Span.startPosition : any
@@ -1126,11 +1126,11 @@ module Formatting {
 >this.GetLineIndentationForOffset(lineStartPosition) : string
 >                                                    : ^^^^^^
 >this.GetLineIndentationForOffset : (offset: number) => string
->                                 : ^      ^^      ^^^^^^^^^^^
+>                                 : ^      ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >GetLineIndentationForOffset : (offset: number) => string
->                            : ^      ^^      ^^^^^^^^^^^
+>                            : ^      ^^      ^^^^^      
 >lineStartPosition : any
 >                  : ^^^
 
@@ -1282,11 +1282,11 @@ module Formatting {
 >text.charAt(i) : string
 >               : ^^^^^^
 >text.charAt : (pos: number) => string
->            : ^   ^^      ^^^^^^^^^^^
+>            : ^   ^^      ^^^^^      
 >text : string
 >     : ^^^^^^
 >charAt : (pos: number) => string
->       : ^   ^^      ^^^^^^^^^^^
+>       : ^   ^^      ^^^^^      
 >i : number
 >  : ^^^^^^
 
@@ -2369,11 +2369,11 @@ module Formatting {
 >this.ApplyIndentationLevel(languageHostIndentation, 1) : string
 >                                                       : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^      
 >languageHostIndentation : string
 >                        : ^^^^^^
 >1 : 1
@@ -2455,11 +2455,11 @@ module Formatting {
 >this.ApplyIndentationLevel(indentInfo.Prefix, indentInfo.Level) : string
 >                                                                : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^      
 >indentInfo.Prefix : any
 >                  : ^^^
 >indentInfo : IndentationInfo
@@ -2834,11 +2834,11 @@ module Formatting {
 >this.GetIndentString(null, totalIndent, tabSize, convertTabsToSpaces) : string
 >                                                                      : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >totalIndent : number
 >            : ^^^^^^
 >tabSize : any
@@ -2861,11 +2861,11 @@ module Formatting {
 >this.GetIndentString(existingIndentation, totalIndentSize, tabSize, convertTabsToSpaces) : string
 >                                                                                         : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >existingIndentation : string
 >                    : ^^^^^^
 >totalIndentSize : number
@@ -3087,11 +3087,11 @@ module Formatting {
 >this.GetIndentationDelta(indentableParent.AuthorNode.Details.StartOffset, token.Span.startPosition()) : number
 >                                                                                                      : ^^^^^^
 >this.GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                         : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
+>                         : ^                  ^^      ^^                       ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >GetIndentationDelta : (tokenStartPosition: number, childTokenStartPosition: number) => number
->                    : ^                  ^^      ^^                       ^^      ^^^^^^^^^^^
+>                    : ^                  ^^      ^^                       ^^      ^^^^^      
 >indentableParent.AuthorNode.Details.StartOffset : any
 >                                                : ^^^
 >indentableParent.AuthorNode.Details : any
@@ -3322,11 +3322,11 @@ module Formatting {
 >this.GetIndentString(null, newIndentSize, this.editorOptions.TabSize, this.editorOptions.ConvertTabsToSpaces) : string
 >                                                                                                              : ^^^^^^
 >this.GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                     : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >this : this
 >     : ^^^^
 >GetIndentString : (prefix: string, totalIndentSize: number, tabSize: number, convertTabsToSpaces: boolean) => string
->                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^^^^^^^
+>                : ^      ^^      ^^               ^^      ^^       ^^      ^^                   ^^       ^^^^^      
 >newIndentSize : number
 >              : ^^^^^^
 >this.editorOptions.TabSize : any
@@ -4220,11 +4220,11 @@ module Formatting {
 >this.GetLineIndentationForOffset(offset) : string
 >                                         : ^^^^^^
 >this.GetLineIndentationForOffset : (offset: number) => string
->                                 : ^      ^^      ^^^^^^^^^^^
+>                                 : ^      ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >GetLineIndentationForOffset : (offset: number) => string
->                            : ^      ^^      ^^^^^^^^^^^
+>                            : ^      ^^      ^^^^^      
 >offset : number
 >       : ^^^^^^
 
@@ -4410,11 +4410,11 @@ module Formatting {
 >this.ApplyIndentationLevel(indentOverride, -lastDelta) : string
 >                                                       : ^^^^^^
 >this.ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                           : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                           : ^                   ^^      ^^     ^^      ^^^^^      
 >this : this
 >     : ^^^^
 >ApplyIndentationLevel : (existingIndentation: string, level: number) => string
->                      : ^                   ^^      ^^     ^^      ^^^^^^^^^^^
+>                      : ^                   ^^      ^^     ^^      ^^^^^      
 >indentOverride : string
 >               : ^^^^^^
 >-lastDelta : number

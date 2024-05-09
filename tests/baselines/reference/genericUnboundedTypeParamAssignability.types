@@ -28,11 +28,11 @@ function f2<T extends {}>(o: T) {
 >o.toString() : string
 >             : ^^^^^^
 >o.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >o : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function f3<T extends Record<string, any>>(o: T) {
@@ -45,11 +45,11 @@ function f3<T extends Record<string, any>>(o: T) {
 >o.toString() : string
 >             : ^^^^^^
 >o.toString : () => string
->           : ^^^^^^^^^^^^
+>           : ^^^^^^      
 >o : T
 >  : ^
 >toString : () => string
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 }
 
 function user<T>(t: T) {

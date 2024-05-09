@@ -69,11 +69,11 @@ const repro_43249 = (value: unknown) => {
 >value.match(/anything/) : RegExpMatchArray | null
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >value.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
->            : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >value : string
 >      : ^^^^^^
 >match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
->      : ^^^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/anything/ : RegExp
 >           : ^^^^^^
 >[] : []

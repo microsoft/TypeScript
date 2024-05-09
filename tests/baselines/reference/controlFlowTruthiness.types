@@ -15,7 +15,7 @@ function f1() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
     if (x) {
 >x : string | undefined
@@ -48,7 +48,7 @@ function f2() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
     if (x) {
 >x : string | undefined
@@ -81,7 +81,7 @@ function f3() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
         x; // string
 >x : string
@@ -114,7 +114,7 @@ function f4() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
         x; // string | undefined
 >x : string | undefined
@@ -151,7 +151,7 @@ function f5() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
         x; // string
 >x : string
@@ -194,7 +194,7 @@ function f6() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 >y = foo() : string | undefined
 >          : ^^^^^^^^^^^^^^^^^^
 >y : string | undefined
@@ -202,7 +202,7 @@ function f6() {
 >foo() : string | undefined
 >      : ^^^^^^^^^^^^^^^^^^
 >foo : () => string | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^                  
 
         x; // string | undefined
 >x : string | undefined

@@ -81,7 +81,7 @@ if (isNumber((otherValue(), value).inner)) {
 >isNumber((otherValue(), value).inner) : boolean
 >                                      : ^^^^^^^
 >isNumber : (obj: any) => obj is number
->         : ^   ^^   ^^^^^^^^^^^^^^^^^^
+>         : ^   ^^   ^^^^^             
 >(otherValue(), value).inner : string | number
 >                            : ^^^^^^^^^^^^^^^
 >(otherValue(), value) : { inner: string | number; }

@@ -186,7 +186,7 @@ a.pb.toFixed();
 >a.pb.toFixed() : string
 >               : ^^^^^^
 >a.pb.toFixed : (fractionDigits?: number) => string
->             : ^              ^^^      ^^^^^^^^^^^
+>             : ^              ^^^      ^^^^^      
 >a.pb : number
 >     : ^^^^^^
 >a : A
@@ -194,13 +194,13 @@ a.pb.toFixed();
 >pb : number
 >   : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 a.ptd.toFixed();    // Error
 >a.ptd.toFixed() : string
 >                : ^^^^^^
 >a.ptd.toFixed : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >a.ptd : number
 >      : ^^^^^^
 >a : A
@@ -208,13 +208,13 @@ a.ptd.toFixed();    // Error
 >ptd : number
 >    : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 a.pvt.toFixed();    // Error
 >a.pvt.toFixed() : string
 >                : ^^^^^^
 >a.pvt.toFixed : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 >a.pvt : number
 >      : ^^^^^^
 >a : A
@@ -222,7 +222,7 @@ a.pvt.toFixed();    // Error
 >pvt : number
 >    : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
 
 ab.pb.toFixed();
 >ab.pb.toFixed() : any

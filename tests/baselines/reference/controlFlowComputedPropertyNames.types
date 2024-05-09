@@ -27,7 +27,7 @@ function f1(obj: Record<string, unknown>, key: string) {
 >obj[key].toUpperCase() : string
 >                       : ^^^^^^
 >obj[key].toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >obj[key] : string
 >         : ^^^^^^
 >obj : Record<string, unknown>
@@ -35,7 +35,7 @@ function f1(obj: Record<string, unknown>, key: string) {
 >key : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -63,7 +63,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >obj[key].toUpperCase() : string
 >                       : ^^^^^^
 >obj[key].toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >obj[key] : string
 >         : ^^^^^^
 >obj : Record<string, string | undefined>
@@ -71,7 +71,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >key : string
 >    : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
     let key2 = key + key;
 >key2 : string
@@ -99,7 +99,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >obj[key2].toUpperCase() : string
 >                        : ^^^^^^
 >obj[key2].toUpperCase : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 >obj[key2] : string
 >          : ^^^^^^
 >obj : Record<string, string | undefined>
@@ -107,7 +107,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >key2 : string
 >     : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
     const key3 = key + key;
 >key3 : string
@@ -135,7 +135,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >obj[key3].toUpperCase() : string
 >                        : ^^^^^^
 >obj[key3].toUpperCase : () => string
->                      : ^^^^^^^^^^^^
+>                      : ^^^^^^      
 >obj[key3] : string
 >          : ^^^^^^
 >obj : Record<string, string | undefined>
@@ -143,7 +143,7 @@ function f2(obj: Record<string, string | undefined>, key: string) {
 >key3 : string
 >     : ^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 
@@ -195,7 +195,7 @@ function f3(obj: Thing, key: keyof Thing) {
 >obj[key].toUpperCase() : string
 >                       : ^^^^^^
 >obj[key].toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >obj[key] : string
 >         : ^^^^^^
 >obj : Thing
@@ -203,7 +203,7 @@ function f3(obj: Thing, key: keyof Thing) {
 >key : keyof Thing
 >    : ^^^^^^^^^^^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
         }
         if (typeof obj[key] === "number") {
 >typeof obj[key] === "number" : boolean
@@ -223,7 +223,7 @@ function f3(obj: Thing, key: keyof Thing) {
 >obj[key].toFixed() : string
 >                   : ^^^^^^
 >obj[key].toFixed : (fractionDigits?: number) => string
->                 : ^              ^^^      ^^^^^^^^^^^
+>                 : ^              ^^^      ^^^^^      
 >obj[key] : number
 >         : ^^^^^^
 >obj : Thing
@@ -231,7 +231,7 @@ function f3(obj: Thing, key: keyof Thing) {
 >key : keyof Thing
 >    : ^^^^^^^^^^^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
         }
     }
 }
@@ -256,7 +256,7 @@ function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
 >obj[key].toUpperCase() : string
 >                       : ^^^^^^
 >obj[key].toUpperCase : () => string
->                     : ^^^^^^^^^^^^
+>                     : ^^^^^^      
 >obj[key] : string
 >         : ^^^^^^
 >obj : Record<K, string | undefined>
@@ -264,7 +264,7 @@ function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
 >key : K
 >    : ^
 >toUpperCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
     }
 }
 

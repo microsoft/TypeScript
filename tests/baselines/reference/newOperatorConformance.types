@@ -81,7 +81,7 @@ var d = new anyCtor;
 >d : any
 >new anyCtor : any
 >anyCtor : new () => any
->        : ^^^^^^^^^^^^^
+>        : ^^^^^^^^^^   
 
 var d: any;
 >d : any
@@ -91,7 +91,7 @@ var d = new anyCtor1(undefined);
 >d : any
 >new anyCtor1(undefined) : any
 >anyCtor1 : new (n: any) => any
->         : ^^^^^ ^^^^^^^^^^^^^
+>         : ^^^^^ ^^^^^^^^^^   
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -148,7 +148,7 @@ var t = new fnVoid();
 >t : any
 >new fnVoid() : any
 >fnVoid : () => void
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 
 var t: any;
 >t : any

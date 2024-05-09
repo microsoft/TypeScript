@@ -37,7 +37,7 @@ class A<P extends Partial<Foo>> {
 >this.props.foo() : void
 >                 : ^^^^
 >this.props.foo : () => void
->               : ^^^^^^^^^^
+>               : ^^^^^^    
 >this.props : Readonly<P>
 >           : ^^^^^^^^^^^
 >this : this
@@ -45,7 +45,7 @@ class A<P extends Partial<Foo>> {
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 >foo : () => void
->    : ^^^^^^^^^^
+>    : ^^^^^^    
     }
 }
 
@@ -312,7 +312,7 @@ function f6<T extends string | (new () => {})>(a: T) {
 >new a() : {}
 >        : ^^
 >a : new () => {}
->  : ^^^^^^^^^^^^
+>  : ^^^^^^^^^^  
   }
 }
 

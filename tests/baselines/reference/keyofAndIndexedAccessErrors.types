@@ -160,11 +160,11 @@ type T53 = any[boolean];  // Error
 
 type T60 = {}["toString"];
 >T60 : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 type T61 = []["toString"];
 >T61 : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 declare let cond: boolean;
 >cond : boolean

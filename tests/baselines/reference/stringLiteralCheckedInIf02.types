@@ -42,7 +42,7 @@ function f(foo: T) {
 >isS(foo) : boolean
 >         : ^^^^^^^
 >isS : (t: T) => t is S
->    : ^ ^^ ^^^^^^^^^^^
+>    : ^ ^^ ^^^^^      
 >foo : T
 >    : ^
 

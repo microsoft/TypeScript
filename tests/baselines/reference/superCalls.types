@@ -58,7 +58,7 @@ class Derived extends Base {
 >v() : void
 >    : ^^^^
 >v : () => void
->  : ^^^^^^^^^^
+>  : ^^^^^^    
     }
 }
 

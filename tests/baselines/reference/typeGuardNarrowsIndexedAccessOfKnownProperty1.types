@@ -153,11 +153,11 @@ function subarea(s: Subshape): number {
 >s[0]["sub"].under["shape"] : Shape
 >                           : ^^^^^
 >s[0]["sub"].under : { shape: Shape; }
->                  : ^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
@@ -165,7 +165,7 @@ function subarea(s: Subshape): number {
 >"sub" : "sub"
 >      : ^^^^^
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 >"shape" : "shape"
 >        : ^^^^^^^
 >"dash-ok" : "dash-ok"
@@ -181,19 +181,19 @@ function subarea(s: Subshape): number {
 >s[0].sub.under.shape : Square
 >                     : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 >shape : Square
 >      : ^^^^^^
 >"square-size" : "square-size"
@@ -203,19 +203,19 @@ function subarea(s: Subshape): number {
 >s[0].sub.under.shape : Square
 >                     : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 >shape : Square
 >      : ^^^^^^
 >"square-size" : "square-size"
@@ -231,11 +231,11 @@ function subarea(s: Subshape): number {
 >s[0]["sub"]["under"]["shape"] : Rectangle
 >                              : ^^^^^^^^^
 >s[0]["sub"]["under"] : { shape: Shape; }
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
@@ -253,11 +253,11 @@ function subarea(s: Subshape): number {
 >s[0]["sub"]["under"]["shape"] : Rectangle
 >                              : ^^^^^^^^^
 >s[0]["sub"]["under"] : { shape: Shape; }
->                     : ^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
@@ -289,19 +289,19 @@ function subarea(s: Subshape): number {
 >s[0].sub.under["shape"] : Circle
 >                        : ^^^^^^
 >s[0].sub.under : { shape: Shape; }
->               : ^^^^^^^^^^^^^^^^^
+>               : ^^^^^^^^^     ^^^
 >s[0].sub : { under: { shape: Shape; }; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
 >  : ^
 >sub : { under: { shape: Shape; }; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^                 ^^^
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 >"shape" : "shape"
 >        : ^^^^^^^
 >radius : number
@@ -311,11 +311,11 @@ function subarea(s: Subshape): number {
 >s[0]["sub"].under.shape : Circle
 >                        : ^^^^^^
 >s[0]["sub"].under : { shape: Shape; }
->                  : ^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^^^     ^^^
 >s[0]["sub"] : { under: { shape: Shape; }; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^^^                 ^^^
 >s[0] : { sub: { under: { shape: Shape; }; }; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^                             ^^^
 >s : Subshape
 >  : ^^^^^^^^
 >0 : 0
@@ -323,7 +323,7 @@ function subarea(s: Subshape): number {
 >"sub" : "sub"
 >      : ^^^^^
 >under : { shape: Shape; }
->      : ^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^     ^^^
 >shape : Circle
 >      : ^^^^^^
 >"radius" : "radius"

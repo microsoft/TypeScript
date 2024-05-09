@@ -33,11 +33,11 @@ const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Ba
 >super.getLocation() : [number, number]
 >                    : ^^^^^^^^^^^^^^^^
 >super.getLocation : () => [number, number]
->                  : ^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^                
 >super : Point
 >      : ^^^^^
 >getLocation : () => [number, number]
->            : ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^                
 
     return [this.x | x, this.y | y];
 >[this.x | x, this.y | y] : [number, number]
@@ -127,11 +127,11 @@ class Foo extends WithLocation(Point) {
 >super.getLocation() : [number, number]
 >                    : ^^^^^^^^^^^^^^^^
 >super.getLocation : (() => [number, number]) & (() => [number, number])
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^^^^^^^                ^^^^^^^^^^^                ^
 >super : WithLocation<typeof Point>.(Anonymous class) & Point
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getLocation : (() => [number, number]) & (() => [number, number])
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^                ^^^^^^^^^^^                ^
   }
   whereAmI() {
 >whereAmI : () => [number, number]

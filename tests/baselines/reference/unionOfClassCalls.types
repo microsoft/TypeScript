@@ -123,11 +123,11 @@ arr.forEach((a: number | string, index: number) => {
 >arr.forEach((a: number | string, index: number) => {     return index}) : void
 >                                                                        : ^^^^
 >arr.forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
->            : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>            : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
 >arr : number[] | string[]
 >    : ^^^^^^^^^^^^^^^^^^^
 >forEach : ((callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void) | ((callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void)
->        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^
+>        : ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^^^^^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    ^
 >(a: number | string, index: number) => {     return index} : (a: number | string, index: number) => number
 >                                                           : ^ ^^               ^^     ^^      ^^^^^^^^^^^
 >a : string | number
@@ -195,11 +195,11 @@ arr1.forEach((a: number, index: number) => {
 >arr1.forEach((a: number, index: number) => {     return index}) : void
 >                                                                : ^^^^
 >arr1.forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr1 : number[]
 >     : ^^^^^^^^
 >forEach : (callbackfn: (value: number, index: number, array: number[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(a: number, index: number) => {     return index} : (a: number, index: number) => number
 >                                                  : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : number
@@ -264,11 +264,11 @@ arr2.forEach((a: string, index: number) => {
 >arr2.forEach((a: string, index: number) => {     return index}) : void
 >                                                                : ^^^^
 >arr2.forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>             : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >arr2 : string[]
 >     : ^^^^^^^^
 >forEach : (callbackfn: (value: string, index: number, array: string[]) => void, thisArg?: any) => void
->        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^
+>        : ^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^    ^^       ^^^   ^^^^^    
 >(a: string, index: number) => {     return index} : (a: string, index: number) => number
 >                                                  : ^ ^^      ^^     ^^      ^^^^^^^^^^^
 >a : string

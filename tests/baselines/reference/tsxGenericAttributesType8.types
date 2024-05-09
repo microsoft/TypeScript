@@ -25,7 +25,7 @@ const decorator = function <U>(props: U) {
 ><Component {...props} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Component : <T>(props: T) => JSX.Element
->          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^           
 >props : U
 >      : ^
 }
@@ -44,7 +44,7 @@ const decorator1 = function <U extends {x: string}>(props: U) {
 ><Component {...props} /> : JSX.Element
 >                         : ^^^^^^^^^^^
 >Component : <T>(props: T) => JSX.Element
->          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^           
 >props : U
 >      : ^
 }

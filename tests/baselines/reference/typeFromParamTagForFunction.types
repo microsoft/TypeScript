@@ -44,7 +44,7 @@ const { A } = require("./a-ext");
 >require("./a-ext") : typeof import("a-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./a-ext" : "./a-ext"
 >          : ^^^^^^^^^
 
@@ -95,7 +95,7 @@ const { B } = require("./b-ext");
 >require("./b-ext") : typeof import("b-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./b-ext" : "./b-ext"
 >          : ^^^^^^^^^
 
@@ -136,7 +136,7 @@ const { C } = require("./c-ext");
 >require("./c-ext") : typeof import("c-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./c-ext" : "./c-ext"
 >          : ^^^^^^^^^
 
@@ -180,7 +180,7 @@ const { D } = require("./d-ext");
 >require("./d-ext") : typeof import("d-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./d-ext" : "./d-ext"
 >          : ^^^^^^^^^
 
@@ -223,7 +223,7 @@ const { E } = require("./e-ext");
 >require("./e-ext") : typeof import("e-ext")
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >require : (id: string) => any
->        : ^  ^^      ^^^^^^^^
+>        : ^  ^^      ^^^^^   
 >"./e-ext" : "./e-ext"
 >          : ^^^^^^^^^
 

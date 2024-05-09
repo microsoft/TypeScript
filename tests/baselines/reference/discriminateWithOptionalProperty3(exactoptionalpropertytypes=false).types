@@ -87,7 +87,7 @@ export function buildExecutionContext(
 >getVariableValues(rawVariableValues ?? {}) : CoercedVariableValues
 >                                           : ^^^^^^^^^^^^^^^^^^^^^
 >getVariableValues : (inputs: { readonly [variable: string]: unknown; }) => CoercedVariableValues
->                  : ^      ^^                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                  : ^      ^^                                         ^^^^^                     
 >rawVariableValues ?? {} : { readonly [variable: string]: unknown; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rawVariableValues : Maybe<{ readonly [variable: string]: unknown; }>

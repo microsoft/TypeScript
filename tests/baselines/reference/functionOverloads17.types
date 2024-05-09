@@ -9,7 +9,7 @@ function foo():{a:number;}
 
 function foo():{a:string;} { return {a:""} }
 >foo : () => { a: number; }
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >a : string
 >  : ^^^^^^
 >{a:""} : { a: string; }

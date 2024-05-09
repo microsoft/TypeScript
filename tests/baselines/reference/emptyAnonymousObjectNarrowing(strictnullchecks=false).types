@@ -35,7 +35,7 @@ if (nonNull === obj) {
 >nonNull : {}
 >        : ^^
 >obj : { a: string; }
->    : ^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^
 
   nonNull;
 >nonNull : object
@@ -109,7 +109,7 @@ if (nonNull === union) {
 >nonNull : {}
 >        : ^^
 >union : { a: string; } | "xyz"
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^^^^^^^
 
   nonNull;
 >nonNull : {}

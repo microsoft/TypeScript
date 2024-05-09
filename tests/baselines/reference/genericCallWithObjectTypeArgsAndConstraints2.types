@@ -134,7 +134,7 @@ function f3<T extends Base>(x: T, y: (a: T) => T) {
 >y(null) : T
 >        : ^
 >y : (a: T) => T
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 }
 var r4 = f3(new Base(), x => x);
 >r4 : Base

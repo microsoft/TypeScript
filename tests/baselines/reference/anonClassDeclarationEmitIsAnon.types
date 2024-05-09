@@ -46,11 +46,11 @@ export function Timestamped<TBase extends Constructor>(Base: TBase) {
 >Date.now() : number
 >           : ^^^^^^
 >Date.now : () => number
->         : ^^^^^^^^^^^^
+>         : ^^^^^^      
 >Date : DateConstructor
 >     : ^^^^^^^^^^^^^^^
 >now : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
     };
 }

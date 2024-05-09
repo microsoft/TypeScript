@@ -17,7 +17,7 @@ function foo1(results: number[] | undefined) {
 >(results ||= bar?.value ?? []).push(100) : number
 >                                         : ^^^^^^
 >(results ||= bar?.value ?? []).push : (...items: number[]) => number
->                                    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^     ^^^^^^^^^^^^^^^      
 >(results ||= bar?.value ?? []) : number[]
 >                               : ^^^^^^^^
 >results ||= bar?.value ?? [] : number[]
@@ -35,7 +35,7 @@ function foo1(results: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }
@@ -50,7 +50,7 @@ function foo2(results: number[] | undefined) {
 >(results ??= bar?.value ?? []).push(100) : number
 >                                         : ^^^^^^
 >(results ??= bar?.value ?? []).push : (...items: number[]) => number
->                                    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^     ^^^^^^^^^^^^^^^      
 >(results ??= bar?.value ?? []) : number[]
 >                               : ^^^^^^^^
 >results ??= bar?.value ?? [] : number[]
@@ -68,7 +68,7 @@ function foo2(results: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }
@@ -83,7 +83,7 @@ function foo3(results: number[] | undefined) {
 >(results &&= bar?.value ?? []).push(100) : number
 >                                         : ^^^^^^
 >(results &&= bar?.value ?? []).push : (...items: number[]) => number
->                                    : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^^^^     ^^^^^^^^^^^^^^^      
 >(results &&= bar?.value ?? []) : number[] | undefined
 >                               : ^^^^^^^^^^^^^^^^^^^^
 >results &&= bar?.value ?? [] : number[] | undefined
@@ -101,7 +101,7 @@ function foo3(results: number[] | undefined) {
 >[] : never[]
 >   : ^^^^^^^
 >push : (...items: number[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^      
 >100 : 100
 >    : ^^^
 }

@@ -33,11 +33,11 @@ var a0: (n: number, s: string) => number = (num, str) => {
 >num.toExponential() : string
 >                    : ^^^^^^
 >num.toExponential : (fractionDigits?: number) => string
->                  : ^              ^^^      ^^^^^^^^^^^
+>                  : ^              ^^^      ^^^^^      
 >num : number
 >    : ^^^^^^
 >toExponential : (fractionDigits?: number) => string
->              : ^              ^^^      ^^^^^^^^^^^
+>              : ^              ^^^      ^^^^^      
 
     return 0;
 >0 : 0
@@ -99,7 +99,7 @@ b1 = (k, h) => { };
 >b1 = (k, h) => { } : (k: string, h: boolean) => void
 >                   : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >b1 : ((s: string, w: boolean) => void) | ((s: string, w: boolean) => string)
->   : ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^^^ ^^      ^^ ^^       ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^       ^^^^^    ^^^^^^ ^^      ^^ ^^       ^^^^^      ^
 >(k, h) => { } : (k: string, h: boolean) => void
 >              : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^
 >k : string
@@ -109,9 +109,9 @@ b1 = (k, h) => { };
 
 var b2: typeof a0 | ((n: number, s: string) => string);
 >b2 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
->   : ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^      ^
+>   : ^^ ^^      ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >a0 : (n: number, s: string) => number
->   : ^ ^^      ^^ ^^      ^^^^^^^^^^^
+>   : ^ ^^      ^^ ^^      ^^^^^      
 >n : number
 >  : ^^^^^^
 >s : string
@@ -121,7 +121,7 @@ b2 = (foo, bar) => { return foo + 1; }
 >b2 = (foo, bar) => { return foo + 1; } : (foo: number, bar: string) => number
 >                                       : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >b2 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
->   : ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >(foo, bar) => { return foo + 1; } : (foo: number, bar: string) => number
 >                                  : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -139,7 +139,7 @@ b2 = (foo, bar) => { return "hello"; }
 >b2 = (foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
 >                                       : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >b2 : ((n: number, s: string) => number) | ((n: number, s: string) => string)
->   : ^^ ^^      ^^ ^^      ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^      ^^^^^      ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >(foo, bar) => { return "hello"; } : (foo: number, bar: string) => string
 >                                  : ^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -163,7 +163,7 @@ b3 = (name, number) => { };
 >b3 = (name, number) => { } : (name: string, number: number) => void
 >                           : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >b3 : (name: string, num: number, boo: boolean) => void
->   : ^    ^^      ^^   ^^      ^^   ^^       ^^^^^^^^^
+>   : ^    ^^      ^^   ^^      ^^   ^^       ^^^^^    
 >(name, number) => { } : (name: string, number: number) => void
 >                      : ^    ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >name : string
@@ -227,7 +227,7 @@ b6 = (k) => { k.toLowerCase() };
 >b6 = (k) => { k.toLowerCase() } : (k: any) => void
 >                                : ^ ^^^^^^^^^^^^^^
 >b6 : ((s: string, w: boolean) => void) | ((n: number) => number)
->   : ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^       ^^^^^    ^^^^^^ ^^      ^^^^^      ^
 >(k) => { k.toLowerCase() } : (k: any) => void
 >                           : ^ ^^^^^^^^^^^^^^
 >k : any
@@ -242,7 +242,7 @@ b6 = (i) => {
 >b6 = (i) => {    i.toExponential();    return i;} : (i: any) => any
 >                                                  : ^ ^^^^^^^^^^^^^
 >b6 : ((s: string, w: boolean) => void) | ((n: number) => number)
->   : ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^       ^^^^^    ^^^^^^ ^^      ^^^^^      ^
 >(i) => {    i.toExponential();    return i;} : (i: any) => any
 >                                             : ^ ^^^^^^^^^^^^^
 >i : any
@@ -263,7 +263,7 @@ b7 = (j, m) => { };  // Per spec, no contextual signature can be extracted in th
 >b7 = (j, m) => { } : (j: any, m: any) => void
 >                   : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >b7 : ((s: string, w: boolean) => void) | ((s: string, w: number) => string)
->   : ^^ ^^      ^^ ^^       ^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^^^^^^^^^^^
+>   : ^^ ^^      ^^ ^^       ^^^^^    ^^^^^^ ^^      ^^ ^^      ^^^^^      ^
 >(j, m) => { } : (j: any, m: any) => void
 >              : ^ ^^^^^^^ ^^^^^^^^^^^^^^
 >j : any

@@ -15,11 +15,11 @@
 >''.match(/ /) : RegExpMatchArray | null
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^               ^^^^^                       
 >'' : ""
 >   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
 >    : ^^^^^^
 >[] : []
@@ -48,11 +48,11 @@ function f1() {
 >''.match(/ /) : RegExpMatchArray | null
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^               ^^^^^                       
 >'' : ""
 >   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
 >    : ^^^^^^
 
@@ -98,11 +98,11 @@ function f2() {
 >''.match(/ /) : RegExpMatchArray | null
 >              : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : (regexp: string | RegExp) => RegExpMatchArray | null
->         : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^      ^^               ^^^^^                       
 >'' : ""
 >   : ^^
 >match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^      ^^               ^^^^^                       
 >/ / : RegExp
 >    : ^^^^^^
 

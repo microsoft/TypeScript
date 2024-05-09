@@ -22,7 +22,7 @@ let foo: LiteralType = dearray(alt);
 >dearray(alt) : LiteralType
 >             : ^^^^^^^^^^^
 >dearray : <T>(ara: ReadonlyArray<T>) => T
->        : ^ ^^   ^^                ^^^^^^
+>        : ^ ^^   ^^                ^^^^^ 
 >alt : LiteralType[]
 >    : ^^^^^^^^^^^^^
 

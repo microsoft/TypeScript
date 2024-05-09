@@ -47,7 +47,7 @@ class A {
 
         const {                 ...rest2 } = this as A;
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >this as A : A
 >          : ^
 >this : this
@@ -87,7 +87,7 @@ class A {
 >rest2.publicProp : string
 >                 : ^^^^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >publicProp : string
 >           : ^^^^^^
 
@@ -119,7 +119,7 @@ class A {
 >rest2.privateProp : any
 >                  : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >privateProp : any
 >            : ^^^
 
@@ -151,7 +151,7 @@ class A {
 >rest2.protectedProp : any
 >                    : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >protectedProp : any
 >              : ^^^
 
@@ -183,7 +183,7 @@ class A {
 >rest2.getter : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >getter : any
 >       : ^^^
 
@@ -215,7 +215,7 @@ class A {
 >rest2.setter : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >setter : any
 >       : ^^^
 
@@ -247,7 +247,7 @@ class A {
 >rest2.method : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >method : any
 >       : ^^^
 
@@ -283,7 +283,7 @@ function destructure<T extends A>(x: T) {
 
     const {                 ...rest2 } = x as A;
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >x as A : A
 >       : ^
 >x : T
@@ -323,7 +323,7 @@ function destructure<T extends A>(x: T) {
 >rest2.publicProp : string
 >                 : ^^^^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >publicProp : string
 >           : ^^^^^^
 
@@ -355,7 +355,7 @@ function destructure<T extends A>(x: T) {
 >rest2.privateProp : any
 >                  : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >privateProp : any
 >            : ^^^
 
@@ -387,7 +387,7 @@ function destructure<T extends A>(x: T) {
 >rest2.protectedProp : any
 >                    : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >protectedProp : any
 >              : ^^^
 
@@ -419,7 +419,7 @@ function destructure<T extends A>(x: T) {
 >rest2.getter : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >getter : any
 >       : ^^^
 
@@ -451,7 +451,7 @@ function destructure<T extends A>(x: T) {
 >rest2.setter : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >setter : any
 >       : ^^^
 
@@ -483,7 +483,7 @@ function destructure<T extends A>(x: T) {
 >rest2.method : any
 >             : ^^^
 >rest2 : { publicProp: string; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^      ^^^
 >method : any
 >       : ^^^
 

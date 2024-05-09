@@ -23,7 +23,7 @@ class Chain<T> {
 >cb(this.value) : S
 >               : ^
 >cb : (x: T) => S
->   : ^ ^^ ^^^^^^
+>   : ^ ^^ ^^^^^ 
 >this.value : T
 >           : ^
 >this : this
@@ -46,11 +46,11 @@ class Chain<T> {
 >this.then(x => result) : Chain<S>
 >                       : ^^^^^^^^
 >this.then : <S>(cb: (x: T) => S) => Chain<S>
->          : ^ ^^  ^^           ^^^^^^^^^^^^^
+>          : ^ ^^  ^^           ^^^^^        
 >this : this
 >     : ^^^^
 >then : <S>(cb: (x: T) => S) => Chain<S>
->     : ^ ^^  ^^           ^^^^^^^^^^^^^
+>     : ^ ^^  ^^           ^^^^^        
 >x => result : (x: T) => S
 >            : ^ ^^^^^^^^^
 >x : T

@@ -42,7 +42,7 @@ const r2 = Moon({
 >Moon({    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },}) : Instance<{ msg: string; }>
 >                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Moon : <Data>(options?: ConstructorOptions<Data>) => Instance<Data>
->     : ^    ^^       ^^^                        ^^^^^^^^^^^^^^^^^^^
+>     : ^    ^^       ^^^                        ^^^^^              
 >{    data: { msg: "" },    render() {        const h = (x: unknown) => x;        return h(this.get("msg"));    },} : { data: { msg: string; }; render(): unknown; }
 >                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -78,11 +78,11 @@ const r2 = Moon({
 >this.get("msg") : unknown
 >                : ^^^^^^^
 >this.get : <K extends "msg">(name: K) => unknown
->         : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^       
 >this : Instance<{ msg: string; }>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >get : <K extends "msg">(name: K) => unknown
->    : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^    ^^^^^^^^       
 >"msg" : "msg"
 >      : ^^^^^
 

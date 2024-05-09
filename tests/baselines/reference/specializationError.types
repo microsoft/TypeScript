@@ -4,7 +4,7 @@
 interface Promise<T> {
     then<U>(value: T): void;
 >then : { <TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): Promise<TResult1 | TResult2>; <U>(value: T): void; }
->     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^    ^^^
+>     : ^^^        ^^^^^^        ^^^^^^^^^^           ^^^                                                                   ^^          ^^^                                                                      ^^^                            ^^^^^^     ^^ ^^^    ^^^
 >value : T
 >      : ^
 }
@@ -12,13 +12,13 @@ interface Promise<T> {
 interface Bar {
     bar(value: "Menu"): Promise<string>;
 >bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T>(value: string): Promise<T>; }
->    : ^^^     ^^      ^^^               ^^^^^^     ^^      ^^       ^^      ^^^^^^^^^^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^
+>    : ^^^     ^^      ^^^               ^^^ ^^     ^^      ^^       ^^      ^^^          ^^^ ^^     ^^      ^^^          ^^^
 >value : "Menu"
 >      : ^^^^^^
 
     bar<T>(value: string, element: string): Promise<T>;
 >bar : { (value: "Menu"): Promise<string>; <T>(value: string, element: string): Promise<T>; <T_1>(value: string): Promise<T_1>; }
->    : ^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^ ^^     ^^      ^^       ^^      ^^^          ^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^
+>    : ^^^     ^^      ^^^               ^^^ ^^     ^^      ^^       ^^      ^^^          ^^^   ^^     ^^      ^^^            ^^^
 >value : string
 >      : ^^^^^^
 >element : string
@@ -26,7 +26,7 @@ interface Bar {
 
     bar<T>(value: string): Promise<T>;
 >bar : { (value: "Menu"): Promise<string>; <T_1>(value: string, element: string): Promise<T_1>; <T>(value: string): Promise<T>; }
->    : ^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^       ^^      ^^^^^^^^^^^^^^^^^^ ^^     ^^      ^^^          ^^^
+>    : ^^^     ^^      ^^^               ^^^   ^^     ^^      ^^       ^^      ^^^            ^^^ ^^     ^^      ^^^          ^^^
 >value : string
 >      : ^^^^^^
 }

@@ -16,7 +16,7 @@ import(getSpecifier());
 >getSpecifier() : boolean
 >               : ^^^^^^^
 >getSpecifier : () => boolean
->             : ^^^^^^^^^^^^^
+>             : ^^^^^^       
 
 var p1 = import(getSpecifier());
 >p1 : Promise<any>
@@ -26,7 +26,7 @@ var p1 = import(getSpecifier());
 >getSpecifier() : boolean
 >               : ^^^^^^^
 >getSpecifier : () => boolean
->             : ^^^^^^^^^^^^^
+>             : ^^^^^^       
 
 const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >p2 : Promise<any>
@@ -40,7 +40,7 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath")
 >getSpecifier() : boolean
 >               : ^^^^^^^
 >getSpecifier : () => boolean
->             : ^^^^^^^^^^^^^
+>             : ^^^^^^       
 >"defaulPath" : "defaulPath"
 >             : ^^^^^^^^^^^^
 

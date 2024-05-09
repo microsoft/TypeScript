@@ -19,7 +19,7 @@ use(x);
 >use(x) : void
 >       : ^^^^
 >use : (f: number) => void
->    : ^ ^^      ^^^^^^^^^
+>    : ^ ^^      ^^^^^    
 >x : number
 >  : ^^^^^^
 

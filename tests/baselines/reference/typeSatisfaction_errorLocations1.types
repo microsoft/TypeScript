@@ -119,7 +119,7 @@ function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >f({ a: true } satisfies unknown) : void
 >                                 : ^^^^
 >f : (...args: T) => void
->  : ^^^^    ^^ ^^^^^^^^^
+>  : ^^^^    ^^ ^^^^^    
 >{ a: true } satisfies unknown : { a: boolean; }
 >                              : ^^^^^^^^^^^^^^^
 >{ a: true } : { a: boolean; }
@@ -145,7 +145,7 @@ function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
 >f(o satisfies unknown) : void
 >                       : ^^^^
 >f : (...args: T) => void
->  : ^^^^    ^^ ^^^^^^^^^
+>  : ^^^^    ^^ ^^^^^    
 >o satisfies unknown : { a: true; }
 >                    : ^^^^^^^^^^^^
 >o : { a: true; }
@@ -208,7 +208,7 @@ fn3(10, ...([10, "20"] satisfies number[]));
 >fn3(10, ...([10, "20"] satisfies number[])) : void
 >                                            : ^^^^
 >fn3 : (...args: unknown[]) => void
->    : ^^^^    ^^         ^^^^^^^^^
+>    : ^^^^    ^^         ^^^^^    
 >10 : 10
 >   : ^^
 >...([10, "20"] satisfies number[]) : string | number
@@ -240,7 +240,7 @@ fn3(10, ...(tuple2 satisfies number[]));
 >fn3(10, ...(tuple2 satisfies number[])) : void
 >                                        : ^^^^
 >fn3 : (...args: unknown[]) => void
->    : ^^^^    ^^         ^^^^^^^^^
+>    : ^^^^    ^^         ^^^^^    
 >10 : 10
 >   : ^^
 >...(tuple2 satisfies number[]) : 10 | "20"
@@ -262,7 +262,7 @@ fn4(10, ...(["10", "20"] satisfies readonly string[]));
 >fn4(10, ...(["10", "20"] satisfies readonly string[])) : void
 >                                                       : ^^^^
 >fn4 : (...args: number[]) => void
->    : ^^^^    ^^        ^^^^^^^^^
+>    : ^^^^    ^^        ^^^^^    
 >10 : 10
 >   : ^^
 >...(["10", "20"] satisfies readonly string[]) : string
@@ -294,7 +294,7 @@ fn4(10, ...(tuple3 satisfies readonly string[]));
 >fn4(10, ...(tuple3 satisfies readonly string[])) : void
 >                                                 : ^^^^
 >fn4 : (...args: number[]) => void
->    : ^^^^    ^^        ^^^^^^^^^
+>    : ^^^^    ^^        ^^^^^    
 >10 : 10
 >   : ^^
 >...(tuple3 satisfies readonly string[]) : "20" | "10"

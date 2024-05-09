@@ -160,7 +160,7 @@ var ResultIsBoolean9 = !foo();
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 var ResultIsBoolean10 = !A.foo();
 >ResultIsBoolean10 : boolean
@@ -244,7 +244,7 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 >foo() : number
 >      : ^^^^^^
 >foo : () => number
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 
 !objA.a;
 >!objA.a : boolean

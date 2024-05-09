@@ -1492,11 +1492,11 @@ class A53267 {
 >Utils.isDefined(this.testNumber) : boolean
 >                                 : ^^^^^^^
 >Utils.isDefined : <T>(value: T) => value is NonNullable<T>
->                : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^     ^^ ^^^^^                       
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 >isDefined : <T>(value: T) => value is NonNullable<T>
->          : ^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^     ^^ ^^^^^                       
 >this.testNumber : number | undefined
 >                : ^^^^^^^^^^^^^^^^^^
 >this : this

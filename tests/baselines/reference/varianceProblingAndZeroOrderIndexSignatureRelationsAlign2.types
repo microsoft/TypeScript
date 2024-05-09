@@ -92,7 +92,7 @@ class Right<L, A> {
 >f(this.value) : B
 >              : ^
 >f : (a: A) => B
->  : ^ ^^ ^^^^^^
+>  : ^ ^^ ^^^^^ 
 >this.value : A
 >           : ^
 >this : this

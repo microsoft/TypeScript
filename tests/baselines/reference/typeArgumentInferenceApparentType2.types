@@ -21,7 +21,7 @@ function method<T>(iterable: Iterable<T>): T {
 >method(u) : T
 >          : ^
 >method : <T>(iterable: Iterable<T>) => T
->       : ^ ^^        ^^           ^^^^^^
+>       : ^ ^^        ^^           ^^^^^ 
 >u : U
 >  : ^
     }

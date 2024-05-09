@@ -4,7 +4,7 @@
 // Ambiguous call picks the first overload in declaration order
 function fn1(strs: TemplateStringsArray, s: string): string;
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -12,7 +12,7 @@ function fn1(strs: TemplateStringsArray, s: string): string;
 
 function fn1(strs: TemplateStringsArray, n: number): number;
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->    : ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^      ^^^
+>    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -20,7 +20,7 @@ function fn1(strs: TemplateStringsArray, n: number): number;
 
 function fn1() { return null; }
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->    : ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 
 var s: string = fn1 `${ undefined }`;
 >s : string
@@ -28,7 +28,7 @@ var s: string = fn1 `${ undefined }`;
 >fn1 `${ undefined }` : string
 >                     : ^^^^^^
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->    : ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 >`${ undefined }` : string
 >                 : ^^^^^^
 >undefined : undefined
@@ -39,7 +39,7 @@ fn1 `${ {} }`; // Error
 >fn1 `${ {} }` : never
 >              : ^^^^^
 >fn1 : { (strs: TemplateStringsArray, s: string): string; (strs: TemplateStringsArray, n: number): number; }
->    : ^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^    ^^                    ^^ ^^      ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^
 >`${ {} }` : string
 >          : ^^^^^^
 >{} : {}
@@ -47,7 +47,7 @@ fn1 `${ {} }`; // Error
 
 function fn2(strs: TemplateStringsArray, s: string, n: number): number;
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -57,7 +57,7 @@ function fn2(strs: TemplateStringsArray, s: string, n: number): number;
 
 function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -67,7 +67,7 @@ function fn2<T>(strs: TemplateStringsArray, n: number, t: T): T;
 
 function fn2() { return undefined; }
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -77,7 +77,7 @@ var d1: Date = fn2 `${ 0 }${ undefined }`; // contextually typed
 >fn2 `${ 0 }${ undefined }` : any
 >                           : ^^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ 0 }${ undefined }` : string
 >                       : ^^^^^^
 >0 : 0
@@ -91,7 +91,7 @@ var d2 = fn2 `${ 0 }${ undefined }`; // any
 >fn2 `${ 0 }${ undefined }` : any
 >                           : ^^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ 0 }${ undefined }` : string
 >                       : ^^^^^^
 >0 : 0
@@ -120,7 +120,7 @@ fn2 `${ 0 }${ '' }`; // OK
 >fn2 `${ 0 }${ '' }` : ""
 >                    : ^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ 0 }${ '' }` : string
 >                : ^^^^^^
 >0 : 0
@@ -133,7 +133,7 @@ fn2 `${ '' }${ 0 }`; // OK
 >fn2 `${ '' }${ 0 }` : number
 >                    : ^^^^^^
 >fn2 : { (strs: TemplateStringsArray, s: string, n: number): number; <T>(strs: TemplateStringsArray, n: number, t: T): T; }
->    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^^^^^^^^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^^^^^
+>    : ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^      ^^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^^ ^^^
 >`${ '' }${ 0 }` : string
 >                : ^^^^^^
 >'' : ""
@@ -144,7 +144,7 @@ fn2 `${ '' }${ 0 }`; // OK
 // Generic overloads with differing arity
 function fn3<T>(strs: TemplateStringsArray, n: T): string;
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T_1, U>(strs: TemplateStringsArray, s: string, t: T_1, u: U): U; <T_1, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T_1): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^   ^^ ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^ ^^^^^^^   ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^   ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^   ^^ ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^ ^^^ ^^^   ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T
@@ -152,7 +152,7 @@ function fn3<T>(strs: TemplateStringsArray, n: T): string;
 
 function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 >fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T_1, U_1, V>(strs: TemplateStringsArray, v: V, u: U_1, t: T_1): number; }
->    : ^^^   ^^    ^^                    ^^ ^^   ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^   ^^   ^^ ^^    ^^                    ^^ ^^ ^^ ^^   ^^ ^^   ^^^^^^^^^^^^
+>    : ^^^   ^^    ^^                    ^^ ^^   ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^   ^^   ^^ ^^    ^^                    ^^ ^^ ^^ ^^   ^^ ^^   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >s : string
@@ -164,7 +164,7 @@ function fn3<T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U;
 
 function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
 >fn3 : { <T_1>(strs: TemplateStringsArray, n: T_1): string; <T_1, U_1>(strs: TemplateStringsArray, s: string, t: T_1, u: U_1): U_1; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^   ^^    ^^                    ^^ ^^   ^^^^^^^^^^^^   ^^   ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
+>    : ^^^   ^^    ^^                    ^^ ^^   ^^^      ^^^   ^^   ^^    ^^                    ^^ ^^      ^^ ^^   ^^ ^^   ^^^   ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >v : V
@@ -176,7 +176,7 @@ function fn3<T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number;
 
 function fn3() { return null; }
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 
 var s = fn3 `${ 3 }`;
 >s : string
@@ -184,7 +184,7 @@ var s = fn3 `${ 3 }`;
 >fn3 `${ 3 }` : string
 >             : ^^^^^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${ 3 }` : string
 >         : ^^^^^^
 >3 : 3
@@ -196,7 +196,7 @@ var s = fn3 `${'' }${ 3 }${ '' }`;
 >fn3 `${'' }${ 3 }${ '' }` : ""
 >                          : ^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${'' }${ 3 }${ '' }` : string
 >                      : ^^^^^^
 >'' : ""
@@ -212,7 +212,7 @@ var n = fn3 `${ 5 }${ 5 }${ 5 }`;
 >fn3 `${ 5 }${ 5 }${ 5 }` : number
 >                         : ^^^^^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${ 5 }${ 5 }${ 5 }` : string
 >                     : ^^^^^^
 >5 : 5
@@ -233,7 +233,7 @@ var s = fn3 `${ 4 }`
 >fn3 `${ 4 }` : string
 >             : ^^^^^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${ 4 }` : string
 >         : ^^^^^^
 >4 : 4
@@ -245,7 +245,7 @@ var s = fn3 `${ '' }${ '' }${ '' }`;
 >fn3 `${ '' }${ '' }${ '' }` : ""
 >                            : ^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${ '' }${ '' }${ '' }` : string
 >                        : ^^^^^^
 >'' : ""
@@ -261,7 +261,7 @@ var n = fn3 `${ '' }${ '' }${ 3 }`;
 >fn3 `${ '' }${ '' }${ 3 }` : 3
 >                           : ^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`${ '' }${ '' }${ 3 }` : string
 >                       : ^^^^^^
 >'' : ""
@@ -276,7 +276,7 @@ fn3 ``; // Error
 >fn3 `` : string
 >       : ^^^^^^
 >fn3 : { <T>(strs: TemplateStringsArray, n: T): string; <T, U>(strs: TemplateStringsArray, s: string, t: T, u: U): U; <T, U, V>(strs: TemplateStringsArray, v: V, u: U, t: T): number; }
->    : ^^^ ^^    ^^                    ^^ ^^ ^^^^^^^^^^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>    : ^^^ ^^    ^^                    ^^ ^^ ^^^      ^^^ ^^ ^^    ^^                    ^^ ^^      ^^ ^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^      ^^^
 >`` : ""
 >   : ^^
 
@@ -391,7 +391,7 @@ fn4 `${ null }${ true }`;
 // Non - generic overloads where contextual typing of function arguments has errors
 function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;
 >fn5 : { (strs: TemplateStringsArray, f: (n: string) => void): string; (strs: TemplateStringsArray, f: (n: number) => void): number; }
->    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >f : (n: string) => void
@@ -401,7 +401,7 @@ function fn5(strs: TemplateStringsArray, f: (n: string) => void): string;
 
 function fn5(strs: TemplateStringsArray, f: (n: number) => void): number;
 >fn5 : { (strs: TemplateStringsArray, f: (n: string) => void): string; (strs: TemplateStringsArray, f: (n: number) => void): number; }
->    : ^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^    ^^                    ^^ ^^                   ^^^      ^^^
+>    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^      ^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >f : (n: number) => void
@@ -411,7 +411,7 @@ function fn5(strs: TemplateStringsArray, f: (n: number) => void): number;
 
 function fn5() { return undefined; }
 >fn5 : { (strs: TemplateStringsArray, f: (n: string) => void): string; (strs: TemplateStringsArray, f: (n: number) => void): number; }
->    : ^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^      ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -419,7 +419,7 @@ fn5 `${ (n) => n.toFixed() }`; // will error; 'n' should have type 'string'.
 >fn5 `${ (n) => n.toFixed() }` : string
 >                              : ^^^^^^
 >fn5 : { (strs: TemplateStringsArray, f: (n: string) => void): string; (strs: TemplateStringsArray, f: (n: number) => void): number; }
->    : ^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^      ^^^
 >`${ (n) => n.toFixed() }` : string
 >                          : ^^^^^^
 >(n) => n.toFixed() : (n: string) => any
@@ -439,7 +439,7 @@ fn5 `${ (n) => n.substr(0) }`;
 >fn5 `${ (n) => n.substr(0) }` : string
 >                              : ^^^^^^
 >fn5 : { (strs: TemplateStringsArray, f: (n: string) => void): string; (strs: TemplateStringsArray, f: (n: number) => void): number; }
->    : ^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^    ^^                    ^^ ^^                   ^^^^^^^^^^^^
+>    : ^^^    ^^                    ^^ ^^                   ^^^      ^^^    ^^                    ^^ ^^                   ^^^      ^^^
 >`${ (n) => n.substr(0) }` : string
 >                          : ^^^^^^
 >(n) => n.substr(0) : (n: string) => string
@@ -449,11 +449,11 @@ fn5 `${ (n) => n.substr(0) }`;
 >n.substr(0) : string
 >            : ^^^^^^
 >n.substr : (from: number, length?: number) => string
->         : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>         : ^    ^^      ^^      ^^^      ^^^^^      
 >n : string
 >  : ^^^^^^
 >substr : (from: number, length?: number) => string
->       : ^    ^^      ^^      ^^^      ^^^^^^^^^^^
+>       : ^    ^^      ^^      ^^^      ^^^^^      
 >0 : 0
 >  : ^
 

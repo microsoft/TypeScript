@@ -28,9 +28,9 @@ export const a = pkg.invoke();
 >pkg.invoke() : import("workspace/packageA/index").Foo
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >pkg.invoke : () => import("workspace/packageA/index").Foo
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >pkg : typeof pkg
 >    : ^^^^^^^^^^
 >invoke : () => import("workspace/packageA/index").Foo
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 

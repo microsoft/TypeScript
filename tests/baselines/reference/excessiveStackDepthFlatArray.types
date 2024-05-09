@@ -21,7 +21,7 @@ configureStore({
 >configureStore({  middleware: [...defaultMiddleware], // Should not error}) : void
 >                                                                            : ^^^^
 >configureStore : (options: { middleware: MiddlewareArray<any>; }) => void
->               : ^       ^^                                     ^^^^^^^^^
+>               : ^       ^^                                     ^^^^^    
 >{  middleware: [...defaultMiddleware], // Should not error} : { middleware: any[]; }
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^
 

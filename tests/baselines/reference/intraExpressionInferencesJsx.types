@@ -104,7 +104,7 @@ const Component = <T extends Animations>({
 
   style,
 >style : (animationsValues: StyleParam<T>) => string
->      : ^                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^                ^^^^^^^^^^^^^^^^^^^^      
 
 }: AnimatedViewProps<T>) => <></>;
 ><></> : JSX.Element
@@ -354,11 +354,11 @@ function Foo<T>(props: Props<T>) {
 >arg.toString() : string
 >               : ^^^^^^
 >arg.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >arg : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 />;
 
@@ -388,11 +388,11 @@ function Foo<T>(props: Props<T>) {
 >arg.toString() : string
 >               : ^^^^^^
 >arg.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >arg : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 />;
 
@@ -424,11 +424,11 @@ function Foo<T>(props: Props<T>) {
 >arg.toString() : string
 >               : ^^^^^^
 >arg.toString : (radix?: number) => string
->             : ^     ^^^      ^^^^^^^^^^^
+>             : ^     ^^^      ^^^^^      
 >arg : number
 >    : ^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 }} />;
 

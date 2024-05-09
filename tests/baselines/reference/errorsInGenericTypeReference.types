@@ -29,11 +29,11 @@ tc1.method<{ x: V }>(); // error: could not find symbol V
 >tc1.method<{ x: V }>() : void
 >                       : ^^^^
 >tc1.method : <T>() => void
->           : ^^^^^^^^^^^^^
+>           : ^^^^^^^^^    
 >tc1 : testClass1
 >    : ^^^^^^^^^^
 >method : <T>() => void
->       : ^^^^^^^^^^^^^
+>       : ^^^^^^^^^    
 >x : V
 >  : ^
 

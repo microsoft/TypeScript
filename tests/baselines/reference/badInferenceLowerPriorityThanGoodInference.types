@@ -27,7 +27,7 @@ const result = canYouInferThis(() => ({
 >canYouInferThis(() => ({    a: { BLAH: 33 },    b: x => { }})) : { BLAH: number; }
 >                                                               : ^^^^^^^^^^^^^^^^^
 >canYouInferThis : <A>(fn: () => Foo<A>) => A
->                : ^ ^^  ^^            ^^^^^^
+>                : ^ ^^  ^^            ^^^^^ 
 >() => ({    a: { BLAH: 33 },    b: x => { }}) : () => { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }
 >                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >({    a: { BLAH: 33 },    b: x => { }}) : { a: { BLAH: number; }; b: (x: { BLAH: number; }) => void; }

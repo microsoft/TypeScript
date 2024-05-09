@@ -33,11 +33,11 @@ var max2: Comparer = (x, y) => { return (x.compareTo(y) > 0) ? x : y };
 >x.compareTo(y) : number
 >               : ^^^^^^
 >x.compareTo : (other: T) => number
->            : ^     ^^^^^^^^^^^^^^
+>            : ^     ^^^^^^^^      
 >x : T
 >  : ^
 >compareTo : (other: T) => number
->          : ^     ^^^^^^^^^^^^^^
+>          : ^     ^^^^^^^^      
 >y : T
 >  : ^
 >0 : 0

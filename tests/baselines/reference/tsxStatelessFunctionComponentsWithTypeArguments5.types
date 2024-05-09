@@ -27,7 +27,7 @@ function createComponent<T extends { prop: number }>(arg: T) {
 ><Component {...arg} /> : JSX.Element
 >                       : ^^^^^^^^^^^
 >Component : <U>(l: U) => JSX.Element
->          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^^^^           
 >arg : T
 >    : ^
 
@@ -37,7 +37,7 @@ function createComponent<T extends { prop: number }>(arg: T) {
 ><Component {...arg} prop1 /> : JSX.Element
 >                             : ^^^^^^^^^^^
 >Component : <U>(l: U) => JSX.Element
->          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^^^^           
 >arg : T
 >    : ^
 >prop1 : true
@@ -80,7 +80,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 ><ComponentSpecific {...arg} ignore-prop="hi" /> : JSX.Element
 >                                                : ^^^^^^^^^^^
 >ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->                  : ^ ^^ ^^            ^^^^^^^^^^^^^^^^
+>                  : ^ ^^ ^^            ^^^^^           
 >arg : T
 >    : ^
 >ignore-prop : string
@@ -92,7 +92,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 ><ComponentSpecific1 {...arg} ignore-prop={10} /> : JSX.Element
 >                                                 : ^^^^^^^^^^^
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": number; }) => JSX.Element
->                   : ^ ^^ ^^                                   ^^^^^^^^^^^^^^^^
+>                   : ^ ^^ ^^                                   ^^^^^           
 >arg : T
 >    : ^
 >ignore-prop : number
@@ -106,7 +106,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 ><ComponentSpecific {...arg} prop="hello" /> : JSX.Element
 >                                            : ^^^^^^^^^^^
 >ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->                  : ^ ^^ ^^            ^^^^^^^^^^^^^^^^
+>                  : ^ ^^ ^^            ^^^^^           
 >arg : T
 >    : ^
 >prop : string
@@ -118,7 +118,7 @@ function Bar<T extends { prop: number }>(arg: T) {
 ><ComponentSpecific {...arg} prop1="hello" /> : JSX.Element
 >                                             : ^^^^^^^^^^^
 >ComponentSpecific : <U>(l: { prop: U; }) => JSX.Element
->                  : ^ ^^ ^^            ^^^^^^^^^^^^^^^^
+>                  : ^ ^^ ^^            ^^^^^           
 >arg : T
 >    : ^
 >prop1 : string

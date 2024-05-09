@@ -191,11 +191,11 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >x.a() : string
 >      : ^^^^^^
 >x.a : () => string
->    : ^^^^^^^^^^^^
+>    : ^^^^^^      
 >x : AWithMethod
 >  : ^^^^^^^^^^^
 >a : () => string
->  : ^^^^^^^^^^^^
+>  : ^^^^^^      
 
         x.b();
 >x.b() : any
@@ -616,7 +616,7 @@ if (isAOrB(x)) {
 >isAOrB(x) : boolean
 >          : ^^^^^^^
 >isAOrB : (x: unknown) => x is AOrB
->       : ^ ^^       ^^^^^^^^^^^^^^
+>       : ^ ^^       ^^^^^         
 >x : unknown
 >  : ^^^^^^^
 
@@ -683,20 +683,20 @@ function negativeIntersectionTest() {
 
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 
     } else {
         window.ontouchstart
 >window.ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->                    : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ontouchstart : (((this: GlobalEventHandlers, ev: TouchEvent) => any) & ((this: Window, ev: TouchEvent) => any)) | null | undefined
->             : ^^^    ^^                   ^^  ^^          ^^^^^^^^^^^^^^    ^^      ^^  ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^    ^^                   ^^  ^^          ^^^^^   ^^^^^^    ^^      ^^  ^^          ^^^^^   ^^^^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -1714,11 +1714,11 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'length' in obj : boolean
@@ -1749,11 +1749,11 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 >Array.isArray(obj) : boolean
 >                   : ^^^^^^^
 >Array.isArray : (arg: any) => arg is any[]
->              : ^   ^^   ^^^^^^^^^^^^^^^^^
+>              : ^   ^^   ^^^^^            
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
->        : ^   ^^   ^^^^^^^^^^^^^^^^^
+>        : ^   ^^   ^^^^^            
 >obj : any[] | Record<string, any>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

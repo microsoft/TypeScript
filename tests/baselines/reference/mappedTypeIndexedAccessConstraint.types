@@ -39,61 +39,61 @@ function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
 >m1.toString() : string
 >              : ^^^^^^
 >m1.toString : (radix?: number) => string
->            : ^     ^^^      ^^^^^^^^^^^
+>            : ^     ^^^      ^^^^^      
 >m1 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
     m1?.toString();
 >m1?.toString() : string | undefined
 >               : ^^^^^^^^^^^^^^^^^^
 >m1?.toString : ((radix?: number) => string) | undefined
->             : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 >m1 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : ((radix?: number) => string) | undefined
->         : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 
     m2.toString();  // Error
 >m2.toString() : string
 >              : ^^^^^^
 >m2.toString : (radix?: number) => string
->            : ^     ^^^      ^^^^^^^^^^^
+>            : ^     ^^^      ^^^^^      
 >m2 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
     m2?.toString();
 >m2?.toString() : string | undefined
 >               : ^^^^^^^^^^^^^^^^^^
 >m2?.toString : ((radix?: number) => string) | undefined
->             : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 >m2 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : ((radix?: number) => string) | undefined
->         : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 
     m3.toString();  // Error
 >m3.toString() : string
 >              : ^^^^^^
 >m3.toString : (radix?: number) => string
->            : ^     ^^^      ^^^^^^^^^^^
+>            : ^     ^^^      ^^^^^      
 >m3 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
     m3?.toString();
 >m3?.toString() : string | undefined
 >               : ^^^^^^^^^^^^^^^^^^
 >m3?.toString : ((radix?: number) => string) | undefined
->             : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 >m3 : 1 | 2 | undefined
 >   : ^^^^^^^^^^^^^^^^^
 >toString : ((radix?: number) => string) | undefined
->         : ^^     ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^     ^^^      ^^^^^      ^^^^^^^^^^^^^
 }
 
 // Repro from #57487
@@ -130,7 +130,7 @@ const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toS
 >mapped[key].toString() : string
 >                       : ^^^^^^
 >mapped[key].toString : (radix?: number) => string
->                     : ^     ^^^      ^^^^^^^^^^^
+>                     : ^     ^^^      ^^^^^      
 >mapped[key] : 1 | 2 | undefined
 >            : ^^^^^^^^^^^^^^^^^
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
@@ -138,7 +138,7 @@ const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toS
 >key : K
 >    : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 // Additional repro from #57487
 
@@ -339,7 +339,7 @@ type Obj2 = {
 
 declare const mapIntersection: {
 >mapIntersection : { a?: number | undefined; b: number; c: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 
     [K in keyof (Partial<Obj1> & Required<Obj2>)]: number;
 };
@@ -354,15 +354,15 @@ const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toSt
 >mapIntersection[key].toString() : string
 >                                : ^^^^^^
 >mapIntersection[key].toString : (radix?: number) => string
->                              : ^     ^^^      ^^^^^^^^^^^
+>                              : ^     ^^^      ^^^^^      
 >mapIntersection[key] : { a?: number | undefined; b: number; c: number; }[K]
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 >mapIntersection : { a?: number | undefined; b: number; c: number; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 declare const resolved: { a?: number | undefined; b: number; c: number };
 >resolved : { a?: number | undefined; b: number; c: number; }
@@ -384,15 +384,15 @@ const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString(
 >resolved[key].toString() : string
 >                         : ^^^^^^
 >resolved[key].toString : (radix?: number) => string
->                       : ^     ^^^      ^^^^^^^^^^^
+>                       : ^     ^^^      ^^^^^      
 >resolved[key] : { a?: number | undefined; b: number; c: number; }[K]
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^                  ^^^^^      ^^^^^      ^^^^^^
 >resolved : { a?: number | undefined; b: number; c: number; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                  ^^^^^      ^^^^^      ^^^
 >key : K
 >    : ^
 >toString : (radix?: number) => string
->         : ^     ^^^      ^^^^^^^^^^^
+>         : ^     ^^^      ^^^^^      
 
 // Additional repro from #57860
 

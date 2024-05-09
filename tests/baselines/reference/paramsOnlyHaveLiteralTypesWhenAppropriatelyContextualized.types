@@ -47,11 +47,11 @@ export function appendToOptionalArray<
 >array.push(value) : number
 >                  : ^^^^^^
 >array.push : (...items: Lower<T>[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^     ^^^^^^^^^^^^^^^^^      
 >array : Lower<T>[]
 >      : ^^^^^^^^^^
 >push : (...items: Lower<T>[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^     ^^^^^^^^^^^^^^^^^      
 >value : T
 >      : ^
 

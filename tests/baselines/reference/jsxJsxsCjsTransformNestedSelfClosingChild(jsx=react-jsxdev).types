@@ -16,11 +16,11 @@ console.log(
 >console.log(  <div>    <div />  </div>) : void
 >                                        : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    <div />  </div> : JSX.Element
@@ -44,11 +44,11 @@ console.log(
 >console.log(  <div>    <div />    <div />  </div>) : void
 >                                                   : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    <div />    <div />  </div> : JSX.Element
@@ -78,11 +78,11 @@ console.log(
 >console.log(  <div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div>) : void
 >                                                                          : ^^^^
 >console.log : (...data: any[]) => void
->            : ^^^^    ^^     ^^^^^^^^^
+>            : ^^^^    ^^     ^^^^^    
 >console : Console
 >        : ^^^^^^^
 >log : (...data: any[]) => void
->    : ^^^^    ^^     ^^^^^^^^^
+>    : ^^^^    ^^     ^^^^^    
 
   <div>
 ><div>    {[1, 2].map(i => <div key={i}>{i}</div>)}  </div> : JSX.Element

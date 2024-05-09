@@ -606,11 +606,11 @@ cplus.plus();
 >cplus.plus() : void
 >             : ^^^^
 >cplus.plus : () => void
->           : ^^^^^^^^^^
+>           : ^^^^^^    
 >cplus : { p: number; plus(): void; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^^^^    ^^^
 >plus : () => void
->     : ^^^^^^^^^^
+>     : ^^^^^^    
 
 // new field's type conflicting with existing field is OK
 let changeTypeAfter: { a: string, b: string } =

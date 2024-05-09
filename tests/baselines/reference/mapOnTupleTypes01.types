@@ -135,11 +135,11 @@ export let c = strStr.map(s => s.charCodeAt(0));
 >s.charCodeAt(0) : number
 >                : ^^^^^^
 >s.charCodeAt : (index: number) => number
->             : ^     ^^      ^^^^^^^^^^^
+>             : ^     ^^      ^^^^^      
 >s : string
 >  : ^^^^^^
 >charCodeAt : (index: number) => number
->           : ^     ^^      ^^^^^^^^^^^
+>           : ^     ^^      ^^^^^      
 >0 : 0
 >  : ^
 

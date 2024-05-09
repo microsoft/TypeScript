@@ -30,7 +30,7 @@ function foo<T extends string[]>(
 >args : any
 >     : ^^^
 >fa : (s: string, ...args: string[]) => string
->   : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^    ^^        ^^^^^      
 
     const f2: (...args: any[]) => string = fa;
 >f2 : (...args: any[]) => string
@@ -38,7 +38,7 @@ function foo<T extends string[]>(
 >args : any[]
 >     : ^^^^^
 >fa : (s: string, ...args: string[]) => string
->   : ^ ^^      ^^^^^    ^^        ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^    ^^        ^^^^^      
 
     const f3: (...args: any) => string = fb;
 >f3 : (...args: any) => string
@@ -46,7 +46,7 @@ function foo<T extends string[]>(
 >args : any
 >     : ^^^
 >fb : (s: string, ...args: T) => string
->   : ^ ^^      ^^^^^    ^^ ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^    ^^ ^^^^^      
 
     const f4: (...args: any[]) => string = fb;
 >f4 : (...args: any[]) => string
@@ -54,7 +54,7 @@ function foo<T extends string[]>(
 >args : any[]
 >     : ^^^^^
 >fb : (s: string, ...args: T) => string
->   : ^ ^^      ^^^^^    ^^ ^^^^^^^^^^^
+>   : ^ ^^      ^^^^^    ^^ ^^^^^      
 }
 
 function bar<T extends string[], K extends number>() {

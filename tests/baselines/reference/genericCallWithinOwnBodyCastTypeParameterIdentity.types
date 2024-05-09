@@ -37,7 +37,7 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 >fn(input) : Result | Thenable<Result>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : (input: Input) => Result | Thenable<Result>
->   : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^     ^^^^^                         
 >input : Input
 >      : ^^^^^
 
@@ -59,9 +59,9 @@ const toThenable = <Result, Input>(fn: (input: Input) => Result | Thenable<Resul
 >toThenable<V, Result>(onFulfilled) : (input: Result) => Thenable<V>
 >                                   : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >toThenable : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->           : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^
+>           : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 >onFulfilled : (value: Result) => V | Thenable<V>
->            : ^     ^^      ^^^^^^^^^^^^^^^^^^^^
+>            : ^     ^^      ^^^^^               
 >result as Result : Result
 >                 : ^^^^^^
 >result : Result | Thenable<Result>
@@ -92,7 +92,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 >fn(input) : Result | Thenable<Result>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn : (input: Input) => Result | Thenable<Result>
->   : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^     ^^     ^^^^^                         
 >input : Input
 >      : ^^^^^
 
@@ -112,7 +112,7 @@ const toThenableInferred = <Result, Input>(fn: (input: Input) => Result | Thenab
 >toThenableInferred(onFulfilled) : (input: Result) => Thenable<V>
 >                                : ^     ^^^^^^^^^^^^^^^^^^^^^^^^
 >toThenableInferred : <Result, Input>(fn: (input: Input) => Result | Thenable<Result>) => (input: Input) => Thenable<Result>
->                   : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^^^^^^^^^^^^^^^^^
+>                   : ^      ^^     ^^  ^^                                           ^^^^^^     ^^     ^^^^^                
 >onFulfilled : (value: Result) => V | Thenable<V>
 >            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >result as Result : Result

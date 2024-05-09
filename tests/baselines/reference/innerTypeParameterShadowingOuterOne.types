@@ -20,11 +20,11 @@ function f<T extends Date>() {
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : T
 >  : ^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     var x: T;
 >x : T
@@ -34,11 +34,11 @@ function f<T extends Date>() {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : T
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 }
 
 function f2<T extends Date, U extends Date>() {
@@ -57,11 +57,11 @@ function f2<T extends Date, U extends Date>() {
 >x.toFixed() : string
 >            : ^^^^^^
 >x.toFixed : (fractionDigits?: number) => string
->          : ^              ^^^      ^^^^^^^^^^^
+>          : ^              ^^^      ^^^^^      
 >x : U
 >  : ^
 >toFixed : (fractionDigits?: number) => string
->        : ^              ^^^      ^^^^^^^^^^^
+>        : ^              ^^^      ^^^^^      
     }
     var x: U;
 >x : U
@@ -71,11 +71,11 @@ function f2<T extends Date, U extends Date>() {
 >x.getDate() : number
 >            : ^^^^^^
 >x.getDate : () => number
->          : ^^^^^^^^^^^^
+>          : ^^^^^^      
 >x : U
 >  : ^
 >getDate : () => number
->        : ^^^^^^^^^^^^
+>        : ^^^^^^      
 }
 //function f2<T extends Date, U extends T>() {
 //    function g<T extends Number, U extends T>() {

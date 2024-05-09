@@ -44,11 +44,11 @@ class D {
 >data.join(" ") : string
 >               : ^^^^^^
 >data.join : (separator?: string) => string
->          : ^         ^^^      ^^^^^^^^^^^
+>          : ^         ^^^      ^^^^^      
 >data : string[]
 >     : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >" " : " "
 >    : ^^^
     }
@@ -81,7 +81,7 @@ class D {
 >this.data.join(" ") : string
 >                    : ^^^^^^
 >this.data.join : (separator?: string) => string
->               : ^         ^^^      ^^^^^^^^^^^
+>               : ^         ^^^      ^^^^^      
 >this.data : string[]
 >          : ^^^^^^^^
 >this : this
@@ -89,7 +89,7 @@ class D {
 >data : string[]
 >     : ^^^^^^^^
 >join : (separator?: string) => string
->     : ^         ^^^      ^^^^^^^^^^^
+>     : ^         ^^^      ^^^^^      
 >" " : " "
 >    : ^^^
     }
@@ -142,7 +142,7 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >o.prop1.toLowerCase() : string
 >                      : ^^^^^^
 >o.prop1.toLowerCase : () => string
->                    : ^^^^^^^^^^^^
+>                    : ^^^^^^      
 >o.prop1 : string
 >        : ^^^^^^
 >o : { prop1: string | number; prop2: string | boolean; }
@@ -150,7 +150,7 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >prop1 : string
 >      : ^^^^^^
 >toLowerCase : () => string
->            : ^^^^^^^^^^^^
+>            : ^^^^^^      
 
 var prop1 = o.prop1;
 >prop1 : string | number
@@ -176,9 +176,9 @@ if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >prop1.toLocaleLowerCase() : string
 >                          : ^^^^^^
 >prop1.toLocaleLowerCase : (locales?: string | string[]) => string
->                        : ^       ^^^                 ^^^^^^^^^^^
+>                        : ^       ^^^                 ^^^^^      
 >prop1 : string
 >      : ^^^^^^
 >toLocaleLowerCase : (locales?: string | string[]) => string
->                  : ^       ^^^                 ^^^^^^^^^^^
+>                  : ^       ^^^                 ^^^^^      
 
