@@ -6,13 +6,21 @@ import type {
     EndOfLineState,
     FileExtensionInfo,
     HighlightSpanKind,
+    InlayHintKind,
     InteractiveRefactorArguments,
     OutputFile,
+    RefactorActionInfo,
     RefactorTriggerReason,
     RenameInfoFailure,
     RenameLocation,
     ScriptElementKind,
     ScriptKind,
+    SignatureHelpCharacterTypedReason,
+    SignatureHelpInvokedReason,
+    SignatureHelpParameter,
+    SignatureHelpRetriggerCharacter,
+    SignatureHelpRetriggeredReason,
+    SignatureHelpTriggerCharacter,
     SignatureHelpTriggerReason,
     SymbolDisplayPart,
     TextChange,
@@ -30,7 +38,7 @@ import {
 } from "./_namespaces/ts.js";
 
 // These types/enums used to be defined in duplicate here and exported. They are re-exported to avoid breaking changes.
-export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, OrganizeImportsMode, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
+export { ApplicableRefactorInfo, ClassificationType, CompletionsTriggerCharacter, CompletionTriggerKind, InlayHintKind, OrganizeImportsMode, RefactorActionInfo, RefactorTriggerReason, RenameInfoFailure, SemicolonPreference, SignatureHelpCharacterTypedReason, SignatureHelpInvokedReason, SignatureHelpParameter, SignatureHelpRetriggerCharacter, SignatureHelpRetriggeredReason, SignatureHelpTriggerCharacter, SignatureHelpTriggerReason, SymbolDisplayPart, UserPreferences };
 
 type ChangeStringIndexSignature<T, NewStringIndexSignatureType> = { [K in keyof T]: string extends K ? NewStringIndexSignatureType : T[K]; };
 type ChangePropertyTypes<T, Substitutions extends { [K in keyof T]?: any; }> = {
