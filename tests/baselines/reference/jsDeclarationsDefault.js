@@ -49,8 +49,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.x = void 0;
 exports.default = foo;
 exports.bar = foo;
-exports.default = foo;
-exports.bar = foo;
 function foo() {
     return foo;
 }

@@ -18,8 +18,6 @@ foo();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = f;
 exports.f = f;
-exports.default = f;
-exports.f = f;
 function f() {
 }
 //// [m2.js]
