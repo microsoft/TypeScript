@@ -105,7 +105,7 @@ export interface ExternalModuleInfo {
     exportSpecifiers: IdentifierNameMap<ExportSpecifier[]>; // file-local export specifiers by name (no reexports)
     exportedBindings: Identifier[][]; // exported names of local declarations
     exportedNames: Identifier[] | undefined; // all exported names in the module, both local and reexported, excluding the names of locally exported function declarations
-    exportedFunctions: Set<FunctionDeclaration> | undefined; // all of the top-level exported function declarations
+    exportedFunctions: Set<FunctionDeclaration>; // all of the top-level exported function declarations
     exportEquals: ExportAssignment | undefined; // an export= declaration if one was present
     hasExportStarsToExportValues: boolean; // whether this module contains export*
 }
@@ -174,8 +174,8 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     const exportSpecifiers = new IdentifierNameMultiMap<ExportSpecifier>();
     const exportedBindings: Identifier[][] = [];
     const uniqueExports = new Map<string, boolean>();
+    const exportedFunctions = new Set<FunctionDeclaration>();
     let exportedNames: Identifier[] | undefined;
-    let exportedFunctions: Set<FunctionDeclaration> | undefined;
     let hasExportDefault = false;
     let exportEquals: ExportAssignment | undefined;
     let hasExportStarsToExportValues = false;
@@ -317,7 +317,7 @@ export function collectExternalModuleInfo(context: TransformationContext, source
     }
 
     function addExportedFunctionDeclaration(node: FunctionDeclaration, name: Identifier | undefined, isDefault: boolean) {
-        (exportedFunctions ??= new Set()).add(node);
+        exportedFunctions.add(node);
         if (isDefault) {
             // export default function() { }
             // function x() { } + export { x as default };
