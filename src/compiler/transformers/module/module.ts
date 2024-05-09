@@ -283,7 +283,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 );
             }
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
+        if (currentModuleInfo.exportedFunctions) {
             for (const f of currentModuleInfo.exportedFunctions) {
                 appendExportsOfHoistedDeclaration(statements, f);
             }
@@ -613,7 +613,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         if (some(currentModuleInfo.exportedNames)) {
             append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
         }
-        if (some(currentModuleInfo.exportedFunctions)) {
+        if (currentModuleInfo.exportedFunctions) {
             for (const f of currentModuleInfo.exportedFunctions) {
                 appendExportsOfHoistedDeclaration(statements, f);
             }
