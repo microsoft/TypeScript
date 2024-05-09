@@ -16,7 +16,7 @@ import {
     UnitTestTask,
 } from "../_namespaces/Harness.Parallel.js";
 
-export function start() {
+export function start(importTests: () => Promise<unknown>) {
     function hookUncaughtExceptions() {
         if (!exceptionsHooked) {
             process.on("uncaughtException", handleUncaughtException);
@@ -277,7 +277,9 @@ export function start() {
         return !!tasks && Array.isArray(tasks) && tasks.length > 0 && tasks.every(validateTest);
     }
 
-    function processHostMessage(message: ParallelHostMessage) {
+    async function processHostMessage(message: ParallelHostMessage) {
+        await importTestsPromise;
+
         if (!validateHostMessage(message)) {
             console.log("Invalid message:", message);
             return;
@@ -338,4 +340,5 @@ export function start() {
     }
 
     process.on("message", processHostMessage);
+    const importTestsPromise = importTests();
 }
