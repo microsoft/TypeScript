@@ -308,6 +308,7 @@ import {
     supportedJSExtensionsFlat,
     SymlinkCache,
     SyntaxKind,
+    SyntaxRangeType, // BUILDLESS: added
     sys,
     System,
     toFileNameLowerCase,
@@ -316,7 +317,10 @@ import {
     trace,
     tracing,
     tryCast,
+    TsCommentPosition, // BUILDLESS: added
+    TsCommentScanner, // BUILDLESS: added
     TsConfigSourceFile,
+    TsSyntaxTracker, // BUILDLESS: added
     TypeChecker,
     typeDirectiveIsEqualTo,
     TypeReferenceDirectiveResolutionCache,
@@ -3092,12 +3096,34 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
         return runWithCancellationToken(() => {
             const diagnostics: DiagnosticWithLocation[] = [];
+            const tsCommentScanner = createTSCommentScanner(sourceFile); // BUILDLESS: added
+            const tsSyntaxTracker = createTSSyntaxTracker(sourceFile); // BUILDLESS: added
             walk(sourceFile, sourceFile);
             forEachChildRecursively(sourceFile, walk, walkArray);
+            lookForJavaScriptInsideOfTSComments(tsSyntaxTracker, tsCommentScanner.getTSCommentPositions()); // BUILDLESS: added
+
+            // BUILDLESS: <added>
+            if (options.buildlessEject) {
+                ejectBuildlessFile(sourceFile, tsCommentScanner.getTSCommentPositions());
+            } else if (options.buildlessConvert) {
+                convertToBuildlessFile(sourceFile, tsSyntaxTracker, tsCommentScanner.getBlockCommentDelimiters());
+            }
+            // BUILDLESS: </added>
 
             return diagnostics;
 
             function walk(node: Node, parent: Node) {
+                // BUILDLESS: <added>
+                const maybeSkip: 'skip' | undefined = walkHelper(node, parent);
+                if (isLeafNode(node)) {
+                    tsCommentScanner.scanThroughLeafNode(node);
+                }
+                return maybeSkip;
+            }
+
+            function walkHelper(node: Node, parent: Node) {
+                // BUILDLESS: </added>
+
                 // Return directly from the case if the given node doesnt want to visit each child
                 // Otherwise break to visit each child
 
@@ -3105,6 +3131,25 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.Parameter:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
+                        // BUILDLESS: <added>
+                        if (
+                            (parent.kind === SyntaxKind.Parameter) &&
+                            (parent as ParameterDeclaration).name === node &&
+                            node.kind === SyntaxKind.Identifier &&
+                            (node as Identifier).escapedText === "this"
+                        ) {
+                            // Using a cloned scanner because the child nodes that haven't yet been processed expect the
+                            // scanner to be at its current position.
+                            const clonedTsCommentScanner = tsCommentScanner.clone();
+                            scanLeavesCheckingIfInTsComment(parent, IsTSSyntax.yes, clonedTsCommentScanner);
+                            // If there's a comma that follows, mark that as needing to be in TS comments as well.
+                            clonedTsCommentScanner.scanUntilAtChar([')', ','], Infinity);
+                            const scannerIndex = clonedTsCommentScanner.getCurrentPos();
+                            if (sourceFile.text[scannerIndex] === ',') {
+                                tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(scannerIndex, scannerIndex + 1);
+                            }
+                        }
+                        // BUILDLESS: </added>
                         if ((parent as ParameterDeclaration | PropertyDeclaration | MethodDeclaration).questionToken === node) {
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics.The_0_modifier_can_only_be_used_in_TypeScript_files, "?"));
                             return "skip";
@@ -3141,10 +3186,52 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.ImportSpecifier:
                     case SyntaxKind.ExportSpecifier:
                         if ((node as ImportOrExportSpecifier).isTypeOnly) {
+                            // BUILDLESS: <added>
+                            if (scanLeavesCheckingIfInTsComment(node)) {
+                                return "skip";
+                            }
+                            tsCommentScanner.scanUntilAtChar([',', '}'], node.end);
+                            // Mark the comma as TypeScript syntax as well.
+                            const scannerIndex = tsCommentScanner.getCurrentPos();
+                            if (sourceFile.text[scannerIndex] === ',') {
+                                tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(scannerIndex, scannerIndex + 1);
+                            }
+                            // BUILDLESS: </added>
                             diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, isImportSpecifier(node) ? "import...type" : "export...type"));
                             return "skip";
                         }
                         break;
+                    // BUILDLESS: <added>
+                    case SyntaxKind.ImportDeclaration: {
+                        const importDeclaration = node as ImportDeclaration;
+                        const importClause = importDeclaration.importClause;
+                        if (
+                            importClause !== undefined &&
+                            !importClause.isTypeOnly &&
+                            !importClause.name &&
+                            importClause.namedBindings !== undefined &&
+                            'elements' in importClause.namedBindings && // eslint-disable-line local/no-in-operator
+                            importClause.namedBindings.elements.every(element => element.isTypeOnly)
+                        ) {
+                            // Using a cloned scanner because the child nodes that haven't yet been processed expect the
+                            // scanner to be at its current position.
+                            const clonedTsCommentScanner = tsCommentScanner.clone();
+                            if (importDeclaration.modifiers) {
+                                scanLeavesCheckingIfInTsComment(importDeclaration.modifiers, IsTSSyntax.no, clonedTsCommentScanner);
+                            }
+                            // Move past the "t" of "import".
+                            clonedTsCommentScanner.scanUntilPastChar('t', importClause.pos);
+                            // We can now scan the `{ ... }` part of the `import { ... } from ...`.
+                            scanLeavesCheckingIfInTsComment(importClause, IsTSSyntax.yes, clonedTsCommentScanner);
+                            const beforeFromPos = clonedTsCommentScanner.getCurrentPos();
+                            // Move past the "m" of "from"
+                            clonedTsCommentScanner.scanUntilPastChar('m', importDeclaration.end);
+                            const afterFromPos = clonedTsCommentScanner.getCurrentPos();
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(beforeFromPos, afterFromPos);
+                        }
+                        break;
+                    }
+                    // BUILDLESS: </added>
                     case SyntaxKind.ImportEqualsDeclaration:
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.import_can_only_be_used_in_TypeScript_files));
                         return "skip";
@@ -3187,6 +3274,21 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, enumKeyword));
                         return "skip";
                     case SyntaxKind.NonNullExpression:
+                        // BUILDLESS: <added>
+                        // We want to use a cloned scanner, because we don't want our real scanner to actually traverse forwards yet.
+                        // We still need to recursively descend into the node's children to see if they're correctly
+                        // using TS comments where they should
+                        const clonedScanner = tsCommentScanner.clone();
+                        // Scan through the non-null assertion node's children (omitting itself)
+                        scanLeavesCheckingIfInTsComment((node as NonNullExpression).expression, IsTSSyntax.no, clonedScanner);
+                        // Now scan to the end of this non-null node, which will cause the "!" to be scanned
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(clonedScanner.getCurrentPos(), node.end);
+                        const exclamationMarkInTSComment = clonedScanner.scanTo(node.end);
+                        if (exclamationMarkInTSComment) {
+                            // Don't return "skip", we need to descend into the children to check for problems.
+                            return;
+                        }
+                        // BUILDLESS: </added>
                         diagnostics.push(createDiagnosticForNode(node, Diagnostics.Non_null_assertions_can_only_be_used_in_TypeScript_files));
                         return "skip";
                     case SyntaxKind.AsExpression:
@@ -3249,6 +3351,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.ArrowFunction:
                         // Check type parameters
                         if (nodes === (parent as DeclarationWithTypeParameterChildren).typeParameters) {
+                            // BUILDLESS: <added>
+                            const startOfList = nodes[0]?.pos ?? parent.end;
+                            tsCommentScanner.scanUntilAtChar('<', startOfList)
+                            const startOfParameterListPos = tsCommentScanner.getCurrentPos();
+                            // Scan the "<" character
+                            const lessThanInTSComment = tsCommentScanner.scanTo(startOfList);
+                            // Scan between "<" and ">"
+                            const contentInTSComment = scanLeavesCheckingIfInTsComment(nodes);
+                            // Scan until just before ">" (which has the same effect as scanning until just after)
+                            const greaterThanInTSComment = tsCommentScanner.scanUntilNextSignificantChar(parent.end);
+                            const endOfParameterListPos = tsCommentScanner.getCurrentPos() + 1; // + 1 to move past the ">"
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startOfParameterListPos, endOfParameterListPos);
+                            if (lessThanInTSComment && contentInTSComment && greaterThanInTSComment) return "skip";
+                            // BUILDLESS: </added>
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_parameter_declarations_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3291,6 +3407,20 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                     case SyntaxKind.TaggedTemplateExpression:
                         // Check type arguments
                         if (nodes === (parent as NodeWithTypeArguments).typeArguments) {
+                            // BUILDLESS: <added>
+                            const startOfList = nodes[0]?.pos ?? parent.end;
+                            tsCommentScanner.scanUntilAtChar('<', startOfList)
+                            const startOfParameterListPos = tsCommentScanner.getCurrentPos();
+                            // Scan the "<" character
+                            const lessThanInTSComment = tsCommentScanner.scanTo(startOfList);
+                            // Scan between "<" and ">"
+                            const contentInTSComment = scanLeavesCheckingIfInTsComment(nodes);
+                            // Scan until just before ">" (which has the same effect as scanning until just after)
+                            const greaterThanInTSComment = tsCommentScanner.scanUntilNextSignificantChar(parent.end);
+                            const endOfParameterListPos = tsCommentScanner.getCurrentPos() + 1; // + 1 to move past the ">"
+                            tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startOfParameterListPos, endOfParameterListPos);
+                            if (lessThanInTSComment && contentInTSComment && greaterThanInTSComment) return "skip";
+                            // BUILDLESS: </added>
                             diagnostics.push(createDiagnosticForNodeArray(nodes, Diagnostics.Type_arguments_can_only_be_used_in_TypeScript_files));
                             return "skip";
                         }
@@ -3338,6 +3468,398 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             function createDiagnosticForNode(node: Node, message: DiagnosticMessage, ...args: DiagnosticArguments): DiagnosticWithLocation {
                 return createDiagnosticForNodeInSourceFile(sourceFile, node, message, ...args);
             }
+
+            // BUILDLESS: <added>
+            const enum IsTSSyntax {
+                /** The node being scanned is not TS syntax */
+                no,
+                /** The node being scanned is TS syntax */
+                yes,
+                /** from the point the scanner currently it as, to the point just after the node is TS syntax. */
+                yesAndSoIsEarlierUnscannedContent,
+            }
+
+            function scanLeavesCheckingIfInTsComment(
+                rootNodes: Node | NodeArray<Node>,
+                isTSSyntax = IsTSSyntax.yes,
+                // By default it uses the comment scanner from the outer scope,
+                // but you can supply an alternative one if, for example, you cloned it.
+                commentScanner: TsCommentScanner = tsCommentScanner
+            ): boolean {
+                const startPos = rootNodes.pos;
+                const endPos = rootNodes.end;
+                const rootNodesArray: Node[] = Array.isArray(rootNodes) ? [...rootNodes] : [rootNodes];
+                let fullyInTsComment = true;
+                if (rootNodesArray.length > 0) {
+                    if (isTSSyntax === IsTSSyntax.yes) {
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(startPos, endPos);
+                    }
+                    if (isTSSyntax === IsTSSyntax.yesAndSoIsEarlierUnscannedContent) {
+                        tsSyntaxTracker.skipWhitespaceThenMarkRangeAsTS(commentScanner.getCurrentPos(), endPos);
+                        const significantTextInTypeScriptComment = commentScanner.scanTo(startPos);
+                        fullyInTsComment &&= significantTextInTypeScriptComment;
+                    }
+                }
+
+                for (const rootNode of rootNodesArray) {
+                    if (isLeafNode(rootNode)) {
+                        const nodeWasInTSComment = commentScanner.scanThroughLeafNode(rootNode);
+                        fullyInTsComment &&= nodeWasInTSComment;
+                        continue;
+                    }
+                    forEachChildRecursively(rootNode, node => {
+                        if (isLeafNode(node)) {
+                            const nodeWasInTSComment = commentScanner.scanThroughLeafNode(node);
+                            fullyInTsComment &&= nodeWasInTSComment;
+                        }
+                    });
+                }
+
+                const endInTSComment = commentScanner.scanTo(endPos);
+                fullyInTsComment &&= endInTSComment;
+                return fullyInTsComment;
+            }
+
+            function lookForJavaScriptInsideOfTSComments(
+                tsSyntaxTracker: TsSyntaxTracker,
+                tsCommentPositions: TsCommentPosition[],
+            ) {
+                let tsCommentPositionIndex = 0
+                for (const syntaxRange of tsSyntaxTracker.getSyntaxRanges()) {
+                    if (syntaxRange.type !== SyntaxRangeType.javaScript) continue;
+                    const jsSyntaxStart = syntaxRange.start;
+                    const jsSyntaxEnd = syntaxRange.end;
+                    while (true) {
+                        const tsCommentPosition: TsCommentPosition | undefined = tsCommentPositions[tsCommentPositionIndex];
+                        // If undefined, then there are no more TS comments to check for error with, so we can do an early return.
+                        if (tsCommentPosition === undefined) return;
+                        if (tsCommentPosition.colonPos + tsCommentPosition.colonCount > jsSyntaxEnd) break;
+                        tsCommentPositionIndex++;
+                        if (tsCommentPosition.close < jsSyntaxStart) continue;
+
+                        let startErrorRange = tsCommentPosition.colonPos + tsCommentPosition.colonCount;
+                        let endErrorRange = tsCommentPosition.close;
+                        if (startErrorRange < jsSyntaxStart) startErrorRange = jsSyntaxStart;
+                        if (endErrorRange > jsSyntaxEnd) endErrorRange = jsSyntaxEnd;
+                        if (startErrorRange === endErrorRange) continue;
+
+                        // Ignoring whitespace because the whitespace tracking isn't very accurate.
+                        // Ignoring commas, because whether or not the comma should be there is a fairly difficult question to answer.
+                        // For example, with:
+                        //    import type { a /*::, type b, */ c } from '...';
+                        // it would be a syntax error, because, ignoring the comment, there's no commas between "a" and "c",
+                        // but which of the two commas inside the comment is JavaScript syntax and which is TypeScript?
+                        // TODO: It still would be good to decide on some way to report an error in this kind of scenario.
+                        while (startErrorRange < endErrorRange) {
+                            const char = sourceFile.text[startErrorRange];
+                            if (char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === ',') {
+                                startErrorRange++;
+                            } else {
+                                break;
+                            }
+                        }
+                        while (endErrorRange > startErrorRange) {
+                            const char = sourceFile.text[endErrorRange];
+                            if (char === ' ' || char === '\t' || char === '\n' || char === '\r' || char === ',') {
+                                endErrorRange++;
+                            } else {
+                                break;
+                            }
+                        }
+                        if (startErrorRange === endErrorRange) continue;
+                     
+                        diagnostics.push(createFileDiagnostic(sourceFile, startErrorRange, endErrorRange - startErrorRange, Diagnostics.JavaScript_syntax_can_not_be_used_inside_of_a_TS_comment));
+                    }
+                }
+            }
+
+            function ejectBuildlessFile(sourceFile: SourceFile, tsCommentPositions: TsCommentPosition[]) {
+                const fs = require('fs');
+
+                interface TextSpan {
+                    start: number
+                    end: number
+                }
+
+                const text = sourceFile.text;
+                const spansToRemove: TextSpan[] = []
+                // Calculate what comment delimiters to remove from the text
+                {
+                    for (const { open, colonPos, close, colonCount, containedInnerOpeningBlockComment } of tsCommentPositions) {
+                        // Handle the opening comment
+                        {
+                            let start = open;
+                            let end = colonPos;
+                            // If "::", advance past it.
+                            // Otherwise, its ":", and we don't want to touch that.
+                            if (colonCount === 2) {
+                                end += 2;
+                                if (text[end] === ' ') end++;
+                            }
+                            if (colonCount === 1 && text[start - 1] === ' ') {
+                                start--;
+                            }
+                            // In the case of `x /* :: ?: ... */` we want to ignore the whitespace between `x` and `/*`.
+                            else if (colonCount === 2 && text[end] === '?' && text[end + 1] === ':' && text[start - 1] === ' ') {
+                                start--;
+                            }
+                            // In the case of `x /* :: !: ... */` we want to ignore the whitespace between `x` and `/*`.
+                            else if (colonCount === 2 && text[end] === '!' && text[end + 1] === ':' && text[start - 1] === ' ') {
+                                start--;
+                            }
+                            // In cases such as `import { x /*::, type y */ }` we want to ignore the whitespace between `x` and the comma.
+                            else if (colonCount === 2 && text[colonPos + 2] === ',' && text[start - 1] === ' ') {
+                                start--;
+                            }
+                            // If `/*::` is standing on its own line, remove that line
+                            else if (colonCount === 2 && text[end] === '\n') {
+                                const maybeStartOfLineIndex = tryMoveToStartOfLine(text, start, /*moveOnIndex*/ false);
+                                // We remove the newline after the comment instead of before,
+                                // because there might not be a newline before the comment if this
+                                // is at the start of the file.
+                                if (maybeStartOfLineIndex !== undefined) {
+                                    start = maybeStartOfLineIndex;
+                                    end++;
+                                }
+                            }
+                            spansToRemove.push({ start, end });
+                        }
+                        // Handle the closing comment
+                        // In the case of `/*:: ... /* ... */`, we only want to remove the opening delimiter, not the closing one.
+                        if (!containedInnerOpeningBlockComment) {
+                            let start = close;
+                            const end = close + 2;
+                            if (text[start - 1] === ' ') {
+                                start--;
+                            }
+                            // If `*/` is standing on its own line, remove that line
+                            if (colonCount === 2 && [undefined, '\n'].includes(text[end])) {
+                                const maybeStartOfLineIndex = tryMoveToStartOfLine(text, start, /*moveOnIndex*/ true);
+                                if (maybeStartOfLineIndex !== undefined) {
+                                    start = maybeStartOfLineIndex;
+                                }
+                            }
+                            spansToRemove.push({ start, end });
+                        }
+                    }
+                }
+
+                // Generated updated file text
+                let newText = '';
+                {
+                    spansToRemove.sort((a, b) => a.start - b.start);
+                    let curPos = 0;
+                    for (const spanToRemove of spansToRemove) {
+                        newText += text.slice(curPos, spanToRemove.start);
+                        curPos = Math.max(curPos, spanToRemove.end);
+                    }
+                    newText += text.slice(curPos);
+                }
+
+                // Can't think of any reason for this condition to not be true,
+                // but we'll still handled it in case it can happen.
+                const newPath = sourceFile.path.endsWith('.js')
+                    ? sourceFile.path.slice(0, -'.js'.length) + '.ts'
+                    : sourceFile.path + '.ts';
+                
+                fs.writeFileSync(newPath, newText);
+                fs.unlinkSync(sourceFile.path);
+            }
+
+            function convertToBuildlessFile(
+                sourceFile: SourceFile,
+                tsSyntaxTracker: TsSyntaxTracker,
+                blockCommentDelimiters: Map<number, BlockCommentDelimiterType>
+            ) {
+                const fs = require('fs');
+                const text = sourceFile.text;
+
+                interface TSSyntaxRange {
+                    start: number
+                    end: number
+                    openCommentIsFirstOnLine: boolean
+                    closeCommentIsLastOnLine: boolean
+                    multiline: boolean
+                    openCommentIndent: string | undefined
+                }
+
+                interface TextInsert {
+                    at: number
+                    value: string
+                }
+
+                // Add metadata to the TS node positions
+                const tsSyntaxRanges: TSSyntaxRange[] = [...tsSyntaxTracker.getSyntaxRanges()]
+                    .filter(syntaxRange => syntaxRange.type === SyntaxRangeType.typeScript)
+                    .map(tsSyntaxRange => {
+                        const maybeStartOfLineIndex = tryMoveToStartOfLine(text, tsSyntaxRange.start, /*moveOnIndex*/ false);
+                        const openCommentIsFirstOnLine = maybeStartOfLineIndex !== undefined;
+                        const openCommentIndent = maybeStartOfLineIndex !== undefined
+                            ? text.slice(maybeStartOfLineIndex, tsSyntaxRange.start)
+                            : undefined;
+
+                        const closeCommentIsLastOnLine = tryMoveToEndOfLine(text, tsSyntaxRange.end) !== undefined;
+
+                        const multiline = text.slice(tsSyntaxRange.start, tsSyntaxRange.end).includes('\n');
+
+                        return { ...tsSyntaxRange, openCommentIsFirstOnLine, closeCommentIsLastOnLine, multiline, openCommentIndent };
+                    });
+
+                // Merge node-positions that are next to each other.
+                const tsSyntaxRanges2: TSSyntaxRange[] = [];
+                if (tsSyntaxRanges.length > 0) {
+                    tsSyntaxRanges2.push(tsSyntaxRanges.shift()!);
+                    for (const tsNodePosition of tsSyntaxRanges) {
+                        const lastNodePosition = tsSyntaxRanges2.at(-1)!;
+                        const textInBetween = text.slice(lastNodePosition.end, tsNodePosition.start);
+                        let merged = false;
+
+                        const mergeNodePositionWithPrevious = () => {
+                            lastNodePosition.end = tsNodePosition.end;
+                            lastNodePosition.multiline ||= tsNodePosition.multiline || textInBetween.includes('\n');
+                            lastNodePosition.closeCommentIsLastOnLine = tsNodePosition.closeCommentIsLastOnLine;
+                            merged = true;
+                        };
+
+                        if (lastNodePosition.openCommentIsFirstOnLine && tsNodePosition.closeCommentIsLastOnLine) {
+                            if (textInBetween.match(/^[ \t\n]*$/g)) {
+                                mergeNodePositionWithPrevious();
+                            }
+                        }
+                        if (!merged && !lastNodePosition.multiline && !tsNodePosition.multiline) {
+                            if (textInBetween.match(/^[ ]*$/g)) {
+                                mergeNodePositionWithPrevious();
+                            }
+                        }
+
+                        if (!merged) {
+                            tsSyntaxRanges2.push(tsNodePosition);
+                        }
+                    }
+                }
+
+                // Calculate text to insert
+                const textInserts: TextInsert[] = [];
+                for (const tsSyntaxRange of tsSyntaxRanges2) {
+                    let moveDelimitersOnTheirOwnLine = tsSyntaxRange.multiline && tsSyntaxRange.openCommentIsFirstOnLine && tsSyntaxRange.closeCommentIsLastOnLine;
+                    const maybeColonIndex = lookForChar(text, ':', [' '], tsSyntaxRange.start, tsSyntaxRange.end);
+                    if (maybeColonIndex !== undefined) {
+                        moveDelimitersOnTheirOwnLine = false; // `/*:-style comments won't go on a line of their own
+                        textInserts.push({
+                            at: maybeColonIndex,
+                            value: ' /*' // `/*` with the colon right after makes `/*:`.
+                        })
+                    }
+                    else if (moveDelimitersOnTheirOwnLine) {
+                        textInserts.push({
+                            at: tsSyntaxRange.start,
+                            value: `/*::\n${tsSyntaxRange.openCommentIndent}`,
+                        });
+                    }
+                    else {
+                        const maybeQuestionMarkIndex = lookForChar(text, '?', [' '], tsSyntaxRange.start, tsSyntaxRange.end);
+                        const maybeExclamationMarkIndex = lookForChar(text, '!', [' '], tsSyntaxRange.start, tsSyntaxRange.end);
+                        // Is this a "?:" or "!:" annotation? If so, we'll handle white-space a little differently.
+                        const isTypeAnnotation = (
+                            (maybeQuestionMarkIndex !== undefined && text[maybeQuestionMarkIndex + 1] === ':') ||
+                            (maybeExclamationMarkIndex !== undefined && text[maybeExclamationMarkIndex + 1] === ':')
+                        );
+                        const spaceBefore = text[tsSyntaxRange.start - 1] === ' ';
+                        textInserts.push({
+                            at: tsSyntaxRange.start,
+                            value: isTypeAnnotation && !spaceBefore ? ' /*:: ' : '/*:: ',
+                        });
+                    }
+
+                    // Special handling for inner block comments.
+                    // If the range we want to comment out contains a `/* ... */`, we'll
+                    // want to add a `/*::` after the `*/` to bring us back into TS-comment land.
+                    for (let i = tsSyntaxRange.start + 1; i < tsSyntaxRange.end - 1; i++) {
+                        const delimiter = blockCommentDelimiters.get(i);
+                        if (delimiter === BlockCommentDelimiterType.close) {
+                            textInserts.push({
+                                at: i + 2,
+                                value: '/*::'
+                            });
+                        }
+                    }
+
+                    if (moveDelimitersOnTheirOwnLine) {
+                        textInserts.push({
+                            at: tsSyntaxRange.end,
+                            value: `\n${tsSyntaxRange.openCommentIndent}*/`,
+                        });
+                    }
+                    else {
+                        textInserts.push({
+                            at: tsSyntaxRange.end,
+                            value: ' */',
+                        });
+                    }
+                }
+
+                // Generated updated file text
+                let newText = '';
+                {
+                    let curPos = 0;
+                    for (const textInsert of textInserts) {
+                        newText += text.slice(curPos, textInsert.at) + textInsert.value;
+                        curPos = textInsert.at;
+                    }
+                    newText += text.slice(curPos);
+                }
+
+                // Can't think of any reason for this condition to not be true,
+                // but we'll still handled it in case it can happen.
+                const newPath = sourceFile.path.endsWith('.ts')
+                    ? sourceFile.path.slice(0, -'.ts'.length) + '.js'
+                    : sourceFile.path + '.js';
+
+                fs.writeFileSync(newPath, newText);
+                fs.unlinkSync(sourceFile.path);
+            }
+
+            function lookForChar(text: string, charToFind: string, charsToNotBreakOn: string[], startAt: number, stopAt: number): number | undefined {
+                for (let i = startAt; i < stopAt; i++) {
+                    const char = text[i];
+                    if (char === charToFind) return i;
+                    if (charsToNotBreakOn.includes(char)) continue;
+                    return undefined;
+                }
+                return undefined;
+            }
+
+            /**
+             * Returns an index if you can make it to the start by passing through only whitespace.
+             * Returns undefined if there are other characters in the way.
+             * The character that "index" is currently on will be ignored, only characters before it will be considered..
+             * @param moveOnIndex if false, returns the index right after the new line.
+             */
+            function tryMoveToStartOfLine(text: string, index: number, moveOnIndex: boolean) {
+                while (true) {
+                    index--;
+                    if (text[index] === ' ' || text[index] === '\t') continue;
+                    if (text[index] === undefined) return index + 1;
+                    if (text[index] === '\n') return moveOnIndex ? index : index + 1;
+                    return undefined;
+                }
+            }
+
+            /**
+             * Returns an index if you can make it to the end by passing through only whitespace.
+             * Returns undefined if there are other characters in the way.
+             */
+            function tryMoveToEndOfLine(text: string, index: number) {
+                index--;
+                while (true) {
+                    index++;
+                    if (text[index] === ' ' || text[index] === '\t') continue;
+                    if (text[index] === undefined) return index - 1;
+                    if (text[index] === '\n') return index;
+                    return undefined;
+                }
+            }
+            // BUILDLESS: </added>
         });
     }
 
