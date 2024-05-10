@@ -2,13 +2,13 @@
 
 === instantiationExpressions.ts ===
 declare function fx<T>(x: T): T;
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
+>fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_1, U>(t: [T_1, U]): [T_1, U]; }
 >   : ^^^ ^^ ^^ ^^^ ^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
 declare function fx<T>(x: T, n: number): T;
->fx : { <T_1>(x: T_1): T_1; <T>(x: T, n: number): T; <T_2, U>(t: [T_2, U]): [T_2, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T>(x: T, n: number): T; <T_1, U>(t: [T_1, U]): [T_1, U]; }
 >   : ^^^   ^^ ^^   ^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^ ^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
 >x : T
 >  : ^
@@ -16,7 +16,7 @@ declare function fx<T>(x: T, n: number): T;
 >  : ^^^^^^
 
 declare function fx<T, U>(t: [T, U]): [T, U];
->fx : { <T_1>(x: T_1): T_1; <T_2>(x: T_2, n: number): T_2; <T, U>(t: [T, U]): [T, U]; }
+>fx : { <T_1>(x: T_1): T_1; <T_1>(x: T_1, n: number): T_1; <T, U>(t: [T, U]): [T, U]; }
 >   : ^^^   ^^ ^^   ^^^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^ ^^ ^^ ^^      ^^^      ^^^
 >t : [T, U]
 >  : ^^^^^^
@@ -26,61 +26,61 @@ function f1() {
 >   : ^^^^^^^^^^
 
     let f0 = fx<>;  // Error
->f0 : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
->fx<> : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->     : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>f0 : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
+>fx<> : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>     : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
     let f1 = fx<string>;  // { (x: string): string; (x: string, n: number): string; }
 >f1 : { (x: string): string; (x: string, n: number): string; }
 >   : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^
 >fx<string> : { (x: string): string; (x: string, n: number): string; }
 >           : ^^^ ^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^      ^^^^^^^^^^^^
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
     let f2 = fx<string, number>;  // (t: [string, number]) => [string, number]
 >f2 : (t: [string, number]) => [string, number]
 >   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fx<string, number> : (t: [string, number]) => [string, number]
 >                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
     let f3 = fx<string, number, boolean>;  // Error
 >f3 : {}
 >   : ^^
 >fx<string, number, boolean> : {}
 >                            : ^^
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 }
 
 type T10 = typeof fx<>;  // Error
->T10 : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->    : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>T10 : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>    : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
 type T11 = typeof fx<string>;  // { (x: string): string; (x: string, n: number): string; }
 >T11 : typeof fx<string>
 >    :                  
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
 type T12 = typeof fx<string, number>;  // (t: [string, number]) => [string, number]
 >T12 : typeof fx<string, number>
 >    :                          
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
 type T13 = typeof fx<string, number, boolean>;  // Error
 >T13 : typeof fx<string, number, boolean>
 >    :                                   
->fx : { <T>(x: T): T; <T_1>(x: T_1, n: number): T_1; <T_2, U>(t: [T_2, U]): [T_2, U]; }
->   : ^^^ ^^ ^^ ^^^^^^^   ^^ ^^   ^^ ^^      ^^^^^^^^^   ^^ ^^ ^^        ^^^^^^^^^^^^^^
+>fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^^^^
 
 function f2() {
 >f2 : () => void
@@ -753,8 +753,8 @@ type T32<B> = InstanceType<T30<B>>;  // { b: B }
 >    : ^^^^^^^^^
 
 declare const g2: {
->g2 : { <T extends string>(a: T): T; new <T_1 extends number>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -768,18 +768,18 @@ declare const g2: {
 type T40<U extends string> = typeof g2<U>;  // Error
 >T40 : typeof g2<U>
 >    :             
->g2 : { <T extends string>(a: T): T; new <T_1 extends number>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 
 type T41<U extends number> = typeof g2<U>;  // Error
 >T41 : typeof g2<U>
 >    :             
->g2 : { <T extends string>(a: T): T; new <T_1 extends number>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 
 declare const g3: {
->g3 : { <T extends string>(a: T): T; new <T_1 extends number, Q>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -793,12 +793,12 @@ declare const g3: {
 type T50<U extends string> = typeof g3<U>;  // (a: U) => U
 >T50 : typeof g3<U>
 >    :             
->g3 : { <T extends string>(a: T): T; new <T_1 extends number, Q>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 
 type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 >T51 : typeof g3<U, any>
 >    :                  
->g3 : { <T extends string>(a: T): T; new <T_1 extends number, Q>(b: T_1): T_1; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
+>   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 

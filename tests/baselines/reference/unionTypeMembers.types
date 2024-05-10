@@ -220,12 +220,12 @@ num = x.commonMethodWithOwnTypeParameter(num);
 >    : ^^^^^^
 >x.commonMethodWithOwnTypeParameter(num) : number
 >                                        : ^^^^^^
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >num : number
 >    : ^^^^^^
 
@@ -236,12 +236,12 @@ str = x.commonMethodWithOwnTypeParameter(str);
 >    : ^^^^^^
 >x.commonMethodWithOwnTypeParameter(str) : string
 >                                        : ^^^^^^
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >str : string
 >    : ^^^^^^
 
@@ -252,12 +252,12 @@ strOrNum = x.commonMethodWithOwnTypeParameter(strOrNum);
 >         : ^^^^^^^^^^^^^^^
 >x.commonMethodWithOwnTypeParameter(strOrNum) : string | number
 >                                             : ^^^^^^^^^^^^^^^
->x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                   : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>x.commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                   : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >x : I1<number> | I2<number>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^
->commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U_1>(a: U_1) => U_1)
->                                 : ^^ ^^ ^^ ^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>commonMethodWithOwnTypeParameter : (<U>(a: U) => U) | (<U>(a: U) => U)
+>                                 : ^^ ^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
 

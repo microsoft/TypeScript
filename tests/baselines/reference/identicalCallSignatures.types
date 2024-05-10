@@ -30,8 +30,8 @@ interface I2<T> {
 }
 
 var a: {
->a : { (x: any): number; (x: any): number; <T>(x: T): T; <T_1>(x: T_1): T_1; }
->  : ^^^ ^^^^^^^^      ^^^ ^^   ^^^      ^^^ ^^ ^^ ^^^ ^^^   ^^ ^^   ^^^   ^^^
+>a : { (x: any): number; (x: any): number; <T>(x: T): T; <T>(x: T): T; }
+>  : ^^^ ^^^^^^^^      ^^^ ^^   ^^^      ^^^ ^^ ^^ ^^^ ^^^ ^^ ^^ ^^^ ^^^
 
     (x): number;
 >x : any

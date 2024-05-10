@@ -16,7 +16,7 @@ function foo1<T>(x: T); // no error, different declaration for each T
 >  : ^
 
 function foo1<T>(x: T) { }
->foo1 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
+>foo1 : { <T_1>(x: T_1): any; <T_1>(x: T_1): any; }
 >     : ^^^   ^^ ^^   ^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
@@ -34,7 +34,7 @@ function foo2<T, U>(x: T); // no error, different declaration for each T
 >  : ^
 
 function foo2<T, U>(x: T) { }
->foo2 : { <T_1, U_1>(x: T_1): any; <T_2, U_2>(x: T_2): any; }
+>foo2 : { <T_1, U_1>(x: T_1): any; <T_1, U_1>(x: T_1): any; }
 >     : ^^^   ^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
@@ -72,8 +72,8 @@ function foo3<T, U>(x: T, y: U) {
 >  : ^
 
     function inner2<T>(x: T); // no error, different T
->inner2 : { (x: T): any; <T_1>(x: T_1): any; }
->       : ^^^ ^^ ^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>inner2 : { (x: T_1): any; <T>(x: T): any; }
+>       : ^^^ ^^   ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -122,7 +122,7 @@ class C<T> {
 >  : ^
 
     foo2<U>(a: T, x: U) { }
->foo2 : { <U_1>(a: T, x: U_1): any; <U_2>(a: T, x: U_2): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U_1>(a: T, x: U_1): any; }
 >     : ^^^   ^^ ^^ ^^ ^^   ^^^^^^^^^   ^^ ^^ ^^ ^^   ^^^^^^^^^
 >a : T
 >  : ^
@@ -142,7 +142,7 @@ class C<T> {
 >  : ^
 
     foo3<T>(x: T) { }
->foo3 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
+>foo3 : { <T_1>(x: T_1): any; <T_1>(x: T_1): any; }
 >     : ^^^   ^^ ^^   ^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
@@ -160,7 +160,7 @@ class C<T> {
 >  : ^
 
     foo4<T extends Date>(x: T) { }
->foo4 : { <T_1 extends Date>(x: T_1): any; <T_2 extends Date>(x: T_2): any; }
+>foo4 : { <T_1 extends Date>(x: T_1): any; <T_1 extends Date>(x: T_1): any; }
 >     : ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^
@@ -205,7 +205,7 @@ class C2<T extends Date> {
 >  : ^
 
     foo2<U>(a: T, x: U) { }
->foo2 : { <U_1>(a: T, x: U_1): any; <U_2>(a: T, x: U_2): any; }
+>foo2 : { <U_1>(a: T, x: U_1): any; <U_1>(a: T, x: U_1): any; }
 >     : ^^^   ^^ ^^ ^^ ^^   ^^^^^^^^^   ^^ ^^ ^^ ^^   ^^^^^^^^^
 >a : T
 >  : ^
@@ -225,7 +225,7 @@ class C2<T extends Date> {
 >  : ^
 
     foo3<T>(x: T) { }
->foo3 : { <T_1>(x: T_1): any; <T_2>(x: T_2): any; }
+>foo3 : { <T_1>(x: T_1): any; <T_1>(x: T_1): any; }
 >     : ^^^   ^^ ^^   ^^^^^^^^^   ^^ ^^   ^^^^^^^^^
 >x : T
 >  : ^

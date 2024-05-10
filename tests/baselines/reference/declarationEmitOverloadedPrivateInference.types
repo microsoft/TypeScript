@@ -48,7 +48,7 @@ export class Wrapper {
 >        : ^
 
     private proxy<T, U>(fn: (options: T) => U) {
->proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T_2, U_2>(fn: (options?: T_2) => U_2, noArgs: true): (options?: T_2) => U_2; }
+>proxy : { <T_1, U_1>(fn: (options: T_1) => U_1): (options: T_1) => U_1; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
 >      : ^^^   ^^   ^^  ^^                     ^^^^       ^^   ^^^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
 >fn : (options: T) => U
 >   : ^       ^^ ^^^^^ 
@@ -70,12 +70,12 @@ export class Wrapper {
 >        : ^       ^^^^^^^^^^^^^^^^^^^^^
 >this.proxy(noArgs, true) : (options?: unknown) => string
 >                         : ^       ^^^^^^^^^^^^^^^^^^^^^
->this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
->           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
+>this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
+>           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^ ^^ ^^  ^^                  ^^      ^^    ^^^^       ^^^ ^^^^^^^^^
 >this : this
 >     : ^^^^
->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
->      : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
+>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
+>      : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^ ^^ ^^  ^^                  ^^      ^^    ^^^^       ^^^ ^^^^^^^^^
 >noArgs : () => string
 >       : ^^^^^^^^^^^^
 >true : true
@@ -86,12 +86,12 @@ export class Wrapper {
 >        : ^       ^^^^^^^^^^^^^^^^^^^
 >this.proxy(oneArg) : (options: string) => string
 >                   : ^       ^^^^^^^^^^^^^^^^^^^
->this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
->           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
+>this.proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
+>           : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^ ^^ ^^  ^^                  ^^      ^^    ^^^^       ^^^ ^^^^^^^^^
 >this : this
 >     : ^^^^
->proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T_1, U_1>(fn: (options?: T_1) => U_1, noArgs: true): (options?: T_1) => U_1; }
->      : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^   ^^   ^^  ^^                      ^^      ^^    ^^^^       ^^^   ^^^^^^^^^^^
+>proxy : { <T, U>(fn: (options: T) => U): (options: T) => U; <T, U>(fn: (options?: T) => U, noArgs: true): (options?: T) => U; }
+>      : ^^^ ^^ ^^  ^^                 ^^^^       ^^ ^^^^^^^^^ ^^ ^^  ^^                  ^^      ^^    ^^^^       ^^^ ^^^^^^^^^
 >oneArg : (input: string) => string
 >       : ^     ^^      ^^^^^^^^^^^
 
