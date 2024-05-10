@@ -3105,7 +3105,8 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // BUILDLESS: <added>
             if (options.buildlessEject) {
                 ejectBuildlessFile(sourceFile, tsCommentScanner.getTSCommentPositions());
-            } else if (options.buildlessConvert) {
+            }
+            else if (options.buildlessConvert) {
                 convertToBuildlessFile(sourceFile, tsSyntaxTracker, tsCommentScanner.getBlockCommentDelimiters());
             }
             // BUILDLESS: </added>
