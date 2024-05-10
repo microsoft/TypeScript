@@ -212,8 +212,8 @@ function test2(x: unknown) {
 
 // https://github.com/microsoft/TypeScript/issues/50712
 function test3(foo: unknown) {
->test3 : (foo: unknown) => void
->      : ^   ^^       ^^^^^^^^^
+>test3 : (foo: unknown) => asserts foo is string | any[]
+>      : ^   ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : unknown
 >    : ^^^^^^^
 

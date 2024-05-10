@@ -954,14 +954,17 @@ declare function foo({ value1, test1, test2, test3, test4, test5, test6, test7, 
     test8?: any;
     test9?: any;
 }): void;
-declare function fa1(x: [true, number] | [false, string]): void;
+declare function fa1(x: [true, number] | [false, string]): asserts x is [false, string];
 declare function fa2(x: {
     guard: true;
     value: number;
 } | {
     guard: false;
     value: string;
-}): void;
+}): asserts x is {
+    guard: false;
+    value: string;
+};
 declare const fa3: (...args: [true, number] | [false, string]) => void;
 interface ClientEvents {
     warn: [message: string];

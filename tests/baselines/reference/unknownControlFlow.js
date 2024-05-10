@@ -866,7 +866,7 @@ declare function fx3<T extends {} | undefined>(value: T & ({} | null)): void;
 declare function fx4<T extends {} | null>(value: T & ({} | null)): void;
 declare function fx5<T extends {} | null | undefined>(value: T & ({} | null)): void;
 declare function fx10(x: string | number, y: number): void;
-declare function SendBlob(encoding: unknown): void;
+declare function SendBlob(encoding: unknown): asserts encoding is "utf8" | undefined;
 declare function doSomething1<T extends unknown>(value: T): T;
 declare function doSomething2(value: unknown): void;
 type TypeA = {

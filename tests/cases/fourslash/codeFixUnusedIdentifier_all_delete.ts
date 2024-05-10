@@ -68,7 +68,7 @@ import { x } from "foo";
 import { x2, used2 } from "foo";
 used1; used2;
 
-function f() {
+function f(a, b) {
 }
 function g(a) { return a; }
 function h(c) { return c; }

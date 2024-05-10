@@ -1370,8 +1370,8 @@ function fx10(x: string | number, y: number) {
 // Repros from #50706
 
 function SendBlob(encoding: unknown) {
->SendBlob : (encoding: unknown) => void
->         : ^        ^^       ^^^^^^^^^
+>SendBlob : (encoding: unknown) => asserts encoding is "utf8" | undefined
+>         : ^        ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >encoding : unknown
 >         : ^^^^^^^
 

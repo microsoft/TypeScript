@@ -397,7 +397,7 @@ declare function assertIsArrayOfStrings(value: unknown): asserts value is string
 declare function assertDefined<T>(value: T): asserts value is NonNullable<T>;
 declare function f01(x: unknown): void;
 declare function f02(x: string | undefined): void;
-declare function f03(x: string | undefined, assert: (value: unknown) => asserts value): void;
+declare function f03(x: string | undefined, assert: (value: unknown) => asserts value): asserts x is string;
 declare namespace Debug {
     function assert(value: unknown, message?: string): asserts value;
     function assertDefined<T>(value: T): asserts value is NonNullable<T>;
@@ -409,14 +409,14 @@ declare class Test {
     assertIsTest2(): asserts this is Test2;
     assertThis(): asserts this;
     bar(): void;
-    foo(x: unknown): void;
+    foo(x: unknown): asserts x is string;
     baz(x: number): void;
 }
 declare class Test2 extends Test {
     z: number;
 }
 declare class Derived extends Test {
-    foo(x: unknown): void;
+    foo(x: unknown): asserts x is string;
     baz(x: number): void;
 }
 declare function f11(items: Test[]): void;
@@ -429,7 +429,7 @@ declare class Wat {
     get p2(): asserts this is string;
     set p2(x: asserts this is string);
 }
-declare function f20(x: unknown): void;
+declare function f20(x: unknown): asserts x is string;
 interface Thing {
     good: boolean;
     isGood(): asserts this is GoodThing;

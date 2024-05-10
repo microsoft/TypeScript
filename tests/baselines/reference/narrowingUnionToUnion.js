@@ -498,12 +498,12 @@ type EmptyString = '' | null | undefined;
 declare function isEmpty(value: string | EmptyString): value is EmptyString;
 declare let test: string | null | undefined;
 declare function assert<T>(value: any): asserts value is T;
-declare function test1(foo: number | string | boolean): void;
+declare function test1(foo: number | string | boolean): asserts foo is string | 1;
 declare function check1(x: unknown): x is (string | 0);
 declare function check2(x: unknown): x is ("hello" | 0);
 declare function test3(x: unknown): void;
 declare function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asserts v is string[] | null;
-declare function f1x(obj: (string | number)[] | null): void;
+declare function f1x(obj: (string | number)[] | null): asserts obj is string[] | null;
 type MyDiscriminatedUnion = {
     type: 'A';
     aProp: number;

@@ -36,10 +36,10 @@ interface Foo extends Array<string> {}
 // Repros from comments in #43249
 
 const repro_43249 = (value: unknown) => {
->repro_43249 : (value: unknown) => void
->            : ^     ^^       ^^^^^^^^^
->(value: unknown) => {    if (typeof value !== "string") {        throw new Error("No");    }    const match = value.match(/anything/) || [];    const [, extracted] = match;} : (value: unknown) => void
->                                                                                                                                                                              : ^     ^^       ^^^^^^^^^
+>repro_43249 : (value: unknown) => asserts value is string
+>            : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(value: unknown) => {    if (typeof value !== "string") {        throw new Error("No");    }    const match = value.match(/anything/) || [];    const [, extracted] = match;} : (value: unknown) => asserts value is string
+>                                                                                                                                                                              : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : unknown
 >      : ^^^^^^^
 

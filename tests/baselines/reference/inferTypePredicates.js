@@ -280,6 +280,88 @@ if (foobarPred(foobar)) {
   foobar.foo;
 }
 
+function assertIsNumber(x: unknown) {
+  if (typeof x !== 'number') {
+    throw new Error();
+  }
+}
+
+function assertIsSmallNumber(x: unknown) {
+  if (typeof x === 'number' && x < 10) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertMultipleReturns(x: unknown) {
+  if (x instanceof Date) {
+    return;
+  } else if (x instanceof RegExp) {
+    return;
+  } else {
+    throw new Error();
+  }
+}
+
+function assertChained(x: number | string) {
+  assertIsNumber(x);
+}
+
+function assertOneParam(a: unknown, b: unknown) {
+  assertIsSmallNumber(b);
+}
+
+function nonAssertion(a: number | string) {
+  if (typeof a === 'number') {
+    return;
+  } else if (typeof a === 'string') {
+    return;
+  }
+  throw new Error();
+}
+
+function justAssert(x: unknown) {
+  throw new Error();
+}
+
+function assertMultiple(a: unknown, b: unknown) {
+  assertIsNumber(a);
+  assertIsNumber(b);
+}
+
+// should not return "asserts x is Date | undefined".
+function assertOptional(x?: Date) {
+  if (x) {
+    return;
+  }
+}
+
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x: unknown) {
+  if (x === null) {
+    return;
+  } else if (x === undefined) {
+    return;
+  }
+}
+
+function assertionViaInfiniteLoop(x: string | number) {
+  if (typeof x === 'string') {
+    for (;;) {}
+  }
+}
+
+function booleanOrVoid(a: boolean | void) {
+  if (typeof a === "undefined") {
+    a
+  }
+  a
+}
+
+function assertTrue(x: boolean) {
+  if (!x) throw new Error();
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -538,6 +620,80 @@ var foobarPred = function (fb) { return fb.type === "foo"; };
 if (foobarPred(foobar)) {
     foobar.foo;
 }
+function assertIsNumber(x) {
+    if (typeof x !== 'number') {
+        throw new Error();
+    }
+}
+function assertIsSmallNumber(x) {
+    if (typeof x === 'number' && x < 10) {
+        return;
+    }
+    throw new Error();
+}
+function assertMultipleReturns(x) {
+    if (x instanceof Date) {
+        return;
+    }
+    else if (x instanceof RegExp) {
+        return;
+    }
+    else {
+        throw new Error();
+    }
+}
+function assertChained(x) {
+    assertIsNumber(x);
+}
+function assertOneParam(a, b) {
+    assertIsSmallNumber(b);
+}
+function nonAssertion(a) {
+    if (typeof a === 'number') {
+        return;
+    }
+    else if (typeof a === 'string') {
+        return;
+    }
+    throw new Error();
+}
+function justAssert(x) {
+    throw new Error();
+}
+function assertMultiple(a, b) {
+    assertIsNumber(a);
+    assertIsNumber(b);
+}
+// should not return "asserts x is Date | undefined".
+function assertOptional(x) {
+    if (x) {
+        return;
+    }
+}
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x) {
+    if (x === null) {
+        return;
+    }
+    else if (x === undefined) {
+        return;
+    }
+}
+function assertionViaInfiniteLoop(x) {
+    if (typeof x === 'string') {
+        for (;;) { }
+    }
+}
+function booleanOrVoid(a) {
+    if (typeof a === "undefined") {
+        a;
+    }
+    a;
+}
+function assertTrue(x) {
+    if (!x)
+        throw new Error();
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -630,3 +786,16 @@ declare const foobarPred: (fb: typeof foobar) => fb is {
     type: "foo";
     foo: number;
 };
+declare function assertIsNumber(x: unknown): asserts x is number;
+declare function assertIsSmallNumber(x: unknown): asserts x is number;
+declare function assertMultipleReturns(x: unknown): asserts x is RegExp | Date;
+declare function assertChained(x: number | string): asserts x is number;
+declare function assertOneParam(a: unknown, b: unknown): asserts b is number;
+declare function nonAssertion(a: number | string): void;
+declare function justAssert(x: unknown): void;
+declare function assertMultiple(a: unknown, b: unknown): asserts a is number;
+declare function assertOptional(x?: Date): void;
+declare function splitUnknown(x: unknown): void;
+declare function assertionViaInfiniteLoop(x: string | number): asserts x is number;
+declare function booleanOrVoid(a: boolean | void): void;
+declare function assertTrue(x: boolean): asserts x is true;

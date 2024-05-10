@@ -279,3 +279,85 @@ const foobarPred = (fb: typeof foobar) => fb.type === "foo";
 if (foobarPred(foobar)) {
   foobar.foo;
 }
+
+function assertIsNumber(x: unknown) {
+  if (typeof x !== 'number') {
+    throw new Error();
+  }
+}
+
+function assertIsSmallNumber(x: unknown) {
+  if (typeof x === 'number' && x < 10) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertMultipleReturns(x: unknown) {
+  if (x instanceof Date) {
+    return;
+  } else if (x instanceof RegExp) {
+    return;
+  } else {
+    throw new Error();
+  }
+}
+
+function assertChained(x: number | string) {
+  assertIsNumber(x);
+}
+
+function assertOneParam(a: unknown, b: unknown) {
+  assertIsSmallNumber(b);
+}
+
+function nonAssertion(a: number | string) {
+  if (typeof a === 'number') {
+    return;
+  } else if (typeof a === 'string') {
+    return;
+  }
+  throw new Error();
+}
+
+function justAssert(x: unknown) {
+  throw new Error();
+}
+
+function assertMultiple(a: unknown, b: unknown) {
+  assertIsNumber(a);
+  assertIsNumber(b);
+}
+
+// should not return "asserts x is Date | undefined".
+function assertOptional(x?: Date) {
+  if (x) {
+    return;
+  }
+}
+
+// should not return "asserts x is {} | null | undefined".
+function splitUnknown(x: unknown) {
+  if (x === null) {
+    return;
+  } else if (x === undefined) {
+    return;
+  }
+}
+
+function assertionViaInfiniteLoop(x: string | number) {
+  if (typeof x === 'string') {
+    for (;;) {}
+  }
+}
+
+function booleanOrVoid(a: boolean | void) {
+  if (typeof a === "undefined") {
+    a
+  }
+  a
+}
+
+function assertTrue(x: boolean) {
+  if (!x) throw new Error();
+}

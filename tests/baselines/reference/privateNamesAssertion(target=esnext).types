@@ -30,8 +30,8 @@ class Foo {
         }
     }
     m1(v: unknown) {
->m1 : (v: unknown) => void
->   : ^ ^^       ^^^^^^^^^
+>m1 : (v: unknown) => asserts v is string
+>   : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >v : unknown
 >  : ^^^^^^^
 
@@ -77,8 +77,8 @@ class Foo2 {
         }
     }
     m1(v: unknown) {
->m1 : (v: unknown) => void
->   : ^ ^^       ^^^^^^^^^
+>m1 : (v: unknown) => asserts v is string
+>   : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
 >v : unknown
 >  : ^^^^^^^
 

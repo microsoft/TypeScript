@@ -569,8 +569,8 @@ declare function assert<T>(value: any): asserts value is T
 >value : any
 
 function test1(foo: number | string | boolean) {
->test1 : (foo: number | string | boolean) => void
->      : ^   ^^                         ^^^^^^^^^
+>test1 : (foo: number | string | boolean) => asserts foo is string | 1
+>      : ^   ^^                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string | number | boolean
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -722,8 +722,8 @@ function assertRelationIsNullOrStringArray(v: (string | number)[] | null): asser
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function f1x(obj: (string | number)[] | null) {
->f1x : (obj: (string | number)[] | null) => void
->    : ^   ^^                          ^^^^^^^^^
+>f1x : (obj: (string | number)[] | null) => asserts obj is string[] | null
+>    : ^   ^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >obj : (string | number)[] | null
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

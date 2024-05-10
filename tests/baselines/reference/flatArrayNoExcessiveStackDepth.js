@@ -47,5 +47,5 @@ declare const foo: unknown[];
 declare const bar: string[];
 interface Foo extends Array<string> {
 }
-declare const repro_43249: (value: unknown) => void;
+declare const repro_43249: (value: unknown) => asserts value is string;
 declare function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>): void;
