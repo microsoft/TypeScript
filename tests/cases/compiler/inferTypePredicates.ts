@@ -361,3 +361,27 @@ function booleanOrVoid(a: boolean | void) {
 function assertTrue(x: boolean) {
   if (!x) throw new Error();
 }
+
+function assertNonNullish<T>(x: T) {
+  if (x != null) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertIsShortString(x: unknown) {
+  if (typeof x !== 'string') {
+    throw new Error('Expected string');
+  } else if (x.length > 10) {
+    throw new Error('Expected short string');
+  }
+}
+
+function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
+  if (x === 'A') {
+    return;  // type of x here is 'A'
+  } else if (x === 'B' || x === 'C') {
+    throw new Error();
+  }
+  // implicit return; type of x here is 'D' | E'
+}
