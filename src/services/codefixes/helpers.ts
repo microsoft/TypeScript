@@ -397,7 +397,7 @@ export function createSignatureDeclarationFromSignature(
 
     let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = isJs ? undefined : signatureDeclaration.type;
+    let type = isJs ? undefined : getSynthesizedDeepClone(signatureDeclaration.type);
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {
