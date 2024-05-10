@@ -131,6 +131,7 @@ class CompilerTest {
         "allowImportingTsExtensions",
         "allowSyntheticDefaultImports",
         "alwaysStrict",
+        "disallowAssertKeywords",
         "downlevelIteration",
         "experimentalDecorators",
         "emitDecoratorMetadata",

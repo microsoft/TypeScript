@@ -1601,6 +1601,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         type: "string",
         defaultValueDescription: undefined,
     },
+    {
+        name: "disallowAssertKeywords",
+        type: "boolean",
+        category: Diagnostics.Backwards_Compatibility,
+        description: Diagnostics.Disallow_using_assert_keywords_in_import_attributes,
+        defaultValueDescription: false,
+    },
 ];
 
 /** @internal */

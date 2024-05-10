@@ -1,0 +1,18 @@
+b.ts(1,14): error TS2869: The `assert` keyword is disallowed. Use the `with` keyword instead for import attributes.
+c.ts(1,27): error TS2869: The `assert` keyword is disallowed. Use the `with` keyword instead for import attributes.
+
+
+==== a.ts (0 errors) ====
+    export const a = 1;
+    export const b = 2;
+    
+==== b.ts (1 errors) ====
+    import './a' assert { type: "json" }
+                 ~~~~~~
+!!! error TS2869: The `assert` keyword is disallowed. Use the `with` keyword instead for import attributes.
+    
+==== c.ts (1 errors) ====
+    const b = import('./a', { assert: { type: "json" } });
+                              ~~~~~~
+!!! error TS2869: The `assert` keyword is disallowed. Use the `with` keyword instead for import attributes.
+    

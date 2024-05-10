@@ -3903,6 +3903,10 @@
         "category": "Error",
         "code": 2868
     },
+    "The `assert` keyword is disallowed. Use the `with` keyword instead for import attributes.": {
+        "category": "Error",
+        "code": 2869
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -5958,6 +5962,10 @@
     "Enable error reporting in type-checked JavaScript files.": {
         "category": "Message",
         "code": 6609
+    },
+    "Disallow using 'assert' keywords in import attributes.": {
+        "category": "Message",
+        "code": 6610
     },
     "Enable constraints that allow a TypeScript project to be used with project references.": {
         "category": "Message",

@@ -1,0 +1,20 @@
+//// [tests/cases/conformance/importAssertion/importAssertion6.ts] ////
+
+=== a.ts ===
+export const a = 1;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+export const b = 2;
+>b : Symbol(b, Decl(a.ts, 1, 12))
+
+=== b.ts ===
+
+import './a' assert { type: "json" }
+
+=== c.ts ===
+const b = import('./a', { assert: { type: "json" } });
+>b : Symbol(b, Decl(c.ts, 0, 5))
+>'./a' : Symbol("a", Decl(a.ts, 0, 0))
+>assert : Symbol(assert, Decl(c.ts, 0, 25))
+>type : Symbol(type, Decl(c.ts, 0, 35))
+

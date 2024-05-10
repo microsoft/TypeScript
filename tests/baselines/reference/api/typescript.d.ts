@@ -7020,6 +7020,7 @@ declare namespace ts {
         verbatimModuleSyntax?: boolean;
         esModuleInterop?: boolean;
         useDefineForClassFields?: boolean;
+        disallowAssertKeywords?: boolean;
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
     interface WatchOptions {

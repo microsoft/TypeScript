@@ -1,0 +1,39 @@
+//// [tests/cases/conformance/importAssertion/importAssertion6.ts] ////
+
+=== a.ts ===
+export const a = 1;
+>a : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export const b = 2;
+>b : 2
+>  : ^
+>2 : 2
+>  : ^
+
+=== b.ts ===
+import './a' assert { type: "json" }
+>type : any
+>     : ^^^
+
+=== c.ts ===
+const b = import('./a', { assert: { type: "json" } });
+>b : Promise<typeof import("a")>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import('./a', { assert: { type: "json" } }) : Promise<typeof import("a")>
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'./a' : "./a"
+>      : ^^^^^
+>{ assert: { type: "json" } } : { assert: { type: string; }; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>assert : { type: string; }
+>       : ^^^^^^^^^^^^^^^^^
+>{ type: "json" } : { type: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>type : string
+>     : ^^^^^^
+>"json" : "json"
+>       : ^^^^^^
+

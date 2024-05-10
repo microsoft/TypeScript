@@ -46517,6 +46517,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function checkImportAttributes(declaration: ImportDeclaration | ExportDeclaration | JSDocImportTag) {
         const node = declaration.attributes;
         if (node) {
+            if (compilerOptions.disallowAssertKeywords && node.token === SyntaxKind.AssertKeyword) {
+                grammarErrorOnFirstToken(node, Diagnostics.The_assert_keyword_is_disallowed_Use_the_with_keyword_instead_for_import_attributes);
+            }
+
             const importAttributesType = getGlobalImportAttributesType(/*reportErrors*/ true);
             if (importAttributesType !== emptyObjectType) {
                 checkTypeAssignableTo(getTypeFromImportAttributes(node), getNullableType(importAttributesType, TypeFlags.Undefined), node);
@@ -51194,6 +51198,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (nodeArguments.length > 1) {
                 const importAttributesArgument = nodeArguments[1];
                 return grammarErrorOnNode(importAttributesArgument, Diagnostics.Dynamic_imports_only_support_a_second_argument_when_the_module_option_is_set_to_esnext_node16_or_nodenext);
+            }
+        }
+
+        if (compilerOptions.disallowAssertKeywords && nodeArguments.length > 1) {
+            const importAttributesArgument = nodeArguments[1];
+            if (isObjectLiteralExpression(importAttributesArgument) && importAttributesArgument.properties.length) {
+                const importAttributeName = find(importAttributesArgument.properties, p => !!p.name && isIdentifier(p.name) && idText(p.name) === tokenToString(SyntaxKind.AssertKeyword));
+                if (importAttributeName && importAttributeName.name) {
+                    grammarErrorOnNode(importAttributeName.name, Diagnostics.The_assert_keyword_is_disallowed_Use_the_with_keyword_instead_for_import_attributes);
+                }
             }
         }
 
