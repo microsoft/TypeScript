@@ -141,15 +141,12 @@ import {
     emptyArray,
     Errors,
     FileStats,
-    forEachResolvedProjectReferenceProject,
     LogLevel,
     ModuleImportResult,
     Msg,
     NormalizedPath,
     PackageJsonWatcher,
-    projectContainsInfoDirectly,
     ProjectOptions,
-    ProjectReferenceProjectLoadKind,
     ProjectService,
     ScriptInfo,
     ServerHost,
@@ -2211,7 +2208,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private isDefaultProjectForOpenFiles(): boolean {
         return !!forEachEntry(
             this.projectService.openFiles,
-            (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this,
+            (_projectRootPath, path) => this.projectService.tryGetDefaultProjectForFile(this.projectService.getScriptInfoForPath(path)!) === this,
         );
     }
 
@@ -2388,7 +2385,7 @@ export class InferredProject extends Project {
     }
 
     override removeRoot(info: ScriptInfo) {
-        this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
+        this.projectService.stopWatchingConfigFilesForScriptInfo(info);
         super.removeRoot(info);
         // Delay toggling to isJsInferredProject = false till we actually need it again
         if (!this.isOrphan() && this._isJsInferredProject && info.isJavaScript()) {
@@ -2412,7 +2409,7 @@ export class InferredProject extends Project {
     }
 
     override close() {
-        forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
+        forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForScriptInfo(info));
         super.close();
     }
 
@@ -2763,9 +2760,6 @@ export class ConfiguredProject extends Project {
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;
 
-    /** Ref count to the project when opened from external project */
-    private externalProjectRefCount = 0;
-
     private projectReferences: readonly ProjectReference[] | undefined;
 
     /**
@@ -2873,8 +2867,7 @@ export class ConfiguredProject extends Project {
             case ProgramUpdateLevel.Full:
                 this.openFileWatchTriggered.clear();
                 const reason = Debug.checkDefined(this.pendingUpdateReason);
-                this.pendingUpdateReason = undefined;
-                this.projectService.reloadConfiguredProject(this, reason, /*clearSemanticCache*/ false);
+                this.projectService.reloadConfiguredProject(this, reason);
                 result = true;
                 break;
             default:
@@ -2999,88 +2992,14 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    addExternalProjectReference() {
-        this.externalProjectRefCount++;
-    }
-
-    /** @internal */
-    deleteExternalProjectReference() {
-        this.externalProjectRefCount--;
-    }
-
-    /** @internal */
     isSolution() {
         return this.getRootFilesMap().size === 0 &&
             !this.canConfigFileJsonReportNoInputFiles;
     }
 
-    /**
-     * Find the configured project from the project references in project which contains the info directly
-     *
-     * @internal
-     */
-    getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
-        return forEachResolvedProjectReferenceProject(
-            this,
-            info.path,
-            child =>
-                projectContainsInfoDirectly(child, info) ?
-                    child :
-                    undefined,
-            ProjectReferenceProjectLoadKind.Find,
-        );
-    }
-
-    /**
-     * Returns true if the project is needed by any of the open script info/external project
-     *
-     * @internal
-     */
-    hasOpenRef() {
-        if (!!this.externalProjectRefCount) {
-            return true;
-        }
-
-        // Closed project doesnt have any reference
-        if (this.isClosed()) {
-            return false;
-        }
-
-        const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
-        if (this.deferredClose) return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
-        if (this.projectService.hasPendingProjectUpdate(this)) {
-            // If there is pending update for this project,
-            // we dont know if this project would be needed by any of the open files impacted by this config file
-            // In that case keep the project alive if there are open files impacted by this project
-            return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
-        }
-
-        // If there is no pending update for this project,
-        // We know exact set of open files that get impacted by this configured project as the files in the project
-        // The project is referenced only if open files impacted by this project are present in this project
-        return !!configFileExistenceInfo.openFilesImpactedByConfigFile && forEachEntry(
-                    configFileExistenceInfo.openFilesImpactedByConfigFile,
-                    (_value, infoPath) => {
-                        const info = this.projectService.getScriptInfoForPath(infoPath)!;
-                        return this.containsScriptInfo(info) ||
-                            !!forEachResolvedProjectReferenceProject(
-                                this,
-                                info.path,
-                                child => child.containsScriptInfo(info),
-                                ProjectReferenceProjectLoadKind.Find,
-                            );
-                    },
-                ) || false;
-    }
-
     /** @internal */
     override isOrphan(): boolean {
         return !!this.deferredClose;
-    }
-
-    /** @internal */
-    hasExternalProjectRef() {
-        return !!this.externalProjectRefCount;
     }
 
     getEffectiveTypeRoots() {

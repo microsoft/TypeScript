@@ -177,7 +177,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             session.host.baselineHost("Before request");
             session.logger.info(`request:${ts.server.stringifyIndented(request)}`);
-            session.getProjectService().openExternalProject(request.arguments, /*print*/ true);
+            session.getProjectService().openExternalProject(request.arguments, /*cleanupAfter*/ true);
             session.host.baselineHost("After request");
             baselineTsserverLogs("projects", "external project including config file", session);
         });
