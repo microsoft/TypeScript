@@ -693,6 +693,7 @@ import {
     isPrivateIdentifierPropertyAccessExpression,
     isPropertyAccessEntityNameExpression,
     isPropertyAccessExpression,
+    isPropertyAccessOrQualifiedName,
     isPropertyAccessOrQualifiedNameOrImportTypeNode,
     isPropertyAssignment,
     isPropertyDeclaration,
@@ -1111,6 +1112,18 @@ import * as performance from "./_namespaces/ts.performance.js";
 
 const ambientModuleSymbolRegex = /^".+"$/;
 const anon = "(anonymous)" as __String & string;
+
+const enum ReferenceHint {
+    Unspecified,
+    Identifier,
+    Property,
+    ExportAssignment,
+    Jsx,
+    AsyncFunction,
+    ExportImportEquals,
+    ExportSpecifier,
+    Decorator,
+}
 
 let nextSymbolId = 1;
 let nextNodeId = 1;
@@ -4254,44 +4267,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getSymbolFlags(resolved) & include ? links.typeOnlyDeclaration : undefined;
         }
         return undefined;
-    }
-
-    function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
-        if (!canCollectSymbolAliasAccessabilityData) {
-            return;
-        }
-        const symbol = getSymbolOfDeclaration(node);
-        const target = resolveAlias(symbol);
-        if (target) {
-            const markAlias = target === unknownSymbol ||
-                ((getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
-
-            if (markAlias) {
-                markAliasSymbolAsReferenced(symbol);
-            }
-        }
-    }
-
-    // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
-    // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
-    // the alias as an expression (which recursively takes us back here if the target references another alias).
-    function markAliasSymbolAsReferenced(symbol: Symbol) {
-        Debug.assert(canCollectSymbolAliasAccessabilityData);
-        const links = getSymbolLinks(symbol);
-        if (!links.referenced) {
-            links.referenced = true;
-            const node = getDeclarationOfAliasSymbol(symbol);
-            if (!node) return Debug.fail();
-            // We defer checking of the reference of an `import =` until the import itself is referenced,
-            // This way a chain of imports can be elided if ultimately the final input is only used in a type
-            // position.
-            if (isInternalModuleImportEqualsDeclaration(node)) {
-                if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
-                    // import foo = <symbol>
-                    checkExpressionCached(node.moduleReference as Expression);
-                }
-            }
-        }
     }
 
     // This function is only for imports with entity names
@@ -29181,6 +29156,285 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         });
     }
 
+    /**
+     * This function marks all the imports the given location refers to as `.referenced` in `NodeLinks` (transitively through local import aliases).
+     * (This corresponds to not getting elided in JS emit.)
+     * It can be called on *most* nodes in the AST with `ReferenceHint.Unspecified` and will filter its inputs, but care should be taken to avoid calling it on the RHS of an `import =` or specifiers in a `import {} from "..."`,
+     * unless you *really* want to *definitely* mark those as referenced.
+     * These shouldn't be directly marked, and should only get marked transitively by the internals of this function.
+     *
+     * @param location The location to mark js import refernces for
+     * @param hint The kind of reference `location` has already been checked to be
+     * @param propSymbol The optional symbol of the property we're looking up - this is used for property accesses when `const enum`s do not count as references (no `isolatedModules`, no `preserveConstEnums` + export). It will be calculated if not provided.
+     * @param parentType The optional type of the parent of the LHS of the property access - this will be recalculated if not provided (but is costly).
+     */
+    function markLinkedReferences(location: PropertyAccessExpression | QualifiedName, hint: ReferenceHint.Property, propSymbol: Symbol | undefined, parentType: Type): void;
+    function markLinkedReferences(location: Identifier, hint: ReferenceHint.Identifier): void;
+    function markLinkedReferences(location: ExportAssignment, hint: ReferenceHint.ExportAssignment): void;
+    function markLinkedReferences(location: JsxOpeningLikeElement | JsxOpeningFragment, hint: ReferenceHint.Jsx): void;
+    function markLinkedReferences(location: FunctionLikeDeclaration | MethodSignature, hint: ReferenceHint.AsyncFunction): void;
+    function markLinkedReferences(location: ImportEqualsDeclaration, hint: ReferenceHint.ExportImportEquals): void;
+    function markLinkedReferences(location: ExportSpecifier, hint: ReferenceHint.ExportSpecifier): void;
+    function markLinkedReferences(location: HasDecorators, hint: ReferenceHint.Decorator): void;
+    function markLinkedReferences(location: Node, hint: ReferenceHint.Unspecified, propSymbol?: Symbol, parentType?: Type): void;
+    function markLinkedReferences(location: Node, hint: ReferenceHint, propSymbol?: Symbol, parentType?: Type) {
+        if (!canCollectSymbolAliasAccessabilityData) {
+            return;
+        }
+        if (location.flags & NodeFlags.Ambient) {
+            return; // References within types and declaration files are never going to contribute to retaining a JS import
+        }
+        switch (hint) {
+            case ReferenceHint.Identifier:
+                return markIdentifierAliasReferenced(location as Identifier);
+            case ReferenceHint.Property:
+                return markPropertyAliasReferenced(location as PropertyAccessExpression | QualifiedName, propSymbol, parentType);
+            case ReferenceHint.ExportAssignment:
+                return markExportAssignmentAliasReferenced(location as ExportAssignment);
+            case ReferenceHint.Jsx:
+                return markJsxAliasReferenced(location as JsxOpeningLikeElement | JsxOpeningFragment);
+            case ReferenceHint.AsyncFunction:
+                return markAsyncFunctionAliasReferenced(location as FunctionLikeDeclaration | MethodSignature);
+            case ReferenceHint.ExportImportEquals:
+                return markImportEqualsAliasReferenced(location as ImportEqualsDeclaration);
+            case ReferenceHint.ExportSpecifier:
+                return markExportSpecifierAliasReferenced(location as ExportSpecifier);
+            case ReferenceHint.Decorator:
+                return markDecoratorAliasReferenced(location as HasDecorators);
+            case ReferenceHint.Unspecified: {
+                // Identifiers in expression contexts are emitted, so we need to follow their referenced aliases and mark them as used
+                // Some non-expression identifiers are also treated as expression identifiers for this purpose, eg, `a` in `b = {a}` or `q` in `import r = q`
+                // This is the exception, rather than the rule - most non-expression identifiers are declaration names.
+                if (isIdentifier(location) && (isExpressionNode(location) || isShorthandPropertyAssignment(location.parent) || (isImportEqualsDeclaration(location.parent) && location.parent.moduleReference === location)) && shouldMarkIdentifierAliasReferenced(location)) {
+                    if (isPropertyAccessOrQualifiedName(location.parent)) {
+                        const left = isPropertyAccessExpression(location.parent) ? location.parent.expression : location.parent.left;
+                        if (left !== location) return; // Only mark the LHS (the RHS is a property lookup)
+                    }
+                    markIdentifierAliasReferenced(location);
+                    return;
+                }
+                if (isPropertyAccessOrQualifiedName(location)) {
+                    let topProp: Node | undefined = location;
+                    while (isPropertyAccessOrQualifiedName(topProp)) {
+                        if (isPartOfTypeNode(topProp)) return;
+                        topProp = topProp.parent;
+                    }
+                    return markPropertyAliasReferenced(location);
+                }
+                if (isExportAssignment(location)) {
+                    return markExportAssignmentAliasReferenced(location);
+                }
+                if (isJsxOpeningLikeElement(location) || isJsxOpeningFragment(location)) {
+                    return markJsxAliasReferenced(location);
+                }
+                if (isFunctionLikeDeclaration(location) || isMethodSignature(location)) {
+                    return markAsyncFunctionAliasReferenced(location);
+                }
+                if (isImportEqualsDeclaration(location)) {
+                    if (isInternalModuleImportEqualsDeclaration(location) || checkExternalImportOrExportDeclaration(location)) {
+                        return markImportEqualsAliasReferenced(location);
+                    }
+                    return;
+                }
+                if (isExportSpecifier(location)) {
+                    return markExportSpecifierAliasReferenced(location);
+                }
+                if (!compilerOptions.emitDecoratorMetadata) {
+                    return;
+                }
+                if (!canHaveDecorators(location) || !hasDecorators(location) || !location.modifiers || !nodeCanBeDecorated(legacyDecorators, location, location.parent, location.parent.parent)) {
+                    return;
+                }
+
+                return markDecoratorAliasReferenced(location);
+            }
+            default:
+                Debug.assertNever(hint, `Unhandled reference hint: ${hint}`);
+        }
+    }
+
+    function markIdentifierAliasReferenced(location: Identifier) {
+        const symbol = getResolvedSymbol(location);
+        if (symbol && symbol !== argumentsSymbol && symbol !== unknownSymbol && !isThisInTypeQuery(location)) {
+            markAliasReferenced(symbol, location);
+        }
+    }
+
+    function markPropertyAliasReferenced(location: PropertyAccessExpression | QualifiedName, propSymbol?: Symbol, parentType?: Type) {
+        const left = isPropertyAccessExpression(location) ? location.expression : location.left;
+        if (isThisIdentifier(left) || !isIdentifier(left)) {
+            return;
+        }
+        const parentSymbol = getResolvedSymbol(left);
+        if (!parentSymbol || parentSymbol === unknownSymbol) {
+            return;
+        }
+        // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
+        // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
+        // here even if `Foo` is not a const enum.
+        //
+        // The exceptions are:
+        //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
+        //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
+        //
+        // The property lookup is deferred as much as possible, in as many situations as possible, to avoid alias marking
+        // pulling on types/symbols it doesn't strictly need to.
+        if (getIsolatedModules(compilerOptions) || (shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(location))) {
+            markAliasReferenced(parentSymbol, location);
+            return;
+        }
+        // Hereafter, this relies on type checking - but every check prior to this only used symbol information
+        const leftType = parentType || checkExpressionCached(left);
+        if (isTypeAny(leftType) || leftType === silentNeverType) {
+            markAliasReferenced(parentSymbol, location);
+            return;
+        }
+        let prop = propSymbol;
+        if (!prop && !parentType) {
+            const right = isPropertyAccessExpression(location) ? location.name : location.right;
+            const lexicallyScopedSymbol = isPrivateIdentifier(right) && lookupSymbolForPrivateIdentifierDeclaration(right.escapedText, right);
+            const assignmentKind = getAssignmentTargetKind(location);
+            const apparentType = getApparentType(assignmentKind !== AssignmentKind.None || isMethodAccessForCall(location) ? getWidenedType(leftType) : leftType);
+            prop = isPrivateIdentifier(right) ? lexicallyScopedSymbol && getPrivateIdentifierPropertyOfType(apparentType, lexicallyScopedSymbol) || undefined : getPropertyOfType(apparentType, right.escapedText);
+        }
+        if (
+            !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && location.parent.kind === SyntaxKind.EnumMember))
+        ) {
+            markAliasReferenced(parentSymbol, location);
+        }
+        return;
+    }
+
+    function markExportAssignmentAliasReferenced(location: ExportAssignment) {
+        if (isIdentifier(location.expression)) {
+            const id = location.expression;
+            const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, location));
+            if (sym) {
+                markAliasReferenced(sym, id);
+            }
+        }
+    }
+
+    function markJsxAliasReferenced(node: JsxOpeningLikeElement | JsxOpeningFragment) {
+        if (!getJsxNamespaceContainerForImplicitImport(node)) {
+            // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
+            // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
+            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const jsxFactoryNamespace = getJsxNamespace(node);
+            const jsxFactoryLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
+
+            // allow null as jsxFragmentFactory
+            let jsxFactorySym: Symbol | undefined;
+            if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
+                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
+            }
+
+            if (jsxFactorySym) {
+                // Mark local symbol as referenced here because it might not have been marked
+                // if jsx emit was not jsxFactory as there wont be error being emitted
+                jsxFactorySym.isReferenced = SymbolFlags.All;
+
+                // If react/jsxFactory symbol is alias, mark it as refereced
+                if (canCollectSymbolAliasAccessabilityData && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
+                    markAliasSymbolAsReferenced(jsxFactorySym);
+                }
+            }
+
+            // For JsxFragment, mark jsx pragma as referenced via resolveName
+            if (isJsxOpeningFragment(node)) {
+                const file = getSourceFileOfNode(node);
+                const localJsxNamespace = getLocalJsxNamespace(file);
+                if (localJsxNamespace) {
+                    resolveName(jsxFactoryLocation, localJsxNamespace, SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
+                }
+            }
+        }
+        return;
+    }
+
+    function markAsyncFunctionAliasReferenced(location: FunctionLikeDeclaration | MethodSignature) {
+        if (languageVersion < ScriptTarget.ES2015) {
+            if (getFunctionFlags(location) & FunctionFlags.Async) {
+                const returnTypeNode = getEffectiveReturnTypeNode(location);
+                markTypeNodeAsReferenced(returnTypeNode);
+            }
+        }
+    }
+
+    function markImportEqualsAliasReferenced(location: ImportEqualsDeclaration) {
+        if (hasSyntacticModifier(location, ModifierFlags.Export)) {
+            markExportAsReferenced(location);
+        }
+    }
+
+    function markExportSpecifierAliasReferenced(location: ExportSpecifier) {
+        if (!location.parent.parent.moduleSpecifier && !location.isTypeOnly && !location.parent.parent.isTypeOnly) {
+            const exportedName = location.propertyName || location.name;
+            const symbol = resolveName(exportedName, exportedName.escapedText, SymbolFlags.Value | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+            if (symbol && (symbol === undefinedSymbol || symbol === globalThisSymbol || symbol.declarations && isGlobalSourceFile(getDeclarationContainer(symbol.declarations[0])))) {
+                // Do nothing, non-local symbol
+            }
+            else {
+                const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                if (!target || getSymbolFlags(target) & SymbolFlags.Value) {
+                    markExportAsReferenced(location); // marks export as used
+                    markIdentifierAliasReferenced(location.propertyName || location.name); // marks target of export as used
+                }
+            }
+            return;
+        }
+    }
+
+    function markDecoratorAliasReferenced(node: HasDecorators) {
+        if (compilerOptions.emitDecoratorMetadata) {
+            const firstDecorator = find(node.modifiers, isDecorator);
+            if (!firstDecorator) {
+                return;
+            }
+
+            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
+
+            // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
+            switch (node.kind) {
+                case SyntaxKind.ClassDeclaration:
+                    const constructor = getFirstConstructorWithBody(node);
+                    if (constructor) {
+                        for (const parameter of constructor.parameters) {
+                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                        }
+                    }
+                    break;
+
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
+                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfDeclaration(node), otherKind);
+                    markDecoratorMedataDataTypeNodeAsReferenced(getAnnotatedAccessorTypeNode(node) || otherAccessor && getAnnotatedAccessorTypeNode(otherAccessor));
+                    break;
+                case SyntaxKind.MethodDeclaration:
+                    for (const parameter of node.parameters) {
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                    }
+
+                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(node));
+                    break;
+
+                case SyntaxKind.PropertyDeclaration:
+                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(node));
+                    break;
+
+                case SyntaxKind.Parameter:
+                    markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(node));
+                    const containingSignature = node.parent;
+                    for (const parameter of containingSignature.parameters) {
+                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
+                    }
+                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(containingSignature));
+                    break;
+            }
+        }
+    }
+
     function markAliasReferenced(symbol: Symbol, location: Node) {
         if (!canCollectSymbolAliasAccessabilityData) {
             return;
@@ -29199,6 +29453,95 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     markAliasSymbolAsReferenced(symbol);
                 }
             }
+        }
+    }
+
+    // When an alias symbol is referenced, we need to mark the entity it references as referenced and in turn repeat that until
+    // we reach a non-alias or an exported entity (which is always considered referenced). We do this by checking the target of
+    // the alias as an expression (which recursively takes us back here if the target references another alias).
+    function markAliasSymbolAsReferenced(symbol: Symbol) {
+        Debug.assert(canCollectSymbolAliasAccessabilityData);
+        const links = getSymbolLinks(symbol);
+        if (!links.referenced) {
+            links.referenced = true;
+            const node = getDeclarationOfAliasSymbol(symbol);
+            if (!node) return Debug.fail();
+            // We defer checking of the reference of an `import =` until the import itself is referenced,
+            // This way a chain of imports can be elided if ultimately the final input is only used in a type
+            // position.
+            if (isInternalModuleImportEqualsDeclaration(node)) {
+                if (getSymbolFlags(resolveSymbol(symbol)) & SymbolFlags.Value) {
+                    // import foo = <symbol>
+                    const left = getFirstIdentifier(node.moduleReference as EntityNameExpression);
+                    markIdentifierAliasReferenced(left);
+                }
+            }
+        }
+    }
+
+    function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
+        const symbol = getSymbolOfDeclaration(node);
+        const target = resolveAlias(symbol);
+        if (target) {
+            const markAlias = target === unknownSymbol ||
+                ((getSymbolFlags(symbol, /*excludeTypeOnlyMeanings*/ true) & SymbolFlags.Value) && !isConstEnumOrConstEnumOnlyModule(target));
+
+            if (markAlias) {
+                markAliasSymbolAsReferenced(symbol);
+            }
+        }
+    }
+
+    function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined, forDecoratorMetadata: boolean) {
+        if (!typeName) return;
+
+        const rootName = getFirstIdentifier(typeName);
+        const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
+        const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
+        if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
+            if (
+                canCollectSymbolAliasAccessabilityData
+                && symbolIsValue(rootSymbol)
+                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
+                && !getTypeOnlyAliasDeclaration(rootSymbol)
+            ) {
+                markAliasSymbolAsReferenced(rootSymbol);
+            }
+            else if (
+                forDecoratorMetadata
+                && getIsolatedModules(compilerOptions)
+                && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
+                && !symbolIsValue(rootSymbol)
+                && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)
+            ) {
+                const diag = error(typeName, Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled);
+                const aliasDeclaration = find(rootSymbol.declarations || emptyArray, isAliasSymbolDeclaration);
+                if (aliasDeclaration) {
+                    addRelatedInfo(diag, createDiagnosticForNode(aliasDeclaration, Diagnostics._0_was_imported_here, idText(rootName)));
+                }
+            }
+        }
+    }
+
+    /**
+     * If a TypeNode can be resolved to a value symbol imported from an external module, it is
+     * marked as referenced to prevent import elision.
+     */
+    function markTypeNodeAsReferenced(node: TypeNode | undefined) {
+        markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
+    }
+
+    /**
+     * This function marks the type used for metadata decorator as referenced if it is import
+     * from external module.
+     * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
+     * union and intersection type
+     * @param node
+     */
+    function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
+        const entityName = getEntityNameForDecoratorMetadata(node);
+        if (entityName && isEntityName(entityName)) {
+            markEntityNameOrEntityExpressionAsReference(entityName, /*forDecoratorMetadata*/ true);
         }
     }
 
@@ -29336,7 +29679,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         if (shouldMarkIdentifierAliasReferenced(node)) {
-            markAliasReferenced(symbol, node);
+            markLinkedReferences(node, ReferenceHint.Identifier);
         }
 
         const localOrExportSymbol = getExportSymbolOfValueSymbolIfExported(symbol);
@@ -32471,39 +32814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         checkJsxPreconditions(node);
 
-        if (!getJsxNamespaceContainerForImplicitImport(node)) {
-            // The reactNamespace/jsxFactory's root symbol should be marked as 'used' so we don't incorrectly elide its import.
-            // And if there is no reactNamespace/jsxFactory's symbol in scope when targeting React emit, we should issue an error.
-            const jsxFactoryRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
-            const jsxFactoryNamespace = getJsxNamespace(node);
-            const jsxFactoryLocation = isNodeOpeningLikeElement ? node.tagName : node;
-
-            // allow null as jsxFragmentFactory
-            let jsxFactorySym: Symbol | undefined;
-            if (!(isJsxOpeningFragment(node) && jsxFactoryNamespace === "null")) {
-                jsxFactorySym = resolveName(jsxFactoryLocation, jsxFactoryNamespace, SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
-            }
-
-            if (jsxFactorySym) {
-                // Mark local symbol as referenced here because it might not have been marked
-                // if jsx emit was not jsxFactory as there wont be error being emitted
-                jsxFactorySym.isReferenced = SymbolFlags.All;
-
-                // If react/jsxFactory symbol is alias, mark it as refereced
-                if (canCollectSymbolAliasAccessabilityData && jsxFactorySym.flags & SymbolFlags.Alias && !getTypeOnlyAliasDeclaration(jsxFactorySym)) {
-                    markAliasSymbolAsReferenced(jsxFactorySym);
-                }
-            }
-
-            // For JsxFragment, mark jsx pragma as referenced via resolveName
-            if (isJsxOpeningFragment(node)) {
-                const file = getSourceFileOfNode(node);
-                const localJsxNamespace = getLocalJsxNamespace(file);
-                if (localJsxNamespace) {
-                    resolveName(jsxFactoryLocation, localJsxNamespace, SymbolFlags.Value, jsxFactoryRefErr, /*isUse*/ true);
-                }
-            }
-        }
+        markLinkedReferences(node, ReferenceHint.Jsx);
 
         if (isNodeOpeningLikeElement) {
             const jsxOpeningLikeNode = node;
@@ -33080,28 +33391,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         else {
             if (isAnyLike) {
                 if (isIdentifier(left) && parentSymbol) {
-                    markAliasReferenced(parentSymbol, node);
+                    markLinkedReferences(node, ReferenceHint.Property, /*propSymbol*/ undefined, leftType);
                 }
                 return isErrorType(apparentType) ? errorType : apparentType;
             }
             prop = getPropertyOfType(apparentType, right.escapedText, /*skipObjectFunctionPropertyAugment*/ isConstEnumObjectType(apparentType), /*includeTypeOnlyMembers*/ node.kind === SyntaxKind.QualifiedName);
         }
-        // In `Foo.Bar.Baz`, 'Foo' is not referenced if 'Bar' is a const enum or a module containing only const enums.
-        // `Foo` is also not referenced in `enum FooCopy { Bar = Foo.Bar }`, because the enum member value gets inlined
-        // here even if `Foo` is not a const enum.
-        //
-        // The exceptions are:
-        //   1. if 'isolatedModules' is enabled, because the const enum value will not be inlined, and
-        //   2. if 'preserveConstEnums' is enabled and the expression is itself an export, e.g. `export = Foo.Bar.Baz`.
-        if (
-            isIdentifier(left) && parentSymbol && (
-                getIsolatedModules(compilerOptions) ||
-                !(prop && (isConstEnumOrConstEnumOnlyModule(prop) || prop.flags & SymbolFlags.EnumMember && node.parent.kind === SyntaxKind.EnumMember)) ||
-                shouldPreserveConstEnums(compilerOptions) && isExportOrExportExpression(node)
-            )
-        ) {
-            markAliasReferenced(parentSymbol, node);
-        }
+        markLinkedReferences(node, ReferenceHint.Property, prop, leftType);
 
         let propType: Type;
         if (!prop) {
@@ -41645,8 +41941,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
         else {
             // Always mark the type node as referenced if it points to a value
-            markTypeNodeAsReferenced(returnTypeNode);
-
+            markLinkedReferences(node, ReferenceHint.AsyncFunction);
             if (isErrorType(returnType)) {
                 return;
             }
@@ -41865,59 +42160,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return createFunctionType(/*typeParameters*/ undefined, /*thisParameter*/ undefined, [valueParam], voidType);
     }
 
-    /**
-     * If a TypeNode can be resolved to a value symbol imported from an external module, it is
-     * marked as referenced to prevent import elision.
-     */
-    function markTypeNodeAsReferenced(node: TypeNode) {
-        markEntityNameOrEntityExpressionAsReference(node && getEntityNameFromTypeNode(node), /*forDecoratorMetadata*/ false);
-    }
-
-    function markEntityNameOrEntityExpressionAsReference(typeName: EntityNameOrEntityNameExpression | undefined, forDecoratorMetadata: boolean) {
-        if (!typeName) return;
-
-        const rootName = getFirstIdentifier(typeName);
-        const meaning = (typeName.kind === SyntaxKind.Identifier ? SymbolFlags.Type : SymbolFlags.Namespace) | SymbolFlags.Alias;
-        const rootSymbol = resolveName(rootName, rootName.escapedText, meaning, /*nameNotFoundMessage*/ undefined, /*isUse*/ true);
-        if (rootSymbol && rootSymbol.flags & SymbolFlags.Alias) {
-            if (
-                canCollectSymbolAliasAccessabilityData
-                && symbolIsValue(rootSymbol)
-                && !isConstEnumOrConstEnumOnlyModule(resolveAlias(rootSymbol))
-                && !getTypeOnlyAliasDeclaration(rootSymbol)
-            ) {
-                markAliasSymbolAsReferenced(rootSymbol);
-            }
-            else if (
-                forDecoratorMetadata
-                && getIsolatedModules(compilerOptions)
-                && getEmitModuleKind(compilerOptions) >= ModuleKind.ES2015
-                && !symbolIsValue(rootSymbol)
-                && !some(rootSymbol.declarations, isTypeOnlyImportOrExportDeclaration)
-            ) {
-                const diag = error(typeName, Diagnostics.A_type_referenced_in_a_decorated_signature_must_be_imported_with_import_type_or_a_namespace_import_when_isolatedModules_and_emitDecoratorMetadata_are_enabled);
-                const aliasDeclaration = find(rootSymbol.declarations || emptyArray, isAliasSymbolDeclaration);
-                if (aliasDeclaration) {
-                    addRelatedInfo(diag, createDiagnosticForNode(aliasDeclaration, Diagnostics._0_was_imported_here, idText(rootName)));
-                }
-            }
-        }
-    }
-
-    /**
-     * This function marks the type used for metadata decorator as referenced if it is import
-     * from external module.
-     * This is different from markTypeNodeAsReferenced because it tries to simplify type nodes in
-     * union and intersection type
-     * @param node
-     */
-    function markDecoratorMedataDataTypeNodeAsReferenced(node: TypeNode | undefined): void {
-        const entityName = getEntityNameForDecoratorMetadata(node);
-        if (entityName && isEntityName(entityName)) {
-            markEntityNameOrEntityExpressionAsReference(entityName, /*forDecoratorMetadata*/ true);
-        }
-    }
-
     function getEntityNameForDecoratorMetadata(node: TypeNode | undefined): EntityName | undefined {
         if (node) {
             switch (node.kind) {
@@ -42025,48 +42267,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
-        if (compilerOptions.emitDecoratorMetadata) {
-            checkExternalEmitHelpers(firstDecorator, ExternalEmitHelpers.Metadata);
-
-            // we only need to perform these checks if we are emitting serialized type metadata for the target of a decorator.
-            switch (node.kind) {
-                case SyntaxKind.ClassDeclaration:
-                    const constructor = getFirstConstructorWithBody(node);
-                    if (constructor) {
-                        for (const parameter of constructor.parameters) {
-                            markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
-                        }
-                    }
-                    break;
-
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    const otherKind = node.kind === SyntaxKind.GetAccessor ? SyntaxKind.SetAccessor : SyntaxKind.GetAccessor;
-                    const otherAccessor = getDeclarationOfKind<AccessorDeclaration>(getSymbolOfDeclaration(node), otherKind);
-                    markDecoratorMedataDataTypeNodeAsReferenced(getAnnotatedAccessorTypeNode(node) || otherAccessor && getAnnotatedAccessorTypeNode(otherAccessor));
-                    break;
-                case SyntaxKind.MethodDeclaration:
-                    for (const parameter of node.parameters) {
-                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
-                    }
-
-                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(node));
-                    break;
-
-                case SyntaxKind.PropertyDeclaration:
-                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveTypeAnnotationNode(node));
-                    break;
-
-                case SyntaxKind.Parameter:
-                    markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(node));
-                    const containingSignature = node.parent;
-                    for (const parameter of containingSignature.parameters) {
-                        markDecoratorMedataDataTypeNodeAsReferenced(getParameterTypeNodeForDecoratorCheck(parameter));
-                    }
-                    markDecoratorMedataDataTypeNodeAsReferenced(getEffectiveReturnTypeNode(containingSignature));
-                    break;
-            }
-        }
+        markLinkedReferences(node, ReferenceHint.Decorator);
 
         for (const modifier of node.modifiers) {
             if (isDecorator(modifier)) {
@@ -46398,9 +46599,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkGrammarModifiers(node);
         if (isInternalModuleImportEqualsDeclaration(node) || checkExternalImportOrExportDeclaration(node)) {
             checkImportBinding(node);
-            if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                markExportAsReferenced(node);
-            }
+            markLinkedReferences(node, ReferenceHint.ExportImportEquals);
             if (node.moduleReference.kind !== SyntaxKind.ExternalModuleReference) {
                 const target = resolveAlias(getSymbolOfDeclaration(node));
                 if (target !== unknownSymbol) {
@@ -46509,13 +46708,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 error(exportedName, Diagnostics.Cannot_export_0_Only_local_declarations_can_be_exported_from_a_module, idText(exportedName));
             }
             else {
-                if (!node.isTypeOnly && !node.parent.parent.isTypeOnly) {
-                    markExportAsReferenced(node);
-                }
-                const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
-                if (!target || getSymbolFlags(target) & SymbolFlags.Value) {
-                    checkExpressionCached(node.propertyName || node.name);
-                }
+                markLinkedReferences(node, ReferenceHint.ExportSpecifier);
             }
         }
         else {
@@ -46568,8 +46761,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const id = node.expression as Identifier;
             const sym = getExportSymbolOfValueSymbolIfExported(resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node));
             if (sym) {
+                markLinkedReferences(node, ReferenceHint.ExportAssignment);
                 const typeOnlyDeclaration = getTypeOnlyAliasDeclaration(sym, SymbolFlags.Value);
-                markAliasReferenced(sym, id);
                 // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
                 if (getSymbolFlags(sym) & SymbolFlags.Value) {
                     // However if it is a value, we need to check it's being used correctly
