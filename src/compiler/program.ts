@@ -3129,6 +3129,37 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
                 // Otherwise break to visit each child
 
                 switch (parent.kind) {
+                    // BUILDLESS: <added>
+                    case SyntaxKind.AsExpression:
+                        if ((parent as AsExpression).type === node) {
+                            // Move scanner just before "as"
+                            tsCommentScanner.scanTo((parent as AsExpression).expression.end);
+                            // Scan "as" and the type node that follows
+                            if (scanLeavesCheckingIfInTsComment(node, IsTSSyntax.yesAndSoIsEarlierUnscannedContent)) return "skip";
+                            diagnostics.push(createDiagnosticForNode((parent as AsExpression).type, Diagnostics.Type_assertion_expressions_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        break;
+                    case SyntaxKind.SatisfiesExpression:
+                        if ((parent as SatisfiesExpression).type === node) {
+                            // Move scanner just before "satisfies"
+                            tsCommentScanner.scanTo((parent as SatisfiesExpression).expression.end);
+                            // Scan "satisfies" and the type node that follows
+                            if (scanLeavesCheckingIfInTsComment(node, IsTSSyntax.yesAndSoIsEarlierUnscannedContent)) return "skip";
+                            diagnostics.push(createDiagnosticForNode((parent as SatisfiesExpression).type, Diagnostics.Type_satisfaction_expressions_can_only_be_used_in_TypeScript_files));
+                            return "skip";
+                        }
+                        break;
+                    case SyntaxKind.ImportDeclaration:
+                        if ((parent as ImportDeclaration).importClause === node) {
+                            if ((node as ImportClause).isTypeOnly) {
+                                if (scanLeavesCheckingIfInTsComment(parent)) return "skip"; // BUILDLESS: added
+                                diagnostics.push(createDiagnosticForNode(parent, Diagnostics._0_declarations_can_only_be_used_in_TypeScript_files, "import type"));
+                                return "skip";
+                            }
+                        }
+                        break;
+                    // BUILDLESS: </added>
                     case SyntaxKind.Parameter:
                     case SyntaxKind.PropertyDeclaration:
                     case SyntaxKind.MethodDeclaration:
