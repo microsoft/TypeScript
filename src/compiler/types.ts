@@ -9933,6 +9933,28 @@ export const enum ListFormat {
     JSDocComment = MultiLine | AsteriskDelimited,
 }
 
+// BUILDLESS: <added>
+
+export const enum BlockCommentDelimiterType {
+    openNonTsComment, // A `/*` not followed by colons
+    openTsCommentWithoutColons, // Just the `/*` part of `/*:` or `/*::`.
+    singleColonForOpenTsComment, // Just the `:` part of `/*:`
+    doubleColonForOpenTsComment, // Just the `::` part of `/*::`
+    close, // Any `*/`, even if it pertains to a non-TS comment.
+}
+
+// Used to record the position of interesting comment-related information.
+// When an openTSCommentWithoutColons is recorded, it will be followed by
+// either a singleColonForOpenTSComment or doubleColonForOpenTSComment.
+export type BlockCommentDelimiterPositions = Map<number, BlockCommentDelimiterType>
+
+export const enum TsCommentScannerState {
+    notInComment,
+    inBlockComment,
+    inTSBlockComment,
+}
+// BUILDLESS: </added>
+
 /** @internal */
 export const enum PragmaKindFlags {
     None = 0,
