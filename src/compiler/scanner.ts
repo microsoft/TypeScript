@@ -959,16 +959,6 @@ function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, 
             case CharacterCodes.space:
                 pos++;
                 continue;
-            // BUILDLESS: <added>
-            case CharacterCodes.asterisk:
-                if (text.charCodeAt(pos + 1) === CharacterCodes.slash) {
-                    pos += 2;
-                    continue;
-                }
-                else {
-                    break scan;
-                }
-            // BUILDLESS: </added>
             case CharacterCodes.slash:
                 const nextChar = text.charCodeAt(pos + 1);
                 let hasTrailingNewLine = false;
