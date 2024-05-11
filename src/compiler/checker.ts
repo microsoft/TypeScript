@@ -39560,11 +39560,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             texts.push(span.literal.text);
             types.push(isTypeAssignableTo(type, templateConstraintType) ? type : stringType);
         }
+        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluate(node).value;
+        if (evaluated) {
+            return getFreshTypeOfLiteralType(getStringLiteralType(evaluated));
+        }
         if (isConstContext(node) || isTemplateLiteralContext(node) || someType(getContextualType(node, /*contextFlags*/ undefined) || unknownType, isTemplateLiteralContextualType)) {
             return getTemplateLiteralType(texts, types);
         }
-        const evaluated = node.parent.kind !== SyntaxKind.TaggedTemplateExpression && evaluate(node).value;
-        return evaluated ? getFreshTypeOfLiteralType(getStringLiteralType(evaluated)) : stringType;
+        return stringType;
     }
 
     function isTemplateLiteralContextualType(type: Type): boolean {
