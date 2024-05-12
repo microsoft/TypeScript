@@ -336,8 +336,8 @@ class Test {
 >        : ^^^^^^^^^^^^^^^^^^
     }
     f1(x: string | undefined) {
->f1 : (x: string | undefined) => asserts x is string
->   : ^ ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
+>f1 : (x: string | undefined) => void
+>   : ^ ^^                  ^^^^^^^^^
 >x : string | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 

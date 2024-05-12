@@ -656,8 +656,8 @@ class Test {
 >     : ^^^^
     }
     foo(x: unknown) {
->foo : (x: unknown) => asserts x is string
->    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 
@@ -767,8 +767,8 @@ class Derived extends Test {
 >     : ^^^^
 
     foo(x: unknown) {
->foo : (x: unknown) => asserts x is string
->    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>foo : (x: unknown) => void
+>    : ^ ^^       ^^^^^^^^^
 >x : unknown
 >  : ^^^^^^^
 

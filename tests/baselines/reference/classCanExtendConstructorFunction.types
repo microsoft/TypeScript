@@ -170,8 +170,8 @@ class Sql extends Wagon {
      * This is not assignable, so should have a type error
      */
     load(files, format) {
->load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => asserts format is "csv" | "json"
->     : ^     ^^             ^^      ^^                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>load : (files: Array<string>, format: "csv" | "json" | "xmlolololol") => void
+>     : ^     ^^             ^^      ^^                              ^^^^^^^^^
 >files : string[]
 >      : ^^^^^^^^
 >format : "csv" | "json" | "xmlolololol"

@@ -409,14 +409,14 @@ declare class Test {
     assertIsTest2(): asserts this is Test2;
     assertThis(): asserts this;
     bar(): void;
-    foo(x: unknown): asserts x is string;
+    foo(x: unknown): void;
     baz(x: number): void;
 }
 declare class Test2 extends Test {
     z: number;
 }
 declare class Derived extends Test {
-    foo(x: unknown): asserts x is string;
+    foo(x: unknown): void;
     baz(x: number): void;
 }
 declare function f11(items: Test[]): void;
