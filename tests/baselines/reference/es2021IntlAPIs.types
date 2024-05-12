@@ -192,16 +192,16 @@ new Intl.DisplayNames('en', { type: 'currency', fallback: 'none' }).of('EUR');
 Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' });
 >Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'best fit' }) : string[]
 >                                                                            : ^^^^^^^^
->Intl.DisplayNames.supportedLocalesOf : (locales?: LocalesArgument, options?: SupportedLocalesOptions) => string[]
->                                     : ^       ^^^               ^^       ^^^                       ^^^^^^^^^^^^^
+>Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: LocalesArgument, options?: SupportedLocalesOptions) => string[]
->                   : ^       ^^^               ^^       ^^^                       ^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 >{ localeMatcher: 'best fit' } : { localeMatcher: "best fit"; }
@@ -362,16 +362,16 @@ new Intl.ListFormat('en').formatToParts(new Set<string>().values())[0];
 Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' });
 >Intl.DisplayNames.supportedLocalesOf(locale, { localeMatcher: 'lookup' }) : string[]
 >                                                                          : ^^^^^^^^
->Intl.DisplayNames.supportedLocalesOf : (locales?: LocalesArgument, options?: SupportedLocalesOptions) => string[]
->                                     : ^       ^^^               ^^       ^^^                       ^^^^^^^^^^^^^
+>Intl.DisplayNames.supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                                     : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.DisplayNames : Intl.DisplayNamesConstructor
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >DisplayNames : Intl.DisplayNamesConstructor
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: LocalesArgument, options?: SupportedLocalesOptions) => string[]
->                   : ^       ^^^               ^^       ^^^                       ^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: Intl.LocalesArgument, options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 >{ localeMatcher: 'lookup' } : { localeMatcher: "lookup"; }

@@ -4687,7 +4687,7 @@ module Harness {
 
         export function makeDefaultCompilerForTest(c?: TypeScript.TypeScriptCompiler) {
 >makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
->                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^^                             ^^^^^^^^
 >c : TypeScript.TypeScriptCompiler
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -6448,11 +6448,11 @@ module Harness {
 >this.getTypeInfoName(tyInfo.ast) : string
 >                                 : ^^^^^^
 >this.getTypeInfoName : (ast: TypeScript.AST) => string
->                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^              ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getTypeInfoName : (ast: TypeScript.AST) => string
->                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^              ^^^^^^^^^^^
 >tyInfo.ast : any
 >           : ^^^
 >tyInfo : any
@@ -6602,11 +6602,11 @@ module Harness {
 >this.getTypeInfoName(tyInfo.ast) : string
 >                                 : ^^^^^^
 >this.getTypeInfoName : (ast: TypeScript.AST) => string
->                     : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^   ^^              ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >getTypeInfoName : (ast: TypeScript.AST) => string
->                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^              ^^^^^^^^^^^
 >tyInfo.ast : any
 >           : ^^^
 >tyInfo : any
@@ -6816,7 +6816,7 @@ module Harness {
 
             private getTypeInfoName(ast : TypeScript.AST) {
 >getTypeInfoName : (ast: TypeScript.AST) => string
->                : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^   ^^              ^^^^^^^^^^^
 >ast : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any
@@ -8329,7 +8329,7 @@ module Harness {
 >makeDefaultCompilerForTest() : any
 >                             : ^^^
 >makeDefaultCompilerForTest : (c?: TypeScript.TypeScriptCompiler) => any
->                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^ ^^^                             ^^^^^^^^
 
             if (usePull) {
 >usePull : boolean
@@ -8733,7 +8733,7 @@ module Harness {
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^        ^^^                              ^^^^^    
 >settings : TypeScript.CompilationSettings
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -8797,7 +8797,7 @@ module Harness {
 >callback : (res: CompilerResult) => void
 >         : ^   ^^              ^^^^^^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^^^^^
 >context : CompilationContext
 >        : ^^^^^^^^^^^^^^^^^^
 >references : TypeScript.IFileReference[]
@@ -8816,7 +8816,7 @@ module Harness {
 >res : CompilerResult
 >    : ^^^^^^^^^^^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>                 : ^        ^^^                              ^^^^^    
 >settings : TypeScript.CompilationSettings
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -8931,13 +8931,13 @@ module Harness {
 
             if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^^^^^
 
                 settingsCallback(compiler.settings);
 >settingsCallback(compiler.settings) : void
 >                                    : ^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^^^^^
 >compiler.settings : any
 >                  : ^^^
 >compiler : TypeScript.TypeScriptCompiler
@@ -8991,7 +8991,7 @@ module Harness {
                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^^^^^
 
                     compiler.settings = oldCompilerSettings;
 >compiler.settings = oldCompilerSettings : any
@@ -9184,7 +9184,7 @@ module Harness {
 
         export function emit(ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) {
 >emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
->     : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^       ^^^^^^^^^
+>     : ^      ^^                        ^^              ^^^       ^^^^^^^^^
 >ioHost : TypeScript.EmitterIOHost
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^
 >TypeScript : any
@@ -9360,7 +9360,7 @@ module Harness {
 >emit(stdout, true) : void
 >                   : ^^^^
 >emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
->     : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^       ^^^^^^^^^
+>     : ^      ^^                        ^^              ^^^       ^^^^^^^^^
 >stdout : EmitterIOHost
 >       : ^^^^^^^^^^^^^
 >true : true
@@ -9383,7 +9383,7 @@ module Harness {
 >emit(stdout, false) : void
 >                    : ^^^^
 >emit : (ioHost: TypeScript.EmitterIOHost, usePullEmitter?: boolean) => void
->     : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^       ^^^^^^^^^
+>     : ^      ^^                        ^^              ^^^       ^^^^^^^^^
 >stdout : EmitterIOHost
 >       : ^^^^^^^^^^^^^
 >false : false
@@ -10326,7 +10326,7 @@ module Harness {
 
         public editRanges: { length: number; editRange: TypeScript.ScriptEditRange; }[] = [];
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 >editRange : TypeScript.ScriptEditRange
@@ -11613,7 +11613,7 @@ module Harness {
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                : ^        ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
 >fileName : string
 >         : ^^^^^^
 >sourceText : TypeScript.ISourceText
@@ -11721,11 +11721,11 @@ module Harness {
 >this.parseSourceText(fileName, sourceText) : TypeScript.Script
 >                                           : ^^^^^^^^^^^^^^^^^
 >this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                     : ^        ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                : ^        ^^      ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
 >fileName : string
 >         : ^^^^^^
 >sourceText : any
@@ -12989,12 +12989,12 @@ module Harness {
             Compiler.compileString(code, unitName, function (res) {
 >Compiler.compileString(code, unitName, function (res) {                runJSString(res.code, callback);            }) : void
 >                                                                                                                      : ^^^^
->Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->                       : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
+>Compiler.compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
+>                       : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^                           ^^^^^^^^^
 >Compiler : typeof Compiler
 >         : ^^^^^^^^^^^^^^^
->compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: CompilationContext, references?: TypeScript.IFileReference[]) => void
->              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^                  ^^          ^^^                           ^^^^^^^^^
+>compileString : (code: string, unitName: string, callback: (res: Compiler.CompilerResult) => void, context?: Compiler.CompilationContext, references?: TypeScript.IFileReference[]) => void
+>              : ^    ^^      ^^        ^^      ^^        ^^                                      ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^                           ^^^^^^^^^
 >code : string
 >     : ^^^^^^
 >unitName : string

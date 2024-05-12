@@ -81,7 +81,7 @@ import {
     tryAddToSet,
     WriteFileCallback,
     WriteFileCallbackData,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {

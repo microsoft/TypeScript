@@ -90,7 +90,7 @@ function flatMapChildren<T>(node: Node, cb: (child: Node) => readonly T[] | T | 
 >                  : ^
 >toArray(value) : readonly T[]
 >               : ^^^^^^^^^^^^
->toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_2>(value: T_2 | readonly T_2[]): readonly T_2[]; }
+>toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
 >        : ^^^   ^^     ^^           ^^^^^^^^^^^   ^^     ^^                    ^^^^^^^^^^^^^^^^^^^^
 >value : readonly T[] | (T & ({} | null))
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -160,7 +160,7 @@ function flatMapChildren2<T>(node: Node, cb: (child: Node) => readonly T[] | T |
 >                  : ^
 >toArray(value) : readonly T[]
 >               : ^^^^^^^^^^^^
->toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_2>(value: T_2 | readonly T_2[]): readonly T_2[]; }
+>toArray : { <T_1>(value: T_1 | T_1[]): T_1[]; <T_1>(value: T_1 | readonly T_1[]): readonly T_1[]; }
 >        : ^^^   ^^     ^^           ^^^^^^^^^^^   ^^     ^^                    ^^^^^^^^^^^^^^^^^^^^
 >value : readonly T[] | (T & ({} | undefined))
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

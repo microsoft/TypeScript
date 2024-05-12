@@ -121,7 +121,7 @@ import {
     WatchDirectoryKind,
     WatchFileKind,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export const compileOnSaveCommandLineOption: CommandLineOption = {
@@ -772,6 +772,20 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         category: Diagnostics.Emit,
         defaultValueDescription: false,
         description: Diagnostics.Disable_emitting_comments,
+    },
+    {
+        name: "noCheck",
+        type: "boolean",
+        showInSimplifiedHelpView: false,
+        category: Diagnostics.Compiler_Diagnostics,
+        description: Diagnostics.Disable_full_type_checking_only_critical_parse_and_emit_errors_will_be_reported,
+        transpileOptionValue: undefined,
+        defaultValueDescription: false,
+        affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
+        extraValidation() {
+            return [Diagnostics.Unknown_compiler_option_0, "noCheck"];
+        },
     },
     {
         name: "noEmit",
@@ -1625,6 +1639,12 @@ export const configDirTemplateSubstitutionOptions: readonly CommandLineOption[] 
 export const configDirTemplateSubstitutionWatchOptions: readonly CommandLineOption[] = optionsForWatch.filter(
     option => option.allowConfigDirTemplateSubstitution || (!option.isCommandLineOnly && option.isFilePath),
 );
+
+/** @internal */
+export const commandLineOptionOfCustomType: readonly CommandLineOptionOfCustomType[] = optionDeclarations.filter(isCommandLineOptionOfCustomType);
+function isCommandLineOptionOfCustomType(option: CommandLineOption): option is CommandLineOptionOfCustomType {
+    return !isString(option.type);
+}
 
 // Build related options
 /** @internal */
@@ -2977,12 +2997,12 @@ function parseJsonConfigFileContentWorker(
         const excludeOfRaw = getSpecsFromRaw("exclude");
         let isDefaultIncludeSpec = false;
         let excludeSpecs = toPropValue(excludeOfRaw);
-        if (excludeOfRaw === "no-prop" && raw.compilerOptions) {
-            const outDir = raw.compilerOptions.outDir;
-            const declarationDir = raw.compilerOptions.declarationDir;
+        if (excludeOfRaw === "no-prop") {
+            const outDir = options.outDir;
+            const declarationDir = options.declarationDir;
 
             if (outDir || declarationDir) {
-                excludeSpecs = [outDir, declarationDir].filter(d => !!d);
+                excludeSpecs = filter([outDir, declarationDir], d => !!d) as string[];
             }
         }
 

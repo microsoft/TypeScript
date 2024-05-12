@@ -1,4 +1,10 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     canHaveExportModifier,
     canHaveLocals,
     Declaration,
@@ -30,13 +36,7 @@ import {
     textChanges,
     tryCast,
     VariableStatement,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixImportNonExportedMember";
 const errorCodes = [

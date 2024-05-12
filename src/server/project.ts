@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     addRange,
     append,
@@ -133,7 +133,7 @@ import {
     WatchDirectoryFlags,
     WatchOptions,
     WatchType,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate,
     asNormalizedPath,
@@ -141,15 +141,12 @@ import {
     emptyArray,
     Errors,
     FileStats,
-    forEachResolvedProjectReferenceProject,
     LogLevel,
     ModuleImportResult,
     Msg,
     NormalizedPath,
     PackageJsonWatcher,
-    projectContainsInfoDirectly,
     ProjectOptions,
-    ProjectReferenceProjectLoadKind,
     ProjectService,
     ScriptInfo,
     ServerHost,
@@ -157,8 +154,8 @@ import {
     toNormalizedPath,
     TypingsCache,
     updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 export enum ProjectKind {
     Inferred,
@@ -2211,7 +2208,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     private isDefaultProjectForOpenFiles(): boolean {
         return !!forEachEntry(
             this.projectService.openFiles,
-            (_, fileName) => this.projectService.tryGetDefaultProjectForFile(toNormalizedPath(fileName)) === this,
+            (_projectRootPath, path) => this.projectService.tryGetDefaultProjectForFile(this.projectService.getScriptInfoForPath(path)!) === this,
         );
     }
 
@@ -2236,6 +2233,18 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             this.noDtsResolutionProject.rootFile = rootFile;
         }
         return this.noDtsResolutionProject;
+    }
+
+    /** @internal */
+    runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
+        const originalProgram = this.program;
+        const originalText = this.program?.getSourceFile(rootFile)?.getText();
+        Debug.assert(this.program && this.program.getSourceFile(rootFile) && originalText);
+
+        this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, updatedText);
+        this.updateGraph();
+        cb(this.program, originalProgram, (this.program?.getSourceFile(rootFile))!);
+        this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, originalText);
     }
 
     /** @internal */
@@ -2376,7 +2385,7 @@ export class InferredProject extends Project {
     }
 
     override removeRoot(info: ScriptInfo) {
-        this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info);
+        this.projectService.stopWatchingConfigFilesForScriptInfo(info);
         super.removeRoot(info);
         // Delay toggling to isJsInferredProject = false till we actually need it again
         if (!this.isOrphan() && this._isJsInferredProject && info.isJavaScript()) {
@@ -2400,7 +2409,7 @@ export class InferredProject extends Project {
     }
 
     override close() {
-        forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForInferredProjectRoot(info));
+        forEach(this.getRootScriptInfos(), info => this.projectService.stopWatchingConfigFilesForScriptInfo(info));
         super.close();
     }
 
@@ -2741,7 +2750,7 @@ export class AutoImportProviderProject extends Project {
  */
 export class ConfiguredProject extends Project {
     /** @internal */
-    pendingUpdateLevel: ProgramUpdateLevel | undefined;
+    pendingUpdateLevel: ProgramUpdateLevel;
     /** @internal */
     pendingUpdateReason: string | undefined;
 
@@ -2750,9 +2759,6 @@ export class ConfiguredProject extends Project {
 
     /** @internal */
     canConfigFileJsonReportNoInputFiles = false;
-
-    /** Ref count to the project when opened from external project */
-    private externalProjectRefCount = 0;
 
     private projectReferences: readonly ProjectReference[] | undefined;
 
@@ -2776,10 +2782,10 @@ export class ConfiguredProject extends Project {
     private compilerHost?: CompilerHost;
 
     /** @internal */
-    hasConfigFileDiagnostics?: boolean;
+    configDiagDiagnosticsReported?: number;
 
     /** @internal */
-    skipConfigDiagEvent?: true;
+    triggerFileForConfigFileDiag?: NormalizedPath;
 
     /** @internal */
     deferredClose?: boolean;
@@ -2791,8 +2797,11 @@ export class ConfiguredProject extends Project {
         projectService: ProjectService,
         documentRegistry: DocumentRegistry,
         cachedDirectoryStructureHost: CachedDirectoryStructureHost,
+        pendingUpdateReason: string,
     ) {
         super(configFileName, ProjectKind.Configured, projectService, documentRegistry, /*hasExplicitListOfFiles*/ false, /*lastFileExceededProgramSize*/ undefined, /*compilerOptions*/ {}, /*compileOnSaveEnabled*/ false, /*watchOptions*/ undefined, cachedDirectoryStructureHost, getDirectoryPath(configFileName));
+        this.pendingUpdateLevel = ProgramUpdateLevel.Full;
+        this.pendingUpdateReason = pendingUpdateReason;
     }
 
     /** @internal */
@@ -2845,7 +2854,7 @@ export class ConfiguredProject extends Project {
      */
     override updateGraph(): boolean {
         if (this.deferredClose) return false;
-        const isInitialLoad = this.isInitialLoadPending();
+        const isDirty = this.dirty;
         this.isInitialLoadPending = returnFalse;
         const updateLevel = this.pendingUpdateLevel;
         this.pendingUpdateLevel = ProgramUpdateLevel.Update;
@@ -2858,8 +2867,7 @@ export class ConfiguredProject extends Project {
             case ProgramUpdateLevel.Full:
                 this.openFileWatchTriggered.clear();
                 const reason = Debug.checkDefined(this.pendingUpdateReason);
-                this.pendingUpdateReason = undefined;
-                this.projectService.reloadConfiguredProject(this, reason, isInitialLoad, /*clearSemanticCache*/ false);
+                this.projectService.reloadConfiguredProject(this, reason);
                 result = true;
                 break;
             default:
@@ -2868,8 +2876,21 @@ export class ConfiguredProject extends Project {
         this.compilerHost = undefined;
         this.projectService.sendProjectLoadingFinishEvent(this);
         this.projectService.sendProjectTelemetry(this);
-        if (!this.skipConfigDiagEvent && !result) { // If new program, send event if diagnostics presence has changed
-            this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined);
+        if (
+            updateLevel === ProgramUpdateLevel.Full || ( // Already sent event through reload
+                result && ( // Not new program
+                    !isDirty ||
+                    !this.triggerFileForConfigFileDiag ||
+                    this.getCurrentProgram()!.structureIsReused === StructureIsReused.Completely
+                )
+            )
+        ) {
+            // Dont send the configFileDiag
+            this.triggerFileForConfigFileDiag = undefined;
+        }
+        else if (!this.triggerFileForConfigFileDiag) {
+            // If we arent tracking to send configFileDiag, send event if diagnostics presence has changed
+            this.projectService.sendConfigFileDiagEvent(this, /*triggerFile*/ undefined, /*force*/ false);
         }
         return result;
     }
@@ -2971,88 +2992,14 @@ export class ConfiguredProject extends Project {
     }
 
     /** @internal */
-    addExternalProjectReference() {
-        this.externalProjectRefCount++;
-    }
-
-    /** @internal */
-    deleteExternalProjectReference() {
-        this.externalProjectRefCount--;
-    }
-
-    /** @internal */
     isSolution() {
         return this.getRootFilesMap().size === 0 &&
             !this.canConfigFileJsonReportNoInputFiles;
     }
 
-    /**
-     * Find the configured project from the project references in project which contains the info directly
-     *
-     * @internal
-     */
-    getDefaultChildProjectFromProjectWithReferences(info: ScriptInfo) {
-        return forEachResolvedProjectReferenceProject(
-            this,
-            info.path,
-            child =>
-                projectContainsInfoDirectly(child, info) ?
-                    child :
-                    undefined,
-            ProjectReferenceProjectLoadKind.Find,
-        );
-    }
-
-    /**
-     * Returns true if the project is needed by any of the open script info/external project
-     *
-     * @internal
-     */
-    hasOpenRef() {
-        if (!!this.externalProjectRefCount) {
-            return true;
-        }
-
-        // Closed project doesnt have any reference
-        if (this.isClosed()) {
-            return false;
-        }
-
-        const configFileExistenceInfo = this.projectService.configFileExistenceInfoCache.get(this.canonicalConfigFilePath)!;
-        if (this.deferredClose) return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
-        if (this.projectService.hasPendingProjectUpdate(this)) {
-            // If there is pending update for this project,
-            // we dont know if this project would be needed by any of the open files impacted by this config file
-            // In that case keep the project alive if there are open files impacted by this project
-            return !!configFileExistenceInfo.openFilesImpactedByConfigFile?.size;
-        }
-
-        // If there is no pending update for this project,
-        // We know exact set of open files that get impacted by this configured project as the files in the project
-        // The project is referenced only if open files impacted by this project are present in this project
-        return !!configFileExistenceInfo.openFilesImpactedByConfigFile && forEachEntry(
-                    configFileExistenceInfo.openFilesImpactedByConfigFile,
-                    (_value, infoPath) => {
-                        const info = this.projectService.getScriptInfoForPath(infoPath)!;
-                        return this.containsScriptInfo(info) ||
-                            !!forEachResolvedProjectReferenceProject(
-                                this,
-                                info.path,
-                                child => child.containsScriptInfo(info),
-                                ProjectReferenceProjectLoadKind.Find,
-                            );
-                    },
-                ) || false;
-    }
-
     /** @internal */
     override isOrphan(): boolean {
         return !!this.deferredClose;
-    }
-
-    /** @internal */
-    hasExternalProjectRef() {
-        return !!this.externalProjectRefCount;
     }
 
     getEffectiveTypeRoots() {

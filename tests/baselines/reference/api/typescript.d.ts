@@ -20,10 +20,18 @@ declare namespace ts {
             export import ClassificationType = ts.ClassificationType;
             export import CompletionsTriggerCharacter = ts.CompletionsTriggerCharacter;
             export import CompletionTriggerKind = ts.CompletionTriggerKind;
+            export import InlayHintKind = ts.InlayHintKind;
             export import OrganizeImportsMode = ts.OrganizeImportsMode;
+            export import RefactorActionInfo = ts.RefactorActionInfo;
             export import RefactorTriggerReason = ts.RefactorTriggerReason;
             export import RenameInfoFailure = ts.RenameInfoFailure;
             export import SemicolonPreference = ts.SemicolonPreference;
+            export import SignatureHelpCharacterTypedReason = ts.SignatureHelpCharacterTypedReason;
+            export import SignatureHelpInvokedReason = ts.SignatureHelpInvokedReason;
+            export import SignatureHelpParameter = ts.SignatureHelpParameter;
+            export import SignatureHelpRetriggerCharacter = ts.SignatureHelpRetriggerCharacter;
+            export import SignatureHelpRetriggeredReason = ts.SignatureHelpRetriggeredReason;
+            export import SignatureHelpTriggerCharacter = ts.SignatureHelpTriggerCharacter;
             export import SignatureHelpTriggerReason = ts.SignatureHelpTriggerReason;
             export import SymbolDisplayPart = ts.SymbolDisplayPart;
             export import UserPreferences = ts.UserPreferences;
@@ -99,6 +107,7 @@ declare namespace ts {
                 GetApplicableRefactors = "getApplicableRefactors",
                 GetEditsForRefactor = "getEditsForRefactor",
                 GetMoveToRefactoringFileSuggestions = "getMoveToRefactoringFileSuggestions",
+                GetPasteEdits = "getPasteEdits",
                 OrganizeImports = "organizeImports",
                 GetEditsForFileRename = "getEditsForFileRename",
                 ConfigurePlugin = "configurePlugin",
@@ -468,6 +477,33 @@ declare namespace ts {
                     newFileName: string;
                     files: string[];
                 };
+            }
+            /**
+             * Request refactorings at a given position post pasting text from some other location.
+             */
+            export interface GetPasteEditsRequest extends Request {
+                command: CommandTypes.GetPasteEdits;
+                arguments: GetPasteEditsRequestArgs;
+            }
+            export interface GetPasteEditsRequestArgs extends FileRequestArgs {
+                /** The text that gets pasted in a file.  */
+                pastedText: string[];
+                /** Locations of where the `pastedText` gets added in a file. If the length of the `pastedText` and `pastedLocations` are not the same,
+                 *  then the `pastedText` is combined into one and added at all the `pastedLocations`.
+                 */
+                pasteLocations: TextSpan[];
+                /** The source location of each `pastedText`. If present, the length of `spans` must be equal to the length of `pastedText`. */
+                copiedFrom?: {
+                    file: string;
+                    spans: TextSpan[];
+                };
+            }
+            export interface GetPasteEditsResponse extends Response {
+                body: PasteEditsAction;
+            }
+            export interface PasteEditsAction {
+                edits: FileCodeEdits[];
+                fixId?: {};
             }
             export interface GetEditsForRefactorRequest extends Request {
                 command: CommandTypes.GetEditsForRefactor;
@@ -2872,8 +2908,6 @@ declare namespace ts {
          */
         class ConfiguredProject extends Project {
             readonly canonicalConfigFilePath: NormalizedPath;
-            /** Ref count to the project when opened from external project */
-            private externalProjectRefCount;
             private projectReferences;
             /**
              * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
@@ -3117,6 +3151,10 @@ declare namespace ts {
              * Open files: with value being project root path, and key being Path of the file that is open
              */
             readonly openFiles: Map<Path, NormalizedPath | undefined>;
+            /** Config files looked up and cached config files for open script info */
+            private readonly configFileForOpenFiles;
+            /** Set of open script infos that are root of inferred project */
+            private rootOfInferredProjects;
             /**
              * Map of open files that are opened without complete path but have projectRoot as current directory
              */
@@ -3135,6 +3173,11 @@ declare namespace ts {
             private safelist;
             private readonly legacySafelist;
             private pendingProjectUpdates;
+            /**
+             * All the open script info that needs recalculation of the default project,
+             * this also caches config file info before config file change was detected to use it in case projects are not updated yet
+             */
+            private pendingOpenFileProjectUpdates?;
             readonly currentDirectory: NormalizedPath;
             readonly toCanonicalFileName: (f: string) => string;
             readonly host: ServerHost;
@@ -3166,6 +3209,11 @@ declare namespace ts {
             setCompilerOptionsForInferredProjects(projectCompilerOptions: protocol.InferredProjectCompilerOptions, projectRootPath?: string): void;
             findProject(projectName: string): Project | undefined;
             getDefaultProjectForFile(fileName: NormalizedPath, ensureProject: boolean): Project | undefined;
+            /**
+             * If there is default project calculation pending for this file,
+             * then it completes that calculation so that correct default project is used for the project
+             */
+            private tryGetDefaultProjectForEnsuringConfiguredProjectForFile;
             private doEnsureDefaultProjectForFile;
             getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string): ScriptInfo | undefined;
             /**
@@ -3185,13 +3233,6 @@ declare namespace ts {
             private delayUpdateSourceInfoProjects;
             private delayUpdateProjectsOfScriptInfoPath;
             private handleDeletedFile;
-            /**
-             * This function goes through all the openFiles and tries to file the config file for them.
-             * If the config file is found and it refers to existing project, it schedules the reload it for reload
-             * If there is no existing project it just opens the configured project for the config file
-             * shouldReloadProjectFor provides a way to filter out files to reload configured project for
-             */
-            private delayReloadConfiguredProjectsForFile;
             private removeProject;
             private assignOrphanScriptInfosToInferredProject;
             /**
@@ -3202,14 +3243,6 @@ declare namespace ts {
             private deleteScriptInfo;
             private configFileExists;
             /**
-             * Returns true if the configFileExistenceInfo is needed/impacted by open files that are root of inferred project
-             */
-            private configFileExistenceImpactsRootOfInferredProject;
-            /**
-             * This is called on file close, so that we stop watching the config file for this script info
-             */
-            private stopWatchingConfigFilesForClosedScriptInfo;
-            /**
              * This function tries to search for a tsconfig.json for the given file.
              * This is different from the method the compiler uses because
              * the compiler can assume it will always start searching in the
@@ -3218,17 +3251,10 @@ declare namespace ts {
              * the newly opened file.
              */
             private forEachConfigFileLocation;
-            /**
-             * This function tries to search for a tsconfig.json for the given file.
-             * This is different from the method the compiler uses because
-             * the compiler can assume it will always start searching in the
-             * current directory (the directory in which tsc was invoked).
-             * The server must start searching from the directory containing
-             * the newly opened file.
-             * If script info is passed in, it is asserted to be open script info
-             * otherwise just file name
-             */
-            private getConfigFileNameForFile;
+            /** Get cached configFileName for scriptInfo or ancestor of open script info */
+            private getConfigFileNameForFileFromCache;
+            /** Caches the configFilename for script info or ancestor of open script info */
+            private setConfigFileNameForFileInCache;
             private printProjects;
             private getConfiguredProjectByCanonicalConfigFilePath;
             private findExternalProjectByProjectName;
@@ -3270,12 +3296,6 @@ declare namespace ts {
              */
             reloadProjects(): void;
             /**
-             * This function goes through all the openFiles and tries to file the config file for them.
-             * If the config file is found and it refers to existing project, it reloads it either immediately
-             * If there is no existing project it just opens the configured project for the config file
-             */
-            private reloadConfiguredProjectForFiles;
-            /**
              * Remove the root of inferred project if script info is part of another project
              */
             private removeRootOfInferredProjectIfNowPartOfOtherProject;
@@ -3296,11 +3316,21 @@ declare namespace ts {
             private findExternalProjectContainingOpenScriptInfo;
             private getOrCreateOpenScriptInfo;
             private assignProjectToOpenedScriptInfo;
-            private createAncestorProjects;
+            /**
+             * Finds the default configured project for given info
+             * For any tsconfig found, it looks into that project, if not then all its references,
+             * The search happens for all tsconfigs till projectRootPath
+             */
+            private tryFindDefaultConfiguredProjectForOpenScriptInfo;
+            /**
+             * Finds the default configured project, if found, it creates the solution projects (does not load them right away)
+             * with Find: finds the projects even if the project is deferredClosed
+             */
+            private tryFindDefaultConfiguredProjectAndLoadAncestorsForOpenScriptInfo;
             private ensureProjectChildren;
-            private cleanupAfterOpeningFile;
+            private cleanupConfiguredProjects;
+            private cleanupProjectsAndScriptInfos;
             openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
-            private removeOrphanConfiguredProjects;
             private removeOrphanScriptInfos;
             private telemetryOnOpenFile;
             /**
@@ -3309,7 +3339,6 @@ declare namespace ts {
              */
             closeClientFile(uncheckedFileName: string): void;
             private collectChanges;
-            private closeConfiguredProjectReferencedFromExternalProject;
             closeExternalProject(uncheckedFileName: string): void;
             openExternalProjects(projects: protocol.ExternalProject[]): void;
             /** Makes a filename safe to insert in a RegExp */
@@ -3499,6 +3528,7 @@ declare namespace ts {
             private getApplicableRefactors;
             private getEditsForRefactor;
             private getMoveToRefactoringFileSuggestions;
+            private getPasteEdits;
             private organizeImports;
             private getEditsForFileRename;
             private getCodeFixes;
@@ -3507,6 +3537,7 @@ declare namespace ts {
             private getStartAndEndPosition;
             private mapCodeAction;
             private mapCodeFixAction;
+            private mapPasteEditsAction;
             private mapTextChangesToCodeEdits;
             private mapTextChangeToCodeEdit;
             private convertTextChangeToCodeEdit;
@@ -10103,6 +10134,7 @@ declare namespace ts {
         uncommentSelection(fileName: string, textRange: TextRange): TextChange[];
         getSupportedCodeFixes(fileName?: string): readonly string[];
         dispose(): void;
+        getPasteEdits(args: PasteEditsArgs, formatOptions: FormatCodeSettings): PasteEdits;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -10119,6 +10151,20 @@ declare namespace ts {
         All = "All",
         SortAndCombine = "SortAndCombine",
         RemoveUnused = "RemoveUnused",
+    }
+    interface PasteEdits {
+        edits: readonly FileTextChanges[];
+        fixId?: {};
+    }
+    interface PasteEditsArgs {
+        targetFile: string;
+        pastedText: string[];
+        pasteLocations: TextRange[];
+        copiedFrom: {
+            file: string;
+            range: TextRange[];
+        } | undefined;
+        preferences: UserPreferences;
     }
     interface OrganizeImportsArgs extends CombinedCodeFixScope {
         /** @deprecated Use `mode` instead */

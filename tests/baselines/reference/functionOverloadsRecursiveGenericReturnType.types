@@ -32,7 +32,7 @@ function Choice<T>(...v_args: T[]): A<T>;
 >       : ^^^
 
 function Choice<T>(...v_args: any[]): A<T>{
->Choice : { <T_1>(args: T_1[]): A<T_1>; <T_2>(...v_args: T_2[]): A<T_2>; }
+>Choice : { <T_1>(args: T_1[]): A<T_1>; <T_1>(...v_args: T_1[]): A<T_1>; }
 >       : ^^^   ^^    ^^     ^^^^^^^^^^^^   ^^^^^      ^^     ^^^^^^^^^^^^
 >v_args : any[]
 >       : ^^^^^

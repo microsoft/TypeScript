@@ -6,9 +6,9 @@ import {
     RunnerBase,
     TestCaseParser,
     TestRunnerKind,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as vpath from "./_namespaces/vpath";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 export class TranspileRunner extends RunnerBase {
     protected basePath = "tests/cases/transpile";

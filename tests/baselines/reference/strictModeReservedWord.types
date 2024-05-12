@@ -101,7 +101,7 @@ function foo() {
 
     function foo(x: private.x) { }
 >foo : (x: private.x) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^         ^^^^^^^^^
 >x : private.x
 >  : ^^^^^^^^^
 >private : any
@@ -109,7 +109,7 @@ function foo() {
 
     function foo1(x: private.package.x) { }
 >foo1 : (x: private.package.x) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                 ^^^^^^^^^
 >x : private.package.x
 >  : ^^^^^^^^^^^^^^^^^
 >private : any
@@ -119,7 +119,7 @@ function foo() {
 
     function foo2(x: private.package.protected) { }
 >foo2 : (x: private.package.protected) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^                         ^^^^^^^^^
 >x : private.package.protected
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >private : any

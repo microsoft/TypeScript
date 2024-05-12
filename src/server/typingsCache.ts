@@ -11,12 +11,12 @@ import {
     sort,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     emptyArray,
     Project,
     ProjectService,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
     projectName: string;

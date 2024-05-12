@@ -44,8 +44,8 @@ foo2(a);
 //foo3(a);
 foo4(a);
 >foo4(a) : any
->foo4 : <T_1 extends <T>(x: T) => void>(x: T_1) => T_1
->     : ^   ^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^ ^^   ^^^^^^^^
+>foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
+>     : ^ ^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^ ^^ ^^^^^^
 >a : any
 
 var b: number;
@@ -69,8 +69,8 @@ foo2<any>(b);
 //foo3<any>(b);
 foo4<any>(b);
 >foo4<any>(b) : any
->foo4 : <T_1 extends <T>(x: T) => void>(x: T_1) => T_1
->     : ^   ^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^ ^^   ^^^^^^^^
+>foo4 : <T extends <T_1>(x: T_1) => void>(x: T) => T
+>     : ^ ^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^ ^^ ^^^^^^
 >b : number
 >  : ^^^^^^
 

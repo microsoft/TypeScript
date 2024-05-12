@@ -1,13 +1,13 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { libContent } from "./contents";
-import { solutionBuildWithBaseline } from "./solutionBuilder";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { libContent } from "./contents.js";
+import { solutionBuildWithBaseline } from "./solutionBuilder.js";
 import {
     createServerHost,
     createWatchedSystem,
     TestServerHost,
     TestServerHostOsFlavor,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function getMonorepoSymlinkedSiblingPackagesSys(forTsserver: boolean, built: boolean, osFlavor?: TestServerHostOsFlavor): TestServerHost {
     const configText = jsonToReadableText({

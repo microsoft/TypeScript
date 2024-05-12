@@ -27,12 +27,12 @@ let magnitude = m.getLength(v);
 >          : ^^^^^^
 >m.getLength(v) : number
 >               : ^^^^^^
->m.getLength : (p: Vector) => number
->            : ^ ^^      ^^^^^^^^^^^
+>m.getLength : (p: m.Vector) => number
+>            : ^ ^^^^^^^^^^^^^^^^^^^^^
 >m : typeof m
 >  : ^^^^^^^^
->getLength : (p: Vector) => number
->          : ^ ^^      ^^^^^^^^^^^
+>getLength : (p: m.Vector) => number
+>          : ^ ^^^^^^^^^^^^^^^^^^^^^
 >v : m.Vector
 >  : ^^^^^^^^
 

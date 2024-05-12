@@ -28,12 +28,12 @@ const myFirstFunction = <T extends FirstInterface | SecondInterface>(param1: T) 
 >              : ^^^^^^
 >Object.assign(param1, { otherProperty: 3 }) : T & { otherProperty: number; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_2 extends {}, U_1, V>(target: T_2, source1: U_1, source2: V): T_2 & U_1 & V; <T_3 extends {}, U_2, V_1, W>(target: T_3, source1: U_2, source2: V_1, source3: W): T_3 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>Object.assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
+>              : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^^^^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_2 extends {}, U_1, V>(target: T_2, source1: U_1, source2: V): T_2 & U_1 & V; <T_3 extends {}, U_2, V_1, W>(target: T_3, source1: U_2, source2: V_1, source3: W): T_3 & U_2 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>assign : { <T_1 extends {}, U>(target: T_1, source: U): T_1 & U; <T_1 extends {}, U, V>(target: T_1, source1: U, source2: V): T_1 & U & V; <T_1 extends {}, U, V, W>(target: T_1, source1: U, source2: V, source3: W): T_1 & U & V & W; (target: object, ...sources: any[]): any; }
+>       : ^^^   ^^^^^^^^^^^^^ ^^      ^^   ^^      ^^ ^^^^^^^^^^^^^   ^^^^^^^^^^^^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^ ^^ ^^ ^^      ^^   ^^       ^^ ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >param1 : T
 >       : ^
 >{ otherProperty: 3 } : { otherProperty: number; }

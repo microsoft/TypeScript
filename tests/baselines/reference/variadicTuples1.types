@@ -2119,8 +2119,8 @@ function f23<U extends string[]>(args: [...U, number]) {
 >   : ^
 >f22(args) : U
 >          : ^
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^^^
 >args : [...U, number]
 >     : ^^^^^^^^^^^^^^
 
@@ -2129,8 +2129,8 @@ function f23<U extends string[]>(args: [...U, number]) {
 >   : ^^^^^^^^^^^^^^^^
 >f22(["foo", "bar"]) : [string, string]
 >                    : ^^^^^^^^^^^^^^^^
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^^^
 >["foo", "bar"] : [string, string]
 >               : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -2143,8 +2143,8 @@ function f23<U extends string[]>(args: [...U, number]) {
 >   : ^^^^^^^^
 >f22(["foo", 42]) : [string]
 >                 : ^^^^^^^^
->f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T_1 extends unknown[] = []>(args: [...T_1]): T_1; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^        ^^^^^^^^^
+>f22 : { <T extends unknown[] = []>(args: [...T, number]): T; <T extends unknown[] = []>(args: [...T]): T; }
+>    : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^              ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^^^^^^
 >["foo", 42] : [string, number]
 >            : ^^^^^^^^^^^^^^^^
 >"foo" : "foo"

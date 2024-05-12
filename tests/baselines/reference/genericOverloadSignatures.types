@@ -24,8 +24,8 @@ function f<T>(a: T);
 >  : ^
 
 function f(a) { }
->f : { <T>(a: T): any; <T_1>(a: T_1): any; }
->  : ^^^ ^^ ^^ ^^^^^^^^^   ^^ ^^   ^^^^^^^^^
+>f : { <T>(a: T): any; <T>(a: T): any; }
+>  : ^^^ ^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >a : any
 
 interface I2 {
@@ -61,8 +61,8 @@ class C2<T> {
 >   : ^^^^^
 }
 var b: {
->b : { new <T>(x: T, y: string): C2<T>; new <T_1>(x: T_1, y: string): C2<T_1>; }
->  : ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^^^^^   ^^ ^^   ^^ ^^      ^^^       ^^^
+>b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
+>  : ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^^^^^ ^^ ^^ ^^ ^^      ^^^     ^^^
 
     new <T>(x: T, y: string): C2<T>;
 >x : T

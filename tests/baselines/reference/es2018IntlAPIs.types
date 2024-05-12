@@ -100,32 +100,32 @@ new Intl.PluralRules().select(10);
 Intl.PluralRules.supportedLocalesOf('en');
 >Intl.PluralRules.supportedLocalesOf('en') : string[]
 >                                          : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: SupportedLocalesOptions) => string[]
->                                    : ^       ^^^                          ^^       ^^^                       ^^^^^^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                                    : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: string | readonly string[], options?: SupportedLocalesOptions) => string[]
->                   : ^       ^^^                          ^^       ^^^                       ^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'en' : "en"
 >     : ^^^^
 
 Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' });
 >Intl.PluralRules.supportedLocalesOf([ 'en', 'de' ] as const, { localeMatcher: 'lookup' }) : string[]
 >                                                                                          : ^^^^^^^^
->Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: SupportedLocalesOptions) => string[]
->                                    : ^       ^^^                          ^^       ^^^                       ^^^^^^^^^^^^^
+>Intl.PluralRules.supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                                    : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl.PluralRules : Intl.PluralRulesConstructor
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
 >PluralRules : Intl.PluralRulesConstructor
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->supportedLocalesOf : (locales?: string | readonly string[], options?: SupportedLocalesOptions) => string[]
->                   : ^       ^^^                          ^^       ^^^                       ^^^^^^^^^^^^^
+>supportedLocalesOf : (locales?: string | readonly string[], options?: Intl.SupportedLocalesOptions) => string[]
+>                   : ^       ^^^                          ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[ 'en', 'de' ] as const : readonly ["en", "de"]
 >                        : ^^^^^^^^^^^^^^^^^^^^^
 >[ 'en', 'de' ] : readonly ["en", "de"]

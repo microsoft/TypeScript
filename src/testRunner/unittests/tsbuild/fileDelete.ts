@@ -1,9 +1,9 @@
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
-import { verifyTsc } from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {

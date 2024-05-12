@@ -100,6 +100,7 @@ import {
     OperationCanceledException,
     OrganizeImportsMode,
     OutliningSpan,
+    PasteEdits,
     Path,
     perfLogger,
     PerformanceEvent,
@@ -136,7 +137,7 @@ import {
     unmangleScopedPackageName,
     version,
     WithMetadata,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     AuxiliaryProject,
     CloseFileWatcherEvent,
@@ -180,8 +181,8 @@ import {
     stringifyIndented,
     toNormalizedPath,
     updateProjectIfDirty,
-} from "./_namespaces/ts.server";
-import * as protocol from "./protocol";
+} from "./_namespaces/ts.server.js";
+import * as protocol from "./protocol.js";
 
 interface StackTraceError extends Error {
     stack?: string;
@@ -910,6 +911,7 @@ const invalidPartialSemanticModeCommands: readonly protocol.CommandTypes[] = [
     protocol.CommandTypes.PrepareCallHierarchy,
     protocol.CommandTypes.ProvideCallHierarchyIncomingCalls,
     protocol.CommandTypes.ProvideCallHierarchyOutgoingCalls,
+    protocol.CommandTypes.GetPasteEdits,
 ];
 
 const invalidSyntacticModeCommands: readonly protocol.CommandTypes[] = [
@@ -2796,6 +2798,24 @@ export class Session<TMessage = string> implements EventSender {
         return project.getLanguageService().getMoveToRefactoringFileSuggestions(file, this.extractPositionOrRange(args, scriptInfo), this.getPreferences(file));
     }
 
+    private getPasteEdits(args: protocol.GetPasteEditsRequestArgs): protocol.PasteEditsAction | undefined {
+        const { file, project } = this.getFileAndProject(args);
+        const copiedFrom = args.copiedFrom
+            ? { file: args.copiedFrom.file, range: args.copiedFrom.spans.map(copies => this.getRange({ file: args.copiedFrom!.file, startLine: copies.start.line, startOffset: copies.start.offset, endLine: copies.end.line, endOffset: copies.end.offset }, project.getScriptInfoForNormalizedPath(toNormalizedPath(args.copiedFrom!.file))!)) }
+            : undefined;
+        const result = project.getLanguageService().getPasteEdits(
+            {
+                targetFile: file,
+                pastedText: args.pastedText,
+                pasteLocations: args.pasteLocations.map(paste => this.getRange({ file, startLine: paste.start.line, startOffset: paste.start.offset, endLine: paste.end.line, endOffset: paste.end.offset }, project.getScriptInfoForNormalizedPath(file)!)),
+                copiedFrom,
+                preferences: this.getPreferences(file),
+            },
+            this.getFormatOptions(file),
+        );
+        return result && this.mapPasteEditsAction(result);
+    }
+
     private organizeImports(args: protocol.OrganizeImportsRequestArgs, simplifiedResult: boolean): readonly protocol.FileCodeEdits[] | readonly FileTextChanges[] {
         Debug.assert(args.scope.type === "file");
         const { file, project } = this.getFileAndProject(args.scope.args);
@@ -2926,6 +2946,10 @@ export class Session<TMessage = string> implements EventSender {
 
     private mapCodeFixAction({ fixName, description, changes, commands, fixId, fixAllDescription }: CodeFixAction): protocol.CodeFixAction {
         return { fixName, description, changes: this.mapTextChangesToCodeEdits(changes), commands, fixId, fixAllDescription };
+    }
+
+    private mapPasteEditsAction({ edits, fixId }: PasteEdits): protocol.PasteEditsAction {
+        return { edits: this.mapTextChangesToCodeEdits(edits), fixId };
     }
 
     private mapTextChangesToCodeEdits(textChanges: readonly FileTextChanges[]): protocol.FileCodeEdits[] {
@@ -3190,7 +3214,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(response);
         },
         [protocol.CommandTypes.OpenExternalProject]: (request: protocol.OpenExternalProjectRequest) => {
-            this.projectService.openExternalProject(request.arguments, /*print*/ true);
+            this.projectService.openExternalProject(request.arguments, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3200,7 +3224,7 @@ export class Session<TMessage = string> implements EventSender {
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.CloseExternalProject]: (request: protocol.CloseExternalProjectRequest) => {
-            this.projectService.closeExternalProject(request.arguments.projectFileName, /*print*/ true);
+            this.projectService.closeExternalProject(request.arguments.projectFileName, /*cleanupAfter*/ true);
             // TODO: GH#20447 report errors
             return this.requiredResponse(/*response*/ true);
         },
@@ -3520,6 +3544,9 @@ export class Session<TMessage = string> implements EventSender {
         },
         [protocol.CommandTypes.GetMoveToRefactoringFileSuggestions]: (request: protocol.GetMoveToRefactoringFileSuggestionsRequest) => {
             return this.requiredResponse(this.getMoveToRefactoringFileSuggestions(request.arguments));
+        },
+        [protocol.CommandTypes.GetPasteEdits]: (request: protocol.GetPasteEditsRequest) => {
+            return this.requiredResponse(this.getPasteEdits(request.arguments));
         },
         [protocol.CommandTypes.GetEditsForRefactorFull]: (request: protocol.GetEditsForRefactorRequest) => {
             return this.requiredResponse(this.getEditsForRefactor(request.arguments, /*simplifiedResult*/ false));

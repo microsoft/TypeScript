@@ -159,8 +159,8 @@ module Errors {
 >    : ^^^ ^^                                                            ^^^     ^^^ ^^                                                             ^^^     ^^^
 
                 (x: {
->x : { <T extends Derived>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
                     <T extends Derived>(a: T): T;
 >a : T
@@ -172,8 +172,8 @@ module Errors {
 
                 }): any[];
                 (x: {
->x : { <T extends Derived2>(a: T): T; <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
                     <T extends Derived2>(a: T): T;
 >a : T

@@ -80,12 +80,12 @@ var r5a = _.map<number, string, Date>(c2, (x, y) => { return x.toFixed() });
 >    : ^^^^^^^^^^^^^^^^^^^^
 >_.map<number, string, Date>(c2, (x, y) => { return x.toFixed() }) : Collection<any, any>
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^
->_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; }
->      : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^ ^^                    ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
+>      : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >_ : Combinators
 >  : ^^^^^^^^^^^
->map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; }
->    : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^ ^^                    ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
+>    : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >c2 : Collection<number, string>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(x, y) => { return x.toFixed() } : (x: number, y: string) => string
@@ -108,12 +108,12 @@ var r5b = _.map<number, string, Date>(c2, rf1);
 >    : ^^^^^^^^^^^^^^^^^^^^
 >_.map<number, string, Date>(c2, rf1) : Collection<any, any>
 >                                     : ^^^^^^^^^^^^^^^^^^^^
->_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; }
->      : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^ ^^                    ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>_.map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
+>      : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >_ : Combinators
 >  : ^^^^^^^^^^^
->map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T_1, U_1, V>(c: Collection<T_1, U_1>, f: (x: T_1, y: U_1) => V): Collection<T_1, V>; }
->    : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^ ^^ ^^                    ^^ ^^                     ^^^^^^^^^^^^^^^^^^^^^^^^
+>map : { <T, U>(c: Collection<T, U>, f: (x: T, y: U) => any): Collection<any, any>; <T, U, V>(c: Collection<T, U>, f: (x: T, y: U) => V): Collection<T, V>; }
+>    : ^^^ ^^ ^^ ^^                ^^ ^^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^                ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >c2 : Collection<number, string>
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >rf1 : (x: number, y: string) => string
