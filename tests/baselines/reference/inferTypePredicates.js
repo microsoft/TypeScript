@@ -362,6 +362,59 @@ function assertTrue(x: boolean) {
   if (!x) throw new Error();
 }
 
+function assertNonNullish<T>(x: T) {
+  if (x != null) {
+    return;
+  }
+  throw new Error();
+}
+
+function assertIsShortString(x: unknown) {
+  if (typeof x !== 'string') {
+    throw new Error('Expected string');
+  } else if (x.length > 10) {
+    throw new Error('Expected short string');
+  }
+}
+
+function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
+  if (x === 'A') {
+    return;  // type of x here is 'A'
+  } else if (x === 'B' || x === 'C') {
+    throw new Error();
+  }
+  // implicit return; type of x here is 'D' | E'
+}
+
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+const assertNumberArrow = (base: string | number) => {
+  if (typeof base !== 'number') {
+    throw new Error();
+  }
+};
+
+assertNumberArrow('hello'); // should ok
+
+class Test {
+  // Methods are not inferred as assertion type predicates becasue you
+  // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+  assert(value: unknown) {
+    if (typeof value === 'number') {
+      return;
+    }
+    throw new Error();
+  }
+}
+
+function fTest(x: unknown) {
+  const t1 = new Test();
+  t1.assert(typeof x === "string"); // should ok
+
+  const t2: Test = new Test();
+  t2.assert(typeof x === "string"); // should ok
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -694,6 +747,56 @@ function assertTrue(x) {
     if (!x)
         throw new Error();
 }
+function assertNonNullish(x) {
+    if (x != null) {
+        return;
+    }
+    throw new Error();
+}
+function assertIsShortString(x) {
+    if (typeof x !== 'string') {
+        throw new Error('Expected string');
+    }
+    else if (x.length > 10) {
+        throw new Error('Expected short string');
+    }
+}
+function assertABC(x) {
+    if (x === 'A') {
+        return; // type of x here is 'A'
+    }
+    else if (x === 'B' || x === 'C') {
+        throw new Error();
+    }
+    // implicit return; type of x here is 'D' | E'
+}
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+var assertNumberArrow = function (base) {
+    if (typeof base !== 'number') {
+        throw new Error();
+    }
+};
+assertNumberArrow('hello'); // should ok
+var Test = /** @class */ (function () {
+    function Test() {
+    }
+    // Methods are not inferred as assertion type predicates becasue you
+    // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+    Test.prototype.assert = function (value) {
+        if (typeof value === 'number') {
+            return;
+        }
+        throw new Error();
+    };
+    return Test;
+}());
+function fTest(x) {
+    var t1 = new Test();
+    t1.assert(typeof x === "string"); // should ok
+    var t2 = new Test();
+    t2.assert(typeof x === "string"); // should ok
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -799,3 +902,11 @@ declare function splitUnknown(x: unknown): void;
 declare function assertionViaInfiniteLoop(x: string | number): asserts x is number;
 declare function booleanOrVoid(a: boolean | void): void;
 declare function assertTrue(x: boolean): asserts x is true;
+declare function assertNonNullish<T>(x: T): asserts x is NonNullable<T>;
+declare function assertIsShortString(x: unknown): asserts x is string;
+declare function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E'): asserts x is "A" | "D" | "E";
+declare const assertNumberArrow: (base: string | number) => void;
+declare class Test {
+    assert(value: unknown): void;
+}
+declare function fTest(x: unknown): void;

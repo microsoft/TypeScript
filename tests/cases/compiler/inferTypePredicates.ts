@@ -385,3 +385,32 @@ function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
   }
   // implicit return; type of x here is 'D' | E'
 }
+
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+const assertNumberArrow = (base: string | number) => {
+  if (typeof base !== 'number') {
+    throw new Error();
+  }
+};
+
+assertNumberArrow('hello'); // should ok
+
+class Test {
+  // Methods are not inferred as assertion type predicates becasue you
+  // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+  assert(value: unknown) {
+    if (typeof value === 'number') {
+      return;
+    }
+    throw new Error();
+  }
+}
+
+function fTest(x: unknown) {
+  const t1 = new Test();
+  t1.assert(typeof x === "string"); // should ok
+
+  const t2: Test = new Test();
+  t2.assert(typeof x === "string"); // should ok
+}

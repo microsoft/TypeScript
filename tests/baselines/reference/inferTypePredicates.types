@@ -1948,3 +1948,237 @@ function assertTrue(x: boolean) {
 >      : ^^^^^^^^^^^^^^^^
 }
 
+function assertNonNullish<T>(x: T) {
+>assertNonNullish : <T>(x: T) => asserts x is NonNullable<T>
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+
+  if (x != null) {
+>x != null : boolean
+>          : ^^^^^^^
+>x : T
+>  : ^
+
+    return;
+  }
+  throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+}
+
+function assertIsShortString(x: unknown) {
+>assertIsShortString : (x: unknown) => asserts x is string
+>                    : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  if (typeof x !== 'string') {
+>typeof x !== 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    throw new Error('Expected string');
+>new Error('Expected string') : Error
+>                             : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'Expected string' : "Expected string"
+>                  : ^^^^^^^^^^^^^^^^^
+
+  } else if (x.length > 10) {
+>x.length > 10 : boolean
+>              : ^^^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+>10 : 10
+>   : ^^
+
+    throw new Error('Expected short string');
+>new Error('Expected short string') : Error
+>                                   : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+>'Expected short string' : "Expected short string"
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+  }
+}
+
+function assertABC(x: 'A' | 'B' | 'C' | 'D' | 'E') {
+>assertABC : (x: "A" | "B" | "C" | "D" | "E") => asserts x is "A" | "D" | "E"
+>          : ^ ^^                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : "A" | "B" | "C" | "D" | "E"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x === 'A') {
+>x === 'A' : boolean
+>          : ^^^^^^^
+>x : "A" | "B" | "C" | "D" | "E"
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'A' : "A"
+>    : ^^^
+
+    return;  // type of x here is 'A'
+  } else if (x === 'B' || x === 'C') {
+>x === 'B' || x === 'C' : boolean
+>                       : ^^^^^^^
+>x === 'B' : boolean
+>          : ^^^^^^^
+>x : "B" | "C" | "D" | "E"
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>'B' : "B"
+>    : ^^^
+>x === 'C' : boolean
+>          : ^^^^^^^
+>x : "C" | "D" | "E"
+>  : ^^^^^^^^^^^^^^^
+>'C' : "C"
+>    : ^^^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+  // implicit return; type of x here is 'D' | E'
+}
+
+// this is not expected to be inferred as an assertion type predicate
+// due to https://github.com/microsoft/TypeScript/issues/34523
+const assertNumberArrow = (base: string | number) => {
+>assertNumberArrow : (base: string | number) => void
+>                  : ^    ^^               ^^^^^^^^^
+>(base: string | number) => {  if (typeof base !== 'number') {    throw new Error();  }} : (base: string | number) => void
+>                                                                                        : ^    ^^               ^^^^^^^^^
+>base : string | number
+>     : ^^^^^^^^^^^^^^^
+
+  if (typeof base !== 'number') {
+>typeof base !== 'number' : boolean
+>                         : ^^^^^^^
+>typeof base : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>base : string | number
+>     : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+};
+
+assertNumberArrow('hello'); // should ok
+>assertNumberArrow('hello') : void
+>                           : ^^^^
+>assertNumberArrow : (base: string | number) => void
+>                  : ^    ^^               ^^^^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+class Test {
+>Test : Test
+>     : ^^^^
+
+  // Methods are not inferred as assertion type predicates becasue you
+  // can easily run into TS2776 (https://github.com/microsoft/TypeScript/pull/33622).
+  assert(value: unknown) {
+>assert : (value: unknown) => void
+>       : ^     ^^       ^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+    if (typeof value === 'number') {
+>typeof value === 'number' : boolean
+>                          : ^^^^^^^
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+
+      return;
+    }
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+}
+
+function fTest(x: unknown) {
+>fTest : (x: unknown) => void
+>      : ^ ^^       ^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  const t1 = new Test();
+>t1 : Test
+>   : ^^^^
+>new Test() : Test
+>           : ^^^^
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+  t1.assert(typeof x === "string"); // should ok
+>t1.assert(typeof x === "string") : void
+>                                 : ^^^^
+>t1.assert : (value: unknown) => void
+>          : ^     ^^       ^^^^^^^^^
+>t1 : Test
+>   : ^^^^
+>assert : (value: unknown) => void
+>       : ^     ^^       ^^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+  const t2: Test = new Test();
+>t2 : Test
+>   : ^^^^
+>new Test() : Test
+>           : ^^^^
+>Test : typeof Test
+>     : ^^^^^^^^^^^
+
+  t2.assert(typeof x === "string"); // should ok
+>t2.assert(typeof x === "string") : void
+>                                 : ^^^^
+>t2.assert : (value: unknown) => void
+>          : ^     ^^       ^^^^^^^^^
+>t2 : Test
+>   : ^^^^
+>assert : (value: unknown) => void
+>       : ^     ^^       ^^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+}
+
