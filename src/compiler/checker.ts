@@ -37867,6 +37867,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
             case SyntaxKind.ArrowFunction:
+            case SyntaxKind.MethodDeclaration:
                 return undefined;
         }
         const functionFlags = getFunctionFlags(func);
