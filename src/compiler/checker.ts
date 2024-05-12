@@ -37866,13 +37866,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.Constructor:
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
+            case SyntaxKind.ArrowFunction:
                 return undefined;
         }
         const functionFlags = getFunctionFlags(func);
         if (functionFlags !== FunctionFlags.Normal || !func.body) return undefined;
 
         const returnFlowNodes: FlowNode[] = [];
-        const bailedEarly = forEachReturnStatement(func.body as Block, returnStatement => {
+        const bailedEarly = forEachReturnStatement(func.body, returnStatement => {
             if (!returnStatement.flowNode) {
                 return true;
             }
