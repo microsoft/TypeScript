@@ -1060,3 +1060,99 @@ function fTest(x: unknown) {
 >x : Symbol(x, Decl(inferTypePredicates.ts, 406, 15))
 }
 
+interface Named {
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+  name: string;
+>name : Symbol(Named.name, Decl(inferTypePredicates.ts, 414, 17))
+}
+interface Aged {
+>Aged : Symbol(Aged, Decl(inferTypePredicates.ts, 416, 1))
+
+  age: number;
+>age : Symbol(Aged.age, Decl(inferTypePredicates.ts, 417, 16))
+}
+
+declare function assertName(x: any): asserts x is Named;
+>assertName : Symbol(assertName, Decl(inferTypePredicates.ts, 419, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 421, 28))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 421, 28))
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+declare function isNamed(x: any): x is Named;
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 421, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 422, 25))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 422, 25))
+>Named : Symbol(Named, Decl(inferTypePredicates.ts, 412, 1))
+
+function inferFromTypePred(x: unknown) {
+>inferFromTypePred : Symbol(inferFromTypePred, Decl(inferTypePredicates.ts, 422, 45))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 424, 27))
+
+  if (!isNamed(x)) {
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 421, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 424, 27))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function inferFromTypePredAny(x: any) {
+>inferFromTypePredAny : Symbol(inferFromTypePredAny, Decl(inferTypePredicates.ts, 428, 1))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 430, 30))
+
+  if (!isNamed(x)) {
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 421, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 430, 30))
+
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+class Namer {
+>Namer : Symbol(Namer, Decl(inferTypePredicates.ts, 434, 1))
+
+  assertName(x: unknown) {
+>assertName : Symbol(Namer.assertName, Decl(inferTypePredicates.ts, 436, 13))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 437, 13))
+
+    if (!isNamed(x)) {
+>isNamed : Symbol(isNamed, Decl(inferTypePredicates.ts, 421, 56))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 437, 13))
+
+      throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+  }
+  assert(value: unknown) {
+>assert : Symbol(Namer.assert, Decl(inferTypePredicates.ts, 441, 3))
+>value : Symbol(value, Decl(inferTypePredicates.ts, 442, 9))
+
+    if (typeof value === 'number') {
+>value : Symbol(value, Decl(inferTypePredicates.ts, 442, 9))
+
+      return;
+    }
+    throw new Error();
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+  bar(x: Aged) {
+>bar : Symbol(Namer.bar, Decl(inferTypePredicates.ts, 447, 3))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 448, 6))
+>Aged : Symbol(Aged, Decl(inferTypePredicates.ts, 416, 1))
+
+    this.assertName(x);
+>this.assertName : Symbol(Namer.assertName, Decl(inferTypePredicates.ts, 436, 13))
+>this : Symbol(Namer, Decl(inferTypePredicates.ts, 434, 1))
+>assertName : Symbol(Namer.assertName, Decl(inferTypePredicates.ts, 436, 13))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 448, 6))
+
+    x.age  // ok
+>x.age : Symbol(Aged.age, Decl(inferTypePredicates.ts, 417, 16))
+>x : Symbol(x, Decl(inferTypePredicates.ts, 448, 6))
+>age : Symbol(Aged.age, Decl(inferTypePredicates.ts, 417, 16))
+  }
+}
+

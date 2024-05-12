@@ -414,3 +414,43 @@ function fTest(x: unknown) {
   const t2: Test = new Test();
   t2.assert(typeof x === "string"); // should ok
 }
+
+interface Named {
+  name: string;
+}
+interface Aged {
+  age: number;
+}
+
+declare function assertName(x: any): asserts x is Named;
+declare function isNamed(x: any): x is Named;
+
+function inferFromTypePred(x: unknown) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+function inferFromTypePredAny(x: any) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+class Namer {
+  assertName(x: unknown) {
+    if (!isNamed(x)) {
+      throw new Error();
+    }
+  }
+  assert(value: unknown) {
+    if (typeof value === 'number') {
+      return;
+    }
+    throw new Error();
+  }
+  bar(x: Aged) {
+    this.assertName(x);
+    x.age  // ok
+  }
+}

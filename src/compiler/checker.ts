@@ -37902,7 +37902,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // An assignability check covers this, but a void initType can become an undefined type through control flow analysis.
             // Since void is not assignable to undefined, we patch initType to handle this, too.
             const assertedType = getUnionType(typesAtReturn, UnionReduction.Subtype);
-            const patchedInitType = mapType(initType, t => t.flags & TypeFlags.Void ? undefinedType : t);
+            const patchedInitType = mapType(initType, t => t.flags & TypeFlags.Void ? undefinedType : t.flags & TypeFlags.Any ? unknownType : t);
             if (isTypeAssignableTo(patchedInitType, assertedType)) return;
             return createTypePredicate(TypePredicateKind.AssertsIdentifier, unescapeLeadingUnderscores(param.name.escapedText), i, assertedType);
         });

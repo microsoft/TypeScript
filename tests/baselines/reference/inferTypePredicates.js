@@ -415,6 +415,46 @@ function fTest(x: unknown) {
   t2.assert(typeof x === "string"); // should ok
 }
 
+interface Named {
+  name: string;
+}
+interface Aged {
+  age: number;
+}
+
+declare function assertName(x: any): asserts x is Named;
+declare function isNamed(x: any): x is Named;
+
+function inferFromTypePred(x: unknown) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+function inferFromTypePredAny(x: any) {
+  if (!isNamed(x)) {
+    throw new Error();
+  }
+}
+
+class Namer {
+  assertName(x: unknown) {
+    if (!isNamed(x)) {
+      throw new Error();
+    }
+  }
+  assert(value: unknown) {
+    if (typeof value === 'number') {
+      return;
+    }
+    throw new Error();
+  }
+  bar(x: Aged) {
+    this.assertName(x);
+    x.age  // ok
+  }
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -797,6 +837,36 @@ function fTest(x) {
     var t2 = new Test();
     t2.assert(typeof x === "string"); // should ok
 }
+function inferFromTypePred(x) {
+    if (!isNamed(x)) {
+        throw new Error();
+    }
+}
+function inferFromTypePredAny(x) {
+    if (!isNamed(x)) {
+        throw new Error();
+    }
+}
+var Namer = /** @class */ (function () {
+    function Namer() {
+    }
+    Namer.prototype.assertName = function (x) {
+        if (!isNamed(x)) {
+            throw new Error();
+        }
+    };
+    Namer.prototype.assert = function (value) {
+        if (typeof value === 'number') {
+            return;
+        }
+        throw new Error();
+    };
+    Namer.prototype.bar = function (x) {
+        this.assertName(x);
+        x.age; // ok
+    };
+    return Namer;
+}());
 
 
 //// [inferTypePredicates.d.ts]
@@ -910,3 +980,18 @@ declare class Test {
     assert(value: unknown): void;
 }
 declare function fTest(x: unknown): void;
+interface Named {
+    name: string;
+}
+interface Aged {
+    age: number;
+}
+declare function assertName(x: any): asserts x is Named;
+declare function isNamed(x: any): x is Named;
+declare function inferFromTypePred(x: unknown): asserts x is Named;
+declare function inferFromTypePredAny(x: any): asserts x is Named;
+declare class Namer {
+    assertName(x: unknown): void;
+    assert(value: unknown): void;
+    bar(x: Aged): void;
+}
