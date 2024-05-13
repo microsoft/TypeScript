@@ -136,13 +136,13 @@ Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist accor
 Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'uppercasepackage', containing file '/user/username/projects/myproject/lib/@app/lib/index.d.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'UpperCasePackage', containing file '/user/username/projects/myproject/lib/@app/lib/index.d.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
 Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/uppercasepackage.d.ts' does not exist.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/uppercasepackage/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts' exists - use it as a name resolution result.
-Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
-Info seq  [hh:mm:ss:mss] ======== Type reference directive 'uppercasepackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts', primary: true. ========
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
@@ -166,7 +166,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 	../lib/@types/UpperCasePackage/index.d.ts
 	  Entry point for implicit type library 'UpperCasePackage'
-	  Type library referenced via 'UpperCasePackage' from file '../lib/@app/lib/index.d.ts'
 	../lib/@app/lib/index.d.ts
 	  Entry point for implicit type library 'lib'
 
@@ -367,7 +366,7 @@ Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not ex
 Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
-Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'uppercasepackage' from '/user/username/projects/myproject/lib/@app/lib/index.d.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/lib/@types/uppercasepackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'UpperCasePackage' from '/user/username/projects/myproject/lib/@app/lib/index.d.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)

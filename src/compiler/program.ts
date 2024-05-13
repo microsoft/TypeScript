@@ -1058,8 +1058,7 @@ export function createModuleResolutionLoader(
 }
 
 function getTypeReferenceResolutionName<T extends FileReference | string>(entry: T) {
-    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-    return !isString(entry) ? toFileNameLowerCase(entry.fileName) : entry;
+    return !isString(entry) ? entry.fileName : entry;
 }
 
 const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
@@ -1257,7 +1256,7 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             break;
         case FileIncludeKind.TypeReferenceDirective:
             ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.getResolvedTypeReferenceDirective(file, toFileNameLowerCase(file.typeReferenceDirectives[index].fileName), resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
+            packageId = program.getResolvedTypeReferenceDirective(file, file.typeReferenceDirectives[index].fileName, resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
             ({ pos, end } = file.libReferenceDirectives[index]);
@@ -3990,7 +3989,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const ref = file.typeReferenceDirectives[index];
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
-            const fileName = toFileNameLowerCase(ref.fileName);
+            const fileName = ref.fileName;
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
