@@ -1242,11 +1242,11 @@ export function isReferenceFileLocation(location: ReferenceFileLocation | Synthe
 export function getReferencedFileLocation(program: Program, ref: ReferencedFile): ReferenceFileLocation | SyntheticReferenceFileLocation {
     const file = Debug.checkDefined(program.getSourceFileByPath(ref.file));
     const { kind, index } = ref;
-    let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined, resolutionMode: FileReference["resolutionMode"] | undefined;
+    let pos: number | undefined, end: number | undefined, packageId: PackageId | undefined;
     switch (kind) {
         case FileIncludeKind.Import:
             const importLiteral = getModuleNameStringLiteralAt(file, index);
-            packageId = program.getResolvedModule(file, importLiteral.text, program.getModeForUsageLocation(file, importLiteral))?.resolvedModule?.packageId;
+            packageId = program.getResolvedModuleFromModuleSpecifier(importLiteral, file)?.resolvedModule?.packageId;
             if (importLiteral.pos === -1) return { file, packageId, text: importLiteral.text };
             pos = skipTrivia(file.text, importLiteral.pos);
             end = importLiteral.end;
@@ -1255,8 +1255,8 @@ export function getReferencedFileLocation(program: Program, ref: ReferencedFile)
             ({ pos, end } = file.referencedFiles[index]);
             break;
         case FileIncludeKind.TypeReferenceDirective:
-            ({ pos, end, resolutionMode } = file.typeReferenceDirectives[index]);
-            packageId = program.getResolvedTypeReferenceDirective(file, file.typeReferenceDirectives[index].fileName, resolutionMode || file.impliedNodeFormat)?.resolvedTypeReferenceDirective?.packageId;
+            ({ pos, end } = file.typeReferenceDirectives[index]);
+            packageId = program.getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(file.typeReferenceDirectives[index], file)?.resolvedTypeReferenceDirective?.packageId;
             break;
         case FileIncludeKind.LibReferenceDirective:
             ({ pos, end } = file.libReferenceDirectives[index]);
@@ -1929,6 +1929,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     resolvedLibProcessing = undefined;
     resolvedModulesProcessing = undefined;
     resolvedTypeReferenceDirectiveNamesProcessing = undefined;
+    resolvedTypeReferenceDirectives = undefined!;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -1960,7 +1961,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getInstantiationCount: () => getTypeChecker().getInstantiationCount(),
         getRelationCacheSizes: () => getTypeChecker().getRelationCacheSizes(),
         getFileProcessingDiagnostics: () => fileProcessingDiagnostics,
-        getResolvedTypeReferenceDirectives: () => resolvedTypeReferenceDirectives,
         getAutomaticTypeDirectiveNames: () => automaticTypeDirectiveNames!,
         getAutomaticTypeDirectiveResolutions: () => automaticTypeDirectiveResolutions,
         isSourceFileFromExternalLibrary,
@@ -1979,6 +1979,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         getResolvedModule,
         getResolvedModuleFromModuleSpecifier,
         getResolvedTypeReferenceDirective,
+        getResolvedTypeReferenceDirectiveFromTypeReferenceDirective,
         forEachResolvedModule,
         forEachResolvedTypeReferenceDirective,
         getCurrentPackagesMap: () => packageMap,
@@ -2075,14 +2076,18 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         return resolvedModules?.get(file.path)?.get(moduleName, mode);
     }
 
-    function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined {
-        const sourceFile = getSourceFileOfNode(moduleSpecifier);
+    function getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike, sourceFile?: SourceFile): ResolvedModuleWithFailedLookupLocations | undefined {
+        sourceFile ??= getSourceFileOfNode(moduleSpecifier);
         Debug.assertIsDefined(sourceFile, "`moduleSpecifier` must have a `SourceFile` ancestor. Use `program.getResolvedModule` instead to provide the containing file and resolution mode.");
         return getResolvedModule(sourceFile, moduleSpecifier.text, getModeForUsageLocation(sourceFile, moduleSpecifier));
     }
 
     function getResolvedTypeReferenceDirective(file: SourceFile, typeDirectiveName: string, mode: ResolutionMode) {
         return resolvedTypeReferenceDirectiveNames?.get(file.path)?.get(typeDirectiveName, mode);
+    }
+
+    function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
+        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
     }
 
     function forEachResolvedModule(
@@ -2717,7 +2722,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         files = newSourceFiles;
         fileReasons = oldProgram.getFileIncludeReasons();
         fileProcessingDiagnostics = oldProgram.getFileProcessingDiagnostics();
-        resolvedTypeReferenceDirectives = oldProgram.getResolvedTypeReferenceDirectives();
         automaticTypeDirectiveNames = oldProgram.getAutomaticTypeDirectiveNames();
         automaticTypeDirectiveResolutions = oldProgram.getAutomaticTypeDirectiveResolutions();
 
