@@ -28787,9 +28787,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         t => isTypeStrictSubtypeOf(t, c) ? t : isTypeStrictSubtypeOf(c, t) ? c : isTypeSubtypeOf(t, c) ? t : isTypeSubtypeOf(c, t) ? c : neverType,
                 );
                 // If no constituents are directly related, create intersections for any generic constituents that
-                // are related by constraint.
+                // are related by constraint or when the type is weak.
                 return directlyRelated.flags & TypeFlags.Never ?
-                    mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) ? getIntersectionType([t, c]) : neverType) :
+                    mapType(type, t => maybeTypeOfKind(t, TypeFlags.Instantiable) && isRelated(c, getBaseConstraintOfType(t) || unknownType) || isWeakType(type) ? getIntersectionType([t, c]) : neverType) :
                     directlyRelated;
             });
             // If filtering produced a non-empty type, return that. Otherwise, pick the most specific of the two

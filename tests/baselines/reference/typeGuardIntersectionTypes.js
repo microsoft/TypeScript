@@ -113,6 +113,30 @@ function beastFoo(beast: Object) {
     }
 }
 
+// https://github.com/microsoft/TypeScript/issues/58518
+
+interface A_58518 {
+  label?: string;
+  a?: string;
+}
+
+interface B_58518 {
+  label?: string;
+  b: boolean;
+}
+
+function isB_58518(thing: object): thing is B_58518 {
+  return "b" in thing;
+}
+
+function test_58518(thing: A_58518) {
+  thing.a;
+  if (isB_58518(thing)) {
+    thing.a;
+  }
+}
+
+
 //// [typeGuardIntersectionTypes.js]
 function f1(obj) {
     if (isX(obj) || isY(obj) || isZ(obj)) {
@@ -178,5 +202,14 @@ function beastFoo(beast) {
     }
     if (hasLegs(beast) && hasWings(beast)) {
         beast; // Legged & Winged
+    }
+}
+function isB_58518(thing) {
+    return "b" in thing;
+}
+function test_58518(thing) {
+    thing.a;
+    if (isB_58518(thing)) {
+        thing.a;
     }
 }
