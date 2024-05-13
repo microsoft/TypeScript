@@ -37,7 +37,8 @@ class TestClass1 {
     "typeRoots": [
       "../lib/@types",
       "../lib/@app"
-    ]
+    ],
+    "traceResolution": true
   }
 }
 
@@ -87,16 +88,64 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/myproject/test/tsconfig
    "/user/username/projects/myproject/lib/@types",
    "/user/username/projects/myproject/lib/@app"
   ],
+  "traceResolution": true,
   "configFilePath": "/user/username/projects/myproject/test/tsconfig.json"
  }
 }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Config: /user/username/projects/myproject/test/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/test 1 undefined Config: /user/username/projects/myproject/test/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/test/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'UpperCasePackage', containing file '/user/username/projects/myproject/test/__inferred type names__.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Failed Lookup Locations
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'lib', containing file '/user/username/projects/myproject/test/__inferred type names__.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/lib.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@app/lib/index.d.ts', result '/user/username/projects/myproject/lib/@app/lib/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'lib' was successfully resolved to '/user/username/projects/myproject/lib/@app/lib/index.d.ts', primary: true. ========
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@app/lib/index.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] ======== Resolving type reference directive 'UpperCasePackage', containing file '/user/username/projects/myproject/lib/@app/lib/index.d.ts', root directory '/user/username/projects/myproject/lib/@types,/user/username/projects/myproject/lib/@app'. ========
+Info seq  [hh:mm:ss:mss] Resolving with primary search path '/user/username/projects/myproject/lib/@types, /user/username/projects/myproject/lib/@app'.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage.d.ts' does not exist.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts' exists - use it as a name resolution result.
+Info seq  [hh:mm:ss:mss] Resolving real path for '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', result '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
+Info seq  [hh:mm:ss:mss] ======== Type reference directive 'UpperCasePackage' was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts', primary: true. ========
+Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/lib/@types 1 undefined Project: /user/username/projects/myproject/test/tsconfig.json WatchType: Type roots
@@ -117,7 +166,6 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 	../lib/@types/UpperCasePackage/index.d.ts
 	  Entry point for implicit type library 'UpperCasePackage'
-	  Type library referenced via 'UpperCasePackage' from file '../lib/@app/lib/index.d.ts'
 	../lib/@app/lib/index.d.ts
 	  Entry point for implicit type library 'lib'
 
@@ -159,7 +207,8 @@ Info seq  [hh:mm:ss:mss] event:
             "typeRoots": [
               "",
               ""
-            ]
+            ],
+            "traceResolution": true
           },
           "typeAcquisition": {
             "enable": false,
@@ -292,6 +341,32 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] Running: /user/username/projects/myproject/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json
+Info seq  [hh:mm:ss:mss] File '/a/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/a/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/test/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/UpperCasePackage/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@types/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/@app/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/lib/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/username/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/user/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] File '/package.json' does not exist according to earlier cached lookups.
+Info seq  [hh:mm:ss:mss] Reusing resolution of type reference directive 'UpperCasePackage' from '/user/username/projects/myproject/lib/@app/lib/index.d.ts' of old program, it was successfully resolved to '/user/username/projects/myproject/lib/@types/UpperCasePackage/index.d.ts'.
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/test/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/test/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
