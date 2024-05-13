@@ -1715,7 +1715,7 @@ function promoteFromTypeOnly(
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
+            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));

@@ -4679,9 +4679,11 @@ export interface Program extends ScriptReferenceHost {
     /** @internal */
     getResolvedModule(f: SourceFile, moduleName: string, mode: ResolutionMode): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @internal */
-    getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike): ResolvedModuleWithFailedLookupLocations | undefined;
+    getResolvedModuleFromModuleSpecifier(moduleSpecifier: StringLiteralLike, sourceFile?: SourceFile): ResolvedModuleWithFailedLookupLocations | undefined;
     /** @internal */
     getResolvedTypeReferenceDirective(f: SourceFile, typeDirectiveName: string, mode: ResolutionMode): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
+    /** @internal */
+    getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typedRef: FileReference, sourceFile: SourceFile): ResolvedTypeReferenceDirectiveWithFailedLookupLocations | undefined;
     /** @internal */
     forEachResolvedModule(
         callback: (resolution: ResolvedModuleWithFailedLookupLocations, moduleName: string, mode: ResolutionMode, filePath: Path) => void,
@@ -4738,7 +4740,6 @@ export interface Program extends ScriptReferenceHost {
     getRelationCacheSizes(): { assignable: number; identity: number; subtype: number; strictSubtype: number; };
 
     /** @internal */ getFileProcessingDiagnostics(): FilePreprocessingDiagnostics[] | undefined;
-    /** @internal */ getResolvedTypeReferenceDirectives(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     /** @internal */ getAutomaticTypeDirectiveNames(): string[];
     /** @internal */ getAutomaticTypeDirectiveResolutions(): ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
     isSourceFileFromExternalLibrary(file: SourceFile): boolean;
