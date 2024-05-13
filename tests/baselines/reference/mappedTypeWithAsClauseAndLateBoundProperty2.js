@@ -14,8 +14,8 @@ export declare const thing: {
     toString: () => string;
     toLocaleString: {
         (): string;
-        (locales?: string | readonly string[], options?: object): string;
-        (locales?: Intl.LocalesArgument, options?: object): string;
+        (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
+        (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
     };
     pop: () => number;
     push: (...items: number[]) => number;
@@ -122,8 +122,8 @@ mappedTypeWithAsClauseAndLateBoundProperty2.d.ts(28,118): error TS2526: A 'this'
         toString: () => string;
         toLocaleString: {
             (): string;
-            (locales?: string | readonly string[], options?: object): string;
-            (locales?: Intl.LocalesArgument, options?: object): string;
+            (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string;
+            (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string;
         };
         pop: () => number;
         push: (...items: number[]) => number;
