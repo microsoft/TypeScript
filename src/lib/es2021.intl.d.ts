@@ -48,6 +48,7 @@ declare namespace Intl {
     }
 
     type DisplayNamesOptionsStyle = "narrow" | "short" | "long";
+    type DisplayNamesOptionsFallback = "code" | "none";
 
     interface DisplayNamesOptionsTypeRegistry {
         language: never;
@@ -56,8 +57,6 @@ declare namespace Intl {
         currency: never;
     }
     type DisplayNamesOptionsType = keyof DisplayNamesOptionsTypeRegistry;
-
-    type DisplayNamesOptionsFallback = "code" | "none";
 
     interface DisplayNamesOptions {
         localeMatcher?: LocaleMatcherAlgorithm | undefined;
