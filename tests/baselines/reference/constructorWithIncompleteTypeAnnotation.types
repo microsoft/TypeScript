@@ -1290,7 +1290,7 @@ module TypeScriptAllInOne {
     interface IF {
         Foo(): bool;
 >Foo : () => bool
->    : ^^^^^^^^^^
+>    : ^^^^^^    
     }
 
     class CLASS implements IF {
@@ -1323,7 +1323,7 @@ module TypeScriptAllInOne {
         }
         public Foo(): bool {
 >Foo : () => bool
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 
             var myEvent = () => { return 1; };
 >myEvent : () => number

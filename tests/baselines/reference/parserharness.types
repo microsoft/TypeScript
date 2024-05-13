@@ -4320,7 +4320,7 @@ module Harness {
             /** create file gets the whole path to create, so this works as expected with the --out parameter */
             public createFile(s: string, useUTF8?: boolean): ITextWriter {
 >createFile : (s: string, useUTF8?: boolean) => ITextWriter
->           : ^ ^^      ^^       ^^^       ^^^^^^^^^^^^^^^^
+>           : ^ ^^      ^^       ^^^       ^^^^^           
 >s : string
 >  : ^^^^^^
 >useUTF8 : boolean
@@ -10623,7 +10623,7 @@ module Harness {
 
         public getEditRangeSinceVersion(version: number): TypeScript.ScriptEditRange {
 >getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
->                         : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^      ^^^^^                          
 >version : number
 >        : ^^^^^^
 >TypeScript : any
@@ -11557,7 +11557,7 @@ module Harness {
          */
         public getLanguageService(): Services.ILanguageServiceShim {
 >getLanguageService : () => Services.ILanguageServiceShim
->                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^^^^^^                             
 >Services : any
 >         : ^^^
 
@@ -11613,7 +11613,7 @@ module Harness {
         /** Parse file given its source text */
         public parseSourceText(fileName: string, sourceText: TypeScript.ISourceText): TypeScript.Script {
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^      ^^          ^^                      ^^^^^                 
 >fileName : string
 >         : ^^^^^^
 >sourceText : TypeScript.ISourceText
@@ -11871,7 +11871,7 @@ module Harness {
         */
         public positionToZeroBasedLineCol(fileName: string, position: number): TypeScript.ILineCol {
 >positionToZeroBasedLineCol : (fileName: string, position: number) => TypeScript.ILineCol
->                           : ^        ^^      ^^        ^^      ^^^^^^^^^^^^^^^^^^^^^^^^
+>                           : ^        ^^      ^^        ^^      ^^^^^                   
 >fileName : string
 >         : ^^^^^^
 >position : number

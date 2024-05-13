@@ -38,7 +38,7 @@ declare namespace lf {
 
     stats(): TransactionStats
 >stats : () => TransactionStats
->      : ^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^                
   }
 }
 === lovefield.js ===

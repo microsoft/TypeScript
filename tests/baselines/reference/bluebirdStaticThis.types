@@ -147,7 +147,7 @@ export declare class Promise<R> implements Promise.Thenable<R> {
 
     static defer<R>(dit: typeof Promise): Promise.Resolver<R>;
 >defer : <R>(dit: typeof Promise) => Promise.Resolver<R>
->      : ^^^^   ^^              ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^   ^^              ^^^^^                   
 >dit : typeof Promise
 >    : ^^^^^^^^^^^^^^
 >Promise : typeof Promise
