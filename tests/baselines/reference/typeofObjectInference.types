@@ -40,8 +40,8 @@ let a = decorateA(({value}) => 5)
 >                          : ^^^^^^^^^^^^
 >decorateA : <O extends unknown>(fn: (first: { value: typeof val; }) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                    ^^^^^^^^^^^ 
->({value}) => 5 : ({ value }: { value: number; }) => number
->               : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>({value}) => 5 : ({ value }: { value: typeof val; }) => number
+>               : ^         ^^^^^^^^^^^          ^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >5 : 5
@@ -113,7 +113,7 @@ let c = decorateC(({value}) => 5)
 >decorateC : <O extends unknown>(fn: (first: { value: number; }) => O) => () => O
 >          : ^ ^^^^^^^^^^^^^^^^^^  ^^                                ^^^^^^^^^^^ 
 >({value}) => 5 : ({ value }: { value: number; }) => number
->               : ^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^         ^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 >5 : 5

@@ -161,8 +161,8 @@ function referencedInInferredType({ name: alias }: Named) {
 >      : ^^^^^^
 
     return null! as Named2
->null! as Named2 : { name: string; }
->                : ^^^^^^^^^^^^^^^^^
+>null! as Named2 : { name: typeof alias; }
+>                : ^^^^^^^^            ^^^
 >null! : null
 >      : ^^^^
 }
