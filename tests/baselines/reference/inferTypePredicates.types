@@ -2187,11 +2187,6 @@ interface Named {
 >name : string
 >     : ^^^^^^
 }
-interface Aged {
-  age: number;
->age : number
->    : ^^^^^^
-}
 
 declare function assertName(x: any): asserts x is Named;
 >assertName : (x: any) => asserts x is Named
@@ -2250,85 +2245,6 @@ function inferFromTypePredAny(x: any) {
 >            : ^^^^^
 >Error : ErrorConstructor
 >      : ^^^^^^^^^^^^^^^^
-  }
-}
-
-class Namer {
->Namer : Namer
->      : ^^^^^
-
-  assertName(x: unknown) {
->assertName : (x: unknown) => void
->           : ^ ^^       ^^^^^^^^^
->x : unknown
->  : ^^^^^^^
-
-    if (!isNamed(x)) {
->!isNamed(x) : boolean
->            : ^^^^^^^
->isNamed(x) : boolean
->           : ^^^^^^^
->isNamed : (x: any) => x is Named
->        : ^ ^^   ^^^^^^^^^^^^^^^
->x : unknown
->  : ^^^^^^^
-
-      throw new Error();
->new Error() : Error
->            : ^^^^^
->Error : ErrorConstructor
->      : ^^^^^^^^^^^^^^^^
-    }
-  }
-  assert(value: unknown) {
->assert : (value: unknown) => void
->       : ^     ^^       ^^^^^^^^^
->value : unknown
->      : ^^^^^^^
-
-    if (typeof value === 'number') {
->typeof value === 'number' : boolean
->                          : ^^^^^^^
->typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : unknown
->      : ^^^^^^^
->'number' : "number"
->         : ^^^^^^^^
-
-      return;
-    }
-    throw new Error();
->new Error() : Error
->            : ^^^^^
->Error : ErrorConstructor
->      : ^^^^^^^^^^^^^^^^
-  }
-  bar(x: Aged) {
->bar : (x: Aged) => void
->    : ^ ^^    ^^^^^^^^^
->x : Aged
->  : ^^^^
-
-    this.assertName(x);
->this.assertName(x) : void
->                   : ^^^^
->this.assertName : (x: unknown) => void
->                : ^ ^^       ^^^^^^^^^
->this : this
->     : ^^^^
->assertName : (x: unknown) => void
->           : ^ ^^       ^^^^^^^^^
->x : Aged
->  : ^^^^
-
-    x.age  // ok
->x.age : number
->      : ^^^^^^
->x : Aged
->  : ^^^^
->age : number
->    : ^^^^^^
   }
 }
 
