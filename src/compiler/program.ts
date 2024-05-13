@@ -1058,8 +1058,7 @@ export function createModuleResolutionLoader(
 }
 
 function getTypeReferenceResolutionName<T extends FileReference | string>(entry: T) {
-    // We lower-case all type references because npm automatically lowercases all packages. See GH#9824.
-    return !isString(entry) ? toFileNameLowerCase(entry.fileName) : entry;
+    return !isString(entry) ? entry.fileName : entry;
 }
 
 const typeReferenceResolutionNameAndModeGetter: ResolutionNameAndModeGetter<FileReference | string, SourceFile | undefined> = {
@@ -2086,7 +2085,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     }
 
     function getResolvedTypeReferenceDirectiveFromTypeReferenceDirective(typeRef: FileReference, sourceFile: SourceFile) {
-        return getResolvedTypeReferenceDirective(sourceFile, toFileNameLowerCase(typeRef.fileName), typeRef.resolutionMode || sourceFile.impliedNodeFormat);
+        return getResolvedTypeReferenceDirective(sourceFile, typeRef.fileName, typeRef.resolutionMode || sourceFile.impliedNodeFormat);
     }
 
     function forEachResolvedModule(
@@ -3992,7 +3991,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             const ref = file.typeReferenceDirectives[index];
             const resolvedTypeReferenceDirective = resolutions[index];
             // store resolved type directive on the file
-            const fileName = toFileNameLowerCase(ref.fileName);
+            const fileName = ref.fileName;
             resolutionsInFile.set(fileName, getModeForFileReference(ref, file.impliedNodeFormat), resolvedTypeReferenceDirective);
             const mode = ref.resolutionMode || getDefaultResolutionModeForFile(file);
             processTypeReferenceDirective(fileName, mode, resolvedTypeReferenceDirective, { kind: FileIncludeKind.TypeReferenceDirective, file: file.path, index });
