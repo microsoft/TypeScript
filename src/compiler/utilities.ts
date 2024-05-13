@@ -11360,11 +11360,15 @@ export function createNameResolver({
                         location = root.parent;
                     }
                     break;
-                case SyntaxKind.Parameter:
+                case SyntaxKind.Parameter: {
+                    const param = location as ParameterDeclaration;
+                    if (lastLocation === param.name) {
+                        lastSelfReferenceLocation = param;
+                    }
                     if (
                         lastLocation && (
-                            lastLocation === (location as ParameterDeclaration).initializer ||
-                            lastLocation === (location as ParameterDeclaration).name && isBindingPattern(lastLocation)
+                            lastLocation === param.initializer ||
+                            lastLocation === param.name && isBindingPattern(lastLocation)
                         )
                     ) {
                         if (!associatedDeclarationForContainingInitializerOrBindingName) {
@@ -11372,6 +11376,7 @@ export function createNameResolver({
                         }
                     }
                     break;
+                }
                 case SyntaxKind.BindingElement:
                     if (
                         lastLocation && (
@@ -11538,6 +11543,7 @@ export function createNameResolver({
     }
 
     type SelfReferenceLocation =
+        | ParameterDeclaration
         | FunctionDeclaration
         | ClassDeclaration
         | InterfaceDeclaration
