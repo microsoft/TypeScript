@@ -1206,6 +1206,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             nodenext: ModuleFormatInteropKind.NodeNext,
         })),
         affectsSemanticDiagnostics: true,
+        affectsBuildInfo: true,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_the_target_runtime_s_rules_for_ESM_CommonJS_interoperation,
         defaultValueDescription: Diagnostics.node16_when_module_is_node16_nodenext_when_module_is_nodenext_bundler_otherwise,
