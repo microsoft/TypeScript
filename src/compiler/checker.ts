@@ -8233,7 +8233,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function serializeReturnTypeForSignatureWorker(context: NodeBuilderContext, signature: Signature) {
             const typePredicate = getTypePredicateOfSignature(signature);
             const type = getReturnTypeOfSignature(signature);
-            if (!isErrorType(type) && context.enclosingDeclaration) {
+            if (context.enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
                 const annotation = signature.declaration && getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
                 const enclosingDeclarationIgnoringFakeScope = getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
                 if (!!findAncestor(annotation, n => n === enclosingDeclarationIgnoringFakeScope) && annotation) {
