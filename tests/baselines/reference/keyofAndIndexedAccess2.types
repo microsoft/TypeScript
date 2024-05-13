@@ -28,7 +28,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
 >1 : 1
@@ -40,7 +40,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
 >2 : 2
@@ -52,7 +52,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k0] : number
 >        : ^^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k0 : "a"
 >   : ^^^
 >'x' : "x"
@@ -64,7 +64,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k1] : 0 | 1
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
 >   : ^^^^^^^^^
 >1 : 1
@@ -76,7 +76,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k1] : 0 | 1
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
 >   : ^^^^^^^^^
 >2 : 2
@@ -88,7 +88,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k1] : 0 | 1
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k1 : "a" | "b"
 >   : ^^^^^^^^^
 >'x' : "x"
@@ -100,7 +100,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
 >1 : 1
@@ -112,7 +112,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
 >2 : 2
@@ -124,7 +124,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 >obj[k2] : never
 >        : ^^^^^
 >obj : { a: number; b: 0 | 1; c: string; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^      ^^^^^     ^^^^^      ^^^
 >k2 : "a" | "b" | "c"
 >   : ^^^^^^^^^^^^^^^
 >'x' : "x"
@@ -155,7 +155,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >a = b : { [key: string]: number; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -163,17 +163,17 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >a = c : T
 >      : ^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >c : T
 >  : ^
 
     b = a;
 >b = a : { x: number; y: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^
 >b : { [key: string]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 
     b = c;
 >b = c : T
@@ -185,11 +185,11 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 
     c = a;  // Error, constraint on target doesn't imply any properties or signatures
 >c = a : { x: number; y: number; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^      ^^^^^      ^^^
 >c : T
 >  : ^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 
     c = b;  // Error, constraint on target doesn't imply any properties or signatures
 >c = b : { [key: string]: number; }
@@ -203,7 +203,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >a.x : number
 >    : ^^^^^^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 
@@ -237,7 +237,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 >a.x : number
 >    : ^^^^^^
 >a : { x: number; y: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^      ^^^^^      ^^^
 >x : number
 >  : ^^^^^^
 >1 : 1
@@ -282,7 +282,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
 >f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^   ^                 ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
@@ -331,7 +331,7 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
 >f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^   ^                 ^^ ^^   ^                      ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
@@ -736,8 +736,8 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 >                  : ^^^^^^^^^^^^^^^
 >param.elements : string[] | number[]
 >               : ^^^^^^^^^^^^^^^^^^^
->param : { elements: string[]; } | { elements: number[]; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>param : { elements: Array<string>; } | { elements: Array<number>; }
+>      : ^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^             ^^^
 >elements : string[] | number[]
 >         : ^^^^^^^^^^^^^^^^^^^
 >0 : 0
