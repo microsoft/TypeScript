@@ -8,6 +8,7 @@ import {
     addSyntheticLeadingComment,
     AliasDeclarationNode,
     AllAccessorDeclarations,
+    AllowRequireESM,
     AmbientModuleDeclaration,
     and,
     AnonymousType,
@@ -138,6 +139,7 @@ import {
     Decorator,
     deduplicate,
     DefaultClause,
+    DefaultIsModuleExports,
     defaultMaximumTruncationLength,
     DeferredTypeReference,
     DeleteExpression,
@@ -245,6 +247,7 @@ import {
     GetAccessorDeclaration,
     getAliasDeclarationFromName,
     getAllJSDocTags,
+    getAllowRequireESM,
     getAllowSyntheticDefaultImports,
     getAncestor,
     getAssignedExpandoInitializer,
@@ -268,6 +271,7 @@ import {
     getDeclarationsOfKind,
     getDeclaredExpandoInitializer,
     getDecorators,
+    getDefaultIsModuleExports,
     getDirectoryPath,
     getEffectiveBaseTypeNode,
     getEffectiveConstraintOfTypeParameter,
@@ -332,7 +336,6 @@ import {
     getLineAndCharacterOfPosition,
     getMembersOfDeclaration,
     getModifiers,
-    getModuleFormatInteropKind,
     getModuleInstanceState,
     getNameFromImportAttribute,
     getNameFromIndexInfo,
@@ -860,7 +863,6 @@ import {
     modifierToFlag,
     ModuleBlock,
     ModuleDeclaration,
-    ModuleFormatInteropKind,
     ModuleInstanceState,
     ModuleKind,
     ModuleResolutionKind,
@@ -3636,9 +3638,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const usageMode = file && getEmitSyntaxForModuleSpecifierExpression(usage);
         if (file && usageMode !== undefined) {
             const targetMode = host.getImpliedNodeFormatForEmit(file);
-            const moduleFormatInterop = getModuleFormatInteropKind(compilerOptions);
-            const usesNodeLikeInteropRules = moduleFormatInterop === ModuleFormatInteropKind.BundlerNode
-                || ModuleFormatInteropKind.Node16 <= moduleFormatInterop && moduleFormatInterop <= ModuleFormatInteropKind.NodeNext;
+            const defaultIsModuleExports = getDefaultIsModuleExports(compilerOptions);
+            const usesNodeLikeInteropRules = DefaultIsModuleExports.Node16 <= defaultIsModuleExports && defaultIsModuleExports <= DefaultIsModuleExports.NodeNext;
             if (usageMode === ModuleKind.ESNext && targetMode !== ModuleKind.ESNext && usesNodeLikeInteropRules) {
                 // In Node.js, CommonJS modules always have a synthetic default when imported into ESM
                 return true;
@@ -4580,8 +4581,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const mode = contextSpecifier && isStringLiteralLike(contextSpecifier)
             ? host.getModeForUsageLocation(currentSourceFile, contextSpecifier)
             : host.getDefaultResolutionModeForFile(currentSourceFile);
+        const importingFileIsJavaScript = isSourceFileJS(currentSourceFile);
         const moduleResolutionKind = getEmitModuleResolutionKind(compilerOptions);
-        const moduleFormatInterop = getModuleFormatInteropKind(compilerOptions);
+        const allowRequireESM = getAllowRequireESM(compilerOptions);
         const resolvedModule = host.getResolvedModule(currentSourceFile, moduleReference, mode)?.resolvedModule;
         const resolutionDiagnostic = resolvedModule && getResolutionDiagnostic(compilerOptions, resolvedModule, currentSourceFile);
         const sourceFile = resolvedModule
@@ -4617,12 +4619,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (resolvedModule.isExternalLibraryImport && !resolutionExtensionIsTSOrJson(resolvedModule.extension)) {
                     errorOnImplicitAnyModule(/*isError*/ false, errorNode, currentSourceFile, mode, resolvedModule, moduleReference);
                 }
-                if (ModuleFormatInteropKind.Node16 <= moduleFormatInterop && moduleFormatInterop <= ModuleFormatInteropKind.NodeNext) {
-                    const isSyncImport = (currentSourceFile.impliedNodeFormat === ModuleKind.CommonJS && !findAncestor(location, isImportCall)) || !!findAncestor(location, isImportEqualsDeclaration);
+                if (AllowRequireESM.Node16 <= allowRequireESM && allowRequireESM <= AllowRequireESM.NodeNext) {
+                    const isSyncImport = (host.getImpliedNodeFormatForEmit(currentSourceFile) === ModuleKind.CommonJS && !findAncestor(location, isImportCall))
+                        || !!findAncestor(location, n => isImportEqualsDeclaration(n) || importingFileIsJavaScript && isVariableDeclarationInitializedToBareOrAccessedRequire(n));
                     const overrideHost = findAncestor(location, l => isImportTypeNode(l) || isExportDeclaration(l) || isImportDeclaration(l)) as ImportTypeNode | ImportDeclaration | ExportDeclaration | undefined;
                     // An override clause will take effect for type-only imports and import types, and allows importing the types across formats, regardless of
                     // normal mode restrictions
-                    if (isSyncImport && sourceFile.impliedNodeFormat === ModuleKind.ESNext && !hasResolutionModeOverride(overrideHost)) {
+                    if (isSyncImport && host.getImpliedNodeFormatForEmit(sourceFile) === ModuleKind.ESNext && !hasResolutionModeOverride(overrideHost)) {
                         if (findAncestor(location, isImportEqualsDeclaration)) {
                             // ImportEquals in a ESM file resolving to another ESM file
                             error(errorNode, Diagnostics.Module_0_cannot_be_imported_using_this_construct_The_specifier_only_resolves_to_an_ES_module_which_cannot_be_imported_with_require_Use_an_ECMAScript_import_instead, moduleReference);

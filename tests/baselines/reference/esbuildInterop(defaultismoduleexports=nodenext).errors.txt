@@ -19,8 +19,8 @@
     
 ==== /index.ts (1 errors) ====
     import dep from "dep";
-    dep.toLowerCase(); // Error
+    dep.toLowerCase(); // Error in nodenext
         ~~~~~~~~~~~
 !!! error TS2339: Property 'toLowerCase' does not exist on type 'typeof import("/node_modules/dep/index")'.
-    dep.default.toLowerCase(); // Ok
+    dep.default.toLowerCase(); // Error in auto
     

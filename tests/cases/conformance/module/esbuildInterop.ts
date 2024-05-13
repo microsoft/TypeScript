@@ -1,6 +1,6 @@
 // @module: esnext
 // @moduleResolution: bundler
-// @moduleFormatInterop: bundler, bundlernode
+// @defaultIsModuleExports: auto, nodenext
 // @noEmit: true
 // @noTypesAndSymbols: true
 
@@ -22,5 +22,5 @@ export default _default;
 
 // @Filename: /index.ts
 import dep from "dep";
-dep.toLowerCase(); // Error in bundlernode
-dep.default.toLowerCase(); // Error in bundler
+dep.toLowerCase(); // Error in nodenext
+dep.default.toLowerCase(); // Error in auto

@@ -7227,6 +7227,7 @@ export interface CompilerOptions {
     allowJs?: boolean;
     /** @internal */ allowNonTsExtensions?: boolean;
     allowArbitraryExtensions?: boolean;
+    allowRequireESM?: AllowRequireESM;
     allowSyntheticDefaultImports?: boolean;
     allowUmdGlobalAccess?: boolean;
     allowUnreachableCode?: boolean;
@@ -7254,6 +7255,7 @@ export interface CompilerOptions {
     declarationMap?: boolean;
     emitDeclarationOnly?: boolean;
     declarationDir?: string;
+    defaultIsModuleExports?: DefaultIsModuleExports;
     /** @internal */ diagnostics?: boolean;
     /** @internal */ extendedDiagnostics?: boolean;
     disableSizeLimit?: boolean;
@@ -7290,7 +7292,6 @@ export interface CompilerOptions {
     mapRoot?: string;
     maxNodeModuleJsDepth?: number;
     module?: ModuleKind;
-    moduleFormatInterop?: ModuleFormatInteropKind;
     moduleResolution?: ModuleResolutionKind;
     moduleSuffixes?: string[];
     moduleDetection?: ModuleDetectionKind;
@@ -7424,10 +7425,15 @@ export enum ModuleKind {
     Preserve = 200,
 }
 
-export enum ModuleFormatInteropKind {
-    Bundler = 1,
-    BundlerNode = 2,
+export enum DefaultIsModuleExports {
+    Auto = 1,
+    Node16 = 100,
+    NodeNext = 199,
+}
 
+export enum AllowRequireESM {
+    Never = 0,
+    Always = 1,
     Node16 = 100,
     NodeNext = 199,
 }

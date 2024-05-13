@@ -129,8 +129,10 @@ class CompilerTest {
     private static varyBy: readonly string[] = [
         "allowArbitraryExtensions",
         "allowImportingTsExtensions",
+        "allowRequireESM",
         "allowSyntheticDefaultImports",
         "alwaysStrict",
+        "defaultIsModuleExports",
         "downlevelIteration",
         "experimentalDecorators",
         "emitDecoratorMetadata",
@@ -142,7 +144,6 @@ class CompilerTest {
         "jsx",
         "module",
         "moduleDetection",
-        "moduleFormatInterop",
         "moduleResolution",
         "noEmit",
         "noImplicitAny",

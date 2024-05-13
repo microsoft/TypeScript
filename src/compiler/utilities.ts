@@ -6,6 +6,7 @@ import {
     affectsDeclarationPathOptionDeclarations,
     affectsEmitOptionDeclarations,
     AllAccessorDeclarations,
+    AllowRequireESM,
     AmbientModuleDeclaration,
     AmpersandAmpersandEqualsToken,
     AnyImportOrBareOrAccessedRequire,
@@ -90,6 +91,7 @@ import {
     DeclarationWithTypeParameters,
     Decorator,
     DefaultClause,
+    DefaultIsModuleExports,
     DestructuringAssignment,
     Diagnostic,
     DiagnosticArguments,
@@ -420,7 +422,6 @@ import {
     ModuleBlock,
     ModuleDeclaration,
     ModuleDetectionKind,
-    ModuleFormatInteropKind,
     ModuleKind,
     ModuleResolutionKind,
     moduleResolutionOptionDeclarations,
@@ -8853,20 +8854,28 @@ export const computedOptions = createComputedCompilerOptions({
                         computedOptions.module.computeValue(compilerOptions) === ModuleKind.NodeNext ? ModuleDetectionKind.Force : ModuleDetectionKind.Auto);
         },
     },
-    moduleFormatInterop: {
+    defaultIsModuleExports: {
         dependencies: ["module", "target"],
-        computeValue: (compilerOptions): ModuleFormatInteropKind => {
-            if (compilerOptions.moduleFormatInterop !== undefined) {
-                return compilerOptions.moduleFormatInterop;
+        computeValue: (compilerOptions): DefaultIsModuleExports => {
+            if (compilerOptions.defaultIsModuleExports !== undefined) {
+                return compilerOptions.defaultIsModuleExports;
             }
-            switch (computedOptions.module.computeValue(compilerOptions)) {
-                case ModuleKind.Node16:
-                    return ModuleFormatInteropKind.Node16;
-                case ModuleKind.NodeNext:
-                    return ModuleFormatInteropKind.NodeNext;
-                default:
-                    return ModuleFormatInteropKind.Bundler;
+            const moduleKind = computedOptions.module.computeValue(compilerOptions);
+            return moduleKind === ModuleKind.Node16 ? DefaultIsModuleExports.Node16 :
+                moduleKind === ModuleKind.NodeNext ? DefaultIsModuleExports.NodeNext :
+                DefaultIsModuleExports.Auto;
+        },
+    },
+    allowRequireESM: {
+        dependencies: ["module", "target"],
+        computeValue: (compilerOptions): AllowRequireESM => {
+            if (compilerOptions.allowRequireESM !== undefined) {
+                return compilerOptions.allowRequireESM;
             }
+            const moduleKind = computedOptions.module.computeValue(compilerOptions);
+            return moduleKind === ModuleKind.Node16 ? AllowRequireESM.Node16 :
+                moduleKind === ModuleKind.NodeNext ? AllowRequireESM.NodeNext :
+                AllowRequireESM.Always;
         },
     },
     isolatedModules: {
@@ -9045,7 +9054,9 @@ export const getEmitModuleResolutionKind = computedOptions.moduleResolution.comp
 /** @internal */
 export const getEmitModuleDetectionKind = computedOptions.moduleDetection.computeValue;
 /** @internal */
-export const getModuleFormatInteropKind = computedOptions.moduleFormatInterop.computeValue;
+export const getDefaultIsModuleExports = computedOptions.defaultIsModuleExports.computeValue;
+/** @internal */
+export const getAllowRequireESM = computedOptions.allowRequireESM.computeValue;
 /** @internal */
 export const getIsolatedModules = computedOptions.isolatedModules.computeValue;
 /** @internal */

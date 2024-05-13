@@ -6392,9 +6392,13 @@
         "category": "Message",
         "code": 6805
     },
-    "Specify the target runtime's rules for ESM-CommonJS interoperation.": {
+    "Specify the target runtime's rules for default imports targeting CommonJS modules.": {
         "category": "Message",
         "code": 6806
+    },
+    "Specify the target runtime's rules for CommonJS 'require' calls targeting ECMAScript modules.": {
+        "category": "Message",
+        "code": 6807
     },
 
     "one of:": {
@@ -6525,9 +6529,13 @@
         "category": "Error",
         "code": 6931
     },
-    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'bundler' otherwise.": {
+    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'auto' otherwise.": {
         "category": "Message",
         "code": 6932
+    },
+    "'node16' when 'module' is 'node16'; 'nodenext' when 'module' is 'nodenext'; 'always' otherwise.": {
+        "category": "Message",
+        "code": 6933
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

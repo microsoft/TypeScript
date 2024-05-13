@@ -6902,6 +6902,7 @@ declare namespace ts {
         allowImportingTsExtensions?: boolean;
         allowJs?: boolean;
         allowArbitraryExtensions?: boolean;
+        allowRequireESM?: AllowRequireESM;
         allowSyntheticDefaultImports?: boolean;
         allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
@@ -6916,6 +6917,7 @@ declare namespace ts {
         declarationMap?: boolean;
         emitDeclarationOnly?: boolean;
         declarationDir?: string;
+        defaultIsModuleExports?: DefaultIsModuleExports;
         disableSizeLimit?: boolean;
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
@@ -6942,7 +6944,6 @@ declare namespace ts {
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
-        moduleFormatInterop?: ModuleFormatInteropKind;
         moduleResolution?: ModuleResolutionKind;
         moduleSuffixes?: string[];
         moduleDetection?: ModuleDetectionKind;
@@ -7045,9 +7046,14 @@ declare namespace ts {
         NodeNext = 199,
         Preserve = 200,
     }
-    enum ModuleFormatInteropKind {
-        Bundler = 1,
-        BundlerNode = 2,
+    enum DefaultIsModuleExports {
+        Auto = 1,
+        Node16 = 100,
+        NodeNext = 199,
+    }
+    enum AllowRequireESM {
+        Never = 0,
+        Always = 1,
         Node16 = 100,
         NodeNext = 199,
     }
