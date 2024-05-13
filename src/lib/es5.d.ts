@@ -540,10 +540,15 @@ declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
-     * Returns a string representation of an object.
+     * Returns a string representation of a number.
      * @param radix Specifies a radix for converting numeric values to strings. This value is only used for numbers.
      */
     toString(radix?: number): string;
+
+    /**
+     * Returns a string representation of a number according to the host environment's current locale.
+     */
+    toLocaleString(): string;
 
     /**
      * Returns a string representing a number in fixed-point notation.
@@ -758,7 +763,7 @@ interface Date {
     toDateString(): string;
     /** Returns a time as a string value. */
     toTimeString(): string;
-    /** Returns a value as a string value according to the host environment's current locale. */
+    /** Returns the date and time as a string value according to the host environment's current locale. */
     toLocaleString(): string;
     /** Returns a date as a string value according to the host environment's current locale. */
     toLocaleDateString(): string;
@@ -2087,7 +2092,8 @@ interface Int8Array {
     subarray(begin?: number, end?: number): Int8Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2367,7 +2373,8 @@ interface Uint8Array {
     subarray(begin?: number, end?: number): Uint8Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2648,7 +2655,8 @@ interface Uint8ClampedArray {
     subarray(begin?: number, end?: number): Uint8ClampedArray;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -2928,7 +2936,8 @@ interface Int16Array {
     subarray(begin?: number, end?: number): Int16Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3209,7 +3218,8 @@ interface Uint16Array {
     subarray(begin?: number, end?: number): Uint16Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3489,7 +3499,8 @@ interface Int32Array {
     subarray(begin?: number, end?: number): Int32Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -3769,7 +3780,8 @@ interface Uint32Array {
     subarray(begin?: number, end?: number): Uint32Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -4050,7 +4062,8 @@ interface Float32Array {
     subarray(begin?: number, end?: number): Float32Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 
@@ -4331,7 +4344,8 @@ interface Float64Array {
     subarray(begin?: number, end?: number): Float64Array;
 
     /**
-     * Converts a number to a string according to the host environment's current locale.
+     * Returns a string representation of an array.
+     * Each element is converted to a string using its `toLocaleString` method, then concatenated using a locale-specific list separator.
      */
     toLocaleString(): string;
 

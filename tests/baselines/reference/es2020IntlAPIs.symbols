@@ -431,19 +431,19 @@ Date.prototype.toLocaleTimeString(mixed);
 >mixed : Symbol(mixed, Decl(es2020IntlAPIs.ts, 1, 5))
 
 Number.prototype.toLocaleString(locale);
->Number.prototype.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>Number.prototype.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >Number.prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >locale : Symbol(locale, Decl(es2020IntlAPIs.ts, 0, 5))
 
 Number.prototype.toLocaleString(mixed);
->Number.prototype.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>Number.prototype.toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >Number.prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
->toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
+>toLocaleString : Symbol(Number.toLocaleString, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.number.d.ts, --, --))
 >mixed : Symbol(mixed, Decl(es2020IntlAPIs.ts, 1, 5))
 
 String.prototype.toLocaleLowerCase(locale);

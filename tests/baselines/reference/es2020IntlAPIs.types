@@ -1001,32 +1001,32 @@ Date.prototype.toLocaleTimeString(mixed);
 Number.prototype.toLocaleString(locale);
 >Number.prototype.toLocaleString(locale) : string
 >                                        : ^^^^^^
->Number.prototype.toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                                : ^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
+>Number.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>                                : ^^^^^^^^^^^^^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
 >Number.prototype : Number
 >                 : ^^^^^^
 >Number : NumberConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >prototype : Number
 >          : ^^^^^^
->toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
 >locale : Intl.Locale
 >       : ^^^^^^^^^^^
 
 Number.prototype.toLocaleString(mixed);
 >Number.prototype.toLocaleString(mixed) : string
 >                                       : ^^^^^^
->Number.prototype.toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->                                : ^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
+>Number.prototype.toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>                                : ^^^^^^^^^^^^^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
 >Number.prototype : Number
 >                 : ^^^^^^
 >Number : NumberConstructor
 >       : ^^^^^^^^^^^^^^^^^
 >prototype : Number
 >          : ^^^^^^
->toLocaleString : { (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
->               : ^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales?: string | readonly string[], options?: Intl.NumberFormatOptions): string; (locales?: Intl.LocalesArgument, options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^^^^^^^^^^       ^^^                          ^^       ^^^                        ^^^^^^^^^^^^       ^^^                    ^^       ^^^                        ^^^^^^^^^^^^
 >mixed : readonly ["en", Intl.Locale]
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
