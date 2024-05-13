@@ -29,8 +29,8 @@ function foo1(bar: { a:string }[]): Dog;
 function foo1([x]: { a:number | string }[]): Animal {
 >foo1 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
 >     : ^^^   ^^                ^^^   ^^^   ^^                ^^^   ^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 
@@ -58,8 +58,8 @@ function foo2(bar: { a:string }[]): Dog;
 function foo2([x]: { a:number | string }[]): Cat | Dog {
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog; }
 >     : ^^^   ^^                ^^^   ^^^   ^^                ^^^   ^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 

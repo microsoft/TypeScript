@@ -133,8 +133,8 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >o.prop1 : string | number
 >        : ^^^^^^^^^^^^^^^
->o : { prop1: string | number; prop2: string | boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { prop1: number | string; prop2: boolean | string; }
+>  : ^^^^^^^^^               ^^^^^^^^^                ^^^
 >prop1 : string | number
 >      : ^^^^^^^^^^^^^^^
 >"string" : "string"
@@ -145,8 +145,8 @@ if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >                    : ^^^^^^      
 >o.prop1 : string
 >        : ^^^^^^
->o : { prop1: string | number; prop2: string | boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { prop1: number | string; prop2: boolean | string; }
+>  : ^^^^^^^^^               ^^^^^^^^^                ^^^
 >prop1 : string
 >      : ^^^^^^
 >toLowerCase : () => string
@@ -157,8 +157,8 @@ var prop1 = o.prop1;
 >      : ^^^^^^^^^^^^^^^
 >o.prop1 : string | number
 >        : ^^^^^^^^^^^^^^^
->o : { prop1: string | number; prop2: string | boolean; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { prop1: number | string; prop2: boolean | string; }
+>  : ^^^^^^^^^               ^^^^^^^^^                ^^^
 >prop1 : string | number
 >      : ^^^^^^^^^^^^^^^
 

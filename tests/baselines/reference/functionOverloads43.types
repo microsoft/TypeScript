@@ -20,20 +20,20 @@ function foo(bar: { a:string }[]): string;
 function foo([x]: { a:number | string }[]): string | number {
 >foo : { (bar: { a: number; }[]): number; (bar: { a: string; }[]): string; }
 >    : ^^^   ^^                ^^^      ^^^   ^^                ^^^      ^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
 
     if (x) {
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 
         return x.a;
 >x.a : string | number
 >    : ^^^^^^^^^^^^^^^
->x : { a: string | number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>x : { a: number | string; }
+>  : ^^^^^               ^^^
 >a : string | number
 >  : ^^^^^^^^^^^^^^^
     }
