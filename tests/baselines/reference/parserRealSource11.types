@@ -7728,7 +7728,7 @@ module TypeScript {
 
         public buildControlFlow(): ControlFlowContext {
 >buildControlFlow : () => ControlFlowContext
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^^^^^^                  
 
             var entry = new BasicBlock();
 >entry : any

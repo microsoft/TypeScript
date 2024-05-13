@@ -235,7 +235,7 @@ module TypeScript {
 
         public pop(): TypeScript.AST {
 >pop : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 >TypeScript : any
 >           : ^^^
 
@@ -469,7 +469,7 @@ module TypeScript {
 
         public nodeType(): TypeScript.NodeType {
 >nodeType : () => TypeScript.NodeType
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^                   
 >TypeScript : any
 >           : ^^^
 
@@ -623,7 +623,7 @@ module TypeScript {
 
         public get(index: number): TypeScript.AST {
 >get : (index: number) => TypeScript.AST
->    : ^     ^^      ^^^^^^^^^^^^^^^^^^^
+>    : ^     ^^      ^^^^^              
 >index : number
 >      : ^^^^^^
 >TypeScript : any
@@ -7467,9 +7467,9 @@ module TypeScript {
 
         var pre = (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^              
 >(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^              
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 >TypeScript : any

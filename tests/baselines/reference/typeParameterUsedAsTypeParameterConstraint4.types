@@ -50,7 +50,7 @@ interface I<T, U extends T, V extends U> {
 
 function foo<T, U extends T>(x: T, y: U): V { // error
 >foo : <T, U extends T>(x: T, y: U) => V
->    : ^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^
+>    : ^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -58,7 +58,7 @@ function foo<T, U extends T>(x: T, y: U): V { // error
 
     function bar<V extends T, W extends U>(): X { // error
 >bar : <V extends T, W extends U>() => X
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
@@ -85,7 +85,7 @@ function foo<T, U extends T>(x: T, y: U): V { // error
 
 function foo2<U extends T, T>(x: T, y: U): W { // error
 >foo2 : <U extends T, T>(x: T, y: U) => W
->     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^
+>     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U
@@ -93,7 +93,7 @@ function foo2<U extends T, T>(x: T, y: U): W { // error
 
     function bar<V extends T, W extends U>(): Y { // error
 >bar : <V extends T, W extends U>() => Y
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T

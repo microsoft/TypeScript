@@ -10,8 +10,8 @@ module TypeScript {
 >           : ^^^^^^^^^^^^^^^^^^^
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
->create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
->       : ^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^^^^
+>create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => MemberName
+>       : ^^^^^^^^^^    ^^   ^^    ^^^   ^^    ^^^   ^^^^^          
 >arg1 : any
 >     : ^^^
 >arg2 : any

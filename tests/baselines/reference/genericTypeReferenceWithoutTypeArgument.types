@@ -24,8 +24,8 @@ var a: { x: C };
 >  : ^^^
 
 var b: { (x: C): C };
->b : (x: C) => any
->  : ^ ^^ ^^^^^^^^
+>b : (x: C) => C
+>  : ^ ^^ ^^^^^ 
 >x : any
 >  : ^^^
 
@@ -48,8 +48,8 @@ var e = (x: C) => { var y: C; return y; }
 >  : ^^^
 
 function f(x: C): C { var y: C; return y; }
->f : (x: C) => any
->  : ^ ^^ ^^^^^^^^
+>f : (x: C) => C
+>  : ^ ^^ ^^^^^ 
 >x : any
 >  : ^^^
 >y : any
@@ -58,12 +58,12 @@ function f(x: C): C { var y: C; return y; }
 >  : ^^^
 
 var g = function f(x: C): C { var y: C; return y; }
->g : (x: C) => any
->  : ^ ^^ ^^^^^^^^
->function f(x: C): C { var y: C; return y; } : (x: C) => any
->                                            : ^ ^^ ^^^^^^^^
->f : (x: C) => any
->  : ^ ^^ ^^^^^^^^
+>g : (x: C) => C
+>  : ^ ^^ ^^^^^ 
+>function f(x: C): C { var y: C; return y; } : (x: C) => C
+>                                            : ^ ^^ ^^^^^ 
+>f : (x: C) => C
+>  : ^ ^^ ^^^^^ 
 >x : any
 >  : ^^^
 >y : any

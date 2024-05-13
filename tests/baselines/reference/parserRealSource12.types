@@ -13,7 +13,7 @@ module TypeScript {
     export interface IAstWalker {
         walk(ast: AST, parent: AST): AST;
 >walk : (ast: AST, parent: AST) => AST
->     : ^   ^^   ^^      ^^   ^^^^^^^^
+>     : ^   ^^   ^^      ^^   ^^^^^   
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -136,7 +136,7 @@ module TypeScript {
 
         public walk(ast: AST, parent: AST): AST {
 >walk : (ast: AST, parent: AST) => AST
->     : ^   ^^   ^^      ^^   ^^^^^^^^
+>     : ^   ^^   ^^      ^^   ^^^^^   
 >ast : AST
 >    : ^^^
 >parent : AST
@@ -355,7 +355,7 @@ module TypeScript {
 
         public walk(ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any): AST {
 >walk : (ast: AST, pre: IAstWalkCallback, post?: IAstWalkCallback, options?: AstWalkOptions, state?: any) => AST
->     : ^   ^^   ^^   ^^                ^^    ^^^                ^^       ^^^              ^^     ^^^   ^^^^^^^^
+>     : ^   ^^   ^^   ^^                ^^    ^^^                ^^       ^^^              ^^     ^^^   ^^^^^   
 >ast : AST
 >    : ^^^
 >pre : IAstWalkCallback
