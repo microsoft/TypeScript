@@ -1589,7 +1589,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     const cachedBindAndCheckDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
     const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
 
-    let resolvedTypeReferenceDirectives = createModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>();
     let fileProcessingDiagnostics: FilePreprocessingDiagnostics[] | undefined;
     let automaticTypeDirectiveNames: string[] | undefined;
     let automaticTypeDirectiveResolutions: ModeAwareCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>;
@@ -1929,7 +1928,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     resolvedLibProcessing = undefined;
     resolvedModulesProcessing = undefined;
     resolvedTypeReferenceDirectiveNamesProcessing = undefined;
-    resolvedTypeReferenceDirectives = undefined!;
 
     const program: Program = {
         getRootFileNames: () => rootNames,
@@ -4022,54 +4020,17 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         reason: FileIncludeReason,
     ): void {
         addResolutionDiagnostics(resolution);
-        // If we already found this library as a primary reference - nothing to do
-        const previousResolution = resolvedTypeReferenceDirectives.get(typeReferenceDirective, mode)?.resolvedTypeReferenceDirective;
-        if (previousResolution && previousResolution.primary) {
-            return;
-        }
-        let saveResolution = true;
         const { resolvedTypeReferenceDirective } = resolution;
         if (resolvedTypeReferenceDirective) {
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth++;
 
-            if (resolvedTypeReferenceDirective.primary) {
-                // resolved from the primary path
-                processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
-            }
-            else {
-                // If we already resolved to this file, it must have been a secondary reference. Check file contents
-                // for sameness and possibly issue an error
-                if (previousResolution) {
-                    // Don't bother reading the file again if it's the same file.
-                    if (resolvedTypeReferenceDirective.resolvedFileName !== previousResolution.resolvedFileName) {
-                        const otherFileText = host.readFile(resolvedTypeReferenceDirective.resolvedFileName!);
-                        const existingFile = getSourceFile(previousResolution.resolvedFileName!)!;
-                        if (otherFileText !== existingFile.text) {
-                            addFilePreprocessingFileExplainingDiagnostic(
-                                existingFile,
-                                reason,
-                                Diagnostics.Conflicting_definitions_for_0_found_at_1_and_2_Consider_installing_a_specific_version_of_this_library_to_resolve_the_conflict,
-                                [typeReferenceDirective, resolvedTypeReferenceDirective.resolvedFileName!, previousResolution.resolvedFileName!],
-                            );
-                        }
-                    }
-                    // don't overwrite previous resolution result
-                    saveResolution = false;
-                }
-                else {
-                    // First resolution of this library
-                    processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason);
-                }
-            }
+            // resolved from the primary path
+            processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, reason); // TODO: GH#18217
 
             if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
         }
         else {
             addFilePreprocessingFileExplainingDiagnostic(/*file*/ undefined, reason, Diagnostics.Cannot_find_type_definition_file_for_0, [typeReferenceDirective]);
-        }
-
-        if (saveResolution) {
-            resolvedTypeReferenceDirectives.set(typeReferenceDirective, mode, resolution);
         }
     }
 

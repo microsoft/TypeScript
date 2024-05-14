@@ -166,6 +166,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	  Matched by default include pattern '**/*'
 	../lib/@types/UpperCasePackage/index.d.ts
 	  Entry point for implicit type library 'UpperCasePackage'
+	  Type library referenced via 'UpperCasePackage' from file '../lib/@app/lib/index.d.ts'
 	../lib/@app/lib/index.d.ts
 	  Entry point for implicit type library 'lib'
 
