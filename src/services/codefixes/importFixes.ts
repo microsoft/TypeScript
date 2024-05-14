@@ -49,6 +49,7 @@ import {
     getEmitScriptTarget,
     getExportInfoMap,
     getImpliedNodeFormatForEmitWorker,
+    getIsFileExcluded,
     getMeaningFromDeclaration,
     getMeaningFromLocation,
     getNameForExportedSymbol,
@@ -89,6 +90,7 @@ import {
     isNamedImports,
     isNamespaceImport,
     isRequireVariableStatement,
+    isSourceFile,
     isSourceFileJS,
     isStringANonContextualKeyword,
     isStringLiteral,
@@ -864,9 +866,14 @@ function codeFixActionToCodeAction({ description, changes, commands }: CodeFixAc
 
 function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile, symbol: Symbol, symbolName: string, moduleSymbol: Symbol, preferCapitalized: boolean, program: Program, host: LanguageServiceHost, preferences: UserPreferences, cancellationToken: CancellationToken | undefined): readonly SymbolExportInfo[] | undefined {
     const getChecker = createGetChecker(program, host);
+    const isFileExcluded = preferences.autoImportFileExcludePatterns && getIsFileExcluded(host, preferences);
+    const moduleSymbolExcluded = isFileExcluded && moduleSymbol.declarations && isSourceFile(moduleSymbol.declarations[0]) && isFileExcluded(moduleSymbol.declarations[0]);
     return getExportInfoMap(importingFile, host, program, preferences, cancellationToken)
         .search(importingFile.path, preferCapitalized, name => name === symbolName, info => {
-            if (skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol && info.some(i => i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)) {
+            if (
+                skipAlias(info[0].symbol, getChecker(info[0].isFromPackageJson)) === symbol
+                && info.some(i => moduleSymbolExcluded || i.moduleSymbol === moduleSymbol || i.symbol.parent === moduleSymbol)
+            ) {
                 return info;
             }
         });
