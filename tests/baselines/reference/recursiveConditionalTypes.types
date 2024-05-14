@@ -263,9 +263,9 @@ declare let b4: { value: { value: { value: typeof b4 }}};
 >value : { value: typeof b4; }
 >      : ^^^^^^^^^         ^^^
 >value : { value: { value: { value: typeof b4; }; }; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
->b4 : { value: { value: { value: any; }; }; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^                                 ^^^
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>   : ^^^^^^^^^                                 ^^^
 
 unbox(b1);  // string
 >unbox(b1) : string
@@ -324,12 +324,12 @@ unbox({ value: { value: { value: { value: { value: { value: 5 }}}}}});  // numbe
 >  : ^
 
 unbox(b4);  // { value: { value: typeof b4 }}
->unbox(b4) : { value: { value: { value: any; }; }; }
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>unbox(b4) : { value: { value: typeof b4; }; }
+>          : ^^^^^^^^^                     ^^^
 >unbox : <T>(box: RecBox<T>) => T
 >      : ^ ^^   ^^         ^^^^^ 
->b4 : { value: { value: { value: any; }; }; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b4 : { value: { value: { value: typeof b4; }; }; }
+>   : ^^^^^^^^^                                 ^^^
 
 unbox({ value: { value: { get value() { return this; } }}});  // { readonly value: ... }
 >unbox({ value: { value: { get value() { return this; } }}}) : { readonly value: { readonly value: any; }; }
