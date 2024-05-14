@@ -4513,7 +4513,7 @@ export class TestState {
 
     public baselineMapCode(
         { fileName, pos }: Range,
-        changesFilename = "/incomingChanges",
+        changesFilename: string,
     ): void {
         const changes = this.getFileContent(changesFilename);
         const beforeContents = this.getFileContent(fileName);

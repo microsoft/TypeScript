@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges
+// @Filename: /incomingChanges.ts
 //// function baz() {
 ////     return 3;
 //// }
@@ -13,4 +13,4 @@
 ////     return 2;
 //// }
 
-verify.baselineMapCode(test.ranges()[0]);
+verify.baselineMapCode(test.ranges()[0], "/incomingChanges.ts");

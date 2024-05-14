@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges
+// @Filename: /incomingChanges.ts
 //// myLabel: if (y === x) {
 ////   console.log("goodbye");
 ////   console.log("world");
@@ -20,4 +20,4 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges()[0]);
+verify.baselineMapCode(test.ranges()[0], "/incomingChanges.ts");

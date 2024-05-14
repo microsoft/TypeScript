@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges
+// @Filename: /incomingChanges.ts
 //// if (false) {
 ////     return "hello";
 //// }
@@ -22,4 +22,4 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges()[0]);
+verify.baselineMapCode(test.ranges()[0], "/incomingChanges.ts");

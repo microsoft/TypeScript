@@ -1,6 +1,6 @@
 ///<reference path="fourslash.ts"/>
 
-// @Filename: /incomingChanges
+// @Filename: /incomingChanges.ts
 //// for (let x = 0; x < 10; x++) {
 ////   console.log("goodbye");
 ////   console.log("world");
@@ -16,4 +16,4 @@
 //// }
 ////
 
-verify.baselineMapCode(test.ranges()[0]);
+verify.baselineMapCode(test.ranges()[0], "/incomingChanges.ts");
