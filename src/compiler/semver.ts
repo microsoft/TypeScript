@@ -244,8 +244,8 @@ interface Comparator {
 // range-set    ::= range ( logical-or range ) *
 // range        ::= hyphen | simple ( ' ' simple ) * | ''
 // logical-or   ::= ( ' ' ) * '||' ( ' ' ) *
-const logicalOrRegExp = /\|\|/g;
-const whitespaceRegExp = /\s+/g;
+const logicalOrRegExp = /\|\|/;
+const whitespaceRegExp = /\s+/;
 
 // https://github.com/npm/node-semver#range-grammar
 //
