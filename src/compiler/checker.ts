@@ -1105,6 +1105,8 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
+    LazyNodeCheckFlags,
+    isClassElement,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
@@ -29272,9 +29274,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isJsxOpeningLikeElement(location) || isJsxOpeningFragment(location)) {
                     return markJsxAliasReferenced(location);
                 }
-                if (isFunctionLikeDeclaration(location) || isMethodSignature(location)) {
-                    return markAsyncFunctionAliasReferenced(location);
-                }
                 if (isImportEqualsDeclaration(location)) {
                     if (isInternalModuleImportEqualsDeclaration(location) || checkExternalImportOrExportDeclaration(location)) {
                         return markImportEqualsAliasReferenced(location);
@@ -29283,6 +29282,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
                 if (isExportSpecifier(location)) {
                     return markExportSpecifierAliasReferenced(location);
+                }
+                if (isFunctionLikeDeclaration(location) || isMethodSignature(location)) {
+                    markAsyncFunctionAliasReferenced(location);
+                    // Might be decorated, fall through to decorator final case
                 }
                 if (!compilerOptions.emitDecoratorMetadata) {
                     return;
@@ -29726,7 +29729,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             addDeprecatedSuggestion(node, targetSymbol.declarations, node.escapedText as string);
         }
 
-        let declaration = localOrExportSymbol.valueDeclaration;
+        const declaration = localOrExportSymbol.valueDeclaration;
         if (declaration && localOrExportSymbol.flags & SymbolFlags.Class) {
             // When we downlevel classes we may emit some code outside of the class body. Due to the fact the
             // class name is double-bound, we must ensure we mark references to the class name so that we can
@@ -48784,7 +48787,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function checkSingleIdentifier(node: Node) {
             const nodeLinks = getNodeLinks(node);
             nodeLinks.calculatedFlags |= NodeCheckFlags.ConstructorReference | NodeCheckFlags.CapturedBlockScopedBinding | NodeCheckFlags.BlockScopedBindingInLoop;
-            if (isIdentifier(node) && isExpressionNode(node) && !isPropertyAccessExpression(node.parent)) {
+            if (isIdentifier(node) && isExpressionNode(node) && !(isPropertyAccessExpression(node.parent) && node.parent.name === node)) {
                 const s = getSymbolAtLocation(node, /*ignoreErrors*/ true);
                 if (s && s !== unknownSymbol) {
                     checkIdentifierCalculateNodeCheckFlags(node, s);
@@ -48811,7 +48814,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 checkComputedPropertyName(node);
             }
             if (isPrivateIdentifier(node) && isClassElement(node.parent)) {
-                setNodeLinksForPrivateIdentifier(node, node.parent);
+                setNodeLinksForPrivateIdentifierScope(node.parent as PropertyDeclaration | PropertySignature | MethodDeclaration | MethodSignature | AccessorDeclaration);
             }
         }
     }
