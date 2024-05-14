@@ -282,7 +282,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
 >f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^   ^                 ^^ ^^                          ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
@@ -331,7 +331,7 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
 >f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^   ^                 ^^ ^^   ^                      ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
