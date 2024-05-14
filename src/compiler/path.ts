@@ -98,7 +98,7 @@ export function pathIsAbsolute(path: string): boolean {
  * @internal
  */
 export function pathIsRelative(path: string): boolean {
-    return /^\.\.?($|[\\/])/.test(path);
+    return /^\.\.?(?:$|[\\/])/.test(path);
 }
 
 /**

@@ -34265,7 +34265,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function containerSeemsToBeEmptyDomElement(containingType: Type) {
         return (compilerOptions.lib && !compilerOptions.lib.includes("dom")) &&
-            everyContainedType(containingType, type => type.symbol && /^(EventTarget|Node|((HTML[a-zA-Z]*)?Element))$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
+            everyContainedType(containingType, type => type.symbol && /^(?:EventTarget|Node|(?:HTML[a-zA-Z]*)?Element)$/.test(unescapeLeadingUnderscores(type.symbol.escapedName))) &&
             isEmptyObjectType(containingType);
     }
 

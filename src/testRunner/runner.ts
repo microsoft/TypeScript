@@ -31,7 +31,7 @@ function runTests(runners: RunnerBase[]) {
                 for (const full of runner.enumerateTestFiles()) {
                     const base = vpath.basename(full).toLowerCase();
                     // allow existing dupes in fourslash/shims and fourslash/server
-                    if (seen.has(base) && !/fourslash\/(shim|server)/.test(full)) {
+                    if (seen.has(base) && !/fourslash\/(?:shim|server)/.test(full)) {
                         dupes.push([seen.get(base)!, full]);
                     }
                     else {
@@ -52,7 +52,7 @@ function tryGetConfig(args: string[]) {
     const prefix = "--config=";
     const configPath = ts.forEach(args, arg => arg.lastIndexOf(prefix, 0) === 0 && arg.substr(prefix.length));
     // strip leading and trailing quotes from the path (necessary on Windows since shell does not do it automatically)
-    return configPath && configPath.replace(/(^["'])|(["']$)/g, "");
+    return configPath && configPath.replace(/^["']|["']$/g, "");
 }
 
 export function createRunner(kind: TestRunnerKind): RunnerBase {

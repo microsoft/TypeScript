@@ -4972,7 +4972,7 @@ export class ProjectService {
         if (
             !pluginConfigEntry.name ||
             isExternalModuleNameRelative(pluginConfigEntry.name) ||
-            /[\\/]\.\.?($|[\\/])/.test(pluginConfigEntry.name)
+            /[\\/]\.\.?(?:$|[\\/])/.test(pluginConfigEntry.name)
         ) {
             this.logger.info(`Skipped loading plugin ${pluginConfigEntry.name || JSON.stringify(pluginConfigEntry)} because only package name is allowed plugin name`);
             return;

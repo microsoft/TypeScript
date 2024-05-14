@@ -36,7 +36,7 @@ const buildPartRegExp = /^[a-z0-9-]+$/i;
 
 // https://semver.org/#spec-item-9
 // > Numeric identifiers MUST NOT include leading zeroes.
-const numericIdentifierRegExp = /^(0|[1-9]\d*)$/;
+const numericIdentifierRegExp = /^(?:0|[1-9]\d*)$/;
 
 /**
  * Describes a precise semantic version number, https://semver.org
