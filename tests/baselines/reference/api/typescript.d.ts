@@ -1770,26 +1770,13 @@ declare namespace ts {
             export interface InlayHintsResponse extends Response {
                 body?: InlayHintItem[];
             }
-            export interface MapCodeRequestArgs {
+            export interface MapCodeRequestArgs extends FileRequestArgs {
                 /**
                  * The files and changes to try and apply/map.
                  */
-                mappings: MapCodeRequestDocumentMapping[];
-                /**
-                 * Edits to apply before performing the mapping.
-                 */
-                updates?: FileCodeEdits[];
+                mapping: MapCodeRequestDocumentMapping;
             }
             export interface MapCodeRequestDocumentMapping {
-                /**
-                 * The file for the request (absolute pathname required). `undefined`
-                 * if specific file is unknown.
-                 */
-                file?: string;
-                /**
-                 * Optional name of project that contains file
-                 */
-                projectFileName?: string;
                 /**
                  * The specific code to map/insert/replace in the file.
                  */
@@ -1801,14 +1788,14 @@ declare namespace ts {
                  * inner array priorities are based on items within that array. Items
                  * earlier in the arrays have higher priority.
                  */
-                focusLocations?: FileSpan[][];
+                focusLocations?: TextSpan[][];
             }
-            export interface MapCodeRequest extends Request {
+            export interface MapCodeRequest extends FileRequest {
                 command: CommandTypes.MapCode;
                 arguments: MapCodeRequestArgs;
             }
             export interface MapCodeResponse extends Response {
-                body: FileCodeEdits[];
+                body: readonly FileCodeEdits[];
             }
             /**
              * Synchronous request for semantic diagnostics of one file.
