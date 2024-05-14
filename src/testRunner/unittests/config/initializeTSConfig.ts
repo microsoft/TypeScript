@@ -6,7 +6,7 @@ describe("unittests:: config:: initTSConfig", () => {
         describe(name, () => {
             const commandLine = ts.parseCommandLine(commandLinesArgs);
             const initResult = ts.generateTSConfig(commandLine.options, commandLine.fileNames, "\n");
-            const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/initTSConfig/${name.replace(/[^a-z0-9\-. ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 Harness.Baseline.runBaseline(outputFileName, initResult, { PrintDiff: true });

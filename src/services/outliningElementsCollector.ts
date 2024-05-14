@@ -158,7 +158,7 @@ function addRegionOutliningSpans(sourceFile: SourceFile, out: OutliningSpan[]): 
     }
 }
 
-const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?(?:\r)?$/;
+const regionDelimiterRegExp = /^#(end)?region(?:\s+(.*))?\r?$/;
 function isRegionDelimiter(lineText: string) {
     // We trim the leading whitespace and // without the regex since the
     // multiple potential whitespace matches can make for some gnarly backtracking behavior

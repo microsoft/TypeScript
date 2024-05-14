@@ -115,7 +115,7 @@ describe("unittests:: PrinterAPI", () => {
             const file = program.getSourceFile("/test.d.ts")!;
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
             const output = printer.printFile(file);
-            assert.equal(output.split(/\r?\n/g).length, 3);
+            assert.equal(output.split(/\r?\n/).length, 3);
         });
         it("with statements", () => {
             const host = new fakes.CompilerHost(
@@ -129,7 +129,7 @@ describe("unittests:: PrinterAPI", () => {
             const file = program.getSourceFile("/test.d.ts")!;
             const printer = ts.createPrinter({ newLine: ts.NewLineKind.CarriageReturnLineFeed });
             const output = printer.printFile(file);
-            assert.equal(output.split(/\r?\n/g).length, 4);
+            assert.equal(output.split(/\r?\n/).length, 4);
         });
     });
 

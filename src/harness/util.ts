@@ -10,7 +10,7 @@ export function removeTestPathPrefixes(text: string, retainTrailingDirectorySepa
 }
 
 function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...args: string[]) => string[]>(diagnosticMessage: ts.DiagnosticMessage, replacer: R) {
-    const messageParts = diagnosticMessage.message.split(/{\d+}/g);
+    const messageParts = diagnosticMessage.message.split(/\{\d+\}/);
     const regExp = new RegExp(`^(?:${messageParts.map(ts.regExpEscape).join("(.*?)")})$`);
     type Args<R> = R extends (messageArgs: string[], ...args: infer A) => string[] ? A : [];
     return (text: string, ...args: Args<R>) => text.replace(regExp, (_, ...fixedArgs) => ts.formatStringFromArgs(diagnosticMessage.message, replacer(fixedArgs, ...args)));

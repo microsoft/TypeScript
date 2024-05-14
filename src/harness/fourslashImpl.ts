@@ -966,7 +966,7 @@ export class TestState {
         const annotations = ts.map(hints.sort(sortHints), hint => {
             if (hint.displayParts) {
                 hint.displayParts = ts.map(hint.displayParts, part => {
-                    if (part.file && /lib(?:.*)\.d\.ts$/.test(part.file)) {
+                    if (part.file && /lib.*\.d\.ts$/.test(part.file)) {
                         part.span!.start = -1;
                     }
                     return part;
@@ -1532,7 +1532,7 @@ export class TestState {
         }: BaselineDocumentSpansWithFileContentsOptions<T>,
         spanToContextId: Map<T, number>,
     ) {
-        const isLibFile = /lib(?:.*)\.d\.ts$/.test(fileName);
+        const isLibFile = /lib.*\.d\.ts$/.test(fileName);
         let readableContents = `// === ${fileName} ===`;
         let newContent = "";
         interface Detail {
@@ -2499,7 +2499,7 @@ export class TestState {
                     for (const part of tag.text ?? ts.emptyArray) {
                         if (part.kind === "linkName") {
                             const link = part as ts.JSDocLinkDisplayPart;
-                            if (/lib(?:.*)\.d\.ts$/.test(link.target.fileName)) {
+                            if (/lib.*\.d\.ts$/.test(link.target.fileName)) {
                                 // The object literal isn't a complete TextSpan, but we're only going to
                                 // use these results in the baseline for diffing, so just overwrite.
                                 (link.target.textSpan as any) = { start: "--", length: "--" };

@@ -150,7 +150,7 @@ function convertPropertyName(origName) {
     result = result.replace(/_+/g, "_");
 
     // remove any leading underscore, unless it is followed by a number.
-    result = result.replace(/^_([^\d])/, "$1");
+    result = result.replace(/^_(\D)/, "$1");
 
     // get rid of all trailing underscores.
     result = result.replace(/_$/, "");

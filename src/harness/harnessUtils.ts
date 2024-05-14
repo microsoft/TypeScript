@@ -333,7 +333,7 @@ const maxHarnessFrames = 1;
 export function filterStack(error: Error, stackTraceLimit = Infinity) {
     const stack = (error as any).stack as string;
     if (stack) {
-        const lines = stack.split(/\r\n?|\n/g);
+        const lines = stack.split(/\r\n?|\n/);
         const filtered: string[] = [];
         let frameCount = 0;
         let harnessFrameCount = 0;

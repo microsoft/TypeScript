@@ -526,7 +526,7 @@ describe("unittests:: tsserver:: CachingFileSystemInformation:: tsserverProjectS
             ts.forEach(filesAndFoldersToAdd, f => {
                 f.path = f.path
                     .replace("/a/b/node_modules/.staging", "/a/b/node_modules")
-                    .replace(/[-.][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w][\d\w]/g, "");
+                    .replace(/[-.]\w\w\w\w\w\w\w\w/g, "");
             });
 
             host.deleteFolder(root + "/a/b/node_modules/.staging", /*recursive*/ true);

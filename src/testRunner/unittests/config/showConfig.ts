@@ -4,7 +4,7 @@ import * as ts from "../../_namespaces/ts.js";
 describe("unittests:: config:: showConfig", () => {
     function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
         describe(name, () => {
-            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/ig, "")}/tsconfig.json`;
+            const outputFileName = `config/showConfig/${name.replace(/[^a-z0-9\-./ ]/gi, "")}/tsconfig.json`;
 
             it(`Correct output for ${outputFileName}`, () => {
                 const cwd = `/${name}`;

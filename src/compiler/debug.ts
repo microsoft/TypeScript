@@ -581,7 +581,7 @@ export namespace Debug {
                         // This regex can trigger slow backtracking because of overlapping potential captures.
                         // We don't care, this is debug code that's only enabled with a debugger attached -
                         // we're just taking note of it for anyone checking regex performance in the future.
-                        defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
+                        defaultValue = String(defaultValue).replace(/(?:,[\s\w]+:[^,]+)+\]$/, "]");
                         return `NodeArray ${defaultValue}`;
                     },
                 },
