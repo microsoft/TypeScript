@@ -8353,8 +8353,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         function canReuseTypeNode(context: NodeBuilderContext, existing: TypeNode) {
             if (isInJSFile(existing)) {
                 if (isLiteralImportTypeNode(existing)) {
-                    getTypeFromImportTypeNode(existing);
-                    // This was existing code. Should we call getTypeFromImportTypeNode to make sure teh symbol is actually there ?
+                    // Ensure resolvedSymbol is present
+                    void getTypeFromImportTypeNode(existing);
                     const nodeSymbol = getNodeLinks(existing).resolvedSymbol;
                     return (
                         !nodeSymbol ||
@@ -8369,15 +8369,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isTypeReferenceNode(existing)) {
                 if (isConstTypeReference(existing)) return false;
-
-                const symbol = resolveTypeReferenceName(existing, SymbolFlags.Type, /*ignoreErrors*/ true);
+                const type = getTypeFromTypeReference(existing);
+                const symbol = getNodeLinks(existing).resolvedSymbol;
+                if (!symbol) return false;
                 if (symbol.flags & SymbolFlags.TypeParameter) {
                     return true;
                 }
                 if (isInJSDoc(existing)) {
-                    return existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, getTypeFromTypeNode(existing))
+                    return existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)
                         && !getIntendedTypeFromJSDocTypeReference(existing) // We should probably allow the reuse of JSDoc reference types such as String Number etc
-                        && resolveTypeReferenceName(existing, SymbolFlags.Type, /*ignoreErrors*/ true) !== unknownSymbol; // JSDoc type annotations can reference values (meaning typeof value) as well as types. We only reuse type nodes
+                        && (symbol.flags & SymbolFlags.Type); // JSDoc type annotations can reference values (meaning typeof value) as well as types. We only reuse type nodes
                 }
             }
             if (
