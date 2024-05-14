@@ -294,8 +294,8 @@ function createPickStep<T extends QuickPickItem>(
 }
 
 function* showStep<
->showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean | undefined; startingStep?: number | undefined; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^   ^^^^^     ^^     ^^        ^^       ^^^^^                                  
+>showStep : <State extends Partial<unknown> & { counter: number; confirm?: boolean; startingStep?: number; } & { repo: any; }, Context extends { repos: any[]; title: string; status: any; }>(state: State, _context: Context) => StepResultGenerator<QuickPickItem>
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^   ^^^^^       ^^^^^^^^^^^^^^^^^^     ^^^^^^^^^      ^^^^^^^^^^   ^^^^^     ^^     ^^        ^^       ^^^^^                                  
 
   State extends PartialStepState & { repo: any },
 >repo : any

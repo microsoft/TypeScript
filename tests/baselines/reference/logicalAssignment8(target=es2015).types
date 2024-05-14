@@ -28,8 +28,8 @@ function foo1(results: number[] | undefined) {
 >                 : ^^^^^^^^
 >bar?.value : number[] | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^
->bar : { value?: number[] | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { value?: number[]; } | undefined
+>    : ^^^^^^^^^^        ^^^^^^^^^^^^^^^
 >value : number[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
@@ -61,8 +61,8 @@ function foo2(results: number[] | undefined) {
 >                 : ^^^^^^^^
 >bar?.value : number[] | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^
->bar : { value?: number[] | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { value?: number[]; } | undefined
+>    : ^^^^^^^^^^        ^^^^^^^^^^^^^^^
 >value : number[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 >[] : never[]
@@ -94,8 +94,8 @@ function foo3(results: number[] | undefined) {
 >                 : ^^^^^^^^
 >bar?.value : number[] | undefined
 >           : ^^^^^^^^^^^^^^^^^^^^
->bar : { value?: number[] | undefined; } | undefined
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bar : { value?: number[]; } | undefined
+>    : ^^^^^^^^^^        ^^^^^^^^^^^^^^^
 >value : number[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^
 >[] : never[]

@@ -42,8 +42,8 @@ someVal2.fn("");
 >                : ^^^^^^^^^^^^^
 >someVal2.fn : (key: string) => string | null
 >            : ^   ^^      ^^^^^             
->someVal2 : Required<{ fn?: ((key: string) => string | null) | undefined; }>
->         : ^^^^^^^^^^^^^^^^^^   ^^      ^^^^^             ^^^^^^^^^^^^^^^^^
+>someVal2 : Required<{ fn?: (key: string) => string | null; }>
+>         : ^^^^^^^^^^^^^^^^                              ^^^^
 >fn : (key: string) => string | null
 >   : ^   ^^      ^^^^^             
 >"" : ""

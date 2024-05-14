@@ -89,13 +89,13 @@ const f12 = id2(function ({ foo = 42 }) { return foo });
 
 const f13 = id3(function ({ foo = 42 }) { return foo });
 >f13 : ({ foo }: { foo: any; }) => any
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^   ^^^^^^^^^^^
 >id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
->                                            : ^       ^^^^^^^^^^^^^^^^^^^^^^^
+>                                            : ^       ^^^^^^^^^   ^^^^^^^^^^^
 >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
 >    : ^ ^^^^^^^^^^ ^^             ^^^^^   ^^     ^^ ^^^^^ 
 >function ({ foo = 42 }) { return foo } : ({ foo }: { foo: any; }) => any
->                                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^
+>                                       : ^       ^^^^^^^^^   ^^^^^^^^^^^
 >foo : any
 >    : ^^^
 >42 : 42
@@ -104,14 +104,14 @@ const f13 = id3(function ({ foo = 42 }) { return foo });
 >    : ^^^
 
 const f14 = id4(function ({ foo = 42 }) { return foo });
->f14 : ({ foo }: { foo?: number | undefined; }) => number
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
->                                            : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f14 : ({ foo }: { foo?: number; }) => number
+>    : ^       ^^^^^^^^^^      ^^^^^^^^^^^^^^
+>id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number; }) => number
+>                                            : ^       ^^^^^^^^^^      ^^^^^^^^^^^^^^
 >id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
 >    : ^ ^^^^^^^^^^ ^^                 ^^^^^   ^^     ^^ ^^^^^ 
->function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
->                                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number; }) => number
+>                                       : ^       ^^^^^^^^^^      ^^^^^^^^^^^^^^
 >foo : number
 >    : ^^^^^^
 >42 : 42

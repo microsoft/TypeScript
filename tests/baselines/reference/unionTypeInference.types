@@ -342,10 +342,10 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >             : ^^^^^^^^^^^^^^^
 
     for (const value of Object.values(deepPromisedWithIndexer)) {
->value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined)[]
->                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Object.values(deepPromisedWithIndexer) : ({} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined)[]
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Object.values : { <T_1>(o: { [s: string]: T_1; } | ArrayLike<T_1>): T_1[]; (o: {}): any[]; }
 >              : ^^^   ^^ ^^                                      ^^^     ^^^ ^^  ^^^     ^^^
 >Object : ObjectConstructor
@@ -356,16 +356,16 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         const awaitedValue = await value;
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->await value : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : {} | ({ [containsPromises]?: true | undefined; } & {}) | Promise<{ [containsPromises]?: true | undefined; } & {}> | null | undefined
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>await value : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : {} | ({ [containsPromises]?: true; } & {}) | Promise<{ [containsPromises]?: true; } & {}> | null | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         if (awaitedValue)
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {}) | null | undefined
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {}) | null | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
             await fun(awaitedValue);
 >await fun(awaitedValue) : void
@@ -374,8 +374,8 @@ async function fun<T>(deepPromised: DeepPromised<T>) {
 >                  : ^^^^^^^^^^^^^
 >fun : <T>(deepPromised: DeepPromised<T>) => Promise<void>
 >    : ^ ^^            ^^               ^^^^^^^^^^^^^^^^^^
->awaitedValue : {} | ({ [containsPromises]?: true | undefined; } & {})
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>awaitedValue : {} | ({ [containsPromises]?: true; } & {})
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
     }
 }
 
@@ -399,9 +399,9 @@ declare let xx: { a: string | undefined };
 
 baz(xx);
 >baz(xx) : { a: string | undefined; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^                  ^^^
 >baz : <T>(dp: Deep<T>) => T
 >    : ^ ^^  ^^       ^^^^^ 
 >xx : { a: string | undefined; }
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^                  ^^^
 
