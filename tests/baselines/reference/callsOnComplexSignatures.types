@@ -93,25 +93,25 @@ function test2() {
 >messages : Messages
 >         : ^^^^^^^^
 >{        foo: (options) => "Foo",        bar: (options) => "Bar",    } : { foo: (options: { [key: string]: any; b: number; }) => string; bar: (options: { [key: string]: any; a: string; }) => string; }
->                                                                       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                       : ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^
 
         foo: (options) => "Foo",
 >foo : (options: { [key: string]: any; b: number; }) => string
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >(options) => "Foo" : (options: { [key: string]: any; b: number; }) => string
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >options : { [key: string]: any; b: number; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >"Foo" : "Foo"
 >      : ^^^^^
 
         bar: (options) => "Bar",
 >bar : (options: { [key: string]: any; a: string; }) => string
->    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >(options) => "Bar" : (options: { [key: string]: any; a: string; }) => string
->                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                   : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
 >options : { [key: string]: any; a: string; }
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >"Bar" : "Bar"
 >      : ^^^^^
 
@@ -628,8 +628,8 @@ function test5() {
 >      : ^^^
 >props.component : React.ReactType<any>
 >                : ^^^^^^^^^^^^^^^^^^^^
->props : { component: React.ReactType<any>; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>props : { component: React.ReactType; }
+>      : ^^^^^^^^^^^^^               ^^^
 >component : React.ReactType<any>
 >          : ^^^^^^^^^^^^^^^^^^^^
 
