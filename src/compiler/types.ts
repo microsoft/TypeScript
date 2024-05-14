@@ -5544,6 +5544,7 @@ export const enum SymbolAccessibility {
     Accessible,
     NotAccessible,
     CannotBeNamed,
+    NotResolved,
 }
 
 /** @internal */
