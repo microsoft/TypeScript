@@ -38,7 +38,7 @@ import {
     TextSpan,
     TypeElement,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import { ChangeTracker } from "./textChanges.js";
 
 /** @internal */
