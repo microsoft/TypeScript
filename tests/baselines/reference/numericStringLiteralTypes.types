@@ -90,13 +90,13 @@ type UnwrapContainers<T extends Container<unknown>[]> = { [K in keyof T]: T[K]['
 
 declare function createContainer<T extends unknown>(value: T): Container<T>;
 >createContainer : <T extends unknown>(value: T) => Container<T>
->                : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^            
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^            
 >value : T
 >      : ^
 
 declare function f<T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void): void;
 >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^      ^^        ^^                                        ^^^^^    
+>  : ^ ^^^^^^^^^                    ^^          ^^      ^^        ^^                                        ^^^^^    
 >containers : [...T]
 >           : ^^^^^^
 >callback : (...values: UnwrapContainers<T>) => void
@@ -110,7 +110,7 @@ const container1 = createContainer('hi')
 >createContainer('hi') : Container<string>
 >                      : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
->                : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^^^^^^^^^^^^^
 >'hi' : "hi"
 >     : ^^^^
 
@@ -120,7 +120,7 @@ const container2 = createContainer(2)
 >createContainer(2) : Container<number>
 >                   : ^^^^^^^^^^^^^^^^^
 >createContainer : <T extends unknown>(value: T) => Container<T>
->                : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^       ^^     ^^ ^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -128,7 +128,7 @@ f([container1, container2], (value1, value2) => {
 >f([container1, container2], (value1, value2) => {    value1;  // string    value2;  // number}) : void
 >                                                                                                : ^^^^
 >f : <T extends Container<unknown>[]>(containers: [...T], callback: (...values: UnwrapContainers<T>) => void) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^      ^^        ^^                                        ^^^^^^^^^
+>  : ^ ^^^^^^^^^                    ^^          ^^      ^^        ^^                                        ^^^^^^^^^
 >[container1, container2] : [Container<string>, Container<number>]
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >container1 : Container<string>

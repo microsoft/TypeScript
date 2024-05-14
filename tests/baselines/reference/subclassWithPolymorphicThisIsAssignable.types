@@ -21,15 +21,15 @@ export class Example<Z extends CustomDocument> {
 >this.test<Z>() : void
 >               : ^^^^
 >this.test : <Z_1 extends Document>() => void
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^^^^^^^^^^^^^        ^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >test : <Z_1 extends Document>() => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^        ^^^^^^^^^^^
     }
 
     public test<Z extends Document>() { }
 >test : <Z extends Document>() => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^        ^^^^^^^^^^^
 }
 

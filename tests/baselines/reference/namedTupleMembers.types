@@ -248,7 +248,7 @@ y = x;
 
 declare function f<T extends any[]>(...x: T): T;
 >f : <T extends any[]>(...x: T) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>  : ^ ^^^^^^^^^     ^^^^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -262,7 +262,7 @@ declare function g(elem: object, index: number): object;
 
 declare function getArgsForInjection<T extends (...args: any[]) => any>(x: T): Parameters<T>;
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^   ^^ ^^ ^^^^^             
+>                    : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^             
 >args : any[]
 >     : ^^^^^
 >x : T
@@ -274,11 +274,11 @@ export const argumentsOfGAsFirstArgument = f(getArgsForInjection(g)); // one tup
 >f(getArgsForInjection(g)) : [[elem: object, index: number]]
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends any[]>(...x: T) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>  : ^ ^^^^^^^^^     ^^^^^ ^^ ^^^^^^
 >getArgsForInjection(g) : [elem: object, index: number]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >g : (elem: object, index: number) => object
 >  : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 
@@ -288,13 +288,13 @@ export const argumentsOfG = f(...getArgsForInjection(g)); // captured arguments 
 >f(...getArgsForInjection(g)) : [elem: object, index: number]
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f : <T extends any[]>(...x: T) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>  : ^ ^^^^^^^^^     ^^^^^ ^^ ^^^^^^
 >...getArgsForInjection(g) : number | object
 >                          : ^^^^^^^^^^^^^^^
 >getArgsForInjection(g) : [elem: object, index: number]
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getArgsForInjection : <T extends (...args: any[]) => any>(x: T) => Parameters<T>
->                    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>                    : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >g : (elem: object, index: number) => object
 >  : ^    ^^      ^^     ^^      ^^^^^^^^^^^
 

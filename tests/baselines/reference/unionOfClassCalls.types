@@ -12,7 +12,7 @@ declare class Test<T> {
 
     get<K extends keyof T>(k: K): T[K];
 >get : <K extends keyof T>(k: K) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^    
+>    : ^ ^^^^^^^^^       ^^ ^^ ^^^^^    
 >k : K
 >  : ^
 }

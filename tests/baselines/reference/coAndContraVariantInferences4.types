@@ -46,7 +46,7 @@ declare function isDecorator(node: Node): node is Decorator;
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T) => element is U): array is readonly U[];
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                            ^^^^^                     
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^                     
 >array : readonly T[]
 >      : ^^^^^^^^^^^^
 >callback : (element: T) => element is U
@@ -66,7 +66,7 @@ function foo() {
 >every(modifiers, isModifier) : boolean
 >                             : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >modifiers : readonly Decorator[] | readonly Modifier[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isModifier : (node: Node) => node is Modifier
@@ -76,7 +76,7 @@ function foo() {
 >every(modifiers, isDecorator) : boolean
 >                              : ^^^^^^^
 >every : <T, U extends T>(array: readonly T[], callback: (element: T) => element is U) => array is readonly U[]
->      : ^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >modifiers : readonly Decorator[] | readonly Modifier[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDecorator : (node: Node) => node is Decorator

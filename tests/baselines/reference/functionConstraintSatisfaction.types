@@ -5,7 +5,7 @@
 
 function foo<T extends Function>(x: T): T { return x; }
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >x : T
@@ -46,7 +46,7 @@ var r = foo(new Function());
 >foo(new Function()) : Function
 >                    : ^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >new Function() : Function
 >               : ^^^^^^^^
 >Function : FunctionConstructor
@@ -58,7 +58,7 @@ var r1 = foo((x) => x);
 >foo((x) => x) : (x: any) => any
 >              : ^ ^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >(x) => x : (x: any) => any
 >         : ^ ^^^^^^^^^^^^^
 >x : any
@@ -70,7 +70,7 @@ var r2 = foo((x: string[]) => x);
 >foo((x: string[]) => x) : (x: string[]) => string[]
 >                        : ^ ^^        ^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >(x: string[]) => x : (x: string[]) => string[]
 >                   : ^ ^^        ^^^^^^^^^^^^^
 >x : string[]
@@ -84,7 +84,7 @@ var r3 = foo(function (x) { return x });
 >foo(function (x) { return x }) : (x: any) => any
 >                               : ^ ^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >function (x) { return x } : (x: any) => any
 >                          : ^ ^^^^^^^^^^^^^
 >x : any
@@ -96,7 +96,7 @@ var r4 = foo(function (x: string[]) { return x });
 >foo(function (x: string[]) { return x }) : (x: string[]) => string[]
 >                                         : ^ ^^        ^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >function (x: string[]) { return x } : (x: string[]) => string[]
 >                                    : ^ ^^        ^^^^^^^^^^^^^
 >x : string[]
@@ -110,7 +110,7 @@ var r5 = foo(i);
 >foo(i) : I
 >       : ^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >i : I
 >  : ^
 
@@ -120,7 +120,7 @@ var r6 = foo(C);
 >foo(C) : typeof C
 >       : ^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -130,7 +130,7 @@ var r7 = foo(b);
 >foo(b) : new () => string
 >       : ^^^^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >b : new () => string
 >  : ^^^^^^^^^^^^^^^^
 
@@ -140,7 +140,7 @@ var r8 = foo(c);
 >foo(c) : { (): string; (x: any): string; }
 >       : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >c : { (): string; (x: any): string; }
 >  : ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
@@ -190,7 +190,7 @@ var r9 = foo(<U>(x: U) => x);
 >foo(<U>(x: U) => x) : <U>(x: U) => U
 >                    : ^ ^^ ^^ ^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 ><U>(x: U) => x : <U>(x: U) => U
 >               : ^ ^^ ^^ ^^^^^^
 >x : U
@@ -204,7 +204,7 @@ var r10 = foo(function <U>(x: U) { return x; });
 >foo(function <U>(x: U) { return x; }) : <U>(x: U) => U
 >                                      : ^ ^^ ^^ ^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >function <U>(x: U) { return x; } : <U>(x: U) => U
 >                                 : ^ ^^ ^^ ^^^^^^
 >x : U
@@ -214,13 +214,13 @@ var r10 = foo(function <U>(x: U) { return x; });
 
 var r11 = foo(<U extends Date>(x: U) => x);
 >r11 : <U extends Date>(x: U) => U
->    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^
 >foo(<U extends Date>(x: U) => x) : <U extends Date>(x: U) => U
->                                 : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>                                 : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 ><U extends Date>(x: U) => x : <U extends Date>(x: U) => U
->                            : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>                            : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^
 >x : U
 >  : ^
 >x : U
@@ -232,7 +232,7 @@ var r12 = foo(<U, V>(x: U, y: V) => x);
 >foo(<U, V>(x: U, y: V) => x) : <U, V>(x: U, y: V) => U
 >                             : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
 >                        : ^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : U
@@ -248,7 +248,7 @@ var r13 = foo(i2);
 >foo(i2) : I2<string>
 >        : ^^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >i2 : I2<string>
 >   : ^^^^^^^^^^
 
@@ -258,7 +258,7 @@ var r14 = foo(C2);
 >foo(C2) : typeof C2
 >        : ^^^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >C2 : typeof C2
 >   : ^^^^^^^^^
 
@@ -268,7 +268,7 @@ var r15 = foo(b2);
 >foo(b2) : new <T>(x: T) => T
 >        : ^^^^^ ^^ ^^ ^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >b2 : new <T>(x: T) => T
 >   : ^^^^^ ^^ ^^ ^^^^^^
 
@@ -278,7 +278,7 @@ var r16 = foo(c2);
 >foo(c2) : { <T>(x: T): T; <T>(x: T, y: T): T; }
 >        : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
 >   : ^^^ ^^ ^^ ^^^^^^^ ^^ ^^ ^^ ^^ ^^^^^^^
 
@@ -296,13 +296,13 @@ var r17 = foo(f2);
 >foo(f2) : F2
 >        : ^^
 >foo : <T extends Function>(x: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>    : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >f2 : F2
 >   : ^^
 
 function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
->foo2 : <T extends () => void, U extends () => void>(x: T, y: U) => void
->     : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^ ^^ ^^ ^^ ^^^^^^^^^
+>foo2 : <T extends { (): void; }, U extends { (): void; }>(x: T, y: U) => void
+>     : ^ ^^^^^^^^^             ^^ ^^^^^^^^^             ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -312,7 +312,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 >foo(x) : T
 >       : ^
 >foo : <T_1 extends Function>(x: T_1) => T_1
->    : ^   ^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^^^^^^^^        ^^ ^^   ^^^^^^^^
 >x : T
 >  : ^
 
@@ -320,7 +320,7 @@ function foo2<T extends { (): void }, U extends { (): void }>(x: T, y: U) {
 >foo(y) : U
 >       : ^
 >foo : <T_1 extends Function>(x: T_1) => T_1
->    : ^   ^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^
+>    : ^   ^^^^^^^^^        ^^ ^^   ^^^^^^^^
 >y : U
 >  : ^
 }

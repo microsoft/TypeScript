@@ -5,7 +5,7 @@
 
 declare function createInstance<Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>): R;
 >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
->               : ^    ^^^^^^^^^^^^^^^^^    ^^     ^^^^^   ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^                           ^^^^^ 
+>               : ^    ^^^^^^^^^                           ^^ ^^^^^^^^^                  ^^    ^^    ^^^^^    ^^                           ^^^^^ 
 >args : any[]
 >     : ^^^^^
 >ctor : Ctor
@@ -43,7 +43,7 @@ createInstance(MenuWorkbenchToolBar, {
 >createInstance(MenuWorkbenchToolBar, {    toolbarOptions: {        foo(bar) { return bar; }    }}) : MenuWorkbenchToolBar
 >                                                                                                   : ^^^^^^^^^^^^^^^^^^^^
 >createInstance : <Ctor extends new (...args: any[]) => any, R extends InstanceType<Ctor>>(ctor: Ctor, ...args: ConstructorParameters<Ctor>) => R
->               : ^    ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^^^^    ^^                           ^^^^^^
+>               : ^    ^^^^^^^^^                           ^^^^^^^^^^^^                  ^^    ^^    ^^^^^    ^^                           ^^^^^^
 >MenuWorkbenchToolBar : typeof MenuWorkbenchToolBar
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    toolbarOptions: {        foo(bar) { return bar; }    }} : { toolbarOptions: { foo(bar: string): string; }; }

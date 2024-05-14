@@ -8,7 +8,7 @@ interface Style {
 
 declare function mergeStyleSets<K extends string>(
 >mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
->               : ^ ^^^^^^^^^^^^^^^^^^^^       ^^                       ^^^^^                    
+>               : ^ ^^^^^^^^^      ^^^^^       ^^                       ^^^^^                    
 
     ...cssSets: { [P in K]?: Style }[]): { [P in K]: Style };
 >cssSets : { [P in K]?: Style; }[]
@@ -25,7 +25,7 @@ let x = mergeStyleSets(
 >mergeStyleSets(    {},    {        a: { flashy: true },    },    {        b: { flashy: true },    },) : { a: Style; b: Style; }
 >                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^
 >mergeStyleSets : <K extends string>(...cssSets: { [P in K]?: Style; }[]) => { [P in K]: Style; }
->               : ^ ^^^^^^^^^^^^^^^^^^^^       ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^^^^       ^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     {},
 >{} : {}

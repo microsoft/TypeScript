@@ -13,15 +13,15 @@ declare function f2<T>(cb: <S extends number>(x: S) => T): T;
 >f2 : <T>(cb: <S extends number>(x: S) => T) => T
 >   : ^ ^^  ^^                             ^^^^^ 
 >cb : <S extends number>(x: S) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >x : S
 >  : ^
 
 declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
 >f3 : <T>(cb: <S extends Array<S>>(x: S) => T) => T
 >   : ^ ^^  ^^                               ^^^^^ 
->cb : <S extends S[]>(x: S) => T
->   : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>cb : <S extends Array<S>>(x: S) => T
+>   : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >x : S
 >  : ^
 
@@ -47,7 +47,7 @@ let x2 = f2(x => x);  // number
 >f2 : <T>(cb: <S extends number>(x: S) => T) => T
 >   : ^ ^^  ^^                             ^^^^^^
 >x => x : <S extends number>(x: S) => S
->       : ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^ ^^^^^^^^^
 >x : S
 >  : ^
 >x : S

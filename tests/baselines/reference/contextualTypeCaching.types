@@ -38,7 +38,7 @@ export type CustomEvents = {
 
 declare function emit<T extends keyof CustomEvents>(type: T, data: CustomEvents[T]): void
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^               ^^^^^    
+>     : ^ ^^^^^^^^^                  ^^    ^^ ^^    ^^               ^^^^^    
 >type : T
 >     : ^
 >data : CustomEvents[T]
@@ -48,7 +48,7 @@ emit('a', {
 >emit('a', {    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },}) : void
 >                                                                                           : ^^^^
 >emit : <T extends keyof CustomEvents>(type: T, data: CustomEvents[T]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^               ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^    ^^ ^^    ^^               ^^^^^^^^^
 >'a' : "a"
 >    : ^^^
 >{    callback: (r) => {},    nested: {        nestedCallback: (r) => {},    },} : { callback: (r: string) => void; nested: { nestedCallback: (r: string) => void; }; }
@@ -110,7 +110,7 @@ interface Optimization {
 }
 declare const A: <T, P extends keyof T>(
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
->  : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^ ^^       ^^          ^^^^^    
+>  : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^ ^^       ^^          ^^^^^    
 
   obj: T,
 >obj : T
@@ -137,7 +137,7 @@ export const applyOptimizationDefaults = (optimization: Optimization) => {
 >A(optimization, "minimizer", () => [    {      apply: (compiler) => {},    },  ]) : void
 >                                                                                  : ^^^^
 >A : <T, P extends keyof T>(obj: T, prop: P, factory: () => T[P]) => void
->  : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^ ^^       ^^          ^^^^^^^^^
+>  : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^    ^^ ^^       ^^          ^^^^^^^^^
 >optimization : Optimization
 >             : ^^^^^^^^^^^^
 >"minimizer" : "minimizer"

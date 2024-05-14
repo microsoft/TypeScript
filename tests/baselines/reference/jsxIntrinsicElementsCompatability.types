@@ -13,8 +13,8 @@ import * as React from "react";
 >      : ^^^^^^^^^^^^
 
 function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.IntrinsicElements[T]): JSX.Element {
->SomeComponent : <T extends "a" | "button">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
->              : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                                           ^^^^^           
+>SomeComponent : <T extends "button" | "a">(props: { element?: T; } & JSX.IntrinsicElements[T]) => JSX.Element
+>              : ^ ^^^^^^^^^              ^^     ^^                                           ^^^^^           
 >props : { element?: T; } & JSX.IntrinsicElements[T]
 >      : ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >element : T | undefined
@@ -33,16 +33,16 @@ function SomeComponent<T extends 'button' | 'a'>(props: { element?: T } & JSX.In
 }
 
 function Test<T extends 'button' | 'a'>(el: T) {
->Test : <T extends "a" | "button">(el: T) => JSX.Element
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^ ^^^^^^^^^^^^^^^^
+>Test : <T extends "button" | "a">(el: T) => JSX.Element
+>     : ^ ^^^^^^^^^              ^^  ^^ ^^^^^^^^^^^^^^^^
 >el : T
 >   : ^
 
     return <SomeComponent element={el} />
 ><SomeComponent element={el} /> : JSX.Element
 >                               : ^^^^^^^^^^^
->SomeComponent : <T_1 extends "a" | "button">(props: { element?: T_1; } & JSX.IntrinsicElements[T_1]) => JSX.Element
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                                               ^^^^^^^^^^^^^^^^
+>SomeComponent : <T_1 extends "button" | "a">(props: { element?: T_1; } & JSX.IntrinsicElements[T_1]) => JSX.Element
+>              : ^   ^^^^^^^^^              ^^     ^^                                               ^^^^^^^^^^^^^^^^
 >element : T
 >        : ^
 >el : T

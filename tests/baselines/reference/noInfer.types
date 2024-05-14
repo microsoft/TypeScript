@@ -81,7 +81,7 @@ type T32 = { [K in keyof NoInfer<{ a: string, b: string }>]: K };
 
 declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 >foo1 : <T extends string>(a: T, b: NoInfer<T>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^          ^^^^^    
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^          ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T>
@@ -89,7 +89,7 @@ declare function foo1<T extends string>(a: T, b: NoInfer<T>): void
 
 declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 >foo2 : <T extends string>(a: T, b: NoInfer<T>[]) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^            ^^^^^    
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^            ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T>[]
@@ -97,7 +97,7 @@ declare function foo2<T extends string>(a: T, b: NoInfer<T>[]): void
 
 declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 >foo3 : <T extends string>(a: T, b: NoInfer<T[]>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^            ^^^^^    
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^            ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<T[]>
@@ -105,7 +105,7 @@ declare function foo3<T extends string>(a: T, b: NoInfer<T[]>): void
 
 declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 >foo4 : <T extends string>(a: T, b: { x: NoInfer<T>; }) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                  ^^^^^    
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^                  ^^^^^    
 >a : T
 >  : ^
 >b : { x: NoInfer<T>; }
@@ -115,7 +115,7 @@ declare function foo4<T extends string>(a: T, b: { x: NoInfer<T> }): void
 
 declare function foo5<T extends string>(a: T, b: NoInfer<{ x: T }>): void
 >foo5 : <T extends string>(a: T, b: NoInfer<{ x: T; }>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                  ^^^^^    
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^                  ^^^^^    
 >a : T
 >  : ^
 >b : NoInfer<{ x: T; }>
@@ -127,7 +127,7 @@ foo1('foo', 'foo') // ok
 >foo1('foo', 'foo') : void
 >                   : ^^^^
 >foo1 : <T extends string>(a: T, b: NoInfer<T>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^          ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^          ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >'foo' : "foo"
@@ -137,7 +137,7 @@ foo1('foo', 'bar') // error
 >foo1('foo', 'bar') : void
 >                   : ^^^^
 >foo1 : <T extends string>(a: T, b: NoInfer<T>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^          ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^          ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >'bar' : "bar"
@@ -147,7 +147,7 @@ foo2('foo', ['bar']) // error
 >foo2('foo', ['bar']) : void
 >                     : ^^^^
 >foo2 : <T extends string>(a: T, b: NoInfer<T>[]) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^            ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^            ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >['bar'] : "bar"[]
@@ -159,7 +159,7 @@ foo3('foo', ['bar']) // error
 >foo3('foo', ['bar']) : void
 >                     : ^^^^
 >foo3 : <T extends string>(a: T, b: NoInfer<T[]>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^            ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^            ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >['bar'] : "bar"[]
@@ -171,7 +171,7 @@ foo4('foo', { x: 'bar' }) // error
 >foo4('foo', { x: 'bar' }) : void
 >                          : ^^^^
 >foo4 : <T extends string>(a: T, b: { x: NoInfer<T>; }) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                  ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^                  ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >{ x: 'bar' } : { x: "bar"; }
@@ -185,7 +185,7 @@ foo5('foo', { x: 'bar' }) // error
 >foo5('foo', { x: 'bar' }) : void
 >                          : ^^^^
 >foo5 : <T extends string>(a: T, b: NoInfer<{ x: T; }>) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                  ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^                  ^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >{ x: 'bar' } : { x: "bar"; }

@@ -39,7 +39,7 @@ interface Refinement<A, B extends A> {
 
 declare const filter: {
 >filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => ReadonlyArray<B>; <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => ReadonlyArray<A>; }
->       : ^^^ ^^ ^^^^^^^^^^^^          ^^                ^^^                                          ^^^ ^^         ^^            ^^^                                                       ^^^ ^^         ^^            ^^^                                          ^^^
+>       : ^^^ ^^ ^^^^^^^^^ ^^          ^^                ^^^                                          ^^^ ^^         ^^            ^^^                                                       ^^^ ^^         ^^            ^^^                                          ^^^
 
     <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => ReadonlyArray<B>
 >refinement : Refinement<A, B>
@@ -95,7 +95,7 @@ const x = pipe(es, filter(exists((n) => n > 0)))
 >filter(exists((n) => n > 0)) : (as: readonly Either<string, number>[]) => readonly Either<string, number>[]
 >                             : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >filter : { <A, B extends A>(refinement: Refinement<A, B>): (as: ReadonlyArray<A>) => readonly B[]; <A>(predicate: Predicate<A>): <B extends A>(bs: ReadonlyArray<B>) => readonly B[]; <A>(predicate: Predicate<A>): (as: ReadonlyArray<A>) => readonly A[]; }
->       : ^^^ ^^ ^^^^^^^^^^^^          ^^                ^^^^  ^^                ^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^^^ ^^^^^^^^^^^^  ^^                ^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^^^  ^^                ^^^^^^^^^^^^^^^^^^^^
+>       : ^^^ ^^ ^^^^^^^^^ ^^          ^^                ^^^^  ^^                ^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^^^ ^^^^^^^^^ ^^  ^^                ^^^^^^^^^^^^^^^^^^^^ ^^         ^^            ^^^^  ^^                ^^^^^^^^^^^^^^^^^^^^
 >exists((n) => n > 0) : <E>(ma: Either<E, number>) => boolean
 >                     : ^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >exists : <A>(predicate: Predicate<A>) => <E>(ma: Either<E, A>) => boolean

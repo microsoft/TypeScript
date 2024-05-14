@@ -59,7 +59,7 @@ type OverloadDeprecations<T extends OverloadDefinitions> = { [P in OverloadKeys<
 
 declare function createOverload<T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>): UnionToIntersection<T[keyof T]>;
 >createOverload : <T extends OverloadDefinitions>(name: string, overloads: T, binder: OverloadBinders<T>, deprecations?: OverloadDeprecations<T>) => UnionToIntersection<T[keyof T]>
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^      ^^         ^^ ^^      ^^                  ^^            ^^^                       ^^^^^                               
+>               : ^ ^^^^^^^^^                   ^^    ^^      ^^         ^^ ^^      ^^                  ^^            ^^^                       ^^^^^                               
 >name : string
 >     : ^^^^^^
 >overloads : T
@@ -71,7 +71,7 @@ declare function createOverload<T extends OverloadDefinitions>(name: string, ove
 
 declare function createBinder<T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>): OverloadBinder<T>;
 >createBinder : <T extends OverloadDefinitions>(overloads: T, binder: OverloadBinders<T>) => OverloadBinder<T>
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^ ^^      ^^                  ^^^^^                 
+>             : ^ ^^^^^^^^^                   ^^         ^^ ^^      ^^                  ^^^^^                 
 >overloads : T
 >          : ^
 >binder : OverloadBinders<T>
@@ -80,7 +80,7 @@ declare function createBinder<T extends OverloadDefinitions>(overloads: T, binde
 interface OverloadBuilder {
     overload<T extends OverloadDefinitions>(overloads: T): BindableOverloadBuilder<T>;
 >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^ ^^^^^                          
+>         : ^ ^^^^^^^^^                   ^^         ^^ ^^^^^                          
 >overloads : T
 >          : ^
 }
@@ -246,7 +246,7 @@ declare const updateImportDeclaration: {
 
 declare function every<T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[];
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T_1, U_1 extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                                           ^^^                     ^^^   ^^   ^^^^^^^^^^^^^^     ^^                          ^^        ^^                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                          ^^        ^^                                        ^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^                     ^^^   ^^   ^^^^^^^^^   ^^     ^^                          ^^        ^^                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                          ^^        ^^                                        ^^^^^^^^^^^^^
 >array : readonly T[]
 >      : ^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
@@ -258,7 +258,7 @@ declare function every<T, U extends T>(array: readonly T[], callback: (element: 
 
 declare function every<T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined;
 >every : { <T_1, U_1 extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U_1): array is readonly U_1[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => boolean): boolean; }
->      : ^^^   ^^   ^^^^^^^^^^^^^^     ^^              ^^        ^^                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^     ^^                        ^^        ^^                                           ^^^                                 ^^^   ^^     ^^                          ^^        ^^                                        ^^^^^^^^^^^^^
+>      : ^^^   ^^   ^^^^^^^^^   ^^     ^^              ^^        ^^                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^                                 ^^^   ^^     ^^                          ^^        ^^                                        ^^^^^^^^^^^^^
 >array : readonly T[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (element: T, index: number) => element is U
@@ -270,7 +270,7 @@ declare function every<T, U extends T>(array: readonly T[] | undefined, callback
 
 declare function every<T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean;
 >every : { <T_1, U extends T_1>(array: readonly T_1[], callback: (element: T_1, index: number) => element is U): array is readonly U[]; <T_1, U extends T_1>(array: readonly T_1[] | undefined, callback: (element: T_1, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^   ^^ ^^^^^^^^^^^^^^     ^^              ^^        ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^     ^^                          ^^        ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
+>      : ^^^   ^^ ^^^^^^^^^   ^^     ^^              ^^        ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^   ^^     ^^                          ^^        ^^                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^       ^^^
 >array : readonly T[] | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^
 >callback : (element: T, index: number) => boolean
@@ -305,7 +305,7 @@ buildOverload("updateImportDeclaration")
 >buildOverload("updateImportDeclaration")    .overload({        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    }) : BindableOverloadBuilder<{ 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }>
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                 ^^         ^^                               ^^            ^^                        ^^               ^^          ^^            ^^                        ^^^                 ^^^^    ^^                 ^^           ^^                                ^^         ^^                               ^^            ^^                        ^^               ^^          ^^            ^^                        ^^^                 ^^^^
 >buildOverload("updateImportDeclaration")    .overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
->                                                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                      : ^ ^^^^^^^^^                   ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >buildOverload("updateImportDeclaration") : OverloadBuilder
 >                                         : ^^^^^^^^^^^^^^^
 >buildOverload : (name: string) => OverloadBuilder
@@ -315,7 +315,7 @@ buildOverload("updateImportDeclaration")
 
     .overload({
 >overload : <T extends OverloadDefinitions>(overloads: T) => BindableOverloadBuilder<T>
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^ ^^^^^^^^^                   ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },        1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration {            return updateImportDeclaration(node, modifiers, importClause, moduleSpecifier, assertClause);        },    } : { 0(node: ImportDeclaration, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; 1(node: ImportDeclaration, _decorators: readonly Decorator[] | undefined, modifiers: readonly Modifier[] | undefined, importClause: ImportClause | undefined, moduleSpecifier: Expression, assertClause: AssertClause | undefined): ImportDeclaration; }
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            : ^^^^    ^^                 ^^         ^^                               ^^            ^^                        ^^               ^^          ^^            ^^                        ^^^                 ^^^^    ^^                 ^^           ^^                                ^^         ^^                               ^^            ^^                        ^^               ^^          ^^            ^^                        ^^^                 ^^^
 
@@ -441,7 +441,7 @@ buildOverload("updateImportDeclaration")
 >every(modifiers, isModifier) : boolean
 >                             : ^^^^^^^
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
 >modifiers : readonly Modifier[] | readonly Decorator[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isModifier : (node: Node) => node is Modifier
@@ -543,7 +543,7 @@ buildOverload("updateImportDeclaration")
 >every(decorators, isDecorator) : boolean
 >                               : ^^^^^^^
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
 >decorators : readonly Modifier[] | readonly Decorator[]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDecorator : (node: Node) => node is Decorator
@@ -652,7 +652,7 @@ function foo() {
 >every(modifiers, isModifier) : boolean
 >                             : ^^^^^^^
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
 >modifiers : readonly Modifier[] | readonly Decorator[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isModifier : (node: Node) => node is Modifier
@@ -662,7 +662,7 @@ function foo() {
 >every(modifiers, isDecorator) : boolean
 >                              : ^^^^^^^
 >every : { <T, U extends T>(array: readonly T[], callback: (element: T, index: number) => element is U): array is readonly U[]; <T, U extends T>(array: readonly T[] | undefined, callback: (element: T, index: number) => element is U): array is readonly U[] | undefined; <T>(array: readonly T[] | undefined, callback: (element: T, index: number) => boolean): boolean; }
->      : ^^^ ^^ ^^^^^^^^^^^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
+>      : ^^^ ^^ ^^^^^^^^^ ^^     ^^            ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^     ^^                        ^^        ^^                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                        ^^        ^^                                      ^^^^^^^^^^^^^
 >modifiers : readonly Modifier[] | readonly Decorator[]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >isDecorator : (node: Node) => node is Decorator

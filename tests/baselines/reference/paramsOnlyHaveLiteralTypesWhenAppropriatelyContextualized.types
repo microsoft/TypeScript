@@ -11,7 +11,7 @@ type Lower<T> = { [K in keyof T]: T[K] };
 
 export function appendToOptionalArray<
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
+>                      : ^ ^^^^^^^^^                        ^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
 
   K extends string | number | symbol,
   T
@@ -87,7 +87,7 @@ appendToOptionalArray(foo, 'x', 123);   // ok
 >appendToOptionalArray(foo, 'x', 123) : void
 >                                     : ^^^^
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
+>                      : ^ ^^^^^^^^^                        ^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'x' : "x"
@@ -99,7 +99,7 @@ appendToOptionalArray(foo, 'y', 'bar'); // ok
 >appendToOptionalArray(foo, 'y', 'bar') : void
 >                                       : ^^^^
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
+>                      : ^ ^^^^^^^^^                        ^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'y' : "y"
@@ -111,7 +111,7 @@ appendToOptionalArray(foo, 'y', 12);    // should fail
 >appendToOptionalArray(foo, 'y', 12) : void
 >                                    : ^^^^
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
+>                      : ^ ^^^^^^^^^                        ^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'y' : "y"
@@ -123,7 +123,7 @@ appendToOptionalArray(foo, 'x', "no");  // should fail
 >appendToOptionalArray(foo, 'x', "no") : void
 >                                      : ^^^^
 >appendToOptionalArray : <K extends string | number | symbol, T>(object: { [x in K]?: Lower<T>[]; }, key: K, value: T) => void
->                      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
+>                      : ^ ^^^^^^^^^                        ^^ ^^      ^^                          ^^   ^^ ^^     ^^ ^^^^^^^^^
 >foo : { x?: number[] | undefined; y?: string[] | undefined; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'x' : "x"

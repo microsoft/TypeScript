@@ -32,7 +32,7 @@ type P2<T> = { data: X<T> };
 interface I<T> {
     fn<K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>): void;
 >fn : <K extends keyof T>(p1: P1<Pick<T, K>>, p2: P2<Pick<T, K>>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^  ^^              ^^  ^^              ^^^^^    
+>   : ^ ^^^^^^^^^       ^^  ^^              ^^  ^^              ^^^^^    
 >p1 : P1<Pick<T, K>>
 >   : ^^^^^^^^^^^^^^
 >p2 : P2<Pick<T, K>>

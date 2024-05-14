@@ -16,7 +16,7 @@ class Query<A extends Attributes<keyof A>> {
 
     multiply<B extends Attributes<keyof B>>(x: B): Query<A & B>;
 >multiply : <B extends Attributes<keyof B>>(x: B) => Query<A & B>
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^            
+>         : ^ ^^^^^^^^^                   ^^ ^^ ^^^^^            
 >x : B
 >  : ^
 }
@@ -41,7 +41,7 @@ type ClassNameArg<S> = ClassName<S> | ClassNameObjectMap<S>;
 
 export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNames: ClassNameArg<S>[]): string {
 >css : <S extends { [K in keyof S]: string; }>(styles: S, ...classNames: ClassNameArg<S>[]) => string
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^          ^^                 ^^^^^      
+>    : ^ ^^^^^^^^^                           ^^      ^^ ^^^^^          ^^                 ^^^^^      
 >styles : S
 >       : ^
 >classNames : ClassNameArg<S>[]

@@ -17,7 +17,7 @@ interface CPromise<T extends { x: any; }> {
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
->     : ^ ^^^^^^^^^^^^^^   ^^^^^  ^^                    ^^^^^          
+>     : ^ ^^^^^^^^^           ^^  ^^                    ^^^^^          
 >x : any
 >  : ^^^
 >cb : (x: T) => Promise<U>

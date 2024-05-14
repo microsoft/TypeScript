@@ -11,7 +11,7 @@ interface Named {
 
 function parrot<T extends Named>(obj: T): T {
 >parrot : <T extends Named>(obj: T) => T
->       : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^ 
+>       : ^ ^^^^^^^^^     ^^   ^^ ^^^^^ 
 >obj : T
 >    : ^
 
@@ -25,7 +25,7 @@ parrot({
 >parrot({    name: "TypeScript",}) : { name: string; }
 >                                  : ^^^^^^^^^^^^^^^^^
 >parrot : <T extends Named>(obj: T) => T
->       : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>       : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
 >{    name: "TypeScript",} : { name: string; }
 >                          : ^^^^^^^^^^^^^^^^^
 
@@ -41,7 +41,7 @@ parrot({
 >parrot({    name: "TypeScript",    age: 5,}) : { name: string; age: number; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >parrot : <T extends Named>(obj: T) => T
->       : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>       : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
 >{    name: "TypeScript",    age: 5,} : { name: string; age: number; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -63,7 +63,7 @@ parrot({
 >parrot({    name: "TypeScript",    age: function () { },}) : { name: string; age: () => void; }
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >parrot : <T extends Named>(obj: T) => T
->       : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>       : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
 >{    name: "TypeScript",    age: function () { },} : { name: string; age: () => void; }
 >                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -85,7 +85,7 @@ parrot({
 >parrot({    name: "TypeScript",    sayHello() {    },}) : { name: string; sayHello(): void; }
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >parrot : <T extends Named>(obj: T) => T
->       : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>       : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^
 >{    name: "TypeScript",    sayHello() {    },} : { name: string; sayHello(): void; }
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

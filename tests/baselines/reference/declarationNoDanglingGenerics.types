@@ -48,7 +48,7 @@ function register(kind: string): void | never {
 
 function ClassFactory<TKind extends string>(kind: TKind) {
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >kind : TKind
 >     : ^^^^^
 
@@ -108,7 +108,7 @@ export class AKind extends ClassFactory(Kinds.A) {
 >ClassFactory(Kinds.A) : ClassFactory<"A">.(Anonymous class)
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.A : "A"
 >        : ^^^
 >Kinds : typeof Kinds
@@ -123,7 +123,7 @@ export class BKind extends ClassFactory(Kinds.B) {
 >ClassFactory(Kinds.B) : ClassFactory<"B">.(Anonymous class)
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.B : "B"
 >        : ^^^
 >Kinds : typeof Kinds
@@ -138,7 +138,7 @@ export class CKind extends ClassFactory(Kinds.C) {
 >ClassFactory(Kinds.C) : ClassFactory<"C">.(Anonymous class)
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ClassFactory : <TKind extends string>(kind: TKind) => typeof (Anonymous class)
->             : ^     ^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^     ^^^^^^^^^      ^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Kinds.C : "C"
 >        : ^^^
 >Kinds : typeof Kinds

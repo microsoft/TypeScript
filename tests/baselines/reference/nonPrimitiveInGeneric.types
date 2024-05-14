@@ -59,7 +59,7 @@ generic<object>(b); // expect error
 
 function bound<T extends object>(t: T) {
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 
@@ -74,7 +74,7 @@ bound({});
 >bound({}) : void
 >          : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -82,7 +82,7 @@ bound(a);
 >bound(a) : void
 >         : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >a : {}
 >  : ^^
 
@@ -90,7 +90,7 @@ bound(123); // expect error
 >bound(123) : void
 >           : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >123 : 123
 >    : ^^^
 
@@ -98,41 +98,41 @@ bound(b); // expect error
 >bound(b) : void
 >         : ^^^^
 >bound : <T extends object>(t: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 
 function bound2<T extends object>() {}
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<{}>();
 >bound2<{}>() : void
 >             : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<Object>();
 >bound2<Object>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<number>(); // expect error
 >bound2<number>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^
 
 bound2<string>(); // expect error
 >bound2<string>() : void
 >                 : ^^^^
 >bound2 : <T extends object>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^^^^^^^^^      ^^^^^^^^^^^
 
 function bound3<T extends {}>(t: T) {
 >bound3 : <T extends {}>(t: T) => void
->       : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 

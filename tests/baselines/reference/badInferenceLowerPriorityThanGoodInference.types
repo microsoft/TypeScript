@@ -67,7 +67,7 @@ result.BLAH;
 
 function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >f : (...args: ARGS) => any
 >  : ^^^^    ^^    ^^^^^   
 >args : ARGS
@@ -77,7 +77,7 @@ goofus((a: string) => ({ dog() { return a; } }));
 >goofus((a: string) => ({ dog() { return a; } })) : void
 >                                                 : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog() { return a; } }) : (a: string) => { dog(): string; }
 >                                         : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >a : string
@@ -95,7 +95,7 @@ goofus((a: string) => ({ dog: function() { return a; } }));
 >goofus((a: string) => ({ dog: function() { return a; } })) : void
 >                                                           : ^^^^
 >goofus : <ARGS extends any[]>(f: (...args: ARGS) => any) => void
->       : ^    ^^^^^^^^^^^^^^^^ ^^                      ^^^^^^^^^
+>       : ^    ^^^^^^^^^     ^^ ^^                      ^^^^^^^^^
 >(a: string) => ({ dog: function() { return a; } }) : (a: string) => { dog: () => string; }
 >                                                   : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : string

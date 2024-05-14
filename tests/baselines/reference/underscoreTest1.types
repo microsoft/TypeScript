@@ -1475,11 +1475,11 @@ var func2 = _.bind(func, { name: 'moe' }, 'hi');
 >_.bind(func, { name: 'moe' }, 'hi') : Function
 >                                    : ^^^^^^^^
 >_.bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >func : (greeting: any) => string
 >     : ^        ^^^^^^^^^^^^^^^^
 >{ name: 'moe' } : { name: string; }
@@ -1590,11 +1590,11 @@ var fibonacci = _.memoize(function (n) {
 >_.memoize(function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);}) : (n: any) => any
 >                                                                                      : ^ ^^^^^^^^^^^^^
 >_.memoize : <T extends Function>(func: T, hashFunction?: Function) => T
->          : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^            ^^^        ^^^^^^
+>          : ^ ^^^^^^^^^        ^^    ^^ ^^            ^^^        ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >memoize : <T extends Function>(func: T, hashFunction?: Function) => T
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^            ^^^        ^^^^^^
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^            ^^^        ^^^^^^
 >function (n) {    return n < 2 ? n : fibonacci(n - 1) + fibonacci(n - 2);} : (n: any) => any
 >                                                                           : ^ ^^^^^^^^^^^^^
 >n : any
@@ -1642,11 +1642,11 @@ var log = _.bind((message?: string, ...rest: string[]) => { }, Date);
 >_.bind((message?: string, ...rest: string[]) => { }, Date) : (message?: string, ...rest: string[]) => void
 >                                                           : ^       ^^^      ^^^^^    ^^        ^^^^^^^^^
 >_.bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >(message?: string, ...rest: string[]) => { } : (message?: string, ...rest: string[]) => void
 >                                             : ^       ^^^      ^^^^^    ^^        ^^^^^^^^^
 >message : string
@@ -1708,11 +1708,11 @@ var throttled = _.throttle(updatePosition, 100);
 >_.throttle(updatePosition, 100) : () => void
 >                                : ^^^^^^^^^^
 >_.throttle : <T extends Function>(func: T, wait: number) => T
->           : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^^^^^
+>           : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >throttle : <T extends Function>(func: T, wait: number) => T
->         : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^^^^^
+>         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^^^^^
 >updatePosition : () => void
 >               : ^^^^^^^^^^
 >100 : 100
@@ -1750,11 +1750,11 @@ var lazyLayout = _.debounce(calculateLayout, 300);
 >_.debounce(calculateLayout, 300) : () => void
 >                                 : ^^^^^^^^^^
 >_.debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
->           : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^^
+>           : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
->         : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^^
+>         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^^
 >calculateLayout : () => void
 >                : ^^^^^^^^^^
 >300 : 300
@@ -1792,11 +1792,11 @@ var initialize = _.once(createApplication);
 >_.once(createApplication) : () => void
 >                          : ^^^^^^^^^^
 >_.once : <T extends Function>(func: T) => T
->       : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>       : ^ ^^^^^^^^^        ^^    ^^ ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >once : <T extends Function>(func: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>     : ^ ^^^^^^^^^        ^^    ^^ ^^^^^^
 >createApplication : () => void
 >                  : ^^^^^^^^^^
 
@@ -1834,11 +1834,11 @@ var renderNotes = _.after(notes.length, render);
 >_.after(notes.length, render) : () => void
 >                              : ^^^^^^^^^^
 >_.after : <T extends Function>(count: number, func: T) => T
->        : ^ ^^^^^^^^^^^^^^^^^^^     ^^      ^^    ^^ ^^^^^^
+>        : ^ ^^^^^^^^^        ^^     ^^      ^^    ^^ ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >after : <T extends Function>(count: number, func: T) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^     ^^      ^^    ^^ ^^^^^^
+>      : ^ ^^^^^^^^^        ^^     ^^      ^^    ^^ ^^^^^^
 >notes.length : number
 >             : ^^^^^^
 >notes : any[]
@@ -1900,11 +1900,11 @@ hello = _.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"
 >_.wrap(hello, (func, arg) => { return "before, " + func(arg) + ", after"; }) : (name: any) => string
 >                                                                             : ^    ^^^^^^^^^^^^^^^^
 >_.wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
->       : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^       ^^                                ^^^^^^
+>       : ^ ^^^^^^^^^        ^^    ^^ ^^       ^^                                ^^^^^^
 >_ : Underscore.Static
 >  : ^^^^^^^^^^^^^^^^^
 >wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^       ^^                                ^^^^^^
+>     : ^ ^^^^^^^^^        ^^    ^^ ^^       ^^                                ^^^^^^
 >hello : (name: any) => string
 >      : ^    ^^^^^^^^^^^^^^^^
 >(func, arg) => { return "before, " + func(arg) + ", after"; } : (func: (name: any) => string, arg: any) => string
@@ -6461,7 +6461,7 @@ module Underscore {
 
         bind<T extends Function>(func: T, object: any): T;
 >bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^ ^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^ ^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^^^^^^^^^^^^
 >func : T
 >     : ^
 >object : any
@@ -6469,7 +6469,7 @@ module Underscore {
 
         bind(func: Function, object: any, ...args: any[]): Function;
 >bind : { <T extends Function>(func: T, object: any): T; (func: Function, object: any, ...args: any[]): Function; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^        ^^^
+>     : ^^^ ^^^^^^^^^        ^^    ^^ ^^      ^^   ^^^^^^^    ^^        ^^      ^^   ^^^^^    ^^     ^^^        ^^^
 >func : Function
 >     : ^^^^^^^^
 >object : any
@@ -6495,7 +6495,7 @@ module Underscore {
 
         memoize<T extends Function>(func: T, hashFunction?: Function): T;
 >memoize : <T extends Function>(func: T, hashFunction?: Function) => T
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^            ^^^        ^^^^^ 
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^            ^^^        ^^^^^ 
 >func : T
 >     : ^
 >hashFunction : Function
@@ -6521,7 +6521,7 @@ module Underscore {
 
         throttle<T extends Function>(func: T, wait: number): T;
 >throttle : <T extends Function>(func: T, wait: number) => T
->         : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^^^^ 
+>         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^^^^ 
 >func : T
 >     : ^
 >wait : number
@@ -6529,7 +6529,7 @@ module Underscore {
 
         debounce<T extends Function>(func: T, wait: number, immediate?: boolean): T;
 >debounce : <T extends Function>(func: T, wait: number, immediate?: boolean) => T
->         : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^ 
+>         : ^ ^^^^^^^^^        ^^    ^^ ^^    ^^      ^^         ^^^       ^^^^^ 
 >func : T
 >     : ^
 >wait : number
@@ -6539,13 +6539,13 @@ module Underscore {
 
         once<T extends Function>(func: T): T;
 >once : <T extends Function>(func: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^        ^^    ^^ ^^^^^ 
 >func : T
 >     : ^
 
         after<T extends Function>(count: number, func: T): T;
 >after : <T extends Function>(count: number, func: T) => T
->      : ^ ^^^^^^^^^^^^^^^^^^^     ^^      ^^    ^^ ^^^^^ 
+>      : ^ ^^^^^^^^^        ^^     ^^      ^^    ^^ ^^^^^ 
 >count : number
 >      : ^^^^^^
 >func : T
@@ -6553,7 +6553,7 @@ module Underscore {
 
         wrap<T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any): T;
 >wrap : <T extends Function>(func: T, wrapper: (func: T, ...args: any[]) => any) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^       ^^                                ^^^^^ 
+>     : ^ ^^^^^^^^^        ^^    ^^ ^^       ^^                                ^^^^^ 
 >func : T
 >     : ^
 >wrapper : (func: T, ...args: any[]) => any

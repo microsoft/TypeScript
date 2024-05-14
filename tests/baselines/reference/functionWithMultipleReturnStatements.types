@@ -126,7 +126,7 @@ function f6<T, U>(x: T, y:U) {
 
 function f8<T extends U, U extends V, V>(x: T, y: U) {
 >f8 : <T extends U, U extends V, V>(x: T, y: U) => U
->   : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 >y : U

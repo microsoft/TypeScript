@@ -20,7 +20,7 @@ declare function g(C: F<unknown>): string;
 
 export function wu<CP extends { o: object }>(CC: F<CP>) {
 >wu : <CP extends { o: object; }>(CC: F<CP>) => void
->   : ^  ^^^^^^^^^^^^^^      ^^^^^  ^^     ^^^^^^^^^
+>   : ^  ^^^^^^^^^              ^^  ^^     ^^^^^^^^^
 >o : object
 >  : ^^^^^^
 >CC : F<CP>

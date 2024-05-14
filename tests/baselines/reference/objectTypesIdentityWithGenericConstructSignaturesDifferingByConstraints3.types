@@ -83,7 +83,7 @@ interface I2 {
 
 var a: { new<T extends U, U extends One>(x: T, y: U): string }
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^      
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 >y : U
@@ -91,11 +91,11 @@ var a: { new<T extends U, U extends One>(x: T, y: U): string }
 
 var b = { new<T extends U, U extends Two>(x: T, y: U) { return ''; } }; // not a construct signature, function called new
 >b : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >{ new<T extends U, U extends Two>(x: T, y: U) { return ''; } } : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->                                                               : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>                                                               : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >new : <T extends U, U extends Two>(x: T, y: U) => string
->    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -158,17 +158,17 @@ function foo3(x: typeof a);
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 
 function foo3(x: typeof a); // error
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 
 function foo3(x: any) { }
 >foo3 : { (x: typeof a): any; (x: typeof a): any; }
@@ -179,17 +179,17 @@ function foo4(x: typeof b);
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo4(x: typeof b); // error
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
 >     : ^^^ ^^        ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo4(x: any) { }
 >foo4 : { (x: typeof b): any; (x: typeof b): any; }
@@ -274,9 +274,9 @@ function foo10(x: typeof a); // ok
 >foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
 >      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 
 function foo10(x: any) { }
 >foo10 : { (x: B<Two, Two>): any; (x: typeof a): any; }
@@ -293,9 +293,9 @@ function foo11(x: typeof b); // ok
 >foo11 : { (x: B<Two, Two>): any; (x: typeof b): any; }
 >      : ^^^ ^^           ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo11(x: any) { }
 >foo11 : { (x: B<Two, Two>): any; (x: typeof b): any; }
@@ -346,9 +346,9 @@ function foo13(x: typeof a); // ok
 >foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
 >      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 >a : new <T extends U, U extends One>(x: T, y: U) => string
->  : ^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^
+>  : ^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^
 
 function foo13(x: any) { }
 >foo13 : { (x: I<Five<string>, Five<string>>): any; (x: typeof a): any; }
@@ -365,9 +365,9 @@ function foo14(x: typeof b); // ok
 >foo14 : { (x: I<Five<string>, Five<string>>): any; (x: typeof b): any; }
 >      : ^^^ ^^                             ^^^^^^^^^ ^^        ^^^^^^^^^
 >x : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 >b : { "new"<T extends U, U extends Two>(x: T, y: U): string; }
->  : ^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^   ^^ ^^ ^^ ^^ ^^^^^^^^^^^^
 
 function foo14(x: any) { }
 >foo14 : { (x: I<Five<string>, Five<string>>): any; (x: typeof b): any; }

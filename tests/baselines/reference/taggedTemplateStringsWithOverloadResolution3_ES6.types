@@ -283,7 +283,7 @@ fn3 ``; // Error
 // Generic overloads with constraints
 function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T_1 extends number, U_1 extends string>(strs: TemplateStringsArray, n: T_1, m: U_1): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^    ^^                    ^^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T
@@ -293,7 +293,7 @@ function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: 
 
 function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U);
 >fn4 : { <T_1 extends string, U_1 extends number>(strs: TemplateStringsArray, n: T_1, m: U_1): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^   ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^   ^^^^^^^^^      ^^   ^^^^^^^^^      ^^    ^^                    ^^ ^^   ^^ ^^   ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 >n : T
@@ -303,20 +303,20 @@ function fn4<T extends number, U extends string>(strs: TemplateStringsArray, n: 
 
 function fn4(strs: TemplateStringsArray)
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >strs : TemplateStringsArray
 >     : ^^^^^^^^^^^^^^^^^^^^
 
 function fn4() { }
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 
 // Generic overloads with constraints tagged with types that satisfy the constraints
 fn4 `${ '' }${ 3  }`;
 >fn4 `${ '' }${ 3  }` : any
 >                     : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ '' }${ 3  }` : string
 >                 : ^^^^^^
 >'' : ""
@@ -328,7 +328,7 @@ fn4 `${ 3  }${ '' }`;
 >fn4 `${ 3  }${ '' }` : any
 >                     : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ 3  }${ '' }` : string
 >                 : ^^^^^^
 >3 : 3
@@ -340,7 +340,7 @@ fn4 `${ 3  }${ undefined }`;
 >fn4 `${ 3  }${ undefined }` : any
 >                            : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ 3  }${ undefined }` : string
 >                        : ^^^^^^
 >3 : 3
@@ -352,7 +352,7 @@ fn4 `${ '' }${ null }`;
 >fn4 `${ '' }${ null }` : any
 >                       : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ '' }${ null }` : string
 >                   : ^^^^^^
 >'' : ""
@@ -363,7 +363,7 @@ fn4 `${ null }${ null }`; // Error
 >fn4 `${ null }${ null }` : any
 >                         : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ null }${ null }` : string
 >                     : ^^^^^^
 
@@ -372,7 +372,7 @@ fn4 `${ true }${ null }`;
 >fn4 `${ true }${ null }` : any
 >                         : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ true }${ null }` : string
 >                     : ^^^^^^
 >true : true
@@ -382,7 +382,7 @@ fn4 `${ null }${ true }`;
 >fn4 `${ null }${ true }` : any
 >                         : ^^^
 >fn4 : { <T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U): any; <T extends number, U extends string>(strs: TemplateStringsArray, n: T, m: U): any; (strs: TemplateStringsArray): any; }
->    : ^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
+>    : ^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^    ^^                    ^^ ^^ ^^ ^^ ^^^^^^^^^    ^^                    ^^^^^^^^^
 >`${ null }${ true }` : string
 >                     : ^^^^^^
 >true : true

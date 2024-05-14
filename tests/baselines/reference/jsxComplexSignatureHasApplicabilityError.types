@@ -40,7 +40,7 @@ export type ReactSingleSelectProps<
 
 export function createReactSingleSelect<
 >createReactSingleSelect : <WrappedProps extends ReactSelectProps<any>>(WrappedComponent: React.ComponentType<WrappedProps>) => React.ComponentType<ReactSingleSelectProps<WrappedProps>>
->                        : ^            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                                 ^^^^^                                                         
+>                        : ^            ^^^^^^^^^                     ^^                ^^                                 ^^^^^                                                         
 
     WrappedProps extends ReactSelectProps<any>
 >(

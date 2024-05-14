@@ -3,7 +3,7 @@
 === indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts ===
 declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
 >f : <T extends unknown = unknown>(x: { [x: string]: T; }) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^ 
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^^ ^^                   ^^^^^ 
 >x : { [x: string]: T; }
 >  : ^^^^^^^^^^^^^^^^^^^
 >x : string
@@ -57,7 +57,7 @@ f(stooges); // Should throw
 >f(stooges) : unknown
 >           : ^^^^^^^
 >f : <T extends unknown = unknown>(x: { [x: string]: T; }) => T
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                   ^^^^^^
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^^ ^^                   ^^^^^^
 >stooges : { name: string; age: number; }[]
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

@@ -7459,8 +7459,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return factory.createTypeParameterDeclaration(modifiers, name, constraintNode, defaultParameterNode);
         }
 
+        function typeToTypeNodeHelperWithPossibleReusableTypeNode(type: Type, typeNode: TypeNode | undefined, context: NodeBuilderContext) {
+            return typeNode && tryReuseExistingNonParameterTypeNode(context, typeNode, type) || typeToTypeNodeHelper(type, context);
+        }
+
         function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
-            const constraintNode = constraint && typeToTypeNodeHelper(constraint, context);
+            const constraintNode = constraint && typeToTypeNodeHelperWithPossibleReusableTypeNode(constraint, getConstraintDeclaration(type), context);
             return typeParameterToDeclarationWithConstraint(type, context, constraintNode);
         }
 
@@ -8274,7 +8278,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             sym = resolveEntityName(leftmost, meaning, /*ignoreErrors*/ true, /*dontResolveAlias*/ true);
             if (
                 context.enclosingDeclaration &&
-                (getNodeLinks(context.enclosingDeclaration).fakeScopeForSignatureDeclaration || !findAncestor(node, n => n === context.enclosingDeclaration)) &&
                 !(sym && sym.flags & SymbolFlags.TypeParameter)
             ) {
                 sym = getExportSymbolOfValueSymbolIfExported(sym);
@@ -8431,6 +8434,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
 
             function visitExistingNodeTreeSymbolsWorker(node: Node): Node | undefined {
+                if (isJSDocTypeExpression(node)) {
+                    // Unwrap JSDocTypeExpressions
+                    return visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode);
+                }
                 // We don't _actually_ support jsdoc namepath types, emit `any` instead
                 if (isJSDocAllType(node) || node.kind === SyntaxKind.JSDocNamepathType) {
                     return factory.createKeywordTypeNode(SyntaxKind.AnyKeyword);

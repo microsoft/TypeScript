@@ -826,7 +826,7 @@ type PropDescMap<T> = {
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^                
 >obj : T
 >    : ^
 >name : K
@@ -848,7 +848,7 @@ let p10 = defineProp(p1, "foo", { value: 42 });
 >defineProp(p1, "foo", { value: 42 }) : Point & Record<"foo", number>
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >"foo" : "foo"
@@ -886,7 +886,7 @@ let p11 = defineProp(p1, "bar", {
 >defineProp(p1, "bar", {    get() {        return this.x;    },    set(value: number) {        this.x = value;    }}) : Point & Record<"bar", number>
 >                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->           : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^ ^^^^^^^^^      ^^ ^^   ^^ ^^    ^^ ^^    ^^                         ^^^^^^^^^^^^^^^^^^^^^
 >p1 : Point
 >   : ^^^^^
 >"bar" : "bar"
