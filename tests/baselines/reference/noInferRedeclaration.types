@@ -16,7 +16,7 @@ export const f = <T>(x: T, y: NoInfer<T>) => x;
 === b.ts ===
 import { f } from "./a";
 >f : <T>(x: T, y: globalThis.NoInfer<T>) => T
->  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^   ^^^^^^
 
 type NoInfer<T> = T & number;
 >NoInfer : NoInfer<T>
@@ -24,7 +24,7 @@ type NoInfer<T> = T & number;
 
 export const g = f;
 >g : <T>(x: T, y: globalThis.NoInfer<T>) => T
->  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^   ^^^^^^
 >f : <T>(x: T, y: globalThis.NoInfer<T>) => T
->  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^   ^^^^^^
 

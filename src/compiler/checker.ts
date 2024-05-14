@@ -5996,6 +5996,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!nodeIsSynthesized(range) && !(range.flags & NodeFlags.Synthesized) && (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(range))) {
                 range = factory.cloneNode(range);
             }
+            if (range === location) return range;
             if (!location) {
                 return range;
             }
@@ -8340,6 +8341,62 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
 
+        function serializeTypeName(context: NodeBuilderContext, node: EntityName, isTypeOf?: boolean, typeArguments?: readonly TypeNode[]) {
+            const meaning = isTypeOf ? SymbolFlags.Value : SymbolFlags.Type;
+            const symbol = resolveEntityName(node, meaning, /*ignoreErrors*/ true);
+            if (!symbol) return undefined;
+            const resolvedSymbol = symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol;
+            if (isSymbolAccessible(symbol, context.enclosingDeclaration, meaning, /*shouldComputeAliasesToMakeVisible*/ false).accessibility !== SymbolAccessibility.Accessible) return undefined;
+            return symbolToTypeNode(resolvedSymbol, context, meaning, typeArguments);
+        }
+
+        function canReuseTypeNode(context: NodeBuilderContext, existing: TypeNode) {
+            if (isInJSFile(existing)) {
+                if (isLiteralImportTypeNode(existing)) {
+                    // Ensure resolvedSymbol is present
+                    void getTypeFromImportTypeNode(existing);
+                    const nodeSymbol = getNodeLinks(existing).resolvedSymbol;
+                    return (
+                        !nodeSymbol ||
+                        !(
+                            // The import type resolved using jsdoc fallback logic
+                            (!existing.isTypeOf && !(nodeSymbol.flags & SymbolFlags.Type)) ||
+                            // The import type had type arguments autofilled by js fallback logic
+                            !(length(existing.typeArguments) >= getMinTypeArgumentCount(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(nodeSymbol)))
+                        )
+                    );
+                }
+            }
+            if (isTypeReferenceNode(existing)) {
+                if (isConstTypeReference(existing)) return false;
+                const type = getTypeFromTypeReference(existing);
+                const symbol = getNodeLinks(existing).resolvedSymbol;
+                if (!symbol) return false;
+                if (symbol.flags & SymbolFlags.TypeParameter) {
+                    return true;
+                }
+                if (isInJSDoc(existing)) {
+                    return existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)
+                        && !getIntendedTypeFromJSDocTypeReference(existing) // We should probably allow the reuse of JSDoc reference types such as String Number etc
+                        && (symbol.flags & SymbolFlags.Type); // JSDoc type annotations can reference values (meaning typeof value) as well as types. We only reuse type nodes
+                }
+            }
+            if (
+                isTypeOperatorNode(existing) &&
+                existing.operator === SyntaxKind.UniqueKeyword &&
+                existing.type.kind === SyntaxKind.SymbolKeyword
+            ) {
+                const effectiveEnclosingContext = context.enclosingDeclaration && getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
+                return !!findAncestor(existing, n => n === effectiveEnclosingContext);
+            }
+            return true;
+        }
+
+        function serializeExistingTypeNode(context: NodeBuilderContext, typeNode: TypeNode) {
+            const type = getTypeFromTypeNode(typeNode);
+            return typeToTypeNodeHelper(type, context);
+        }
+
         /**
          * Do you mean to call this directly? You probably should use `tryReuseExistingTypeNode` instead,
          * which performs sanity checking on the type before doing this.
@@ -8353,6 +8410,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (hadError) {
                 return undefined;
             }
+            context.approximateLength += existing.end - existing.pos;
             return transformed;
 
             function visitExistingNodeTreeSymbols(node: Node): Node | undefined {
@@ -8456,8 +8514,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         );
                     }
                 }
-                if (isTypeReferenceNode(node) && isInJSDoc(node) && (!existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(node, getTypeFromTypeNode(node)) || getIntendedTypeFromJSDocTypeReference(node) || unknownSymbol === resolveTypeReferenceName(node, SymbolFlags.Type, /*ignoreErrors*/ true))) {
-                    return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
+                if (isTypeReferenceNode(node)) {
+                    if (canReuseTypeNode(context, node)) {
+                        const { introducesError, node: newName } = trackExistingEntityName(node.typeName, context);
+                        const typeArguments = visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode);
+
+                        if (!introducesError) {
+                            const updated = factory.updateTypeReferenceNode(
+                                node,
+                                newName,
+                                typeArguments,
+                            );
+                            return setTextRange(context, updated, node);
+                        }
+                        else {
+                            const serializedName = serializeTypeName(context, node.typeName, /*isTypeOf*/ false, typeArguments);
+                            if (serializedName) {
+                                return setTextRange(context, serializedName, node.typeName);
+                            }
+                        }
+                    }
+                    return serializeExistingTypeNode(context, node);
                 }
                 if (isLiteralImportTypeNode(node)) {
                     const nodeSymbol = getNodeLinks(node).resolvedSymbol;
@@ -8471,7 +8548,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             !(length(node.typeArguments) >= getMinTypeArgumentCount(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(nodeSymbol)))
                         )
                     ) {
-                        return setOriginalNode(typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
+                        return setTextRange(context, typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
                     }
                     return factory.updateImportTypeNode(
                         node,
@@ -8503,15 +8580,47 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                     return visited;
                 }
-
-                if (isEntityName(node) || isEntityNameExpression(node)) {
-                    if (isDeclarationName(node)) {
-                        return node;
+                if (isTypeQueryNode(node)) {
+                    const { introducesError, node: exprName } = trackExistingEntityName(node.exprName, context);
+                    if (introducesError) {
+                        const serializedName = serializeTypeName(context, node.exprName, /*isTypeOf*/ true);
+                        if (serializedName) {
+                            return setTextRange(context, serializedName, node.exprName);
+                        }
+                        return serializeExistingTypeNode(context, node);
                     }
-                    const { introducesError, node: result } = trackExistingEntityName(node, context);
+                    return factory.updateTypeQueryNode(
+                        node,
+                        exprName,
+                        visitNodes(node.typeArguments, visitExistingNodeTreeSymbols, isTypeNode),
+                    );
+                }
+                if (isComputedPropertyName(node) && isEntityNameExpression(node.expression)) {
+                    const { node: result, introducesError } = trackExistingEntityName(node.expression, context);
+                    if (!introducesError) {
+                        return factory.updateComputedPropertyName(node, result);
+                    }
+                    else {
+                        const type = getWidenedType(getRegularTypeOfExpression(node.expression));
+                        const computedPropertyNameType = typeToTypeNodeHelper(type, context);
+                        Debug.assertNode(computedPropertyNameType, isLiteralTypeNode);
+                        const literal = computedPropertyNameType.literal;
+                        if (literal.kind === SyntaxKind.StringLiteral && isIdentifierText(literal.text, getEmitScriptTarget(compilerOptions))) {
+                            return factory.createIdentifier(literal.text);
+                        }
+                        if (literal.kind === SyntaxKind.NumericLiteral && !literal.text.startsWith("-")) {
+                            return literal;
+                        }
+                        return factory.updateComputedPropertyName(node, literal);
+                    }
+                }
+                if (isTypePredicateNode(node) && isIdentifier(node.parameterName)) {
+                    const { node: result, introducesError } = trackExistingEntityName(node.parameterName, context);
+                    // Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
+                    // /** @type {(v: unknown) => v is undefined} */
+                    // const isUndef = v => v === undefined;
                     hadError = hadError || introducesError;
-                    // We should not go to child nodes of the entity name, they will not be accessible
-                    return result;
+                    return factory.updateTypePredicateNode(node, node.assertsModifier, result, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
                 }
 
                 if (isTupleTypeNode(node) || isTypeLiteralNode(node) || isMappedTypeNode(node)) {
@@ -8541,6 +8650,12 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         trueType,
                         falseType,
                     );
+                }
+
+                if (isTypeOperatorNode(node) && node.operator === SyntaxKind.UniqueKeyword && node.type.kind === SyntaxKind.SymbolKeyword) {
+                    if (!canReuseTypeNode(context, node)) {
+                        return serializeExistingTypeNode(context, node);
+                    }
                 }
 
                 return visitEachChild(node, visitExistingNodeTreeSymbols, /*context*/ undefined);

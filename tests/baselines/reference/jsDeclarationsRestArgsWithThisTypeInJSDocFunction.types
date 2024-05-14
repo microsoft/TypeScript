@@ -10,8 +10,8 @@ export class Clazz {
    */
   method(functionDeclaration) {}
 >method : (functionDeclaration: (this: any, ...args: any[]) => any) => void
->       : ^                   ^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >functionDeclaration : (this: any, ...arg1: any[]) => any
->                    : ^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^
+>                    : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

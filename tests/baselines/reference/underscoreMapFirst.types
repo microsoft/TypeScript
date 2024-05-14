@@ -121,11 +121,11 @@ class MyView extends View {
 >_.pluck(data, "series") : any[]
 >                        : ^^^^^
 >_.pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^            ^^      ^^^^^^^^^^
+>        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
 >pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->      : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^            ^^      ^^^^^^^^^^
+>      : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
 >data : IData[]
 >     : ^^^^^^^
 >"series" : "series"
@@ -135,19 +135,19 @@ class MyView extends View {
 >_.map(allSeries, _.first) : ISeries[]
 >                          : ^^^^^^^^^
 >_.map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
->      : ^ ^^       ^^    ^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^
+>      : ^ ^^       ^^    ^^^^^^^^   ^^        ^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^^^^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
 >map : <T, TResult>(list: _.List<T>, iterator: _.ListIterator<T, TResult>, context?: any) => TResult[]
->    : ^ ^^       ^^    ^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^
+>    : ^ ^^       ^^    ^^^^^^^^   ^^        ^^^^^^^^^^^^^^^^            ^^       ^^^   ^^^^^^^^^^^^^^
 >allSeries : ISeries[][]
 >          : ^^^^^^^^^^^
 >_.first : <T>(array: _.List<T>) => T
->        : ^ ^^     ^^^^^^^^^^^^^^^^^
+>        : ^ ^^     ^^^^^^^^   ^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
 >first : <T>(array: _.List<T>) => T
->      : ^ ^^     ^^^^^^^^^^^^^^^^^
+>      : ^ ^^     ^^^^^^^^   ^^^^^^
     }
 }
 

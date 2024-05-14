@@ -43,7 +43,7 @@ function test1() {
 
     function test(t: Temp1 | Temp2) {
 >test : (t: Temp1 | Temp2) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^   ^^^^^^^^^^^^^^
 >t : Temp1 | Temp2
 >  : ^^^^^^^^^^^^^
 
