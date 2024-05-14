@@ -1,5 +1,6 @@
 // @ts-check
 import eslint from "@eslint/js";
+import * as regexpPlugin from "eslint-plugin-regexp";
 import fs from "fs";
 import globals from "globals";
 import { createRequire } from "module";
@@ -36,6 +37,7 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
+    regexpPlugin.configs["flat/recommended"],
     {
         plugins: {
             local: {
