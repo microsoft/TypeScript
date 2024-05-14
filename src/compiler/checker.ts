@@ -5993,10 +5993,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
          * It also calls `setOriginalNode` to setup a `.original` pointer, since you basically *always* want these in the node builder.
          */
         function setTextRange<T extends Node>(context: NodeBuilderContext, range: T, location: Node | undefined): T {
-            if (range === location) return range;
             if (!nodeIsSynthesized(range) && !(range.flags & NodeFlags.Synthesized) && (!context.enclosingFile || context.enclosingFile !== getSourceFileOfNode(range))) {
                 range = factory.cloneNode(range);
             }
+            if (range === location) return range;
             if (!location) {
                 return range;
             }
@@ -8368,6 +8368,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 }
             }
             if (isTypeReferenceNode(existing)) {
+                if (isConstTypeReference(existing)) return false;
+
                 const symbol = resolveTypeReferenceName(existing, SymbolFlags.Type, /*ignoreErrors*/ true);
                 if (symbol.flags & SymbolFlags.TypeParameter) {
                     return true;
@@ -8582,7 +8584,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     if (introducesError) {
                         const serializedName = serializeTypeName(context, node.exprName, /*isTypeOf*/ true);
                         if (serializedName) {
-                            serializeExistingTypeNode(context, node);
                             return setTextRange(context, serializedName, node.exprName);
                         }
                         return serializeExistingTypeNode(context, node);
