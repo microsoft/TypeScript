@@ -490,6 +490,7 @@ import {
     isCatchClauseVariableDeclarationOrBindingElement,
     isCheckJsEnabledForFile,
     isClassDeclaration,
+    isClassElement,
     isClassExpression,
     isClassInstanceProperty,
     isClassLike,
@@ -836,6 +837,7 @@ import {
     LateBoundDeclaration,
     LateBoundName,
     LateVisibilityPaintedStatement,
+    LazyNodeCheckFlags,
     length,
     LiteralExpression,
     LiteralType,
@@ -1105,8 +1107,6 @@ import {
     WideningContext,
     WithStatement,
     YieldExpression,
-    LazyNodeCheckFlags,
-    isClassElement,
 } from "./_namespaces/ts.js";
 import * as moduleSpecifiers from "./_namespaces/ts.moduleSpecifiers.js";
 import * as performance from "./_namespaces/ts.performance.js";
