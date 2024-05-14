@@ -19,6 +19,10 @@
 //// import { Event } from '../event/event';
 //// export { Event };
 
+// @Filename: /src/vs/workbench/workbench2.ts
+//// import { Event } from '../event/event';
+//// export { Event };
+
 verify.codeFix({
     description: "Implement interface 'Parts'",
     newFileContent: 
@@ -28,6 +32,6 @@ export class EditorParts implements Parts {
     options: Event;
 }`,
     preferences: {
-        autoImportFileExcludePatterns: ["src/vs/workbench/workbench.ts"],
+        autoImportFileExcludePatterns: ["src/vs/workbench/workbench*"],
     }
 });

@@ -16,6 +16,10 @@
 //// }
 
 // @Filename: /src/vs/workbench/workbench.ts
+//// import { Event } from './workbench2';
+//// export { Event };
+
+// @Filename: /src/vs/workbench/workbench2.ts
 //// import { Event } from '../event/event';
 //// export { Event };
 
@@ -28,6 +32,6 @@ export class EditorParts implements Parts {
     options: Event;
 }`,
     preferences: {
-        autoImportFileExcludePatterns: ["src/vs/workbench/workbench.ts"],
+        autoImportFileExcludePatterns: ["src/vs/workbench/workbench*"],
     }
 });

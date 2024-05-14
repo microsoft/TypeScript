@@ -16,13 +16,17 @@
 //// }
 
 // @Filename: /src/vs/workbench/workbench.ts
+//// import { Event } from './canImport';
+//// export { Event };
+
+// @Filename: /src/vs/workbench/canImport.ts
 //// import { Event } from '../event/event';
 //// export { Event };
 
 verify.codeFix({
     description: "Implement interface 'Parts'",
     newFileContent: 
-`import { Event } from '../event/event';
+`import { Event } from './canImport';
 import { Parts } from './parts';
 export class EditorParts implements Parts {
     options: Event;
