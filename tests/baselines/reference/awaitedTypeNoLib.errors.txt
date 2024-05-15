@@ -44,7 +44,7 @@ awaitedTypeNoLib.ts(18,27): error TS2345: Argument of type 'NotPromise<TResult> 
         resolve: Receiver<TResult>,
       ) {
         if (result instanceof Thennable) {
-          // Error: Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+          //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
           this.resolvePromise(result, resolve);
                               ~~~~~~
 !!! error TS2345: Argument of type 'NotPromise<TResult> | Thennable<NotPromise<TResult>>' is not assignable to parameter of type 'Thennable<TResult>'.

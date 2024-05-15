@@ -57,7 +57,7 @@ class Thennable<T> {
 >result : Symbol(result, Decl(awaitedTypeNoLib.ts, 11, 33))
 >Thennable : Symbol(Thennable, Decl(awaitedTypeNoLib.ts, 6, 50))
 
-      // Error: Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+      //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
       this.resolvePromise(result, resolve);
 >this.resolvePromise : Symbol(Thennable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
 >this : Symbol(Thennable, Decl(awaitedTypeNoLib.ts, 6, 50))

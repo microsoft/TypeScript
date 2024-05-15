@@ -17,7 +17,7 @@ class Thennable<T> {
     resolve: Receiver<TResult>,
   ) {
     if (result instanceof Thennable) {
-      // Error: Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+      //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
       this.resolvePromise(result, resolve);
     }
   }
@@ -35,7 +35,7 @@ var Thennable = /** @class */ (function () {
     Thennable.prototype.then = function (a) { };
     Thennable.prototype.handleResolve = function (result, resolve) {
         if (result instanceof Thennable) {
-            // Error: Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+            //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
             this.resolvePromise(result, resolve);
         }
     };

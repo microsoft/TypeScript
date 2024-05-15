@@ -47,7 +47,7 @@ class Thennable<T> {
 >Thennable : typeof Thennable
 >          : ^^^^^^^^^^^^^^^^
 
-      // Error: Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+      //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
       this.resolvePromise(result, resolve);
 >this.resolvePromise(result, resolve) : void
 >                                     : ^^^^
