@@ -740,6 +740,7 @@ import {
     isThisInitializedObjectBindingExpression,
     isThisInTypeQuery,
     isThisProperty,
+    isThisTypeNode,
     isThisTypeParameter,
     isThisTypePredicate,
     isTransientSymbol,
@@ -5983,6 +5984,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToNode(symbol, context, meaning)),
         };
 
+        function tryMapTypeInContext(context: NodeBuilderContext, type: Type) {
+            return context.mapper ? getMappedType(type, context.mapper) : type;
+        }
+
         /**
          * Unlike the utilities `setTextRange`, this checks if the `location` we're trying to set on `range` is within the
          * same file as the active context. If not, the range is not applied. This prevents us from copying ranges across files,
@@ -6125,6 +6130,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 typeParameterNames: undefined,
                 typeParameterNamesByText: undefined,
                 typeParameterNamesByTextNextNameCount: undefined,
+                mapper: undefined,
             };
             context.tracker = new SymbolTrackerImpl(context, tracker, moduleResolverHost);
             const resultingNode = cb(context);
@@ -7198,7 +7204,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let typeArguments: TypeNode[] | undefined;
 
             const expandedParams = getExpandedParameters(signature, /*skipUnionExpanding*/ true)[0];
-            const cleanup = enterNewScope(context, signature.declaration, expandedParams, signature.typeParameters, signature.parameters);
+            const cleanup = enterNewScope(context, signature.declaration, expandedParams, signature.typeParameters, signature.parameters, signature.mapper);
             context.approximateLength += 3; // Usually a signature contributes a few more characters than this, but 3 is the minimum
 
             if (context.flags & NodeBuilderFlags.WriteTypeArgumentsOfSignature && signature.target && signature.mapper && signature.target.typeParameters) {
@@ -7278,6 +7284,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             expandedParams: readonly Symbol[] | undefined,
             typeParameters: readonly TypeParameter[] | undefined,
             originalParameters?: readonly Symbol[] | undefined,
+            mapper?: TypeMapper,
         ) {
             const cleanupContext = cloneNodeBuilderContext(context);
             // For regular function/method declarations, the enclosing declaration will already be signature.declaration,
@@ -7295,6 +7302,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             let cleanupParams: (() => void) | undefined;
             let cleanupTypeParams: (() => void) | undefined;
             const oldEnclosingDecl = context.enclosingDeclaration;
+            const oldMapper = context.mapper;
+            if (mapper) {
+                context.mapper = mapper;
+            }
             if (context.enclosingDeclaration && declaration) {
                 // As a performance optimization, reuse the same fake scope within this chain.
                 // This is especially needed when we are working on an excessively deep type;
@@ -7427,6 +7438,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 cleanupTypeParams?.();
                 cleanupContext();
                 context.enclosingDeclaration = oldEnclosingDecl;
+                context.mapper = oldMapper;
             };
         }
 
@@ -8133,7 +8145,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             };
         }
 
-        function getDeclarationWithTypeAnnotation(symbol: Symbol, enclosingDeclaration: Node | undefined) {
+        function getDeclarationWithTypeAnnotation(symbol: Symbol, enclosingDeclaration?: Node | undefined) {
             return symbol.declarations && find(symbol.declarations, s => !!getNonlocalEffectiveTypeAnnotationNode(s) && (!enclosingDeclaration || !!findAncestor(s, n => n === enclosingDeclaration)));
         }
 
@@ -8171,11 +8183,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
                 const declWithExistingAnnotation = declaration && getNonlocalEffectiveTypeAnnotationNode(declaration)
                     ? declaration
-                    : getDeclarationWithTypeAnnotation(symbol, getEnclosingDeclarationIgnoringFakeScope(enclosingDeclaration));
+                    : getDeclarationWithTypeAnnotation(symbol);
                 if (declWithExistingAnnotation && !isFunctionLikeDeclaration(declWithExistingAnnotation) && !isGetAccessorDeclaration(declWithExistingAnnotation)) {
                     // try to reuse the existing annotation
                     const existing = getNonlocalEffectiveTypeAnnotationNode(declWithExistingAnnotation)!;
-                    const result = tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
+                    const result = !isTypePredicateNode(existing) && tryReuseExistingTypeNode(context, existing, type, declWithExistingAnnotation, addUndefined);
                     if (result) {
                         return result;
                     }
@@ -8233,14 +8245,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function serializeReturnTypeForSignatureWorker(context: NodeBuilderContext, signature: Signature) {
             const typePredicate = getTypePredicateOfSignature(signature);
-            const type = getReturnTypeOfSignature(signature);
-            if (context.enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames))) {
+            const type = tryMapTypeInContext(context, getReturnTypeOfSignature(signature));
+            if (context.enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames)) && signature.declaration && !nodeIsSynthesized(signature.declaration)) {
                 const annotation = signature.declaration && getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
-                const enclosingDeclarationIgnoringFakeScope = getEnclosingDeclarationIgnoringFakeScope(context.enclosingDeclaration);
-                if (!!findAncestor(annotation, n => n === enclosingDeclarationIgnoringFakeScope) && annotation) {
-                    const annotated = getTypeFromTypeNode(annotation);
-                    const thisInstantiated = annotated.flags & TypeFlags.TypeParameter && (annotated as TypeParameter).isThisType ? instantiateType(annotated, signature.mapper) : annotated;
-                    const result = tryReuseExistingNonParameterTypeNode(context, annotation, type, signature.declaration, thisInstantiated);
+                if (annotation) {
+                    const result = tryReuseExistingNonParameterTypeNode(context, annotation, type, signature.declaration, tryMapTypeInContext(context, getTypeFromTypeNode(annotation)));
                     if (result) {
                         return result;
                     }
@@ -8367,13 +8376,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     );
                 }
             }
+            if (isThisTypeNode(existing)) {
+                if (context.mapper === undefined) return true;
+                const type = getTypeFromTypeNode(existing);
+                return tryMapTypeInContext(context, type) === type;
+            }
             if (isTypeReferenceNode(existing)) {
                 if (isConstTypeReference(existing)) return false;
                 const type = getTypeFromTypeReference(existing);
                 const symbol = getNodeLinks(existing).resolvedSymbol;
                 if (!symbol) return false;
                 if (symbol.flags & SymbolFlags.TypeParameter) {
-                    return true;
+                    const type = getDeclaredTypeOfSymbol(symbol);
+                    if (tryMapTypeInContext(context, type) !== type) {
+                        return false;
+                    }
                 }
                 if (isInJSDoc(existing)) {
                     return existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)
@@ -8393,7 +8410,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function serializeExistingTypeNode(context: NodeBuilderContext, typeNode: TypeNode) {
-            const type = getTypeFromTypeNode(typeNode);
+            const type = tryMapTypeInContext(context, getTypeFromTypeNode(typeNode));
             return typeToTypeNodeHelper(type, context);
         }
 
@@ -8490,7 +8507,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 p.name && isIdentifier(p.name) && p.name.escapedText === "new" ? (newTypeNode = p.type, undefined) : factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
-                                    getNameForJSDocFunctionParameter(p, i),
+                                    setTextRange(context, factory.createIdentifier(getNameForJSDocFunctionParameter(p, i)), p),
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined,
@@ -8505,7 +8522,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                 factory.createParameterDeclaration(
                                     /*modifiers*/ undefined,
                                     getEffectiveDotDotDotForParameter(p),
-                                    getNameForJSDocFunctionParameter(p, i),
+                                    setTextRange(context, factory.createIdentifier(getNameForJSDocFunctionParameter(p, i)), p),
                                     p.questionToken,
                                     visitNode(p.type, visitExistingNodeTreeSymbols, isTypeNode),
                                     /*initializer*/ undefined,
@@ -8513,6 +8530,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode) || factory.createKeywordTypeNode(SyntaxKind.AnyKeyword),
                         );
                     }
+                }
+                if (isThisTypeNode(node)) {
+                    if (canReuseTypeNode(context, node)) {
+                        return node;
+                    }
+                    return serializeExistingTypeNode(context, node);
+                }
+                if (isTypeParameterDeclaration(node)) {
+                    return factory.updateTypeParameterDeclaration(
+                        node,
+                        node.modifiers,
+                        setTextRange(context, typeParameterToName(getDeclaredTypeOfSymbol(getSymbolOfDeclaration(node)), context), node),
+                        visitNode(node.constraint, visitExistingNodeTreeSymbols, isTypeNode),
+                        visitNode(node.default, visitExistingNodeTreeSymbols, isTypeNode),
+                    );
                 }
                 if (isTypeReferenceNode(node)) {
                     if (canReuseTypeNode(context, node)) {
@@ -8614,13 +8646,20 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         return factory.updateComputedPropertyName(node, literal);
                     }
                 }
-                if (isTypePredicateNode(node) && isIdentifier(node.parameterName)) {
-                    const { node: result, introducesError } = trackExistingEntityName(node.parameterName, context);
-                    // Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
-                    // /** @type {(v: unknown) => v is undefined} */
-                    // const isUndef = v => v === undefined;
-                    hadError = hadError || introducesError;
-                    return factory.updateTypePredicateNode(node, node.assertsModifier, result, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
+                if (isTypePredicateNode(node)) {
+                    let parameterName;
+                    if (isIdentifier(node.parameterName)) {
+                        const { node: result, introducesError } = trackExistingEntityName(node.parameterName, context);
+                        // Should not usually happen the only case is when a type predicate comes from a JSDoc type annotation with it's own parameter symbol definition.
+                        // /** @type {(v: unknown) => v is undefined} */
+                        // const isUndef = v => v === undefined;
+                        hadError = hadError || introducesError;
+                        parameterName = result;
+                    }
+                    else {
+                        parameterName = node.parameterName;
+                    }
+                    return factory.updateTypePredicateNode(node, node.assertsModifier, parameterName, visitNode(node.type, visitExistingNodeTreeSymbols, isTypeNode));
                 }
 
                 if (isTupleTypeNode(node) || isTypeLiteralNode(node) || isMappedTypeNode(node)) {
@@ -51616,6 +51655,7 @@ interface NodeBuilderContext {
     remappedSymbolReferences: Map<SymbolId, Symbol> | undefined;
     reverseMappedStack: ReverseMappedSymbol[] | undefined;
     bundled: boolean;
+    mapper: TypeMapper | undefined;
 }
 
 class SymbolTrackerImpl implements SymbolTracker {

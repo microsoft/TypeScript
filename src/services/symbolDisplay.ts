@@ -557,7 +557,7 @@ function getSymbolDisplayPartsDocumentationAndSymbolKindWorker(typeChecker: Type
                         typeChecker,
                         resolvedSymbol,
                         getSourceFileOfNode(resolvedNode),
-                        resolvedNode,
+                        enclosingDeclaration,
                         declarationName,
                         type,
                         semanticMeaning,
