@@ -48717,6 +48717,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function calculateNodeCheckFlagWorker(node: Node, flag: LazyNodeCheckFlags) {
+        if (!compilerOptions.noCheck) {
+            // Unless noCheck is passed, assume calculation of node check flags has been done eagerly.
+            // This saves needing to mark up where in the eager traversal certain results are "done",
+            // just to reconcile the eager and lazy results. This wouldn't be hard if an eager typecheck
+            // was actually an in-order traversal, but it isn't - some nodes are deferred, and so don't
+            // have these node check flags calculated until that deferral is completed. As an example,
+            // in concept, we could consider a class that we've called `checkSourceElement` on as having had
+            // these flags calculated, but since the method bodies are deferred, we actually can't set the
+            // flags as having been calculated until that deferral is completed.
+            // The downside to this either/or approach to eager or lazy calculation is that we can't combine
+            // a partial eager traversal and lazy calculation for the missing bits, and there's a bit of
+            // overlap in functionality. This isn't a huge loss for any usecases today, but would be nice
+            // alongside language service partial file checking and editor-triggered emit.
+            return;
+        }
         const links = getNodeLinks(node);
         if (links.calculatedFlags & flag) {
             return;
