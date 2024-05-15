@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/awaitedTypeNoLib.ts] ////
 
 //// [awaitedTypeNoLib.ts]
-type NotPromise<T> = T extends Thennable<unknown>
+type NotPromise<T> = T extends Thenable<unknown>
   ? T
   : T extends PromiseLike<unknown>
   ? never
@@ -9,36 +9,36 @@ type NotPromise<T> = T extends Thennable<unknown>
 
 type Receiver<T> = (value: NotPromise<T>) => void;
 
-class Thennable<T> {
+class Thenable<T> {
   then(a: Receiver<T>) {}
 
   private handleResolve<TResult>(
-    result: NotPromise<TResult> | Thennable<NotPromise<TResult>>,
+    result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
     resolve: Receiver<TResult>,
   ) {
-    if (result instanceof Thennable) {
+    if (result instanceof Thenable) {
       //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
       this.resolvePromise(result, resolve);
     }
   }
 
   private resolvePromise<TResult>(
-    result: Thennable<TResult>,
+    result: Thenable<TResult>,
     resolve: Receiver<TResult>,
   ) {}
 }
 
 //// [awaitedTypeNoLib.js]
-var Thennable = /** @class */ (function () {
-    function Thennable() {
+var Thenable = /** @class */ (function () {
+    function Thenable() {
     }
-    Thennable.prototype.then = function (a) { };
-    Thennable.prototype.handleResolve = function (result, resolve) {
-        if (result instanceof Thennable) {
+    Thenable.prototype.then = function (a) { };
+    Thenable.prototype.handleResolve = function (result, resolve) {
+        if (result instanceof Thenable) {
             //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
             this.resolvePromise(result, resolve);
         }
     };
-    Thennable.prototype.resolvePromise = function (result, resolve) { };
-    return Thennable;
+    Thenable.prototype.resolvePromise = function (result, resolve) { };
+    return Thenable;
 }());
