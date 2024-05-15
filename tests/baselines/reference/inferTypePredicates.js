@@ -973,5 +973,5 @@ declare function assertName(x: any): asserts x is Named;
 declare function isNamed(x: any): x is Named;
 declare function inferFromTypePred(x: unknown): asserts x is Named;
 declare function inferFromTypePredAny(x: any): asserts x is Named;
-declare const assertWithFuncExpr: (pattern: unknown) => asserts pattern is string;
+declare const assertWithFuncExpr: (pattern: unknown) => void;
 declare function useAssertWithFuncExpr(pattern: string): void;
