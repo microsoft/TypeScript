@@ -5965,7 +5965,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function isClassInstanceSide(type: Type) {
         return !!type.symbol && !!(type.symbol.flags & SymbolFlags.Class) && (type === getDeclaredTypeOfClassOrInterface(type.symbol) || (!!(type.flags & TypeFlags.Object) && !!(getObjectFlags(type) & ObjectFlags.IsClassInstanceClone)));
     }
-
+    /**
+     * Same as getTypeFromTypeNode, but for use in createNodeBuilder
+     * Inside createNodeBuilder we shadow getTypeFromTypeNode to make sure anyone using this function will call the local version that does type mapping if appropriate
+     * This function is used to still be able to call the original getTypeFromTypeNode from the local scope version of getTypeFromTypeNode
+     */
+    function getTypeFromTypeNodeWithoutContext(node: TypeNode) {
+        return getTypeFromTypeNode(node);
+    }
     function createNodeBuilder() {
         return {
             typeToTypeNode: (type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => typeToTypeNodeHelper(type, context)),
@@ -5984,8 +5991,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             symbolToNode: (symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker) => withContext(enclosingDeclaration, flags, tracker, context => symbolToNode(symbol, context, meaning)),
         };
 
-        function tryMapTypeInContext(context: NodeBuilderContext, type: Type) {
-            return context.mapper ? getMappedType(type, context.mapper) : type;
+        function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: false): Type;
+        function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes: true): Type | undefined;
+        function getTypeFromTypeNode(context: NodeBuilderContext, node: TypeNode, noMappedTypes?: boolean): Type | undefined {
+            const type = getTypeFromTypeNodeWithoutContext(node);
+            if (!context.mapper) return type;
+
+            const mappedType = instantiateType(type, context.mapper);
+            return noMappedTypes && mappedType !== type ? undefined : mappedType;
         }
 
         /**
@@ -6057,7 +6070,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             const clone = tryReuseExistingNonParameterTypeNode(context, typeNode, type, host);
             if (clone) {
-                if (addUndefined && !someType(getTypeFromTypeNode(typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
+                if (addUndefined && !someType(getTypeFromTypeNode(context, typeNode), t => !!(t.flags & TypeFlags.Undefined))) {
                     return factory.createUnionTypeNode([clone, factory.createKeywordTypeNode(SyntaxKind.UndefinedKeyword)]);
                 }
                 return clone;
@@ -6076,9 +6089,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             existing: TypeNode,
             type: Type,
             host = context.enclosingDeclaration,
-            annotationType?: Type,
+            annotationType = getTypeFromTypeNode(context, existing, /*noMappedTypes*/ true),
         ) {
-            if (typeNodeIsEquivalentToType(existing, host, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
+            if (annotationType && typeNodeIsEquivalentToType(host, type, annotationType) && existingTypeNodeIsNotReferenceOrIsReferenceWithCompatibleTypeArgumentCount(existing, type)) {
                 const result = tryReuseExistingTypeNodeHelper(context, existing);
                 if (result) {
                     return result;
@@ -6420,8 +6433,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.inferTypeParameters = type.root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper(instantiateType(type.root.extendsType, newMapper), context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(type.root.node.trueType), newMapper));
-                    const falseTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(type.root.node.falseType), newMapper));
+                    const trueTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(context, type.root.node.trueType), newMapper));
+                    const falseTypeNode = typeToTypeNodeOrCircularityElision(instantiateType(getTypeFromTypeNode(context, type.root.node.falseType), newMapper));
 
                     // outermost conditional makes `T` a type parameter, allowing the inner conditionals to be distributive
                     // second conditional makes `T` have `T & checkType` substitution, so it is correctly usable as the checkType
@@ -6518,7 +6531,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     // homomorphic mapped type with a non-homomorphic naive inlining
                     // wrap it with a conditional like `SomeModifiersType extends infer U ? {..the mapped type...} : never` to ensure the resulting
                     // type stays homomorphic
-                    const originalConstraint = instantiateType(getConstraintOfTypeParameter(getTypeFromTypeNode((type.declaration.typeParameter.constraint! as TypeOperatorNode).type) as TypeParameter) || unknownType, type.mapper);
+                    const originalConstraint = instantiateType(getConstraintOfTypeParameter(getTypeFromTypeNode(context, (type.declaration.typeParameter.constraint! as TypeOperatorNode).type) as TypeParameter) || unknownType, type.mapper);
                     return factory.createConditionalTypeNode(
                         typeToTypeNodeHelper(getModifiersTypeFromMappedType(type), context),
                         factory.createInferTypeNode(factory.createTypeParameterDeclaration(/*modifiers*/ undefined, factory.cloneNode(newTypeVariable!.typeName) as Identifier, originalConstraint.flags & TypeFlags.Unknown ? undefined : typeToTypeNodeHelper(originalConstraint, context))),
@@ -7454,7 +7467,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                         /*dotDotDotToken*/ undefined,
                         "this",
                         /*questionToken*/ undefined,
-                        typeToTypeNodeHelper(getTypeFromTypeNode(thisTag.typeExpression), context),
+                        typeToTypeNodeHelper(getTypeFromTypeNode(context, thisTag.typeExpression), context),
                     );
                 }
             }
@@ -8213,7 +8226,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return result;
         }
 
-        function typeNodeIsEquivalentToType(typeNode: TypeNode, annotatedDeclaration: Node | undefined, type: Type, typeFromTypeNode = getTypeFromTypeNode(typeNode)) {
+        function typeNodeIsEquivalentToType(annotatedDeclaration: Node | undefined, type: Type, typeFromTypeNode: Type) {
             if (typeFromTypeNode === type) {
                 return true;
             }
@@ -8245,11 +8258,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         function serializeReturnTypeForSignatureWorker(context: NodeBuilderContext, signature: Signature) {
             const typePredicate = getTypePredicateOfSignature(signature);
-            const type = tryMapTypeInContext(context, getReturnTypeOfSignature(signature));
+            const type = getReturnTypeOfSignature(signature);
             if (context.enclosingDeclaration && (!isErrorType(type) || (context.flags & NodeBuilderFlags.AllowUnresolvedNames)) && signature.declaration && !nodeIsSynthesized(signature.declaration)) {
                 const annotation = signature.declaration && getNonlocalEffectiveReturnTypeAnnotationNode(signature.declaration);
-                if (annotation) {
-                    const result = tryReuseExistingNonParameterTypeNode(context, annotation, type, signature.declaration, tryMapTypeInContext(context, getTypeFromTypeNode(annotation)));
+                // Default constructor signatures inherited from base classes return the derived class but have the base class declaration
+                // To ensure we don't serialize the wrong type we check that that return type of the signature corresponds to the declaration return type signature
+                if (annotation && getTypeFromTypeNode(context, annotation) === type) {
+                    const result = tryReuseExistingTypeNodeHelper(context, annotation);
                     if (result) {
                         return result;
                     }
@@ -8378,8 +8393,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             if (isThisTypeNode(existing)) {
                 if (context.mapper === undefined) return true;
-                const type = getTypeFromTypeNode(existing);
-                return tryMapTypeInContext(context, type) === type;
+                const type = getTypeFromTypeNode(context, existing, /*noMappedTypes*/ true);
+                return !!type;
             }
             if (isTypeReferenceNode(existing)) {
                 if (isConstTypeReference(existing)) return false;
@@ -8388,7 +8403,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (!symbol) return false;
                 if (symbol.flags & SymbolFlags.TypeParameter) {
                     const type = getDeclaredTypeOfSymbol(symbol);
-                    if (tryMapTypeInContext(context, type) !== type) {
+                    if (context.mapper && getMappedType(type, context.mapper) !== type) {
                         return false;
                     }
                 }
@@ -8410,7 +8425,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
 
         function serializeExistingTypeNode(context: NodeBuilderContext, typeNode: TypeNode) {
-            const type = tryMapTypeInContext(context, getTypeFromTypeNode(typeNode));
+            const type = getTypeFromTypeNode(context, typeNode);
             return typeToTypeNodeHelper(type, context);
         }
 
@@ -8470,8 +8485,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (isJSDocTypeLiteral(node)) {
                     return factory.createTypeLiteralNode(map(node.jsDocPropertyTags, t => {
                         const name = isIdentifier(t.name) ? t.name : t.name.right;
-                        const typeViaParent = getTypeOfPropertyOfType(getTypeFromTypeNode(node), name.escapedText);
-                        const overrideTypeNode = typeViaParent && t.typeExpression && getTypeFromTypeNode(t.typeExpression.type) !== typeViaParent ? typeToTypeNodeHelper(typeViaParent, context) : undefined;
+                        const typeViaParent = getTypeOfPropertyOfType(getTypeFromTypeNode(context, node), name.escapedText);
+                        const overrideTypeNode = typeViaParent && t.typeExpression && getTypeFromTypeNode(context, t.typeExpression.type) !== typeViaParent ? typeToTypeNodeHelper(typeViaParent, context) : undefined;
 
                         return factory.createPropertySignature(
                             /*modifiers*/ undefined,
@@ -8580,7 +8595,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                             !(length(node.typeArguments) >= getMinTypeArgumentCount(getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(nodeSymbol)))
                         )
                     ) {
-                        return setTextRange(context, typeToTypeNodeHelper(getTypeFromTypeNode(node), context), node);
+                        return setTextRange(context, typeToTypeNodeHelper(getTypeFromTypeNode(context, node), context), node);
                     }
                     return factory.updateImportTypeNode(
                         node,
@@ -9498,8 +9513,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return cleanup(factory.createExpressionWithTypeArguments(
                         expr,
                         map(e.typeArguments, a =>
-                            tryReuseExistingNonParameterTypeNode(context, a, getTypeFromTypeNode(a))
-                            || typeToTypeNodeHelper(getTypeFromTypeNode(a), context)),
+                            tryReuseExistingNonParameterTypeNode(context, a, getTypeFromTypeNode(context, a))
+                            || typeToTypeNodeHelper(getTypeFromTypeNode(context, a), context)),
                     ));
 
                     function cleanup<T>(result: T): T {

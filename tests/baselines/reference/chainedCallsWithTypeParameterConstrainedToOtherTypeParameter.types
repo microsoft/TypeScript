@@ -55,19 +55,19 @@ class C extends B {
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A) : Chain<C>
 >                                                                                       : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then : <S extends C>(cb: (x: C) => S) => Chain<S>
->                                                                           : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >(new Chain(new A)).then(a => new B).then(b => new C).then(c => new B) : Chain<C>
 >                                                                      : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then(b => new C).then : <S extends C>(cb: (x: C) => S) => Chain<S>
->                                                          : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                                                          : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >(new Chain(new A)).then(a => new B).then(b => new C) : Chain<C>
 >                                                     : ^^^^^^^^
 >(new Chain(new A)).then(a => new B).then : <S extends B>(cb: (x: B) => S) => Chain<S>
->                                         : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                                         : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >(new Chain(new A)).then(a => new B) : Chain<B>
 >                                    : ^^^^^^^^
 >(new Chain(new A)).then : <S extends A>(cb: (x: A) => S) => Chain<S>
->                        : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>                        : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >(new Chain(new A)) : Chain<A>
 >                   : ^^^^^^^^
 >new Chain(new A) : Chain<A>
@@ -79,7 +79,7 @@ class C extends B {
 >A : typeof A
 >  : ^^^^^^^^
 >then : <S extends A>(cb: (x: A) => S) => Chain<S>
->     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >a => new B : (a: A) => B
 >           : ^ ^^^^^^^^^
 >a : A
@@ -89,7 +89,7 @@ class C extends B {
 >B : typeof B
 >  : ^^^^^^^^
 >then : <S extends B>(cb: (x: B) => S) => Chain<S>
->     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >b => new C : (b: B) => C
 >           : ^ ^^^^^^^^^
 >b : B
@@ -99,7 +99,7 @@ class C extends B {
 >C : typeof C
 >  : ^^^^^^^^
 >then : <S extends C>(cb: (x: C) => S) => Chain<S>
->     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >c => new B : (c: C) => B
 >           : ^ ^^^^^^^^^
 >c : C
@@ -109,7 +109,7 @@ class C extends B {
 >B : typeof B
 >  : ^^^^^^^^
 >then : <S extends C>(cb: (x: C) => S) => Chain<S>
->     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^  ^^^ ^^^^^^^^^^^^^^      ^ 
 >b => new A : (b: C) => A
 >           : ^ ^^^^^^^^^
 >b : C

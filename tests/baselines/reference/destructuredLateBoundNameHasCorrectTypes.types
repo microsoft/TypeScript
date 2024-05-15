@@ -9,7 +9,7 @@ let { [Symbol.iterator]: destructured } = [];
 >iterator : unique symbol
 >         : ^^^^^^^^^^^^^
 >destructured : () => IterableIterator<undefined>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                 ^^^^^^^^^ 
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -17,7 +17,7 @@ void destructured;
 >void destructured : undefined
 >                  : ^^^^^^^^^
 >destructured : () => IterableIterator<undefined>
->             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^^^^^^                 ^^^^^^^^^ 
 
 const named = "prop";
 >named : "prop"
