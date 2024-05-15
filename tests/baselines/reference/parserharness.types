@@ -8931,13 +8931,13 @@ module Harness {
 
             if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 
                 settingsCallback(compiler.settings);
 >settingsCallback(compiler.settings) : void
 >                                    : ^^^^
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 >compiler.settings : any
 >                  : ^^^
 >compiler : TypeScript.TypeScriptCompiler
@@ -8991,7 +8991,7 @@ module Harness {
                 // So that a test doesn't have side effects for tests run after it, restore the compiler settings to their previous state.
                 if (settingsCallback) {
 >settingsCallback : (settings?: TypeScript.CompilationSettings) => void
->                 : ^        ^^^                              ^^^^^^^^^
+>                 : ^        ^^^                              ^^^^^    
 
                     compiler.settings = oldCompilerSettings;
 >compiler.settings = oldCompilerSettings : any
@@ -10371,11 +10371,11 @@ module Harness {
 >this.editRanges = [] : undefined[]
 >                     : ^^^^^^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >[] : undefined[]
 >   : ^^^^^^^^^^^
 
@@ -10494,15 +10494,15 @@ module Harness {
 >this.editRanges.push({                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            }) : number
 >                                                                                                                                                                                                  : ^^^^^^
 >this.editRanges.push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
->                     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>                     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^      
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >push : (...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => number
->     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      
+>     : ^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^      
 >{                length: this.content.length,                editRange: new TypeScript.ScriptEditRange(minChar, limChar, (limChar - minChar) + newText.length)            } : { length: number; editRange: any; }
 >                                                                                                                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -10560,11 +10560,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 >this.maxScriptVersions : number
@@ -10576,17 +10576,17 @@ module Harness {
 
                 this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length);
 >this.editRanges.splice(0, this.maxScriptVersions - this.editRanges.length) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                                                                           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >splice : { (start: number, deleteCount?: number): { length: number; editRange: TypeScript.ScriptEditRange; }[]; (start: number, deleteCount: number, ...items: { length: number; editRange: TypeScript.ScriptEditRange; }[]): { length: number; editRange: TypeScript.ScriptEditRange; }[]; }
->       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^^^     ^^      ^^           ^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^     ^^      ^^           ^^      ^^^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^
 >0 : 0
 >  : ^
 >this.maxScriptVersions - this.editRanges.length : number
@@ -10600,11 +10600,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
             }
@@ -10653,11 +10653,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 >(this.version - version) : number
@@ -10689,11 +10689,11 @@ module Harness {
 >this.editRanges.length : number
 >                       : ^^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -10715,19 +10715,19 @@ module Harness {
 
             var entries = this.editRanges.slice(initialEditRangeIndex);
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.slice(initialEditRangeIndex) : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                                             : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                             : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges.slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this.editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->                : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >this : this
 >     : ^^^^
 >editRanges : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >slice : (start?: number, end?: number) => { length: number; editRange: TypeScript.ScriptEditRange; }[]
->      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >initialEditRangeIndex : number
 >                      : ^^^^^^
 
@@ -10741,21 +10741,21 @@ module Harness {
 >entries.map(x => x.editRange.minChar) : any[]
 >                                      : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.editRange.minChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
->                         : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.editRange.minChar : any
 >                    : ^^^
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -10791,21 +10791,21 @@ module Harness {
 >entries.map(x => x.length - x.editRange.limChar) : number[]
 >                                                 : ^^^^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.length - x.editRange.limChar : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => number
->                                    : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                    : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.length - x.editRange.limChar : number
 >                               : ^^^^^^
 >x.length : number
 >         : ^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >length : number
 >       : ^^^^^^
 >x.editRange.limChar : any
@@ -10813,7 +10813,7 @@ module Harness {
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >limChar : any
@@ -10849,21 +10849,21 @@ module Harness {
 >entries.map(x => x.editRange.delta) : any[]
 >                                    : ^^^^^
 >entries.map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>            : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >map : <U>(callbackfn: (value: { length: number; editRange: TypeScript.ScriptEditRange; }, index: number, array: { length: number; editRange: TypeScript.ScriptEditRange; }[]) => U, thisArg?: any) => U[]
->    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>    : ^^^^          ^^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^     ^^      ^^     ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
 >x => x.editRange.delta : (x: { length: number; editRange: TypeScript.ScriptEditRange; }) => any
->                       : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^ ^^^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >x.editRange.delta : any
 >                  : ^^^
 >x.editRange : TypeScript.ScriptEditRange
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : { length: number; editRange: TypeScript.ScriptEditRange; }
->  : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >editRange : TypeScript.ScriptEditRange
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >delta : any
@@ -10899,9 +10899,9 @@ module Harness {
 >entries[0].length : number
 >                  : ^^^^^^
 >entries[0] : { length: number; editRange: TypeScript.ScriptEditRange; }
->           : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^
 >entries : { length: number; editRange: TypeScript.ScriptEditRange; }[]
->        : ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^^^^^^^^^^      ^^^^^^^^^^^^^                          ^^^^^
 >0 : 0
 >  : ^
 >length : number
@@ -11495,7 +11495,7 @@ module Harness {
 >this.scripts[scriptIndex].getEditRangeSinceVersion(scriptVersion) : TypeScript.ScriptEditRange
 >                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this.scripts[scriptIndex].getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
->                                                   : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                   : ^       ^^      ^^^^^                          
 >this.scripts[scriptIndex] : ScriptInfo
 >                          : ^^^^^^^^^^
 >this.scripts : ScriptInfo[]
@@ -11507,7 +11507,7 @@ module Harness {
 >scriptIndex : number
 >            : ^^^^^^
 >getEditRangeSinceVersion : (version: number) => TypeScript.ScriptEditRange
->                         : ^       ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                         : ^       ^^      ^^^^^                          
 >scriptVersion : number
 >              : ^^^^^^
 
@@ -11721,11 +11721,11 @@ module Harness {
 >this.parseSourceText(fileName, sourceText) : TypeScript.Script
 >                                           : ^^^^^^^^^^^^^^^^^
 >this.parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                     : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^        ^^      ^^          ^^                      ^^^^^                 
 >this : this
 >     : ^^^^
 >parseSourceText : (fileName: string, sourceText: TypeScript.ISourceText) => TypeScript.Script
->                : ^        ^^      ^^          ^^                      ^^^^^^^^^^^^^^^^^^^^^^
+>                : ^        ^^      ^^          ^^                      ^^^^^                 
 >fileName : string
 >         : ^^^^^^
 >sourceText : any
@@ -12279,25 +12279,25 @@ module Harness {
 
             var temp = mapEdits(edits).sort(function (a, b) {
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits).sort(function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            }) : { edit: Services.TextEdit; index: number; }[]
->                                                                                                                                                                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>                                                                                                                                                                                                                               : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits).sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->                     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>                     : ^         ^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits(edits) : { edit: Services.TextEdit; index: number; }[]
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>                : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >mapEdits : (edits: Services.TextEdit[]) => { edit: Services.TextEdit; index: number; }[]
 >         : ^     ^^                   ^^^^^                                             
 >edits : Services.TextEdit[]
 >      : ^^^^^^^^^^^^^^^^^^^
 >sort : (compareFn?: (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number) => { edit: Services.TextEdit; index: number; }[]
->     : ^         ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^         ^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^      ^^^^^^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >function (a, b) {                var result = a.edit.minChar - b.edit.minChar;                if (result == 0)                    result = a.index - b.index;                return result;            } : (a: { edit: Services.TextEdit; index: number; }, b: { edit: Services.TextEdit; index: number; }) => number
->                                                                                                                                                                                                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^
+>                                                                                                                                                                                                         : ^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^ ^^^^^^^^^^                 ^^^^^^^^^      ^^^^^^^^^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 
                 var result = a.edit.minChar - b.edit.minChar;
 >result : number
@@ -12309,7 +12309,7 @@ module Harness {
 >a.edit : Services.TextEdit
 >       : ^^^^^^^^^^^^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >edit : Services.TextEdit
 >     : ^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -12319,7 +12319,7 @@ module Harness {
 >b.edit : Services.TextEdit
 >       : ^^^^^^^^^^^^^^^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >edit : Services.TextEdit
 >     : ^^^^^^^^^^^^^^^^^
 >minChar : any
@@ -12343,13 +12343,13 @@ module Harness {
 >a.index : number
 >        : ^^^^^^
 >a : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >index : number
 >      : ^^^^^^
 >b.index : number
 >        : ^^^^^^
 >b : { edit: Services.TextEdit; index: number; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>  : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >index : number
 >      : ^^^^^^
 
@@ -12379,7 +12379,7 @@ module Harness {
 >temp.length : number
 >            : ^^^^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -12389,9 +12389,9 @@ module Harness {
 >temp[current].edit : Services.TextEdit
 >                   : ^^^^^^^^^^^^^^^^^
 >temp[current] : { edit: Services.TextEdit; index: number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>              : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >current : number
 >        : ^^^^^^
 >edit : Services.TextEdit
@@ -12406,7 +12406,7 @@ module Harness {
 >temp.length : number
 >            : ^^^^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -12436,9 +12436,9 @@ module Harness {
 >temp[next].edit : Services.TextEdit
 >                : ^^^^^^^^^^^^^^^^^
 >temp[next] : { edit: Services.TextEdit; index: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>           : ^^^^^^^^                 ^^^^^^^^^      ^^^
 >temp : { edit: Services.TextEdit; index: number; }[]
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^
+>     : ^^^^^^^^                 ^^^^^^^^^      ^^^^^
 >next : number
 >     : ^^^^^^
 >edit : Services.TextEdit

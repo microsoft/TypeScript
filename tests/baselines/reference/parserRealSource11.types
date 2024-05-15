@@ -2398,11 +2398,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Expression
 >      : ^^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -7774,11 +7774,11 @@ module TypeScript {
 >ast.addToControlFlow(walker.state) : void
 >                                   : ^^^^
 >ast.addToControlFlow : (context: ControlFlowContext) => void
->                     : ^       ^^                  ^^^^^^^^^
+>                     : ^       ^^                  ^^^^^    
 >ast : AST
 >    : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >walker.state : any
 >             : ^^^
 >walker : IAstWalker
@@ -10663,11 +10663,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12128,7 +12128,7 @@ module TypeScript {
 >this.cond.addToControlFlow(context) : void
 >                                    : ^^^^
 >this.cond.addToControlFlow : (context: ControlFlowContext) => void
->                           : ^       ^^                  ^^^^^^^^^
+>                           : ^       ^^                  ^^^^^    
 >this.cond : AST
 >          : ^^^
 >this : this
@@ -12136,7 +12136,7 @@ module TypeScript {
 >cond : AST
 >     : ^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 
@@ -12684,11 +12684,11 @@ module TypeScript {
 >super.addToControlFlow(context) : void
 >                                : ^^^^
 >super.addToControlFlow : (context: ControlFlowContext) => void
->                       : ^       ^^                  ^^^^^^^^^
+>                       : ^       ^^                  ^^^^^    
 >super : Statement
 >      : ^^^^^^^^^
 >addToControlFlow : (context: ControlFlowContext) => void
->                 : ^       ^^                  ^^^^^^^^^
+>                 : ^       ^^                  ^^^^^    
 >context : ControlFlowContext
 >        : ^^^^^^^^^^^^^^^^^^
 

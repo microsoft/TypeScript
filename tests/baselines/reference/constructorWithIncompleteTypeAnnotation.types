@@ -859,11 +859,11 @@ module TypeScriptAllInOne {
 >xx.Foo() : bool
 >         : ^^^^
 >xx.Foo : () => bool
->       : ^^^^^^^^^^
+>       : ^^^^^^    
 >xx : IF
 >   : ^^
 >Foo : () => bool
->    : ^^^^^^^^^^
+>    : ^^^^^^    
 >0 : 0
 >  : ^
 >1 : 1
