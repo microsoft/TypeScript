@@ -286,16 +286,16 @@ module TypeScript {
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >                : ^^^^^^^^^^^^^^
->this.asts.pop : () => TypeScript.AST
->              : ^^^^^^^^^^^^^^^^^^^^
+>this.asts.pop : () => TypeScript.AST | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^            
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
->pop : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>pop : () => TypeScript.AST | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^            
             }
             return head;
 >head : TypeScript.AST
@@ -335,16 +335,16 @@ module TypeScript {
                 this.asts.pop();
 >this.asts.pop() : TypeScript.AST
 >                : ^^^^^^^^^^^^^^
->this.asts.pop : () => TypeScript.AST
->              : ^^^^^^^^^^^^^^^^^^^^
+>this.asts.pop : () => TypeScript.AST | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^            
 >this.asts : TypeScript.AST[]
 >          : ^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >asts : TypeScript.AST[]
 >     : ^^^^^^^^^^^^^^^^
->pop : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>pop : () => TypeScript.AST | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^            
             }
             this.top = this.asts.length;
 >this.top = this.asts.length : number
@@ -7119,7 +7119,7 @@ module TypeScript {
 >isValidAstNode(cur) : boolean
 >                    : ^^^^^^^
 >isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->               : ^   ^^                  ^^^^^^^^^^^^
+>               : ^   ^^                  ^^^^^       
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 
@@ -7489,11 +7489,11 @@ module TypeScript {
 >TypeScript.isValidAstNode(cur) : boolean
 >                               : ^^^^^^^
 >TypeScript.isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->                          : ^   ^^                  ^^^^^^^^^^^^
+>                          : ^   ^^                  ^^^^^       
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 >isValidAstNode : (ast: TypeScript.ASTSpan) => boolean
->               : ^   ^^                  ^^^^^^^^^^^^
+>               : ^   ^^                  ^^^^^       
 >cur : TypeScript.AST
 >    : ^^^^^^^^^^^^^^
 
@@ -7595,7 +7595,7 @@ module TypeScript {
 >script : TypeScript.Script
 >       : ^^^^^^^^^^^^^^^^^
 >pre : (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) => TypeScript.AST
->    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^^^^^^^^^^^^^^^
+>    : ^   ^^              ^^      ^^              ^^      ^^                     ^^^^^              
 
         return bestOffset;
 >bestOffset : number
@@ -7667,7 +7667,7 @@ module TypeScript {
 >callback(path, walker) : void
 >                       : ^^^^
 >callback : (path: AstPath, walker: TypeScript.IAstWalker) => void
->         : ^    ^^       ^^      ^^                     ^^^^^^^^^
+>         : ^    ^^       ^^      ^^                     ^^^^^    
 >path : AstPath
 >     : ^^^^^^^
 >walker : TypeScript.IAstWalker
@@ -7711,11 +7711,11 @@ module TypeScript {
 >path.pop() : TypeScript.AST
 >           : ^^^^^^^^^^^^^^
 >path.pop : () => TypeScript.AST
->         : ^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^              
 >path : AstPath
 >     : ^^^^^^^
 >pop : () => TypeScript.AST
->    : ^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^              
 
             return cur;
 >cur : TypeScript.AST
