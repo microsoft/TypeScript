@@ -1966,6 +1966,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
         const isDecoratedClassDeclaration = !!(facts & ClassFacts.ClassWasDecorated);
         const staticPropertiesOrClassStaticBlocks = getStaticPropertiesAndClassStaticBlock(node);
         const isClassWithConstructorReference = resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference);
+        const requiresBlockScopedVar = resolver.hasNodeCheckFlag(node, NodeCheckFlags.BlockScopedBindingInLoop);
 
         let temp: Identifier | undefined;
         function createClassTempVar() {
@@ -1982,7 +1983,6 @@ export function transformClassFields(context: TransformationContext): (x: Source
                 return getClassLexicalEnvironment().classConstructor = node.emitNode.classThis;
             }
 
-            const requiresBlockScopedVar = resolver.hasNodeCheckFlag(node, NodeCheckFlags.BlockScopedBindingInLoop);
             const temp = factory.createTempVariable(requiresBlockScopedVar ? addBlockScopedVariable : hoistVariableDeclaration, /*reservedInNestedScopes*/ true);
             getClassLexicalEnvironment().classConstructor = factory.cloneNode(temp);
             return temp;
