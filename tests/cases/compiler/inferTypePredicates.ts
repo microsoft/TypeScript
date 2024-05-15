@@ -433,3 +433,18 @@ function inferFromTypePredAny(x: any) {
     throw new Error();
   }
 }
+
+// should return void, not "asserts pattern is string"
+const assertWithFuncExpr = function (pattern: unknown) {
+  if (typeof pattern !== 'string') {
+    throw new TypeError('invalid pattern')
+  }
+
+  if (pattern.length > 1024) {
+    throw new TypeError('pattern is too long')
+  }
+}
+
+function useAssertWithFuncExpr(pattern: string) {
+  assertWithFuncExpr(pattern);
+}

@@ -1105,3 +1105,34 @@ function inferFromTypePredAny(x: any) {
   }
 }
 
+// should return void, not "asserts pattern is string"
+const assertWithFuncExpr = function (pattern: unknown) {
+>assertWithFuncExpr : Symbol(assertWithFuncExpr, Decl(inferTypePredicates.ts, 434, 5))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+
+  if (typeof pattern !== 'string') {
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+
+    throw new TypeError('invalid pattern')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+
+  if (pattern.length > 1024) {
+>pattern.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 434, 37))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+    throw new TypeError('pattern is too long')
+>TypeError : Symbol(TypeError, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+function useAssertWithFuncExpr(pattern: string) {
+>useAssertWithFuncExpr : Symbol(useAssertWithFuncExpr, Decl(inferTypePredicates.ts, 442, 1))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 444, 31))
+
+  assertWithFuncExpr(pattern);
+>assertWithFuncExpr : Symbol(assertWithFuncExpr, Decl(inferTypePredicates.ts, 434, 5))
+>pattern : Symbol(pattern, Decl(inferTypePredicates.ts, 444, 31))
+}
+

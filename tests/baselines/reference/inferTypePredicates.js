@@ -434,6 +434,21 @@ function inferFromTypePredAny(x: any) {
   }
 }
 
+// should return void, not "asserts pattern is string"
+const assertWithFuncExpr = function (pattern: unknown) {
+  if (typeof pattern !== 'string') {
+    throw new TypeError('invalid pattern')
+  }
+
+  if (pattern.length > 1024) {
+    throw new TypeError('pattern is too long')
+  }
+}
+
+function useAssertWithFuncExpr(pattern: string) {
+  assertWithFuncExpr(pattern);
+}
+
 
 //// [inferTypePredicates.js]
 // https://github.com/microsoft/TypeScript/issues/16069
@@ -826,6 +841,18 @@ function inferFromTypePredAny(x) {
         throw new Error();
     }
 }
+// should return void, not "asserts pattern is string"
+var assertWithFuncExpr = function (pattern) {
+    if (typeof pattern !== 'string') {
+        throw new TypeError('invalid pattern');
+    }
+    if (pattern.length > 1024) {
+        throw new TypeError('pattern is too long');
+    }
+};
+function useAssertWithFuncExpr(pattern) {
+    assertWithFuncExpr(pattern);
+}
 
 
 //// [inferTypePredicates.d.ts]
@@ -946,3 +973,5 @@ declare function assertName(x: any): asserts x is Named;
 declare function isNamed(x: any): x is Named;
 declare function inferFromTypePred(x: unknown): asserts x is Named;
 declare function inferFromTypePredAny(x: any): asserts x is Named;
+declare const assertWithFuncExpr: (pattern: unknown) => asserts pattern is string;
+declare function useAssertWithFuncExpr(pattern: string): void;
