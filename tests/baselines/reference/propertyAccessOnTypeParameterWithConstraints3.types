@@ -183,8 +183,8 @@ var r2b = i.foo['foo']();
 >      : ^^^^^
 
 var a: {
->a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
->  : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>  : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
     <U extends A, T extends U>(): T;
     <U extends T, T extends A>(x: U): U;
@@ -200,8 +200,8 @@ var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constrai
 >        : ^^^^^^^^^^^^
 >a() : A
 >    : ^
->a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 >foo : () => string
 >    : ^^^^^^^^^^^^
 
@@ -214,8 +214,8 @@ var r3b = a()['foo']();
 >           : ^^^^^^^^^^^^
 >a() : A
 >    : ^
->a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -229,8 +229,8 @@ var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred 
 >               : ^^^^^^^^^^^^
 >a(new B()) : B
 >           : ^
->a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B
@@ -247,8 +247,8 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 >                  : ^^^^^^^^^^^^
 >a(new B()) : B
 >           : ^
->a : { <U extends A, T extends U>(): T; <U_1 extends T_1, T_1 extends A>(x: U_1): U_1; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B

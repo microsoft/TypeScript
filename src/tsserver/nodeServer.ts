@@ -23,13 +23,13 @@ import {
     validateLocaleAndSetLanguage,
     versionMajorMinor,
     WatchOptions,
-} from "../typescript/typescript";
-import * as ts from "../typescript/typescript";
+} from "../typescript/typescript.js";
+import * as ts from "../typescript/typescript.js";
 import {
     getLogLevel,
     StartInput,
     StartSessionOptions,
-} from "./common";
+} from "./common.js";
 
 interface LogOptions {
     file?: string;

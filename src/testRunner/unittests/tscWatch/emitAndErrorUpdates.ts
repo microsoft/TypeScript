@@ -1,15 +1,15 @@
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "../helpers/contents";
-import { getFsContentsForNoEmitOnError } from "../helpers/noEmitOnError";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "../helpers/contents.js";
+import { getFsContentsForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {

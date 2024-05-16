@@ -164,7 +164,7 @@ declare class Cls {
 export function g(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 /**
  * @param {{x: string}} a
@@ -173,6 +173,6 @@ export function g(a: {
 declare function hh(a: {
     x: string;
 }, b: {
-    y: typeof b;
+    y: typeof import(".").b;
 }): void;
 export { hh as h, i as ii, j as jj };

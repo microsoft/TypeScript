@@ -1,0 +1,7 @@
+error TS5052: Option 'noCheck' cannot be specified without specifying option 'emitDeclarationOnly'.
+
+
+!!! error TS5052: Option 'noCheck' cannot be specified without specifying option 'emitDeclarationOnly'.
+==== noCheckRequiresEmitDeclarationOnly.ts (0 errors) ====
+    export const a: number = "not ok";
+    

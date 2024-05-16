@@ -214,7 +214,7 @@ module.exports.f.self = module.exports.f;
  */
 function g(a, b) {
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: { (): void; cat: string; }; }
@@ -241,9 +241,9 @@ function g(a, b) {
 
 module.exports.g = g;
 >module.exports.g = g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                     : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                     : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >module.exports.g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                 : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -251,9 +251,9 @@ module.exports.g = g;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >g : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 
 /**
  * @param {{x: string}} a
@@ -261,7 +261,7 @@ module.exports.g = g;
  */
 function hh(a, b) {
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >a : { x: string; }
 >  : ^^^^^^^^^^^^^^
 >b : { y: { (): void; cat: string; }; }
@@ -288,9 +288,9 @@ function hh(a, b) {
 
 module.exports.h = hh;
 >module.exports.h = hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                      : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >module.exports.h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->                 : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                 : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >module.exports : typeof module.exports
 >               : ^^^^^^^^^^^^^^^^^^^^^
 >module : { exports: typeof module.exports; }
@@ -298,9 +298,9 @@ module.exports.h = hh;
 >exports : typeof module.exports
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >h : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->  : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 >hh : (a: { x: string; }, b: { y: { (): void; cat: string; }; }) => void
->   : ^ ^^              ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^              ^^ ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^
 
 module.exports.i = function i() {}
 >module.exports.i = function i() {} : () => void

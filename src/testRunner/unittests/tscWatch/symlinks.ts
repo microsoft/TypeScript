@@ -2,15 +2,15 @@ import {
     buildMonorepoSymlinkedSiblingPackage1,
     cleanMonorepoSymlinkedSiblingPackage1,
     getMonorepoSymlinkedSiblingPackagesSys,
-} from "../helpers/monorepoSymlinkedSiblingPackages";
+} from "../helpers/monorepoSymlinkedSiblingPackages.js";
 import {
     noopChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     osFlavorToString,
     TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: symlinks::", () => {
     describe("monorepoSymlinkedSiblingPackages:: monorepo style sibling packages symlinked", () => {

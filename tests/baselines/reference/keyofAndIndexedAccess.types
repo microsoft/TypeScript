@@ -2269,15 +2269,15 @@ class OtherPerson {
 // Modified repro from #12544
 
 function path<T, K1 extends keyof T>(obj: T, key1: K1): T[K1];
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^     ^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2]>(obj: T_1, key1: K1_1, key2: K2, key3: K3): T_1[K1_1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^     ^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >obj : T
 >    : ^
 >key1 : K1
 >     : ^^
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2];
->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1], K3 extends keyof T_1[K1_1][K2_1]>(obj: T_1, key1: K1_1, key2: K2_1, key3: K3): T_1[K1_1][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >     : ^^^   ^^    ^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^         ^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >obj : T
 >    : ^
@@ -2287,7 +2287,7 @@ function path<T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, k
 >     : ^^
 
 function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3];
->path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2]>(obj: T_2, key1: K1_2, key2: K2_1): T_2[K1_2][K2_1]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>path : { <T_1, K1_1 extends keyof T_1>(obj: T_1, key1: K1_1): T_1[K1_1]; <T_1, K1_1 extends keyof T_1, K2_1 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2_1): T_1[K1_1][K2_1]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
 >     : ^^^   ^^    ^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^^^^^^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^             ^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >obj : T
 >    : ^
@@ -2299,16 +2299,16 @@ function path<T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[
 >     : ^^
 
 function path(obj: any, ...keys: (string | number)[]): any;
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^   ^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^   ^^^
 >obj : any
 >    : ^^^
 >keys : (string | number)[]
 >     : ^^^^^^^^^^^^^^^^^^^
 
 function path(obj: any, ...keys: (string | number)[]): any {
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >obj : any
 >    : ^^^
 >keys : (string | number)[]
@@ -2373,8 +2373,8 @@ function f1(thing: Thing) {
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >path(thing, 'a') : { x: number; y: string; }
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >thing : Thing
 >      : ^^^^^
 >'a' : "a"
@@ -2385,8 +2385,8 @@ function f1(thing: Thing) {
 >   : ^^^^^^
 >path(thing, 'a', 'y') : string
 >                      : ^^^^^^
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >thing : Thing
 >      : ^^^^^
 >'a' : "a"
@@ -2399,8 +2399,8 @@ function f1(thing: Thing) {
 >   : ^^^^^^^
 >path(thing, 'b') : boolean
 >                 : ^^^^^^^
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >thing : Thing
 >      : ^^^^^
 >'b' : "b"
@@ -2411,8 +2411,8 @@ function f1(thing: Thing) {
 >   : ^^^
 >path(thing, ...['a', 'x']) : any
 >                           : ^^^
->path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T_1, K1_1 extends keyof T_1, K2 extends keyof T_1[K1_1]>(obj: T_1, key1: K1_1, key2: K2): T_1[K1_1][K2]; <T_2, K1_2 extends keyof T_2, K2_1 extends keyof T_2[K1_2], K3 extends keyof T_2[K1_2][K2_1]>(obj: T_2, key1: K1_2, key2: K2_1, key3: K3): T_2[K1_2][K2_1][K3]; (obj: any, ...keys: (string | number)[]): any; }
->     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^    ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^    ^^    ^^    ^^    ^^    ^^  ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
+>path : { <T, K1 extends keyof T>(obj: T, key1: K1): T[K1]; <T, K1 extends keyof T, K2 extends keyof T[K1]>(obj: T, key1: K1, key2: K2): T[K1][K2]; <T, K1 extends keyof T, K2 extends keyof T[K1], K3 extends keyof T[K1][K2]>(obj: T, key1: K1, key2: K2, key3: K3): T[K1][K2][K3]; (obj: any, ...keys: (string | number)[]): any; }
+>     : ^^^ ^^  ^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^ ^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^  ^^    ^^  ^^    ^^  ^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^                   ^^^^^^^^^
 >thing : Thing
 >      : ^^^^^
 >...['a', 'x'] : string
@@ -2981,12 +2981,12 @@ class SampleClass<P> {
 >      : ^^^^^^^^^^^
 >Object.freeze(props) : Readonly<P>
 >                     : ^^^^^^^^^^^
->Object.freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
->              : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
+>Object.freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>              : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->freeze : { <T extends Function>(f: T): T; <T_1 extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T_1): Readonly<T_1>; <T_2>(o: T_2): Readonly<T_2>; }
->       : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^^^^^^^^^^^^^^^^^^
+>freeze : { <T extends Function>(f: T): T; <T extends { [idx: string]: object | U | null | undefined; }, U extends string | number | bigint | boolean | symbol>(o: T): Readonly<T>; <T>(o: T): Readonly<T>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^
 >props : P
 >      : ^
     }

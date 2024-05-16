@@ -1,8 +1,8 @@
-import { getSysForNoEmitOnError } from "../helpers/noEmitOnError";
+import { getSysForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: with noEmitOnError", () => {
     function change(caption: string, content: string): TscWatchCompileChange {

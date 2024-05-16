@@ -106,7 +106,7 @@ import {
     WatchStatusReporter,
     whitespaceOrMapCommentRegExp,
     WriteFileCallback,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const sysFormatDiagnosticsHost: FormatDiagnosticsHost | undefined = sys ? {
     getCurrentDirectory: () => sys.getCurrentDirectory(),

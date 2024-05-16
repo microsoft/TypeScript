@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     AwaitKeyword,
     Diagnostics,
     findPrecedingToken,
@@ -13,12 +18,7 @@ import {
     textChanges,
     TextSpan,
     tryCast,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "removeUnnecessaryAwait";
 const errorCodes = [
