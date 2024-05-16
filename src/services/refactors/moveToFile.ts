@@ -56,7 +56,6 @@ import {
     getModifiers,
     getNameForExportedSymbol,
     getNormalizedAbsolutePath,
-    getOriginalNode,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
     getRangesWhere,
@@ -441,7 +440,7 @@ function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
 export function moduleSpecifierFromImport(i: SupportedImport): StringLiteralLike {
     return (i.kind === SyntaxKind.ImportDeclaration ? i.moduleSpecifier
         : i.kind === SyntaxKind.ImportEqualsDeclaration ? i.moduleReference.expression
-            : i.initializer.arguments[0]);
+        : i.initializer.arguments[0]);
 }
 
 /** @internal */
@@ -953,7 +952,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
     let newFilename = proposedFilename;
-    for (let i = 1; ; i++) {
+    for (let i = 1;; i++) {
         const name = combinePaths(inDirectory, newFilename + extension);
         if (!host.fileExists(name)) return newFilename;
         newFilename = `${proposedFilename}.${i}`;
