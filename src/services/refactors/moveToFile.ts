@@ -56,6 +56,7 @@ import {
     getModifiers,
     getNameForExportedSymbol,
     getNormalizedAbsolutePath,
+    getOriginalNode,
     getPropertySymbolFromBindingElement,
     getQuotePreference,
     getRangesWhere,
@@ -175,7 +176,7 @@ registerRefactor(refactorNameForMoveToFile, {
         }
         /** If the start/end nodes of the selection are inside a block like node do not show the `Move to file` code action
          *  This condition is used in order to show less often the `Move to file` code action */
-        if (context.endPosition !== undefined) {
+        if (context.triggerReason === "implicit" && context.endPosition !== undefined) {
             const startNodeAncestor = findAncestor(getTokenAtPosition(file, context.startPosition), isBlockLike);
             const endNodeAncestor = findAncestor(getTokenAtPosition(file, context.endPosition), isBlockLike);
             if (startNodeAncestor && !isSourceFile(startNodeAncestor) && endNodeAncestor && !isSourceFile(endNodeAncestor)) {
@@ -440,7 +441,7 @@ function createRequireCall(moduleSpecifier: StringLiteralLike): CallExpression {
 export function moduleSpecifierFromImport(i: SupportedImport): StringLiteralLike {
     return (i.kind === SyntaxKind.ImportDeclaration ? i.moduleSpecifier
         : i.kind === SyntaxKind.ImportEqualsDeclaration ? i.moduleReference.expression
-        : i.initializer.arguments[0]);
+            : i.initializer.arguments[0]);
 }
 
 /** @internal */
@@ -952,7 +953,7 @@ export function getUsageInfo(oldFile: SourceFile, toMove: readonly Statement[], 
 
 function makeUniqueFilename(proposedFilename: string, extension: string, inDirectory: string, host: LanguageServiceHost): string {
     let newFilename = proposedFilename;
-    for (let i = 1;; i++) {
+    for (let i = 1; ; i++) {
         const name = combinePaths(inDirectory, newFilename + extension);
         if (!host.fileExists(name)) return newFilename;
         newFilename = `${proposedFilename}.${i}`;
