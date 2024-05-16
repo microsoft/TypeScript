@@ -9,7 +9,7 @@
 
 declare function spected<ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT): Result<ROOTINPUT, SPEC>;
 >spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
->        : ^         ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^                       
+>        : ^         ^^    ^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^                       
 >spec : SPEC
 >     : ^^^^
 >input : ROOTINPUT
@@ -80,5 +80,5 @@ export type Result<INPUT, SPEC> = {[key in keyof INPUT]: true | any[] | Result<I
 
 export default spected;
 >spected : <ROOTINPUT, SPEC extends SpecValue<ROOTINPUT, ROOTINPUT> = SpecValue<ROOTINPUT, ROOTINPUT>>(spec: SPEC, input: ROOTINPUT) => Result<ROOTINPUT, SPEC>
->        : ^         ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^         ^^    ^^^^^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^    ^^     ^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

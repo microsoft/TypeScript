@@ -349,7 +349,7 @@ type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
 
 declare function useQuery<
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
 
   TQueryFnData = unknown,
   TError = DefaultError,
@@ -368,9 +368,9 @@ export { type UseQueryReturnType as b, useQuery as u };
 >b : any
 >  : ^^^
 >useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >u : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
->  : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === node_modules/@tanstack/vue-query/build/modern/index.d.ts ===
 export { b as UseQueryReturnType, u as useQuery } from './useQuery-CPqkvEsh.js';

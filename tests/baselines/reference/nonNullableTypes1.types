@@ -63,7 +63,7 @@ function f3(x: unknown) {
 
 function f4<T extends { x: string } | undefined>(obj: T) {
 >f4 : <T extends { x: string; } | undefined>(obj: T) => void
->   : ^ ^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^                          ^^   ^^ ^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >obj : T

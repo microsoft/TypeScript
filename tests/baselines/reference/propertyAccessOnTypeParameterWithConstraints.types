@@ -103,7 +103,7 @@ var r2b = i.foo['getDate']();
 
 var a: {
 >a : <T extends Date>() => T
->  : ^ ^^^^^^^^^^^^^^^^^^^^ 
+>  : ^ ^^^^^^^^^    ^^^^^^^ 
 
     <T extends Date>(): T;
 }
@@ -117,7 +117,7 @@ var r3 = a<Date>().getDate();
 >a<Date>() : Date
 >          : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^    ^^^^^^^^
 >getDate : () => number
 >        : ^^^^^^^^^^^^
 
@@ -131,21 +131,21 @@ var r3b = a()['getDate']();
 >a() : Date
 >    : ^^^^
 >a : <T extends Date>() => T
->  : ^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^    ^^^^^^^^
 >'getDate' : "getDate"
 >          : ^^^^^^^^^
 
 var b = {
 >b : { foo: <T extends Date>(x: T) => number; }
->  : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    }} : { foo: <T extends Date>(x: T) => number; }
->                                                                                                                    : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>                                                                                                                    : ^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <T extends Date>(x: T) => {
 >foo : <T extends Date>(x: T) => number
->    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^
 ><T extends Date>(x: T) => {        var a = x['getDate'](); // number        return a + x.getDate();    } : <T extends Date>(x: T) => number
->                                                                                                         : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>                                                                                                         : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -183,11 +183,11 @@ var r4 = b.foo(new Date());
 >b.foo(new Date()) : number
 >                  : ^^^^^^
 >b.foo : <T extends Date>(x: T) => number
->      : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>      : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^
 >b : { foo: <T extends Date>(x: T) => number; }
->  : ^^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^^^^
 >foo : <T extends Date>(x: T) => number
->    : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^^^
 >new Date() : Date
 >           : ^^^^
 >Date : DateConstructor

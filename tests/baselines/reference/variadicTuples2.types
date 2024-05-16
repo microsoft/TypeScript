@@ -451,7 +451,7 @@ ft2(0, 'abc', 'def', true);  // Error
 
 function ft3<T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) {
 >ft3 : <T extends unknown[]>(x: [number, ...T], y: [number, number], z: [number, ...number[]]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^              ^^ ^^                ^^ ^^                     ^^^^^^^^^
+>    : ^ ^^^^^^^^^         ^^ ^^              ^^ ^^                ^^ ^^                     ^^^^^^^^^
 >x : [number, ...T]
 >  : ^^^^^^^^^^^^^^
 >y : [number, number]
@@ -507,7 +507,7 @@ let tt4: [number, ...number[]] = tt3  // Error
 
 function pipe<T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) {
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >args : [...T, (...values: T) => void]
 >     : ^^^^^^^^^^^      ^^ ^^^^^    ^
 >values : T
@@ -572,7 +572,7 @@ pipe("foo", 123, true, (a, b, c) => {
 >pipe("foo", 123, true, (a, b, c) => {    a;  // string    b;  // number    c;  // boolean}) : void
 >                                                                                            : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 >123 : 123
@@ -606,7 +606,7 @@ pipe("foo", 123, true, (...x) => {
 >pipe("foo", 123, true, (...x) => {    x;  // [string, number, boolean]}) : void
 >                                                                         : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 >123 : 123
@@ -632,7 +632,7 @@ pipe(...sa, (...x) => {
 >pipe(...sa, (...x) => {    x;  // string[]}) : void
 >                                             : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >...sa : string
 >      : ^^^^^^
 >sa : string[]
@@ -652,7 +652,7 @@ pipe(1, ...sa, 2, (...x) => {
 >pipe(1, ...sa, 2, (...x) => {    x;  // [number, ...string[], number]    let qq = x[x.length - 1];    let ww = x[0]}) : void
 >                                                                                                                      : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >1 : 1
 >  : ^
 >...sa : string
@@ -704,7 +704,7 @@ pipe<number[]>(1, 2, 3, 4);  // Error
 >pipe<number[]>(1, 2, 3, 4) : void
 >                           : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -718,7 +718,7 @@ pipe(...sa);  // Error
 >pipe(...sa) : void
 >            : ^^^^
 >pipe : <T extends readonly unknown[]>(...args: [...T, (...values: T) => void]) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                              ^^^^^^^^^
+>     : ^ ^^^^^^^^^                  ^^^^^    ^^                              ^^^^^^^^^
 >...sa : string
 >      : ^^^^^^
 >sa : string[]
@@ -828,7 +828,7 @@ fn2([1, 'abc', true]);  // [number, boolean]
 
 declare function foo<S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]): [...S, number];
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^              
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^              
 >stringsAndNumber : readonly [...S, number]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -838,7 +838,7 @@ const a1 = foo('blah1', 1);
 >foo('blah1', 1) : ["blah1", number]
 >                : ^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
 >'blah1' : "blah1"
 >        : ^^^^^^^
 >1 : 1
@@ -850,7 +850,7 @@ const b1 = foo('blah1', 'blah2', 1);
 >foo('blah1', 'blah2', 1) : ["blah1", "blah2", number]
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
 >'blah1' : "blah1"
 >        : ^^^^^^^
 >'blah2' : "blah2"
@@ -864,7 +864,7 @@ const c1 = foo(1);  // Error
 >foo(1) : [string, ...string[], number]
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -874,7 +874,7 @@ const d1 = foo(1, 2);  // Error
 >foo(1, 2) : [string, ...string[], number]
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -886,7 +886,7 @@ const e1 = foo('blah1', 'blah2', 1, 2, 3);  // Error
 >foo('blah1', 'blah2', 1, 2, 3) : [string, ...string[], number]
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : <S extends readonly [string, ...string[]]>(...stringsAndNumber: readonly [...S, number]) => [...S, number]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                              ^^^^^                ^^                       ^^^^^^^^^^^^^^^^^^^
 >'blah1' : "blah1"
 >        : ^^^^^^^
 >'blah2' : "blah2"

@@ -21,7 +21,7 @@ interface Invariant<T> {
 
 function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 >f1 : <A, B extends A>(a: Covariant<A>, b: Covariant<B>) => void
->   : ^ ^^ ^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^            ^^ ^^            ^^^^^^^^^
 >a : Covariant<A>
 >  : ^^^^^^^^^^^^
 >b : Covariant<B>
@@ -46,7 +46,7 @@ function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 
 function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 >f2 : <A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) => void
->   : ^ ^^ ^^^^^^^^^^^^ ^^                ^^ ^^                ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^                ^^ ^^                ^^^^^^^^^
 >a : Contravariant<A>
 >  : ^^^^^^^^^^^^^^^^
 >b : Contravariant<B>
@@ -71,7 +71,7 @@ function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 
 function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
 >f3 : <A, B extends A>(a: Invariant<A>, b: Invariant<B>) => void
->   : ^ ^^ ^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^ ^^ ^^            ^^ ^^            ^^^^^^^^^
 >a : Invariant<A>
 >  : ^^^^^^^^^^^^
 >b : Invariant<B>
@@ -356,7 +356,7 @@ class Vector<T> implements Seq<T> {
     }
     partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^ ^^^^^^^^^^^^         ^^                ^^^                                  ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^ ^^^^^^^^^ ^^         ^^                ^^^                                  ^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (v: T) => v is U
 >          : ^ ^^ ^^^^^      
 >v : T
@@ -364,7 +364,7 @@ class Vector<T> implements Seq<T> {
 
     partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
 >partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^ ^^^^^^^^^^^^         ^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                 ^^^                      ^^^
+>           : ^^^ ^^^^^^^^^ ^^         ^^                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                 ^^^                      ^^^
 >predicate : (x: T) => boolean
 >          : ^ ^^ ^^^^^       
 >x : T
@@ -372,7 +372,7 @@ class Vector<T> implements Seq<T> {
 
     partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
 >partition2 : { <U_1 extends T>(predicate: (v: T) => v is U_1): [Vector<U_1>, Vector<Exclude<T, U_1>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
->           : ^^^   ^^^^^^^^^^^^         ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^^^   ^^^^^^^^^ ^^         ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >predicate : (v: T) => boolean
 >          : ^ ^^ ^^^^^       
 >v : T

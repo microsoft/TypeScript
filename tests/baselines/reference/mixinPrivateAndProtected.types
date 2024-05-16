@@ -34,7 +34,7 @@ class A {
 
 function mixB<T extends Constructor<{}>>(Cls: T) {
 >mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : T
 >    : ^
 
@@ -61,7 +61,7 @@ function mixB<T extends Constructor<{}>>(Cls: T) {
 
 function mixB2<T extends Constructor<A>>(Cls: T) {
 >mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : T
 >    : ^
 
@@ -87,7 +87,7 @@ const
 >mixB(A) : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
 >        : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixB : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB<any>.(Anonymous class); } & T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -97,13 +97,13 @@ const
 >mixB2(A) : { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
 >         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixB2 : <T extends Constructor<A>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixB2<any>.(Anonymous class); } & T
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >A : typeof A
 >  : ^^^^^^^^
 
 function mixC<T extends Constructor<{}>>(Cls: T) {
 >mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Cls : T
 >    : ^
 
@@ -135,7 +135,7 @@ const
 >mixC(AB2) : { new (...args: any[]): mixC<{ new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
 >          : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AB2 : { new (...args: any[]): mixB2<typeof A>.(Anonymous class); prototype: mixB2<any>.(Anonymous class); } & typeof A
 >    : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -145,7 +145,7 @@ const
 >mixC(AB) : { new (...args: any[]): mixC<{ new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A>.(Anonymous class); prototype: mixC<any>.(Anonymous class); } & { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
 >         : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mixC : <T extends Constructor<{}>>(Cls: T) => { new (...args: any[]): (Anonymous class); prototype: mixC<any>.(Anonymous class); } & T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^               ^^   ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >AB : { new (...args: any[]): mixB<typeof A>.(Anonymous class); prototype: mixB<any>.(Anonymous class); } & typeof A
 >   : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -370,7 +370,7 @@ class Person {
 
 function PersonMixin<T extends Constructor<Person>>(Base: T) {
 >PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^                   ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Base : T
 >     : ^
 
@@ -420,7 +420,7 @@ class Customer extends PersonMixin(Person) {
 >PersonMixin(Person) : PersonMixin<typeof Person>.(Anonymous class) & Person
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >PersonMixin : <T extends Constructor<Person>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: PersonMixin<any>.(Anonymous class); } & T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^                   ^^    ^^ ^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Person : typeof Person
 >       : ^^^^^^^^^^^^^
 

@@ -612,7 +612,7 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
     // get/set a field by name
     get<K extends TDef[number]["name"]>(key: K): FieldType<Extract<TDef[number], { readonly name: K }>["type"]>;
 >get : <K extends TDef[number]["name"]>(key: K) => FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^                                                               
+>    : ^ ^^^^^^^^^                    ^^   ^^ ^^^^^                                                               
 >key : K
 >    : ^
 >name : K
@@ -620,7 +620,7 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
 
     set<K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K }>["type"]>): void;
 >set : <K extends TDef[number]["name"]>(key: K, value: FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^                                                               ^^^^^    
+>    : ^ ^^^^^^^^^                    ^^   ^^ ^^     ^^                                                               ^^^^^    
 >key : K
 >    : ^
 >value : FieldType<Extract<TDef[number], { readonly name: K; }>["type"]>
@@ -630,14 +630,14 @@ interface TypedObjectMembers<TDef extends readonly FieldDefinition[]> {
 
     // get/set a field by index
     getIndex<I extends IndicesOf<TDef>>(index: I): FieldType<Extract<TDef[I], FieldDefinition>["type"]>;
->getIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                                                    
+>getIndex : <I extends IndicesOf<TDef>>(index: I) => FieldType<Extract<TDef[I], FieldDefinition>["type"]>
+>         : ^ ^^^^^^^^^               ^^     ^^ ^^^^^                                                    
 >index : I
 >      : ^
 
     setIndex<I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>): void;
->setIndex : <I extends IndexFor<Extract<keyof TDef, string>>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^     ^^                                                    ^^^^^    
+>setIndex : <I extends IndicesOf<TDef>>(index: I, value: FieldType<Extract<TDef[I], FieldDefinition>["type"]>) => void
+>         : ^ ^^^^^^^^^               ^^     ^^ ^^     ^^                                                    ^^^^^    
 >index : I
 >      : ^
 >value : FieldType<Extract<TDef[I], FieldDefinition>["type"]>
@@ -756,7 +756,7 @@ p.setIndex(2, 3); // error, 2 is not a valid index
 // function inference
 declare function f1<T extends string | number>(s: `**${T}**`): T;
 >f1 : <T extends string | number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
+>   : ^ ^^^^^^^^^               ^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -764,13 +764,13 @@ f1("**123**"); // "123"
 >f1("**123**") : "123"
 >              : ^^^^^
 >f1 : <T extends string | number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f2<T extends number>(s: `**${T}**`): T;
 >f2 : <T extends number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
+>   : ^ ^^^^^^^^^      ^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -778,13 +778,13 @@ f2("**123**"); // 123
 >f2("**123**") : 123
 >              : ^^^
 >f2 : <T extends number>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f3<T extends bigint>(s: `**${T}**`): T;
 >f3 : <T extends bigint>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
+>   : ^ ^^^^^^^^^      ^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -792,13 +792,13 @@ f3("**123**"); // 123n
 >f3("**123**") : 123n
 >              : ^^^^
 >f3 : <T extends bigint>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^
 >"**123**" : "**123**"
 >          : ^^^^^^^^^
 
 declare function f4<T extends boolean>(s: `**${T}**`): T;
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^ 
+>   : ^ ^^^^^^^^^       ^^ ^^          ^^^^^ 
 >s : `**${T}**`
 >  : ^^^^^^^^^^
 
@@ -806,7 +806,7 @@ f4("**true**"); // true | "true"
 >f4("**true**") : true
 >               : ^^^^
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
+>   : ^ ^^^^^^^^^       ^^ ^^          ^^^^^^
 >"**true**" : "**true**"
 >           : ^^^^^^^^^^
 
@@ -814,7 +814,7 @@ f4("**false**"); // false | "false"
 >f4("**false**") : false
 >                : ^^^^^
 >f4 : <T extends boolean>(s: `**${T}**`) => T
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^          ^^^^^^
+>   : ^ ^^^^^^^^^       ^^ ^^          ^^^^^^
 >"**false**" : "**false**"
 >            : ^^^^^^^^^^^
 

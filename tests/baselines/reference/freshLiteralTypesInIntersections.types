@@ -5,7 +5,7 @@
 
 declare function func<A extends string, B extends A>(a: A, b: B[]): (ab: A & B) => void;
 >func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^   ^^^^^                   
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^   ^^^^^                   
 >a : A
 >  : ^
 >b : B[]
@@ -19,7 +19,7 @@ const q = func("x" as "x" | "y", ["x"]);
 >func("x" as "x" | "y", ["x"]) : (ab: "x") => void
 >                              : ^  ^^^^^^^^^^^^^^
 >func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
->     : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^   ^^^^^^  ^^     ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^   ^^^^^^  ^^     ^^^^^^^^^
 >"x" as "x" | "y" : "x" | "y"
 >                 : ^^^^^^^^^
 >"x" : "x"

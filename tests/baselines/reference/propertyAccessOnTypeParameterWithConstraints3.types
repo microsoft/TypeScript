@@ -184,7 +184,7 @@ var r2b = i.foo['foo']();
 
 var a: {
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^ ^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^ ^^^
 
     <U extends A, T extends U>(): T;
     <U extends T, T extends A>(x: U): U;
@@ -201,7 +201,7 @@ var r3 = a().foo(); // error, no inferences for U so it doesn't satisfy constrai
 >a() : A
 >    : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
 >foo : () => string
 >    : ^^^^^^^^^^^^
 
@@ -215,7 +215,7 @@ var r3b = a()['foo']();
 >a() : A
 >    : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -230,7 +230,7 @@ var r3c = a(new B()).foo(); // valid call to an invalid function, U is inferred 
 >a(new B()) : B
 >           : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B
@@ -248,7 +248,7 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 >a(new B()) : B
 >           : ^
 >a : { <U extends A, T extends U>(): T; <U extends T, T extends A>(x: U): U; }
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>  : ^^^ ^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B
@@ -258,15 +258,15 @@ var r3d = a(new B())['foo'](); // valid call to an invalid function, U is inferr
 
 var b = {
 >b : { foo: <U extends A, T extends U>(x: T) => string; }
->  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >{    foo: <U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    }} : { foo: <U extends A, T extends U>(x: T) => string; }
->                                                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>                                                                                                                                                     : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 
     foo: <U extends A, T extends U>(x: T) => {
 >foo : <U extends A, T extends U>(x: T) => string
->    : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^
 ><U extends A, T extends U>(x: T) => {        // BUG 823818        var a = x['foo'](); // should be string        return a + x.foo();    } : <U extends A, T extends U>(x: T) => string
->                                                                                                                                          : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>                                                                                                                                          : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -305,11 +305,11 @@ var r4 = b.foo(new B()); // valid call to an invalid function
 >b.foo(new B()) : string
 >               : ^^^^^^
 >b.foo : <U extends A, T extends U>(x: T) => string
->      : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>      : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^
 >b : { foo: <U extends A, T extends U>(x: T) => string; }
->  : ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^
+>  : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^^^^
 >foo : <U extends A, T extends U>(x: T) => string
->    : ^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^^^^^^^^^^
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^^^^^^^
 >new B() : B
 >        : ^
 >B : typeof B

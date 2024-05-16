@@ -670,7 +670,7 @@ function ff1(x: 'foo' | 'bar', y: 1 | 2) {
 
 function ff2<T extends string, U extends string>(x: T, y: U) {
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 >y : U
@@ -693,7 +693,7 @@ const ts1 = ff2('foo', 'bar');
 >ff2('foo', 'bar') : "foo-bar"
 >                  : ^^^^^^^^^
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >'bar' : "bar"
@@ -705,7 +705,7 @@ const ts2 = ff2('foo', !!true ? '0' : '1');
 >ff2('foo', !!true ? '0' : '1') : "foo-1" | "foo-0"
 >                               : ^^^^^^^^^^^^^^^^^
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 >!!true ? '0' : '1' : "0" | "1"
@@ -727,7 +727,7 @@ const ts3 = ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right');
 >ff2(!!true ? 'top' : 'bottom', !!true ? 'left' : 'right') : "top-left" | "top-right" | "bottom-left" | "bottom-right"
 >                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ff2 : <T extends string, U extends string>(x: T, y: U) => `${T}-${U}`
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^^^^^^^^^^^^^^^
 >!!true ? 'top' : 'bottom' : "top" | "bottom"
 >                          : ^^^^^^^^^^^^^^^^
 >!!true : true
@@ -884,7 +884,7 @@ function ff5(verify: boolean, contentMatches: boolean) {
 
 function accessorNames<S extends string>(propName: S) {
 >accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
->              : ^ ^^^^^^^^^^^^^^^^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >propName : S
 >         : ^
 
@@ -909,7 +909,7 @@ const ns1 = accessorNames('foo');
 >accessorNames('foo') : readonly ["get-foo", "set-foo"]
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >accessorNames : <S extends string>(propName: S) => readonly [`get-${S}`, `set-${S}`]
->              : ^ ^^^^^^^^^^^^^^^^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 

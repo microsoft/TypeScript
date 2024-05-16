@@ -10,7 +10,7 @@ export type FilterPropsByType<T, TT> = {
 
 function select<
 >select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^     ^^^^^^^^^      ^^          ^^^^^^^^^                           ^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
 
   T extends string | number,
   TList extends object,
@@ -25,7 +25,7 @@ function select<
 
 export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 >func : <XX extends string>(x: XX, tipos: { value: XX; }[]) => void
->     : ^  ^^^^^^^^^^^^^^^^^ ^^  ^^     ^^                ^^^^^^^^^
+>     : ^  ^^^^^^^^^      ^^ ^^  ^^     ^^                ^^^^^^^^^
 >x : XX
 >  : ^^
 >tipos : { value: XX; }[]
@@ -37,7 +37,7 @@ export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 >select(x, tipos, "value") : void
 >                          : ^^^^
 >select : <T extends string | number, TList extends object, TValueProp extends FilterPropsByType<TList, T>>(property: T, list: TList[], valueProp: TValueProp) => void
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
+>       : ^ ^^^^^^^^^               ^^     ^^^^^^^^^      ^^          ^^^^^^^^^                           ^^        ^^ ^^    ^^       ^^         ^^          ^^^^^^^^^
 >x : XX
 >  : ^^
 >tipos : { value: XX; }[]
@@ -48,7 +48,7 @@ export function func<XX extends string>(x: XX, tipos: { value: XX }[]) {
 
 declare function onlyNullablePlease<T extends null extends T ? any : never>(
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^    
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^    
 
   value: T
 >value : T
@@ -58,7 +58,7 @@ declare function onlyNullablePlease<T extends null extends T ? any : never>(
 
 declare function onlyNullablePlease2<
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^    
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^    
 
   T extends [null] extends [T] ? any : never
 >(value: T): void;
@@ -73,7 +73,7 @@ onlyNullablePlease(z); // works as expected
 >onlyNullablePlease(z) : void
 >                      : ^^^^
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^^^^^
 >z : string | null
 >  : ^^^^^^^^^^^^^
 
@@ -81,7 +81,7 @@ onlyNullablePlease2(z); // works as expected
 >onlyNullablePlease2(z) : void
 >                       : ^^^^
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^^^^^
 >z : string | null
 >  : ^^^^^^^^^^^^^
 
@@ -93,7 +93,7 @@ onlyNullablePlease(y); // error as expected
 >onlyNullablePlease(y) : void
 >                      : ^^^^
 >onlyNullablePlease : <T extends null extends T ? any : never>(value: T) => void
->                   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^
+>                   : ^ ^^^^^^^^^                            ^^     ^^ ^^^^^^^^^
 >y : string
 >  : ^^^^^^
 
@@ -101,7 +101,7 @@ onlyNullablePlease2(y); // error as expected
 >onlyNullablePlease2(y) : void
 >                       : ^^^^
 >onlyNullablePlease2 : <T extends [null] extends [T] ? any : never>(value: T) => void
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^
+>                    : ^ ^^^^^^^^^                                ^^     ^^ ^^^^^^^^^
 >y : string
 >  : ^^^^^^
 
@@ -135,7 +135,7 @@ function f<T>(t: T) {
 >onlyNullablePlease(x) : void
 >                      : ^^^^
 >onlyNullablePlease : <T_1 extends null extends T_1 ? any : never>(value: T_1) => void
->                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^
+>                   : ^   ^^^^^^^^^                              ^^     ^^   ^^^^^^^^^
 >x : T | null
 >  : ^^^^^^^^
 
@@ -143,7 +143,7 @@ function f<T>(t: T) {
 >onlyNullablePlease2(x) : void
 >                       : ^^^^
 >onlyNullablePlease2 : <T_1 extends [null] extends [T_1] ? any : never>(value: T_1) => void
->                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^
+>                    : ^   ^^^^^^^^^                                  ^^     ^^   ^^^^^^^^^
 >x : T | null
 >  : ^^^^^^^^
 }
@@ -350,7 +350,7 @@ type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
 
 declare function set<T, K extends keyof T>(
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^            ^^^^^            
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^            
 
   obj: T,
 >obj : T
@@ -382,7 +382,7 @@ class Foo2 {
 >set(this, "prop", "hi") : Unwrap<this["prop"]>
 >                        : ^^^^^^^^^^^^^^^^^^^^
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^            ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >"prop" : "prop"
@@ -396,7 +396,7 @@ set(new Foo2(), "prop", "hi"); // <-- typechecks
 >set(new Foo2(), "prop", "hi") : string
 >                              : ^^^^^^
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^            ^^^^^^^^^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^            ^^^^^^^^^^^^^^^^^
 >new Foo2() : Foo2
 >           : ^^^^
 >Foo2 : typeof Foo2
@@ -417,7 +417,7 @@ type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any]
 
 function f3<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 >f3 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNot<Q>
->   : ^ ^^^^^^^^^^   ^^   ^^^^^   ^^ ^^ ^^^^^                     
+>   : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                     
 >arg : any
 >    : ^^^
 >x : Q
@@ -439,7 +439,7 @@ type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any
 
 function f4<Q extends (arg: any) => any>(
 >f4 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNotDistributive<Q>
->   : ^ ^^^^^^^^^^   ^^   ^^^^^   ^^ ^^ ^^^^^                                 
+>   : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^                                 
 >arg : any
 >    : ^^^
 

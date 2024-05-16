@@ -27,7 +27,7 @@ declare function foo<T>(x: T): null | T;
 
 function bar<K extends "foo">(key: K) {
 >bar : <K extends "foo">(key: K) => void
->    : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^^^^
 >key : K
 >    : ^
 

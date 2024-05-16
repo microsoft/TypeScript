@@ -4,30 +4,30 @@
 // Generic call with no parameters
 function noParams<T extends {}>() { }
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 noParams();
 >noParams() : void
 >           : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 noParams<string>();
 >noParams<string>() : void
 >                   : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 noParams<{}>();
 >noParams<{}>() : void
 >               : ^^^^
 >noParams : <T extends {}>() => void
->         : ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 // Generic call with parameters but none use type parameter type
 function noGenericParams<T extends number>(n: string) { }
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >n : string
 >  : ^^^^^^
 
@@ -35,7 +35,7 @@ noGenericParams(''); // Valid
 >noGenericParams('') : void
 >                    : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -43,7 +43,7 @@ noGenericParams<number>('');
 >noGenericParams<number>('') : void
 >                            : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
@@ -51,14 +51,14 @@ noGenericParams<{}>(''); // Error
 >noGenericParams<{}>('') : void
 >                        : ^^^^
 >noGenericParams : <T extends number>(n: string) => void
->                : ^^^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>                : ^^^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >'' : ""
 >   : ^^
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U extends T>(n: T, m: number) { }
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >n : T
 >  : ^
 >m : number
@@ -68,7 +68,7 @@ someGenerics1(3, 4); // Valid
 >someGenerics1(3, 4) : void
 >                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -78,7 +78,7 @@ someGenerics1<string, number>(3, 4); // Error
 >someGenerics1<string, number>(3, 4) : void
 >                                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -88,7 +88,7 @@ someGenerics1<number, {}>(3, 4); // Error
 >someGenerics1<number, {}>(3, 4) : void
 >                                : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -98,7 +98,7 @@ someGenerics1<number, number>(3, 4);
 >someGenerics1<number, number>(3, 4) : void
 >                                    : ^^^^
 >someGenerics1 : <T, U extends T>(n: T, m: number) => void
->              : ^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^      ^^^^^^^^^
+>              : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^      ^^^^^^^^^
 >3 : 3
 >  : ^
 >4 : 4
@@ -107,7 +107,7 @@ someGenerics1<number, number>(3, 4);
 // Generic call with argument of function type whose parameter is of type parameter type
 function someGenerics2a<T extends string>(n: (x: T) => void) { }
 >someGenerics2a : <T extends string>(n: (x: T) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^              ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^              ^^^^^^^^^
 >n : (x: T) => void
 >  : ^ ^^ ^^^^^    
 >x : T
@@ -117,7 +117,7 @@ someGenerics2a((n: string) => n);
 >someGenerics2a((n: string) => n) : void
 >                                 : ^^^^
 >someGenerics2a : <T extends string>(n: (x: T) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^              ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^              ^^^^^^^^^
 >(n: string) => n : (n: string) => string
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : string
@@ -129,7 +129,7 @@ someGenerics2a<string>((n: string) => n);
 >someGenerics2a<string>((n: string) => n) : void
 >                                         : ^^^^
 >someGenerics2a : <T extends string>(n: (x: T) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^              ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^              ^^^^^^^^^
 >(n: string) => n : (n: string) => string
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : string
@@ -141,7 +141,7 @@ someGenerics2a<string>((n) => n.substr(0));
 >someGenerics2a<string>((n) => n.substr(0)) : void
 >                                           : ^^^^
 >someGenerics2a : <T extends string>(n: (x: T) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^              ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^              ^^^^^^^^^
 >(n) => n.substr(0) : (n: string) => string
 >                   : ^ ^^^^^^^^^^^^^^^^^^^
 >n : string
@@ -159,7 +159,7 @@ someGenerics2a<string>((n) => n.substr(0));
 
 function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
 >someGenerics2b : <T extends string, U extends number>(n: (x: T, y: U) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^                    ^^^^^^^^^
 >n : (x: T, y: U) => void
 >  : ^ ^^ ^^ ^^ ^^^^^    
 >x : T
@@ -171,7 +171,7 @@ someGenerics2b((n: string, x: number) => n);
 >someGenerics2b((n: string, x: number) => n) : void
 >                                            : ^^^^
 >someGenerics2b : <T extends string, U extends number>(n: (x: T, y: U) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^                    ^^^^^^^^^
 >(n: string, x: number) => n : (n: string, x: number) => string
 >                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >n : string
@@ -185,7 +185,7 @@ someGenerics2b<string, number>((n: string, t: number) => n);
 >someGenerics2b<string, number>((n: string, t: number) => n) : void
 >                                                            : ^^^^
 >someGenerics2b : <T extends string, U extends number>(n: (x: T, y: U) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^                    ^^^^^^^^^
 >(n: string, t: number) => n : (n: string, t: number) => string
 >                            : ^ ^^      ^^ ^^      ^^^^^^^^^^^
 >n : string
@@ -199,7 +199,7 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 >someGenerics2b<string, number>((n, t) => n.substr(t * t)) : void
 >                                                          : ^^^^
 >someGenerics2b : <T extends string, U extends number>(n: (x: T, y: U) => void) => void
->               : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^                    ^^^^^^^^^
+>               : ^ ^^^^^^^^^      ^^ ^^^^^^^^^      ^^ ^^                    ^^^^^^^^^
 >(n, t) => n.substr(t * t) : (n: string, t: number) => string
 >                          : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
 >n : string
@@ -224,7 +224,7 @@ someGenerics2b<string, number>((n, t) => n.substr(t * t));
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 function someGenerics3<T extends Window>(producer: () => T) { }
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->              : ^ ^^^^^^^^^^^^^^^^^        ^^       ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^       ^^^^^^^^^
 >producer : () => T
 >         : ^^^^^^ 
 
@@ -232,7 +232,7 @@ someGenerics3(() => ''); // Error
 >someGenerics3(() => '') : void
 >                        : ^^^^
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->              : ^ ^^^^^^^^^^^^^^^^^        ^^       ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^       ^^^^^^^^^
 >() => '' : () => string
 >         : ^^^^^^^^^^^^
 >'' : ""
@@ -242,7 +242,7 @@ someGenerics3<Window>(() => undefined);
 >someGenerics3<Window>(() => undefined) : void
 >                                       : ^^^^
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->              : ^ ^^^^^^^^^^^^^^^^^        ^^       ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^       ^^^^^^^^^
 >() => undefined : () => any
 >                : ^^^^^^^^^
 >undefined : undefined
@@ -252,7 +252,7 @@ someGenerics3<number>(() => 3); // Error
 >someGenerics3<number>(() => 3) : void
 >                               : ^^^^
 >someGenerics3 : <T extends Window>(producer: () => T) => void
->              : ^ ^^^^^^^^^^^^^^^^^        ^^       ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^        ^^       ^^^^^^^^^
 >() => 3 : () => number
 >        : ^^^^^^^^^^^^
 >3 : 3
@@ -261,7 +261,7 @@ someGenerics3<number>(() => 3); // Error
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 function someGenerics4<T, U extends number>(n: T, f: (x: U) => void) { }
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 >n : T
 >  : ^
 >f : (x: U) => void
@@ -273,7 +273,7 @@ someGenerics4(4, () => null); // Valid
 >someGenerics4(4, () => null) : void
 >                             : ^^^^
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 >4 : 4
 >  : ^
 >() => null : () => any
@@ -283,7 +283,7 @@ someGenerics4<string, number>('', () => 3);
 >someGenerics4<string, number>('', () => 3) : void
 >                                           : ^^^^
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'' : ""
 >   : ^^
 >() => 3 : () => number
@@ -295,7 +295,7 @@ someGenerics4<string, number>('', (x: string) => ''); // Error
 >someGenerics4<string, number>('', (x: string) => '') : void
 >                                                     : ^^^^
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
@@ -309,12 +309,12 @@ someGenerics4<string, number>(null, null);
 >someGenerics4<string, number>(null, null) : void
 >                                          : ^^^^
 >someGenerics4 : <T, U extends number>(n: T, f: (x: U) => void) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^ ^^              ^^^^^^^^^
 
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 function someGenerics5<U extends number, T>(n: T, f: (x: U) => void) { }
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >n : T
 >  : ^
 >f : (x: U) => void
@@ -326,7 +326,7 @@ someGenerics5(4, () => null); // Valid
 >someGenerics5(4, () => null) : void
 >                             : ^^^^
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >4 : 4
 >  : ^
 >() => null : () => any
@@ -336,7 +336,7 @@ someGenerics5<number, string>('', () => 3);
 >someGenerics5<number, string>('', () => 3) : void
 >                                           : ^^^^
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'' : ""
 >   : ^^
 >() => 3 : () => number
@@ -348,7 +348,7 @@ someGenerics5<number, string>('', (x: string) => ''); // Error
 >someGenerics5<number, string>('', (x: string) => '') : void
 >                                                     : ^^^^
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 >'' : ""
 >   : ^^
 >(x: string) => '' : (x: string) => string
@@ -362,12 +362,12 @@ someGenerics5<string, number>(null, null); // Error
 >someGenerics5<string, number>(null, null) : void
 >                                          : ^^^^
 >someGenerics5 : <U extends number, T>(n: T, f: (x: U) => void) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^ ^^ ^^              ^^^^^^^^^
 
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 function someGenerics6<A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >a : (a: A) => A
 >  : ^ ^^ ^^^^^ 
 >a : A
@@ -385,7 +385,7 @@ someGenerics6(n => n, n => n, n => n); // Valid
 >someGenerics6(n => n, n => n, n => n) : void
 >                                      : ^^^^
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >n => n : (n: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -409,7 +409,7 @@ someGenerics6<number>(n => n, n => n, n => n);
 >someGenerics6<number>(n => n, n => n, n => n) : void
 >                                              : ^^^^
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >n => n : (n: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -433,7 +433,7 @@ someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // 
 >someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n) : void
 >                                                                            : ^^^^
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >(n: number) => n : (n: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -457,7 +457,7 @@ someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 >someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n) : void
 >                                                                            : ^^^^
 >someGenerics6 : <A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) => void
->              : ^ ^^^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >(n: number) => n : (n: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -480,7 +480,7 @@ someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 function someGenerics7<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >a : (a: A) => A
 >  : ^ ^^ ^^^^^ 
 >a : A
@@ -498,7 +498,7 @@ someGenerics7(n => n, n => n, n => n); // Valid, types of n are <any, string, an
 >someGenerics7(n => n, n => n, n => n) : void
 >                                      : ^^^^
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >n => n : (n: unknown) => unknown
 >       : ^ ^^^^^^^^^^^^^^^^^^^^^
 >n : unknown
@@ -522,7 +522,7 @@ someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7<number, string, number>(n => n, n => n, n => n) : void
 >                                                              : ^^^^
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >n => n : (n: number) => number
 >       : ^ ^^^^^^^^^^^^^^^^^^^
 >n : number
@@ -546,7 +546,7 @@ someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: nu
 >someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n) : void
 >                                                                                            : ^^^^
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 >(n: number) => n : (n: number) => number
 >                 : ^ ^^      ^^^^^^^^^^^
 >n : number
@@ -569,7 +569,7 @@ someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: nu
 // Generic call with argument of generic function type
 function someGenerics8<T extends string>(n: T): T { return n; }
 >someGenerics8 : <T extends string>(n: T) => T
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >n : T
 >  : ^
 >n : T
@@ -581,9 +581,9 @@ var x = someGenerics8<string>(someGenerics7); // Error
 >someGenerics8<string>(someGenerics7) : string
 >                                     : ^^^^^^
 >someGenerics8 : <T extends string>(n: T) => T
->              : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>              : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->              : ^ ^^ ^^^^^^^^^^^^^^^^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
+>              : ^ ^^ ^^^^^^^^^      ^^ ^^ ^^           ^^ ^^           ^^ ^^           ^^^^^^^^^
 
 x<string, string, string>(null, null, null); // Error
 >x<string, string, string>(null, null, null) : any

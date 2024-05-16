@@ -32,9 +32,9 @@ const decorator = function <U>(props: U) {
 
 const decorator1 = function <U extends {x: string}>(props: U) {
 >decorator1 : <U extends { x: string; }>(props: U) => JSX.Element
->           : ^ ^^^^^^^^^^^^^^      ^^^^^     ^^ ^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^              ^^     ^^ ^^^^^^^^^^^^^^^^
 >function <U extends {x: string}>(props: U) {    return <Component {...props} />;} : <U extends { x: string; }>(props: U) => JSX.Element
->                                                                                  : ^ ^^^^^^^^^^^^^^      ^^^^^     ^^ ^^^^^^^^^^^^^^^^
+>                                                                                  : ^ ^^^^^^^^^              ^^     ^^ ^^^^^^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
 >props : U

@@ -663,7 +663,7 @@ function f37(f: (<T>(a: T) => T) | (new (a: string, b: number) => string[])) {
 
 function f38<T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) {
 >f38 : <T extends (<A>(x: A) => A) | (<B>(x: B) => B[]), U>(f: T | U | (<C>(x: C) => C[][])) => void
->    : ^ ^^^^^^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^   ^^^ ^^ ^^                            ^^^^^^^^^
+>    : ^ ^^^^^^^^^                                     ^^ ^^ ^^                            ^^^^^^^^^
 >x : A
 >  : ^
 >x : B
@@ -754,7 +754,7 @@ type T32<B> = InstanceType<T30<B>>;  // { b: B }
 
 declare const g2: {
 >g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -769,17 +769,17 @@ type T40<U extends string> = typeof g2<U>;  // Error
 >T40 : typeof g2<U>
 >    :             
 >g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^
 
 type T41<U extends number> = typeof g2<U>;  // Error
 >T41 : typeof g2<U>
 >    :             
 >g2 : { <T extends string>(a: T): T; new <T extends number>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^
 
 declare const g3: {
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^ ^^^
 
     <T extends string>(a: T): T;
 >a : T
@@ -794,11 +794,11 @@ type T50<U extends string> = typeof g3<U>;  // (a: U) => U
 >T50 : typeof g3<U>
 >    :             
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^^^^^
 
 type T51<U extends number> = typeof g3<U, any>;  // (b: U) => U
 >T51 : typeof g3<U, any>
 >    :                  
 >g3 : { <T extends string>(a: T): T; new <T extends number, Q>(b: T): T; }
->   : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
+>   : ^^^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^ ^^^^^^^^^      ^^^^^ ^^ ^^^^^^^
 

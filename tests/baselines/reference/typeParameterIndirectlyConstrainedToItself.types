@@ -52,5 +52,5 @@ type Foo<T> = [T] extends [number] ? {} : {};
 
 function foo<S extends Foo<S>>() {}
 >foo : <S extends Foo<S>>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^^^^^^^^^^
 

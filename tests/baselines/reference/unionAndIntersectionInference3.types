@@ -239,7 +239,7 @@ export interface RouteComponentProps { route: string }
 
 declare function withRouter<
 >withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, keyof RouteComponentProps>>
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                    ^^^^^                                                  
+>           : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^                ^^         ^^                    ^^^^^                                                  
 
   P extends RouteComponentProps,
   C extends ComponentType<P>
@@ -262,7 +262,7 @@ withRouter(MyComponent);
 >withRouter(MyComponent) : ComponentClass<Omit<Props, "route">>
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >withRouter : <P extends RouteComponentProps, C extends ComponentType<P>>(component: C & ComponentType<P>) => ComponentClass<Omit<P, "route">>
->           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>           : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^                ^^         ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyComponent : ComponentType<Props>
 >            : ^^^^^^^^^^^^^^^^^^^^
 

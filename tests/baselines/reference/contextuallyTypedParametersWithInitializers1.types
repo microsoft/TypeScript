@@ -9,7 +9,7 @@ declare function id1<T>(input: T): T;
 
 declare function id2<T extends (x: any) => any>(input: T): T;
 >id2 : <T extends (x: any) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^   ^^^^^   ^^     ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^               ^^     ^^ ^^^^^ 
 >x : any
 >  : ^^^
 >input : T
@@ -17,7 +17,7 @@ declare function id2<T extends (x: any) => any>(input: T): T;
 
 declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^             ^^^^^   ^^     ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^                         ^^     ^^ ^^^^^ 
 >x : { foo: any; }
 >  : ^^^^^^^   ^^^
 >foo : any
@@ -27,7 +27,7 @@ declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
 
 declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 >id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^                 ^^^^^   ^^     ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^                             ^^     ^^ ^^^^^ 
 >x : { foo?: number; }
 >  : ^^^^^^^^      ^^^
 >foo : number | undefined
@@ -37,7 +37,7 @@ declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
 
 declare function id5<T extends (x?: number) => any>(input: T): T;
 >id5 : <T extends (x?: number) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^^      ^^^^^   ^^     ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^                   ^^     ^^ ^^^^^ 
 >x : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >input : T
@@ -77,7 +77,7 @@ const f12 = id2(function ({ foo = 42 }) { return foo });
 >id2(function ({ foo = 42 }) { return foo }) : ({ foo }: any) => any
 >                                            : ^       ^^^^^^^^^^^^^
 >id2 : <T extends (x: any) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^   ^^^^^^^^^^     ^^ ^^^^^^
+>    : ^ ^^^^^^^^^               ^^     ^^ ^^^^^^
 >function ({ foo = 42 }) { return foo } : ({ foo }: any) => any
 >                                       : ^       ^^^^^^^^^^^^^
 >foo : any
@@ -93,7 +93,7 @@ const f13 = id3(function ({ foo = 42 }) { return foo });
 >id3(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo: any; }) => any
 >                                            : ^       ^^^^^^^^^^^^^^^^^^^^^^^
 >id3 : <T extends (x: { foo: any; }) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^             ^^^^^^^^^^     ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                         ^^     ^^ ^^^^^^
 >function ({ foo = 42 }) { return foo } : ({ foo }: { foo: any; }) => any
 >                                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : any
@@ -109,7 +109,7 @@ const f14 = id4(function ({ foo = 42 }) { return foo });
 >id4(function ({ foo = 42 }) { return foo }) : ({ foo }: { foo?: number | undefined; }) => number
 >                                            : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id4 : <T extends (x: { foo?: number; }) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^                 ^^^^^^^^^^     ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                             ^^     ^^ ^^^^^^
 >function ({ foo = 42 }) { return foo } : ({ foo }: { foo?: number | undefined; }) => number
 >                                       : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number
@@ -153,7 +153,7 @@ const f22 = id2(function (foo = 42) { return foo });
 >id2(function (foo = 42) { return foo }) : (foo?: any) => any
 >                                        : ^   ^^^^^^^^^^^^^^
 >id2 : <T extends (x: any) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^   ^^^^^^^^^^     ^^ ^^^^^^
+>    : ^ ^^^^^^^^^               ^^     ^^ ^^^^^^
 >function (foo = 42) { return foo } : (foo?: any) => any
 >                                   : ^   ^^^^^^^^^^^^^^
 >foo : any
@@ -169,7 +169,7 @@ const f25 = id5(function (foo = 42) { return foo });
 >id5(function (foo = 42) { return foo }) : (foo?: number | undefined) => number
 >                                        : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id5 : <T extends (x?: number) => any>(input: T) => T
->    : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^^     ^^ ^^^^^^
+>    : ^ ^^^^^^^^^                   ^^     ^^ ^^^^^^
 >function (foo = 42) { return foo } : (foo?: number | undefined) => number
 >                                   : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : number | undefined
@@ -287,19 +287,19 @@ declare function g2<T extends any>(x: T): T;
 
 declare function g3<T extends unknown>(x: T): T;
 >g3 : <T extends unknown>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g4<T extends Function>(x: T): T;
 >g4 : <T extends Function>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
 declare function g5<T extends (...args: any[]) => any>(x: T): T;
 >g5 : <T extends (...args: any[]) => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^    ^^     ^^^^^   ^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^ 
 >args : any[]
 >     : ^^^^^
 >x : T
@@ -307,7 +307,7 @@ declare function g5<T extends (...args: any[]) => any>(x: T): T;
 
 declare function g6<T extends () => any>(x: T): T;
 >g6 : <T extends () => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^   ^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -343,7 +343,7 @@ g3((x = 1) => 0);  // number
 >g3((x = 1) => 0) : (x?: number) => 0
 >                 : ^ ^^^^^^^^^^^^^^^
 >g3 : <T extends unknown>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^
 >(x = 1) => 0 : (x?: number) => 0
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
@@ -357,7 +357,7 @@ g4((x = 1) => 0);  // number
 >g4((x = 1) => 0) : (x?: number) => 0
 >                 : ^ ^^^^^^^^^^^^^^^
 >g4 : <T extends Function>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >(x = 1) => 0 : (x?: number) => 0
 >             : ^ ^^^^^^^^^^^^^^^
 >x : number
@@ -371,7 +371,7 @@ g5((x = 1) => 0);  // any
 >g5((x = 1) => 0) : (x?: any) => number
 >                 : ^ ^^^^^^^^^^^^^^^^^
 >g5 : <T extends (...args: any[]) => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^
 >(x = 1) => 0 : (x?: any) => number
 >             : ^ ^^^^^^^^^^^^^^^^^
 >x : any
@@ -385,7 +385,7 @@ g6((x = 1) => 0);  // number
 >g6((x = 1) => 0) : (x?: number) => number
 >                 : ^ ^^^^^^^^^^^^^^^^^^^^
 >g6 : <T extends () => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^
 >(x = 1) => 0 : (x?: number) => number
 >             : ^ ^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -399,7 +399,7 @@ g6((x?) => 0);     // Implicit any error
 >g6((x?) => 0) : (x?: any) => number
 >              : ^ ^^^^^^^^^^^^^^^^^
 >g6 : <T extends () => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^
 >(x?) => 0 : (x?: any) => number
 >          : ^ ^^^^^^^^^^^^^^^^^
 >x : any
@@ -411,7 +411,7 @@ g6((...x) => 0);   // []
 >g6((...x) => 0) : () => number
 >                : ^^^^^^^^^^^^
 >g6 : <T extends () => any>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^
 >(...x) => 0 : () => number
 >            : ^^^^^^^^^^^^
 >x : []
@@ -478,7 +478,7 @@ const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
 
 declare function memoize<F extends Function>(func: F): F;
 >memoize : <F extends Function>(func: F) => F
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^^^^ 
 >func : F
 >     : ^
 
@@ -506,7 +506,7 @@ const memoizedAdd = memoize(add);
 >memoize(add) : (x: number, y?: number) => number
 >             : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^
 >memoize : <F extends Function>(func: F) => F
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^^^^^
 >add : (x: number, y?: number) => number
 >    : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^
 
@@ -534,7 +534,7 @@ const memoizedAdd2 = memoize(add2);
 >memoize(add2) : (x: number, y?: number) => number
 >              : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^
 >memoize : <F extends Function>(func: F) => F
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^^^^^
 >add2 : (x: number, y?: number) => number
 >     : ^ ^^      ^^ ^^^^^^^^^^^^^^^^^^^^
 
@@ -544,7 +544,7 @@ const memoizedAdd3 = memoize((x: number, y = 0): number => x + y);
 >memoize((x: number, y = 0): number => x + y) : (x: number, y?: number) => number
 >                                             : ^ ^^      ^^ ^^^^^^^^^^^^^^      
 >memoize : <F extends Function>(func: F) => F
->        : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>        : ^ ^^^^^^^^^        ^^    ^^ ^^^^^^
 >(x: number, y = 0): number => x + y : (x: number, y?: number) => number
 >                                    : ^ ^^      ^^ ^^^^^^^^^^^^^^      
 >x : number

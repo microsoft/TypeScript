@@ -140,32 +140,32 @@ function fn9() { }
 //Function overloads that differ only by type parameter constraints
 function fn10<T extends Window>();
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^
 
 function fn10<S extends Date>();
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^
 
 function fn10() { }
 >fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^
 
 // (actually OK)
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 function fn11() { }
->fn11 : { <T extends Window>(): any; <S extends Window & typeof globalThis>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn11 : { <T extends Window>(): any; <S extends typeof window>(): any; }
+>     : ^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {
@@ -175,15 +175,15 @@ interface List<T> {
 }
 function fn12<T extends List<List<any>>>();
 >fn12 : { <T extends List<List<any>>>(): any; <T_1 extends List<any>>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^
 
 function fn12<T extends List<any>>();
 >fn12 : { <T_1 extends List<List<any>>>(): any; <T extends List<any>>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^
 
 function fn12() { }
 >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^
 
 //Function overloads that differ by accessibility
 class cls {
@@ -326,15 +326,15 @@ function fn14() {
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T_1 extends List<any>>(): T_1; }
->     : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^ ^^^^^^^^^               ^^^^^ ^^^^^^^^^^^^^^^         ^^^^^^^^^^^
 
 function fn15<T extends List<any>>(): T;
 >fn15 : { <T_1 extends List<List<any>>>(): T_1; <T extends List<any>>(): T; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^
+>     : ^^^^^^^^^^^^^^^               ^^^^^^^^^^^ ^^^^^^^^^         ^^^^^ ^^^
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^^^               ^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^
 
     return undefined;
 >undefined : undefined

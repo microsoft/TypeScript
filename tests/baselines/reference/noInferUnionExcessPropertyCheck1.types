@@ -3,7 +3,7 @@
 === noInferUnionExcessPropertyCheck1.ts ===
 declare function test1<T extends { x: string }>(
 >test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void
->      : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^ ^^                               ^^^^^    
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                               ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -21,7 +21,7 @@ test1({ x: "foo" }, { x: "bar" }); // no error
 >test1({ x: "foo" }, { x: "bar" }) : void
 >                                  : ^^^^
 >test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                               ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                               ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
@@ -39,7 +39,7 @@ test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test1({ x: "foo" }, { x: "bar", y: 42 }) : void
 >                                         : ^^^^
 >test1 : <T extends { x: string; }>(a: T, b: NoInfer<T> | (() => NoInfer<T>)) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                               ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                               ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
@@ -59,7 +59,7 @@ test1({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 
 declare function test2<T extends { x: string }>(
 >test2 : <T extends { x: string; }>(a: T, b: NoInfer<T> | NoInfer<() => T>) => void
->      : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^ ^^                             ^^^^^    
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                             ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -77,7 +77,7 @@ test2({ x: "foo" }, { x: "bar" }); // no error
 >test2({ x: "foo" }, { x: "bar" }) : void
 >                                  : ^^^^
 >test2 : <T extends { x: string; }>(a: T, b: NoInfer<T> | NoInfer<() => T>) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                             ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
@@ -95,7 +95,7 @@ test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test2({ x: "foo" }, { x: "bar", y: 42 }) : void
 >                                         : ^^^^
 >test2 : <T extends { x: string; }>(a: T, b: NoInfer<T> | NoInfer<() => T>) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                             ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                             ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
@@ -115,7 +115,7 @@ test2({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 
 declare function test3<T extends { x: string }>(
 >test3 : <T extends { x: string; }>(a: T, b: NoInfer<T | (() => T)>) => void
->      : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^ ^^                      ^^^^^    
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                      ^^^^^    
 >x : string
 >  : ^^^^^^
 
@@ -133,7 +133,7 @@ test3({ x: "foo" }, { x: "bar" }); // no error
 >test3({ x: "foo" }, { x: "bar" }) : void
 >                                  : ^^^^
 >test3 : <T extends { x: string; }>(a: T, b: NoInfer<T | (() => T)>) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                      ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                      ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string
@@ -151,7 +151,7 @@ test3({ x: "foo" }, { x: "bar", y: 42 }); // epc error
 >test3({ x: "foo" }, { x: "bar", y: 42 }) : void
 >                                         : ^^^^
 >test3 : <T extends { x: string; }>(a: T, b: NoInfer<T | (() => T)>) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^                      ^^^^^^^^^
+>      : ^ ^^^^^^^^^              ^^ ^^ ^^ ^^                      ^^^^^^^^^
 >{ x: "foo" } : { x: string; }
 >             : ^^^^^^^^^^^^^^
 >x : string

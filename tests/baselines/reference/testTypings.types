@@ -11,7 +11,7 @@ interface IComparable<T> {
 
 declare function sort<U extends IComparable<U>>(items: U[]): U[];
 >sort : <U extends IComparable<U>>(items: U[]) => U[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^   
+>     : ^ ^^^^^^^^^              ^^     ^^   ^^^^^   
 >items : U[]
 >      : ^^^
 

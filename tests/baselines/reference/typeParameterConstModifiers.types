@@ -293,7 +293,7 @@ const x52 = f5({ x: { a: 1, b: 'x' }, y: { a: 2, b: 'y' } });
 
 declare function f6<const T extends readonly unknown[]>(...args: T): T;
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -303,7 +303,7 @@ const x61 = f6(1, 'b', { a: 1, b: 'x' });
 >f6(1, 'b', { a: 1, b: 'x' }) : readonly [1, "b", { readonly a: 1; readonly b: "x"; }]
 >                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >1 : 1
 >  : ^
 >'b' : "b"
@@ -325,7 +325,7 @@ const x62 = f6(...[1, 'b']);
 >f6(...[1, 'b']) : readonly [number, string]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >...[1, 'b'] : string | number
 >            : ^^^^^^^^^^^^^^^
 >[1, 'b'] : [number, string]
@@ -341,7 +341,7 @@ const x63 = f6(true, ...[1, 'b']);
 >f6(true, ...[1, 'b']) : readonly [true, number, string]
 >                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >...[1, 'b'] : string | number
@@ -359,7 +359,7 @@ const x64 = f6(...([1, 'b']));
 >f6(...([1, 'b'])) : readonly [number, string]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >...([1, 'b']) : string | number
 >              : ^^^^^^^^^^^^^^^
 >([1, 'b']) : [number, string]
@@ -377,7 +377,7 @@ const x65 = f6(true, ...([1, 'b']));
 >f6(true, ...([1, 'b'])) : readonly [true, number, string]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >f6 : <const T extends readonly unknown[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >true : true
 >     : ^^^^
 >...([1, 'b']) : string | number
@@ -552,7 +552,7 @@ type GetPath<T, P> =
 
 function set<T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) {}
 >set : <T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
->    : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^ ^^     ^^             ^^^^^^^^^
+>    : ^ ^^^^^^^^ ^^^^^^^^^                 ^^   ^^ ^^    ^^ ^^     ^^             ^^^^^^^^^
 >obj : T
 >    : ^
 >path : P
@@ -572,7 +572,7 @@ set(obj, ['a', 'b', 'c'], value);
 >set(obj, ['a', 'b', 'c'], value) : void
 >                                 : ^^^^
 >set : <T, const P extends readonly string[]>(obj: T, path: P, value: GetPath<T, P>) => void
->    : ^ ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^    ^^ ^^     ^^             ^^^^^^^^^
+>    : ^ ^^^^^^^^ ^^^^^^^^^                 ^^   ^^ ^^    ^^ ^^     ^^             ^^^^^^^^^
 >obj : Obj
 >    : ^^^
 >['a', 'b', 'c'] : ["a", "b", "c"]
@@ -590,7 +590,7 @@ set(obj, ['a', 'b', 'c'], value);
 
 declare function inners<const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]): T;
 >inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
->       : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                                 ^^^^^ 
+>       : ^^^^^^^ ^^^^^^^^^              ^^^^^    ^^                                 ^^^^^ 
 >args : readonly [unknown, ...T, unknown]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -600,7 +600,7 @@ const test = inners(1,2,3,4,5);
 >inners(1,2,3,4,5) : [2, 3, 4]
 >                  : ^^^^^^^^^
 >inners : <const T extends readonly any[]>(...args: readonly [unknown, ...T, unknown]) => T
->       : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                                 ^^^^^^
+>       : ^^^^^^^ ^^^^^^^^^              ^^^^^    ^^                                 ^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -614,7 +614,7 @@ const test = inners(1,2,3,4,5);
 
 declare function inners2<const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]): T;
 >inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
->        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                                 ^^^^^ 
+>        : ^^^^^^^ ^^^^^^^^^              ^^    ^^                                 ^^^^^ 
 >args : readonly [unknown, ...T, unknown]
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -624,7 +624,7 @@ const test2 = inners2([1,2,3,4,5]);
 >inners2([1,2,3,4,5]) : [2, 3, 4]
 >                     : ^^^^^^^^^
 >inners2 : <const T extends readonly any[]>(args: readonly [unknown, ...T, unknown]) => T
->        : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                                 ^^^^^^
+>        : ^^^^^^^ ^^^^^^^^^              ^^    ^^                                 ^^^^^^
 >[1,2,3,4,5] : [number, 2, 3, 4, number]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
@@ -646,9 +646,9 @@ type NotEmpty<T extends Record<string, any>> = keyof T extends never ? never : T
 
 const thing = <const O extends Record<string, any>>(o: NotEmpty<O>) => o;
 >thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^ ^^^^^^^^^                   ^^ ^^           ^^^^^^^^^^^^^^^^
 ><const O extends Record<string, any>>(o: NotEmpty<O>) => o : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
->                                                           : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^^^^^^^^
+>                                                           : ^^^^^^^ ^^^^^^^^^                   ^^ ^^           ^^^^^^^^^^^^^^^^
 >o : NotEmpty<O>
 >  : ^^^^^^^^^^^
 >o : NotEmpty<O>
@@ -660,7 +660,7 @@ const t = thing({ foo: '' });  // readonly { foo: "" }
 >thing({ foo: '' }) : { readonly foo: ""; }
 >                   : ^^^^^^^^^^^^^^^^^^^^^
 >thing : <const O extends Record<string, any>>(o: NotEmpty<O>) => NotEmpty<O>
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^^^^^^^^
+>      : ^^^^^^^ ^^^^^^^^^                   ^^ ^^           ^^^^^^^^^^^^^^^^
 >{ foo: '' } : { foo: ""; }
 >            : ^^^^^^^^^^^^
 >foo : ""
@@ -674,9 +674,9 @@ type NotEmptyMapped<T extends Record<string, any>> = keyof T extends never ? nev
 
 const thingMapped = <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o;
 >thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
->            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^^^^^^^^                   ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 ><const O extends Record<string, any>>(o: NotEmptyMapped<O>) => o : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
->                                                                 : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
+>                                                                 : ^^^^^^^ ^^^^^^^^^                   ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >o : NotEmptyMapped<O>
 >  : ^^^^^^^^^^^^^^^^^
 >o : NotEmptyMapped<O>
@@ -688,7 +688,7 @@ const tMapped = thingMapped({ foo: '' });  // { foo: "" }
 >thingMapped({ foo: '' }) : { readonly foo: ""; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^
 >thingMapped : <const O extends Record<string, any>>(o: NotEmptyMapped<O>) => NotEmptyMapped<O>
->            : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^^^^^ ^^^^^^^^^                   ^^ ^^                 ^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: '' } : { foo: ""; }
 >            : ^^^^^^^^^^^^
 >foo : ""
@@ -700,7 +700,7 @@ const tMapped = thingMapped({ foo: '' });  // { foo: "" }
 
 function factory_55033_minimal<const T extends readonly unknown[]>(cb: (...args: T) => void) {
 >factory_55033_minimal : <const T extends readonly unknown[]>(cb: (...args: T) => void) => T
->                      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^ 
+>                      : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^ 
 >cb : (...args: T) => void
 >   : ^^^^    ^^ ^^^^^    
 >args : T
@@ -719,7 +719,7 @@ const test_55033_minimal = factory_55033_minimal((b: string) => {})
 >factory_55033_minimal((b: string) => {}) : readonly [b: string]
 >                                         : ^^^^^^^^^^^^^^^^^^^^
 >factory_55033_minimal : <const T extends readonly unknown[]>(cb: (...args: T) => void) => T
->                      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^ 
+>                      : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^ 
 >(b: string) => {} : (b: string) => void
 >                  : ^ ^^      ^^^^^^^^^
 >b : string
@@ -727,7 +727,7 @@ const test_55033_minimal = factory_55033_minimal((b: string) => {})
 
 function factory_55033<const T extends readonly unknown[]>(cb: (...args: T) => void) {
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->              : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>              : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >cb : (...args: T) => void
 >   : ^^^^    ^^ ^^^^^    
 >args : T
@@ -735,9 +735,9 @@ function factory_55033<const T extends readonly unknown[]>(cb: (...args: T) => v
 
     return function call<const K extends T>(...args: K): K {
 >function call<const K extends T>(...args: K): K {        return {} as K;    } : <const K extends T>(...args: K) => K
->                                                                              : ^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>                                                                              : ^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >call : <const K extends T>(...args: K) => K
->     : ^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>     : ^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >args : K
 >     : ^
 
@@ -758,7 +758,7 @@ const t1_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->              : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>              : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >                                       : ^ ^^                 ^^ ^^      ^^^^^^^^^
 >a : { test: number; }
@@ -790,7 +790,7 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 >factory_55033((a: { test: number }, b: string) => {}) : <const K extends readonly [a: { test: number; }, b: string]>(...args: K) => K
 >                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033 : <const T extends readonly unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->              : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>              : ^^^^^^^ ^^^^^^^^^                  ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >                                       : ^ ^^                 ^^ ^^      ^^^^^^^^^
 >a : { test: number; }
@@ -820,7 +820,7 @@ const t2_55033 = factory_55033((a: { test: number }, b: string) => {})(
 
 function factory_55033_2<const T extends unknown[]>(cb: (...args: T) => void) {
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->                : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>                : ^^^^^^^ ^^^^^^^^^         ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >cb : (...args: T) => void
 >   : ^^^^    ^^ ^^^^^    
 >args : T
@@ -828,9 +828,9 @@ function factory_55033_2<const T extends unknown[]>(cb: (...args: T) => void) {
 
     return function call<const K extends T>(...args: K): K {
 >function call<const K extends T>(...args: K): K {        return {} as K;    } : <const K extends T>(...args: K) => K
->                                                                              : ^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>                                                                              : ^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >call : <const K extends T>(...args: K) => K
->     : ^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>     : ^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >args : K
 >     : ^
 
@@ -851,7 +851,7 @@ const t1_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->                : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>                : ^^^^^^^ ^^^^^^^^^         ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >                                       : ^ ^^                 ^^ ^^      ^^^^^^^^^
 >a : { test: number; }
@@ -883,7 +883,7 @@ const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 >factory_55033_2((a: { test: number }, b: string) => {}) : <const K extends [a: { test: number; }, b: string]>(...args: K) => K
 >                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^
 >factory_55033_2 : <const T extends unknown[]>(cb: (...args: T) => void) => <const K extends T>(...args: K) => K
->                : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>                : ^^^^^^^ ^^^^^^^^^         ^^  ^^                    ^^^^^^^^^^^^ ^^^^^^^^^ ^^^^^    ^^ ^^^^^ 
 >(a: { test: number }, b: string) => {} : (a: { test: number; }, b: string) => void
 >                                       : ^ ^^                 ^^ ^^      ^^^^^^^^^
 >a : { test: number; }
@@ -913,7 +913,7 @@ const t2_55033_2 = factory_55033_2((a: { test: number }, b: string) => {})(
 
 declare function fn<const T extends any[]>(...args: T): T;
 >fn : <const T extends any[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>   : ^^^^^^^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -923,7 +923,7 @@ const a = fn("a", false);
 >fn("a", false) : ["a", false]
 >               : ^^^^^^^^^^^^
 >fn : <const T extends any[]>(...args: T) => T
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>   : ^^^^^^^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^^
 >"a" : "a"
 >    : ^^^
 >false : false
@@ -933,13 +933,13 @@ const a = fn("a", false);
 
 declare function fa1<const T extends unknown[]>(args: T): T;
 >fa1 : <const T extends unknown[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^         ^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
 declare function fa2<const T extends readonly unknown[]>(args: T): T;
 >fa2 : <const T extends readonly unknown[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                  ^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -947,7 +947,7 @@ fa1(["hello", 42]);
 >fa1(["hello", 42]) : ["hello", 42]
 >                   : ^^^^^^^^^^^^^
 >fa1 : <const T extends unknown[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^         ^^    ^^ ^^^^^^
 >["hello", 42] : ["hello", 42]
 >              : ^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -959,7 +959,7 @@ fa2(["hello", 42]);
 >fa2(["hello", 42]) : readonly ["hello", 42]
 >                   : ^^^^^^^^^^^^^^^^^^^^^^
 >fa2 : <const T extends readonly unknown[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^    ^^ ^^^^^^
 >["hello", 42] : ["hello", 42]
 >              : ^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -969,13 +969,13 @@ fa2(["hello", 42]);
 
 declare function fb1<const T extends unknown[]>(...args: T): T;
 >fb1 : <const T extends unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
 declare function fb2<const T extends readonly unknown[]>(...args: T): T;
 >fb2 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -983,7 +983,7 @@ fb1("hello", 42);
 >fb1("hello", 42) : ["hello", 42]
 >                 : ^^^^^^^^^^^^^
 >fb1 : <const T extends unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^         ^^^^^    ^^ ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42
@@ -993,7 +993,7 @@ fb2("hello", 42);
 >fb2("hello", 42) : readonly ["hello", 42]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^
 >fb2 : <const T extends readonly unknown[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^ ^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >42 : 42
@@ -1001,7 +1001,7 @@ fb2("hello", 42);
 
 declare function fc1<const T extends unknown[]>(f: (...args: T) => void, ...args: T): T;
 >fc1 : <const T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^         ^^ ^^                    ^^^^^    ^^ ^^^^^ 
 >f : (...args: T) => void
 >  : ^^^^    ^^ ^^^^^    
 >args : T
@@ -1011,7 +1011,7 @@ declare function fc1<const T extends unknown[]>(f: (...args: T) => void, ...args
 
 declare function fc2<const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T): T;
 >fc2 : <const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                  ^^ ^^                    ^^^^^    ^^ ^^^^^ 
 >f : (...args: T) => void
 >  : ^^^^    ^^ ^^^^^    
 >args : T
@@ -1023,7 +1023,7 @@ fc1((a: string, b: number) => {}, "hello", 42);
 >fc1((a: string, b: number) => {}, "hello", 42) : ["hello", 42]
 >                                               : ^^^^^^^^^^^^^
 >fc1 : <const T extends unknown[]>(f: (...args: T) => void, ...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^         ^^ ^^                    ^^^^^    ^^ ^^^^^^
 >(a: string, b: number) => {} : (a: string, b: number) => void
 >                             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
@@ -1039,7 +1039,7 @@ fc2((a: string, b: number) => {}, "hello", 42);
 >fc2((a: string, b: number) => {}, "hello", 42) : readonly ["hello", 42]
 >                                               : ^^^^^^^^^^^^^^^^^^^^^^
 >fc2 : <const T extends readonly unknown[]>(f: (...args: T) => void, ...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                    ^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                  ^^ ^^                    ^^^^^    ^^ ^^^^^^
 >(a: string, b: number) => {} : (a: string, b: number) => void
 >                             : ^ ^^      ^^ ^^      ^^^^^^^^^
 >a : string
@@ -1053,19 +1053,19 @@ fc2((a: string, b: number) => {}, "hello", 42);
 
 declare function fd1<const T extends string[] | number[]>(args: T): T;
 >fd1 : <const T extends string[] | number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                   ^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
 declare function fd2<const T extends string[] | readonly number[]>(args: T): T;
 >fd2 : <const T extends string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                            ^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
 declare function fd3<const T extends readonly string[] | readonly number[]>(args: T): T;
 >fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                                     ^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -1073,7 +1073,7 @@ fd1(["hello", "world"]);
 >fd1(["hello", "world"]) : ["hello", "world"]
 >                        : ^^^^^^^^^^^^^^^^^^
 >fd1 : <const T extends string[] | number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                   ^^    ^^ ^^^^^^
 >["hello", "world"] : ["hello", "world"]
 >                   : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -1085,7 +1085,7 @@ fd1([1, 2, 3]);
 >fd1([1, 2, 3]) : [1, 2, 3]
 >               : ^^^^^^^^^
 >fd1 : <const T extends string[] | number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                   ^^    ^^ ^^^^^^
 >[1, 2, 3] : [1, 2, 3]
 >          : ^^^^^^^^^
 >1 : 1
@@ -1099,7 +1099,7 @@ fd2(["hello", "world"]);
 >fd2(["hello", "world"]) : ["hello", "world"]
 >                        : ^^^^^^^^^^^^^^^^^^
 >fd2 : <const T extends string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                            ^^    ^^ ^^^^^^
 >["hello", "world"] : ["hello", "world"]
 >                   : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -1111,7 +1111,7 @@ fd2([1, 2, 3]);
 >fd2([1, 2, 3]) : [1, 2, 3]
 >               : ^^^^^^^^^
 >fd2 : <const T extends string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                            ^^    ^^ ^^^^^^
 >[1, 2, 3] : [1, 2, 3]
 >          : ^^^^^^^^^
 >1 : 1
@@ -1125,7 +1125,7 @@ fd3(["hello", "world"]);
 >fd3(["hello", "world"]) : readonly ["hello", "world"]
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                                     ^^    ^^ ^^^^^^
 >["hello", "world"] : ["hello", "world"]
 >                   : ^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -1137,7 +1137,7 @@ fd3([1, 2, 3]);
 >fd3([1, 2, 3]) : readonly [1, 2, 3]
 >               : ^^^^^^^^^^^^^^^^^^
 >fd3 : <const T extends readonly string[] | readonly number[]>(args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                                     ^^    ^^ ^^^^^^
 >[1, 2, 3] : [1, 2, 3]
 >          : ^^^^^^^^^
 >1 : 1
@@ -1149,7 +1149,7 @@ fd3([1, 2, 3]);
 
 declare function fn1<const T extends { foo: unknown[] }[]>(...args: T): T;
 >fn1 : <const T extends { foo: unknown[]; }[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^         ^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^^^^^^^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^ 
 >foo : unknown[]
 >    : ^^^^^^^^^
 >args : T
@@ -1159,7 +1159,7 @@ fn1({ foo: ["hello", 123] }, { foo: [true]});
 >fn1({ foo: ["hello", 123] }, { foo: [true]}) : [{ readonly foo: ["hello", 123]; }, { readonly foo: [true]; }]
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fn1 : <const T extends { foo: unknown[]; }[]>(...args: T) => T
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^^^^^^^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^^
 >{ foo: ["hello", 123] } : { foo: ["hello", 123]; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : ["hello", 123]

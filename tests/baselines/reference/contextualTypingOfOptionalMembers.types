@@ -29,7 +29,7 @@ interface Options<State, Actions> {
 
 declare function app<State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>): void;
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->    : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                       ^^^^^    
+>    : ^     ^^       ^^^^^^^^^                    ^^   ^^                       ^^^^^    
 >obj : Options<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -37,7 +37,7 @@ app({
 >app({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                       : ^^^^
 >app : <State, Actions extends ActionsObject<State>>(obj: Options<State, Actions>) => void
->    : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                       ^^^^^^^^^
+>    : ^     ^^       ^^^^^^^^^                    ^^   ^^                       ^^^^^^^^^
 >{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 >                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -90,7 +90,7 @@ interface Bar {
 
 declare function foo<T extends Bar>(x: string | T): T;
 >foo : <T extends Bar>(x: string | T) => T
->    : ^ ^^^^^^^^^^^^^^ ^^          ^^^^^ 
+>    : ^ ^^^^^^^^^   ^^ ^^          ^^^^^ 
 >x : string | T
 >  : ^^^^^^^^^^
 
@@ -100,7 +100,7 @@ const y = foo({
 >foo({    bar(x) { // Should be typed number => void    }}) : { bar(x: number): void; }
 >                                                           : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 >foo : <T extends Bar>(x: string | T) => T
->    : ^ ^^^^^^^^^^^^^^ ^^          ^^^^^^
+>    : ^ ^^^^^^^^^   ^^ ^^          ^^^^^^
 >{    bar(x) { // Should be typed number => void    }} : { bar(x: number): void; }
 >                                                      : ^^^^^^ ^^^^^^^^^^^^^^^^^^
 
@@ -132,7 +132,7 @@ interface Options2<State, Actions> {
 
 declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>): void;
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                        ^^^^^    
+>     : ^     ^^       ^^^^^^^^^                    ^^   ^^                        ^^^^^    
 >obj : Options2<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -140,7 +140,7 @@ app2({
 >app2({    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                        : ^^^^
 >app2 : <State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                        ^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                    ^^   ^^                        ^^^^^^^^^
 >{    state: 100,    actions: {        foo: s => s // Should be typed number => number    },    view: (s, a) => undefined as any,} : { state: number; actions: { foo: (s: number) => number; }; view: (s: number, a: { foo: (s: number) => number; }) => any; }
 >                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -191,7 +191,7 @@ type ActionsArray<State> = ((state: State) => State)[];
 
 declare function app3<State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>): void;
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                       ^^^^^    
+>     : ^     ^^       ^^^^^^^^^                   ^^   ^^                       ^^^^^    
 >obj : Options<State, Actions>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -199,7 +199,7 @@ app3({
 >app3({    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,}) : void
 >                                                                                                                                   : ^^^^
 >app3 : <State, Actions extends ActionsArray<State>>(obj: Options<State, Actions>) => void
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                       ^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                   ^^   ^^                       ^^^^^^^^^
 >{    state: 100,    actions: [        s => s // Should be typed number => number    ],    view: (s, a) => undefined as any,} : { state: number; actions: ((s: number) => number)[]; view: (s: number, a: ((s: number) => number)[]) => any; }
 >                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^ ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
 
@@ -254,7 +254,7 @@ interface ActionsObjectOr<State> {
 
 declare function App4<State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State }): JSX.Element;
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                                                      ^^^^^           
+>     : ^     ^^       ^^^^^^^^^                      ^^     ^^                                                      ^^^^^           
 >props : (string | Actions) & { state: State; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^
 >state : State
@@ -268,7 +268,7 @@ const a = <App4 state={100} foo={s => s} />; // TODO: should be number => number
 ><App4 state={100} foo={s => s} /> : JSX.Element
 >                                  : ^^^^^^^^^^^
 >App4 : <State, Actions extends ActionsObjectOr<State>>(props: Options<State, Actions>["actions"] & { state: State; }) => JSX.Element
->     : ^     ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^                                                      ^^^^^^^^^^^^^^^^
+>     : ^     ^^       ^^^^^^^^^                      ^^     ^^                                                      ^^^^^^^^^^^^^^^^
 >state : number
 >      : ^^^^^^
 >100 : 100

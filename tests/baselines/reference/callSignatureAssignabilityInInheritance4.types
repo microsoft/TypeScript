@@ -71,7 +71,7 @@ interface A { // T
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : <T extends Base>(x: (arg: T) => Derived) => T
->   : ^ ^^^^^^^^^^^^^^^ ^^                   ^^^^^ 
+>   : ^ ^^^^^^^^^    ^^ ^^                   ^^^^^ 
 >x : (arg: T) => Derived
 >  : ^   ^^ ^^^^^       
 >arg : T
@@ -103,7 +103,7 @@ interface A { // T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
->    : ^ ^^^^^^^^^^^^^^^ ^^               ^^^^^   
+>    : ^ ^^^^^^^^^    ^^ ^^               ^^^^^   
 >x : { a: T; b: T; }
 >  : ^^^^^ ^^^^^ ^^^
 >a : T
@@ -113,7 +113,7 @@ interface A { // T
 
     a17: {
 >a17 : { <T extends Derived>(x: (a: T) => T): T[]; <T extends Base>(x: (a: T) => T): T[]; }
->    : ^^^ ^^^^^^^^^^^^^^^^^^ ^^           ^^^   ^^^ ^^^^^^^^^^^^^^^ ^^           ^^^   ^^^
+>    : ^^^ ^^^^^^^^^       ^^ ^^           ^^^   ^^^ ^^^^^^^^^    ^^ ^^           ^^^   ^^^
 
         <T extends Derived>(x: (a: T) => T): T[];
 >x : (a: T) => T
@@ -134,7 +134,7 @@ interface A { // T
 
         (x: {
 >x : { <T extends Derived>(a: T): T; <T extends Base>(a: T): T; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^ ^^^^^^^^^       ^^ ^^ ^^^ ^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
             <T extends Derived>(a: T): T;
 >a : T
@@ -147,7 +147,7 @@ interface A { // T
         }): any[];
         (x: {
 >x : { <T extends Derived2>(a: T): T; <T extends Base>(a: T): T; }
->  : ^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
+>  : ^^^ ^^^^^^^^^        ^^ ^^ ^^^ ^^^ ^^^^^^^^^    ^^ ^^ ^^^ ^^^
 
             <T extends Derived2>(a: T): T;
 >a : T
@@ -200,7 +200,7 @@ interface I extends A {
 
     a6: <T extends Base, U extends Derived>(x: (arg: T) => U) => T; // ok, same as a5 but with object type hierarchy
 >a6 : <T extends Base, U extends Derived>(x: (arg: T) => U) => T
->   : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^             ^^^^^ 
+>   : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^ ^^             ^^^^^ 
 >x : (arg: T) => U
 >  : ^   ^^ ^^^^^ 
 >arg : T

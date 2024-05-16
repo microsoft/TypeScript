@@ -20,7 +20,7 @@ type Something<T> = { test: string } &  (T extends object ? {
 
 function testFunc2<A extends object>(a: A, sa: Something<A>) {
 >testFunc2 : <A extends object>(a: A, sa: Something<A>) => void
->          : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^  ^^            ^^^^^^^^^
+>          : ^ ^^^^^^^^^      ^^ ^^ ^^  ^^            ^^^^^^^^^
 >a : A
 >  : ^
 >sa : Something<A>

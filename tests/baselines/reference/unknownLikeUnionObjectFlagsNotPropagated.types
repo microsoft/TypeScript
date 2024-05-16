@@ -55,11 +55,11 @@ async function myUnusedFunction() {
 >Promise.all([fetch1]) : Promise<[string[]]>
 >                      : ^^^^^^^^^^^^^^^^^^^
 >Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
 >all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[fetch1] : [Promise<string[]>]
 >         : ^^^^^^^^^^^^^^^^^^^
 >fetch1 : Promise<string[]>

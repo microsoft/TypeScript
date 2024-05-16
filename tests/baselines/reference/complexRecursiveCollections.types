@@ -520,7 +520,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^       ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^       ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -534,7 +534,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): List<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -858,7 +858,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -872,7 +872,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Map<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -996,7 +996,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -1010,7 +1010,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): OrderedMap<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -1183,7 +1183,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^      ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^      ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -1197,7 +1197,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -1291,7 +1291,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^             ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^             ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -1305,7 +1305,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): OrderedSet<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -1491,7 +1491,7 @@ declare module Immutable {
 
     filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^      ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^      ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -1505,7 +1505,7 @@ declare module Immutable {
 
     filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -1580,7 +1580,7 @@ declare module Immutable {
 
       get<K extends keyof T>(key: K): T[K];
 >get : <K extends keyof T>(key: K) => T[K]
->    : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^    
+>    : ^ ^^^^^^^^^       ^^   ^^ ^^^^^    
 >key : K
 >    : ^
 
@@ -1611,7 +1611,7 @@ declare module Immutable {
       // Persistent changes
       set<K extends keyof T>(key: K, value: T[K]): this;
 >set : <K extends keyof T>(key: K, value: T[K]) => this
->    : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^     ^^    ^^^^^    
+>    : ^ ^^^^^^^^^       ^^   ^^ ^^     ^^    ^^^^^    
 >key : K
 >    : ^
 >value : T[K]
@@ -1619,7 +1619,7 @@ declare module Immutable {
 
       update<K extends keyof T>(key: K, updater: (value: T[K]) => T[K]): this;
 >update : <K extends keyof T>(key: K, updater: (value: T[K]) => T[K]) => this
->       : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^       ^^                     ^^^^^    
+>       : ^ ^^^^^^^^^       ^^   ^^ ^^       ^^                     ^^^^^    
 >key : K
 >    : ^
 >updater : (value: T[K]) => T[K]
@@ -1669,13 +1669,13 @@ declare module Immutable {
 
       delete<K extends keyof T>(key: K): this;
 >delete : <K extends keyof T>(key: K) => this
->       : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^    
+>       : ^ ^^^^^^^^^       ^^   ^^ ^^^^^    
 >key : K
 >    : ^
 
       remove<K extends keyof T>(key: K): this;
 >remove : <K extends keyof T>(key: K) => this
->       : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^    
+>       : ^ ^^^^^^^^^       ^^   ^^ ^^^^^    
 >key : K
 >    : ^
 
@@ -1943,7 +1943,7 @@ declare module Immutable {
 
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^               ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^               ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -1959,7 +1959,7 @@ declare module Immutable {
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2061,7 +2061,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Seq.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^              ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^              ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -2077,7 +2077,7 @@ declare module Immutable {
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -2179,7 +2179,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Seq.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^          ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^          ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -2195,7 +2195,7 @@ declare module Immutable {
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -2307,7 +2307,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^         ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -2321,7 +2321,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Seq<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2494,7 +2494,7 @@ declare module Immutable {
 
       filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection.Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^                      ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                      ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -2510,7 +2510,7 @@ declare module Immutable {
 
       filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Keyed<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V
@@ -2737,7 +2737,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Collection.Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^                     ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^                     ^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, index: number, iter: this) => value is F
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^          
 >value : T
@@ -2753,7 +2753,7 @@ declare module Immutable {
 
       filter(predicate: (value: T, index: number, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, index: number, iter: this) => value is F, context?: any): Indexed<F>; (predicate: (value: T, index: number, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                   ^^       ^^^   ^^^^^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, index: number, iter: this) => any
 >          : ^     ^^ ^^     ^^      ^^    ^^    ^^^^^   
 >value : T
@@ -2842,7 +2842,7 @@ declare module Immutable {
 
       filter<F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Collection.Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^                 ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^                 ^^^         ^^                                         ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: T, key: never, iter: this) => value is F
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^          
 >value : T
@@ -2858,7 +2858,7 @@ declare module Immutable {
 
       filter(predicate: (value: T, key: never, iter: this) => any, context?: any): this;
 >filter : { <F extends T>(predicate: (value: T, key: never, iter: this) => value is F, context?: any): Set<F>; (predicate: (value: T, key: never, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                                ^^       ^^^   ^^^^^^^^^^^^         ^^                                         ^^       ^^^   ^^^    ^^^
 >predicate : (value: T, key: never, iter: this) => any
 >          : ^     ^^ ^^   ^^     ^^    ^^    ^^^^^   
 >value : T
@@ -3102,7 +3102,7 @@ declare module Immutable {
 
     filter<F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^                ^^^         ^^                                     ^^       ^^^   ^^^^^^^^^^
 >predicate : (value: V, key: K, iter: this) => value is F
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^          
 >value : V
@@ -3116,7 +3116,7 @@ declare module Immutable {
 
     filter(predicate: (value: V, key: K, iter: this) => any, context?: any): this;
 >filter : { <F extends V>(predicate: (value: V, key: K, iter: this) => value is F, context?: any): Collection<K, F>; (predicate: (value: V, key: K, iter: this) => any, context?: any): this; }
->       : ^^^ ^^^^^^^^^^^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
+>       : ^^^ ^^^^^^^^^ ^^         ^^                                            ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^         ^^                                     ^^       ^^^   ^^^    ^^^
 >predicate : (value: V, key: K, iter: this) => any
 >          : ^     ^^ ^^   ^^ ^^    ^^    ^^^^^   
 >value : V

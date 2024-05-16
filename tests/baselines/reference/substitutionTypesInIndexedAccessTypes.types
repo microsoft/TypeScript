@@ -19,13 +19,13 @@ type Subset<T, U> = { [key in keyof T]: key extends keyof U ? T[key] : never };
 
 declare function withBoundary<T extends UserArgs>(args?: Subset<T, UserArgs>): T;
 >withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs>) => T
->             : ^ ^^^^^^^^^^^^^^^^^^^    ^^^                   ^^^^^ 
+>             : ^ ^^^^^^^^^        ^^    ^^^                   ^^^^^ 
 >args : Subset<T, UserArgs> | undefined
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function withoutBoundary<T extends UserArgs>(args?: T): T;
 >withoutBoundary : <T extends UserArgs>(args?: T) => T
->                : ^ ^^^^^^^^^^^^^^^^^^^    ^^^ ^^^^^ 
+>                : ^ ^^^^^^^^^        ^^    ^^^ ^^^^^ 
 >args : T | undefined
 >     : ^^^^^^^^^^^^^
 
@@ -35,7 +35,7 @@ const boundaryResult = withBoundary({
 >withBoundary({  select: true,}) : { select: true; }
 >                                : ^^^^^^^^^^^^^^^^^
 >withBoundary : <T extends UserArgs>(args?: Subset<T, UserArgs>) => T
->             : ^ ^^^^^^^^^^^^^^^^^^^    ^^^                   ^^^^^^
+>             : ^ ^^^^^^^^^        ^^    ^^^                   ^^^^^^
 >{  select: true,} : { select: true; }
 >                  : ^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,7 @@ const withoutBoundaryResult = withoutBoundary({
 >withoutBoundary({  select: true,}) : { select: true; }
 >                                   : ^^^^^^^^^^^^^^^^^
 >withoutBoundary : <T extends UserArgs>(args?: T) => T
->                : ^ ^^^^^^^^^^^^^^^^^^^    ^^^ ^^^^^^
+>                : ^ ^^^^^^^^^        ^^    ^^^ ^^^^^^
 >{  select: true,} : { select: true; }
 >                  : ^^^^^^^^^^^^^^^^^
 

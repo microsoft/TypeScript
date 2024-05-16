@@ -33,7 +33,7 @@ declare module _ {
     }
     export function pluck<T extends {}>(
 >pluck : <T extends {}>(list: Collection<T>, propertyName: string) => any[]
->      : ^ ^^^^^^^^^^^^^    ^^             ^^            ^^      ^^^^^     
+>      : ^ ^^^^^^^^^  ^^    ^^             ^^            ^^      ^^^^^     
 
         list: Collection<T>,
 >list : Collection<T>
@@ -121,11 +121,11 @@ class MyView extends View {
 >_.pluck(data, "series") : any[]
 >                        : ^^^^^
 >_.pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->        : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
+>        : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
 >_ : typeof _
 >  : ^^^^^^^^
 >pluck : <T extends {}>(list: _.Collection<T>, propertyName: string) => any[]
->      : ^ ^^^^^^^^^^^^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
+>      : ^ ^^^^^^^^^  ^^    ^^^^^^^^^^^^^^   ^^            ^^      ^^^^^^^^^^
 >data : IData[]
 >     : ^^^^^^^
 >"series" : "series"

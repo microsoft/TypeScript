@@ -9,7 +9,7 @@ interface Mixin {
 
 function Mixin<TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass): TBaseClass & (abstract new (...args: any) => Mixin) {
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^   ^^         ^^          ^^^^^                                                   
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^                                                   
 >args : any
 >baseClass : TBaseClass
 >          : ^^^^^^^^^^
@@ -55,7 +55,7 @@ class DerivedFromConcrete extends Mixin(ConcreteBase) {
 >Mixin(ConcreteBase) : ConcreteBase & Mixin
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
 >ConcreteBase : typeof ConcreteBase
 >             : ^^^^^^^^^^^^^^^^^^^
 }
@@ -94,7 +94,7 @@ class DerivedFromAbstract extends Mixin(AbstractBase) {
 >Mixin(AbstractBase) : AbstractBase & Mixin
 >                    : ^^^^^^^^^^^^^^^^^^^^
 >Mixin : <TBaseClass extends abstract new (...args: any) => any>(baseClass: TBaseClass) => TBaseClass & (abstract new (...args: any) => Mixin)
->      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
+>      : ^          ^^^^^^^^^                                  ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^
 >AbstractBase : typeof AbstractBase
 >             : ^^^^^^^^^^^^^^^^^^^
 

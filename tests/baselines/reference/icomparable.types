@@ -11,7 +11,7 @@
 
     declare function sort<U extends IComparable<any>>(items: U[]): U[];
 >sort : <U extends IComparable<any>>(items: U[]) => U[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^   
+>     : ^ ^^^^^^^^^                ^^     ^^   ^^^^^   
 >items : U[]
 >      : ^^^
 
@@ -28,7 +28,7 @@
 >sort(sc) : StringComparable[]
 >         : ^^^^^^^^^^^^^^^^^^
 >sort : <U extends IComparable<any>>(items: U[]) => U[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^
+>     : ^ ^^^^^^^^^                ^^     ^^   ^^^^^^^^
 >sc : StringComparable[]
 >   : ^^^^^^^^^^^^^^^^^^
 

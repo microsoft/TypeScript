@@ -40,7 +40,7 @@ declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
 // Error
 function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
 >Baz : <T extends { b: number; }, U extends { a: boolean; b: string; }>(arg1: T, arg2: U) => void
->    : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^^^^^^^^^^^^^       ^^^^^      ^^^^^    ^^ ^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^^^^^^^^                          ^^    ^^ ^^    ^^ ^^^^^^^^^
 >b : number
 >  : ^^^^^^
 >a : boolean

@@ -3,7 +3,7 @@
 === typeParameterAndArgumentOfSameName1.ts ===
 function f<A extends Number>(A: A): A {
 >f : <A extends Number>(A: A) => A
->  : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>  : ^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >A : A
 >  : ^
 

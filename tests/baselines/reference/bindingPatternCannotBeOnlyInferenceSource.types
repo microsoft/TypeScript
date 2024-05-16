@@ -112,16 +112,16 @@ type TFuncs1 = typeof funcs1;
 >       : ^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^
 
 declare function useReduxDispatch1<T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>): T;
->useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<TFuncs1, T>) => T
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^             ^^                         ^^^^^ 
+>useReduxDispatch1 : <T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>) => T
+>                  : ^ ^^^^^^^^^                       ^^             ^^                         ^^^^^ 
 >destructuring : Destructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }, T>
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^^
 
 const {} = useReduxDispatch1(
 >useReduxDispatch1(    (d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    })) : { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }
 >                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->useReduxDispatch1 : <T extends IDestructuring<{ funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }>>(destructuring: Destructuring<TFuncs1, T>) => T
->                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^^^^^^^^^^^^^^^^^^ ^^      ^^  ^^      ^^   ^^       ^^^^^^^^^^^^^^^             ^^                         ^^^^^^
+>useReduxDispatch1 : <T extends IDestructuring<TFuncs1>>(destructuring: Destructuring<TFuncs1, T>) => T
+>                  : ^ ^^^^^^^^^                       ^^             ^^                         ^^^^^^
 
     (d, f) => ({
 >(d, f) => ({        funcA: (...p) => d(f.funcA(...p)), // p should be inferrable        funcB: (...p) => d(f.funcB(...p)),        funcC: (...p) => d(f.funcC(...p)),    }) : (d: Dispatch<any>, f: { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }) => { funcA: (a: boolean) => void; funcB: (b: string, bb: string) => void; funcC: (c: number, cc: number, ccc: boolean) => void; }

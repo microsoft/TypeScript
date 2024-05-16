@@ -237,7 +237,7 @@ module ts {
 >setEquals(this.getSignatures(), that.getSignatures()) : boolean
 >                                                      : ^^^^^^^
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->          : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^^^^
+>          : ^ ^^^^^^^^^         ^^ ^^   ^^ ^^   ^^^^^^^^^^^^
 >this.getSignatures() : Signature[]
 >                     : ^^^^^^^^^^^
 >this.getSignatures : () => Signature[]
@@ -540,7 +540,7 @@ module ts {
 >arrayEquals(this.parameters, other.parameters) : boolean
 >                                               : ^^^^^^^
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^         ^^ ^^   ^^ ^^   ^^^^^^^^^^^^
 >this.parameters : Parameter[]
 >                : ^^^^^^^^^^^
 >this : this
@@ -558,7 +558,7 @@ module ts {
 >arrayEquals(this.typeParameters, other.typeParameters) : boolean
 >                                                       : ^^^^^^^
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^         ^^ ^^   ^^ ^^   ^^^^^^^^^^^^
 >this.typeParameters : TypeParameter[]
 >                    : ^^^^^^^^^^^^^^^
 >this : this
@@ -790,7 +790,7 @@ module ts {
 
     function arrayContains<T extends Equals<T>>(a: T[], item: T): boolean {
 >arrayContains : <T extends Equals<T>>(a: T[], item: T) => boolean
->              : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^    ^^ ^^^^^       
+>              : ^ ^^^^^^^^^         ^^ ^^   ^^    ^^ ^^^^^       
 >a : T[]
 >  : ^^^
 >item : T
@@ -847,7 +847,7 @@ module ts {
 
     function arrayEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >arrayEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^       
+>            : ^ ^^^^^^^^^         ^^ ^^   ^^ ^^   ^^^^^       
 >a : T[]
 >  : ^^^
 >b : T[]
@@ -924,7 +924,7 @@ module ts {
 
     function setEquals<T extends Equals<T>>(a: T[], b: T[]): boolean {
 >setEquals : <T extends Equals<T>>(a: T[], b: T[]) => boolean
->          : ^ ^^^^^^^^^^^^^^^^^^^^ ^^   ^^ ^^   ^^^^^       
+>          : ^ ^^^^^^^^^         ^^ ^^   ^^ ^^   ^^^^^       
 >a : T[]
 >  : ^^^
 >b : T[]
@@ -976,7 +976,7 @@ module ts {
 >arrayContains(b, a[i]) : boolean
 >                       : ^^^^^^^
 >arrayContains : <T_1 extends Equals<T_1>>(a: T_1[], item: T_1) => boolean
->              : ^   ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^    ^^   ^^^^^^^^^^^^
+>              : ^   ^^^^^^^^^           ^^ ^^     ^^    ^^   ^^^^^^^^^^^^
 >b : T[]
 >  : ^^^
 >a[i] : T

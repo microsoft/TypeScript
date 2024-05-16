@@ -452,7 +452,7 @@ type Pet = Fish | Dog;
 
 function handleDogBroken<PetType extends Pet>(pet: PetType) {
 >handleDogBroken : <PetType extends Pet>(pet: PetType) => void
->                : ^       ^^^^^^^^^^^^^^   ^^       ^^^^^^^^^
+>                : ^       ^^^^^^^^^   ^^   ^^       ^^^^^^^^^
 >pet : PetType
 >    : ^^^^^^^
 

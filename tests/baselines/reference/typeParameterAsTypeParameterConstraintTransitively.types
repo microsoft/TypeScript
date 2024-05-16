@@ -144,7 +144,7 @@ foo((x: number, y) => { }, (x) => { }, () => { });
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 >foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
->     : ^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 >y : U

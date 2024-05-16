@@ -217,7 +217,7 @@ function other<T>(x: T) {
 
 function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->       : ^ ^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^    ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -276,7 +276,7 @@ function other2<T extends Date>(x: T) {
 
 function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->     : ^ ^^^^^^^^^^^^^^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^    ^^ ^^           ^^ ^^           ^^^^^^ ^^ ^^^^^ 
 >a : (x: T) => T
 >  : ^ ^^ ^^^^^ 
 >x : T
@@ -299,7 +299,7 @@ function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 
 function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->       : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>       : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -309,7 +309,7 @@ function other3<T extends RegExp>(x: T) {
 >foo2((a: Date) => a, (b: Date) => b) : (x: Date) => Date
 >                                     : ^ ^^^^^^^^^^^^^^^
 >foo2 : <T_1 extends Date>(a: (x: T_1) => T_1, b: (x: T_1) => T_1) => (x: T_1) => T_1
->     : ^   ^^^^^^^^^^^^^^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
+>     : ^   ^^^^^^^^^    ^^ ^^               ^^ ^^               ^^^^^^ ^^   ^^^^^^^^
 >(a: Date) => a : (a: Date) => Date
 >               : ^ ^^    ^^^^^^^^^
 >a : Date

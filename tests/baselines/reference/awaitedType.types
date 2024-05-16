@@ -175,12 +175,12 @@ async function main() {
 >                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all([        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ]) : Promise<[number, string, boolean]>
 >                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        MaybePromise(1),        MaybePromise('2'),        MaybePromise(true),    ] : [number | Promise<1> | PromiseLike<1>, string | Promise<"2"> | PromiseLike<"2">, true | Promise<true> | PromiseLike<true>]
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -352,7 +352,7 @@ async function f8<T extends any>(x: T) {
 
 async function f9<T extends unknown>(x: T) {
 >f9 : <T extends unknown>(x: T) => Promise<void>
->   : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>   : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -372,7 +372,7 @@ async function f9<T extends unknown>(x: T) {
 
 async function f10<T extends {}>(x: T) {
 >f10 : <T extends {}>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -392,7 +392,7 @@ async function f10<T extends {}>(x: T) {
 
 async function f11<T extends { then(onfulfilled: (value: unknown) => void): void }>(x: T) {
 >f11 : <T extends { then(onfulfilled: (value: unknown) => void): void; }>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^^^           ^^                        ^^^    ^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                                                      ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >then : (onfulfilled: (value: unknown) => void) => void
 >     : ^           ^^                        ^^^^^    
 >onfulfilled : (value: unknown) => void
@@ -418,7 +418,7 @@ async function f11<T extends { then(onfulfilled: (value: unknown) => void): void
 
 async function f12<T extends string | object>(x: T) {
 >f12 : <T extends string | object>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^               ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -438,7 +438,7 @@ async function f12<T extends string | object>(x: T) {
 
 async function f13<T extends string>(x: T) {
 >f13 : <T extends string>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -456,7 +456,7 @@ async function f13<T extends string>(x: T) {
 
 async function f14<T extends { x: number }>(x: T) {
 >f14 : <T extends { x: number; }>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >x : T
@@ -476,7 +476,7 @@ async function f14<T extends { x: number }>(x: T) {
 
 async function f15<T extends { then: number }>(x: T) {
 >f15 : <T extends { then: number; }>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >then : number
 >     : ^^^^^^
 >x : T
@@ -496,7 +496,7 @@ async function f15<T extends { then: number }>(x: T) {
 
 async function f16<T extends number & { then(): void }>(x: T) {
 >f16 : <T extends number & { then(): void; }>(x: T) => Promise<void>
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^ ^^ ^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                          ^^ ^^ ^^^^^^^^^^^^^^^^^^
 >then : () => void
 >     : ^^^^^^    
 >x : T
@@ -523,7 +523,7 @@ type _Expect<TActual extends TExpected, TExpected> = TActual;
 // https://github.com/microsoft/TypeScript/issues/48320
 async function f17<T extends (...args: any[]) => Promise<any>>(fn: T) {
 >f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
->    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^            ^^  ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                                ^^  ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : any[]
 >     : ^^^^^
 >fn : T
@@ -561,7 +561,7 @@ async function f17_usage() {
 >f17(async () => 123 as const) : Promise<Promise<123>>
 >                              : ^^^^^^^^^^^^^^^^^^^^^
 >f17 : <T extends (...args: any[]) => Promise<any>>(fn: T) => Promise<ReturnType<T>>
->    : ^ ^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^  ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^                                ^^  ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >async () => 123 as const : () => Promise<123>
 >                         : ^^^^^^^^^^^^^^^^^^
 >123 as const : 123
@@ -586,7 +586,7 @@ type GenericStructure<
 
 async function brokenExample<AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType): Promise<void> {
 >brokenExample : <AcceptableKeyType extends string = string>(structurePromise: Promise<GenericStructure<AcceptableKeyType>>, key: AcceptableKeyType) => Promise<void>
->              : ^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^                ^^                                            ^^   ^^                 ^^^^^             
+>              : ^                 ^^^^^^^^^      ^^^^^^^^^^^                ^^                                            ^^   ^^                 ^^^^^             
 >structurePromise : Promise<GenericStructure<AcceptableKeyType>>
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : AcceptableKeyType
@@ -660,7 +660,7 @@ type CheckSelect<T, S, U> = T extends SelectAndInclude
 
 declare function findMany<T extends { select?: string; include?: string }>(
 >findMany : <T extends { select?: string; include?: string; }>(args: T) => CheckSelect<T, Promise<1>, Promise<2>>
->         : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^    ^^ ^^^^^                                      
+>         : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^                                      
 >select : string
 >       : ^^^^^^
 >include : string
@@ -674,7 +674,7 @@ declare function findMany<T extends { select?: string; include?: string }>(
 
 async function findManyWrapper<
 >findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
->                : ^ ^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   T extends { select?: string; include?: string }
 >select : string
@@ -694,7 +694,7 @@ async function findManyWrapper<
 >findMany(args) : CheckSelect<T, Promise<1>, Promise<2>>
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findMany : <T_1 extends { select?: string; include?: string; }>(args: T_1) => CheckSelect<T_1, Promise<1>, Promise<2>>
->         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^                                      ^^    ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >args : T
 >     : ^
 
@@ -715,7 +715,7 @@ async function mainFindMany() {
 >findManyWrapper({    select: "foo",    include: "bar",  }) : Promise<"Please either choose `select` or `include`">
 >                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{    select: "foo",    include: "bar",  } : { select: string; include: string; }
 >                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -740,7 +740,7 @@ async function mainFindMany() {
 >findManyWrapper({}) : Promise<Promise<1>>
 >                    : ^^^^^^^^^^^^^^^^^^^
 >findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -752,7 +752,7 @@ async function mainFindMany() {
 >findManyWrapper({ select: "foo" }) : Promise<Promise<2>>
 >                                   : ^^^^^^^^^^^^^^^^^^^
 >findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ select: "foo" } : { select: string; }
 >                  : ^^^^^^^^^^^^^^^^^^^
 >select : string
@@ -768,7 +768,7 @@ async function mainFindMany() {
 >findManyWrapper({ include: "bar" }) : Promise<Promise<2>>
 >                                    : ^^^^^^^^^^^^^^^^^^^
 >findManyWrapper : <T extends { select?: string; include?: string; }>(args: T) => Promise<CheckSelect<T, Promise<1>, Promise<2>>>
->                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                : ^ ^^^^^^^^^                                      ^^    ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ include: "bar" } : { include: string; }
 >                   : ^^^^^^^^^^^^^^^^^^^^
 >include : string
@@ -805,12 +805,12 @@ async function mainFindMany() {
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.all(promises) : Promise<[number]>
 >                      : ^^^^^^^^^^^^^^^^^
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >promises : readonly [Promise<number>]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = [number], TResult2 = never>(onfulfilled?: (value: [number]) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
@@ -876,12 +876,12 @@ async function test40330() {
 >                                                                          : ^^^^^^^^^^^^^^^^^^^
 >Promise.all([        promiseNumber,        ...[promiseVoid()]    ]) : Promise<[number, ...void[]]>
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>            : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends [] | readonly unknown[]>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
->    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>all : { <T>(values: Iterable<T | PromiseLike<T>>): Promise<Awaited<T>[]>; <T extends readonly unknown[] | []>(values: T): Promise<{ -readonly [P in keyof T]: Awaited<T[P]>; }>; }
+>    : ^^^ ^^      ^^                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^                       ^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[        promiseNumber,        ...[promiseVoid()]    ] : [Promise<number>, ...Promise<void>[]]
 >                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

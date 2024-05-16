@@ -14,7 +14,7 @@ interface BulleanConstructor {
 interface Ari<T> {
     filter<S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>;
 >filter : { <S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
->       : ^^^ ^^^^^^^^^^^^   ^^                        ^^^                                 ^^^   ^^                     ^^^^^^^^^^^^
+>       : ^^^ ^^^^^^^^^ ^^   ^^                        ^^^                                 ^^^   ^^                     ^^^^^^^^^^^^
 >cb1 : (value: T) => value is S
 >    : ^     ^^ ^^^^^          
 >value : T
@@ -22,7 +22,7 @@ interface Ari<T> {
 
     filter(cb2: (value: T) => unknown): Ari<T>;
 >filter : { <S extends T>(cb1: (value: T) => value is S): T extends any ? Ari<any> : Ari<S>; (cb2: (value: T) => unknown): Ari<T>; }
->       : ^^^ ^^^^^^^^^^^^   ^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                     ^^^      ^^^
+>       : ^^^ ^^^^^^^^^ ^^   ^^                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                     ^^^      ^^^
 >cb2 : (value: T) => unknown
 >    : ^     ^^ ^^^^^       
 >value : T

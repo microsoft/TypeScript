@@ -130,7 +130,7 @@
 >document.body.appendChild(image) : HTMLImageElement
 >                                 : ^^^^^^^^^^^^^^^^
 >document.body.appendChild : <T extends Node>(node: T) => T
->                          : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
 >document.body : HTMLElement
 >              : ^^^^^^^^^^^
 >document : Document
@@ -138,7 +138,7 @@
 >body : HTMLElement
 >     : ^^^^^^^^^^^
 >appendChild : <T extends Node>(node: T) => T
->            : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
 >image : HTMLImageElement
 >      : ^^^^^^^^^^^^^^^^
 

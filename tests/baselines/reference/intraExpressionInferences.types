@@ -545,7 +545,7 @@ type MappingComponent<I extends WrappedMap, O extends WrappedMap> = {
 
 declare function createMappingComponent<I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>): void;
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
->                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^   ^^                      ^^^^^    
+>                       : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^   ^^                      ^^^^^    
 >def : MappingComponent<I, O>
 >    : ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -553,7 +553,7 @@ createMappingComponent({
 >createMappingComponent({    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }}) : void
 >                                                                                                                                                                                                                                                                                                                                                                                                                                                           : ^^^^
 >createMappingComponent : <I extends WrappedMap, O extends WrappedMap>(def: MappingComponent<I, O>) => void
->                       : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^   ^^                      ^^^^^^^^^
+>                       : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^   ^^                      ^^^^^^^^^
 >{    setup() {        return {            inputs: {                num: new Wrapper<number>(),                str: new Wrapper<string>()            },            outputs: {                bool: new Wrapper<boolean>(),                str: new Wrapper<string>()            }        };    },    map(inputs) {        return {            bool: inputs.nonexistent,            str: inputs.num,  // Causes error        }    }} : { setup(): { inputs: { num: Wrapper<number>; str: Wrapper<string>; }; outputs: { bool: Wrapper<boolean>; str: Wrapper<string>; }; }; map(inputs: Unwrap<{ num: Wrapper<number>; str: Wrapper<string>; }>): { bool: any; str: number; }; }
 >                                                                                                                                                                                                                                                                                                                                                                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -977,7 +977,7 @@ example({
 
 declare const branch:
 >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
->       : ^ ^^ ^^^^^^^^^^^^ ^^                                                        ^^^^^    
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^                                                        ^^^^^    
 
   <T, U extends T>(_: { test: T, if: (t: T) => t is U, then: (u: U) => void }) => void
 >_ : { test: T; if: (t: T) => t is U; then: (u: U) => void; }
@@ -1001,7 +1001,7 @@ branch({
 >branch({  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }}) : void
 >                                                                                             : ^^^^
 >branch : <T, U extends T>(_: { test: T; if: (t: T) => t is U; then: (u: U) => void; }) => void
->       : ^ ^^ ^^^^^^^^^^^^ ^^                                                        ^^^^^^^^^
+>       : ^ ^^ ^^^^^^^^^ ^^ ^^                                                        ^^^^^^^^^
 >{  test: x,  if: (t): t is "a" => t === "a",  then: u => {    let test1: "a" = u  }} : { test: "a" | "b"; if: (t: "a" | "b") => t is "a"; then: (u: "a") => void; }
 >                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^        ^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 

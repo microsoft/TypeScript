@@ -633,8 +633,8 @@ type NarrowByDeepValue<ObjT, DeepPathT, ValueT> = DeepPathT extends readonly [
 
 
 declare function doesValueAtDeepPathSatisfy<
->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^                                                 
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^                                                 
 
     ObjT extends object,
     const DeepPathT extends ReadonlyArray<number | string>,
@@ -710,8 +710,8 @@ function test1(foo: Foo): {value: {type: 'A'}; a?: number} {
 >       : ^         ^^       ^^^^^^^^^^^^^^^^^^^^^^
 >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isA) : boolean
 >                                                        : ^^^^^^^
->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >['value', 'type'] : ["value", "type"]
@@ -749,8 +749,8 @@ function test2(foo: Foo): {value: {type: 'A'}; a?: number} {
 >                                                         : ^^^^^^^
 >doesValueAtDeepPathSatisfy(foo, ['value', 'type'], isB) : boolean
 >                                                        : ^^^^^^^
->doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends readonly (string | number)[], ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
->                           : ^    ^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>doesValueAtDeepPathSatisfy : <ObjT extends object, const DeepPathT extends ReadonlyArray<number | string>, ValueT>(obj: ObjT, deepPath: DeepPathT, predicate: (arg: unknown) => arg is ValueT) => obj is NarrowByDeepValue<ObjT, DeepPathT, ValueT>
+>                           : ^    ^^^^^^^^^      ^^^^^^^^         ^^^^^^^^^                              ^^      ^^   ^^    ^^        ^^         ^^         ^^                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : Foo
 >    : ^^^
 >['value', 'type'] : ["value", "type"]
