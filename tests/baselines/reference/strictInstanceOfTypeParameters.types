@@ -1,0 +1,204 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParameters.ts] ////
+
+=== strictInstanceOfTypeParameters.ts ===
+class Unconstrained<T> {
+>Unconstrained : Unconstrained<T>
+>              : ^^^^^^^^^^^^^^^^
+
+    value: T;
+>value : T
+>      : ^
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>     : ^     ^^ ^^^^^    
+>value : T
+>      : ^
+}
+
+declare const x: unknown;
+>x : unknown
+>  : ^^^^^^^
+
+if (x instanceof Unconstrained) {
+>x instanceof Unconstrained : boolean
+>                           : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>Unconstrained : typeof Unconstrained
+>              : ^^^^^^^^^^^^^^^^^^^^
+
+    x.value.toUpperCase();
+>x.value.toUpperCase() : any
+>                      : ^^^
+>x.value.toUpperCase : any
+>                    : ^^^
+>x.value : unknown
+>        : ^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>toUpperCase : any
+>            : ^^^
+
+    x.value++;
+>x.value++ : number
+>          : ^^^^^^
+>x.value : unknown
+>        : ^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+    x.value();
+>x.value() : any
+>          : ^^^
+>x.value : unknown
+>        : ^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+
+    if (typeof x.value === "string") {
+>typeof x.value === "string" : boolean
+>                            : ^^^^^^^
+>typeof x.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.value : unknown
+>        : ^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+        x.value.toUpperCase();
+>x.value.toUpperCase() : string
+>                      : ^^^^^^
+>x.value.toUpperCase : () => string
+>                    : ^^^^^^^^^^^^
+>x.value : string
+>        : ^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^^^^^^^
+    }
+    if (typeof x.value === "number") {
+>typeof x.value === "number" : boolean
+>                            : ^^^^^^^
+>typeof x.value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x.value : unknown
+>        : ^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+
+        x.value++;
+>x.value++ : number
+>          : ^^^^^^
+>x.value : number
+>        : ^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+    }
+
+    x.read(1);
+>x.read(1) : void
+>          : ^^^^
+>x.read : (value: unknown) => void
+>       : ^     ^^^^^^^^^^^^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>read : (value: unknown) => void
+>     : ^     ^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    x.read("foo");
+>x.read("foo") : void
+>              : ^^^^
+>x.read : (value: unknown) => void
+>       : ^     ^^^^^^^^^^^^^^^^^^
+>x : Unconstrained<unknown>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>read : (value: unknown) => void
+>     : ^     ^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+
+class Constrained<T extends number> {
+>Constrained : Constrained<T>
+>            : ^^^^^^^^^^^^^^
+
+    value: T;
+>value : T
+>      : ^
+
+    read: (value: T) => void;
+>read : (value: T) => void
+>     : ^     ^^ ^^^^^    
+>value : T
+>      : ^
+}
+
+declare const y: unknown;
+>y : unknown
+>  : ^^^^^^^
+
+if (y instanceof Constrained) {
+>y instanceof Constrained : boolean
+>                         : ^^^^^^^
+>y : unknown
+>  : ^^^^^^^
+>Constrained : typeof Constrained
+>            : ^^^^^^^^^^^^^^^^^^
+
+    y.value++;
+>y.value++ : number
+>          : ^^^^^^
+>y.value : number
+>        : ^^^^^^
+>y : Constrained<number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+    y.read(1);
+>y.read(1) : void
+>          : ^^^^
+>y.read : (value: number) => void
+>       : ^     ^^^^^^^^^^^^^^^^^
+>y : Constrained<number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>read : (value: number) => void
+>     : ^     ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    y.read("foo");
+>y.read("foo") : void
+>              : ^^^^
+>y.read : (value: number) => void
+>       : ^     ^^^^^^^^^^^^^^^^^
+>y : Constrained<number>
+>  : ^^^^^^^^^^^^^^^^^^^
+>read : (value: number) => void
+>     : ^     ^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+

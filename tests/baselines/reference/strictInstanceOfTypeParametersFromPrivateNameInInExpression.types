@@ -1,0 +1,109 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts] ////
+
+=== strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts ===
+class UnconstrainedWithPrivate<T> {
+>UnconstrainedWithPrivate : UnconstrainedWithPrivate<T>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    #brand;
+>#brand : any
+>       : ^^^
+
+    value: T;
+>value : T
+>      : ^
+
+    constructor(value: T) {
+>value : T
+>      : ^
+
+        this.value = value;
+>this.value = value : T
+>                   : ^
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+>value : T
+>      : ^
+    }
+    copyValue(other: object) {
+>copyValue : (other: object) => void
+>          : ^     ^^      ^^^^^^^^^
+>other : object
+>      : ^^^^^^
+
+        if (#brand in other) {
+>#brand in other : boolean
+>                : ^^^^^^^
+>#brand : any
+>       : ^^^
+>other : object
+>      : ^^^^^^
+
+            this.value = other.value;
+>this.value = other.value : unknown
+>                         : ^^^^^^^
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+>other.value : unknown
+>            : ^^^^^^^
+>other : UnconstrainedWithPrivate<unknown>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+        }
+    }
+}
+
+class ConstrainedWithPrivate<T extends string> {
+>ConstrainedWithPrivate : ConstrainedWithPrivate<T>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    #brand;
+>#brand : any
+>       : ^^^
+
+    value: T;
+>value : T
+>      : ^
+
+    copyValue(other: object) {
+>copyValue : (other: object) => void
+>          : ^     ^^      ^^^^^^^^^
+>other : object
+>      : ^^^^^^
+
+        if (#brand in other) {
+>#brand in other : boolean
+>                : ^^^^^^^
+>#brand : any
+>       : ^^^
+>other : object
+>      : ^^^^^^
+
+            this.value = other.value;
+>this.value = other.value : string
+>                         : ^^^^^^
+>this.value : T
+>           : ^
+>this : this
+>     : ^^^^
+>value : T
+>      : ^
+>other.value : string
+>            : ^^^^^^
+>other : ConstrainedWithPrivate<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+        }
+    }
+}
+

@@ -1,0 +1,79 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersFromAnonymousClass.ts] ////
+
+=== strictInstanceOfTypeParametersFromAnonymousClass.ts ===
+function MakeClass<T>(someStuff: T) {
+>MakeClass : <T>(someStuff: T) => typeof (Anonymous class)
+>          : ^ ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someStuff : T
+>          : ^
+
+    return class {
+>class {        someStuff = someStuff;    } : typeof (Anonymous class)
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+        someStuff = someStuff;
+>someStuff : T
+>          : ^
+>someStuff : T
+>          : ^
+
+    };
+}
+
+const MadeClassNumber = MakeClass(123);
+>MadeClassNumber : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>MakeClass(123) : typeof (Anonymous class)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^
+>MakeClass : <T>(someStuff: T) => typeof (Anonymous class)
+>          : ^ ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+const MadeClassString = MakeClass("foo");
+>MadeClassString : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+>MakeClass("foo") : typeof (Anonymous class)
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^
+>MakeClass : <T>(someStuff: T) => typeof (Anonymous class)
+>          : ^ ^^         ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+const numberInstance = new MadeClassNumber();
+>numberInstance : MakeClass<number>.(Anonymous class)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new MadeClassNumber() : MakeClass<number>.(Anonymous class)
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>MadeClassNumber : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+numberInstance.someStuff;
+>numberInstance.someStuff : number
+>                         : ^^^^^^
+>numberInstance : MakeClass<number>.(Anonymous class)
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someStuff : number
+>          : ^^^^^^
+
+declare const someInstance: unknown;
+>someInstance : unknown
+>             : ^^^^^^^
+
+if (someInstance instanceof MadeClassNumber) {
+>someInstance instanceof MadeClassNumber : boolean
+>                                        : ^^^^^^^
+>someInstance : unknown
+>             : ^^^^^^^
+>MadeClassNumber : typeof (Anonymous class)
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    someInstance.someStuff;
+>someInstance.someStuff : unknown
+>                       : ^^^^^^^
+>someInstance : MakeClass<unknown>.(Anonymous class)
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someStuff : unknown
+>          : ^^^^^^^
+}
+

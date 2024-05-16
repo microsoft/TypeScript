@@ -1,0 +1,110 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParameters.ts] ////
+
+=== strictInstanceOfTypeParameters.ts ===
+class Unconstrained<T> {
+>Unconstrained : Symbol(Unconstrained, Decl(strictInstanceOfTypeParameters.ts, 0, 0))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 0, 20))
+
+    value: T;
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 0, 20))
+
+    read: (value: T) => void;
+>read : Symbol(Unconstrained.read, Decl(strictInstanceOfTypeParameters.ts, 1, 13))
+>value : Symbol(value, Decl(strictInstanceOfTypeParameters.ts, 2, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 0, 20))
+}
+
+declare const x: unknown;
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+
+if (x instanceof Unconstrained) {
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>Unconstrained : Symbol(Unconstrained, Decl(strictInstanceOfTypeParameters.ts, 0, 0))
+
+    x.value.toUpperCase();
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+
+    x.value++;
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+
+    x.value();
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+
+    if (typeof x.value === "string") {
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+
+        x.value.toUpperCase();
+>x.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+    }
+    if (typeof x.value === "number") {
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+
+        x.value++;
+>x.value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>value : Symbol(Unconstrained.value, Decl(strictInstanceOfTypeParameters.ts, 0, 24))
+    }
+
+    x.read(1);
+>x.read : Symbol(Unconstrained.read, Decl(strictInstanceOfTypeParameters.ts, 1, 13))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>read : Symbol(Unconstrained.read, Decl(strictInstanceOfTypeParameters.ts, 1, 13))
+
+    x.read("foo");
+>x.read : Symbol(Unconstrained.read, Decl(strictInstanceOfTypeParameters.ts, 1, 13))
+>x : Symbol(x, Decl(strictInstanceOfTypeParameters.ts, 5, 13))
+>read : Symbol(Unconstrained.read, Decl(strictInstanceOfTypeParameters.ts, 1, 13))
+}
+
+class Constrained<T extends number> {
+>Constrained : Symbol(Constrained, Decl(strictInstanceOfTypeParameters.ts, 21, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 23, 18))
+
+    value: T;
+>value : Symbol(Constrained.value, Decl(strictInstanceOfTypeParameters.ts, 23, 37))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 23, 18))
+
+    read: (value: T) => void;
+>read : Symbol(Constrained.read, Decl(strictInstanceOfTypeParameters.ts, 24, 13))
+>value : Symbol(value, Decl(strictInstanceOfTypeParameters.ts, 25, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParameters.ts, 23, 18))
+}
+
+declare const y: unknown;
+>y : Symbol(y, Decl(strictInstanceOfTypeParameters.ts, 28, 13))
+
+if (y instanceof Constrained) {
+>y : Symbol(y, Decl(strictInstanceOfTypeParameters.ts, 28, 13))
+>Constrained : Symbol(Constrained, Decl(strictInstanceOfTypeParameters.ts, 21, 1))
+
+    y.value++;
+>y.value : Symbol(Constrained.value, Decl(strictInstanceOfTypeParameters.ts, 23, 37))
+>y : Symbol(y, Decl(strictInstanceOfTypeParameters.ts, 28, 13))
+>value : Symbol(Constrained.value, Decl(strictInstanceOfTypeParameters.ts, 23, 37))
+
+    y.read(1);
+>y.read : Symbol(Constrained.read, Decl(strictInstanceOfTypeParameters.ts, 24, 13))
+>y : Symbol(y, Decl(strictInstanceOfTypeParameters.ts, 28, 13))
+>read : Symbol(Constrained.read, Decl(strictInstanceOfTypeParameters.ts, 24, 13))
+
+    y.read("foo");
+>y.read : Symbol(Constrained.read, Decl(strictInstanceOfTypeParameters.ts, 24, 13))
+>y : Symbol(y, Decl(strictInstanceOfTypeParameters.ts, 28, 13))
+>read : Symbol(Constrained.read, Decl(strictInstanceOfTypeParameters.ts, 24, 13))
+}
+

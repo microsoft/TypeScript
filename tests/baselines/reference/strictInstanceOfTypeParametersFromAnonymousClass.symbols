@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersFromAnonymousClass.ts] ////
+
+=== strictInstanceOfTypeParametersFromAnonymousClass.ts ===
+function MakeClass<T>(someStuff: T) {
+>MakeClass : Symbol(MakeClass, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 0))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 19))
+>someStuff : Symbol(someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 22))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 19))
+
+    return class {
+        someStuff = someStuff;
+>someStuff : Symbol((Anonymous class).someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 1, 18))
+>someStuff : Symbol(someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 22))
+
+    };
+}
+
+const MadeClassNumber = MakeClass(123);
+>MadeClassNumber : Symbol(MadeClassNumber, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 6, 5))
+>MakeClass : Symbol(MakeClass, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 0))
+
+const MadeClassString = MakeClass("foo");
+>MadeClassString : Symbol(MadeClassString, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 7, 5))
+>MakeClass : Symbol(MakeClass, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 0, 0))
+
+const numberInstance = new MadeClassNumber();
+>numberInstance : Symbol(numberInstance, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 9, 5))
+>MadeClassNumber : Symbol(MadeClassNumber, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 6, 5))
+
+numberInstance.someStuff;
+>numberInstance.someStuff : Symbol((Anonymous class).someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 1, 18))
+>numberInstance : Symbol(numberInstance, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 9, 5))
+>someStuff : Symbol((Anonymous class).someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 1, 18))
+
+declare const someInstance: unknown;
+>someInstance : Symbol(someInstance, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 12, 13))
+
+if (someInstance instanceof MadeClassNumber) {
+>someInstance : Symbol(someInstance, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 12, 13))
+>MadeClassNumber : Symbol(MadeClassNumber, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 6, 5))
+
+    someInstance.someStuff;
+>someInstance.someStuff : Symbol((Anonymous class).someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 1, 18))
+>someInstance : Symbol(someInstance, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 12, 13))
+>someStuff : Symbol((Anonymous class).someStuff, Decl(strictInstanceOfTypeParametersFromAnonymousClass.ts, 1, 18))
+}
+

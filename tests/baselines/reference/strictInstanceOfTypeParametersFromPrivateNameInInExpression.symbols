@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts] ////
+
+=== strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts ===
+class UnconstrainedWithPrivate<T> {
+>UnconstrainedWithPrivate : Symbol(UnconstrainedWithPrivate, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 0))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 31))
+
+    #brand;
+>#brand : Symbol(UnconstrainedWithPrivate.#brand, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 35))
+
+    value: T;
+>value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 31))
+
+    constructor(value: T) {
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 3, 16))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 31))
+
+        this.value = value;
+>this.value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>this : Symbol(UnconstrainedWithPrivate, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 0))
+>value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>value : Symbol(value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 3, 16))
+    }
+    copyValue(other: object) {
+>copyValue : Symbol(UnconstrainedWithPrivate.copyValue, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 5, 5))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 6, 14))
+
+        if (#brand in other) {
+>#brand : Symbol(UnconstrainedWithPrivate.#brand, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 35))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 6, 14))
+
+            this.value = other.value;
+>this.value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>this : Symbol(UnconstrainedWithPrivate, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 0, 0))
+>value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>other.value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 6, 14))
+>value : Symbol(UnconstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 1, 11))
+        }
+    }
+}
+
+class ConstrainedWithPrivate<T extends string> {
+>ConstrainedWithPrivate : Symbol(ConstrainedWithPrivate, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 11, 1))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 13, 29))
+
+    #brand;
+>#brand : Symbol(ConstrainedWithPrivate.#brand, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 13, 48))
+
+    value: T;
+>value : Symbol(ConstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 14, 11))
+>T : Symbol(T, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 13, 29))
+
+    copyValue(other: object) {
+>copyValue : Symbol(ConstrainedWithPrivate.copyValue, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 15, 13))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 16, 14))
+
+        if (#brand in other) {
+>#brand : Symbol(ConstrainedWithPrivate.#brand, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 13, 48))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 16, 14))
+
+            this.value = other.value;
+>this.value : Symbol(ConstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 14, 11))
+>this : Symbol(ConstrainedWithPrivate, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 11, 1))
+>value : Symbol(ConstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 14, 11))
+>other.value : Symbol(ConstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 14, 11))
+>other : Symbol(other, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 16, 14))
+>value : Symbol(ConstrainedWithPrivate.value, Decl(strictInstanceOfTypeParametersFromPrivateNameInInExpression.ts, 14, 11))
+        }
+    }
+}
+

@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/strictInstanceOfTypeParametersWithLocalTypeReferences.ts] ////
+
+=== strictInstanceOfTypeParametersWithLocalTypeReferences.ts ===
+class Box<T> {
+>Box : Box<T>
+>    : ^^^^^^
+
+    value: T;
+>value : T
+>      : ^
+}
+
+class BoxBox<T, B extends Box<T>> {
+>BoxBox : BoxBox<T, B>
+>       : ^^^^^^^^^^^^
+
+    box: B;
+>box : B
+>    : ^
+}
+
+declare const bb: any;
+>bb : any
+
+if (bb instanceof BoxBox) {
+>bb instanceof BoxBox : boolean
+>                     : ^^^^^^^
+>bb : any
+>BoxBox : typeof BoxBox
+>       : ^^^^^^^^^^^^^
+
+    bb.box.value;
+>bb.box.value : unknown
+>             : ^^^^^^^
+>bb.box : Box<unknown>
+>       : ^^^^^^^^^^^^
+>bb : BoxBox<unknown, Box<unknown>>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>box : Box<unknown>
+>    : ^^^^^^^^^^^^
+>value : unknown
+>      : ^^^^^^^
+}
+

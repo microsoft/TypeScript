@@ -149,10 +149,10 @@ function f3() {
 >   : ^^^^^^^^^^
 
     let c1 = C<string>;  // { new (x: string): C<string>; f<U>(x: U): T[]; prototype: C<any>; }
->c1 : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
->   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
->C<string> : { new (x: string): C<string>; prototype: C<any>; f<U>(x: U): U[]; }
->          : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
+>c1 : { new (x: string): C<string>; prototype: C<unknown>; f<U>(x: U): U[]; }
+>   : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
+>C<string> : { new (x: string): C<string>; prototype: C<unknown>; f<U>(x: U): U[]; }
+>          : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^^^^^^^^
 >C : typeof C
 >  : ^^^^^^^^
 
