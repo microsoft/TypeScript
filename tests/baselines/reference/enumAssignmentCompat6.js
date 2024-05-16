@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/enumAssignmentCompat6.ts] ////
 
-//// [f.ts]
-// @filename a.ts
+//// [a.ts]
 namespace numerics {
     export enum DiagnosticCategory {
         Warning,
@@ -56,6 +55,7 @@ function i(x: strings.DiagnosticCategory, y: ambients.DiagnosticCategory) {
     y = x;
 }
 
+//// [f.ts]
 export enum DiagnosticCategory {
     Warning,
     Error,
@@ -78,11 +78,7 @@ export let x: DiagnosticCategory;
     }
 })()
 
-//// [f.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = exports.DiagnosticCategory = void 0;
-// @filename a.ts
+//// [a.js]
 var numerics;
 (function (numerics) {
     var DiagnosticCategory;
@@ -126,6 +122,10 @@ function i(x, y) {
     x = y;
     y = x;
 }
+//// [f.js]
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.x = exports.DiagnosticCategory = void 0;
 var DiagnosticCategory;
 (function (DiagnosticCategory) {
     DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";

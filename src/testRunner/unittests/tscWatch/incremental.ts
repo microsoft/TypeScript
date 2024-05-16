@@ -1,26 +1,20 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    CommandLineProgram,
-} from "../helpers/baseline";
-import {
-    libContent,
-} from "../helpers/contents";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { CommandLineProgram } from "../helpers/baseline.js";
+import { libContent } from "../helpers/contents.js";
 import {
     applyEdit,
     createBaseline,
     verifyTscWatch,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";
@@ -184,19 +178,19 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                     version: system.createHash(libFile.content),
                     signature: system.createHash(libFile.content),
                     affectsGlobalScope: true,
-                    impliedFormat: undefined,
+                    impliedFormat: ts.ModuleKind.CommonJS,
                 });
                 assert.deepEqual(state.fileInfos.get(file1.path as ts.Path), {
                     version: system.createHash(file1.content),
                     signature: system.createHash(file1.content),
                     affectsGlobalScope: undefined,
-                    impliedFormat: undefined,
+                    impliedFormat: ts.ModuleKind.CommonJS,
                 });
                 assert.deepEqual(state.fileInfos.get(file2.path as ts.Path), {
                     version: system.createHash(fileModified.content),
                     signature: system.createHash(fileModified.content),
                     affectsGlobalScope: undefined,
-                    impliedFormat: undefined,
+                    impliedFormat: ts.ModuleKind.CommonJS,
                 });
 
                 assert.deepEqual(state.compilerOptions, {
@@ -206,7 +200,6 @@ describe("unittests:: tsc-watch:: emit file --incremental", () => {
                 });
 
                 assert.equal(ts.arrayFrom(state.referencedMap!.keys()).length, 0);
-                assert.equal(ts.arrayFrom(state.exportedModulesMap!.keys()).length, 0);
 
                 assert.equal(state.semanticDiagnosticsPerFile!.size, 3);
                 assert.deepEqual(state.semanticDiagnosticsPerFile!.get(libFile.path as ts.Path), ts.emptyArray);

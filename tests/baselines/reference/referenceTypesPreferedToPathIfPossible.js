@@ -20,5 +20,4 @@ exports.thing = thing;
 
 
 //// [usage.d.ts]
-/// <reference types="node" />
 export declare const thing: () => import("url").Url;

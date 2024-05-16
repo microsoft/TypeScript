@@ -3,10 +3,12 @@
 === file1.ts ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === file2.ts ===
 export function foo(): import("./file1").Foo {
 >foo : () => import("./file1").Foo
+>    : ^^^^^^                     
 
     return null as any;
 >null as any : any
@@ -14,12 +16,16 @@ export function foo(): import("./file1").Foo {
 === file3.ts ===
 import {foo} from "./file2";
 >foo : () => import("file1").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export function bar() {
 >bar : () => import("file1").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     return foo();
 >foo() : import("file1").Foo
+>      : ^^^^^^^^^^^^^^^^^^^
 >foo : () => import("file1").Foo
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

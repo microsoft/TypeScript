@@ -92,7 +92,7 @@ import {
     TypeChecker,
     typeParameterNamePart,
     VariableStatement,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 const jsDocTagNames = [
     "abstract",
@@ -131,6 +131,7 @@ const jsDocTagNames = [
     "host",
     "ignore",
     "implements",
+    "import",
     "inheritdoc",
     "inner",
     "instance",

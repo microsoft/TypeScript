@@ -3,7 +3,7 @@ import {
     globalTimeout,
     RunnerBase,
     runUnitTests,
-} from "../_namespaces/Harness";
+} from "../_namespaces/Harness.js";
 import {
     ErrorInfo,
     ParallelClientMessage,
@@ -14,9 +14,12 @@ import {
     TaskResult,
     TestInfo,
     UnitTestTask,
-} from "../_namespaces/Harness.Parallel";
+} from "../_namespaces/Harness.Parallel.js";
 
-export function start() {
+export function start(importTests: () => Promise<unknown>) {
+    // This brings in the tests after we finish setting things up and yield to the event loop.
+    const importTestsPromise = importTests();
+
     function hookUncaughtExceptions() {
         if (!exceptionsHooked) {
             process.on("uncaughtException", handleUncaughtException);
@@ -277,7 +280,9 @@ export function start() {
         return !!tasks && Array.isArray(tasks) && tasks.length > 0 && tasks.every(validateTest);
     }
 
-    function processHostMessage(message: ParallelHostMessage) {
+    async function processHostMessage(message: ParallelHostMessage) {
+        await importTestsPromise;
+
         if (!validateHostMessage(message)) {
             console.log("Invalid message:", message);
             return;

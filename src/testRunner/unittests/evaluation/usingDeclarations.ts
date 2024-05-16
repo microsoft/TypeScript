@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 function FakeSuppressedError(error: any, suppressed: any) {
     return { error, suppressed };
@@ -351,8 +351,8 @@ describe("unittests:: evaluation:: usingDeclarations", () => {
         ]);
         assert.instanceOf(output[4], Error);
         assert.strictEqual(output[4].name, "SuppressedError");
-        assert.strictEqual(output[4].error, "dispose error");
-        assert.strictEqual(output[4].suppressed, "body error");
+        assert.strictEqual((output[4] as any).error, "dispose error");
+        assert.strictEqual((output[4] as any).suppressed, "body error");
         assert.deepEqual(output.slice(5), [
             "after try",
         ]);

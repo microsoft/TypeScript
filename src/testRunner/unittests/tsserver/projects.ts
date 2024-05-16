@@ -1,19 +1,13 @@
-import {
-    createLoggerWithInMemoryLogs,
-} from "../../../harness/tsserverLogger";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import { createLoggerWithInMemoryLogs } from "../../../harness/tsserverLogger.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     commonFile1,
     commonFile2,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
-    logConfiguredProjectsHasOpenRefStatus,
-    logInferredProjectsOrphanStatus,
     openExternalProjectForSession,
     openFilesForSession,
     protocolFileLocationFromSubstring,
@@ -23,16 +17,14 @@ import {
     toExternalFile,
     toExternalFiles,
     verifyGetErrRequest,
-} from "../helpers/tsserver";
-import {
-    customTypesMap,
-} from "../helpers/typingsInstaller";
+} from "../helpers/tsserver.js";
+import { customTypesMap } from "../helpers/typingsInstaller.js";
 import {
     createServerHost,
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projects::", () => {
     it("handles the missing files - that were added to program because they were added with ///<ref", () => {
@@ -185,7 +177,7 @@ describe("unittests:: tsserver:: projects::", () => {
             };
             session.host.baselineHost("Before request");
             session.logger.info(`request:${ts.server.stringifyIndented(request)}`);
-            session.getProjectService().openExternalProject(request.arguments);
+            session.getProjectService().openExternalProject(request.arguments, /*cleanupAfter*/ true);
             session.host.baselineHost("After request");
             baselineTsserverLogs("projects", "external project including config file", session);
         });
@@ -325,7 +317,6 @@ describe("unittests:: tsserver:: projects::", () => {
 
         host.writeFile(file2.path, `export * from "../c/f3"`); // now inferred project should inclule file3
         host.runQueuedTimeoutCallbacks();
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("projects", "changes in closed files are reflected in project structure", session);
     });
 
@@ -512,22 +503,11 @@ describe("unittests:: tsserver:: projects::", () => {
         const session = new TestSession(host);
 
         openFilesForSession([file2], session);
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file3], session);
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file1], session);
-        logInferredProjectsOrphanStatus(session);
-
         closeFilesForSession([file1], session);
-        logInferredProjectsOrphanStatus(session);
-
         closeFilesForSession([file3], session);
-        logInferredProjectsOrphanStatus(session);
-
         openFilesForSession([file3], session);
-        logInferredProjectsOrphanStatus(session);
         baselineTsserverLogs("projects", "correctly migrate files between projects", session);
     });
 
@@ -892,19 +872,10 @@ describe("unittests:: tsserver:: projects::", () => {
         const session = new TestSession(host);
 
         openFilesForSession([file2], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
-
         openFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
-
         closeFilesForSession([file2], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
-
         closeFilesForSession([file1], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
-
         openFilesForSession([file2], session);
-        logConfiguredProjectsHasOpenRefStatus(session);
         baselineTsserverLogs("projects", "File in multiple projects at opened and closed correctly", session);
     });
 
@@ -1183,19 +1154,11 @@ describe("unittests:: tsserver:: projects::", () => {
         host.writeFile(config.path, config.content);
         host.runQueuedTimeoutCallbacks();
 
-        verifyFile2InfoIsOrphan();
-
         file2.content += "export let z = 10;";
         host.writeFile(file2.path, file2.content);
         host.runQueuedTimeoutCallbacks();
 
-        verifyFile2InfoIsOrphan();
         baselineTsserverLogs("projects", "Orphan source files are handled correctly on watch trigger", session);
-
-        function verifyFile2InfoIsOrphan() {
-            const info = ts.Debug.checkDefined(session.getProjectService().getScriptInfoForPath(file2.path as ts.Path));
-            session.logger.log(`Containing projects for ${file2.path}:: ${info.containingProjects.map(p => p.projectName).join(",")}`);
-        }
     });
 
     it("no project structure update on directory watch invoke on open file save", () => {

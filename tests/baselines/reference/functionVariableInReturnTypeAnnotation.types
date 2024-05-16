@@ -2,13 +2,18 @@
 
 === functionVariableInReturnTypeAnnotation.ts ===
 function bar(): typeof b {
->bar : () => any
+>bar : () => typeof b
+>    : ^^^^^^        
 >b : any
+>  : ^^^
 
     var b = 1;
 >b : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
     return undefined;
 >undefined : undefined
+>          : ^^^^^^^^^
 }

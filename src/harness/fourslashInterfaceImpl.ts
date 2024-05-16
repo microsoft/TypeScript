@@ -1,5 +1,5 @@
-import * as FourSlash from "./_namespaces/FourSlash";
-import * as ts from "./_namespaces/ts";
+import * as FourSlash from "./_namespaces/FourSlash.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class Test {
     constructor(private state: FourSlash.TestState) {
@@ -212,12 +212,12 @@ export class VerifyNegatable {
         this.state.verifyRefactorsAvailable(names);
     }
 
-    public refactorAvailable(name: string, actionName?: string, actionDescription?: string) {
-        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription);
+    public refactorAvailable(name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, "implicit", name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
-    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string) {
-        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName);
+    public refactorAvailableForTriggerReason(triggerReason: ts.RefactorTriggerReason, name: string, actionName?: string, actionDescription?: string, kind?: string, preferences = ts.emptyOptions, includeInteractiveActions?: boolean) {
+        this.state.verifyRefactorAvailable(this.negative, triggerReason, name, actionName, actionDescription, kind, preferences, includeInteractiveActions);
     }
 
     public refactorKindAvailable(kind: string, expected: string[], preferences = ts.emptyOptions) {
@@ -619,6 +619,10 @@ export class Verify extends VerifyNegatable {
 
     public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
+    }
+
+    public pasteEdits(options: PasteEditsOptions): void {
+        this.state.verifyPasteEdits(options);
     }
 }
 
@@ -1418,6 +1422,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "using",
         "var",
         "void",
         "while",
@@ -1530,6 +1535,7 @@ export namespace Completion {
         "try",
         "type",
         "typeof",
+        "using",
         "var",
         "void",
         "while",
@@ -1635,6 +1641,7 @@ export namespace Completion {
         "typeof",
         "unique",
         "unknown",
+        "using",
         "var",
         "void",
         "while",
@@ -1686,6 +1693,7 @@ export namespace Completion {
         "try",
         "type",
         "typeof",
+        "using",
         "var",
         "void",
         "while",
@@ -1917,6 +1925,12 @@ export interface MoveToFileOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
     readonly preferences?: ts.UserPreferences;
+}
+
+export interface PasteEditsOptions {
+    readonly newFileContents: { readonly [fileName: string]: string; };
+    args: ts.PasteEditsArgs;
+    readonly fixId: string;
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

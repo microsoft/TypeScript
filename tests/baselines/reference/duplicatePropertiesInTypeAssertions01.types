@@ -3,8 +3,13 @@
 === duplicatePropertiesInTypeAssertions01.ts ===
 let x = <{a: number; a: number}>{};
 >x : { a: number; }
+>  : ^^^^^      ^^^
 ><{a: number; a: number}>{} : { a: number; }
+>                           : ^^^^^      ^^^
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
 >{} : {}
+>   : ^^
 

@@ -3,7 +3,11 @@
 === exportEqualsAmd.ts ===
 export = { ["hi"]: "there" };
 >{ ["hi"]: "there" } : { hi: string; }
+>                    : ^^^^^^^^^^^^^^^
 >["hi"] : string
+>       : ^^^^^^
 >"hi" : "hi"
+>     : ^^^^
 >"there" : "there"
+>        : ^^^^^^^
 
