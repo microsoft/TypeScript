@@ -9162,7 +9162,7 @@ const filesMatcher: WildcardMatcher = {
      *  [^./]                   # matches everything up to the first . character (excluding directory separators)
      *  (\\.(?!min\\.js$))?     # matches . characters but not if they are part of the .min.js file extension
      */
-    singleAsteriskRegexFragment: "(?:[^./]|(\\.(?!min\\.js$))?)*",
+    singleAsteriskRegexFragment: "(?:[^./]|(?:\\.(?!min\\.js$))?)*",
     /**
      * Regex for the ** wildcard. Matches any number of subdirectories. When used for including
      * files or directories, does not match subdirectories that start with a . character
