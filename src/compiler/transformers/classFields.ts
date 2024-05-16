@@ -89,6 +89,7 @@ import {
     isClassDeclaration,
     isClassElement,
     isClassExpression,
+    isClassLike,
     isClassNamedEvaluationHelperBlock,
     isClassStaticBlockDeclaration,
     isClassThisAssignmentBlock,
@@ -1713,7 +1714,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     function getClassFacts(node: ClassLikeDeclaration) {
         let facts = ClassFacts.None;
         const original = getOriginalNode(node);
-        if (isClassDeclaration(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
+        if (isClassLike(original) && classOrConstructorParameterIsDecorated(legacyDecorators, original)) {
             facts |= ClassFacts.ClassWasDecorated;
         }
         if (shouldTransformPrivateElementsOrClassStaticBlocks && (classHasClassThisAssignment(node) || classHasExplicitlyAssignedName(node))) {
