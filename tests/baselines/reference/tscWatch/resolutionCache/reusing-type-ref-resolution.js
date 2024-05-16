@@ -62,11 +62,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg0' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg0/package.json' does not exist.
+File '/users/username/projects/project/node_modules/pkg0.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg0.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg0.tsx' does not exist.
-File '/users/username/projects/project/node_modules/pkg0.d.ts' does not exist.
-File '/users/username/projects/project/node_modules/pkg0/index.ts' does not exist.
-File '/users/username/projects/project/node_modules/pkg0/index.tsx' does not exist.
 File '/users/username/projects/project/node_modules/pkg0/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg0/index.d.ts', result '/users/username/projects/project/node_modules/pkg0/index.d.ts'.
 ======== Module name 'pkg0' was successfully resolved to '/users/username/projects/project/node_modules/pkg0/index.d.ts'. ========
@@ -74,9 +72,9 @@ Resolving real path for '/users/username/projects/project/node_modules/pkg0/inde
 Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
-File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
 Directory '/users/username/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/users/username/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/users/username/node_modules' does not exist, skipping all lookups in it.
@@ -511,11 +509,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'pkg1' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/users/username/projects/project/node_modules/pkg1/package.json' does not exist.
+File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.ts' does not exist.
 File '/users/username/projects/project/node_modules/pkg1.tsx' does not exist.
-File '/users/username/projects/project/node_modules/pkg1.d.ts' does not exist.
-File '/users/username/projects/project/node_modules/pkg1/index.ts' does not exist.
-File '/users/username/projects/project/node_modules/pkg1/index.tsx' does not exist.
 File '/users/username/projects/project/node_modules/pkg1/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/users/username/projects/project/node_modules/pkg1/index.d.ts', result '/users/username/projects/project/node_modules/pkg1/index.d.ts'.
 ======== Module name 'pkg1' was successfully resolved to '/users/username/projects/project/node_modules/pkg1/index.d.ts'. ========

@@ -14,8 +14,6 @@
     "Matched 'exports' condition 'default'.",
     "Using 'exports' subpath '.' with target './index.web.js'.",
     "File name '/node_modules/conditions/index.web.js' has a '.js' extension - stripping it.",
-    "File '/node_modules/conditions/index.web.ts' does not exist.",
-    "File '/node_modules/conditions/index.web.tsx' does not exist.",
     "File '/node_modules/conditions/index.web.d.ts' exists - use it as a name resolution result.",
     "'package.json' does not have a 'peerDependencies' field.",
     "Resolved under condition 'default'.",

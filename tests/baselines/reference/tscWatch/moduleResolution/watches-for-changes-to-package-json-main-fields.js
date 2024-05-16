@@ -62,16 +62,14 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
@@ -137,8 +135,6 @@ FsWatches::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules: *new*
-  {}
-/user/username/projects/myproject/node_modules/pkg2: *new*
   {}
 /user/username/projects/myproject/packages/pkg1: *new*
   {}
@@ -222,16 +218,14 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/other.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/other.js'.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/other.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/other.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/other.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/other.d.ts'.
@@ -290,8 +284,6 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/pkg2:
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}
@@ -371,16 +363,14 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/user/username/projects/myproject/packages/pkg1/node_modules' does not exist, skipping all lookups in it.
 Directory '/user/username/projects/myproject/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/user/username/projects/myproject/node_modules/pkg2/package.json'.
+File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'build/index.js' that references '/user/username/projects/myproject/node_modules/pkg2/build/index.js'.
 File name '/user/username/projects/myproject/node_modules/pkg2/build/index.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg2/build/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/user/username/projects/myproject/node_modules/pkg2/build/index.d.ts', result '/user/username/projects/myproject/packages/pkg2/build/index.d.ts'.
@@ -444,8 +434,6 @@ FsWatches *deleted*::
 
 FsWatchesRecursive::
 /user/username/projects/myproject/node_modules:
-  {}
-/user/username/projects/myproject/node_modules/pkg2:
   {}
 /user/username/projects/myproject/packages/pkg1:
   {}

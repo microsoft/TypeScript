@@ -12,8 +12,6 @@
     "Loading module 'foo' from 'node_modules' folder, target file types: TypeScript, Declaration.",
     "Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.",
     "Directory '/a/b/c/node_modules' does not exist, skipping all lookups in it.",
-    "File '/a/b/node_modules/foo.ts' does not exist.",
-    "File '/a/b/node_modules/foo.tsx' does not exist.",
     "File '/a/b/node_modules/foo.d.ts' exists - use it as a name resolution result.",
     "Resolving real path for '/a/b/node_modules/foo.d.ts', result '/a/b/node_modules/foo.d.ts'.",
     "======== Module name 'foo' was successfully resolved to '/a/b/node_modules/foo.d.ts'. ========",

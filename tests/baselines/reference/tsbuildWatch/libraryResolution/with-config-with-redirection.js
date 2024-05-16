@@ -209,11 +209,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-webworker'
 File '/home/src/projects/node_modules/@typescript/lib-webworker/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-webworker/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'.
 ======== Module name '@typescript/lib-webworker' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-webworker/index.d.ts'. ========
@@ -231,11 +229,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-scripthost'
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'.
 ======== Module name '@typescript/lib-scripthost' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-scripthost/index.d.ts'. ========
@@ -253,11 +249,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-es5'
 File '/home/src/projects/node_modules/@typescript/lib-es5/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-es5/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'.
 ======== Module name '@typescript/lib-es5' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-es5/index.d.ts'. ========
@@ -299,11 +293,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project1/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-dom'
 File '/home/src/projects/node_modules/@typescript/lib-dom/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-dom/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'.
 ======== Module name '@typescript/lib-dom' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-dom/index.d.ts'. ========
@@ -461,11 +453,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project4/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'typescript__lib-esnext'
 File '/home/src/projects/node_modules/@typescript/lib-esnext/package.json' does not exist.
+File '/home/src/projects/node_modules/@typescript/lib-esnext.d.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-esnext.ts' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-esnext.tsx' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-esnext.d.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-esnext/index.ts' does not exist.
-File '/home/src/projects/node_modules/@typescript/lib-esnext/index.tsx' does not exist.
 File '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts', result '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts'.
 ======== Module name '@typescript/lib-esnext' was successfully resolved to '/home/src/projects/node_modules/@typescript/lib-esnext/index.d.ts'. ========

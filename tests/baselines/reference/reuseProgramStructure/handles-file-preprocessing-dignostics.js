@@ -23,20 +23,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -49,20 +47,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -109,20 +105,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -135,20 +129,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -195,20 +187,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -221,20 +211,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -360,20 +348,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -386,20 +372,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -446,20 +430,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -472,20 +454,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -532,20 +512,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -558,20 +536,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -694,20 +670,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -720,20 +694,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -768,20 +740,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -794,20 +764,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {
@@ -854,20 +822,18 @@ fp-ts/lib/Struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/Struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/Struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/Struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/Struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/Struct.ts",
-    "/src/project/node_modules/fp-ts/lib/Struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 fp-ts/lib/struct: {
@@ -880,20 +846,18 @@ fp-ts/lib/struct: {
   "failedLookupLocations": [
     "/src/project/src/node_modules/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/fp-ts/package.json",
+    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct.d.ts",
+    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.ts",
     "/src/project/src/node_modules/fp-ts/lib/struct/index.tsx",
-    "/src/project/src/node_modules/fp-ts/lib/struct/index.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/package.json",
     "/src/project/src/node_modules/@types/fp-ts/package.json",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct.d.ts",
     "/src/project/src/node_modules/@types/fp-ts/lib/struct/index.d.ts",
     "/src/project/node_modules/fp-ts/lib/struct/package.json",
-    "/src/project/node_modules/fp-ts/package.json",
-    "/src/project/node_modules/fp-ts/lib/struct.ts",
-    "/src/project/node_modules/fp-ts/lib/struct.tsx"
+    "/src/project/node_modules/fp-ts/package.json"
   ]
 }
 ./Struct: {

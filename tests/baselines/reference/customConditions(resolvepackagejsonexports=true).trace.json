@@ -15,8 +15,6 @@
     "Matched 'exports' condition 'webpack'.",
     "Using 'exports' subpath '.' with target './webpack.js'.",
     "File name '/node_modules/lodash/webpack.js' has a '.js' extension - stripping it.",
-    "File '/node_modules/lodash/webpack.ts' does not exist.",
-    "File '/node_modules/lodash/webpack.tsx' does not exist.",
     "File '/node_modules/lodash/webpack.d.ts' exists - use it as a name resolution result.",
     "'package.json' does not have a 'peerDependencies' field.",
     "Resolved under condition 'webpack'.",

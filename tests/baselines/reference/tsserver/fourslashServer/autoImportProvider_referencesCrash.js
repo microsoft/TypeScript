@@ -268,6 +268,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /c/package.json 250 undefined WatchType: package.json file
 Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
@@ -351,6 +352,8 @@ Info seq  [hh:mm:ss:mss] 	FileName: /c/index.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /c/tsconfig.json
 After Request
 watchedFiles::
+/a/index.d.ts: *new*
+  {"pollingInterval":500}
 /a/index.ts:
   {"pollingInterval":500}
 /a/package.json:
@@ -391,6 +394,10 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
+/a/index.d.ts *new*
+    version: Text-0
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
 /a/index.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
@@ -463,7 +470,6 @@ Info seq  [hh:mm:ss:mss] Config: /b/tsconfig.json : {
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /b 1 undefined Config: /b/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/index.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -550,7 +556,7 @@ Info seq  [hh:mm:ss:mss] 	FileName: /b/b.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /b/tsconfig.json
 After Request
 watchedFiles::
-/a/index.d.ts: *new*
+/a/index.d.ts:
   {"pollingInterval":500}
 /a/index.ts:
   {"pollingInterval":500}
@@ -598,10 +604,11 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/a/index.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /b/tsconfig.json
+/a/index.d.ts *changed*
+    version: Text-1 *changed*
+    containingProjects: 2 *changed*
+        /dev/null/autoImportProviderProject1*
+        /b/tsconfig.json *new*
 /a/index.ts
     version: Text-1
     containingProjects: 2
@@ -767,7 +774,8 @@ ScriptInfos::
 /a/index.d.ts *changed*
     version: Text-1
     sourceMapFilePath: /a/index.d.ts.map *changed*
-    containingProjects: 1
+    containingProjects: 2
+        /dev/null/autoImportProviderProject1*
         /b/tsconfig.json
 /a/index.d.ts.map *new*
     version: Text-1

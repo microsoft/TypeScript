@@ -69,9 +69,9 @@ File '/package.json' does not exist according to earlier cached lookups.
 Loading module 'yargs' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/Users/name/projects/web/src/node_modules' does not exist, skipping all lookups in it.
+File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.ts' does not exist.
 File '/Users/name/projects/web/node_modules/yargs.tsx' does not exist.
-File '/Users/name/projects/web/node_modules/yargs.d.ts' does not exist.
 Found 'package.json' at '/Users/name/projects/web/node_modules/@types/yargs/package.json'.
 Entering conditional exports.
 Matched 'exports' condition 'types'.

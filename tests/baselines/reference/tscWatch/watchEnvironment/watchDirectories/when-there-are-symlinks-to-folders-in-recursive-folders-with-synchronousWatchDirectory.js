@@ -61,11 +61,9 @@ Loading module 'a' from 'node_modules' folder, target file types: TypeScript, De
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
-File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
-File '/home/user/projects/myproject/node_modules/a/index.ts' does not exist.
-File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/home/user/projects/myproject/node_modules/a/index.d.ts', result '/home/user/projects/myproject/node_modules/reala/index.d.ts'.
 ======== Module name 'a' was successfully resolved to '/home/user/projects/myproject/node_modules/reala/index.d.ts'. ========
@@ -292,12 +290,12 @@ Loading module 'a' from 'node_modules' folder, target file types: TypeScript, De
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/user/projects/myproject/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/user/projects/myproject/node_modules/a/package.json' does not exist.
+File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a.tsx' does not exist.
-File '/home/user/projects/myproject/node_modules/a.d.ts' does not exist.
+File '/home/user/projects/myproject/node_modules/a/index.d.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.ts' does not exist.
 File '/home/user/projects/myproject/node_modules/a/index.tsx' does not exist.
-File '/home/user/projects/myproject/node_modules/a/index.d.ts' does not exist.
 Directory '/home/user/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/user/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/user/node_modules' does not exist, skipping all lookups in it.

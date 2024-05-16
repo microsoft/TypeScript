@@ -58,6 +58,7 @@
     "Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.",
     "Directory 'c:/root/folder1/node_modules' does not exist, skipping all lookups in it.",
     "Directory 'c:/root/node_modules' does not exist, skipping all lookups in it.",
+    "File 'c:/node_modules/file4.d.ts' does not exist.",
     "File 'c:/node_modules/file4.ts' exists - use it as a name resolution result.",
     "Resolving real path for 'c:/node_modules/file4.ts', result 'c:/node_modules/file4.ts'.",
     "======== Module name 'file4' was successfully resolved to 'c:/node_modules/file4.ts'. ========",

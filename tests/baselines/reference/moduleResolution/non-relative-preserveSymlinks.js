@@ -19,11 +19,9 @@ Resolution:: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/app/node_modules/linked.ts",
-    "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index.ts",
-    "/app/node_modules/linked/index.tsx"
+    "/app/node_modules/linked.ts",
+    "/app/node_modules/linked.tsx"
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"
@@ -50,11 +48,9 @@ Resolution:: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/app/node_modules/linked.ts",
-    "/app/node_modules/linked.tsx",
     "/app/node_modules/linked.d.ts",
-    "/app/node_modules/linked/index.ts",
-    "/app/node_modules/linked/index.tsx"
+    "/app/node_modules/linked.ts",
+    "/app/node_modules/linked.tsx"
   ],
   "affectingLocations": [
     "/app/node_modules/linked/package.json"

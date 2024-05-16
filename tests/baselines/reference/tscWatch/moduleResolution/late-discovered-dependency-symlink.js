@@ -68,15 +68,13 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/workspace/packageC/node_modules/package-b/package.json'.
+File '/workspace/packageC/node_modules/package-b.d.ts' does not exist.
 File '/workspace/packageC/node_modules/package-b.ts' does not exist.
 File '/workspace/packageC/node_modules/package-b.tsx' does not exist.
-File '/workspace/packageC/node_modules/package-b.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.
-File '/workspace/packageC/node_modules/package-b/index.ts' does not exist.
-File '/workspace/packageC/node_modules/package-b/index.tsx' does not exist.
 File '/workspace/packageC/node_modules/package-b/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/workspace/packageC/node_modules/package-b/index.d.ts', result '/workspace/packageB/index.d.ts'.
 ======== Module name 'package-b' was successfully resolved to '/workspace/packageB/index.d.ts'. ========
@@ -86,11 +84,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/workspace/packageB/node_modules/package-a/package.json' does not exist.
+File '/workspace/packageB/node_modules/package-a.d.ts' does not exist.
 File '/workspace/packageB/node_modules/package-a.ts' does not exist.
 File '/workspace/packageB/node_modules/package-a.tsx' does not exist.
-File '/workspace/packageB/node_modules/package-a.d.ts' does not exist.
-File '/workspace/packageB/node_modules/package-a/index.ts' does not exist.
-File '/workspace/packageB/node_modules/package-a/index.tsx' does not exist.
 File '/workspace/packageB/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/workspace/packageB/node_modules/package-a/index.d.ts', result '/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/workspace/packageA/index.d.ts'. ========
@@ -108,11 +104,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/workspace/packageC/node_modules/package-a/package.json' does not exist.
+File '/workspace/packageC/node_modules/package-a.d.ts' does not exist.
 File '/workspace/packageC/node_modules/package-a.ts' does not exist.
 File '/workspace/packageC/node_modules/package-a.tsx' does not exist.
-File '/workspace/packageC/node_modules/package-a.d.ts' does not exist.
-File '/workspace/packageC/node_modules/package-a/index.ts' does not exist.
-File '/workspace/packageC/node_modules/package-a/index.tsx' does not exist.
 File '/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/workspace/packageC/node_modules/package-a/index.d.ts', result '/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/workspace/packageA/index.d.ts'. ========
@@ -222,14 +216,12 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'package-b' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/workspace/packageC/node_modules/package-b/package.json' exists according to earlier cached lookups.
+File '/workspace/packageC/node_modules/package-b.d.ts' does not exist.
 File '/workspace/packageC/node_modules/package-b.ts' does not exist.
 File '/workspace/packageC/node_modules/package-b.tsx' does not exist.
-File '/workspace/packageC/node_modules/package-b.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' does not have a 'main' field.
-File '/workspace/packageC/node_modules/package-b/index.ts' does not exist.
-File '/workspace/packageC/node_modules/package-b/index.tsx' does not exist.
 File '/workspace/packageC/node_modules/package-b/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/workspace/packageC/node_modules/package-b/index.d.ts', result '/workspace/packageB/index.d.ts'.
 ======== Module name 'package-b' was successfully resolved to '/workspace/packageB/index.d.ts'. ========
@@ -238,11 +230,9 @@ Module resolution kind is not specified, using 'Node10'.
 Loading module 'package-a' from 'node_modules' folder, target file types: TypeScript, Declaration.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/workspace/packageC/node_modules/package-a/package.json' does not exist.
+File '/workspace/packageC/node_modules/package-a.d.ts' does not exist.
 File '/workspace/packageC/node_modules/package-a.ts' does not exist.
 File '/workspace/packageC/node_modules/package-a.tsx' does not exist.
-File '/workspace/packageC/node_modules/package-a.d.ts' does not exist.
-File '/workspace/packageC/node_modules/package-a/index.ts' does not exist.
-File '/workspace/packageC/node_modules/package-a/index.tsx' does not exist.
 File '/workspace/packageC/node_modules/package-a/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/workspace/packageC/node_modules/package-a/index.d.ts', result '/workspace/packageA/index.d.ts'.
 ======== Module name 'package-a' was successfully resolved to '/workspace/packageA/index.d.ts'. ========

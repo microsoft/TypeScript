@@ -177,8 +177,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -226,8 +226,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -263,17 +263,17 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -318,8 +318,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -585,8 +585,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -620,17 +620,17 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -639,12 +639,12 @@ File '/home/src/projects/project/node_modules/@types/bar/package.json' exists ac
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -753,8 +753,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -787,12 +787,12 @@ File '/home/src/projects/project/node_modules/foo/package.json' exists according
 File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.ts.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -905,8 +905,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -940,17 +940,17 @@ File '/home/src/projects/project/node_modules/bar/package.json' exists according
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar/index.js'.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -1063,8 +1063,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -1212,8 +1212,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -1754,8 +1754,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -1791,17 +1791,17 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar2/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -2066,8 +2066,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -2325,8 +2325,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -2360,17 +2360,17 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar2/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -2379,12 +2379,12 @@ File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists a
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/@types/bar2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.tsx' does not exist.
-File '/home/src/projects/project/node_modules/@types/bar2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types/bar2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -2493,8 +2493,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -2527,12 +2527,12 @@ File '/home/src/projects/project/node_modules/foo2/package.json' exists accordin
 File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/foo2/index.d.ts', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/foo2/index.d.ts' has a '.d.ts' extension - stripping it.
+File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.ts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.ts.tsx' does not exist.
-File '/home/src/projects/project/node_modules/foo2/index.d.ts.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/foo2/index.d.ts' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -2645,8 +2645,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/bar2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.
@@ -2680,17 +2680,17 @@ File '/home/src/projects/project/node_modules/bar2/package.json' exists accordin
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'index.js' that references '/home/src/projects/project/node_modules/bar2/index.js'.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/bar2/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/bar2/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.d.ts' does not exist.
+File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.ts' does not exist.
 File '/home/src/projects/project/node_modules/bar2/index.js.tsx' does not exist.
-File '/home/src/projects/project/node_modules/bar2/index.js.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/bar2/index.js' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/@types/bar2/package.json' exists according to earlier cached lookups.
 'package.json' does not have a 'typesVersions' field.
@@ -2803,8 +2803,8 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './index.mjs'.
 File name '/home/src/projects/project/node_modules/foo2/index.mjs' has a '.mjs' extension - stripping it.
-File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 File '/home/src/projects/project/node_modules/foo2/index.d.mts' does not exist.
+File '/home/src/projects/project/node_modules/foo2/index.mts' does not exist.
 Failed to resolve under condition 'import'.
 Saw non-matching condition 'require'.
 Exiting conditional exports.

@@ -408,14 +408,14 @@ Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/temp/test/proj
 Info seq  [hh:mm:ss:mss] Project 'c:/temp/test/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 	C:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
-	C:/temp/test/project1/index.ts SVC-1-0 "export function myFunc() {\n}\n"
+	c:/temp/test/project1/index.ts SVC-1-0 "export function myFunc() {\n}\n"
 	c:/temp/test/project2/index.ts Text-1 "import { myFunc } from 'project1'\nmyFunc();\n"
 
 
 	../../../a/lib/lib.d.ts
 	  Default library for target 'es5'
 	../project1/index.ts
-	  Imported via 'project1' from file 'index.ts' with packageId 'project1/index.ts@1.0.0'
+	  Imported via 'project1' from file 'index.ts' with packageId 'project1/index.d.ts@1.0.0'
 	index.ts
 	  Matched by default include pattern '**/*'
 

@@ -103,9 +103,9 @@ Directory '/home/src/projects/project/packages/package2/src/node_modules' does n
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
@@ -113,9 +113,9 @@ File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -146,18 +146,18 @@ Directory '/home/src/projects/project/packages/package2/src/node_modules' does n
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -358,16 +358,14 @@ Directory '/home/src/projects/project/packages/package2/src/node_modules' does n
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-File '/home/src/projects/project/node_modules/package1/dist/index.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1/dist/index.tsx' does not exist.
 File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
@@ -379,6 +377,8 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -427,11 +427,13 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
-/home/src/projects/project/node_modules/package1:
-  {}
 /home/src/projects/project/packages/package2:
   {}
 /home/src/projects/project/packages/package2/src:
+  {}
+
+FsWatchesRecursive *deleted*::
+/home/src/projects/project/node_modules/package1:
   {}
 
 Before running Timeout callback:: count: 0
@@ -484,24 +486,13 @@ Output::
 FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
 Scheduling update
 Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 2:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 250 undefined Source file
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.js :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 
 
-Timeout callback:: count: 2
+Timeout callback:: count: 1
 5: timerToUpdateProgram *new*
-8: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
+Before running Timeout callback:: count: 1
 5: timerToUpdateProgram
-8: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -526,20 +517,19 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/home/src/projects/project/packages/package2/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
-Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
-'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -570,18 +560,18 @@ Directory '/home/src/projects/project/packages/package2/src/node_modules' does n
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/project/node_modules/package1/package.json' exists according to earlier cached lookups.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
 Loading module as file / folder, candidate module location '/home/src/projects/project/node_modules/package1/dist/index.js', target file types: TypeScript, Declaration.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
+File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1/index.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1/index.d.ts' does not exist.
 Directory '/home/src/projects/project/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
@@ -591,6 +581,8 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 FileWatcher:: Close:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
@@ -647,15 +639,12 @@ FsWatches *deleted*::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
-/home/src/projects/project/node_modules/package1:
+/home/src/projects/project/node_modules/package1: *new*
   {}
 /home/src/projects/project/packages/package2:
   {}
 /home/src/projects/project/packages/package2/src:
   {}
-
-Timeout callback:: count: 0
-8: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -729,10 +718,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_
 
 
 Timeout callback:: count: 1
-11: timerToInvalidateFailedLookupResolutions *new*
+8: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-11: timerToInvalidateFailedLookupResolutions
+8: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 1
 Output::
@@ -741,10 +730,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-12: timerToUpdateProgram *new*
+9: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-12: timerToUpdateProgram
+9: timerToUpdateProgram
 
 After running Timeout callback:: count: 0
 Output::
@@ -769,16 +758,14 @@ Directory '/home/src/projects/project/packages/package2/src/node_modules' does n
 Directory '/home/src/projects/project/packages/package2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/project/packages/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/project/node_modules/package1/package.json'.
+File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.ts' does not exist.
 File '/home/src/projects/project/node_modules/package1.tsx' does not exist.
-File '/home/src/projects/project/node_modules/package1.d.ts' does not exist.
 'package.json' does not have a 'typesVersions' field.
 'package.json' does not have a 'typings' field.
 'package.json' does not have a 'types' field.
 'package.json' has 'main' field 'dist/index.js' that references '/home/src/projects/project/node_modules/package1/dist/index.js'.
 File name '/home/src/projects/project/node_modules/package1/dist/index.js' has a '.js' extension - stripping it.
-File '/home/src/projects/project/node_modules/package1/dist/index.ts' does not exist.
-File '/home/src/projects/project/node_modules/package1/dist/index.tsx' does not exist.
 File '/home/src/projects/project/node_modules/package1/dist/index.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/project/node_modules/package1/dist/index.d.ts', result '/home/src/projects/project/packages/package1/dist/index.d.ts'.
@@ -790,6 +777,8 @@ File '/a/lib/package.json' does not exist according to earlier cached lookups.
 File '/a/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/dist/package.json 2000 undefined File location affecting resolution
+DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
@@ -838,11 +827,13 @@ FsWatches::
 FsWatchesRecursive::
 /home/src/projects/project/node_modules:
   {}
-/home/src/projects/project/node_modules/package1:
-  {}
 /home/src/projects/project/packages/package2:
   {}
 /home/src/projects/project/packages/package2/src:
+  {}
+
+FsWatchesRecursive *deleted*::
+/home/src/projects/project/node_modules/package1:
   {}
 
 Before running Timeout callback:: count: 0

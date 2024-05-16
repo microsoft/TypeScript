@@ -90,8 +90,6 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 'package.json' does not have a 'peerDependencies' field.
 Resolved under condition 'import'.
@@ -114,9 +112,9 @@ Saw non-matching condition 'import'.
 Matched 'exports' condition 'require'.
 Using 'exports' subpath '.' with target './require.js'.
 File name '/user/username/projects/myproject/node_modules/pkg1/require.js' has a '.js' extension - stripping it.
+File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg1/require.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg1/require.d.ts' does not exist.
 Failed to resolve under condition 'require'.
 Exiting conditional exports.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
@@ -290,8 +288,6 @@ Entering conditional exports.
 Matched 'exports' condition 'import'.
 Using 'exports' subpath '.' with target './import.js'.
 File name '/user/username/projects/myproject/node_modules/pkg/import.js' has a '.js' extension - stripping it.
-File '/user/username/projects/myproject/node_modules/pkg/import.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/pkg/import.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/pkg/import.d.ts' exists - use it as a name resolution result.
 Resolved under condition 'import'.
 Exiting conditional exports.

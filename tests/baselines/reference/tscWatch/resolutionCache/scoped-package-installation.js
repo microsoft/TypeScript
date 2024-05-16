@@ -408,9 +408,9 @@ Loading module '@myapp/ts-types' from 'node_modules' folder, target file types: 
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
 Directory '/user/username/projects/myproject/node_modules/@types' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 Directory '/user/username/projects/node_modules' does not exist, skipping all lookups in it.
@@ -584,11 +584,9 @@ Searching all ancestor node_modules directories for preferred extensions: TypeSc
 Directory '/user/username/projects/myproject/lib/node_modules' does not exist, skipping all lookups in it.
 Scoped package detected, looking in 'myapp__ts-types'
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/package.json' does not exist.
+File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.ts' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types.tsx' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types.d.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.ts' does not exist.
-File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.tsx' does not exist.
 File '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts', result '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'.
 ======== Module name '@myapp/ts-types' was successfully resolved to '/user/username/projects/myproject/node_modules/@myapp/ts-types/index.d.ts'. ========

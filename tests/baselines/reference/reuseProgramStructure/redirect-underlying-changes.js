@@ -22,11 +22,9 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/node_modules/x.ts",
-    "/node_modules/a/node_modules/x.tsx",
     "/node_modules/a/node_modules/x.d.ts",
-    "/node_modules/a/node_modules/x/index.ts",
-    "/node_modules/a/node_modules/x/index.tsx"
+    "/node_modules/a/node_modules/x.ts",
+    "/node_modules/a/node_modules/x.tsx"
   ],
   "affectingLocations": [
     "/node_modules/a/node_modules/x/package.json"
@@ -56,11 +54,9 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/node_modules/x.ts",
-    "/node_modules/b/node_modules/x.tsx",
     "/node_modules/b/node_modules/x.d.ts",
-    "/node_modules/b/node_modules/x/index.ts",
-    "/node_modules/b/node_modules/x/index.tsx"
+    "/node_modules/b/node_modules/x.ts",
+    "/node_modules/b/node_modules/x.tsx"
   ],
   "affectingLocations": [
     "/node_modules/b/node_modules/x/package.json"
@@ -81,11 +77,9 @@ a: {
   },
   "failedLookupLocations": [
     "/node_modules/a/package.json",
-    "/node_modules/a.ts",
-    "/node_modules/a.tsx",
     "/node_modules/a.d.ts",
-    "/node_modules/a/index.ts",
-    "/node_modules/a/index.tsx"
+    "/node_modules/a.ts",
+    "/node_modules/a.tsx"
   ]
 }
 b: {
@@ -97,11 +91,9 @@ b: {
   },
   "failedLookupLocations": [
     "/node_modules/b/package.json",
-    "/node_modules/b.ts",
-    "/node_modules/b.tsx",
     "/node_modules/b.d.ts",
-    "/node_modules/b/index.ts",
-    "/node_modules/b/index.tsx"
+    "/node_modules/b.ts",
+    "/node_modules/b.tsx"
   ]
 }
 
@@ -137,11 +129,9 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/a/node_modules/x.ts",
-    "/node_modules/a/node_modules/x.tsx",
     "/node_modules/a/node_modules/x.d.ts",
-    "/node_modules/a/node_modules/x/index.ts",
-    "/node_modules/a/node_modules/x/index.tsx"
+    "/node_modules/a/node_modules/x.ts",
+    "/node_modules/a/node_modules/x.tsx"
   ],
   "affectingLocations": [
     "/node_modules/a/node_modules/x/package.json"
@@ -171,11 +161,9 @@ x: {
     "resolvedUsingTsExtension": false
   },
   "failedLookupLocations": [
-    "/node_modules/b/node_modules/x.ts",
-    "/node_modules/b/node_modules/x.tsx",
     "/node_modules/b/node_modules/x.d.ts",
-    "/node_modules/b/node_modules/x/index.ts",
-    "/node_modules/b/node_modules/x/index.tsx"
+    "/node_modules/b/node_modules/x.ts",
+    "/node_modules/b/node_modules/x.tsx"
   ],
   "affectingLocations": [
     "/node_modules/b/node_modules/x/package.json"
@@ -196,11 +184,9 @@ a: {
   },
   "failedLookupLocations": [
     "/node_modules/a/package.json",
-    "/node_modules/a.ts",
-    "/node_modules/a.tsx",
     "/node_modules/a.d.ts",
-    "/node_modules/a/index.ts",
-    "/node_modules/a/index.tsx"
+    "/node_modules/a.ts",
+    "/node_modules/a.tsx"
   ]
 }
 b: {
@@ -212,11 +198,9 @@ b: {
   },
   "failedLookupLocations": [
     "/node_modules/b/package.json",
-    "/node_modules/b.ts",
-    "/node_modules/b.tsx",
     "/node_modules/b.d.ts",
-    "/node_modules/b/index.ts",
-    "/node_modules/b/index.tsx"
+    "/node_modules/b.ts",
+    "/node_modules/b.tsx"
   ]
 }
 
