@@ -35,8 +35,8 @@ export function Configurable<T extends Constructor<{}>>(base: T): T {
 >     : ^
 
     return class extends base {
->class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: Configurable<any>.(Anonymous class); } & T
->                                                                                                   : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>class extends base {        constructor(...args: any[]) {            super(...args);        }    } : { new (...args: any[]): (Anonymous class); prototype: (Anonymous class); } & T
+>                                                                                                   : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >base : {}
 >     : ^^
 

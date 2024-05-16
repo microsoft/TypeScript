@@ -52,6 +52,6 @@ function cloneClass<T extends Constructor<{}>>(OriginalClass: T): T {
         }
     }
     return AnotherOriginalClass
->AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: cloneClass<any>.AnotherOriginalClass; } & T
->                     : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>AnotherOriginalClass : { new (...args: any[]): AnotherOriginalClass; prototype: AnotherOriginalClass; } & T
+>                     : ^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

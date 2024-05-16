@@ -10672,7 +10672,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // the type of which is an instantiation of the class type with type Any supplied as a type argument for each type parameter.
         // It is an error to explicitly declare a static property member with the name 'prototype'.
         const classType = getDeclaredTypeOfSymbol(getParentOfSymbol(prototype)!) as InterfaceType;
-        return classType.typeParameters ? createTypeReference(classType as GenericType, map(classType.typeParameters, _ => anyType)) : classType;
+        return classType.localTypeParameters ? createTypeReference(classType as GenericType, concatenate(classType.outerTypeParameters, map(classType.localTypeParameters, _ => anyType))) : classType;
     }
 
     // Return the type of the given property in the given type, or undefined if no such property exists
