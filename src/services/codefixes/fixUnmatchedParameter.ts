@@ -1,4 +1,11 @@
 import {
+    createCodeFixAction,
+    createCodeFixActionWithoutFixAll,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     append,
     CodeFixAction,
@@ -21,14 +28,7 @@ import {
     SignatureDeclaration,
     SourceFile,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCodeFixActionWithoutFixAll,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const deleteUnmatchedParameter = "deleteUnmatchedParameter";
 const renameUnmatchedParameter = "renameUnmatchedParameter";

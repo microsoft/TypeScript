@@ -1,16 +1,16 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     getFsConentsForAlternateResultAtTypesPackageJson,
     getFsContentsForAlternateResult,
     getFsContentsForAlternateResultDts,
     getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult";
-import { libContent } from "../helpers/contents";
-import { verifyTsc } from "../helpers/tsc";
-import { verifyTscWatch } from "../helpers/tscWatch";
-import { loadProjectFromFiles } from "../helpers/vfs";
-import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/alternateResult.js";
+import { libContent } from "../helpers/contents.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
+import { createWatchedSystem } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc:: moduleResolution::", () => {
     verifyTsc({

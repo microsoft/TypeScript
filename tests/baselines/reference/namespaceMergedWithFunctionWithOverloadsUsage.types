@@ -2,14 +2,14 @@
 
 === index.ts ===
 import X = require("./file");
->X : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
->  : ^^^    ^^^            ^^^^^^^^^^  ^^        ^^    ^^^            ^^^^^^^^^^
+>X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
+>  : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^        ^^    ^^^^^^^^^^^^^^^^^^^^^^^
 
 X(0); // shouldn't cause a crash
 >X(0) : void
 >     : ^^^^
->X : { (opts?: Foo.Whatever): void; (cb: Function, opts?: Foo.Whatever): void; }
->  : ^^^    ^^^            ^^^^^^^^^^  ^^        ^^    ^^^            ^^^^^^^^^^
+>X : { (opts?: X.Whatever): void; (cb: Function, opts?: X.Whatever): void; }
+>  : ^^^    ^^^^^^^^^^^^^^^^^^^^^^^  ^^        ^^    ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 

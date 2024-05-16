@@ -29,12 +29,12 @@ var s = $.extend({
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >$.extend({    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    }, "") : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
 >                                                                                                                                                                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->$.extend : { <T>(target: T, ...objs: any[]): T; <T_1>(deep: boolean, target: T_1, ...objs: any[]): T_1; }
->         : ^^^ ^^      ^^ ^^^^^    ^^     ^^^^^^^   ^^    ^^       ^^      ^^   ^^^^^    ^^     ^^^^^^^^^
+>$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>         : ^^^ ^^      ^^ ^^^^^    ^^     ^^^^^^^ ^^    ^^       ^^      ^^ ^^^^^    ^^     ^^^^^^^
 >$ : Foo
 >  : ^^^
->extend : { <T>(target: T, ...objs: any[]): T; <T_1>(deep: boolean, target: T_1, ...objs: any[]): T_1; }
->       : ^^^ ^^      ^^ ^^^^^    ^^     ^^^^^^^   ^^    ^^       ^^      ^^   ^^^^^    ^^     ^^^^^^^^^
+>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>       : ^^^ ^^      ^^ ^^^^^    ^^     ^^^^^^^ ^^    ^^       ^^      ^^ ^^^^^    ^^     ^^^^^^^
 >{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
 >                                                                                                                                                                                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

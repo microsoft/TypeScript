@@ -1,3 +1,4 @@
+import { ImportAdder } from "../_namespaces/ts.codefix.js";
 import {
     AccessorDeclaration,
     append,
@@ -110,8 +111,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
-import { ImportAdder } from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 /**
  * Finds members of the resolved type that are missing in the class pointed to by class decl
@@ -397,7 +397,7 @@ export function createSignatureDeclarationFromSignature(
 
     let typeParameters = isJs ? undefined : signatureDeclaration.typeParameters;
     let parameters = signatureDeclaration.parameters;
-    let type = isJs ? undefined : signatureDeclaration.type;
+    let type = isJs ? undefined : getSynthesizedDeepClone(signatureDeclaration.type);
     if (importAdder) {
         if (typeParameters) {
             const newTypeParameters = sameMap(typeParameters, typeParameterDecl => {

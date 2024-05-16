@@ -35,7 +35,7 @@ import {
     TextRange,
     TransformationContext,
     UnscopedEmitHelper,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const enum PrivateIdentifierKind {

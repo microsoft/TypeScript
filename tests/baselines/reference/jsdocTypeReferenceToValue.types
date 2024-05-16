@@ -4,7 +4,7 @@
 /** @param {Image} image */
 function process(image) {
 >process : (image: new (width?: number, height?: number) => HTMLImageElement) => HTMLImageElement
->        : ^     ^^          ^^^              ^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>        : ^     ^^^^^^^     ^^^      ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >image : new (width?: number, height?: number) => HTMLImageElement
 >      : ^^^^^     ^^^      ^^      ^^^      ^^^^^^^^^^^^^^^^^^^^^
 

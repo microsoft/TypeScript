@@ -287,12 +287,12 @@ const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ na
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => ({ name: 'test' }) : () => { name: "test"; }
@@ -376,12 +376,12 @@ const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
 >  : ^
 >Object.assign(a, b) : T & U
 >                    : ^^^^^
->Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_2 extends {}, U_2, V>(target: T_2, source1: U_2, source2: V): T_2 & U_2 & V; <T_3 extends {}, U_3, V_1, W>(target: T_3, source1: U_3, source2: V_1, source3: W): T_3 & U_3 & V_1 & W; (target: object, ...sources: any[]): any; }
->              : ^^^   ^^^^^^^^^^^^^   ^^      ^^   ^^      ^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>Object.assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>              : ^^^   ^^^^^^^^^^^^^   ^^      ^^   ^^      ^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >Object : ObjectConstructor
 >       : ^^^^^^^^^^^^^^^^^
->assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_2 extends {}, U_2, V>(target: T_2, source1: U_2, source2: V): T_2 & U_2 & V; <T_3 extends {}, U_3, V_1, W>(target: T_3, source1: U_3, source2: V_1, source3: W): T_3 & U_3 & V_1 & W; (target: object, ...sources: any[]): any; }
->       : ^^^   ^^^^^^^^^^^^^   ^^      ^^   ^^      ^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
+>assign : { <T_1 extends {}, U_1>(target: T_1, source: U_1): T_1 & U_1; <T_1 extends {}, U_1, V>(target: T_1, source1: U_1, source2: V): T_1 & U_1 & V; <T_1 extends {}, U_1, V, W>(target: T_1, source1: U_1, source2: V, source3: W): T_1 & U_1 & V & W; (target: object, ...sources: any[]): any; }
+>       : ^^^   ^^^^^^^^^^^^^   ^^      ^^   ^^      ^^   ^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^   ^^ ^^ ^^      ^^   ^^       ^^   ^^       ^^ ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^      ^^^^^       ^^     ^^^^^^^^^
 >a : T
 >  : ^
 >b : U

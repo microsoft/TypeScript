@@ -262,7 +262,6 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Loading configured project c:/temp/test/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -471,6 +470,17 @@ Info seq  [hh:mm:ss:mss] event:
           "languageServiceEnabled": true,
           "version": "FakeVersion"
         }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "c:/temp/test/project2/tsconfig.json",
+        "configFile": "c:/temp/test/project2/tsconfig.json",
+        "diagnostics": []
       }
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/temp/test/project1/index.d.ts 2000 undefined Project: c:/temp/test/project1/tsconfig.json WatchType: Missing generated file

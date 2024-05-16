@@ -304,7 +304,6 @@ ScriptInfos::
     deferredDelete: true
     containingProjects: 0
 
-Info seq  [hh:mm:ss:mss] Loading configured project /a/b/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

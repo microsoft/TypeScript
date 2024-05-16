@@ -18,8 +18,8 @@ var v = f<string>("");
 >  : ^^^^^^
 >f<string>("") : string
 >              : ^^^^^^
->f : { <T extends Number>(x: T): T; <T_1 extends String>(x: T_1): T_1; }
->  : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^   ^^^^^^^^^^^^^^^^^ ^^   ^^^^^^^^^
+>f : { <T extends Number>(x: T): T; <T extends String>(x: T): T; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^
 >"" : ""
 >   : ^^
 

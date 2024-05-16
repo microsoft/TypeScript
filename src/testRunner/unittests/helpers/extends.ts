@@ -1,12 +1,12 @@
-import { dedent } from "../../_namespaces/Utils";
-import { jsonToReadableText } from "../helpers";
-import { FsContents } from "./contents";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { FsContents } from "./contents.js";
 import {
     createServerHost,
     createWatchedSystem,
     libFile,
     TestServerHost,
-} from "./virtualFileSystemWithWatch";
+} from "./virtualFileSystemWithWatch.js";
 
 export function getSymlinkedExtendsSys(forTsserver?: true): TestServerHost {
     return (!forTsserver ? createWatchedSystem : createServerHost)({

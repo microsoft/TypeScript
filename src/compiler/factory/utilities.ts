@@ -180,7 +180,7 @@ import {
     TransformFlags,
     TypeNode,
     WrappedExpression,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 // Compound nodes
 

@@ -157,6 +157,17 @@ Info seq  [hh:mm:ss:mss] event:
         "version": "FakeVersion"
       }
     }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "CustomHandler::configFileDiag",
+      "body": {
+        "configFileName": "/user/username/projects/a/tsconfig.json",
+        "diagnostics": [],
+        "triggerFile": "/user/username/projects/a/tsconfig.json"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
 

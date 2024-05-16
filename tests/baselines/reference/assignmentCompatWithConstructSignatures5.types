@@ -110,8 +110,8 @@ var a16: new <T extends Base>(x: { a: T; b: T }) => T[];
 >  : ^
 
 var a17: {
->a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T_1 extends Base>(x: new (a: T_1) => T_1): T_1[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^ ^^                   ^^^     ^^^
+>a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^   ^^^
 
     new <T extends Derived>(x: new (a: T) => T): T[];
 >x : new (a: T) => T
@@ -131,8 +131,8 @@ var a18: {
 >    : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
 
     new (x: {
->x : { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
         new <T extends Derived>(a: T): T;
 >a : T
@@ -144,8 +144,8 @@ var a18: {
 
     }): any[];
     new (x: {
->x : { new <T extends Derived2>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
         new <T extends Derived2>(a: T): T;
 >a : T
@@ -389,18 +389,18 @@ var b17: new <T>(x: new (a: T) => T) => T[];
 a17 = b17; // ok
 >a17 = b17 : new <T>(x: new (a: T) => T) => T[]
 >          : ^^^^^ ^^ ^^               ^^^^^^^^
->a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T_1 extends Base>(x: new (a: T_1) => T_1): T_1[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^
+>a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >b17 : new <T>(x: new (a: T) => T) => T[]
 >    : ^^^^^ ^^ ^^               ^^^^^^^^
 
 b17 = a17; // ok
->b17 = a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T_1 extends Base>(x: new (a: T_1) => T_1): T_1[]; }
->          : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^
+>b17 = a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
+>          : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^
 >b17 : new <T>(x: new (a: T) => T) => T[]
 >    : ^^^^^ ^^ ^^               ^^^^^^^^
->a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T_1 extends Base>(x: new (a: T_1) => T_1): T_1[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^ ^^                   ^^^^^^^^^^^
+>a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^^^^^^^
 
 var b18: new (x: new <T>(a: T) => T) => any[]; 
 >b18 : new (x: new <T>(a: T) => T) => any[]

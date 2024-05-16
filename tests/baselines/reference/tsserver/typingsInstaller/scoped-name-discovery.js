@@ -722,6 +722,117 @@ Info seq  [hh:mm:ss:mss] event:
         "kind": "action::set"
       }
     }
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /jsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /jsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/jsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+	/app.js SVC-1-0 ""
+
+
+	app.js
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
+Info seq  [hh:mm:ss:mss] 	Files (1)
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+TI:: [hh:mm:ss:mss] Got install request
+    {
+      "projectName": "/jsconfig.json",
+      "fileNames": [
+        "/app.js"
+      ],
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "unresolvedImports": [],
+      "projectRootPath": "/",
+      "kind": "discover"
+    }
+TI:: [hh:mm:ss:mss] Explicitly included types: []
+TI:: [hh:mm:ss:mss] Typing names in '/package.json' dependencies: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Searching for typing names in /node_modules; all files: ["/node_modules/@zkat/cacache/package.json"]
+TI:: [hh:mm:ss:mss]     Found package names: ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
+TI:: [hh:mm:ss:mss] Finished typings discovery:
+    {
+      "cachedTypingPaths": [],
+      "newTypingNames": [
+        "@zkat/cacache"
+      ],
+      "filesToWatch": [
+        "/bower_components",
+        "/package.json",
+        "/node_modules"
+      ]
+    }
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "kind": "action::watchTypingLocations",
+      "projectName": "/jsconfig.json"
+    }
+TI:: [hh:mm:ss:mss] Installing typings ["@zkat/cacache"]
+TI:: [hh:mm:ss:mss] '@zkat/cacache':: 'zkat__cacache' already has an up-to-date typing - skipping...
+TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings
+TI:: [hh:mm:ss:mss] Sending response:
+    {
+      "projectName": "/jsconfig.json",
+      "typeAcquisition": {
+        "enable": true,
+        "include": [],
+        "exclude": []
+      },
+      "compilerOptions": {
+        "allowJs": true,
+        "maxNodeModuleJsDepth": 2,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "configFilePath": "/jsconfig.json",
+        "allowNonTsExtensions": true
+      },
+      "typings": [],
+      "unresolvedImports": [],
+      "kind": "action::set"
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "setTypings",
+      "body": {
+        "projectName": "/jsconfig.json",
+        "typeAcquisition": {
+          "enable": true,
+          "include": [],
+          "exclude": []
+        },
+        "compilerOptions": {
+          "allowJs": true,
+          "maxNodeModuleJsDepth": 2,
+          "allowSyntheticDefaultImports": true,
+          "skipLibCheck": true,
+          "noEmit": true,
+          "configFilePath": "/jsconfig.json",
+          "allowNonTsExtensions": true
+        },
+        "typings": [],
+        "unresolvedImports": [],
+        "kind": "action::set"
+      }
+    }
 After running Timeout callback:: count: 2
 
 Timeout callback:: count: 2
@@ -736,8 +847,8 @@ Projects::
     dirty: true *changed*
 /jsconfig.json (Configured) *changed*
     projectStateVersion: 4 *changed*
-    projectProgramVersion: 2 *changed*
-    dirty: true
+    projectProgramVersion: 3 *changed*
+    dirty: false *changed*
     autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 ScriptInfos::

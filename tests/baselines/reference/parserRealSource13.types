@@ -15,7 +15,7 @@ module TypeScript.AstWalkerWithDetailCallback {
     export interface AstWalkerDetailCallback {
         EmptyCallback? (pre, ast: AST): boolean;
 >EmptyCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -23,7 +23,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         EmptyExprCallback? (pre, ast: AST): boolean;
 >EmptyExprCallback : (pre: any, ast: AST) => boolean
->                  : ^   ^^^^^^^   ^^^^^^^^^^       
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -31,7 +31,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TrueCallback? (pre, ast: AST): boolean;
 >TrueCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -39,7 +39,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         FalseCallback? (pre, ast: AST): boolean;
 >FalseCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -47,7 +47,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ThisCallback? (pre, ast: AST): boolean;
 >ThisCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -55,7 +55,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         SuperCallback? (pre, ast: AST): boolean;
 >SuperCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -63,7 +63,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         QStringCallback? (pre, ast: AST): boolean;
 >QStringCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -71,7 +71,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         RegexCallback? (pre, ast: AST): boolean;
 >RegexCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -79,7 +79,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NullCallback? (pre, ast: AST): boolean;
 >NullCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -87,7 +87,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ArrayLitCallback? (pre, ast: AST): boolean;
 >ArrayLitCallback : (pre: any, ast: AST) => boolean
->                 : ^   ^^^^^^^   ^^^^^^^^^^       
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -95,7 +95,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ObjectLitCallback? (pre, ast: AST): boolean;
 >ObjectLitCallback : (pre: any, ast: AST) => boolean
->                  : ^   ^^^^^^^   ^^^^^^^^^^       
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -103,7 +103,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         VoidCallback? (pre, ast: AST): boolean;
 >VoidCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -111,7 +111,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         CommaCallback? (pre, ast: AST): boolean;
 >CommaCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -119,7 +119,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         PosCallback? (pre, ast: AST): boolean;
 >PosCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -127,7 +127,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NegCallback? (pre, ast: AST): boolean;
 >NegCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -135,7 +135,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DeleteCallback? (pre, ast: AST): boolean;
 >DeleteCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -143,7 +143,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AwaitCallback? (pre, ast: AST): boolean;
 >AwaitCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -151,7 +151,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         InCallback? (pre, ast: AST): boolean;
 >InCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -159,7 +159,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DotCallback? (pre, ast: AST): boolean;
 >DotCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -167,7 +167,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         FromCallback? (pre, ast: AST): boolean;
 >FromCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -175,7 +175,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         IsCallback? (pre, ast: AST): boolean;
 >IsCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -183,7 +183,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         InstOfCallback? (pre, ast: AST): boolean;
 >InstOfCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -191,7 +191,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TypeofCallback? (pre, ast: AST): boolean;
 >TypeofCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -199,7 +199,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NumberLitCallback? (pre, ast: AST): boolean;
 >NumberLitCallback : (pre: any, ast: AST) => boolean
->                  : ^   ^^^^^^^   ^^^^^^^^^^       
+>                  : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -207,7 +207,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NameCallback? (pre, identifierAst: Identifier): boolean;
 >NameCallback : (pre: any, identifierAst: Identifier) => boolean
->             : ^   ^^^^^^^             ^^^^^^^^^^^^^^^^^       
+>             : ^   ^^^^^^^             ^^          ^^^^^       
 >pre : any
 >    : ^^^
 >identifierAst : Identifier
@@ -215,7 +215,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TypeRefCallback? (pre, ast: AST): boolean;
 >TypeRefCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -223,7 +223,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         IndexCallback? (pre, ast: AST): boolean;
 >IndexCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -231,7 +231,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         CallCallback? (pre, ast: AST): boolean;
 >CallCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -239,7 +239,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NewCallback? (pre, ast: AST): boolean;
 >NewCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -247,7 +247,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgCallback? (pre, ast: AST): boolean;
 >AsgCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -255,7 +255,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgAddCallback? (pre, ast: AST): boolean;
 >AsgAddCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -263,7 +263,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgSubCallback? (pre, ast: AST): boolean;
 >AsgSubCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -271,7 +271,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgDivCallback? (pre, ast: AST): boolean;
 >AsgDivCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -279,7 +279,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgMulCallback? (pre, ast: AST): boolean;
 >AsgMulCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -287,7 +287,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgModCallback? (pre, ast: AST): boolean;
 >AsgModCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -295,7 +295,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgAndCallback? (pre, ast: AST): boolean;
 >AsgAndCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -303,7 +303,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgXorCallback? (pre, ast: AST): boolean;
 >AsgXorCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -311,7 +311,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgOrCallback? (pre, ast: AST): boolean;
 >AsgOrCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -319,7 +319,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgLshCallback? (pre, ast: AST): boolean;
 >AsgLshCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -327,7 +327,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgRshCallback? (pre, ast: AST): boolean;
 >AsgRshCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -335,7 +335,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AsgRs2Callback? (pre, ast: AST): boolean;
 >AsgRs2Callback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -343,7 +343,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         QMarkCallback? (pre, ast: AST): boolean;
 >QMarkCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -351,7 +351,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LogOrCallback? (pre, ast: AST): boolean;
 >LogOrCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -359,7 +359,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LogAndCallback? (pre, ast: AST): boolean;
 >LogAndCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -367,7 +367,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         OrCallback? (pre, ast: AST): boolean;
 >OrCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -375,7 +375,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         XorCallback? (pre, ast: AST): boolean;
 >XorCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -383,7 +383,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AndCallback? (pre, ast: AST): boolean;
 >AndCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -391,7 +391,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         EqCallback? (pre, ast: AST): boolean;
 >EqCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -399,7 +399,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NeCallback? (pre, ast: AST): boolean;
 >NeCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -407,7 +407,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         EqvCallback? (pre, ast: AST): boolean;
 >EqvCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -415,7 +415,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NEqvCallback? (pre, ast: AST): boolean;
 >NEqvCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -423,7 +423,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LtCallback? (pre, ast: AST): boolean;
 >LtCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -431,7 +431,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LeCallback? (pre, ast: AST): boolean;
 >LeCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -439,7 +439,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         GtCallback? (pre, ast: AST): boolean;
 >GtCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -447,7 +447,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         GeCallback? (pre, ast: AST): boolean;
 >GeCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -455,7 +455,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         AddCallback? (pre, ast: AST): boolean;
 >AddCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -463,7 +463,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         SubCallback? (pre, ast: AST): boolean;
 >SubCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -471,7 +471,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         MulCallback? (pre, ast: AST): boolean;
 >MulCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -479,7 +479,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DivCallback? (pre, ast: AST): boolean;
 >DivCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -487,7 +487,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ModCallback? (pre, ast: AST): boolean;
 >ModCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -495,7 +495,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LshCallback? (pre, ast: AST): boolean;
 >LshCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -503,7 +503,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         RshCallback? (pre, ast: AST): boolean;
 >RshCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -511,7 +511,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         Rs2Callback? (pre, ast: AST): boolean;
 >Rs2Callback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -519,7 +519,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         NotCallback? (pre, ast: AST): boolean;
 >NotCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -527,7 +527,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LogNotCallback? (pre, ast: AST): boolean;
 >LogNotCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -535,7 +535,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         IncPreCallback? (pre, ast: AST): boolean;
 >IncPreCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -543,7 +543,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DecPreCallback? (pre, ast: AST): boolean;
 >DecPreCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -551,7 +551,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         IncPostCallback? (pre, ast: AST): boolean;
 >IncPostCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -559,7 +559,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DecPostCallback? (pre, ast: AST): boolean;
 >DecPostCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -567,7 +567,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TypeAssertionCallback? (pre, ast: AST): boolean;
 >TypeAssertionCallback : (pre: any, ast: AST) => boolean
->                      : ^   ^^^^^^^   ^^^^^^^^^^       
+>                      : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -575,7 +575,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         FuncDeclCallback? (pre, funcDecl: FuncDecl): boolean;
 >FuncDeclCallback : (pre: any, funcDecl: FuncDecl) => boolean
->                 : ^   ^^^^^^^        ^^^^^^^^^^^^^^^       
+>                 : ^   ^^^^^^^        ^^        ^^^^^       
 >pre : any
 >    : ^^^
 >funcDecl : FuncDecl
@@ -583,7 +583,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         MemberCallback? (pre, ast: AST): boolean;
 >MemberCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -591,7 +591,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         VarDeclCallback? (pre, varDecl: VarDecl): boolean;
 >VarDeclCallback : (pre: any, varDecl: VarDecl) => boolean
->                : ^   ^^^^^^^       ^^^^^^^^^^^^^^       
+>                : ^   ^^^^^^^       ^^       ^^^^^       
 >pre : any
 >    : ^^^
 >varDecl : VarDecl
@@ -599,7 +599,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ArgDeclCallback? (pre, ast: AST): boolean;
 >ArgDeclCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -607,7 +607,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ReturnCallback? (pre, ast: AST): boolean;
 >ReturnCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -615,7 +615,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         BreakCallback? (pre, ast: AST): boolean;
 >BreakCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -623,7 +623,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ContinueCallback? (pre, ast: AST): boolean;
 >ContinueCallback : (pre: any, ast: AST) => boolean
->                 : ^   ^^^^^^^   ^^^^^^^^^^       
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -631,7 +631,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ThrowCallback? (pre, ast: AST): boolean;
 >ThrowCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -639,7 +639,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ForCallback? (pre, ast: AST): boolean;
 >ForCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -647,7 +647,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ForInCallback? (pre, ast: AST): boolean;
 >ForInCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -655,7 +655,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         IfCallback? (pre, ast: AST): boolean;
 >IfCallback : (pre: any, ast: AST) => boolean
->           : ^   ^^^^^^^   ^^^^^^^^^^       
+>           : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -663,7 +663,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         WhileCallback? (pre, ast: AST): boolean;
 >WhileCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -671,7 +671,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DoWhileCallback? (pre, ast: AST): boolean;
 >DoWhileCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -679,7 +679,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         BlockCallback? (pre, block: Block): boolean;
 >BlockCallback : (pre: any, block: Block) => boolean
->              : ^   ^^^^^^^     ^^^^^^^^^^^^       
+>              : ^   ^^^^^^^     ^^     ^^^^^       
 >pre : any
 >    : ^^^
 >block : Block
@@ -687,7 +687,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         CaseCallback? (pre, ast: AST): boolean;
 >CaseCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -695,7 +695,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         SwitchCallback? (pre, ast: AST): boolean;
 >SwitchCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -703,7 +703,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TryCallback? (pre, ast: AST): boolean;
 >TryCallback : (pre: any, ast: AST) => boolean
->            : ^   ^^^^^^^   ^^^^^^^^^^       
+>            : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -711,7 +711,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TryCatchCallback? (pre, ast: AST): boolean;
 >TryCatchCallback : (pre: any, ast: AST) => boolean
->                 : ^   ^^^^^^^   ^^^^^^^^^^       
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -719,7 +719,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         TryFinallyCallback? (pre, ast: AST): boolean;
 >TryFinallyCallback : (pre: any, ast: AST) => boolean
->                   : ^   ^^^^^^^   ^^^^^^^^^^       
+>                   : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -727,7 +727,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         FinallyCallback? (pre, ast: AST): boolean;
 >FinallyCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -735,7 +735,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         CatchCallback? (pre, ast: AST): boolean;
 >CatchCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -743,7 +743,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ListCallback? (pre, astList: ASTList): boolean;
 >ListCallback : (pre: any, astList: ASTList) => boolean
->             : ^   ^^^^^^^       ^^^^^^^^^^^^^^       
+>             : ^   ^^^^^^^       ^^       ^^^^^       
 >pre : any
 >    : ^^^
 >astList : ASTList
@@ -751,7 +751,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ScriptCallback? (pre, script: Script): boolean;
 >ScriptCallback : (pre: any, script: Script) => boolean
->               : ^   ^^^^^^^      ^^^^^^^^^^^^^       
+>               : ^   ^^^^^^^      ^^      ^^^^^       
 >pre : any
 >    : ^^^
 >script : Script
@@ -759,7 +759,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ClassDeclarationCallback? (pre, ast: AST): boolean;
 >ClassDeclarationCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^^^^^^^^^       
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -767,7 +767,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         InterfaceDeclarationCallback? (pre, interfaceDecl: InterfaceDeclaration): boolean;
 >InterfaceDeclarationCallback : (pre: any, interfaceDecl: InterfaceDeclaration) => boolean
->                             : ^   ^^^^^^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>                             : ^   ^^^^^^^             ^^                    ^^^^^       
 >pre : any
 >    : ^^^
 >interfaceDecl : InterfaceDeclaration
@@ -775,7 +775,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ModuleDeclarationCallback? (pre, moduleDecl: ModuleDeclaration): boolean;
 >ModuleDeclarationCallback : (pre: any, moduleDecl: ModuleDeclaration) => boolean
->                          : ^   ^^^^^^^          ^^^^^^^^^^^^^^^^^^^^^^^^       
+>                          : ^   ^^^^^^^          ^^                 ^^^^^       
 >pre : any
 >    : ^^^
 >moduleDecl : ModuleDeclaration
@@ -783,7 +783,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ImportDeclarationCallback? (pre, ast: AST): boolean;
 >ImportDeclarationCallback : (pre: any, ast: AST) => boolean
->                          : ^   ^^^^^^^   ^^^^^^^^^^       
+>                          : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -791,7 +791,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         WithCallback? (pre, ast: AST): boolean;
 >WithCallback : (pre: any, ast: AST) => boolean
->             : ^   ^^^^^^^   ^^^^^^^^^^       
+>             : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -799,7 +799,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LabelCallback? (pre, labelAST: AST): boolean;
 >LabelCallback : (pre: any, labelAST: AST) => boolean
->              : ^   ^^^^^^^        ^^^^^^^^^^       
+>              : ^   ^^^^^^^        ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >labelAST : AST
@@ -807,7 +807,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         LabeledStatementCallback? (pre, ast: AST): boolean;
 >LabeledStatementCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^^^^^^^^^       
+>                         : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -815,7 +815,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         EBStartCallback? (pre, ast: AST): boolean;
 >EBStartCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -823,7 +823,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         GotoEBCallback? (pre, ast: AST): boolean;
 >GotoEBCallback : (pre: any, ast: AST) => boolean
->               : ^   ^^^^^^^   ^^^^^^^^^^       
+>               : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -831,7 +831,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         EndCodeCallback? (pre, ast: AST): boolean;
 >EndCodeCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -839,7 +839,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         ErrorCallback? (pre, ast: AST): boolean;
 >ErrorCallback : (pre: any, ast: AST) => boolean
->              : ^   ^^^^^^^   ^^^^^^^^^^       
+>              : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -847,7 +847,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         CommentCallback? (pre, ast: AST): boolean;
 >CommentCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -855,7 +855,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DebuggerCallback? (pre, ast: AST): boolean;
 >DebuggerCallback : (pre: any, ast: AST) => boolean
->                 : ^   ^^^^^^^   ^^^^^^^^^^       
+>                 : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -863,7 +863,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         DefaultCallback? (pre, ast: AST): boolean;
 >DefaultCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^       
+>                : ^   ^^^^^^^   ^^   ^^^^^       
 >pre : any
 >    : ^^^
 >ast : AST
@@ -872,7 +872,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
     export function walk(script: Script, callback: AstWalkerDetailCallback): void {
 >walk : (script: Script, callback: AstWalkerDetailCallback) => void
->     : ^      ^^^^^^^^^^        ^^                       ^^^^^    
+>     : ^      ^^      ^^        ^^                       ^^^^^    
 >script : Script
 >       : ^^^^^^
 >callback : AstWalkerDetailCallback
@@ -880,9 +880,9 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         var pre = (cur: AST, parent: AST) => {
 >pre : (cur: AST, parent: AST) => AST
->    : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>    : ^   ^^   ^^      ^^   ^^^^^^^^
 >(cur: AST, parent: AST) => {            walker.options.goChildren = AstWalkerCallback(true, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
->                                                                                                                                            : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                                            : ^   ^^   ^^      ^^   ^^^^^^^^
 >cur : AST
 >    : ^^^
 >parent : AST
@@ -904,7 +904,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(true, cur, callback) : boolean
 >                                       : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^       ^^   ^^^^^^^        ^^                       ^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^^^^^^^^
 >true : true
 >     : ^^^^
 >cur : AST
@@ -919,9 +919,9 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         var post = (cur: AST, parent: AST) => {
 >post : (cur: AST, parent: AST) => AST
->     : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>     : ^   ^^   ^^      ^^   ^^^^^^^^
 >(cur: AST, parent: AST) => {            AstWalkerCallback(false, cur, callback);            return cur;        } : (cur: AST, parent: AST) => AST
->                                                                                                                 : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>                                                                                                                 : ^   ^^   ^^      ^^   ^^^^^^^^
 >cur : AST
 >    : ^^^
 >parent : AST
@@ -931,7 +931,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback(false, cur, callback) : boolean
 >                                        : ^^^^^^^
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^       ^^   ^^^^^^^        ^^                       ^^^^^^^^^^^^
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 >cur : AST
@@ -962,9 +962,9 @@ module TypeScript.AstWalkerWithDetailCallback {
 >getWalker : any
 >          : ^^^
 >pre : (cur: AST, parent: AST) => AST
->    : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>    : ^   ^^   ^^      ^^   ^^^^^^^^
 >post : (cur: AST, parent: AST) => AST
->     : ^   ^^^^^^^      ^^^^^^^^^^^^^
+>     : ^   ^^   ^^      ^^   ^^^^^^^^
 
         walker.walk(script, null);
 >walker.walk(script, null) : any
@@ -981,7 +981,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 
     function AstWalkerCallback(pre: boolean, ast: AST, callback: AstWalkerDetailCallback): boolean {
 >AstWalkerCallback : (pre: boolean, ast: AST, callback: AstWalkerDetailCallback) => boolean
->                  : ^   ^^       ^^   ^^^^^^^        ^^                       ^^^^^       
+>                  : ^   ^^       ^^   ^^   ^^        ^^                       ^^^^^       
 >pre : boolean
 >    : ^^^^^^^
 >ast : AST
@@ -1047,21 +1047,21 @@ module TypeScript.AstWalkerWithDetailCallback {
 
         if (callback.DefaultCallback) {
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
+>                         : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
 >callback : AstWalkerDetailCallback
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
+>                : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
 
             return callback.DefaultCallback(pre, ast);
 >callback.DefaultCallback(pre, ast) : boolean
 >                                   : ^^^^^^^
 >callback.DefaultCallback : (pre: any, ast: AST) => boolean
->                         : ^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
+>                         : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
 >callback : AstWalkerDetailCallback
 >         : ^^^^^^^^^^^^^^^^^^^^^^^
 >DefaultCallback : (pre: any, ast: AST) => boolean
->                : ^   ^^^^^^^   ^^^^^^^^^^^^^^^^^
+>                : ^   ^^^^^^^   ^^   ^^^^^^^^^^^^
 >pre : boolean
 >    : ^^^^^^^
 >ast : AST

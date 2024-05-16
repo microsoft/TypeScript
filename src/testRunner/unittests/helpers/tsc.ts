@@ -1,8 +1,8 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselinePrograms,
     CommandLineCallbacks,
@@ -15,7 +15,7 @@ import {
     ReadableProgramMultiFileEmitBuildInfo,
     toPathWithSystem,
     tscBaselineName,
-} from "./baseline";
+} from "./baseline.js";
 
 export type TscCompileSystem = fakes.System & {
     writtenFiles: Set<ts.Path>;

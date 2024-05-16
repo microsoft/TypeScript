@@ -49,6 +49,7 @@ import {
     Decorator,
     Diagnostic,
     Diagnostics,
+    diagnosticsEqualityComparer,
     ElementAccessChain,
     ElementAccessExpression,
     emptyArray,
@@ -294,7 +295,7 @@ import {
     TypeReferenceType,
     UnaryExpression,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export function isExternalModuleNameRelative(moduleName: string): boolean {
     // TypeScript 1.0 spec (April 2014): 11.2.1
@@ -304,7 +305,7 @@ export function isExternalModuleNameRelative(moduleName: string): boolean {
 }
 
 export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: readonly T[]): SortedReadonlyArray<T> {
-    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
+    return sortAndDeduplicate<T>(diagnostics, compareDiagnostics, diagnosticsEqualityComparer);
 }
 
 export function getDefaultLibFileName(options: CompilerOptions): string {
@@ -2319,7 +2320,8 @@ function isDeclarationKind(kind: SyntaxKind) {
         || kind === SyntaxKind.VariableDeclaration
         || kind === SyntaxKind.JSDocTypedefTag
         || kind === SyntaxKind.JSDocCallbackTag
-        || kind === SyntaxKind.JSDocPropertyTag;
+        || kind === SyntaxKind.JSDocPropertyTag
+        || kind === SyntaxKind.NamedTupleMember;
 }
 
 function isDeclarationStatementKind(kind: SyntaxKind) {

@@ -175,8 +175,8 @@ declare function foo16(a: any): any;
 declare function foo17(a17: {
 >foo17 : { (a17: { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }): any; (a: any): any; }
 >      : ^^^   ^^                                                                                                    ^^^^^^^^^ ^^   ^^^^^^^^^
->a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T_1 extends Base>(x: new (a: T_1) => T_1): T_1[]; }
->    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^^^^^   ^^^^^^^^^^^^^^^ ^^                   ^^^     ^^^
+>a17 : { new <T extends Derived>(x: new (a: T) => T): T[]; new <T extends Base>(x: new (a: T) => T): T[]; }
+>    : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^               ^^^   ^^^^^^^ ^^^^^^^^^^^^^^^ ^^               ^^^   ^^^
 
     new <T extends Derived>(x: new (a: T) => T): T[];
 >x : new (a: T) => T
@@ -203,8 +203,8 @@ declare function foo18(a18: {
 >    : ^^^^^^^ ^^                                                                    ^^^     ^^^^^^^ ^^                                                                     ^^^     ^^^
 
     new (x: {
->x : { new <T extends Derived>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { new <T extends Derived>(a: T): T; new <T extends Base>(a: T): T; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
         new <T extends Derived>(a: T): T;
 >a : T
@@ -216,8 +216,8 @@ declare function foo18(a18: {
 
     }): any[];
     new (x: {
->x : { new <T extends Derived2>(a: T): T; new <T_1 extends Base>(a: T_1): T_1; }
->  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^   ^^^^^^^^^^^^^^^ ^^   ^^^   ^^^
+>x : { new <T extends Derived2>(a: T): T; new <T extends Base>(a: T): T; }
+>  : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^ ^^^ ^^^^^^^ ^^^^^^^^^^^^^^^ ^^ ^^^ ^^^
 
         new <T extends Derived2>(a: T): T;
 >a : T

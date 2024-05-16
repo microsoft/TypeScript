@@ -26,7 +26,7 @@ import {
     TextRange,
     TypeNode,
     TypeParameterDeclaration,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /**
  * Associates a node with the current transformation, initializing

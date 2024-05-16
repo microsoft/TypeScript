@@ -28,7 +28,7 @@ import {
     ScriptTarget,
     toPath,
     transpileOptionValueCompilerOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface TranspileOptions {
     compilerOptions?: CompilerOptions;
@@ -75,6 +75,7 @@ export function transpileModule(input: string, transpileOptions: TranspileOption
  * - noResolve = true
  * - declaration = true
  * - emitDeclarationOnly = true
+ * - noCheck = true
  * Note that this declaration file may differ from one produced by a full program typecheck,
  * in that only types in the single input file are available to be used in the generated declarations.
  */
@@ -141,6 +142,7 @@ function transpileWorker(input: string, transpileOptions: TranspileOptions, decl
         options.declaration = true;
         options.emitDeclarationOnly = true;
         options.isolatedDeclarations = true;
+        options.noCheck = true;
     }
     else {
         options.declaration = false;

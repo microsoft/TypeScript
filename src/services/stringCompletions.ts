@@ -1,4 +1,13 @@
-import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers";
+import { getModuleSpecifierPreferences } from "../compiler/moduleSpecifiers.js";
+import {
+    CompletionKind,
+    createCompletionDetails,
+    createCompletionDetailsForSymbol,
+    getCompletionEntriesFromSymbols,
+    getPropertiesForObjectExpression,
+    Log,
+    SortText,
+} from "./_namespaces/ts.Completions.js";
 import {
     addToSeen,
     altDirectorySeparator,
@@ -148,16 +157,7 @@ import {
     UserPreferences,
     walkUpParenthesizedExpressions,
     walkUpParenthesizedTypes,
-} from "./_namespaces/ts";
-import {
-    CompletionKind,
-    createCompletionDetails,
-    createCompletionDetailsForSymbol,
-    getCompletionEntriesFromSymbols,
-    getPropertiesForObjectExpression,
-    Log,
-    SortText,
-} from "./_namespaces/ts.Completions";
+} from "./_namespaces/ts.js";
 
 interface NameAndKindSet {
     add(value: NameAndKind): void;

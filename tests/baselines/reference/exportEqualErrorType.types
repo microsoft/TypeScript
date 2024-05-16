@@ -9,14 +9,14 @@ import connect = require('exportEqualErrorType_0');
 connect().use(connect.static('foo')); // Error  1      The property 'static' does not exist on value of type ''.
 >connect().use(connect.static('foo')) : connect.connectExport
 >                                     : ^^^^^^^^^^^^^^^^^^^^^
->connect().use : (mod: connectModule) => connect.connectExport
->              : ^   ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>connect().use : (mod: connect.connectModule) => connect.connectExport
+>              : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect() : connect.connectExport
 >          : ^^^^^^^^^^^^^^^^^^^^^
 >connect : { (): connect.connectExport; foo: Date; }
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->use : (mod: connectModule) => connect.connectExport
->    : ^   ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>use : (mod: connect.connectModule) => connect.connectExport
+>    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >connect.static('foo') : any
 >                      : ^^^
 >connect.static : any

@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /types/typedefs/index.d.ts
 
 
@@ -29,7 +29,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /types/typedefs/index.d.ts
 
 
@@ -60,7 +60,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: SafeModules
+Program 3 Reused:: SafeModules
 File: /a.ts
 
 
@@ -74,7 +74,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: SafeModules
+Program 4 Reused:: SafeModules
 File: /types/typedefs/index.d.ts
 
 
