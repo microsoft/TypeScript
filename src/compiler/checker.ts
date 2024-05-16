@@ -41889,10 +41889,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         //   - The base constraint of `T` is an object type with a callable `then` method.
 
         if (isAwaitedTypeNeeded(type)) {
-            const awaitedType = tryCreateAwaitedType(type);
-            if (awaitedType) {
-                return awaitedType;
-            }
+            return tryCreateAwaitedType(type) ?? type;
         }
 
         Debug.assert(isAwaitedTypeInstantiation(type) || getPromisedTypeOfPromise(type) === undefined, "type provided should not be a non-generic 'promise'-like.");
