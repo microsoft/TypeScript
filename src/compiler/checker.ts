@@ -48854,9 +48854,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return getEnumMemberValue(node).value;
         }
 
-        void checkExpressionCached(node); // ensure cached resolved symbol is set
-        const links = getNodeLinks(node);
-        const symbol = links.resolvedSymbol || (isEntityNameExpression(node) ? resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true) : undefined);
+        if (!getNodeLinks(node).resolvedSymbol) {
+            void checkExpressionCached(node); // ensure cached resolved symbol is set
+        }
+        const symbol = getNodeLinks(node).resolvedSymbol || (isEntityNameExpression(node) ? resolveEntityName(node, SymbolFlags.Value, /*ignoreErrors*/ true) : undefined);
         if (symbol && (symbol.flags & SymbolFlags.EnumMember)) {
             // inline property\index accesses only for const enums
             const member = symbol.valueDeclaration as EnumMember;
