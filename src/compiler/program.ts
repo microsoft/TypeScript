@@ -3765,7 +3765,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         }
 
         let redirectedPath: Path | undefined;
-        if (isReferencedFile(reason) && !useSourceOfProjectReferenceRedirect) {
+        if (!useSourceOfProjectReferenceRedirect) {
             const redirectProject = getProjectReferenceRedirectProject(fileName);
             if (redirectProject) {
                 if (redirectProject.commandLine.options.outFile) {

@@ -172,14 +172,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -196,10 +198,12 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 exitCode:: ExitStatus.Success
 
 
@@ -214,7 +218,7 @@ console.log('Hello, world!');
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-1222780632-export function log(str: string) {\n    console.log(str);\n}\n","signature":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,2,4,5,1],"latestChangedDtsFile":"../shared/src/random.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,4,2,5,1],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -223,8 +227,8 @@ console.log('Hello, world!');
       "../../../../../../../lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/logging.d.ts",
+      "../../../shared/dist/src/random.d.ts"
     ],
     "fileNamesList": [
       [
@@ -262,23 +266,21 @@ console.log('Hello, world!');
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "-1222780632-export function log(str: string) {\n    console.log(str);\n}\n",
-          "signature": "2292560907-export declare function log(str: string): void;\n",
+          "version": "2292560907-export declare function log(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "-1222780632-export function log(str: string) {\n    console.log(str);\n}\n",
+        "version": "2292560907-export declare function log(str: string): void;\n",
         "signature": "2292560907-export declare function log(str: string): void;\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/random.ts": {
+      "../../../shared/dist/src/random.d.ts": {
         "original": {
-          "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
-          "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
+          "version": "-1751303682-export declare function randomFn(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
+        "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
         "impliedFormat": "commonjs"
       }
@@ -292,8 +294,8 @@ console.log('Hello, world!');
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts",
-          "../../../shared/src/random.ts"
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/dist/src/random.d.ts"
         ]
       ]
     ],
@@ -309,42 +311,16 @@ console.log('Hello, world!');
     },
     "semanticDiagnosticsPerFile": [
       "../../src/server.ts",
+      "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts",
+      "../../../shared/dist/src/random.d.ts",
       "../../../../../../../lib/lib.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/random.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1559
+  "size": 1383
 }
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.d.ts]
-export declare function log(str: string): void;
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.log = log;
-function log(str) {
-    console.log(str);
-}
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/random.d.ts]
-export declare function randomFn(str: string): void;
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/random.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.randomFn = randomFn;
-function randomFn(str) {
-    console.log(str);
-}
-
 
 //// [/home/src/workspaces/projects/shared/dist/src/logging.d.ts]
 export declare function log(str: string): void;
@@ -482,15 +458,15 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:00:53 AM[0m] Projects in this build: 
+[[90m12:00:47 AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:00:54 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/random.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90m12:00:48 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/random.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:00:55 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
+[[90m12:00:49 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
 
-[[90m12:00:56 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:00:50 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/server/src/package.json' does not exist.
 File '/home/src/workspaces/projects/server/package.json' does not exist.
@@ -517,14 +493,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -533,7 +511,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:00:57 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:00:51 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 ../../../lib/lib.d.ts
   Default library for target 'es5'
@@ -543,10 +521,12 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 exitCode:: ExitStatus.Success
 
 
@@ -565,13 +545,13 @@ export const x = 10;
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:01 AM[0m] Projects in this build: 
+[[90m12:00:55 AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:02 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output 'projects/shared/dist/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
+[[90m12:00:56 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because output 'projects/shared/dist/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
 
-[[90m12:01:03 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
+[[90m12:00:57 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/package.json' does not exist.
@@ -604,9 +584,9 @@ projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/random.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90m12:01:09 AM[0m] Project 'projects/server/tsconfig.json' is out of date because output 'projects/server/dist/server/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
+[[90m12:01:03 AM[0m] Project 'projects/server/tsconfig.json' is out of date because output 'projects/server/dist/server/tsconfig.tsbuildinfo' is older than input 'projects/shared/src/logging.ts'
 
-[[90m12:01:10 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:04 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/server/src/package.json' does not exist.
 File '/home/src/workspaces/projects/server/package.json' does not exist.
@@ -633,14 +613,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -657,15 +639,17 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 exitCode:: ExitStatus.Success
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,2,4,5,1],"latestChangedDtsFile":"../shared/src/logging.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,4,2,5,1],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -674,8 +658,8 @@ exitCode:: ExitStatus.Success
       "../../../../../../../lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/logging.d.ts",
+      "../../../shared/dist/src/random.d.ts"
     ],
     "fileNamesList": [
       [
@@ -713,23 +697,21 @@ exitCode:: ExitStatus.Success
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
-          "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
+          "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
           "impliedFormat": 1
         },
-        "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
+        "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/random.ts": {
+      "../../../shared/dist/src/random.d.ts": {
         "original": {
-          "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
-          "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
+          "version": "-1751303682-export declare function randomFn(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
+        "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
         "impliedFormat": "commonjs"
       }
@@ -743,8 +725,8 @@ exitCode:: ExitStatus.Success
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts",
-          "../../../shared/src/random.ts"
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/dist/src/random.d.ts"
         ]
       ]
     ],
@@ -760,32 +742,16 @@ exitCode:: ExitStatus.Success
     },
     "semanticDiagnosticsPerFile": [
       "../../src/server.ts",
+      "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts",
+      "../../../shared/dist/src/random.d.ts",
       "../../../../../../../lib/lib.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/logging.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1609
+  "size": 1414
 }
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.d.ts]
-export declare function log(str: string): void;
-export declare const x = 10;
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.log = log;
-function log(str) {
-    console.log(str);
-}
-exports.x = 10;
-
 
 //// [/home/src/workspaces/projects/shared/dist/src/logging.d.ts]
 export declare function log(str: string): void;
@@ -896,15 +862,15 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:16 AM[0m] Projects in this build: 
+[[90m12:01:08 AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:17 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90m12:01:09 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:01:18 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
+[[90m12:01:10 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
 
-[[90m12:01:19 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:11 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/server/src/package.json' does not exist.
 File '/home/src/workspaces/projects/server/package.json' does not exist.
@@ -931,14 +897,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -947,7 +915,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:01:20 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:12 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 ../../../lib/lib.d.ts
   Default library for target 'es5'
@@ -957,10 +925,12 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 exitCode:: ExitStatus.Success
 
 
@@ -974,13 +944,13 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:24 AM[0m] Projects in this build: 
+[[90m12:01:16 AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:25 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because buildinfo file 'projects/shared/dist/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
+[[90m12:01:17 AM[0m] Project 'projects/shared/tsconfig.json' is out of date because buildinfo file 'projects/shared/dist/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
 
-[[90m12:01:26 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
+[[90m12:01:18 AM[0m] Building project '/home/src/workspaces/projects/shared/tsconfig.json'...
 
 File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
 File '/home/src/workspaces/projects/shared/package.json' does not exist.
@@ -1004,9 +974,9 @@ projects/shared/src/logging.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
 projects/shared/src/myClass.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/shared/tsconfig.json'
-[[90m12:01:30 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
+[[90m12:01:22 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
 
-[[90m12:01:31 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:23 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/server/src/package.json' does not exist.
 File '/home/src/workspaces/projects/server/package.json' does not exist.
@@ -1033,7 +1003,8 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -1050,13 +1021,14 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
 exitCode:: ExitStatus.Success
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,2,4,1],"latestChangedDtsFile":"../shared/src/logging.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[3,4,2,1],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1065,7 +1037,7 @@ exitCode:: ExitStatus.Success
       "../../../../../../../lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts"
+      "../../../shared/dist/src/logging.d.ts"
     ],
     "fileNamesList": [
       [
@@ -1103,13 +1075,12 @@ exitCode:: ExitStatus.Success
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
-          "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
+          "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
           "impliedFormat": 1
         },
-        "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
+        "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "impliedFormat": "commonjs"
       }
@@ -1123,7 +1094,7 @@ exitCode:: ExitStatus.Success
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts"
+          "../../../shared/dist/src/logging.d.ts"
         ]
       ]
     ],
@@ -1139,14 +1110,14 @@ exitCode:: ExitStatus.Success
     },
     "semanticDiagnosticsPerFile": [
       "../../src/server.ts",
+      "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts",
       "../../../../../../../lib/lib.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/logging.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1383
+  "size": 1274
 }
 
 //// [/home/src/workspaces/projects/shared/dist/tsconfig.tsbuildinfo]
@@ -1227,15 +1198,15 @@ Input::
 
 Output::
 /lib/tsc --b projects/server -v --traceResolution --explainFiles
-[[90m12:01:35 AM[0m] Projects in this build: 
+[[90m12:01:27 AM[0m] Projects in this build: 
     * projects/shared/tsconfig.json
     * projects/server/tsconfig.json
 
-[[90m12:01:36 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
+[[90m12:01:28 AM[0m] Project 'projects/shared/tsconfig.json' is up to date because newest input 'projects/shared/src/logging.ts' is older than output 'projects/shared/dist/tsconfig.tsbuildinfo'
 
-[[90m12:01:37 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
+[[90m12:01:29 AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/myclass.d.ts' was root file of compilation but not any more.
 
-[[90m12:01:38 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:30 AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 File '/home/src/workspaces/projects/server/src/package.json' does not exist.
 File '/home/src/workspaces/projects/server/package.json' does not exist.
@@ -1262,7 +1233,8 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -1271,7 +1243,7 @@ File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/lib/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-[[90m12:01:39 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
+[[90m12:01:31 AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/projects/server/tsconfig.json'...
 
 ../../../lib/lib.d.ts
   Default library for target 'es5'
@@ -1281,8 +1253,9 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
 exitCode:: ExitStatus.Success
 
 

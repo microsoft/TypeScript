@@ -160,14 +160,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -185,10 +187,12 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
@@ -331,34 +335,8 @@ console.log('Hello, world!');
 export {};
 
 
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.log = log;
-function log(str) {
-    console.log(str);
-}
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.d.ts]
-export declare function log(str: string): void;
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/random.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.randomFn = randomFn;
-function randomFn(str) {
-    console.log(str);
-}
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/random.d.ts]
-export declare function randomFn(str: string): void;
-
-
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-1222780632-export function log(str: string) {\n    console.log(str);\n}\n","signature":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"../shared/src/random.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,4,2,5],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -367,8 +345,8 @@ export declare function randomFn(str: string): void;
       "../../../../../../../a/lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/logging.d.ts",
+      "../../../shared/dist/src/random.d.ts"
     ],
     "fileNamesList": [
       [
@@ -406,23 +384,21 @@ export declare function randomFn(str: string): void;
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "-1222780632-export function log(str: string) {\n    console.log(str);\n}\n",
-          "signature": "2292560907-export declare function log(str: string): void;\n",
+          "version": "2292560907-export declare function log(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "-1222780632-export function log(str: string) {\n    console.log(str);\n}\n",
+        "version": "2292560907-export declare function log(str: string): void;\n",
         "signature": "2292560907-export declare function log(str: string): void;\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/random.ts": {
+      "../../../shared/dist/src/random.d.ts": {
         "original": {
-          "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
-          "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
+          "version": "-1751303682-export declare function randomFn(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
+        "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
         "impliedFormat": "commonjs"
       }
@@ -436,8 +412,8 @@ export declare function randomFn(str: string): void;
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts",
-          "../../../shared/src/random.ts"
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/dist/src/random.d.ts"
         ]
       ]
     ],
@@ -454,14 +430,14 @@ export declare function randomFn(str: string): void;
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
       "../../src/server.ts",
+      "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/random.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/random.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1561
+  "size": 1385
 }
 
 
@@ -574,22 +550,22 @@ Program files::
 /a/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/server/src/server.ts
-/home/src/workspaces/projects/shared/src/logging.ts
-/home/src/workspaces/projects/shared/src/random.ts
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts
+/home/src/workspaces/projects/shared/dist/src/random.d.ts
 
 Semantic diagnostics in builder refreshed for::
 /a/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/server/src/server.ts
-/home/src/workspaces/projects/shared/src/logging.ts
-/home/src/workspaces/projects/shared/src/random.ts
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts
+/home/src/workspaces/projects/shared/dist/src/random.d.ts
 
 Shape signatures in builder refreshed for::
 /a/lib/lib.d.ts (used version)
 /home/src/workspaces/projects/shared/dist/src/myclass.d.ts (used version)
 /home/src/workspaces/projects/server/src/server.ts (computed .d.ts during emit)
-/home/src/workspaces/projects/shared/src/logging.ts (computed .d.ts during emit)
-/home/src/workspaces/projects/shared/src/random.ts (computed .d.ts during emit)
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts (used version)
+/home/src/workspaces/projects/shared/dist/src/random.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -798,14 +774,16 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -823,32 +801,18 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/random.ts
+  File is output of project reference source 'projects/shared/src/logging.ts'
+projects/shared/dist/src/random.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/random.ts'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.log = log;
-function log(str) {
-    console.log(str);
-}
-exports.x = 10;
-
-
-//// [/home/src/workspaces/projects/server/dist/shared/src/logging.d.ts]
-export declare function log(str: string): void;
-export declare const x = 10;
-
-
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n","signature":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2,4,5],"latestChangedDtsFile":"../shared/src/logging.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/random.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,4,2,5],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -857,8 +821,8 @@ export declare const x = 10;
       "../../../../../../../a/lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/logging.d.ts",
+      "../../../shared/dist/src/random.d.ts"
     ],
     "fileNamesList": [
       [
@@ -896,23 +860,21 @@ export declare const x = 10;
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
-          "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
+          "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
           "impliedFormat": 1
         },
-        "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
+        "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/random.ts": {
+      "../../../shared/dist/src/random.d.ts": {
         "original": {
-          "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
-          "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
+          "version": "-1751303682-export declare function randomFn(str: string): void;\n",
           "impliedFormat": 1
         },
-        "version": "4380863035-export function randomFn(str: string) {\n    console.log(str);\n}\n",
+        "version": "-1751303682-export declare function randomFn(str: string): void;\n",
         "signature": "-1751303682-export declare function randomFn(str: string): void;\n",
         "impliedFormat": "commonjs"
       }
@@ -926,8 +888,8 @@ export declare const x = 10;
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts",
-          "../../../shared/src/random.ts"
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/dist/src/random.d.ts"
         ]
       ]
     ],
@@ -944,14 +906,14 @@ export declare const x = 10;
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
       "../../src/server.ts",
+      "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts",
-      "../../../shared/src/random.ts"
+      "../../../shared/dist/src/random.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/logging.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1611
+  "size": 1416
 }
 
 
@@ -1009,14 +971,14 @@ Program files::
 /a/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/server/src/server.ts
-/home/src/workspaces/projects/shared/src/logging.ts
-/home/src/workspaces/projects/shared/src/random.ts
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts
+/home/src/workspaces/projects/shared/dist/src/random.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/workspaces/projects/shared/src/logging.ts
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts
 
 Shape signatures in builder refreshed for::
-/home/src/workspaces/projects/shared/src/logging.ts (computed .d.ts)
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -1232,7 +1194,8 @@ File '/home/src/workspaces/package.json' does not exist according to earlier cac
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-File '/home/src/workspaces/projects/shared/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/workspaces/projects/shared/dist/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/shared/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/projects/package.json' does not exist according to earlier cached lookups.
 File '/home/src/workspaces/package.json' does not exist according to earlier cached lookups.
@@ -1250,14 +1213,15 @@ projects/shared/dist/src/myClass.d.ts
   File is output of project reference source 'projects/shared/src/myClass.ts'
 projects/server/src/server.ts
   Matched by include pattern 'src/**/*.ts' in 'projects/server/tsconfig.json'
-projects/shared/src/logging.ts
+projects/shared/dist/src/logging.d.ts
   Matched by include pattern '../shared/src/**/*.ts' in 'projects/server/tsconfig.json'
+  File is output of project reference source 'projects/shared/src/logging.ts'
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;","signature":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,2,4],"latestChangedDtsFile":"../shared/src/logging.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/dist/src/logging.d.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,3,4,2],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1266,7 +1230,7 @@ projects/shared/src/logging.ts
       "../../../../../../../a/lib/lib.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../src/server.ts",
-      "../../../shared/src/logging.ts"
+      "../../../shared/dist/src/logging.d.ts"
     ],
     "fileNamesList": [
       [
@@ -1304,13 +1268,12 @@ projects/shared/src/logging.ts
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../../../shared/src/logging.ts": {
+      "../../../shared/dist/src/logging.d.ts": {
         "original": {
-          "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
-          "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
+          "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
           "impliedFormat": 1
         },
-        "version": "483739938-export function log(str: string) {\n    console.log(str);\n}\nexport const x = 10;",
+        "version": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "signature": "-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n",
         "impliedFormat": "commonjs"
       }
@@ -1324,7 +1287,7 @@ projects/shared/src/logging.ts
         [
           "../../../shared/dist/src/myclass.d.ts",
           "../../src/server.ts",
-          "../../../shared/src/logging.ts"
+          "../../../shared/dist/src/logging.d.ts"
         ]
       ]
     ],
@@ -1341,13 +1304,13 @@ projects/shared/src/logging.ts
     "semanticDiagnosticsPerFile": [
       "../../../../../../../a/lib/lib.d.ts",
       "../../src/server.ts",
-      "../../../shared/dist/src/myclass.d.ts",
-      "../../../shared/src/logging.ts"
+      "../../../shared/dist/src/logging.d.ts",
+      "../../../shared/dist/src/myclass.d.ts"
     ],
-    "latestChangedDtsFile": "../shared/src/logging.d.ts"
+    "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1385
+  "size": 1276
 }
 
 
@@ -1400,7 +1363,7 @@ Program files::
 /a/lib/lib.d.ts
 /home/src/workspaces/projects/shared/dist/src/myClass.d.ts
 /home/src/workspaces/projects/server/src/server.ts
-/home/src/workspaces/projects/shared/src/logging.ts
+/home/src/workspaces/projects/shared/dist/src/logging.d.ts
 
 Semantic diagnostics in builder refreshed for::
 
