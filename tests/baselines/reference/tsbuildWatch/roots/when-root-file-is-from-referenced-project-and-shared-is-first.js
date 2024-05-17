@@ -336,7 +336,7 @@ export {};
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,5,2,3,4],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"2292560907-export declare function log(str: string): void;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,5,2,3,4],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -346,7 +346,10 @@ export {};
       "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../../shared/dist/src/random.d.ts",
-      "../../src/server.ts"
+      "../../src/server.ts",
+      "../../../shared/src/logging.ts",
+      "../../../shared/src/myclass.ts",
+      "../../../shared/src/random.ts"
     ],
     "fileNamesList": [
       [
@@ -417,6 +420,38 @@ export {};
         ]
       ]
     ],
+    "resolvedRoot": [
+      [
+        [
+          2,
+          6
+        ],
+        [
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/src/logging.ts"
+        ]
+      ],
+      [
+        [
+          3,
+          7
+        ],
+        [
+          "../../../shared/dist/src/myclass.d.ts",
+          "../../../shared/src/myclass.ts"
+        ]
+      ],
+      [
+        [
+          4,
+          8
+        ],
+        [
+          "../../../shared/dist/src/random.d.ts",
+          "../../../shared/src/random.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "..",
@@ -437,7 +472,7 @@ export {};
     "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1385
+  "size": 1518
 }
 
 
@@ -812,7 +847,7 @@ projects/server/src/server.ts
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,5]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,5,2,3,4],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../../shared/dist/src/random.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts","../../../shared/src/random.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-1751303682-export declare function randomFn(str: string): void;\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,5]],"resolvedRoot":[[2,6],[3,7],[4,8]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,5,2,3,4],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -822,7 +857,10 @@ projects/server/src/server.ts
       "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
       "../../../shared/dist/src/random.d.ts",
-      "../../src/server.ts"
+      "../../src/server.ts",
+      "../../../shared/src/logging.ts",
+      "../../../shared/src/myclass.ts",
+      "../../../shared/src/random.ts"
     ],
     "fileNamesList": [
       [
@@ -893,6 +931,38 @@ projects/server/src/server.ts
         ]
       ]
     ],
+    "resolvedRoot": [
+      [
+        [
+          2,
+          6
+        ],
+        [
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/src/logging.ts"
+        ]
+      ],
+      [
+        [
+          3,
+          7
+        ],
+        [
+          "../../../shared/dist/src/myclass.d.ts",
+          "../../../shared/src/myclass.ts"
+        ]
+      ],
+      [
+        [
+          4,
+          8
+        ],
+        [
+          "../../../shared/dist/src/random.d.ts",
+          "../../../shared/src/random.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "..",
@@ -913,7 +983,7 @@ projects/server/src/server.ts
     "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1416
+  "size": 1549
 }
 
 
@@ -1165,7 +1235,7 @@ Before running Timeout callback:: count: 1
 
 After running Timeout callback:: count: 0
 Output::
-[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/dist/src/logging.d.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'projects/server/tsconfig.json' is out of date because buildinfo file 'projects/server/dist/server/tsconfig.tsbuildinfo' indicates that file 'projects/shared/src/random.ts' was root file of compilation but not any more.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/projects/server/tsconfig.json'...
 
@@ -1221,7 +1291,7 @@ projects/server/src/server.ts
 
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,2,3],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../../../a/lib/lib.d.ts","../../../shared/dist/src/logging.d.ts","../../../shared/dist/src/myclass.d.ts","../../src/server.ts","../../../shared/src/logging.ts","../../../shared/src/myclass.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-4937597761-export declare function log(str: string): void;\nexport declare const x = 10;\n","impliedFormat":1},{"version":"-7943199723-export declare class MyClass {\n}\n","impliedFormat":1},{"version":"-19159694382-import { MyClass } from ':shared/myClass.js';\nconsole.log('Hello, world!');\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,4]],"resolvedRoot":[[2,5],[3,6]],"options":{"composite":true,"outDir":"..","rootDir":"../../.."},"fileIdsList":[[3]],"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,4,2,3],"latestChangedDtsFile":"./src/server.d.ts"},"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/server/dist/server/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -1230,7 +1300,9 @@ projects/server/src/server.ts
       "../../../../../../../a/lib/lib.d.ts",
       "../../../shared/dist/src/logging.d.ts",
       "../../../shared/dist/src/myclass.d.ts",
-      "../../src/server.ts"
+      "../../src/server.ts",
+      "../../../shared/src/logging.ts",
+      "../../../shared/src/myclass.ts"
     ],
     "fileNamesList": [
       [
@@ -1291,6 +1363,28 @@ projects/server/src/server.ts
         ]
       ]
     ],
+    "resolvedRoot": [
+      [
+        [
+          2,
+          5
+        ],
+        [
+          "../../../shared/dist/src/logging.d.ts",
+          "../../../shared/src/logging.ts"
+        ]
+      ],
+      [
+        [
+          3,
+          6
+        ],
+        [
+          "../../../shared/dist/src/myclass.d.ts",
+          "../../../shared/src/myclass.ts"
+        ]
+      ]
+    ],
     "options": {
       "composite": true,
       "outDir": "..",
@@ -1310,7 +1404,7 @@ projects/server/src/server.ts
     "latestChangedDtsFile": "./src/server.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1276
+  "size": 1371
 }
 
 
