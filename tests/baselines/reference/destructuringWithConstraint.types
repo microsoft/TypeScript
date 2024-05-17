@@ -11,7 +11,7 @@ interface Props {
 
 function foo<P extends Props>(props: Readonly<P>) {
 >foo : <P extends Props>(props: Readonly<P>) => void
->    : ^ ^^^^^^^^^^^^^^^^     ^^           ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^     ^^           ^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 

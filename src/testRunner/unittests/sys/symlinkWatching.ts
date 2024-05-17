@@ -1,17 +1,17 @@
 import * as fs from "fs";
 
-import { IO } from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
+import { IO } from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
 import {
     defer,
     Deferred,
-} from "../../_namespaces/Utils";
+} from "../../_namespaces/Utils.js";
 import {
     createWatchedSystem,
     FileOrFolderOrSymLinkMap,
     osFlavorToString,
     TestServerHostOsFlavor,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: sys:: symlinkWatching::", () => {
     function delayedOp(op: () => void, delay: number) {
         ts.sys.setTimeout!(op, delay);
@@ -45,10 +45,16 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                     watcher: sys.watchFile!(
                         toWatch,
                         (fileName, eventKind, modifiedTime) => {
-                            assert.equal(fileName, toWatch);
-                            assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
-                            const actual = modifiedTimeToString(modifiedTime);
-                            assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            try {
+                                assert.equal(fileName, toWatch);
+                                assert.equal(eventKind, ts.FileWatcherEventKind.Changed);
+                                const actual = modifiedTimeToString(modifiedTime);
+                                assert(actual === undefined || actual === modifiedTimeToString(sys.getModifiedTime!(file)));
+                            }
+                            catch (e) {
+                                result.deferred.reject(e);
+                                return;
+                            }
                             result.deferred.resolve();
                         },
                         10,
@@ -118,8 +124,14 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         const deferred = defer();
         delayedOp(() => {
             if (opType !== "init") {
-                verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
-                verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                try {
+                    verifyEventAndFileNames(`${opType}:: dir`, dirResult.actual, expectedResult);
+                    verifyEventAndFileNames(`${opType}:: link`, linkResult.actual, expectedResult);
+                }
+                catch (e) {
+                    deferred.reject(e);
+                    return;
+                }
             }
             deferred.resolve();
         }, !!process.env.CI ? 1000 : 500);

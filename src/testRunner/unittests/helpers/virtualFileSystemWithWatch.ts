@@ -2,7 +2,7 @@ import {
     createWatchUtils,
     Watches,
     WatchUtils,
-} from "../../../harness/watchUtils";
+} from "../../../harness/watchUtils.js";
 import {
     arrayFrom,
     clear,
@@ -43,9 +43,9 @@ import {
     SortedArray,
     sys,
     toPath,
-} from "../../_namespaces/ts";
-import { typingsInstaller } from "../../_namespaces/ts.server";
-import { timeIncrements } from "../../_namespaces/vfs";
+} from "../../_namespaces/ts.js";
+import { typingsInstaller } from "../../_namespaces/ts.server.js";
+import { timeIncrements } from "../../_namespaces/vfs.js";
 
 export const libFile: File = {
     path: "/a/lib/lib.d.ts",

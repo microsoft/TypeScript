@@ -50,7 +50,7 @@ interface ApiItemContainerMixin extends ApiItem {
 
 function ApiItemContainerMixin<TBaseClass extends IApiItemConstructor>(
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
->                      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^          ^^^^^                                                            
+>                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^                                                            
 
   baseClass: TBaseClass
 >baseClass : TBaseClass
@@ -102,7 +102,7 @@ export class ApiEnum extends ApiItemContainerMixin(ApiItem) {
 >ApiItemContainerMixin(ApiItem) : ApiItem & ApiItemContainerMixin
 >                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ApiItemContainerMixin : <TBaseClass extends IApiItemConstructor>(baseClass: TBaseClass) => TBaseClass & (new (...args: any[]) => ApiItemContainerMixin)
->                      : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                      : ^          ^^^^^^^^^                   ^^         ^^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ApiItem : typeof ApiItem
 >        : ^^^^^^^^^^^^^^
 

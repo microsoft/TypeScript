@@ -3,7 +3,7 @@
 === templateLiteralTypes2.ts ===
 function ft1<T extends string>(s: string, n: number, u: 'foo' | 'bar' | 'baz', t: T) {
 >ft1 : <T extends string>(s: string, n: number, u: "foo" | "bar" | "baz", t: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^ ^^      ^^ ^^                     ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^      ^^ ^^      ^^ ^^                     ^^ ^^ ^^^^^^^^^
 >s : string
 >  : ^^^^^^
 >n : number
@@ -334,7 +334,7 @@ declare function widening<T>(x: T): T;
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -382,7 +382,7 @@ function ft13(s: string, cond: boolean) {
 >nonWidening(`foo${s}`) : `foo${string}`
 >                       : ^^^^^^^^^^^^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
 >`foo${s}` : `foo${string}`
 >          : ^^^^^^^^^^^^^^
 >s : string
@@ -394,7 +394,7 @@ function ft13(s: string, cond: boolean) {
 >nonWidening(cond ? 'a' : `foo${s}`) : `foo${string}` | "a"
 >                                    : ^^^^^^^^^^^^^^^^^^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
 >cond ? 'a' : `foo${s}` : `foo${string}` | "a"
 >                       : ^^^^^^^^^^^^^^^^^^^^
 >cond : boolean
@@ -458,7 +458,7 @@ declare function g1<T>(x: T): T;
 
 declare function g2<T extends string>(x: T): T;
 >g2 : <T extends string>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -486,7 +486,7 @@ function ft20(s: string) {
 >g2(`xyz-${s}`) : `xyz-${string}`
 >               : ^^^^^^^^^^^^^^^
 >g2 : <T extends string>(x: T) => T
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^
 >`xyz-${s}` : `xyz-${string}`
 >           : ^^^^^^^^^^^^^^^
 >s : string
@@ -497,7 +497,7 @@ function ft20(s: string) {
 
 declare function takesLiteral<T extends string>(literal: T): T extends `foo.bar.${infer R}` ? R : unknown;
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^                                            
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^                                            
 >literal : T
 >        : ^
 
@@ -507,7 +507,7 @@ const t1 = takesLiteral("foo.bar.baz"); // "baz"
 >takesLiteral("foo.bar.baz") : "baz"
 >                            : ^^^^^
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo.bar.baz" : "foo.bar.baz"
 >              : ^^^^^^^^^^^^^
 
@@ -523,7 +523,7 @@ const t2 = takesLiteral(id2); // "baz"
 >takesLiteral(id2) : "baz"
 >                  : ^^^^^
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id2 : "foo.bar.baz"
 >    : ^^^^^^^^^^^^^
 
@@ -537,7 +537,7 @@ const t3 = takesLiteral(`foo.bar.${someString}`);  // string
 >takesLiteral(`foo.bar.${someString}`) : string
 >                                      : ^^^^^^
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo.bar.${someString}` : `foo.bar.${string}`
 >                        : ^^^^^^^^^^^^^^^^^^^
 >someString : string
@@ -557,7 +557,7 @@ const t4 = takesLiteral(id4);  // unknown
 >takesLiteral(id4) : unknown
 >                  : ^^^^^^^
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >id4 : string
 >    : ^^^^^^
 
@@ -571,7 +571,7 @@ const t5 = takesLiteral(`foo.bar.${someUnion}`);  // "abc" | "def" | "ghi"
 >takesLiteral(`foo.bar.${someUnion}`) : "abc" | "def" | "ghi"
 >                                     : ^^^^^^^^^^^^^^^^^^^^^
 >takesLiteral : <T extends string>(literal: T) => T extends `foo.bar.${infer R}` ? R : unknown
->             : ^ ^^^^^^^^^^^^^^^^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>             : ^ ^^^^^^^^^      ^^       ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >`foo.bar.${someUnion}` : "foo.bar.abc" | "foo.bar.def" | "foo.bar.ghi"
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someUnion : "abc" | "def" | "ghi"

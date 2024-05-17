@@ -27,7 +27,7 @@ type M3 = { [K in keyof Identity<Partial<M0>>]: M0[K] };
 
 function foo<K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) {
 >foo : <K extends keyof M0>(m1: M1[K], m2: M2[K], m3: M3[K]) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^  ^^     ^^  ^^     ^^  ^^     ^^^^^^^^^
+>    : ^ ^^^^^^^^^        ^^  ^^     ^^  ^^     ^^  ^^     ^^^^^^^^^
 >m1 : M1[K]
 >   : ^^^^^
 >m2 : M2[K]
@@ -119,10 +119,10 @@ const mapped: { [K in keyof Partial<Obj>]: Obj[K] } = {};
 >   : ^^
 
 const resolveMapped = <K extends keyof typeof mapped>(key: K) => mapped[key].toString();  // Error
->resolveMapped : <K extends keyof Obj>(key: K) => string
->              : ^ ^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
-><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof Obj>(key: K) => string
->                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>resolveMapped : <K extends keyof typeof mapped>(key: K) => string
+>              : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^
+><K extends keyof typeof mapped>(key: K) => mapped[key].toString() : <K extends keyof typeof mapped>(key: K) => string
+>                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^^^^^^^^^^
 >mapped : { a?: 1 | undefined; b?: 2 | undefined; }
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
@@ -260,10 +260,10 @@ const mapper: { [K in keyof PartMappings]: (o: MapperArgs<K>) => PartMappings[K]
 }
 
 const resolveMapper1 = <K extends keyof typeof mapper>(
->resolveMapper1 : <K extends "foo" | "12" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
-><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends "foo" | "12" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K]
->                                                                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
+>resolveMapper1 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
+>               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
+><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key](o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K]
+>                                                                                : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^
 >mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
 >       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -284,10 +284,10 @@ const resolveMapper1 = <K extends keyof typeof mapper>(
 >  : ^^^^^^^^^^^^^
 
 const resolveMapper2 = <K extends keyof typeof mapper>(
->resolveMapper2 : <K extends "foo" | "12" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends "foo" | "12" | 42>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
->                                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolveMapper2 : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
+>               : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+><K extends keyof typeof mapper>(    key: K, o: MapperArgs<K>) => mapper[key]?.(o) : <K extends keyof typeof mapper>(key: K, o: MapperArgs<K>) => PartMappings[K] | undefined
+>                                                                                  : ^ ^^^^^^^^^                   ^^   ^^ ^^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mapper : { "12": (o: MapperArgs<"12">) => number; 42: (o: MapperArgs<42>) => string; foo?: ((o: MapperArgs<"foo">) => boolean | undefined) | undefined; }
 >       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -346,9 +346,9 @@ declare const mapIntersection: {
 
 const accessMapped = <K extends keyof Obj2>(key: K) => mapIntersection[key].toString();
 >accessMapped : <K extends keyof Obj2>(key: K) => string
->             : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>             : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
 ><K extends keyof Obj2>(key: K) => mapIntersection[key].toString() : <K extends keyof Obj2>(key: K) => string
->                                                                  : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>                                                                  : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
 >key : K
 >    : ^
 >mapIntersection[key].toString() : string
@@ -376,9 +376,9 @@ declare const resolved: { a?: number | undefined; b: number; c: number };
 
 const accessResolved = <K extends keyof Obj2>(key: K) => resolved[key].toString();
 >accessResolved : <K extends keyof Obj2>(key: K) => string
->               : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>               : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
 ><K extends keyof Obj2>(key: K) => resolved[key].toString() : <K extends keyof Obj2>(key: K) => string
->                                                           : ^ ^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^^^
+>                                                           : ^ ^^^^^^^^^          ^^   ^^ ^^^^^^^^^^^
 >key : K
 >    : ^
 >resolved[key].toString() : string
@@ -406,8 +406,8 @@ type Foo = {
 }
 
 function test<K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) {
->test : <K extends "prop">(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
->     : ^ ^^^^^^^^^^^^^^^^^   ^^                                     ^^   ^^ ^^^^^^^^^
+>test : <K extends keyof Foo>(obj: Pick<Required<Foo> & Partial<Foo>, K>, key: K) => void
+>     : ^ ^^^^^^^^^         ^^   ^^                                     ^^   ^^ ^^^^^^^^^
 >obj : Pick<Required<Foo> & Partial<Foo>, K>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

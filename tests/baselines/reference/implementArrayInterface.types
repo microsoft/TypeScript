@@ -15,13 +15,13 @@ declare class MyArray<T> implements Array<T> {
 
     concat<U extends T[]>(...items: U[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^ ^^^^^^^^^^^^^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^^^^^^^
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^   ^^^^^^     ^^   ^^^^^^^^^
 >items : U[]
 >      : ^^^
 
     concat(...items: T[]): T[];
 >concat : { <U extends T[]>(...items: U[]): T[]; (...items: T[]): T[]; }
->       : ^^^ ^^^^^^^^^^^^^^^^^     ^^   ^^^^^^^^^^^^     ^^   ^^^   ^^^
+>       : ^^^ ^^^^^^^^^   ^^^^^     ^^   ^^^^^^^^^^^^     ^^   ^^^   ^^^
 >items : T[]
 >      : ^^^
 

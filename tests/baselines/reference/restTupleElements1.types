@@ -59,91 +59,91 @@ type L15 = T15["length"];  // number
 
 declare function assign<T, S extends T>(): void;
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^    
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^    
 
 assign<number[], [...number[]]>();
 >assign<number[], [...number[]]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<number[], [number, ...number[]]>();
 >assign<number[], [number, ...number[]]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[...number[]], number[]>();
 >assign<[...number[]], number[]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], number[]>();  // Error
 >assign<[number, ...number[]], number[]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], []>();  // Error
 >assign<[number, ...number[]], []>() : void
 >                                    : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number]>();
 >assign<[number, ...number[]], [number]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number, number]>();
 >assign<[number, ...number[]], [number, number]>() : void
 >                                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number, number, ...number[]]>();
 >assign<[number, ...number[]], [number, number, ...number[]]>() : void
 >                                                               : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number], [...number[]]>();  // Error
 >assign<[number], [...number[]]>() : void
 >                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number], [number, ...number[]]>();  // Error
 >assign<[number], [number, ...number[]]>() : void
 >                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number, ...string[]]>();  // Error
 >assign<[number, ...number[]], [number, ...string[]]>() : void
 >                                                       : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [string, ...number[]]>();  // Error
 >assign<[number, ...number[]], [string, ...number[]]>() : void
 >                                                       : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, string]>() : void
 >                                                          : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 assign<[number, ...number[]], [number, number, number, string]>();  // Error
 >assign<[number, ...number[]], [number, number, number, string]>() : void
 >                                                                  : ^^^^
 >assign : <T, S extends T>() => void
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^
 
 type T20 = [number, string, ...boolean[]];
 >T20 : T20

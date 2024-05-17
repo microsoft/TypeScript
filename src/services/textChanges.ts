@@ -174,7 +174,7 @@ import {
     visitEachChild,
     visitNodes,
     Visitor,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Currently for simplicity we store recovered positions on the node itself.

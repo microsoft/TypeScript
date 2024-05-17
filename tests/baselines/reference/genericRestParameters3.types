@@ -195,7 +195,7 @@ interface CoolArray<E> extends Array<E> {
 
 declare function foo<T extends any[]>(cb: (...args: T) => void): void;
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^    
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^    
 >cb : (...args: T) => void
 >   : ^^^^    ^^ ^^^^^    
 >args : T
@@ -205,13 +205,13 @@ foo<CoolArray<any>>();     // Error
 >foo<CoolArray<any>>() : void
 >                      : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^^^^^
 
 foo<CoolArray<any>>(100);  // Error
 >foo<CoolArray<any>>(100) : void
 >                         : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^^^^^
 >100 : 100
 >    : ^^^
 
@@ -219,13 +219,13 @@ foo<CoolArray<any>>(foo);  // Error
 >foo<CoolArray<any>>(foo) : void
 >                         : ^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^^^^^
 >foo : <T extends any[]>(cb: (...args: T) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^  ^^                    ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^  ^^                    ^^^^^^^^^
 
 function bar<T extends any[]>(...args: T): T {
 >bar : <T extends any[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^ 
 >args : T
 >     : ^
 
@@ -240,7 +240,7 @@ let a = bar(10, 20);
 >bar(10, 20) : [number, number]
 >            : ^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -252,7 +252,7 @@ let b = bar<CoolArray<number>>(10, 20);  // Error
 >bar<CoolArray<number>>(10, 20) : CoolArray<number>
 >                               : ^^^^^^^^^^^^^^^^^
 >bar : <T extends any[]>(...args: T) => T
->    : ^ ^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^    ^^ ^^^^^^
 >10 : 10
 >   : ^^
 >20 : 20
@@ -306,7 +306,7 @@ baz(...ca);  // Error
 
 declare function hmm<A extends [] | [number, string]>(...args: A): void;
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^    
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^    
 >args : A
 >     : ^
 
@@ -314,13 +314,13 @@ hmm(); // okay, A = []
 >hmm() : void
 >      : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^^^^^
 
 hmm(1, "s"); // okay, A = [1, "s"]
 >hmm(1, "s") : void
 >            : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^^^^^
 >1 : 1
 >  : ^
 >"s" : "s"
@@ -330,7 +330,7 @@ hmm("what"); // no error?  A = [] | [number, string] ?
 >hmm("what") : void
 >            : ^^^^
 >hmm : <A extends [] | [number, string]>(...args: A) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                     ^^^^^    ^^ ^^^^^^^^^
 >"what" : "what"
 >       : ^^^^^^
 
@@ -410,7 +410,7 @@ ff2 = ff1;
 
 function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) {
 >ff3 : <A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number]]) => void, s2: (x: string, ...rest: A | [number]) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^  ^^                                                     ^^  ^^                                          ^^^^^^^^^
+>    : ^ ^^^^^^^^^         ^^  ^^                                                     ^^  ^^                                          ^^^^^^^^^
 >s1 : (...args: [x: string, ...rest: A | [number]]) => void
 >   : ^^^^    ^^                                  ^^^^^    
 >args : [x: string, number] | [x: string, ...rest: A]

@@ -14,7 +14,7 @@ function g<T>(x: T): T {
  
 function f<S extends { foo: string }>(x: S) {
 >f : <S extends { foo: string; }>(x: S) => void
->  : ^ ^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^                ^^ ^^ ^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 >x : S

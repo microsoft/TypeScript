@@ -54,7 +54,7 @@ declare module Bacon {
 >initState : U
 >          : ^
 >f : (state: U, event: Event<T>) => StateValue<U, V>
->  : ^     ^^ ^^     ^^        ^^^^^^^^^^^^^^^^^^^^^
+>  : ^     ^^ ^^     ^^        ^^^^^                
 >state : U
 >      : ^
 >event : Event<T>

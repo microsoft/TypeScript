@@ -56,7 +56,7 @@ type TProps<Entry extends TranslationEntry> = {
 
 declare function T<Entry extends TranslationEntry>(
 >T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
->  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^             ^^^^^           
+>  : ^     ^^^^^^^^^                ^^     ^^             ^^^^^           
 
     props: TProps<Entry>
 >props : TProps<Entry>
@@ -70,7 +70,7 @@ declare function T<Entry extends TranslationEntry>(
 ><T getTranslationEntry={(allTranslations) => allTranslations.a} args="a" /> : JSX.Element
 >                                                                            : ^^^^^^^^^^^
 >T : <Entry extends TranslationEntry>(props: TProps<Entry>) => JSX.Element
->  : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^             ^^^^^^^^^^^^^^^^
+>  : ^     ^^^^^^^^^                ^^     ^^             ^^^^^^^^^^^^^^^^
 >getTranslationEntry : (allTranslations: Translations) => { args: [string]; }
 >                    : ^               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(allTranslations) => allTranslations.a : (allTranslations: Translations) => { args: [string]; }

@@ -94,12 +94,12 @@ var e:string=x.g(new O.A()); // matches overload but bad assignment
 >  : ^^^^^^
 >x.g(new O.A()) : O.C
 >               : ^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >new O.A() : O.A
 >          : ^^^
 >O.A : typeof O.A
@@ -144,20 +144,20 @@ var z:string=x.g(x.g(3,3)); // good
 >  : ^^^^^^
 >x.g(x.g(3,3)) : string
 >              : ^^^^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x.g(3,3) : number
 >         : ^^^^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 >3 : 3
@@ -170,12 +170,12 @@ z=x.g(2,2,2); // no match
 >  : ^^^^^^
 >x.g(2,2,2) : never
 >           : ^^^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 >2 : 2
@@ -190,12 +190,12 @@ z=x.g(); // no match
 >  : ^^^^^^
 >x.g() : never
 >      : ^^^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
 z=x.g(new O.B()); // ambiguous (up and down conversion)
 >z=x.g(new O.B()) : O.C
@@ -204,12 +204,12 @@ z=x.g(new O.B()); // ambiguous (up and down conversion)
 >  : ^^^^^^
 >x.g(new O.B()) : O.C
 >               : ^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >new O.B() : O.B
 >          : ^^^
 >O.B : typeof O.B
@@ -256,13 +256,13 @@ z=x.h("hello",0); // good
 >  : ^
 
 var v=x.g;
->v : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
->x.g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>v : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
+>x.g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>    : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 >x : O.I
 >  : ^^^
->g : { (n1: number, n2: number): number; (n: number): string; (a: A): O.C; (c: C): string; }
->  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^^^^^^^^^^^
+>g : { (n1: number, n2: number): number; (n: number): string; (a: O.A): O.C; (c: O.C): string; }
+>  : ^^^  ^^      ^^  ^^      ^^^^^^^^^^^^ ^^      ^^^^^^^^^^^^ ^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^
 
 

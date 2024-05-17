@@ -1,25 +1,25 @@
 import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
-} from "../../../../harness/tsserverLogger";
+} from "../../../../harness/tsserverLogger.js";
 import {
     createWatchUtils,
     Watches,
     WatchUtils,
-} from "../../../../harness/watchUtils";
-import * as ts from "../../../_namespaces/ts";
+} from "../../../../harness/watchUtils.js";
+import * as ts from "../../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     closeFilesForSession,
     createSessionWithCustomEventHandler,
     openFilesForSession,
     TestSession,
-} from "../../helpers/tsserver";
+} from "../../helpers/tsserver.js";
 import {
     createServerHost,
     libFile,
     TestServerHost,
-} from "../../helpers/virtualFileSystemWithWatch";
+} from "../../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: events:: watchEvents", () => {
     interface TestServerHostWithCustomWatch extends TestServerHost {

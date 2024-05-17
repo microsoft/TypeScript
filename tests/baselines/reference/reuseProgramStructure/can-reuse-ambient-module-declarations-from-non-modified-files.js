@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: /a/b/app.ts
 
 import * as fs from 'fs'
@@ -81,7 +81,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: Completely
+Program 2 Reused:: Completely
 File: /a/b/app.ts
 
 import * as fs from 'fs'
@@ -136,7 +136,7 @@ MissingPaths:: [
 
 
 
-Program Reused:: Completely
+Program 3 Reused:: Completely
 File: /a/b/app.ts
 
 import * as fs from 'fs'

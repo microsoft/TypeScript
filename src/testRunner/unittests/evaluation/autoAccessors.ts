@@ -1,5 +1,5 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
 
 describe("unittests:: evaluation:: autoAccessors", () => {
     const editions = [
@@ -20,8 +20,8 @@ describe("unittests:: evaluation:: autoAccessors", () => {
 
                 const desc = Object.getOwnPropertyDescriptor(C.prototype, "x");
                 assert.isDefined(desc);
-                assert.isFunction(desc!.get);
-                assert.isFunction(desc!.set);
+                assert.isFunction(desc.get);
+                assert.isFunction(desc.set);
             });
 
             it("storage is private", async () => {

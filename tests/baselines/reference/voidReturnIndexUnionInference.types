@@ -52,7 +52,7 @@ interface Props {
 
 function bad<P extends Props>(props: Readonly<P>) {
 >bad : <P extends Props>(props: Readonly<P>) => void
->    : ^ ^^^^^^^^^^^^^^^^     ^^           ^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^     ^^           ^^^^^^^^^
 >props : Readonly<P>
 >      : ^^^^^^^^^^^
 

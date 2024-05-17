@@ -1,6 +1,6 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import * as Utils from "../_namespaces/Utils";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import * as Utils from "../_namespaces/Utils.js";
 import {
     createTestCompilerHost,
     jsonToReadableText,
@@ -12,14 +12,15 @@ import {
     TestCompilerHost,
     updateProgram,
     updateProgramText,
-} from "./helpers";
+} from "./helpers.js";
 import {
     createWatchedSystem,
     File,
     libFile,
-} from "./helpers/virtualFileSystemWithWatch";
+} from "./helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: Reuse program structure:: General", () => {
+describe("unittests:: reuseProgramStructure:: General", () => {
+    type ProgramToBaseline = ts.Program & Pick<ProgramWithSourceTexts, "version">;
     function baselineCache<File, T>(
         baselines: string[],
         cacheType: string,
@@ -40,8 +41,21 @@ describe("unittests:: Reuse program structure:: General", () => {
             baselines.push(`${key}: ${mode ? ts.getNameOfCompilerOptionValue(mode, ts.moduleOptionDeclaration.type) + ": " : ""}${jsonToReadableText(resolved)}`);
         }
     }
-    function baselineProgram(baselines: string[], program: ts.Program, host?: TestCompilerHost) {
-        baselines.push(`Program Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
+
+    function baselineDiagnostics(baselines: string[], program: ProgramToBaseline, skipHeader?: boolean) {
+        if (!skipHeader) {
+            baselines.push(`Program ${program.version} Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
+            baselines.push(`Diagnostics:`);
+        }
+        baselines.push(ts.formatDiagnostics(program.getSemanticDiagnostics(), {
+            getCurrentDirectory: () => program.getCurrentDirectory(),
+            getNewLine: () => "\n",
+            getCanonicalFileName: ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames()),
+        }));
+        baselines.push("", "");
+    }
+    function baselineProgram(baselines: string[], program: ProgramToBaseline, host?: TestCompilerHost, skipDiagnostics?: boolean) {
+        baselines.push(`Program ${program.version} Reused:: ${(ts as any).StructureIsReused[program.structureIsReused]}`);
         program.getSourceFiles().forEach(f => {
             baselines.push(`File: ${f.fileName}`, f.text);
             baselineCache(baselines, "resolvedModules", f, program.forEachResolvedModule);
@@ -55,12 +69,12 @@ describe("unittests:: Reuse program structure:: General", () => {
         baselines.push("");
         baselines.push(`MissingPaths:: ${jsonToReadableText(ts.arrayFrom(program.getMissingFilePaths().values()))}`);
         baselines.push("");
-        baselines.push(ts.formatDiagnostics(program.getSemanticDiagnostics(), {
-            getCurrentDirectory: () => program.getCurrentDirectory(),
-            getNewLine: () => "\n",
-            getCanonicalFileName: ts.createGetCanonicalFileName(program.useCaseSensitiveFileNames()),
-        }));
-        baselines.push("", "");
+        if (!skipDiagnostics) {
+            baselineDiagnostics(baselines, program, /*skipHeader*/ true);
+        }
+        else {
+            baselines.push("Skipped diagnostics", "", "");
+        }
     }
 
     function runBaseline(scenario: string, baselines: readonly string[]) {
@@ -281,7 +295,8 @@ describe("unittests:: Reuse program structure:: General", () => {
         ];
         const host = createTestCompilerHost(files, target);
         const options: ts.CompilerOptions = { target, typeRoots: ["/types"] };
-        const program1 = ts.createProgram(["/a.ts"], options, host);
+        const program1 = ts.createProgram(["/a.ts"], options, host) as ProgramToBaseline;
+        program1.version = 1;
         let sourceFile = program1.getSourceFile("/a.ts")!;
         const baselines: string[] = [];
         baselineProgram(baselines, program1, host);
@@ -293,7 +308,8 @@ describe("unittests:: Reuse program structure:: General", () => {
                 return fileName === sourceFile.fileName ? sourceFile : program1.getSourceFile(fileName);
             },
         };
-        const program2 = ts.createProgram(["/a.ts"], options, updateHost, program1);
+        const program2 = ts.createProgram(["/a.ts"], options, updateHost, program1) as ProgramToBaseline;
+        program2.version = 2;
         baselineProgram(baselines, program2, updateHost);
         baselines.push(`parent pointers are not altered: ${sourceFile.statements[2].getSourceFile() === sourceFile}`);
         runBaseline("works with updated SourceFiles", baselines);
@@ -554,15 +570,217 @@ describe("unittests:: Reuse program structure:: General", () => {
             verifyRedirects(/*useGetSourceFileByPath*/ true);
         });
     });
+
+    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics", () => {
+        const files = [
+            {
+                name: "/src/project/src/struct.d.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/anotherFile.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/oneMore.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                text: SourceText.New("", "", `export function foo(): void`),
+            },
+        ];
+
+        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
+        const rootNames = files.map(f => f.name);
+        const program1 = newProgram(files, rootNames, options, /*useGetSourceFileByPath*/ undefined, /*useCaseSensitiveFileNames*/ false);
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1);
+
+        const program2 = updateProgram(
+            program1,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const y = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program2);
+
+        const program3 = updateProgram(
+            program2,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program3);
+        runBaseline("handles file preprocessing dignostics", baselines);
+    });
+
+    it("forceConsistentCasingInFileNames:: handles file preprocessing dignostics when diagnostics are not queried", () => {
+        const files = [
+            {
+                name: "/src/project/src/struct.d.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/anotherFile.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/src/oneMore.ts",
+                text: SourceText.New(
+                    "",
+                    "",
+                    Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                        import * as xs4 from "./struct";
+                    `,
+                ),
+            },
+            {
+                name: "/src/project/node_modules/fp-ts/lib/struct.d.ts",
+                text: SourceText.New("", "", `export function foo(): void`),
+            },
+        ];
+
+        const options: ts.CompilerOptions = { target, moduleResolution: ts.ModuleResolutionKind.Node10 };
+        const rootNames = files.map(f => f.name);
+        const program1 = newProgram(files, rootNames, options, /*useGetSourceFileByPath*/ undefined, /*useCaseSensitiveFileNames*/ false);
+        const baselines: string[] = [];
+        baselineProgram(baselines, program1, /*host*/ undefined, /*skipDiagnostics*/ true);
+
+        const program2 = updateProgram(
+            program1,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const y = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program2, /*host*/ undefined, /*skipDiagnostics*/ true);
+        baselineDiagnostics(baselines, program1);
+
+        const program3 = updateProgram(
+            program2,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(files[0].text.getFullText() + "export const z = 10;");
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program3);
+        baselineDiagnostics(baselines, program2);
+
+        const program4 = updateProgram(
+            program3,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs2 from "fp-ts/lib/struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program4, /*host*/ undefined, /*skipDiagnostics*/ true);
+
+        const program5 = updateProgram(
+            program4,
+            rootNames,
+            options,
+            files => {
+                files[0].text = files[0].text.updateProgram(Utils.dedent`
+                        import * as xs1 from "fp-ts/lib/Struct";
+                        import * as xs3 from "./Struct";
+                    `);
+            },
+            /*newTexts*/ undefined,
+            /*useGetSourceFileByPath*/ undefined,
+            /*useCaseSensitiveFileNames*/ false,
+        );
+        baselineProgram(baselines, program5);
+        baselineDiagnostics(baselines, program4);
+        runBaseline("handles file preprocessing dignostics when diagnostics are not queried", baselines);
+    });
 });
 
-describe("unittests:: Reuse program structure:: host is optional", () => {
+describe("unittests:: reuseProgramStructure:: host is optional", () => {
     it("should work if host is not provided", () => {
         ts.createProgram([], {});
     });
 });
 
-describe("unittests:: Reuse program structure:: isProgramUptoDate", () => {
+describe("unittests:: reuseProgramStructure:: isProgramUptoDate::", () => {
     function getWhetherProgramIsUptoDate(
         program: ts.Program,
         newRootFileNames: string[],

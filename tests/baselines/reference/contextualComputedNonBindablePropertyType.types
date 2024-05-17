@@ -95,9 +95,9 @@ type Mapped = {
 
 const propSelector =  <propName extends string>(propName: propName): propName => propName;
 >propSelector : <propName extends string>(propName: propName) => propName
->             : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^        
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 ><propName extends string>(propName: propName): propName => propName : <propName extends string>(propName: propName) => propName
->                                                                    : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^        
+>                                                                    : ^        ^^^^^^^^^      ^^        ^^        ^^^^^        
 >propName : propName
 >         : ^^^^^^^^
 >propName : propName
@@ -135,7 +135,7 @@ const unexpectedlyFailingExample: Mapped = {
 >propSelector('bar') : "bar"
 >                    : ^^^^^
 >propSelector : <propName extends string>(propName: propName) => propName
->             : ^        ^^^^^^^^^^^^^^^^^        ^^        ^^^^^^^^^^^^^
+>             : ^        ^^^^^^^^^      ^^        ^^        ^^^^^^^^^^^^^
 >'bar' : "bar"
 >      : ^^^^^
 >(arg) => 51345 : (arg: number) => number

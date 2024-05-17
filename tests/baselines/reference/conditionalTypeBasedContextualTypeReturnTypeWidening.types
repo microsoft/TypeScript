@@ -45,13 +45,13 @@ const func2 = useState2(() => () => 0);
 
 declare function useState3<S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)): S; // No args
 >useState3 : <S, T extends S>(initialState: (T extends (() => any) ? never : T) | (() => S)) => S
->          : ^ ^^ ^^^^^^^^^^^^            ^^                                               ^^^^^ 
+>          : ^ ^^ ^^^^^^^^^ ^^            ^^                                               ^^^^^ 
 >initialState : (T extends () => any ? never : T) | (() => S)
 >             : ^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^ ^
 
 declare function useState4<S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)): S; // Any args
 >useState4 : <S, T extends S>(initialState: (T extends ((...args: any[]) => any) ? never : T) | (() => S)) => S
->          : ^ ^^ ^^^^^^^^^^^^            ^^                                                             ^^^^^ 
+>          : ^ ^^ ^^^^^^^^^ ^^            ^^                                                             ^^^^^ 
 >initialState : (T extends (...args: any[]) => any ? never : T) | (() => S)
 >             : ^^^^^^^^^^^^^^^    ^^     ^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^ ^
 >args : any[]

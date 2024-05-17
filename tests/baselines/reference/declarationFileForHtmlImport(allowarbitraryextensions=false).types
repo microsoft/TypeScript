@@ -71,7 +71,7 @@ if (document !== mod.default) {
 >document.body.appendChild(mod.blogPost) : any
 >                                        : ^^^
 >document.body.appendChild : <T extends Node>(node: T) => T
->                          : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>                          : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
 >document.body : HTMLElement
 >              : ^^^^^^^^^^^
 >document : Document
@@ -79,7 +79,7 @@ if (document !== mod.default) {
 >body : HTMLElement
 >     : ^^^^^^^^^^^
 >appendChild : <T extends Node>(node: T) => T
->            : ^ ^^^^^^^^^^^^^^^    ^^ ^^^^^^
+>            : ^ ^^^^^^^^^    ^^    ^^ ^^^^^^
 >mod.blogPost : any
 >             : ^^^
 >mod : any

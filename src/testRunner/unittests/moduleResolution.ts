@@ -1,6 +1,6 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
-import { jsonToReadableText } from "./helpers";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
+import { jsonToReadableText } from "./helpers.js";
 
 interface File {
     name: string;

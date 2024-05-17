@@ -27,8 +27,8 @@ type ActionFunction<TEvent extends { type: string }> = (event: TEvent) => void;
 >      : ^^^^^^
 
 declare function createMachine<
->createMachine : <TTypesMeta extends TypegenDisabled | TypegenEnabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
->              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^    
+>createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
+>              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^    
 
   TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled
 >(
@@ -58,8 +58,8 @@ declare function createMachine<
 createMachine({}, (ev) => {
 >createMachine({}, (ev) => {  ev.type; // should be `string`}) : void
 >                                                              : ^^^^
->createMachine : <TTypesMeta extends TypegenDisabled | TypegenEnabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
->              : ^          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^^^^^
+>createMachine : <TTypesMeta extends TypegenEnabled | TypegenDisabled = TypegenDisabled>(config: { types?: TTypesMeta; }, implementations: TTypesMeta extends TypegenEnabled ? ActionFunction<{ type: "test"; }> : ActionFunction<{ type: string; }>) => void
+>              : ^          ^^^^^^^^^                                ^^^^^^^^^^^^^^^^^^^^      ^^                       ^^               ^^                                                                                                         ^^^^^^^^^
 >{} : {}
 >   : ^^
 >(ev) => {  ev.type; // should be `string`} : (ev: { type: string; }) => void

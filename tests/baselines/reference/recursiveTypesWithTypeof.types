@@ -118,22 +118,22 @@ var i = i(i);
 >  : ^ ^^        ^^^^^^^^
 
 var j: <T extends typeof j>(x: T) => T;
->j : <T extends any>(x: T) => T
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^ 
->j : <T extends any>(x: T) => T
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^ 
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
 var j = j(j);
->j : <T extends any>(x: T) => T
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->j(j) : <T extends any>(x: T) => T
->     : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->j : <T extends any>(x: T) => T
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->j : <T extends any>(x: T) => T
->  : ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
+>j(j) : <T extends typeof j>(x: T) => T
+>     : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
+>j : <T extends typeof j>(x: T) => T
+>  : ^ ^^^^^^^^^        ^^ ^^ ^^^^^^
 
 // Same as h, i, j with construct signatures
 var h2: new () => typeof h2;
@@ -171,22 +171,22 @@ var i2 = new i2(i2);
 >   : ^^^^^ ^^         ^^^^^^^^
 
 var j2: new <T extends typeof j2>(x: T) => T;
->j2 : new <T extends any>(x: T) => T
->   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^ 
->j2 : new <T extends any>(x: T) => T
->   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^ 
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^^
 >x : T
 >  : ^
 
 var j2 = new j2(j2);
->j2 : new <T extends any>(x: T) => T
->   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->new j2(j2) : new <T extends any>(x: T) => T
->           : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->j2 : new <T extends any>(x: T) => T
->   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
->j2 : new <T extends any>(x: T) => T
->   : ^^^^^ ^^^^^^^^^^^^^^ ^^ ^^^^^^
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^^
+>new j2(j2) : new <T extends typeof j2>(x: T) => T
+>           : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^^
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^^
+>j2 : new <T extends typeof j2>(x: T) => T
+>   : ^^^^^ ^^^^^^^^^         ^^ ^^ ^^^^^^
 
 // Indexers
 var k: { [n: number]: typeof k;[s: string]: typeof k };

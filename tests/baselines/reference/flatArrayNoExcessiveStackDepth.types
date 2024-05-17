@@ -91,7 +91,7 @@ const repro_43249 = (value: unknown) => {
 
 function f<Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) {
 >f : <Arr, D extends number>(x: FlatArray<Arr, any>, y: FlatArray<Arr, D>) => void
->  : ^   ^^ ^^^^^^^^^^^^^^^^^ ^^                   ^^ ^^                 ^^^^^^^^^
+>  : ^   ^^ ^^^^^^^^^      ^^ ^^                   ^^ ^^                 ^^^^^^^^^
 >x : FlatArray<Arr, any>
 >  : ^^^^^^^^^^^^^^^^^^^
 >y : FlatArray<Arr, D>

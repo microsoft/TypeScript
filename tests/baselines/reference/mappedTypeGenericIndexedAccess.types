@@ -56,7 +56,7 @@ class Test {
 
     addEntry<T extends keyof Types>(name: T, entry: Types[T]) {
 >addEntry : <T extends keyof Types>(name: T, entry: Types[T]) => void
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^    ^^ ^^     ^^        ^^^^^^^^^
+>         : ^ ^^^^^^^^^           ^^    ^^ ^^     ^^        ^^^^^^^^^
 >name : T
 >     : ^
 >entry : Types[T]
@@ -212,9 +212,9 @@ const typeHandlers: TypeHandlers = {
 
 const onSomeEvent = <T extends keyof TypesMap>(p: P<T>) =>
 >onSomeEvent : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
+>            : ^ ^^^^^^^^^              ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 ><T extends keyof TypesMap>(p: P<T>) =>    typeHandlers[p.t]?.(p) : <T extends keyof TypesMap>(p: P<T>) => void | undefined
->                                                                 : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
+>                                                                 : ^ ^^^^^^^^^              ^^ ^^    ^^^^^^^^^^^^^^^^^^^^^
 >p : P<T>
 >  : ^^^^
 

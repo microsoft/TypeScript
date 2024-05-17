@@ -13,7 +13,7 @@ interface Slugs {
 
 function call<T extends object>(obj: T, cb: (val: T) => void) {
 >call : <T extends object>(obj: T, cb: (val: T) => void) => void
->     : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^  ^^                ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^ ^^  ^^                ^^^^^^^^^
 >obj : T
 >    : ^
 >cb : (val: T) => void
@@ -38,7 +38,7 @@ call(obj, ({foo, ...rest}) => {
 >call(obj, ({foo, ...rest}) => {  console.log(rest.bar);}) : void
 >                                                          : ^^^^
 >call : <T extends object>(obj: T, cb: (val: T) => void) => void
->     : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^  ^^                ^^^^^^^^^
+>     : ^ ^^^^^^^^^      ^^   ^^ ^^  ^^                ^^^^^^^^^
 >obj : Slugs
 >    : ^^^^^
 >({foo, ...rest}) => {  console.log(rest.bar);} : ({ foo, ...rest }: Slugs) => void

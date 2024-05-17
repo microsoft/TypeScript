@@ -129,7 +129,7 @@ const result3 = test3({
 
 declare function test4<const T extends readonly unknown[]>(arr: {
 >test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                         ^^^^^ 
+>      : ^^^^^^^ ^^^^^^^^^                  ^^   ^^                         ^^^^^ 
 >arr : { [K in keyof T]: T[K]; }
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -142,7 +142,7 @@ const result4 = test4(["1", 2]);
 >test4(["1", 2]) : readonly ["1", 2]
 >                : ^^^^^^^^^^^^^^^^^
 >test4 : <const T extends readonly unknown[]>(arr: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                         ^^^^^^
+>      : ^^^^^^^ ^^^^^^^^^                  ^^   ^^                         ^^^^^^
 >["1", 2] : ["1", 2]
 >         : ^^^^^^^^
 >"1" : "1"
@@ -152,7 +152,7 @@ const result4 = test4(["1", 2]);
 
 declare function test5<const T extends readonly unknown[]>(
 >test5 : <const T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                         ^^^^^ 
+>      : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^                         ^^^^^ 
 
   ...args: {
 >args : { [K in keyof T]: T[K]; }
@@ -168,7 +168,7 @@ const result5 = test5({ a: "foo" });
 >test5({ a: "foo" }) : readonly [{ readonly a: "foo"; }]
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test5 : <const T extends readonly unknown[]>(...args: { [K in keyof T]: T[K]; }) => T
->      : ^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^                         ^^^^^^
+>      : ^^^^^^^ ^^^^^^^^^                  ^^^^^    ^^                         ^^^^^^
 >{ a: "foo" } : { a: "foo"; }
 >             : ^^^^^^^^^^^^^
 >a : "foo"

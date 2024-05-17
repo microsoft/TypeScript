@@ -1,4 +1,4 @@
-Program Reused:: Not
+Program 1 Reused:: Not
 File: file1.ts
 
 import * as a from "a";
@@ -63,7 +63,7 @@ file1.ts(2,20): error TS2307: Cannot find module 'a' or its corresponding type d
 
 
 
-Program Reused:: SafeModules
+Program 2 Reused:: SafeModules
 File: node_modules/a/index.d.ts
 
 export declare let x: number;

@@ -39,7 +39,7 @@ var r99 = map(e); // should be {}[] for S since a generic lambda is not inferent
 
 declare function map2<S extends { length: number }, T>(f: (x: S) => T): (a: S[]) => T[];
 >map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->     : ^ ^^^^^^^^^^^^^^^^^^^      ^^^^^ ^^ ^^           ^^^^^               
+>     : ^ ^^^^^^^^^                   ^^ ^^ ^^           ^^^^^               
 >length : number
 >       : ^^^^^^
 >f : (x: S) => T
@@ -71,7 +71,7 @@ var r100 = map2(e2); // type arg inference should fail for S since a generic lam
 >map2(e2) : <K>(a: string[]) => number[]
 >         : ^^^^ ^^^^^^^^^^^^^^^^^^^^^^^
 >map2 : <S extends { length: number; }, T>(f: (x: S) => T) => (a: S[]) => T[]
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
+>     : ^ ^^^^^^^^^                   ^^ ^^ ^^           ^^^^^^ ^^   ^^^^^^^^
 >e2 : <K>(x: string, y?: K) => number
 >   : ^ ^^ ^^      ^^ ^^^ ^^^^^^^^^^^
 
