@@ -1473,6 +1473,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var strictFunctionTypes = getStrictOptionValue(compilerOptions, "strictFunctionTypes");
     var strictBindCallApply = getStrictOptionValue(compilerOptions, "strictBindCallApply");
     var strictPropertyInitialization = getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
+    var strictBuiltinIteratorReturn = getStrictOptionValue(compilerOptions, "strictBuiltinIteratorReturn");
     var noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
     var noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
@@ -12483,7 +12484,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.instantiations.set(getTypeListId(typeParameters), type);
                 }
                 if (type === intrinsicMarkerType && symbol.escapedName === "BuiltinIteratorReturn") {
-                    type = compilerOptions.noUncheckedIndexedAccess ? undefinedType : anyType;
+                    type = strictBuiltinIteratorReturn ? undefinedType : anyType;
                 }
             }
             else {
@@ -45487,10 +45488,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkExportsOnMergedDeclarations(node);
         checkTypeParameters(node.typeParameters);
         if (node.type.kind === SyntaxKind.IntrinsicKeyword) {
-            if (
-                !(node.name.escapedText === "BuiltinIteratorReturn" && length(node.typeParameters) === 0) &&
-                !(intrinsicTypeKinds.has(node.name.escapedText as string) && length(node.typeParameters) === 1)
-            ) {
+            const typeParameterCount = length(node.typeParameters);
+            const valid = typeParameterCount === 0 ? node.name.escapedText === "BuiltinIteratorReturn" :
+                typeParameterCount === 1 && intrinsicTypeKinds.has(node.name.escapedText as string);
+            if (!valid) {
                 error(node.type, Diagnostics.The_intrinsic_keyword_can_only_be_used_to_declare_compiler_provided_intrinsic_types);
             }
         }

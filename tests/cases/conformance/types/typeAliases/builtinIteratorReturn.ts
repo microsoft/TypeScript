@@ -1,6 +1,6 @@
 // @target: esnext
 // @noEmit: true
-// @noUncheckedIndexedAccess: *
+// @strictBuiltinIteratorReturn: *
 
 declare const array: number[];
 declare const map: Map<string, number>;

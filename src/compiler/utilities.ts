@@ -8878,6 +8878,12 @@ export const computedOptions = createComputedCompilerOptions({
             return getStrictOptionValue(compilerOptions, "strictPropertyInitialization");
         },
     },
+    strictBuiltinIteratorReturn: {
+        dependencies: ["strict"],
+        computeValue: compilerOptions => {
+            return getStrictOptionValue(compilerOptions, "strictBuiltinIteratorReturn");
+        },
+    },
     alwaysStrict: {
         dependencies: ["strict"],
         computeValue: compilerOptions => {
@@ -8965,6 +8971,7 @@ export type StrictOptionName =
     | "strictFunctionTypes"
     | "strictBindCallApply"
     | "strictPropertyInitialization"
+    | "strictBuiltinIteratorReturn"
     | "alwaysStrict"
     | "useUnknownInCatchVariables";
 
