@@ -20,6 +20,6 @@ var iterableWithOptionalIterator: {
 for (var v of iterableWithOptionalIterator) { }
 >v : any
 >  : ^^^
->iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, unknown>; }
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string, any, any>; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

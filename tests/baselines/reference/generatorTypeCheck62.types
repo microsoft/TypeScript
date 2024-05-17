@@ -20,8 +20,8 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >  : ^
 
     return function*(state) {
->function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T, void, unknown>
->                                                                                                                                                                                         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function*(state) {        for (const next of gen(state)) {            if (next) {                next.lastStrategyApplied = stratName;            }            yield next;        }    } : (state: T) => Generator<T, void, any>
+>                                                                                                                                                                                         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : T
 >      : ^
 
@@ -52,8 +52,8 @@ export function strategy<T extends StrategicState>(stratName: string, gen: (a: T
 >          : ^^^^^^
             }
             yield next;
->yield next : unknown
->           : ^^^^^^^
+>yield next : any
+>           : ^^^
 >next : T
 >     : ^
         }
@@ -81,8 +81,8 @@ export const Nothing1: Strategy<State> = strategy("Nothing", function*(state: St
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Nothing" : "Nothing"
 >          : ^^^^^^^^^
->function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<never, State, unknown>
->                                                                                                                       : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function*(state: State) {    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<never, State, any>
+>                                                                                                                       : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
 
@@ -101,14 +101,14 @@ export const Nothing2: Strategy<State> = strategy("Nothing", function*(state: St
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Nothing" : "Nothing"
 >          : ^^^^^^^^^
->function*(state: State) {    yield state;} : (state: State) => Generator<State, void, unknown>
->                                           : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function*(state: State) {    yield state;} : (state: State) => Generator<State, void, any>
+>                                           : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
 
     yield state;
->yield state : unknown
->            : ^^^^^^^
+>yield state : any
+>            : ^^^
 >state : State
 >      : ^^^^^
 
@@ -123,14 +123,14 @@ export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: S
 >         : ^ ^^^^^^^^^              ^^         ^^      ^^   ^^                                               ^^^^^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Nothing" : "Nothing"
 >          : ^^^^^^^^^
->function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<any, State, unknown>
->                                                                                                                                   : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* (state: State) {    yield ;    return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.} : (state: State) => Generator<any, State, any>
+>                                                                                                                                   : ^     ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >state : State
 >      : ^^^^^
 
     yield ;
->yield : unknown
->      : ^^^^^^^
+>yield : any
+>      : ^^^
 
     return state; // `return`/`TReturn` isn't supported by `strategy`, so this should error.
 >state : State
