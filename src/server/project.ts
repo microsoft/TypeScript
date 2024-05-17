@@ -1579,6 +1579,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                 });
             }
 
+            // Update roots
+            this.rootFilesMap.forEach((value, path) => {
+                const file = this.program!.getSourceFileByPath(path);
+                const info = value.info;
+                if (!file || value.info?.path === file.resolvedPath) return;
+                value.info = this.projectService.getScriptInfo(file.fileName)!;
+                Debug.assert(value.info.isAttached(this));
+                info?.detachFromProject(this);
+            });
+
             // Update the missing file paths watcher
             updateMissingFilePathsWatch(
                 this.program,
