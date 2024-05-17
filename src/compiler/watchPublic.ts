@@ -61,7 +61,6 @@ import {
     parseConfigHostFromCompilerHostLike,
     ParsedCommandLine,
     Path,
-    perfLogger,
     PollingInterval,
     ProgramUpdateLevel,
     ProjectReference,
@@ -890,19 +889,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     function updateProgram() {
         switch (updateLevel) {
             case ProgramUpdateLevel.RootNamesAndUpdate:
-                perfLogger?.logStartUpdateProgram("PartialConfigReload");
                 reloadFileNamesFromConfigFile();
                 break;
             case ProgramUpdateLevel.Full:
-                perfLogger?.logStartUpdateProgram("FullConfigReload");
                 reloadConfigFile();
                 break;
             default:
-                perfLogger?.logStartUpdateProgram("SynchronizeProgram");
                 synchronizeProgram();
                 break;
         }
-        perfLogger?.logStopUpdateProgram("Done");
         return getCurrentBuilderProgram();
     }
 

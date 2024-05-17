@@ -35,7 +35,6 @@ import {
     normalizeSlashes,
     orderedRemoveItem,
     Path,
-    perfLogger,
     PollingWatchKind,
     resolveJSModule,
     some,
@@ -1786,7 +1785,7 @@ export let sys: System = (() => {
             );
         }
 
-        function readFileWorker(fileName: string, _encoding?: string): string | undefined {
+        function readFile(fileName: string, _encoding?: string): string | undefined {
             let buffer: Buffer;
             try {
                 buffer = _fs.readFileSync(fileName);
@@ -1818,15 +1817,7 @@ export let sys: System = (() => {
             return buffer.toString("utf8");
         }
 
-        function readFile(fileName: string, _encoding?: string): string | undefined {
-            perfLogger?.logStartReadFile(fileName);
-            const file = readFileWorker(fileName, _encoding);
-            perfLogger?.logStopReadFile();
-            return file;
-        }
-
         function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
-            perfLogger?.logEvent("WriteFile: " + fileName);
             // If a BOM is required, emit one
             if (writeByteOrderMark) {
                 data = byteOrderMarkIndicator + data;
@@ -1846,7 +1837,6 @@ export let sys: System = (() => {
         }
 
         function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
-            perfLogger?.logEvent("ReadDir: " + (path || "."));
             try {
                 const entries = _fs.readdirSync(path || ".", { withFileTypes: true });
                 const files: string[] = [];
