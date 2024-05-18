@@ -166,6 +166,51 @@ function CreateTypedArraysFromThisObj2<T>(obj:ArrayLike<T>, mapFn: (n:T, v:numbe
     return typedArrays;
 }
 
+function CreateTypedArraysFromIterable(obj:Iterable<number>) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj);
+    typedArrays[1] = Uint8Array.from(obj);
+    typedArrays[2] = Int16Array.from(obj);
+    typedArrays[3] = Uint16Array.from(obj);
+    typedArrays[4] = Int32Array.from(obj);
+    typedArrays[5] = Uint32Array.from(obj);
+    typedArrays[6] = Float32Array.from(obj);
+    typedArrays[7] = Float64Array.from(obj);
+    typedArrays[8] = Uint8ClampedArray.from(obj);
+
+    return typedArrays;
+}
+
+function CreateTypedArraysFromMappedIterable(obj:Iterable<number>, mapFn: (n:number, v:number)=> number) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj, mapFn);
+    typedArrays[1] = Uint8Array.from(obj, mapFn);
+    typedArrays[2] = Int16Array.from(obj, mapFn);
+    typedArrays[3] = Uint16Array.from(obj, mapFn);
+    typedArrays[4] = Int32Array.from(obj, mapFn);
+    typedArrays[5] = Uint32Array.from(obj, mapFn);
+    typedArrays[6] = Float32Array.from(obj, mapFn);
+    typedArrays[7] = Float64Array.from(obj, mapFn);
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
+
+    return typedArrays;
+}
+
+function CreateTypedArraysFromMappedIterable2<T>(obj:Iterable<T>, mapFn: (n:T, v:number)=> number) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj, mapFn);
+    typedArrays[1] = Uint8Array.from(obj, mapFn);
+    typedArrays[2] = Int16Array.from(obj, mapFn);
+    typedArrays[3] = Uint16Array.from(obj, mapFn);
+    typedArrays[4] = Int32Array.from(obj, mapFn);
+    typedArrays[5] = Uint32Array.from(obj, mapFn);
+    typedArrays[6] = Float32Array.from(obj, mapFn);
+    typedArrays[7] = Float64Array.from(obj, mapFn);
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
+
+    return typedArrays;
+}
+
 //// [typedArrays.js]
 function CreateTypedArrayTypes() {
     var typedArrays = [];
@@ -308,5 +353,44 @@ function CreateTypedArraysFromThisObj2(obj, mapFn, thisArg) {
     typedArrays[6] = Float32Array.from(obj, mapFn, thisArg);
     typedArrays[7] = Float64Array.from(obj, mapFn, thisArg);
     typedArrays[8] = Uint8ClampedArray.from(obj, mapFn, thisArg);
+    return typedArrays;
+}
+function CreateTypedArraysFromIterable(obj) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj);
+    typedArrays[1] = Uint8Array.from(obj);
+    typedArrays[2] = Int16Array.from(obj);
+    typedArrays[3] = Uint16Array.from(obj);
+    typedArrays[4] = Int32Array.from(obj);
+    typedArrays[5] = Uint32Array.from(obj);
+    typedArrays[6] = Float32Array.from(obj);
+    typedArrays[7] = Float64Array.from(obj);
+    typedArrays[8] = Uint8ClampedArray.from(obj);
+    return typedArrays;
+}
+function CreateTypedArraysFromMappedIterable(obj, mapFn) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj, mapFn);
+    typedArrays[1] = Uint8Array.from(obj, mapFn);
+    typedArrays[2] = Int16Array.from(obj, mapFn);
+    typedArrays[3] = Uint16Array.from(obj, mapFn);
+    typedArrays[4] = Int32Array.from(obj, mapFn);
+    typedArrays[5] = Uint32Array.from(obj, mapFn);
+    typedArrays[6] = Float32Array.from(obj, mapFn);
+    typedArrays[7] = Float64Array.from(obj, mapFn);
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
+    return typedArrays;
+}
+function CreateTypedArraysFromMappedIterable2(obj, mapFn) {
+    var typedArrays = [];
+    typedArrays[0] = Int8Array.from(obj, mapFn);
+    typedArrays[1] = Uint8Array.from(obj, mapFn);
+    typedArrays[2] = Int16Array.from(obj, mapFn);
+    typedArrays[3] = Uint16Array.from(obj, mapFn);
+    typedArrays[4] = Int32Array.from(obj, mapFn);
+    typedArrays[5] = Uint32Array.from(obj, mapFn);
+    typedArrays[6] = Float32Array.from(obj, mapFn);
+    typedArrays[7] = Float64Array.from(obj, mapFn);
+    typedArrays[8] = Uint8ClampedArray.from(obj, mapFn);
     return typedArrays;
 }
