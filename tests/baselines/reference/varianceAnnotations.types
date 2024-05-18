@@ -429,7 +429,7 @@ interface ActionObject<TEvent extends { type: string }> {
 
 declare function createMachine<TEvent extends { type: string }>(action: ActionObject<TEvent>): StateNode<any, any>;
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
->              : ^      ^^^^^^^^^^^^^^^^^      ^^^^^      ^^                    ^^^^^                   
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^                   
 >type : string
 >     : ^^^^^^
 >action : ActionObject<TEvent>
@@ -447,7 +447,7 @@ const machine = createMachine({} as any);
 >createMachine({} as any) : StateNode<any, any>
 >                         : ^^^^^^^^^^^^^^^^^^^
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
->              : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^
 >{} as any : any
 >          : ^^^
 >{} : {}
@@ -473,7 +473,7 @@ createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq);  // Erro
 >createMachine<{ type: "PLAY"; value: number } | { type: "RESET" }>(qq) : StateNode<any, any>
 >                                                                       : ^^^^^^^^^^^^^^^^^^^
 >createMachine : <TEvent extends { type: string; }>(action: ActionObject<TEvent>) => StateNode<any, any>
->              : ^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^      ^^^^^^^^^                 ^^      ^^                    ^^^^^^^^^^^^^^^^^^^^^^^^
 >type : "PLAY"
 >     : ^^^^^^
 >value : number

@@ -1,0 +1,63 @@
+error TS2318: Cannot find global type 'Array'.
+error TS2318: Cannot find global type 'Awaited'.
+error TS2318: Cannot find global type 'Boolean'.
+error TS2318: Cannot find global type 'Function'.
+error TS2318: Cannot find global type 'IArguments'.
+error TS2318: Cannot find global type 'Number'.
+error TS2318: Cannot find global type 'Object'.
+error TS2318: Cannot find global type 'RegExp'.
+error TS2318: Cannot find global type 'String'.
+awaitedTypeNoLib.ts(3,15): error TS2304: Cannot find name 'PromiseLike'.
+awaitedTypeNoLib.ts(18,27): error TS2345: Argument of type 'NotPromise<TResult> | Thenable<NotPromise<TResult>>' is not assignable to parameter of type 'Thenable<TResult>'.
+  Type 'NotPromise<TResult>' is not assignable to type 'Thenable<TResult>'.
+    Type 'TResult | (TResult extends PromiseLike<unknown> ? never : TResult)' is not assignable to type 'Thenable<TResult>'.
+      Type 'Thenable<unknown> & TResult' is not assignable to type 'Thenable<TResult>'.
+        Type 'unknown' is not assignable to type 'TResult'.
+          'TResult' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
+
+
+!!! error TS2318: Cannot find global type 'Array'.
+!!! error TS2318: Cannot find global type 'Awaited'.
+!!! error TS2318: Cannot find global type 'Boolean'.
+!!! error TS2318: Cannot find global type 'Function'.
+!!! error TS2318: Cannot find global type 'IArguments'.
+!!! error TS2318: Cannot find global type 'Number'.
+!!! error TS2318: Cannot find global type 'Object'.
+!!! error TS2318: Cannot find global type 'RegExp'.
+!!! error TS2318: Cannot find global type 'String'.
+==== awaitedTypeNoLib.ts (2 errors) ====
+    type NotPromise<T> = T extends Thenable<unknown>
+      ? T
+      : T extends PromiseLike<unknown>
+                  ~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'PromiseLike'.
+      ? never
+      : T;
+    
+    type Receiver<T> = (value: NotPromise<T>) => void;
+    
+    class Thenable<T> {
+      then(a: Receiver<T>) {}
+    
+      private handleResolve<TResult>(
+        result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
+        resolve: Receiver<TResult>,
+      ) {
+        if (result instanceof Thenable) {
+          //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+          this.resolvePromise(result, resolve);
+                              ~~~~~~
+!!! error TS2345: Argument of type 'NotPromise<TResult> | Thenable<NotPromise<TResult>>' is not assignable to parameter of type 'Thenable<TResult>'.
+!!! error TS2345:   Type 'NotPromise<TResult>' is not assignable to type 'Thenable<TResult>'.
+!!! error TS2345:     Type 'TResult | (TResult extends PromiseLike<unknown> ? never : TResult)' is not assignable to type 'Thenable<TResult>'.
+!!! error TS2345:       Type 'Thenable<unknown> & TResult' is not assignable to type 'Thenable<TResult>'.
+!!! error TS2345:         Type 'unknown' is not assignable to type 'TResult'.
+!!! error TS2345:           'TResult' could be instantiated with an arbitrary type which could be unrelated to 'unknown'.
+        }
+      }
+    
+      private resolvePromise<TResult>(
+        result: Thenable<TResult>,
+        resolve: Receiver<TResult>,
+      ) {}
+    }

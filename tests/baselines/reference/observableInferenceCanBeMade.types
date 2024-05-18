@@ -11,7 +11,7 @@ declare function of<T>(a: T): Observable<T>;
 
 declare function from<O extends ObservableInput<any>>(input: O): Observable<ObservedValueOf<O>>;
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                              
+>     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^                              
 >input : O
 >      : ^
 
@@ -82,7 +82,7 @@ function asObservable(input: string | ObservableInput<string>): Observable<strin
 >from(input) : Observable<string>
 >            : ^^^^^^^^^^^^^^^^^^
 >from : <O extends ObservableInput<any>>(input: O) => Observable<ObservedValueOf<O>>
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^ ^^^^^^^^^                    ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >input : ObservableInput<string>
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 }

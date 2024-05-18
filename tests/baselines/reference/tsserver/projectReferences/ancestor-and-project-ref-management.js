@@ -254,8 +254,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/compositeExec
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/compositeExec/index.ts :: Config file name: /user/username/projects/container/compositeExec/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/compositeExec/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/compositeExec/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/compositeExec/tsconfig.json 2000 undefined Project: /user/username/projects/container/compositeExec/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -387,12 +386,10 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/compositeExec
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/compositeExec/tsconfig.json :: Config file name: /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/compositeExec/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/container/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/container/tsconfig.json 2000 undefined Project: /user/username/projects/container/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/container/compositeExec/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
@@ -464,8 +461,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/temp
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/temp/temp.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/temp/temp.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -579,8 +575,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 3,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/lib
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -666,7 +661,17 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Loading configured project /user/username/projects/container/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/lib/tsconfig.json",
+        "configFile": "/user/username/projects/container/lib/tsconfig.json",
+        "diagnostics": []
+      }
+    }
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -867,8 +872,18 @@ Info seq  [hh:mm:ss:mss] event:
         }
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/container/lib
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/container/lib/index.ts :: Config file name: /user/username/projects/container/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/user/username/projects/container/exec/tsconfig.json",
+        "configFile": "/user/username/projects/container/exec/tsconfig.json",
+        "diagnostics": []
+      }
+    }
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/container/lib/index.ts ProjectRootPath: undefined:: Result: /user/username/projects/container/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "response": {
@@ -1182,8 +1197,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/temp
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/temp/temp.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/temp/temp.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
@@ -1596,8 +1610,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/temp/temp.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /user/username/projects/temp
-Info seq  [hh:mm:ss:mss] For info: /user/username/projects/temp/temp.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/temp/temp.ts ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/temp/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

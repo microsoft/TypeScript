@@ -153,8 +153,8 @@ module GenericParameter {
 >  : ^
 
     var a: { <T>(x: T): number; <T>(x: number): T; }
->a : { <T>(x: T): number; <T_1>(x: number): T_1; }
->  : ^^^ ^^ ^^ ^^^      ^^^   ^^ ^^      ^^^   ^^^
+>a : { <T>(x: T): number; <T>(x: number): T; }
+>  : ^^^ ^^ ^^ ^^^      ^^^ ^^ ^^      ^^^ ^^^
 >x : T
 >  : ^
 >x : number
@@ -169,6 +169,6 @@ module GenericParameter {
 >     : ^ ^^ ^^ ^^  ^^                                          ^^^^^^^^ ^^ ^^^^^^^^^^^^ ^^ ^^ ^^^ ^^^^^^^^^^^^
 >1 : 1
 >  : ^
->a : { <T>(x: T): number; <T_1>(x: number): T_1; }
->  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>a : { <T>(x: T): number; <T>(x: number): T; }
+>  : ^^^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^      ^^^^^^^
 }

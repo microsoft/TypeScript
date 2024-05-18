@@ -1,10 +1,10 @@
 import {
     IO,
     userSpecifiedRoot,
-} from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
+} from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
 
-export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project";
+export type TestRunnerKind = CompilerTestKind | FourslashTestKind | "project" | "transpile";
 export type CompilerTestKind = "conformance" | "compiler";
 export type FourslashTestKind = "fourslash" | "fourslash-server";
 

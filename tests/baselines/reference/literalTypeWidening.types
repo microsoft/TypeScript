@@ -344,7 +344,7 @@ declare function widening<T>(x: T): T;
 
 declare function nonWidening<T extends string | number | symbol>(x: T): T;
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^ 
 >x : T
 >  : ^
 
@@ -396,7 +396,7 @@ function f6(cond: boolean) {
 >nonWidening('a') : "a"
 >                 : ^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
 >'a' : "a"
 >    : ^^^
 
@@ -406,7 +406,7 @@ function f6(cond: boolean) {
 >nonWidening(10) : 10
 >                : ^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
 >10 : 10
 >   : ^^
 
@@ -416,7 +416,7 @@ function f6(cond: boolean) {
 >nonWidening(cond ? 'a' : 10) : "a" | 10
 >                             : ^^^^^^^^
 >nonWidening : <T extends string | number | symbol>(x: T) => T
->            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^
+>            : ^ ^^^^^^^^^                        ^^ ^^ ^^^^^^
 >cond ? 'a' : 10 : "a" | 10
 >                : ^^^^^^^^
 >cond : boolean
@@ -548,7 +548,7 @@ let x = onMouseOver();
 
 export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
 >Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
->    : ^ ^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^                           
+>    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^                           
 >keys : K[]
 >     : ^^^
 >true : true
@@ -595,7 +595,7 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 
 export function keys<K extends string, V>(obj: Record<K, V>): K[] {
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
->     : ^ ^^^^^^^^^^^^^^^^^ ^^   ^^            ^^^^^   
+>     : ^ ^^^^^^^^^      ^^ ^^   ^^            ^^^^^   
 >obj : Record<K, V>
 >    : ^^^^^^^^^^^^
 
@@ -626,7 +626,7 @@ const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 >Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
 >                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Set : <K extends string>(...keys: K[]) => Record<K, true>
->    : ^ ^^^^^^^^^^^^^^^^^^^^    ^^   ^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^^^^^^^^^^^^^^^^
 >'fr' : "fr"
 >     : ^^^^
 >'en' : "en"
@@ -650,7 +650,7 @@ export const langCodes = keys(langCodeSet)
 >keys(langCodeSet) : ("fr" | "en" | "es" | "it" | "nl")[]
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
->     : ^ ^^^^^^^^^^^^^^^^^ ^^   ^^            ^^^^^   
+>     : ^ ^^^^^^^^^      ^^ ^^   ^^            ^^^^^   
 >langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -680,7 +680,7 @@ const arr: Obj[] = langCodes.map(code => ({ code }))
 
 function test<T extends { a: string, b: string }>(obj: T): T {
 >test : <T extends { a: string; b: string; }>(obj: T) => T
->     : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^   ^^ ^^^^^ 
+>     : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^ 
 >a : string
 >  : ^^^^^^
 >b : string

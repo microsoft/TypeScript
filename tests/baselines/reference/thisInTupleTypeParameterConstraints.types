@@ -41,7 +41,7 @@ interface Array<T> {
 
 declare function f<T extends [(x: number) => number]>(a: T): void;
 >f : <T extends [(x: number) => number]>(a: T) => void
->  : ^ ^^^^^^^^^^^ ^^      ^^^^^      ^^^ ^^ ^^^^^    
+>  : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^    
 >x : number
 >  : ^^^^^^
 >a : T
@@ -57,7 +57,7 @@ f(x);
 >f(x) : void
 >     : ^^^^
 >f : <T extends [(x: number) => number]>(a: T) => void
->  : ^ ^^^^^^^^^^^ ^^      ^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^^^^
 >x : [(x: number) => number]
 >  : ^^ ^^      ^^^^^^^^^^^^
 

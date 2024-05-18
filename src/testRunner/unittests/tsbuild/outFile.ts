@@ -1,21 +1,21 @@
-import * as fakes from "../../_namespaces/fakes";
-import * as ts from "../../_namespaces/ts";
-import { dedent } from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
-import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder";
+import * as fakes from "../../_namespaces/fakes.js";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
+import { createSolutionBuilderHostForBaseline } from "../helpers/solutionBuilder.js";
 import {
     noChangeOnlyRuns,
     testTscCompileLike,
     TscCompileSystem,
     verifyTsc,
     verifyTscCompileLike,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: outFile::", () => {
     let outFileFs: vfs.FileSystem;

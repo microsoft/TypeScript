@@ -1,5 +1,5 @@
-import * as FourSlash from "./_namespaces/FourSlash";
-import * as ts from "./_namespaces/ts";
+import * as FourSlash from "./_namespaces/FourSlash.js";
+import * as ts from "./_namespaces/ts.js";
 
 export class Test {
     constructor(private state: FourSlash.TestState) {
@@ -619,6 +619,10 @@ export class Verify extends VerifyNegatable {
 
     public organizeImports(newContent: string, mode?: ts.OrganizeImportsMode, preferences?: ts.UserPreferences): void {
         this.state.verifyOrganizeImports(newContent, mode, preferences);
+    }
+
+    public pasteEdits(options: PasteEditsOptions): void {
+        this.state.verifyPasteEdits(options);
     }
 }
 
@@ -1921,6 +1925,12 @@ export interface MoveToFileOptions {
     readonly newFileContents: { readonly [fileName: string]: string; };
     readonly interactiveRefactorArguments: ts.InteractiveRefactorArguments;
     readonly preferences?: ts.UserPreferences;
+}
+
+export interface PasteEditsOptions {
+    readonly newFileContents: { readonly [fileName: string]: string; };
+    args: ts.PasteEditsArgs;
+    readonly fixId: string;
 }
 
 export type RenameLocationsOptions = readonly RenameLocationOptions[] | {

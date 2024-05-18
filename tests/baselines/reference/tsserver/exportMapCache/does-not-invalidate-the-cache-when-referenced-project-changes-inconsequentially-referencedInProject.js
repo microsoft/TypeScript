@@ -87,8 +87,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/app
-Info seq  [hh:mm:ss:mss] For info: /packages/app/index.ts :: Config file name: /packages/app/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/index.ts ProjectRootPath: undefined:: Result: /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/app/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /packages/app/tsconfig.json 2000 undefined Project: /packages/app/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -227,8 +226,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/app
-Info seq  [hh:mm:ss:mss] For info: /packages/app/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/app/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 
@@ -295,8 +293,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /packages/lib/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /packages/lib
-Info seq  [hh:mm:ss:mss] For info: /packages/lib/index.ts :: Config file name: /packages/lib/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/lib/index.ts ProjectRootPath: undefined:: Result: /packages/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /packages/lib/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -386,8 +383,7 @@ Info seq  [hh:mm:ss:mss] event:
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Search path: /packages/lib
-Info seq  [hh:mm:ss:mss] For info: /packages/lib/tsconfig.json :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /packages/lib/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/packages/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
 

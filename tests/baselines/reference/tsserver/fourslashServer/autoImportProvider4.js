@@ -38,8 +38,7 @@ Info seq  [hh:mm:ss:mss] request:
       },
       "command": "open"
     }
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/package.json :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/package.json ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/tsconfig.json 2000 undefined Project: /a/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -103,50 +102,6 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "projectLoadingFinish",
       "body": {
         "projectName": "/a/tsconfig.json"
-      }
-    }
-Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/b/tsconfig.json",
-        "reason": "Creating project referenced in solution /a/tsconfig.json to find possible configured project for /a/package.json to open"
-      }
-    }
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
-Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/b/index.ts Text-1 "export class Shape {}"
-
-
-	../lib.d.ts
-	  Default library for target 'es5'
-	../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../lib.d.ts'
-	../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
-	index.ts
-	  Matched by default include pattern '**/*'
-
-Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingFinish",
-      "body": {
-        "projectName": "/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -222,6 +177,50 @@ Info seq  [hh:mm:ss:mss] event:
             "category": "error"
           }
         ]
+      }
+    }
+Info seq  [hh:mm:ss:mss] Creating configuration project /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/b/tsconfig.json",
+        "reason": "Creating project referenced in solution /a/tsconfig.json to find possible configured project for /a/package.json to open"
+      }
+    }
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /b/index.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /b/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/b/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] 	Files (4)
+	/lib.d.ts Text-1 lib.d.ts-Text
+	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/b/index.ts Text-1 "export class Shape {}"
+
+
+	../lib.d.ts
+	  Default library for target 'es5'
+	../lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../lib.d.ts'
+	../lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../lib.d.ts'
+	index.ts
+	  Matched by default include pattern '**/*'
+
+Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/b/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -371,8 +370,7 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /a/index.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Search path: /a
-Info seq  [hh:mm:ss:mss] For info: /a/index.ts :: Config file name: /a/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /a/index.ts ProjectRootPath: undefined:: Result: /a/tsconfig.json
 Info seq  [hh:mm:ss:mss] Project '/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (1)
 

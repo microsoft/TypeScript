@@ -36,8 +36,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /Volumes/git/projects/project
-Info seq  [hh:mm:ss:mss] For info: /Volumes/git/projects/project/foo.ts :: Config file name: /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Volumes/git/projects/project/foo.ts ProjectRootPath: undefined:: Result: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/tsconfig.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:

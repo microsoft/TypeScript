@@ -172,7 +172,7 @@ declare let cond: boolean;
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 >key : K
@@ -189,7 +189,7 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 
 function setProperty<T, K extends keyof T>(obj: T, key: K, value: T[K]) {
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >obj : T
 >    : ^
 >key : K
@@ -222,7 +222,7 @@ function f10(shape: Shape) {
 >getProperty(shape, "name") : string
 >                           : ^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"name" : "name"
@@ -234,7 +234,7 @@ function f10(shape: Shape) {
 >getProperty(shape, "size") : string | number | boolean
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"size" : "size"
@@ -246,7 +246,7 @@ function f10(shape: Shape) {
 >getProperty(shape, cond ? "name" : "size") : string | number | boolean
 >                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >getProperty : <T, K extends keyof T>(obj: T, key: K) => T[K]
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
@@ -262,7 +262,7 @@ function f10(shape: Shape) {
 >setProperty(shape, "name", "rectangle") : void
 >                                        : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"name" : "name"
@@ -274,7 +274,7 @@ function f10(shape: Shape) {
 >setProperty(shape, "size", 10) : void
 >                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >"size" : "size"
@@ -286,7 +286,7 @@ function f10(shape: Shape) {
 >setProperty(shape, cond ? "name" : "size", 10) : void
 >                                               : ^^^^
 >setProperty : <T, K extends keyof T>(obj: T, key: K, value: T[K]) => void
->            : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
+>            : ^ ^^ ^^^^^^^^^       ^^   ^^ ^^   ^^ ^^     ^^    ^^^^^^^^^
 >shape : Shape
 >      : ^^^^^
 >cond ? "name" : "size" : "name" | "size"
@@ -481,7 +481,7 @@ function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U,
 // Repro from #17166
 function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >f3 : <T, K extends Extract<keyof T, string>, U extends T, J extends K>(t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^ ^^ ^^ ^^  ^^    ^^ ^^ ^^ ^^ ^^  ^^    ^^  ^^    ^^  ^^    ^^^^^    
+>   : ^ ^^ ^^^^^^^^^                        ^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^ ^^ ^^  ^^    ^^ ^^ ^^ ^^ ^^  ^^    ^^  ^^    ^^  ^^    ^^^^^    
 
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
 >t : T
@@ -615,7 +615,7 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 // The constraint of 'keyof T' is 'keyof T'
 function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
 >f4 : <T extends { [K in keyof T]: string; }>(k: keyof T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
+>   : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof T
 >  : ^^^^^^^
 
@@ -671,7 +671,7 @@ const b1: Result1['b'] = 'b';
 
 function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >test1 : <T extends Record<string, any>, K extends keyof T>(t: T, k: K) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                   ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >k : K
@@ -722,7 +722,7 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 
 function f30<T, K extends keyof T>() {
 >f30 : <T, K extends keyof T>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 >x : Partial<Record<keyof T, string>>[K]
@@ -733,7 +733,7 @@ function f30<T, K extends keyof T>() {
 
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^       ^^^^^^^^^^^
 
     let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 >x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]

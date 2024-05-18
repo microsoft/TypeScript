@@ -1,6 +1,6 @@
-import * as evaluator from "../../_namespaces/evaluator";
-import * as ts from "../../_namespaces/ts";
-import { ScriptTarget } from "../../_namespaces/ts";
+import * as evaluator from "../../_namespaces/evaluator.js";
+import * as ts from "../../_namespaces/ts.js";
+import { ScriptTarget } from "../../_namespaces/ts.js";
 
 describe("unittests:: evaluation:: esDecorators", () => {
     const options: ts.CompilerOptions = { target: ts.ScriptTarget.ES2021 };

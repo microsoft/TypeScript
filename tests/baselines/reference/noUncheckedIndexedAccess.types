@@ -406,7 +406,7 @@ const num_ok5: boolean = numMap[NumericEnum2.A];
 // Generics
 function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
 >generic1 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^       
+>         : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^       
 >s : string
 >  : ^^^^^^
 >arg : T
@@ -423,7 +423,7 @@ function generic1<T extends { [s: string]: boolean }>(arg: T): boolean {
 }
 function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
 >generic2 : <T extends { [s: string]: boolean; }>(arg: T) => boolean
->         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^       
+>         : ^ ^^^^^^^^^                         ^^   ^^ ^^^^^       
 >s : string
 >  : ^^^^^^
 >arg : T
@@ -442,7 +442,7 @@ function generic2<T extends { [s: string]: boolean }>(arg: T): boolean {
 }
 function generic3<T extends string>(arg: T): boolean {
 >generic3 : <T extends string>(arg: T) => boolean
->         : ^ ^^^^^^^^^^^^^^^^^   ^^ ^^^^^       
+>         : ^ ^^^^^^^^^      ^^   ^^ ^^^^^       
 >arg : T
 >    : ^
 
@@ -617,10 +617,10 @@ declare const myRecord2: { a: string; b: string, [key: string]: string };
 >    : ^^^^^^
 
 const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key]; // Should OK
->fn1 : <Key extends "a" | "b">(key: Key) => string
->    : ^   ^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^      
-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends "a" | "b">(key: Key) => string
->                                                                         : ^   ^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^      
+>fn1 : <Key extends keyof typeof myRecord1>(key: Key) => string
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+>                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : Key
@@ -633,10 +633,10 @@ const fn1 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord1[
 >    : ^^^
 
 const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key]; // Should OK
->fn2 : <Key extends "a" | "b">(key: Key) => string
->    : ^   ^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^      
-><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends "a" | "b">(key: Key) => string
->                                                                         : ^   ^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^      
+>fn2 : <Key extends keyof typeof myRecord1>(key: Key) => string
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
+><Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[key] : <Key extends keyof typeof myRecord1>(key: Key) => string
+>                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^      
 >myRecord1 : { a: string; b: string; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : Key
@@ -649,10 +649,10 @@ const fn2 = <Key extends keyof typeof myRecord1>(key: Key): string => myRecord2[
 >    : ^^^
 
 const fn3 = <Key extends keyof typeof myRecord2>(key: Key) => {
->fn3 : <Key extends string | number>(key: Key) => void
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^^^^^
-><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends string | number>(key: Key) => void
->                                                                                                                                                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^^^^^
+>fn3 : <Key extends keyof typeof myRecord2>(key: Key) => void
+>    : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^^^^^
+><Key extends keyof typeof myRecord2>(key: Key) => {    myRecord2[key] = undefined; // Should error    const v: string = myRecord2[key]; // Should error} : <Key extends keyof typeof myRecord2>(key: Key) => void
+>                                                                                                                                                         : ^   ^^^^^^^^^                      ^^   ^^   ^^^^^^^^^
 >myRecord2 : { [key: string]: string; a: string; b: string; }
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : Key

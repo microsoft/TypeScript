@@ -11,9 +11,9 @@ type B = {b: string}
 
 const flowtypes = <A>(b: B) => {
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 ><A>(b: B) => {  type Combined = A & B  const combined = (fn: (combined: Combined) => void) => null  const literal = (fn: (aPlusB: A & B) => void) => null  return {combined, literal}} : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->                                                                                                                                                                                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
+>                                                                                                                                                                                       : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >b : B
 >  : ^
 
@@ -23,9 +23,9 @@ const flowtypes = <A>(b: B) => {
 
   const combined = (fn: (combined: Combined) => void) => null
 >combined : (fn: (combined: A & B) => void) => any
->         : ^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^
+>         : ^  ^^           ^^^^^         ^^^^^^^^
 >(fn: (combined: Combined) => void) => null : (fn: (combined: A & B) => void) => any
->                                           : ^  ^^^        ^^^^^^^^^^^^    ^^^^^^^^
+>                                           : ^  ^^           ^^^^^         ^^^^^^^^
 >fn : (combined: A & B) => void
 >   : ^        ^^^^^^^^^^^^    
 >combined : A & B
@@ -43,9 +43,9 @@ const flowtypes = <A>(b: B) => {
 
   return {combined, literal}
 >{combined, literal} : { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->                    : ^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
+>                    : ^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >combined : (fn: (combined: A & B) => void) => any
->         : ^  ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^
+>         : ^  ^^           ^^^^^         ^^^^^^^^
 >literal : (fn: (aPlusB: A & B) => void) => any
 >        : ^  ^^                       ^^^^^^^^
 }
@@ -58,7 +58,7 @@ const {combined, literal} = flowtypes<{a: string}>({b: 'b-value'})
 >flowtypes<{a: string}>({b: 'b-value'}) : { combined: (fn: (combined: { a: string; } & B) => void) => any; literal: (fn: (aPlusB: { a: string; } & B) => void) => any; }
 >                                       : ^^^^^^^^^^^^^  ^^^        ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^      ^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >flowtypes : <A>(b: B) => { combined: (fn: (combined: A & B) => void) => any; literal: (fn: (aPlusB: A & B) => void) => any; }
->          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
+>          : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^  ^^           ^^^^^         ^^^^^^^^^^^^^^^^^^^^  ^^                       ^^^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >{b: 'b-value'} : { b: string; }

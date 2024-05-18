@@ -1,20 +1,20 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import { jsonToReadableText } from "../helpers";
-import { CommandLineProgram } from "../helpers/baseline";
-import { libContent } from "../helpers/contents";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
+import { CommandLineProgram } from "../helpers/baseline.js";
+import { libContent } from "../helpers/contents.js";
 import {
     applyEdit,
     createBaseline,
     verifyTscWatch,
     watchBaseline,
-} from "../helpers/tscWatch";
+} from "../helpers/tscWatch.js";
 import {
     createWatchedSystem,
     File,
     libFile,
     TestServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsc-watch:: emit file --incremental", () => {
     const project = "/users/username/projects/project";

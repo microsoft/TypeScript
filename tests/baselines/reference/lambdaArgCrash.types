@@ -69,7 +69,7 @@ class ItemSetEvent extends Event {
 >add : (listener: (items: ItemSet) => void) => void
 >    : ^        ^^                        ^^^^^^^^^
 >listener : (items: ItemSet) => void
->         : ^     ^^^^^^^^^^^^^^    
+>         : ^     ^^       ^^^^^    
 >items : ItemSet
 >      : ^^^^^^^
 
@@ -83,7 +83,7 @@ class ItemSetEvent extends Event {
 >add : (listener: () => any) => void
 >    : ^        ^^         ^^^^^^^^^
 >listener : (items: ItemSet) => void
->         : ^     ^^^^^^^^^^^^^^^^^^
+>         : ^     ^^       ^^^^^^^^^
 
 	}
 

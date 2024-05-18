@@ -1,24 +1,24 @@
-import * as ts from "../../_namespaces/ts";
-import * as Utils from "../../_namespaces/Utils";
-import * as vfs from "../../_namespaces/vfs";
-import { jsonToReadableText } from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import * as Utils from "../../_namespaces/Utils.js";
+import * as vfs from "../../_namespaces/vfs.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     compilerOptionsToConfigJson,
     libContent,
-} from "../helpers/contents";
-import { getFsForNoEmitOnError } from "../helpers/noEmitOnError";
+} from "../helpers/contents.js";
+import { getFsForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     noChangeOnlyRuns,
     noChangeRun,
     TestTscEdit,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 import {
     appendText,
     loadProjectFromFiles,
     prependText,
     replaceText,
-} from "../helpers/vfs";
+} from "../helpers/vfs.js";
 
 describe("unittests:: tsc:: incremental::", () => {
     verifyTsc({

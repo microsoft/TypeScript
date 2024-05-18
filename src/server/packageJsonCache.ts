@@ -8,8 +8,8 @@ import {
     ProjectPackageJsonInfo,
     Ternary,
     tryFileExists,
-} from "./_namespaces/ts";
-import { ProjectService } from "./_namespaces/ts.server";
+} from "./_namespaces/ts.js";
+import { ProjectService } from "./_namespaces/ts.server.js";
 
 /** @internal */
 export interface PackageJsonCache {

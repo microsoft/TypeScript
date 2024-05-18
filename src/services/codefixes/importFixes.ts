@@ -1,4 +1,10 @@
 import {
+    createCodeFixAction,
+    createCombinedCodeActions,
+    eachDiagnostic,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     AnyImportOrRequire,
     AnyImportOrRequireStatement,
     AnyImportSyntax,
@@ -35,12 +41,12 @@ import {
     flatMap,
     flatMapIterator,
     forEachExternalModuleToImportFrom,
+    forEachNameOfDefaultExport,
     formatting,
     FutureSourceFile,
     FutureSymbolExportInfo,
     getAllowSyntheticDefaultImports,
     getBaseFileName,
-    getDefaultExportInfoWorker,
     getDefaultLikeExportInfo,
     getDirectoryPath,
     getEmitModuleFormatOfFileWorker,
@@ -49,7 +55,6 @@ import {
     getEmitScriptTarget,
     getExportInfoMap,
     getImpliedNodeFormatForEmitWorker,
-    getMeaningFromDeclaration,
     getMeaningFromLocation,
     getNameForExportedSymbol,
     getOutputExtension,
@@ -65,6 +70,7 @@ import {
     hasJSFileExtension,
     hostGetCanonicalFileName,
     Identifier,
+    identity,
     ImportClause,
     ImportEqualsDeclaration,
     importFromModuleSpecifier,
@@ -75,8 +81,6 @@ import {
     isExternalModuleReference,
     isFullSourceFile,
     isIdentifier,
-    isIdentifierPart,
-    isIdentifierStart,
     isImportableFile,
     isImportDeclaration,
     isImportEqualsDeclaration,
@@ -90,7 +94,6 @@ import {
     isNamespaceImport,
     isRequireVariableStatement,
     isSourceFileJS,
-    isStringANonContextualKeyword,
     isStringLiteral,
     isStringLiteralLike,
     isTypeOnlyImportDeclaration,
@@ -108,6 +111,7 @@ import {
     ModuleKind,
     moduleResolutionUsesNodeModules,
     moduleSpecifiers,
+    moduleSymbolToValidIdentifier,
     MultiMap,
     Mutable,
     NamedImports,
@@ -123,12 +127,9 @@ import {
     pathIsBareSpecifier,
     Program,
     QuotePreference,
-    removeFileExtension,
-    removeSuffix,
     RequireOrImportCall,
     RequireVariableStatement,
     sameMap,
-    ScriptTarget,
     SemanticMeaning,
     shouldUseUriStyleNodeCoreModules,
     single,
@@ -153,13 +154,7 @@ import {
     TypeOnlyAliasDeclaration,
     UserPreferences,
     VariableDeclarationInitializedTo,
-} from "../_namespaces/ts";
-import {
-    createCodeFixAction,
-    createCombinedCodeActions,
-    eachDiagnostic,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export const importFixName = "import";
@@ -404,6 +399,15 @@ function createImportAdderWorker(sourceFile: SourceFile | FutureSourceFile, prog
                         entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
                         break;
                     case ImportKind.CommonJS:
+                        if (compilerOptions.verbatimModuleSyntax) {
+                            const prevValue = (entry.namedImports ||= new Map()).get(symbolName);
+                            entry.namedImports.set(symbolName, reduceAddAsTypeOnlyValues(prevValue, addAsTypeOnly));
+                        }
+                        else {
+                            Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
+                            entry.namespaceLikeImport = { importKind, name: symbolName, addAsTypeOnly };
+                        }
+                        break;
                     case ImportKind.Namespace:
                         Debug.assert(entry.namespaceLikeImport === undefined || entry.namespaceLikeImport.name === symbolName, "Namespacelike import shoudl be missing or match symbolName");
                         entry.namespaceLikeImport = { importKind, name: symbolName, addAsTypeOnly };
@@ -864,7 +868,6 @@ function getAllExportInfoForSymbol(importingFile: SourceFile | FutureSourceFile,
 }
 
 function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, moduleSymbol: Symbol, program: Program, host: LanguageServiceHost): SymbolExportInfo {
-    const compilerOptions = program.getCompilerOptions();
     const mainProgramInfo = getInfoWithChecker(program.getTypeChecker(), /*isFromPackageJson*/ false);
     if (mainProgramInfo) {
         return mainProgramInfo;
@@ -873,7 +876,7 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
     return Debug.checkDefined(autoImportProvider && getInfoWithChecker(autoImportProvider, /*isFromPackageJson*/ true), `Could not find symbol in specified module for code actions`);
 
     function getInfoWithChecker(checker: TypeChecker, isFromPackageJson: boolean): SymbolExportInfo | undefined {
-        const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
+        const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
         if (defaultInfo && skipAlias(defaultInfo.symbol, checker) === symbol) {
             return { symbol: defaultInfo.symbol, moduleSymbol, moduleFileName: undefined, exportKind: defaultInfo.exportKind, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
@@ -882,10 +885,6 @@ function getSingleExportInfoForSymbol(symbol: Symbol, symbolName: string, module
             return { symbol: named, moduleSymbol, moduleFileName: undefined, exportKind: ExportKind.Named, targetFlags: skipAlias(symbol, checker).flags, isFromPackageJson };
         }
     }
-}
-
-function isFutureSymbolExportInfoArray(info: readonly SymbolExportInfo[] | readonly FutureSymbolExportInfo[]): info is readonly FutureSymbolExportInfo[] {
-    return info[0].symbol === undefined;
 }
 
 function getImportFixes(
@@ -901,7 +900,7 @@ function getImportFixes(
     fromCacheOnly?: boolean,
 ): { computedWithoutCacheCount: number; fixes: readonly ImportFixWithModuleSpecifier[]; } {
     const checker = program.getTypeChecker();
-    const existingImports = importMap && !isFutureSymbolExportInfoArray(exportInfos) ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
+    const existingImports = importMap ? flatMap(exportInfos, importMap.getImportsForExportInfo) : emptyArray;
     const useNamespace = usagePosition !== undefined && tryUseExistingNamespaceImport(existingImports, usagePosition);
     const addToExisting = tryAddToExistingImport(existingImports, isValidTypeOnlyUseSite, checker, program.getCompilerOptions());
     if (addToExisting) {
@@ -1083,7 +1082,7 @@ function createExistingImportMap(importingFile: SourceFile, program: Program) {
     }
 
     return {
-        getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo): readonly FixAddToExistingImportInfo[] => {
+        getImportsForExportInfo: ({ moduleSymbol, exportKind, targetFlags, symbol }: SymbolExportInfo | FutureSymbolExportInfo): readonly FixAddToExistingImportInfo[] => {
             const matchingDeclarations = importMap?.get(getSymbolId(moduleSymbol));
             if (!matchingDeclarations) return emptyArray;
 
@@ -1185,7 +1184,7 @@ function getNewImportFixes(
                 const exportEquals = checker.resolveExternalModuleSymbol(exportInfo.moduleSymbol);
                 let namespacePrefix;
                 if (exportEquals !== exportInfo.moduleSymbol) {
-                    namespacePrefix = getDefaultExportInfoWorker(exportEquals, checker, compilerOptions)?.name;
+                    namespacePrefix = forEachNameOfDefaultExport(exportEquals, checker, compilerOptions, /*preferCapitalizedNames*/ false, identity)!;
                 }
                 namespacePrefix ||= moduleSymbolToValidIdentifier(
                     exportInfo.moduleSymbol,
@@ -1524,14 +1523,18 @@ function getExportInfos(
         cancellationToken.throwIfCancellationRequested();
 
         const compilerOptions = program.getCompilerOptions();
-        const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
-        if (defaultInfo && (defaultInfo.name === symbolName || moduleSymbolToValidIdentifier(moduleSymbol, getEmitScriptTarget(compilerOptions), isJsxTagName) === symbolName) && symbolHasMeaning(defaultInfo.resolvedSymbol, currentTokenMeaning)) {
+        const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker);
+        if (
+            defaultInfo
+            && symbolFlagsHaveMeaning(checker.getSymbolFlags(defaultInfo.symbol), currentTokenMeaning)
+            && forEachNameOfDefaultExport(defaultInfo.symbol, checker, compilerOptions, isJsxTagName, name => name === symbolName)
+        ) {
             addSymbol(moduleSymbol, sourceFile, defaultInfo.symbol, defaultInfo.exportKind, program, isFromPackageJson);
         }
 
         // check exports with the same name
         const exportSymbolWithIdenticalName = checker.tryGetMemberInModuleExportsAndProperties(symbolName, moduleSymbol);
-        if (exportSymbolWithIdenticalName && symbolHasMeaning(exportSymbolWithIdenticalName, currentTokenMeaning)) {
+        if (exportSymbolWithIdenticalName && symbolFlagsHaveMeaning(checker.getSymbolFlags(exportSymbolWithIdenticalName), currentTokenMeaning)) {
             addSymbol(moduleSymbol, sourceFile, exportSymbolWithIdenticalName, ExportKind.Named, program, isFromPackageJson);
         }
     });
@@ -1712,7 +1715,7 @@ function promoteFromTypeOnly(
         // Change .ts extension to .js if necessary
         if (!compilerOptions.allowImportingTsExtensions) {
             const moduleSpecifier = tryGetModuleSpecifierFromDeclaration(importClause.parent);
-            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier)?.resolvedModule;
+            const resolvedModule = moduleSpecifier && program.getResolvedModuleFromModuleSpecifier(moduleSpecifier, sourceFile)?.resolvedModule;
             if (resolvedModule?.resolvedUsingTsExtension) {
                 const changedExtension = changeAnyExtension(moduleSpecifier!.text, getOutputExtension(moduleSpecifier!.text, compilerOptions));
                 changes.replaceNode(sourceFile, moduleSpecifier!, factory.createStringLiteral(changedExtension));
@@ -2000,44 +2003,12 @@ function createConstEqualsRequireDeclaration(name: string | ObjectBindingPattern
     ) as RequireVariableStatement;
 }
 
-function symbolHasMeaning({ declarations }: Symbol, meaning: SemanticMeaning): boolean {
-    return some(declarations, decl => !!(getMeaningFromDeclaration(decl) & meaning));
-}
-
-/** @internal */
-export function moduleSymbolToValidIdentifier(moduleSymbol: Symbol, target: ScriptTarget | undefined, forceCapitalize: boolean): string {
-    return moduleSpecifierToValidIdentifier(removeFileExtension(stripQuotes(moduleSymbol.name)), target, forceCapitalize);
-}
-
-/** @internal */
-export function moduleSpecifierToValidIdentifier(moduleSpecifier: string, target: ScriptTarget | undefined, forceCapitalize?: boolean): string {
-    const baseName = getBaseFileName(removeSuffix(moduleSpecifier, "/index"));
-    let res = "";
-    let lastCharWasValid = true;
-    const firstCharCode = baseName.charCodeAt(0);
-    if (isIdentifierStart(firstCharCode, target)) {
-        res += String.fromCharCode(firstCharCode);
-        if (forceCapitalize) {
-            res = res.toUpperCase();
-        }
-    }
-    else {
-        lastCharWasValid = false;
-    }
-    for (let i = 1; i < baseName.length; i++) {
-        const ch = baseName.charCodeAt(i);
-        const isValid = isIdentifierPart(ch, target);
-        if (isValid) {
-            let char = String.fromCharCode(ch);
-            if (!lastCharWasValid) {
-                char = char.toUpperCase();
-            }
-            res += char;
-        }
-        lastCharWasValid = isValid;
-    }
-    // Need `|| "_"` to ensure result isn't empty.
-    return !isStringANonContextualKeyword(res) ? res || "_" : `_${res}`;
+function symbolFlagsHaveMeaning(flags: SymbolFlags, meaning: SemanticMeaning): boolean {
+    return meaning === SemanticMeaning.All ? true :
+        meaning & SemanticMeaning.Value ? !!(flags & SymbolFlags.Value) :
+        meaning & SemanticMeaning.Type ? !!(flags & SymbolFlags.Type) :
+        meaning & SemanticMeaning.Namespace ? !!(flags & SymbolFlags.Namespace) :
+        false;
 }
 
 function getImpliedNodeFormatForEmit(file: SourceFile | FutureSourceFile, program: Program) {

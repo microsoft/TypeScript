@@ -154,10 +154,10 @@ class C {
             set x(value) { }
             /*14*/
             y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, 1));
-            #z_accessor_storage = (__runInitializers(this, _y_extraInitializers), __runInitializers(this, _z_initializers, 1));
+            #z_1_accessor_storage = (__runInitializers(this, _y_extraInitializers), __runInitializers(this, _z_initializers, 1));
             /*17*/
-            get z() { return this.#z_accessor_storage; }
-            set z(value) { this.#z_accessor_storage = value; }
+            get z() { return this.#z_1_accessor_storage; }
+            set z(value) { this.#z_1_accessor_storage = value; }
             static {
                 /*29*/
                 _C_y = { value: (__runInitializers(_classThis, _staticExtraInitializers), __runInitializers(_classThis, _static_private_y_initializers, 1)) };

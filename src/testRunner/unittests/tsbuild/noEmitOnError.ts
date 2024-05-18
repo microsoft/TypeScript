@@ -1,9 +1,9 @@
-import * as vfs from "../../_namespaces/vfs";
-import { getFsForNoEmitOnError } from "../helpers/noEmitOnError";
+import * as vfs from "../../_namespaces/vfs.js";
+import { getFsForNoEmitOnError } from "../helpers/noEmitOnError.js";
 import {
     noChangeRun,
     verifyTsc,
-} from "../helpers/tsc";
+} from "../helpers/tsc.js";
 
 describe("unittests:: tsbuild - with noEmitOnError", () => {
     let projFs: vfs.FileSystem;

@@ -121,7 +121,7 @@ var q: String = null;
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : <T, U, V extends Date>(x: T, y: U, z: V) => void
->    : ^ ^^ ^^ ^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^ ^^^^^^^^^    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 >y : U

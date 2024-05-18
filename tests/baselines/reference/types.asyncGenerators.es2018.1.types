@@ -29,12 +29,12 @@ async function * inferReturnType4() {
 >yield Promise.resolve(1) : any
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -51,12 +51,12 @@ async function * inferReturnType5() {
 >yield Promise.resolve(2) : any
 >Promise.resolve(2) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 }
@@ -83,12 +83,12 @@ async function * inferReturnType7() {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -133,12 +133,12 @@ const assignability2: () => AsyncIterableIterator<number> = async function * () 
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -171,12 +171,12 @@ const assignability4: () => AsyncIterableIterator<number> = async function * () 
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -226,12 +226,12 @@ const assignability7: () => AsyncIterable<number> = async function * () {
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -264,12 +264,12 @@ const assignability9: () => AsyncIterable<number> = async function * () {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -319,12 +319,12 @@ const assignability12: () => AsyncIterator<number> = async function * () {
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -357,12 +357,12 @@ const assignability14: () => AsyncIterator<number> = async function * () {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -407,12 +407,12 @@ async function * explicitReturnType2(): AsyncIterableIterator<number> {
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -439,12 +439,12 @@ async function * explicitReturnType4(): AsyncIterableIterator<number> {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -485,12 +485,12 @@ async function * explicitReturnType7(): AsyncIterable<number> {
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -517,12 +517,12 @@ async function * explicitReturnType9(): AsyncIterable<number> {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -563,12 +563,12 @@ async function * explicitReturnType12(): AsyncIterator<number> {
 >                         : ^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -595,12 +595,12 @@ async function * explicitReturnType14(): AsyncIterator<number> {
 >                     : ^^^^^^^^^^^^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }
@@ -654,12 +654,12 @@ async function * awaitedType2() {
 >                         : ^^^^^^
 >Promise.resolve(1) : Promise<number>
 >                   : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }

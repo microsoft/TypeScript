@@ -233,7 +233,7 @@ type Awaitified<T> = { [P in keyof T]: __Awaited<T[P]> };
 
 declare function all<T extends any[]>(...values: T): Promise<Awaitified<T>>;
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^                      
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^                      
 >values : T
 >       : ^
 
@@ -255,7 +255,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a) : Promise<[number]>
 >       : ^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -265,7 +265,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b) : Promise<[number, number]>
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -277,7 +277,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b, c) : Promise<[number, number, string[]]>
 >             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -291,7 +291,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >all(a, b, c, d) : Promise<[number, number, string[], string[]]>
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >all : <T extends any[]>(...values: T) => Promise<Awaitified<T>>
->    : ^ ^^^^^^^^^^^^^^^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^ ^^^^^^^^^     ^^^^^      ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >b : Promise<number>
@@ -304,7 +304,7 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 
 function f2<T extends any[]>(a: Boxified<T>) {
 >f2 : <T extends any[]>(a: Boxified<T>) => void
->   : ^ ^^^^^^^^^^^^^^^^ ^^           ^^^^^^^^^
+>   : ^ ^^^^^^^^^     ^^ ^^           ^^^^^^^^^
 >a : Boxified<T>
 >  : ^^^^^^^^^^^
 
@@ -367,13 +367,13 @@ declare function acceptArray(arr: any[]): void;
 
 declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
 >mapArray : <T extends any[]>(arr: T) => Mapped<T>
->         : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^         
+>         : ^ ^^^^^^^^^     ^^   ^^ ^^^^^         
 >arr : T
 >    : ^
 
 function acceptMappedArray<T extends any[]>(arr: T) {
 >acceptMappedArray : <T extends any[]>(arr: T) => void
->                  : ^ ^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>                  : ^ ^^^^^^^^^     ^^   ^^ ^^^^^^^^^
 >arr : T
 >    : ^
 
@@ -385,7 +385,7 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 >mapArray(arr) : Mapped<T>
 >              : ^^^^^^^^^
 >mapArray : <T_1 extends any[]>(arr: T_1) => Mapped<T_1>
->         : ^   ^^^^^^^^^^^^^^^^   ^^   ^^^^^^^^^^^^^^^^
+>         : ^   ^^^^^^^^^     ^^   ^^   ^^^^^^^^^^^^^^^^
 >arr : T
 >    : ^
 }

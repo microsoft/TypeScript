@@ -14,12 +14,12 @@ const C = class {
 >                          : ^^^^^^
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
 
@@ -116,12 +116,12 @@ const C = class {
 >                          : ^^^^^^
 >Promise.resolve(42) : Promise<number>
 >                    : ^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
     }

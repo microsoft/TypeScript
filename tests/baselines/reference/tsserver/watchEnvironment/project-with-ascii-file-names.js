@@ -28,8 +28,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /User/userName/Projects/I
-Info seq  [hh:mm:ss:mss] For info: /User/userName/Projects/I/foo.ts :: No config files found.
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /User/userName/Projects/I/foo.ts ProjectRootPath: /User/userName/Projects/I:: Result: undefined
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/I/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /User/userName/Projects/I/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*

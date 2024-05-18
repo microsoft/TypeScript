@@ -30,7 +30,7 @@ interface Wrapper<T> {
 }
 declare function sepsis<T extends Signs>(opts: Opts<T>): Wrapper<T>;
 >sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
->       : ^ ^^^^^^^^^^^^^^^^    ^^       ^^^^^          
+>       : ^ ^^^^^^^^^     ^^    ^^       ^^^^^          
 >opts : Opts<T>
 >     : ^^^^^^^
 
@@ -46,7 +46,7 @@ export const y = sepsis({ low: 1, sign: { kind: 'a', a: 3 }});
 >sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: "a"; a: 3; }>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
->       : ^ ^^^^^^^^^^^^^^^^    ^^       ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^     ^^    ^^       ^^^^^^^^^^^^^^^
 >{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: "a"; a: 3; }; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >low : number
@@ -88,7 +88,7 @@ export const yone = unwrap(sepsis({ low: 1, sign: { kind: 'a', a: 3 }}));
 >sepsis({ low: 1, sign: { kind: 'a', a: 3 }}) : Wrapper<{ kind: "a"; a: 3; }>
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >sepsis : <T extends Signs>(opts: Opts<T>) => Wrapper<T>
->       : ^ ^^^^^^^^^^^^^^^^    ^^       ^^^^^^^^^^^^^^^
+>       : ^ ^^^^^^^^^     ^^    ^^       ^^^^^^^^^^^^^^^
 >{ low: 1, sign: { kind: 'a', a: 3 }} : { low: number; sign: { kind: "a"; a: 3; }; }
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >low : number

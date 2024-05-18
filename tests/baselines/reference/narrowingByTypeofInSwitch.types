@@ -230,7 +230,7 @@ function testUnion(x: Basic) {
 
 function testExtendsUnion<T extends Basic>(x: T) {
 >testExtendsUnion : <T extends Basic>(x: T) => void
->                 : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>                 : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -541,7 +541,7 @@ function testUnionImplicitDefault(x: Basic) {
 
 function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >testExtendsExplicitDefault : <T extends Basic>(x: T) => void
->                           : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>                           : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -604,7 +604,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 
 function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >testExtendsImplicitDefault : <T extends Basic>(x: T) => Basic
->                           : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^
+>                           : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^^
 >x : T
 >  : ^
 
@@ -732,8 +732,8 @@ function exhaustiveChecks(x: number | string | L | R): string {
 }
 
 function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): string {
->exhaustiveChecksGenerics : <T extends string | number | R | L>(x: T) => string
->                         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^      
+>exhaustiveChecksGenerics : <T extends L | R | number | string>(x: T) => string
+>                         : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^      
 >x : T
 >  : ^
 
@@ -795,7 +795,7 @@ function exhaustiveChecksGenerics<T extends L | R | number | string>(x: T): stri
 
 function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGeneric : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->                : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^     ^^^^^                         
+>                : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^  ^^     ^^^^^                         
 >xy : X | Y
 >   : ^^^^^
 
@@ -844,8 +844,8 @@ function multipleGeneric<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y,
 }
 
 function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuse : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
->                    : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^     ^^^^^                                     
+>multipleGenericFuse : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>                    : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^  ^^     ^^^^^                                     
 >xy : X | Y
 >   : ^^^^^
 
@@ -887,7 +887,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
 function multipleGenericExhaustive<X extends L, Y extends R>(xy: X | Y): [X, string] | [Y, number] {
 >multipleGenericExhaustive : <X extends L, Y extends R>(xy: X | Y) => [X, string] | [Y, number]
->                          : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^     ^^^^^                         
+>                          : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^  ^^     ^^^^^                         
 >xy : X | Y
 >   : ^^^^^
 
@@ -1193,7 +1193,7 @@ function unknownNarrowing(x: unknown) {
 
 function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
->               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
+>               : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
 
@@ -1626,7 +1626,7 @@ function fallThroughTestWithTempalte(x: string | number | boolean | object) {
 
 function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: keyof S) {
 >keyofNarrowingWithTemplate : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
->                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^^^^^
+>                           : ^ ^^^^^^^^^                           ^^ ^^       ^^^^^^^^^
 >k : keyof S
 >  : ^^^^^^^
 
@@ -1695,8 +1695,8 @@ function keyofNarrowingWithTemplate<S extends { [K in keyof S]: string }>(k: key
 /* Both string literals and template literals */
 
 function multipleGenericFuseWithBoth<X extends L | number, Y extends R | number>(xy: X | Y): [X, number] | [Y, string] | [(X | Y)] {
->multipleGenericFuseWithBoth : <X extends number | L, Y extends number | R>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
->                            : ^ ^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^  ^^     ^^^^^                                     
+>multipleGenericFuseWithBoth : <X extends L | number, Y extends R | number>(xy: X | Y) => [X, number] | [Y, string] | [(X | Y)]
+>                            : ^ ^^^^^^^^^          ^^ ^^^^^^^^^          ^^  ^^     ^^^^^                                     
 >xy : X | Y
 >   : ^^^^^
 

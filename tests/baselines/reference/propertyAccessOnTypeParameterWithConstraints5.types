@@ -137,7 +137,7 @@ var r2b = i.foo['foo']();
 
 var a: {
 >a : <U extends T, T extends A>() => U
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+>  : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^ 
 
     <U extends T, T extends A>(): U;
 }
@@ -152,7 +152,7 @@ var r3: string = a().notHere();
 >a() : A
 >    : ^
 >a : <U extends T, T extends A>() => U
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^^
 >notHere : any
 >        : ^^^
 
@@ -166,7 +166,7 @@ var r3b: string = a()['foo']();
 >a() : A
 >    : ^
 >a : <U extends T, T extends A>() => U
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^ ^^ ^^^^^^^^^ ^^^^^^^^
 >'foo' : "foo"
 >      : ^^^^^
 
@@ -174,13 +174,13 @@ var b = {
 >b : any
 >  : ^^^
 >{    foo: <U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    },    // BUG 794164    bar: b.foo(1).notHere()} : { foo: <U extends T, T extends A>(x: U) => U; bar: any; }
->                                                                                                                                                                                    : ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ ^^^^^^^^^^^^^
+>                                                                                                                                                                                    : ^^^^^^^^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^
 
     foo: <U extends T, T extends A>(x: U): U => {
 >foo : <U extends T, T extends A>(x: U) => U
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>    : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 ><U extends T, T extends A>(x: U): U => {        var a = x['foo'](); // should be string        return a + x.notHere();    } : <U extends T, T extends A>(x: U) => U
->                                                                                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^ 
+>                                                                                                                            : ^ ^^^^^^^^^ ^^ ^^^^^^^^^ ^^ ^^ ^^^^^ 
 >x : U
 >  : ^
 

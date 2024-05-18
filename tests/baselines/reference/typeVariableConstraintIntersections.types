@@ -146,7 +146,7 @@ declare function isC(x: any): x is "c";
 
 function foo<K extends "a" | "b">(x: K) {
 >foo : <K extends "a" | "b">(x: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^         ^^ ^^ ^^^^^^^^^
 >x : K
 >  : ^
 
@@ -331,8 +331,8 @@ const optionHandlers: OptionHandlers = {
 };
 
 function handleOption<K extends Options['kind']>(option: Options & { kind: K }): string {
->handleOption : <K extends "one" | "two">(option: Options & { kind: K; }) => string
->             : ^ ^^^^^^^^^^^^^^^^^^^^^^^^      ^^                      ^^^^^      
+>handleOption : <K extends Options["kind"]>(option: Options & { kind: K; }) => string
+>             : ^ ^^^^^^^^^               ^^      ^^                      ^^^^^      
 >option : Options & { kind: K; }
 >       : ^^^^^^^^^^^^^^^^^^ ^^^
 >kind : K

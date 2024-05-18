@@ -136,7 +136,8 @@ Output::
         "/home/src/projects/myproject/src"
     ],
     "exclude": [
-        "outDir"
+        "/home/src/projects/myproject/outDir",
+        "/home/src/projects/myproject/decls"
     ]
 }
 exitCode:: ExitStatus.Success

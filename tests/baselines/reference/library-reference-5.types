@@ -22,3 +22,8 @@ declare var bar: any;
 >bar : any
 >    : ^^^
 
+=== /node_modules/bar/node_modules/alpha/index.d.ts ===
+declare var alpha: {};
+>alpha : any
+>      : ^^^
+

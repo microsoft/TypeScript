@@ -99,7 +99,7 @@ const actionB = { payload: true } as Action<'ACTION_B', boolean>;
 
 function call<TName extends string,TPayload>(
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
->     : ^     ^^^^^^^^^^^^^^^^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
+>     : ^     ^^^^^^^^^      ^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
 
   action: Action<TName,TPayload>,
 >action : Action<TName, TPayload>
@@ -146,7 +146,7 @@ call(actionA, printFn);
 >call(actionA, printFn) : void
 >                       : ^^^^
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
->     : ^     ^^^^^^^^^^^^^^^^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
+>     : ^     ^^^^^^^^^      ^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
 >actionA : Action<"ACTION_A", string>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >printFn : (action: typeof actionA | typeof actionB) => void
@@ -156,7 +156,7 @@ call(actionB, printFn);
 >call(actionB, printFn) : void
 >                       : ^^^^
 >call : <TName extends string, TPayload>(action: Action<TName, TPayload>, fn: (action: Action<TName, TPayload>) => any) => void
->     : ^     ^^^^^^^^^^^^^^^^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
+>     : ^     ^^^^^^^^^      ^^        ^^      ^^                       ^^  ^^                                        ^^^^^^^^^
 >actionB : Action<"ACTION_B", boolean>
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >printFn : (action: typeof actionA | typeof actionB) => void

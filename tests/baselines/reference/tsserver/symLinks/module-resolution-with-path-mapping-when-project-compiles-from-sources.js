@@ -53,8 +53,7 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime
-Info seq  [hh:mm:ss:mss] For info: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts :: Config file name: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject:: Result: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] event:
@@ -718,6 +717,7 @@ After running Immedidate callback:: count: 0
 
 Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 1:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] Scheduled: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /users/username/projects/myproject/javascript/packages/recognizers-date-time/src/datetime/baseDate.ts ProjectRootPath: /users/username/projects/myproject:: Result: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] Scheduled: *ensureProjectForOpenFiles*
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 1:: WatchInfo: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json 2000 undefined Project: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json WatchType: Config file
 Before running Timeout callback:: count: 2
@@ -752,7 +752,6 @@ Projects::
     dirty: true *changed*
 
 Info seq  [hh:mm:ss:mss] Running: /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
-Info seq  [hh:mm:ss:mss] Reloading configured project /users/username/projects/myproject/javascript/packages/recognizers-date-time/tsconfig.json
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,

@@ -72,12 +72,12 @@ async function* f3(): AsyncGenerator<any, { x: 'x' }, any> {
   return Promise.resolve({ x: 'x' });
 >Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
 >                            : ^^^^^^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'x' } : { x: "x"; }
 >           : ^^^^^^^^^^^
 >x : "x"
@@ -95,12 +95,12 @@ async function* g3(): AsyncIterator<any, { x: 'x' }, any> {
   return Promise.resolve({ x: 'x' });
 >Promise.resolve({ x: 'x' }) : Promise<{ x: "x"; }>
 >                            : ^^^^^^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ x: 'x' } : { x: "x"; }
 >           : ^^^^^^^^^^^
 >x : "x"
@@ -128,12 +128,12 @@ async function* f4(): AsyncGenerator<any, { x: 'x' }, any> {
   return Promise.resolve(ret); // Error
 >Promise.resolve(ret) : Promise<{ x: string; }>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ret : { x: string; }
 >    : ^^^^^^^^^^^^^^
 }
@@ -157,12 +157,12 @@ async function* g4(): AsyncIterator<any, { x: 'x' }, any> {
   return Promise.resolve(ret); // Error
 >Promise.resolve(ret) : Promise<{ x: string; }>
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^
->Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise : PromiseConstructor
 >        : ^^^^^^^^^^^^^^^^^^
->resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T_1>(value: T_1 | PromiseLike<T_1>): Promise<Awaited<T_1>>; }
->        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^   ^^     ^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^
 >ret : { x: string; }
 >    : ^^^^^^^^^^^^^^
 }

@@ -75,8 +75,8 @@ var result = bar(derived, d => d.toBase());
 >       : ^^^^^^^
 >bar(derived, d => d.toBase()) : Base
 >                              : ^^^^
->bar : { <T>(x: T, func: (p: T) => T): T; <T_1>(x: T_1, func: (p: T_1) => T_1): T_1; }
->    : ^^^ ^^ ^^ ^^    ^^           ^^^^^^^   ^^ ^^   ^^    ^^               ^^^^^^^^^
+>bar : { <T>(x: T, func: (p: T) => T): T; <T>(x: T, func: (p: T) => T): T; }
+>    : ^^^ ^^ ^^ ^^    ^^           ^^^^^^^ ^^ ^^ ^^    ^^           ^^^^^^^
 >derived : Derived
 >        : ^^^^^^^
 >d => d.toBase() : (d: Derived) => Base
