@@ -479,7 +479,8 @@ function getStringLiteralCompletionEntries(sourceFile: SourceFile, node: StringL
     function fromContextualType(contextFlags: ContextFlags = ContextFlags.Completions): StringLiteralCompletionsFromTypes | undefined {
         // Get completion for string literal from string literal type
         // i.e. var x: "hi" | "hello" = "/*completion position*/"
-        const types = getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags));
+        const contextualType = getContextualTypeFromParent(node, typeChecker, contextFlags);
+        const types = getStringLiteralTypes(contextualType);
         if (!types.length) {
             return;
         }
@@ -552,8 +553,11 @@ function stringLiteralCompletionsForObjectLiteral(checker: TypeChecker, objectLi
 function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string, true>()): readonly StringLiteralType[] {
     if (!type) return emptyArray;
     type = skipConstraint(type);
-    return type.isUnion() ? flatMap(type.types, t => getStringLiteralTypes(t, uniques)) :
-        type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    if (type.isUnion()) {
+        return flatMap(type.types, t => getStringLiteralTypes(t, uniques));
+    } else {
+        return type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
+    }
 }
 
 interface NameAndKind {
