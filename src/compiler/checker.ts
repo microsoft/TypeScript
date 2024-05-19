@@ -31361,6 +31361,27 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         );
     }
 
+    function discriminateContextualTypeByElements(node: ArrayLiteralExpression, contextualType: UnionType) {
+        const key = `D${getNodeId(node)},${getTypeId(contextualType)}`;
+        const cached = getCachedType(key);
+        if (cached) return cached;
+
+        // Create a discriminator for each element in the list
+        const discriminators = map(
+            node.elements,
+            (e, ndx) => [() => getContextFreeTypeOfExpression(e), "" + ndx as __String] as const,
+        );
+
+        return setCachedType(
+            key,
+            discriminateTypeByDiscriminableItems(
+                contextualType,
+                discriminators,
+                isTypeAssignableTo,
+            ),
+        );
+    }
+
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
     // be "pushed" onto a node using the contextualType property.
     function getApparentTypeOfContextualType(node: Expression | MethodDeclaration, contextFlags: ContextFlags | undefined): Type | undefined {
@@ -31378,9 +31399,19 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 t => getObjectFlags(t) & ObjectFlags.Mapped ? t : getApparentType(t),
                 /*noReductions*/ true,
             );
-            return apparentType.flags & TypeFlags.Union && isObjectLiteralExpression(node) ? discriminateContextualTypeByObjectMembers(node, apparentType as UnionType) :
-                apparentType.flags & TypeFlags.Union && isJsxAttributes(node) ? discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType) :
-                apparentType;
+            const isUnion = apparentType.flags & TypeFlags.Union;
+            if (isUnion && isObjectLiteralExpression(node)) {
+                return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+            }
+            else if (isUnion && isJsxAttributes(node)) {
+                return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+            }
+            else if (isUnion && isArrayLiteralExpression(node)) {
+                return discriminateContextualTypeByElements(node, apparentType as UnionType);
+            }
+            else {
+                return apparentType;
+            }
         }
     }
 
