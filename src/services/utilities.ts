@@ -4,7 +4,6 @@ import {
     addSyntheticLeadingComment,
     addSyntheticTrailingComment,
     AnyImportOrRequireStatement,
-    ArrayLiteralExpression,
     assertType,
     AssignmentDeclarationKind,
     BinaryExpression,
@@ -385,7 +384,6 @@ import {
     TypeOfExpression,
     TypeQueryNode,
     unescapeLeadingUnderscores,
-    UnionType,
     UserPreferences,
     VariableDeclaration,
     visitEachChild,
@@ -3414,39 +3412,6 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
         }
         case SyntaxKind.CaseClause:
             return getSwitchedType(parent as CaseClause, checker);
-        case SyntaxKind.ArrayLiteralExpression:
-            const typedParent = parent as ArrayLiteralExpression;
-            const parentType = checker.getContextualType(typedParent, contextFlags);
-            if (parentType && parentType.flags & TypeFlags.Union) {
-                // If there is a union of tuples, filter down to only valid
-                // variants of the union based on previous elements in the tuple
-                const unionType = parentType as UnionType;
-                const nodeNdx = indexOfNode(typedParent.elements, node);
-
-                // Fiilter down to only types that could have a valid element at this index
-                let filteredTypes = unionType.types.filter(t => {
-                    const typeArguments = checker.getTypeArguments(t as any);
-                    return typeArguments && typeArguments.length > nodeNdx;
-                });
-
-                for (let i = 0; i < nodeNdx; i++) {
-                    const element = typedParent.elements[i];
-                    const typeToFilterBy = checker.getTypeAtLocation(element);
-                    // Filter down to only types that match the preceding elements
-                    filteredTypes = filteredTypes.filter(t => {
-                        const typeArguments = checker.getTypeArguments(t as any);
-                        if (typeArguments && typeArguments.length > i) {
-                            const elementType = typeArguments[i];
-                            return checker.isTypeAssignableTo(typeToFilterBy, elementType);
-                        }
-                        return true;
-                    });
-                }
-                const resolvedTypes = filteredTypes.map(t => checker.getTypeArguments(t as any)[nodeNdx]);
-                const filteredUnionType = checker.getUnionType(resolvedTypes);
-                return filteredUnionType;
-            }
-            return checker.getContextualType(node, contextFlags);
         default:
             return checker.getContextualType(node, contextFlags);
     }
