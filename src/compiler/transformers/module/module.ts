@@ -56,9 +56,11 @@ import {
     getOriginalNodeId,
     getStrictOptionValue,
     getTextOfIdentifierOrLiteral,
+    hasJSFileExtension,
     hasJsonModuleEmitEnabled,
     hasSyntacticModifier,
     Identifier,
+    IdentifierNameMap,
     idText,
     IfStatement,
     ImportCall,
@@ -86,6 +88,7 @@ import {
     isExpression,
     isExternalModule,
     isExternalModuleImportEqualsDeclaration,
+    isFileLevelReservedGeneratedIdentifier,
     isForInitializer,
     isFunctionExpression,
     isGeneratedIdentifier,
@@ -123,7 +126,6 @@ import {
     NodeArray,
     NodeFlags,
     ObjectLiteralElementLike,
-    outFile,
     ParameterDeclaration,
     ParenthesizedExpression,
     PartiallyEmittedExpression,
@@ -159,7 +161,7 @@ import {
     VisitResult,
     WhileStatement,
     WithStatement,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -171,9 +173,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
 
     function getTransformModuleDelegate(moduleKind: ModuleKind): (node: SourceFile) => SourceFile {
         switch (moduleKind) {
-            case ModuleKind.AMD: return transformAMDModule;
-            case ModuleKind.UMD: return transformUMDModule;
-            default: return transformCommonJSModule;
+            case ModuleKind.AMD:
+                return transformAMDModule;
+            case ModuleKind.UMD:
+                return transformUMDModule;
+            default:
+                return transformCommonJSModule;
         }
     }
 
@@ -182,7 +187,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         getEmitHelperFactory: emitHelpers,
         startLexicalEnvironment,
         endLexicalEnvironment,
-        hoistVariableDeclaration
+        hoistVariableDeclaration,
     } = context;
 
     const compilerOptions = context.getCompilerOptions();
@@ -216,15 +221,17 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param node The SourceFile node.
      */
     function transformSourceFile(node: SourceFile) {
-        if (node.isDeclarationFile ||
+        if (
+            node.isDeclarationFile ||
             !(isEffectiveExternalModule(node, compilerOptions) ||
                 node.transformFlags & TransformFlags.ContainsDynamicImport ||
-                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && outFile(compilerOptions)))) {
+                (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && compilerOptions.outFile))
+        ) {
             return node;
         }
 
         currentSourceFile = node;
-        currentModuleInfo = collectExternalModuleInfo(context, node, resolver, compilerOptions);
+        currentModuleInfo = collectExternalModuleInfo(context, node);
         moduleInfoMap[getOriginalNodeId(node)] = currentModuleInfo;
 
         // Perform the transformation.
@@ -236,8 +243,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return updated;
     }
 
-
     function shouldEmitUnderscoreUnderscoreESModule() {
+        if (hasJSFileExtension(currentSourceFile.fileName) && currentSourceFile.commonJsModuleIndicator && (!currentSourceFile.externalModuleIndicator || currentSourceFile.externalModuleIndicator === true)) {
+            return false;
+        }
         if (!currentModuleInfo.exportEquals && isExternalModule(currentSourceFile)) {
             return true;
         }
@@ -253,25 +262,30 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || (!compilerOptions.noImplicitUseStrict && isExternalModule(currentSourceFile));
+        const ensureUseStrict = getStrictOptionValue(compilerOptions, "alwaysStrict") || isExternalModule(currentSourceFile);
         const statementOffset = factory.copyPrologue(node.statements, statements, ensureUseStrict && !isJsonSourceFile(node), topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             const chunkSize = 50;
-            for (let i=0; i<currentModuleInfo.exportedNames!.length; i += chunkSize) {
+            for (let i = 0; i < currentModuleInfo.exportedNames.length; i += chunkSize) {
                 append(
                     statements,
                     factory.createExpressionStatement(
                         reduceLeft(
-                            currentModuleInfo.exportedNames!.slice(i, i + chunkSize),
+                            currentModuleInfo.exportedNames.slice(i, i + chunkSize),
                             (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev),
-                            factory.createVoidZero() as Expression
-                        )
-                    )
+                            factory.createVoidZero() as Expression,
+                        ),
+                    ),
                 );
+            }
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
             }
         }
 
@@ -321,7 +335,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // Create an updated SourceFile:
         //
         //     define(mofactory.updateSourceFile", "module2"], function ...
-        const updated = factory.updateSourceFile(node,
+        const updated = factory.updateSourceFile(
+            node,
             setTextRange(
                 factory.createNodeArray([
                     factory.createExpressionStatement(
@@ -335,12 +350,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 // Add the dependency array argument:
                                 //
                                 //     ["require", "exports", module1", "module2", ...]
-                                factory.createArrayLiteralExpression(jsonSourceFile ? emptyArray : [
-                                    factory.createStringLiteral("require"),
-                                    factory.createStringLiteral("exports"),
-                                    ...aliasedModuleNames,
-                                    ...unaliasedModuleNames
-                                ]),
+                                factory.createArrayLiteralExpression(
+                                    jsonSourceFile ? emptyArray : [
+                                        factory.createStringLiteral("require"),
+                                        factory.createStringLiteral("exports"),
+                                        ...aliasedModuleNames,
+                                        ...unaliasedModuleNames,
+                                    ],
+                                ),
 
                                 // Add the module body function argument:
                                 //
@@ -355,17 +372,17 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         [
                                             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                            ...importAliasNames
+                                            ...importAliasNames,
                                         ],
                                         /*type*/ undefined,
-                                        transformAsynchronousModuleBody(node)
-                                    )
-                            ]
-                        )
-                    )
+                                        transformAsynchronousModuleBody(node),
+                                    ),
+                            ],
+                        ),
+                    ),
                 ]),
-                /*location*/ node.statements
-            )
+                /*location*/ node.statements,
+            ),
         );
 
         addEmitHelpers(updated, context.readEmitHelpers());
@@ -393,7 +410,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         factory.createIfStatement(
                             factory.createLogicalAnd(
                                 factory.createTypeCheck(factory.createIdentifier("module"), "object"),
-                                factory.createTypeCheck(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), "object")
+                                factory.createTypeCheck(factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"), "object"),
                             ),
                             factory.createBlock([
                                 factory.createVariableStatement(
@@ -408,32 +425,32 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                                 /*typeArguments*/ undefined,
                                                 [
                                                     factory.createIdentifier("require"),
-                                                    factory.createIdentifier("exports")
-                                                ]
-                                            )
-                                        )
-                                    ]
+                                                    factory.createIdentifier("exports"),
+                                                ],
+                                            ),
+                                        ),
+                                    ],
                                 ),
                                 setEmitFlags(
                                     factory.createIfStatement(
                                         factory.createStrictInequality(
                                             factory.createIdentifier("v"),
-                                            factory.createIdentifier("undefined")
+                                            factory.createIdentifier("undefined"),
                                         ),
                                         factory.createExpressionStatement(
                                             factory.createAssignment(
                                                 factory.createPropertyAccessExpression(factory.createIdentifier("module"), "exports"),
-                                                factory.createIdentifier("v")
-                                            )
-                                        )
+                                                factory.createIdentifier("v"),
+                                            ),
+                                        ),
                                     ),
-                                    EmitFlags.SingleLine
-                                )
+                                    EmitFlags.SingleLine,
+                                ),
                             ]),
                             factory.createIfStatement(
                                 factory.createLogicalAnd(
                                     factory.createTypeCheck(factory.createIdentifier("define"), "function"),
-                                    factory.createPropertyAccessExpression(factory.createIdentifier("define"), "amd")
+                                    factory.createPropertyAccessExpression(factory.createIdentifier("define"), "amd"),
                                 ),
                                 factory.createBlock([
                                     factory.createExpressionStatement(
@@ -447,20 +464,20 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                                     factory.createStringLiteral("require"),
                                                     factory.createStringLiteral("exports"),
                                                     ...aliasedModuleNames,
-                                                    ...unaliasedModuleNames
+                                                    ...unaliasedModuleNames,
                                                 ]),
-                                                factory.createIdentifier("factory")
-                                            ]
-                                        )
-                                    )
-                                ])
-                            )
-                        )
+                                                factory.createIdentifier("factory"),
+                                            ],
+                                        ),
+                                    ),
+                                ]),
+                            ),
+                        ),
                     ],
-                    /*multiLine*/ true
+                    /*multiLine*/ true,
                 ),
-                /*location*/ undefined
-            )
+                /*location*/ undefined,
+            ),
         );
 
         // Create an updated SourceFile:
@@ -495,17 +512,17 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                     [
                                         factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "require"),
                                         factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, "exports"),
-                                        ...importAliasNames
+                                        ...importAliasNames,
                                     ],
                                     /*type*/ undefined,
-                                    transformAsynchronousModuleBody(node)
-                                )
-                            ]
-                        )
-                    )
+                                    transformAsynchronousModuleBody(node),
+                                ),
+                            ],
+                        ),
+                    ),
                 ]),
-                /*location*/ node.statements
-            )
+                /*location*/ node.statements,
+            ),
         );
 
         addEmitHelpers(updated, context.readEmitHelpers());
@@ -588,13 +605,18 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         startLexicalEnvironment();
 
         const statements: Statement[] = [];
-        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ !compilerOptions.noImplicitUseStrict, topLevelVisitor);
+        const statementOffset = factory.copyPrologue(node.statements, statements, /*ensureUseStrict*/ true, topLevelVisitor);
 
         if (shouldEmitUnderscoreUnderscoreESModule()) {
             append(statements, createUnderscoreUnderscoreESModule());
         }
-        if (length(currentModuleInfo.exportedNames)) {
+        if (some(currentModuleInfo.exportedNames)) {
             append(statements, factory.createExpressionStatement(reduceLeft(currentModuleInfo.exportedNames, (prev, nextId) => factory.createAssignment(factory.createPropertyAccessExpression(factory.createIdentifier("exports"), factory.createIdentifier(idText(nextId))), prev), factory.createVoidZero() as Expression)));
+        }
+        if (some(currentModuleInfo.exportedFunctions)) {
+            for (const f of currentModuleInfo.exportedFunctions) {
+                appendExportsOfHoistedDeclaration(statements, f);
+            }
         }
 
         // Visit each statement of the module body.
@@ -642,10 +664,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         factory.createAssignment(
                             factory.createPropertyAccessExpression(
                                 factory.createIdentifier("module"),
-                                "exports"
+                                "exports",
                             ),
-                            expressionResult
-                        )
+                            expressionResult,
+                        ),
                     );
 
                     setTextRange(statement, currentModuleInfo.exportEquals);
@@ -668,22 +690,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function topLevelVisitor(node: Node): VisitResult<Node | undefined> {
         switch (node.kind) {
             case SyntaxKind.ImportDeclaration:
-                return visitImportDeclaration(node as ImportDeclaration);
+                return visitTopLevelImportDeclaration(node as ImportDeclaration);
 
             case SyntaxKind.ImportEqualsDeclaration:
-                return visitImportEqualsDeclaration(node as ImportEqualsDeclaration);
+                return visitTopLevelImportEqualsDeclaration(node as ImportEqualsDeclaration);
 
             case SyntaxKind.ExportDeclaration:
-                return visitExportDeclaration(node as ExportDeclaration);
+                return visitTopLevelExportDeclaration(node as ExportDeclaration);
 
             case SyntaxKind.ExportAssignment:
-                return visitExportAssignment(node as ExportAssignment);
-
-            case SyntaxKind.FunctionDeclaration:
-                return visitFunctionDeclaration(node as FunctionDeclaration);
-
-            case SyntaxKind.ClassDeclaration:
-                return visitClassDeclaration(node as ClassDeclaration);
+                return visitTopLevelExportAssignment(node as ExportAssignment);
 
             default:
                 return topLevelNestedVisitor(node);
@@ -773,7 +789,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitPartiallyEmittedExpression(node as PartiallyEmittedExpression, valueIsDiscarded);
             case SyntaxKind.CallExpression:
-                if (isImportCall(node) && currentSourceFile.impliedNodeFormat === undefined) {
+                if (isImportCall(node) && host.shouldTransformImportCall(currentSourceFile)) {
                     return visitImportCallExpression(node);
                 }
                 break;
@@ -821,7 +837,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return false;
-                    default: Debug.assertNever(elem, "Unhandled object member kind");
+                    default:
+                        Debug.assertNever(elem, "Unhandled object member kind");
                 }
             }
         }
@@ -851,9 +868,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     }
 
     function visitForStatement(node: ForStatement, isTopLevel: boolean) {
-        if (isTopLevel && node.initializer &&
+        if (
+            isTopLevel && node.initializer &&
             isVariableDeclarationList(node.initializer) &&
-            !(node.initializer.flags & NodeFlags.BlockScoped)) {
+            !(node.initializer.flags & NodeFlags.BlockScoped)
+        ) {
             const exportStatements = appendExportsOfVariableDeclarationList(/*statements*/ undefined, node.initializer, /*isForInOrOfInitializer*/ false);
             if (exportStatements) {
                 const statements: Statement[] = [];
@@ -874,7 +893,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             visitNode(node.initializer, discardedValueVisitor, isForInitializer),
             visitNode(node.condition, visitor, isExpression),
             visitNode(node.incrementor, discardedValueVisitor, isExpression),
-            visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context)
+            visitIterationBody(node.statement, isTopLevel ? topLevelNestedVisitor : visitor, context),
         );
     }
 
@@ -900,7 +919,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             node,
             visitNode(node.initializer, discardedValueVisitor, isForInitializer),
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
     }
 
@@ -927,7 +946,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             node.awaitModifier,
             visitNode(node.initializer, discardedValueVisitor, isForInitializer),
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
     }
 
@@ -940,7 +959,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateDoStatement(
             node,
             visitIterationBody(node.statement, topLevelNestedVisitor, context),
-            visitNode(node.expression, visitor, isExpression)
+            visitNode(node.expression, visitor, isExpression),
         );
     }
 
@@ -953,7 +972,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateWhileStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitIterationBody(node.statement, topLevelNestedVisitor, context)
+            visitIterationBody(node.statement, topLevelNestedVisitor, context),
         );
     }
 
@@ -966,7 +985,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateLabeledStatement(
             node,
             node.label,
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
         );
     }
 
@@ -979,7 +998,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateWithStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock))
+            Debug.checkDefined(visitNode(node.statement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
         );
     }
 
@@ -993,7 +1012,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             node,
             visitNode(node.expression, visitor, isExpression),
             Debug.checkDefined(visitNode(node.thenStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)),
-            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock)
+            visitNode(node.elseStatement, topLevelNestedVisitor, isStatement, factory.liftToBlock),
         );
     }
 
@@ -1006,7 +1025,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateSwitchStatement(
             node,
             visitNode(node.expression, visitor, isExpression),
-            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock))
+            Debug.checkDefined(visitNode(node.caseBlock, topLevelNestedVisitor, isCaseBlock)),
         );
     }
 
@@ -1018,7 +1037,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitCaseBlock(node: CaseBlock): CaseBlock {
         return factory.updateCaseBlock(
             node,
-            visitNodes(node.clauses, topLevelNestedVisitor, isCaseOrDefaultClause)
+            visitNodes(node.clauses, topLevelNestedVisitor, isCaseOrDefaultClause),
         );
     }
 
@@ -1031,7 +1050,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateCaseClause(
             node,
             visitNode(node.expression, visitor, isExpression),
-            visitNodes(node.statements, topLevelNestedVisitor, isStatement)
+            visitNodes(node.statements, topLevelNestedVisitor, isStatement),
         );
     }
 
@@ -1062,7 +1081,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         return factory.updateCatchClause(
             node,
             node.variableDeclaration,
-            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock))
+            Debug.checkDefined(visitNode(node.block, topLevelNestedVisitor, isBlock)),
         );
     }
 
@@ -1079,7 +1098,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitExpressionStatement(node: ExpressionStatement) {
         return factory.updateExpressionStatement(
             node,
-            visitNode(node.expression, discardedValueVisitor, isExpression)
+            visitNode(node.expression, discardedValueVisitor, isExpression),
         );
     }
 
@@ -1101,11 +1120,13 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // - We do not transform identifiers that were originally the name of an enum or
         //   namespace due to how they are transformed in TypeScript.
         // - We only transform identifiers that are exported at the top level.
-        if ((node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)
+        if (
+            (node.operator === SyntaxKind.PlusPlusToken || node.operator === SyntaxKind.MinusMinusToken)
             && isIdentifier(node.operand)
             && !isGeneratedIdentifier(node.operand)
             && !isLocalName(node.operand)
-            && !isDeclarationNameOfEnumOrNamespace(node.operand)) {
+            && !isDeclarationNameOfEnumOrNamespace(node.operand)
+        ) {
             const exportedNames = getExports(node.operand);
             if (exportedNames) {
                 let temp: Identifier | undefined;
@@ -1183,18 +1204,21 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*questionToken*/ undefined,
                 /*whenTrue*/ createImportCallExpressionCommonJS(arg),
                 /*colonToken*/ undefined,
-                /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis)
+                /*whenFalse*/ createImportCallExpressionAMD(argClone, containsLexicalThis),
             );
         }
         else {
             const temp = factory.createTempVariable(hoistVariableDeclaration);
-            return factory.createComma(factory.createAssignment(temp, arg), factory.createConditionalExpression(
-                /*condition*/ factory.createIdentifier("__syncRequire"),
-                /*questionToken*/ undefined,
-                /*whenTrue*/ createImportCallExpressionCommonJS(temp, /*isInlineable*/ true),
-                /*colonToken*/ undefined,
-                /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis)
-            ));
+            return factory.createComma(
+                factory.createAssignment(temp, arg),
+                factory.createConditionalExpression(
+                    /*condition*/ factory.createIdentifier("__syncRequire"),
+                    /*questionToken*/ undefined,
+                    /*whenTrue*/ createImportCallExpressionCommonJS(temp, /*isInlineable*/ true),
+                    /*colonToken*/ undefined,
+                    /*whenFalse*/ createImportCallExpressionAMD(temp, containsLexicalThis),
+                ),
+            );
         }
     }
 
@@ -1209,16 +1233,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         const reject = factory.createUniqueName("reject");
         const parameters = [
             factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ resolve),
-            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject)
+            factory.createParameterDeclaration(/*modifiers*/ undefined, /*dotDotDotToken*/ undefined, /*name*/ reject),
         ];
         const body = factory.createBlock([
             factory.createExpressionStatement(
                 factory.createCallExpression(
                     factory.createIdentifier("require"),
                     /*typeArguments*/ undefined,
-                    [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject]
-                )
-            )
+                    [factory.createArrayLiteralExpression([arg || factory.createOmittedExpression()]), resolve, reject],
+                ),
+            ),
         ]);
 
         let func: FunctionExpression | ArrowFunction;
@@ -1229,7 +1253,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 parameters,
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                body);
+                body,
+            );
         }
         else {
             func = factory.createFunctionExpression(
@@ -1239,7 +1264,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*typeParameters*/ undefined,
                 parameters,
                 /*type*/ undefined,
-                body);
+                body,
+            );
 
             // if there is a lexical 'this' in the import call arguments, ensure we indicate
             // that this new function expression indicates it captures 'this' so that the
@@ -1272,18 +1298,18 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             /*argumentsArray*/ needSyncEval
                 ? languageVersion >= ScriptTarget.ES2015
                     ? [
-                          factory.createTemplateExpression(factory.createTemplateHead(""), [
-                              factory.createTemplateSpan(arg, factory.createTemplateTail("")),
-                          ]),
-                      ]
+                        factory.createTemplateExpression(factory.createTemplateHead(""), [
+                            factory.createTemplateSpan(arg, factory.createTemplateTail("")),
+                        ]),
+                    ]
                     : [
-                          factory.createCallExpression(
-                              factory.createPropertyAccessExpression(factory.createStringLiteral(""), "concat"),
-                              /*typeArguments*/ undefined,
-                              [arg]
-                          ),
-                      ]
-                : []
+                        factory.createCallExpression(
+                            factory.createPropertyAccessExpression(factory.createStringLiteral(""), "concat"),
+                            /*typeArguments*/ undefined,
+                            [arg],
+                        ),
+                    ]
+                : [],
         );
 
         let requireCall: Expression = factory.createCallExpression(
@@ -1300,7 +1326,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 factory.createParameterDeclaration(
                     /*modifiers*/ undefined,
                     /*dotDotDotToken*/ undefined,
-                    /*name*/ "s"),
+                    /*name*/ "s",
+                ),
             ]
             : [];
 
@@ -1312,7 +1339,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*parameters*/ parameters,
                 /*type*/ undefined,
                 /*equalsGreaterThanToken*/ undefined,
-                requireCall);
+                requireCall,
+            );
         }
         else {
             func = factory.createFunctionExpression(
@@ -1322,7 +1350,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 /*typeParameters*/ undefined,
                 /*parameters*/ parameters,
                 /*type*/ undefined,
-                factory.createBlock([factory.createReturnStatement(requireCall)]));
+                factory.createBlock([factory.createReturnStatement(requireCall)]),
+            );
         }
 
         const downleveledImport = factory.createCallExpression(factory.createPropertyAccessExpression(promiseResolveCall, "then"), /*typeArguments*/ undefined, [func]);
@@ -1358,7 +1387,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelImportDeclaration(node: ImportDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         const namespaceDeclaration = getNamespaceDeclarationNode(node);
         if (moduleKind !== ModuleKind.AMD) {
@@ -1375,8 +1404,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             factory.cloneNode(namespaceDeclaration.name),
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
-                            getHelperExpressionForImport(node, createRequireCall(node))
-                        )
+                            getHelperExpressionForImport(node, createRequireCall(node)),
+                        ),
                     );
                 }
                 else {
@@ -1389,8 +1418,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             factory.getGeneratedNameForNode(node),
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
-                            getHelperExpressionForImport(node, createRequireCall(node))
-                        )
+                            getHelperExpressionForImport(node, createRequireCall(node)),
+                        ),
                     );
 
                     if (namespaceDeclaration && isDefaultImport(node)) {
@@ -1399,31 +1428,34 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                 factory.cloneNode(namespaceDeclaration.name),
                                 /*exclamationToken*/ undefined,
                                 /*type*/ undefined,
-                                factory.getGeneratedNameForNode(node)
-                            )
+                                factory.getGeneratedNameForNode(node),
+                            ),
                         );
                     }
                 }
 
-                statements = append(statements,
+                statements = append(
+                    statements,
                     setOriginalNode(
                         setTextRange(
                             factory.createVariableStatement(
                                 /*modifiers*/ undefined,
                                 factory.createVariableDeclarationList(
                                     variables,
-                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
+                                    languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                                ),
                             ),
-                            /*location*/ node),
-                        /*original*/ node
-                    )
+                            /*location*/ node,
+                        ),
+                        /*original*/ node,
+                    ),
                 );
             }
         }
         else if (namespaceDeclaration && isDefaultImport(node)) {
             // import d, * as n from "mod";
-            statements = append(statements,
+            statements = append(
+                statements,
                 factory.createVariableStatement(
                     /*modifiers*/ undefined,
                     factory.createVariableDeclarationList(
@@ -1434,15 +1466,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         factory.cloneNode(namespaceDeclaration.name),
                                         /*exclamationToken*/ undefined,
                                         /*type*/ undefined,
-                                        factory.getGeneratedNameForNode(node)
+                                        factory.getGeneratedNameForNode(node),
                                     ),
-                                    /*location*/ node),
-                                /*original*/ node
-                            )
+                                    /*location*/ node,
+                                ),
+                                /*original*/ node,
+                            ),
                         ],
-                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                    )
-                )
+                        languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                    ),
+                ),
             );
         }
 
@@ -1470,28 +1503,31 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelImportEqualsDeclaration(node: ImportEqualsDeclaration): VisitResult<Statement | undefined> {
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
         if (moduleKind !== ModuleKind.AMD) {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
+                statements = append(
+                    statements,
                     setOriginalNode(
                         setTextRange(
                             factory.createExpressionStatement(
                                 createExportExpression(
                                     node.name,
-                                    createRequireCall(node)
-                                )
+                                    createRequireCall(node),
+                                ),
                             ),
-                            node),
-                        node
-                    )
+                            node,
+                        ),
+                        node,
+                    ),
                 );
             }
             else {
-                statements = append(statements,
+                statements = append(
+                    statements,
                     setOriginalNode(
                         setTextRange(
                             factory.createVariableStatement(
@@ -1502,29 +1538,32 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                             factory.cloneNode(node.name),
                                             /*exclamationToken*/ undefined,
                                             /*type*/ undefined,
-                                            createRequireCall(node)
-                                        )
+                                            createRequireCall(node),
+                                        ),
                                     ],
-                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                                )
+                                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                                ),
                             ),
-                            node),
-                        node
-                    )
+                            node,
+                        ),
+                        node,
+                    ),
                 );
             }
         }
         else {
             if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-                statements = append(statements,
+                statements = append(
+                    statements,
                     setOriginalNode(
                         setTextRange(
                             factory.createExpressionStatement(
-                                createExportExpression(factory.getExportName(node), factory.getLocalName(node))
+                                createExportExpression(factory.getExportName(node), factory.getLocalName(node)),
                             ),
-                            node),
-                        node
-                    )
+                            node,
+                        ),
+                        node,
+                    ),
                 );
             }
         }
@@ -1538,7 +1577,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param The node to visit.
      */
-    function visitExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
+    function visitTopLevelExportDeclaration(node: ExportDeclaration): VisitResult<Statement | undefined> {
         if (!node.moduleSpecifier) {
             // Elide export declarations with no module specifier as they are handled
             // elsewhere.
@@ -1561,47 +1600,35 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                                         generatedName,
                                         /*exclamationToken*/ undefined,
                                         /*type*/ undefined,
-                                        createRequireCall(node)
-                                    )
-                                ])
+                                        createRequireCall(node),
+                                    ),
+                                ]),
                             ),
-                            /*location*/ node),
-                        /* original */ node
-                    )
+                            /*location*/ node,
+                        ),
+                        /* original */ node,
+                    ),
                 );
             }
             for (const specifier of node.exportClause.elements) {
-                if (languageVersion === ScriptTarget.ES3) {
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    emitHelpers().createCreateBindingHelper(generatedName, factory.createStringLiteralFromNode(specifier.propertyName || specifier.name), specifier.propertyName ? factory.createStringLiteralFromNode(specifier.name) : undefined)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
-                }
-                else {
-                    const exportNeedsImportDefault =
-                        !!getESModuleInterop(compilerOptions) &&
-                        !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
-                        idText(specifier.propertyName || specifier.name) === "default";
-                    const exportedValue = factory.createPropertyAccessExpression(
-                        exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
-                        specifier.propertyName || specifier.name);
-                    statements.push(
-                        setOriginalNode(
-                            setTextRange(
-                                factory.createExpressionStatement(
-                                    createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true)
-                                ),
-                                specifier),
-                            specifier
-                        )
-                    );
-                }
+                const exportNeedsImportDefault = !!getESModuleInterop(compilerOptions) &&
+                    !(getInternalEmitFlags(node) & InternalEmitFlags.NeverApplyImportHelper) &&
+                    idText(specifier.propertyName || specifier.name) === "default";
+                const exportedValue = factory.createPropertyAccessExpression(
+                    exportNeedsImportDefault ? emitHelpers().createImportDefaultHelper(generatedName) : generatedName,
+                    specifier.propertyName || specifier.name,
+                );
+                statements.push(
+                    setOriginalNode(
+                        setTextRange(
+                            factory.createExpressionStatement(
+                                createExportExpression(factory.getExportName(specifier), exportedValue, /*location*/ undefined, /*liveBinding*/ true),
+                            ),
+                            specifier,
+                        ),
+                        specifier,
+                    ),
+                );
             }
 
             return singleOrMany(statements);
@@ -1616,16 +1643,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                         factory.createExpressionStatement(
                             createExportExpression(
                                 factory.cloneNode(node.exportClause.name),
-                                getHelperExpressionForExport(node, moduleKind !== ModuleKind.AMD ?
-                                    createRequireCall(node) :
-                                    isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
-                                        factory.createIdentifier(idText(node.exportClause.name)))
-                            )
+                                getHelperExpressionForExport(
+                                    node,
+                                    moduleKind !== ModuleKind.AMD ?
+                                        createRequireCall(node) :
+                                        isExportNamespaceAsDefaultDeclaration(node) ? generatedName :
+                                        factory.createIdentifier(idText(node.exportClause.name)),
+                                ),
+                            ),
                         ),
-                        node
+                        node,
                     ),
-                    node
-                )
+                    node,
+                ),
             );
 
             return singleOrMany(statements);
@@ -1635,10 +1665,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return setOriginalNode(
                 setTextRange(
                     factory.createExpressionStatement(
-                        emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName)
+                        emitHelpers().createExportStarHelper(moduleKind !== ModuleKind.AMD ? createRequireCall(node) : generatedName),
                     ),
-                    node),
-                node
+                    node,
+                ),
+                node,
             );
         }
     }
@@ -1648,7 +1679,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      *
      * @param node The node to visit.
      */
-    function visitExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
+    function visitTopLevelExportAssignment(node: ExportAssignment): VisitResult<Statement | undefined> {
         if (node.isExportEquals) {
             return undefined;
         }
@@ -1664,7 +1695,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitFunctionDeclaration(node: FunctionDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
+            statements = append(
+                statements,
                 setOriginalNode(
                     setTextRange(
                         factory.createFunctionDeclaration(
@@ -1674,19 +1706,19 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             /*typeParameters*/ undefined,
                             visitNodes(node.parameters, visitor, isParameter),
                             /*type*/ undefined,
-                            visitEachChild(node.body, visitor, context)
+                            visitEachChild(node.body, visitor, context),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     ),
-                    /*original*/ node
-                )
+                    /*original*/ node,
+                ),
             );
         }
         else {
             statements = append(statements, visitEachChild(node, visitor, context));
         }
 
-        statements = appendExportsOfHoistedDeclaration(statements, node);
+        // NOTE: CommonJS/AMD/UMD exports are hoisted to the top of the module body and do not need to be added here.
         return singleOrMany(statements);
     }
 
@@ -1698,7 +1730,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
     function visitClassDeclaration(node: ClassDeclaration): VisitResult<Statement | undefined> {
         let statements: Statement[] | undefined;
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements,
+            statements = append(
+                statements,
                 setOriginalNode(
                     setTextRange(
                         factory.createClassDeclaration(
@@ -1706,12 +1739,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             factory.getDeclarationName(node, /*allowComments*/ true, /*allowSourceMaps*/ true),
                             /*typeParameters*/ undefined,
                             visitNodes(node.heritageClauses, visitor, isHeritageClause),
-                            visitNodes(node.members, visitor, isClassElement)
+                            visitNodes(node.members, visitor, isClassElement),
                         ),
-                        node
+                        node,
                     ),
-                    node
-                )
+                    node,
+                ),
             );
         }
         else {
@@ -1757,7 +1790,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             /*type*/ undefined,
                             createExportExpression(
                                 variable.name,
-                                visitNode(variable.initializer, visitor, isExpression)));
+                                visitNode(variable.initializer, visitor, isExpression),
+                            ),
+                        );
                         variables = append(variables, updatedVariable);
                     }
                     else {
@@ -1770,17 +1805,17 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                             setTextRange(
                                 factory.createPropertyAccessExpression(
                                     factory.createIdentifier("exports"),
-                                    variable.name
+                                    variable.name,
                                 ),
-                                /*location*/ variable.name
+                                /*location*/ variable.name,
                             ),
-                            factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name))
+                            factory.createIdentifier(getTextOfIdentifierOrLiteral(variable.name)),
                         );
                         const updatedVariable = factory.createVariableDeclaration(
                             variable.name,
                             variable.exclamationToken,
                             variable.type,
-                            visitNode(variable.initializer, visitor, isExpression)
+                            visitNode(variable.initializer, visitor, isExpression),
                         );
 
                         variables = append(variables, updatedVariable);
@@ -1842,7 +1877,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 context,
                 FlattenLevel.All,
                 /*needsValue*/ false,
-                createAllExportExpressions
+                createAllExportExpressions,
             );
         }
         else {
@@ -1850,11 +1885,11 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createIdentifier("exports"),
-                        node.name
+                        node.name,
                     ),
-                    /*location*/ node.name
+                    /*location*/ node.name,
                 ),
-                node.initializer ? visitNode(node.initializer, visitor, isExpression) : factory.createVoidZero()
+                node.initializer ? visitNode(node.initializer, visitor, isExpression) : factory.createVoidZero(),
             );
         }
     }
@@ -1878,20 +1913,21 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
+        const seen = new IdentifierNameMap<boolean>();
         if (importClause.name) {
-            statements = appendExportsOfDeclaration(statements, importClause);
+            statements = appendExportsOfDeclaration(statements, seen, importClause);
         }
 
         const namedBindings = importClause.namedBindings;
         if (namedBindings) {
             switch (namedBindings.kind) {
                 case SyntaxKind.NamespaceImport:
-                    statements = appendExportsOfDeclaration(statements, namedBindings);
+                    statements = appendExportsOfDeclaration(statements, seen, namedBindings);
                     break;
 
                 case SyntaxKind.NamedImports:
                     for (const importBinding of namedBindings.elements) {
-                        statements = appendExportsOfDeclaration(statements, importBinding, /*liveBinding*/ true);
+                        statements = appendExportsOfDeclaration(statements, seen, importBinding, /*liveBinding*/ true);
                     }
 
                     break;
@@ -1915,7 +1951,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
-        return appendExportsOfDeclaration(statements, decl);
+        return appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
     }
 
     /**
@@ -1974,7 +2010,7 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             }
         }
         else if (!isGeneratedIdentifier(decl.name) && (!isVariableDeclaration(decl) || decl.initializer || isForInOrOfInitializer)) {
-            statements = appendExportsOfDeclaration(statements, decl);
+            statements = appendExportsOfDeclaration(statements, new IdentifierNameMap(), decl);
         }
 
         return statements;
@@ -1994,13 +2030,14 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             return statements;
         }
 
+        const seen = new IdentifierNameMap<boolean>();
         if (hasSyntacticModifier(decl, ModifierFlags.Export)) {
             const exportName = hasSyntacticModifier(decl, ModifierFlags.Default) ? factory.createIdentifier("default") : factory.getDeclarationName(decl);
-            statements = appendExportStatement(statements, exportName, factory.getLocalName(decl), /*location*/ decl);
+            statements = appendExportStatement(statements, seen, exportName, factory.getLocalName(decl), /*location*/ decl);
         }
 
         if (decl.name) {
-            statements = appendExportsOfDeclaration(statements, decl);
+            statements = appendExportsOfDeclaration(statements, seen, decl);
         }
 
         return statements;
@@ -2014,12 +2051,12 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * appended.
      * @param decl The declaration to export.
      */
-    function appendExportsOfDeclaration(statements: Statement[] | undefined, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
+    function appendExportsOfDeclaration(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, decl: Declaration, liveBinding?: boolean): Statement[] | undefined {
         const name = factory.getDeclarationName(decl);
-        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(idText(name));
+        const exportSpecifiers = currentModuleInfo.exportSpecifiers.get(name);
         if (exportSpecifiers) {
             for (const exportSpecifier of exportSpecifiers) {
-                statements = appendExportStatement(statements, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /*allowComments*/ undefined, liveBinding);
+                statements = appendExportStatement(statements, seen, exportSpecifier.name, name, /*location*/ exportSpecifier.name, /*allowComments*/ undefined, liveBinding);
             }
         }
         return statements;
@@ -2037,36 +2074,28 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      * @param location The location to use for source maps and comments for the export.
      * @param allowComments Whether to allow comments on the export.
      */
-    function appendExportStatement(statements: Statement[] | undefined, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
-        statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+    function appendExportStatement(statements: Statement[] | undefined, seen: IdentifierNameMap<boolean>, exportName: Identifier, expression: Expression, location?: TextRange, allowComments?: boolean, liveBinding?: boolean): Statement[] | undefined {
+        if (!seen.has(exportName)) {
+            seen.set(exportName, true);
+            statements = append(statements, createExportStatement(exportName, expression, location, allowComments, liveBinding));
+        }
         return statements;
     }
 
     function createUnderscoreUnderscoreESModule() {
-        let statement: Statement;
-        if (languageVersion === ScriptTarget.ES3) {
-            statement = factory.createExpressionStatement(
-                createExportExpression(
-                    factory.createIdentifier("__esModule"),
-                    factory.createTrue()
-                )
-            );
-        }
-        else {
-            statement = factory.createExpressionStatement(
-                factory.createCallExpression(
-                    factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
-                    /*typeArguments*/ undefined,
-                    [
-                        factory.createIdentifier("exports"),
-                        factory.createStringLiteral("__esModule"),
-                        factory.createObjectLiteralExpression([
-                            factory.createPropertyAssignment("value", factory.createTrue())
-                        ])
-                    ]
-                )
-            );
-        }
+        const statement = factory.createExpressionStatement(
+            factory.createCallExpression(
+                factory.createPropertyAccessExpression(factory.createIdentifier("Object"), "defineProperty"),
+                /*typeArguments*/ undefined,
+                [
+                    factory.createIdentifier("exports"),
+                    factory.createStringLiteral("__esModule"),
+                    factory.createObjectLiteralExpression([
+                        factory.createPropertyAssignment("value", factory.createTrue()),
+                    ]),
+                ],
+            ),
+        );
         setEmitFlags(statement, EmitFlags.CustomPrologue);
         return statement;
     }
@@ -2098,10 +2127,10 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
      */
     function createExportExpression(name: Identifier, value: Expression, location?: TextRange, liveBinding?: boolean) {
         return setTextRange(
-            liveBinding && languageVersion !== ScriptTarget.ES3 ? factory.createCallExpression(
+            liveBinding ? factory.createCallExpression(
                 factory.createPropertyAccessExpression(
                     factory.createIdentifier("Object"),
-                    "defineProperty"
+                    "defineProperty",
                 ),
                 /*typeArguments*/ undefined,
                 [
@@ -2109,25 +2138,28 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     factory.createStringLiteralFromNode(name),
                     factory.createObjectLiteralExpression([
                         factory.createPropertyAssignment("enumerable", factory.createTrue()),
-                        factory.createPropertyAssignment("get", factory.createFunctionExpression(
-                            /*modifiers*/ undefined,
-                            /*asteriskToken*/ undefined,
-                            /*name*/ undefined,
-                            /*typeParameters*/ undefined,
-                            /*parameters*/ [],
-                            /*type*/ undefined,
-                            factory.createBlock([factory.createReturnStatement(value)])
-                        ))
-                    ])
-                ]
+                        factory.createPropertyAssignment(
+                            "get",
+                            factory.createFunctionExpression(
+                                /*modifiers*/ undefined,
+                                /*asteriskToken*/ undefined,
+                                /*name*/ undefined,
+                                /*typeParameters*/ undefined,
+                                /*parameters*/ [],
+                                /*type*/ undefined,
+                                factory.createBlock([factory.createReturnStatement(value)]),
+                            ),
+                        ),
+                    ]),
+                ],
             ) : factory.createAssignment(
                 factory.createPropertyAccessExpression(
                     factory.createIdentifier("exports"),
-                    factory.cloneNode(name)
+                    factory.cloneNode(name),
                 ),
-                value
+                value,
             ),
-            location
+            location,
         );
     }
 
@@ -2250,14 +2282,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             noSubstitution[getNodeId(expression)] = true;
             if (!isIdentifier(expression) && !(getEmitFlags(node.expression) & EmitFlags.HelperName)) {
                 return addInternalEmitFlags(
-                    factory.updateCallExpression(node,
-                        expression,
-                        /*typeArguments*/ undefined,
-                        node.arguments
-                    ),
-                    InternalEmitFlags.IndirectCall
+                    factory.updateCallExpression(node, expression, /*typeArguments*/ undefined, node.arguments),
+                    InternalEmitFlags.IndirectCall,
                 );
-
             }
         }
         return node;
@@ -2269,12 +2296,8 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
             noSubstitution[getNodeId(tag)] = true;
             if (!isIdentifier(tag) && !(getEmitFlags(node.tag) & EmitFlags.HelperName)) {
                 return addInternalEmitFlags(
-                    factory.updateTaggedTemplateExpression(node,
-                        tag,
-                        /*typeArguments*/ undefined,
-                        node.template
-                    ),
-                    InternalEmitFlags.IndirectCall
+                    factory.updateTaggedTemplateExpression(node, tag, /*typeArguments*/ undefined, node.template),
+                    InternalEmitFlags.IndirectCall,
                 );
             }
         }
@@ -2301,9 +2324,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 return setTextRange(
                     factory.createPropertyAccessExpression(
                         factory.createIdentifier("exports"),
-                        factory.cloneNode(node)
+                        factory.cloneNode(node),
                     ),
-                    /*location*/ node
+                    /*location*/ node,
                 );
             }
             const importDeclaration = resolver.getReferencedImportDeclaration(node);
@@ -2312,9 +2335,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent),
-                            factory.createIdentifier("default")
+                            factory.createIdentifier("default"),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
                 else if (isImportSpecifier(importDeclaration)) {
@@ -2322,9 +2345,9 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                     return setTextRange(
                         factory.createPropertyAccessExpression(
                             factory.getGeneratedNameForNode(importDeclaration.parent?.parent?.parent || importDeclaration),
-                            factory.cloneNode(name)
+                            factory.cloneNode(name),
                         ),
-                        /*location*/ node
+                        /*location*/ node,
                     );
                 }
             }
@@ -2341,13 +2364,15 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
         // When we see an assignment expression whose left-hand side is an exported symbol,
         // we should ensure all exports of that symbol are updated with the correct value.
         //
-        // - We do not substitute generated identifiers for any reason.
+        // - We do not substitute generated identifiers unless they are file-level reserved names.
         // - We do not substitute identifiers tagged with the LocalName flag.
         // - We only substitute identifiers that are exported at the top level.
-        if (isAssignmentOperator(node.operatorToken.kind)
+        if (
+            isAssignmentOperator(node.operatorToken.kind)
             && isIdentifier(node.left)
-            && !isGeneratedIdentifier(node.left)
-            && !isLocalName(node.left)) {
+            && (!isGeneratedIdentifier(node.left) || isFileLevelReservedGeneratedIdentifier(node.left))
+            && !isLocalName(node.left)
+        ) {
             const exportedNames = getExports(node.left);
             if (exportedNames) {
                 // For each additional export of the declaration, apply an export assignment.
@@ -2395,6 +2420,16 @@ export function transformModule(context: TransformationContext): (x: SourceFile 
                 }
             }
         }
+        else if (isFileLevelReservedGeneratedIdentifier(name)) {
+            const exportSpecifiers = currentModuleInfo?.exportSpecifiers.get(name);
+            if (exportSpecifiers) {
+                const exportedNames: Identifier[] = [];
+                for (const exportSpecifier of exportSpecifiers) {
+                    exportedNames.push(exportSpecifier.name);
+                }
+                return exportedNames;
+            }
+        }
     }
 }
 
@@ -2403,5 +2438,5 @@ const dynamicImportUMDHelper: EmitHelper = {
     name: "typescript:dynamicimport-sync-require",
     scoped: true,
     text: `
-            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`
+            var __syncRequire = typeof module === "object" && typeof module.exports === "object";`,
 };

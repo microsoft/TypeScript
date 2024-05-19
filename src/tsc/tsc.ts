@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 // This file actually uses arguments passed on commandline and executes it
 
@@ -6,7 +6,7 @@ import * as ts from "./_namespaces/ts";
 ts.Debug.loggingHost = {
     log(_level, s) {
         ts.sys.write(`${s || ""}${ts.sys.newLine}`);
-    }
+    },
 };
 
 if (ts.Debug.isDebugging) {

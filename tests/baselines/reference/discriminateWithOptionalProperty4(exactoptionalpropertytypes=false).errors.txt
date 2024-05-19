@@ -1,0 +1,24 @@
+discriminateWithOptionalProperty4.ts(16,14): error TS18048: 'z.a' is possibly 'undefined'.
+
+
+==== discriminateWithOptionalProperty4.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/55566
+    
+    export function main(a: string[] | undefined) {
+      const z = a ? { a } : { b: ["there"] };
+    
+      z.a //
+        ? z.a.toString()
+        : z.b.toString();
+    
+      const zWorkAround:
+        | { a: string[]; b?: undefined }
+        | { b: string[]; a?: undefined } = z;
+    
+      zWorkAround.a ? zWorkAround.a.toString() : zWorkAround.b.toString();
+    
+      "a" in z ? z.a.toString() : z.b.toString();
+                 ~~~
+!!! error TS18048: 'z.a' is possibly 'undefined'.
+    }
+    

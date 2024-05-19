@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts] ////
+
+=== classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts ===
+interface IObserver {
+>IObserver : Symbol(IObserver, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 0, 0))
+
+	handleChange<T, TChange>(observable: IObservable<T, TChange>, change: TChange): void;
+>handleChange : Symbol(IObserver.handleChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 0, 21))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 14))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 16))
+>observable : Symbol(observable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 26))
+>IObservable : Symbol(IObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 2, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 14))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 16))
+>change : Symbol(change, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 62))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 1, 16))
+}
+
+interface IObservable<T, TChange = unknown> {
+>IObservable : Symbol(IObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 2, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 22))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 24), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 5, 10))
+
+	get(): T;
+>get : Symbol(IObservable.get, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 45))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 22))
+
+	readonly TChange: TChange;
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 24), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 5, 10))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 4, 24), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 5, 10))
+}
+
+export interface IReader {
+>IReader : Symbol(IReader, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 7, 1))
+
+	readObservable<T>(observable: IObservable<T, any>): T;
+>readObservable : Symbol(IReader.readObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 9, 26))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 10, 16))
+>observable : Symbol(observable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 10, 19))
+>IObservable : Symbol(IObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 2, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 10, 16))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 10, 16))
+}
+
+export abstract class ConvenientObservable<T, TChange> implements IObservable<T, TChange> {
+>ConvenientObservable : Symbol(ConvenientObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 11, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 43))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 45), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 91))
+>IObservable : Symbol(IObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 2, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 43))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 45), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 91))
+
+	get TChange(): TChange { return null!; }
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 45), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 91))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 45), Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 91))
+
+	public abstract get(): T;
+>get : Symbol(ConvenientObservable.get, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 14, 41))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 13, 43))
+}
+
+export abstract class BaseObservable<T, TChange = void> extends ConvenientObservable<T, TChange> {
+>BaseObservable : Symbol(BaseObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 16, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 37))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 39))
+>ConvenientObservable : Symbol(ConvenientObservable, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 11, 1))
+>T : Symbol(T, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 37))
+>TChange : Symbol(TChange, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 39))
+
+	protected readonly observers = new Set<IObserver>();
+>observers : Symbol(BaseObservable.observers, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 18, 98))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>IObserver : Symbol(IObserver, Decl(classExtendingAbstractClassWithMemberCalledTheSameAsItsOwnTypeParam.ts, 0, 0))
+}
+

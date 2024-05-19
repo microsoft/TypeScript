@@ -1,3 +1,4 @@
+// === Completions ===
 === /tests/cases/fourslash/b.js ===
 //  /**
 //   * @p
@@ -39,6 +40,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -135,6 +137,7 @@
 // | @host
 // | @ignore
 // | @implements
+// | @import
 // | @inheritdoc
 // | @inner
 // | @instance
@@ -228,6 +231,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -326,6 +330,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -426,6 +431,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -521,6 +527,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -617,6 +624,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -713,6 +721,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -808,6 +817,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -904,6 +914,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -997,6 +1008,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1091,6 +1103,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1185,6 +1198,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1278,6 +1292,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1373,6 +1388,7 @@
 // | @host
 // | @ignore
 // | @implements
+// | @import
 // | @inheritdoc
 // | @inner
 // | @instance
@@ -1466,6 +1482,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -1561,6 +1578,7 @@
 // | host
 // | ignore
 // | implements
+// | import
 // | inheritdoc
 // | inner
 // | instance
@@ -2090,6 +2108,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -3215,6 +3246,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -4334,6 +4378,19 @@
           "documentation": []
         },
         {
+          "name": "@import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -5434,6 +5491,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -6546,6 +6616,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -7646,6 +7729,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -8771,6 +8867,19 @@
           "documentation": []
         },
         {
+          "name": "@import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "@import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "@inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -9871,6 +9980,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -10983,6 +11105,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -12083,6 +12218,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -13195,6 +13343,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -14295,6 +14456,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -15407,6 +15581,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -16507,6 +16694,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],
@@ -17632,6 +17832,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -18738,6 +18951,19 @@
           "documentation": []
         },
         {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
           "name": "inheritdoc",
           "kind": "",
           "kindModifiers": "",
@@ -19838,6 +20064,19 @@
           "displayParts": [
             {
               "text": "implements",
+              "kind": "text"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "import",
+          "kind": "",
+          "kindModifiers": "",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "import",
               "kind": "text"
             }
           ],

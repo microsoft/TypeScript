@@ -1,9 +1,8 @@
 // WARNING: The script `configurePrerelease.ts` uses a regexp to parse out these values.
 // If changing the text in this section, be sure to test `configurePrerelease` too.
-export const versionMajorMinor = "5.2";
+export const versionMajorMinor = "5.5";
 // The following is baselined as a literal template type without intervention
 /** The version of the TypeScript compiler release */
-// eslint-disable-next-line @typescript-eslint/no-inferrable-types
 export const version: string = `${versionMajorMinor}.0-dev`;
 
 /**
@@ -52,7 +51,7 @@ export type Comparer<T> = (a: T, b: T) => Comparison;
 
 /** @internal */
 export const enum Comparison {
-    LessThan    = -1,
-    EqualTo     = 0,
-    GreaterThan = 1
+    LessThan = -1,
+    EqualTo = 0,
+    GreaterThan = 1,
 }

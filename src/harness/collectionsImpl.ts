@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 export interface SortOptions<T> {
     comparer: (a: T, b: T) => number;
@@ -44,9 +44,9 @@ export class SortedMap<K, V> {
         return index >= 0 ? this._values[index] : undefined;
     }
 
-    public getEntry(key: K): [ K, V ] | undefined {
+    public getEntry(key: K): [K, V] | undefined {
         const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
-        return index >= 0 ? [ this._keys[index], this._values[index] ] : undefined;
+        return index >= 0 ? [this._keys[index], this._values[index]] : undefined;
     }
 
     public set(key: K, value: V) {
@@ -112,7 +112,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * keys() {
+    public *keys() {
         const keys = this._keys;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -134,7 +134,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * values() {
+    public *values() {
         const values = this._values;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -156,7 +156,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public * entries() {
+    public *entries() {
         const keys = this._keys;
         const values = this._values;
         const indices = this.getIterationOrder();
@@ -230,14 +230,14 @@ function insertAt<T>(array: T[], index: number, value: T): void {
 export class Metadata {
     private static readonly _undefinedValue = {};
     private _parent: Metadata | undefined;
-    private _map: { [key: string]: any };
+    private _map: { [key: string]: any; };
     private _version = 0;
     private _size = -1;
     private _parentVersion: number | undefined;
 
     constructor(parent?: Metadata) {
         this._parent = parent;
-        this._map = Object.create(parent ? parent._map : null); // eslint-disable-line no-null/no-null
+        this._map = Object.create(parent ? parent._map : null); // eslint-disable-line no-restricted-syntax
     }
 
     public get size(): number {
@@ -284,7 +284,7 @@ export class Metadata {
     }
 
     public clear(): void {
-        this._map = Object.create(this._parent ? this._parent._map : null); // eslint-disable-line no-null/no-null
+        this._map = Object.create(this._parent ? this._parent._map : null); // eslint-disable-line no-restricted-syntax
         this._size = -1;
         this._version++;
     }

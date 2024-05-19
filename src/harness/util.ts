@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 
 /**
  * Common utilities
@@ -18,7 +18,8 @@ function createDiagnosticMessageReplacer<R extends (messageArgs: string[], ...ar
 
 const replaceTypesVersionsMessage = createDiagnosticMessageReplacer(
     ts.Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2,
-    ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName]);
+    ([entry, , moduleName], compilerVersion) => [entry, compilerVersion, moduleName],
+);
 
 export function sanitizeTraceResolutionLogEntry(text: string) {
     return text && replaceTypesVersionsMessage(text, "3.1.0-dev");
@@ -37,7 +38,7 @@ export function dedent(array: TemplateStringsArray, ...args: any[]) {
     const lineTerminatorRegExp = /\r\n?|\n/g;
     const lines: string[] = [];
     const lineTerminators: string[] = [];
-    let match: RegExpExecArray | null;
+    let match: RegExpExecArray | null; // eslint-disable-line no-restricted-syntax
     let lineStart = 0;
     while (match = lineTerminatorRegExp.exec(text)) {
         if (lineStart !== match.index || lines.length > 0) {

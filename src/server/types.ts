@@ -4,7 +4,7 @@ import {
     FileWatcherCallback,
     System,
     WatchOptions,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export interface CompressedData {
     length: number;
@@ -12,7 +12,7 @@ export interface CompressedData {
     data: any;
 }
 
-export type ModuleImportResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
+export type ModuleImportResult = { module: {}; error: undefined; } | { module: undefined; error: { stack?: string; message?: string; }; };
 
 /** @deprecated Use {@link ModuleImportResult} instead. */
 export type RequireResult = ModuleImportResult;

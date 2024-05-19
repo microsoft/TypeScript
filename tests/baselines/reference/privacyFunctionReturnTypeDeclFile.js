@@ -1195,7 +1195,13 @@ module publicModuleInGlobal {
 //// [privacyFunctionReturnTypeDeclFile_externalModule.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.publicModule = exports.publicFunctionWithPrivateModuleParameterTypes1 = exports.publicFunctionWithPrivateModuleParameterTypes = exports.publicClassWithPrivateModuleParameterTypes = exports.publicFunctionWithPublicParmeterTypes1 = exports.publicFunctionWithPrivateParmeterTypes1 = exports.publicFunctionWithPublicParmeterTypes = exports.publicFunctionWithPrivateParmeterTypes = exports.publicClassWithWithPublicParmeterTypes = exports.publicClassWithWithPrivateParmeterTypes = exports.publicClass = void 0;
+exports.publicModule = exports.publicClassWithPrivateModuleParameterTypes = exports.publicClassWithWithPublicParmeterTypes = exports.publicClassWithWithPrivateParmeterTypes = exports.publicClass = void 0;
+exports.publicFunctionWithPrivateParmeterTypes = publicFunctionWithPrivateParmeterTypes;
+exports.publicFunctionWithPublicParmeterTypes = publicFunctionWithPublicParmeterTypes;
+exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
+exports.publicFunctionWithPublicParmeterTypes1 = publicFunctionWithPublicParmeterTypes1;
+exports.publicFunctionWithPrivateModuleParameterTypes = publicFunctionWithPrivateModuleParameterTypes;
+exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }
@@ -1328,11 +1334,9 @@ var privateClassWithWithPublicParmeterTypes = /** @class */ (function () {
 function publicFunctionWithPrivateParmeterTypes() {
     return null;
 }
-exports.publicFunctionWithPrivateParmeterTypes = publicFunctionWithPrivateParmeterTypes;
 function publicFunctionWithPublicParmeterTypes() {
     return null;
 }
-exports.publicFunctionWithPublicParmeterTypes = publicFunctionWithPublicParmeterTypes;
 function privateFunctionWithPrivateParmeterTypes() {
     return null;
 }
@@ -1342,11 +1346,9 @@ function privateFunctionWithPublicParmeterTypes() {
 function publicFunctionWithPrivateParmeterTypes1() {
     return new privateClass();
 }
-exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParmeterTypes1;
 function publicFunctionWithPublicParmeterTypes1() {
     return new publicClass();
 }
-exports.publicFunctionWithPublicParmeterTypes1 = publicFunctionWithPublicParmeterTypes1;
 function privateFunctionWithPrivateParmeterTypes1() {
     return new privateClass();
 }
@@ -1374,11 +1376,9 @@ exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModul
 function publicFunctionWithPrivateModuleParameterTypes() {
     return null;
 }
-exports.publicFunctionWithPrivateModuleParameterTypes = publicFunctionWithPrivateModuleParameterTypes;
 function publicFunctionWithPrivateModuleParameterTypes1() {
     return new privateModule.publicClass();
 }
-exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
 var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleParameterTypes() {
     }
@@ -2339,7 +2339,7 @@ export declare class publicClassWithPrivateModuleParameterTypes {
 export declare function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
 export declare function publicFunctionWithPrivateModuleParameterTypes1(): privateModule.publicClass;
 export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -2399,7 +2399,7 @@ export declare module publicModule {
     export function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {
@@ -2482,12 +2482,12 @@ declare class publicClassWithWithPublicParmeterTypesInGlobal {
 declare function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
 declare function publicFunctionWithPublicParmeterTypesInGlobal1(): publicClassInGlobal;
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
-declare module publicModuleInGlobal {
+declare namespace publicModuleInGlobal {
     class privateClass {
     }
     export class publicClass {
     }
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
         export class publicClass {

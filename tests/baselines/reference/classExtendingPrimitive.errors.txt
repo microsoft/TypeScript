@@ -1,6 +1,6 @@
-classExtendingPrimitive.ts(3,17): error TS2693: 'number' only refers to a type, but is being used as a value here.
-classExtendingPrimitive.ts(4,18): error TS2693: 'string' only refers to a type, but is being used as a value here.
-classExtendingPrimitive.ts(5,18): error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+classExtendingPrimitive.ts(3,17): error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(4,18): error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
+classExtendingPrimitive.ts(5,18): error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
 classExtendingPrimitive.ts(6,18): error TS2304: Cannot find name 'Void'.
 classExtendingPrimitive.ts(7,19): error TS1109: Expression expected.
 classExtendingPrimitive.ts(8,18): error TS2304: Cannot find name 'Null'.
@@ -14,13 +14,13 @@ classExtendingPrimitive.ts(14,18): error TS2507: Type 'typeof E' is not a constr
     
     class C extends number { }
                     ~~~~~~
-!!! error TS2693: 'number' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'number'. Classes can only extend constructable values.
     class C2 extends string { }
                      ~~~~~~
-!!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'string'. Classes can only extend constructable values.
     class C3 extends boolean { }
                      ~~~~~~~
-!!! error TS2693: 'boolean' only refers to a type, but is being used as a value here.
+!!! error TS2863: A class cannot extend a primitive type like 'boolean'. Classes can only extend constructable values.
     class C4 extends Void  { }
                      ~~~~
 !!! error TS2304: Cannot find name 'Void'.

@@ -1,0 +1,73 @@
+//// [tests/cases/conformance/jsdoc/declarations/jsDeclarationsTypedefAndLatebound.ts] ////
+
+=== index.js ===
+const LazySet = require("./LazySet");
+>LazySet : typeof LazySet
+>        : ^^^^^^^^^^^^^^
+>require("./LazySet") : typeof LazySet
+>                     : ^^^^^^^^^^^^^^
+>require : any
+>"./LazySet" : "./LazySet"
+>            : ^^^^^^^^^^^
+
+/** @type {LazySet} */
+const stringSet = undefined;
+>stringSet : LazySet
+>          : ^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+stringSet.addAll(stringSet);
+>stringSet.addAll(stringSet) : void
+>                            : ^^^^
+>stringSet.addAll : (iterable: LazySet) => void
+>                 : ^        ^^       ^^^^^^^^^
+>stringSet : LazySet
+>          : ^^^^^^^
+>addAll : (iterable: LazySet) => void
+>       : ^        ^^       ^^^^^^^^^
+>stringSet : LazySet
+>          : ^^^^^^^
+
+
+=== LazySet.js ===
+// Comment out this JSDoc, and note that the errors index.js go away.
+/**
+ * @typedef {Object} SomeObject
+ */
+class LazySet {
+>LazySet : LazySet
+>        : ^^^^^^^
+
+    /**
+     * @param {LazySet} iterable
+     */
+    addAll(iterable) {}
+>addAll : (iterable: LazySet) => void
+>       : ^        ^^       ^^^^^^^^^
+>iterable : import("LazySet")
+>         : ^^^^^^^^^^^^^^^^^^^^^^^
+
+    [Symbol.iterator]() {}
+>[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+}
+
+module.exports = LazySet;
+>module.exports = LazySet : typeof LazySet
+>                         : ^^^^^^^^^^^^^^
+>module.exports : typeof LazySet
+>               : ^^^^^^^^^^^^^^
+>module : { exports: typeof LazySet; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof LazySet
+>        : ^^^^^^^^^^^^^^
+>LazySet : typeof LazySet
+>        : ^^^^^^^^^^^^^^
+

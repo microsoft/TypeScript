@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/uniqueSymbolJs.ts] ////
+
+=== ./a.js ===
+/** @type {unique symbol} */
+const foo = Symbol();
+>foo : unique symbol
+>    : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+/** @typedef {{ [foo]: boolean }} A */
+/** @typedef {{ [key: foo] boolean }} B */
+

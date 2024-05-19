@@ -3,6 +3,7 @@
 === moduleCrashBug1.ts ===
 module _modes {
 >_modes : typeof _modes
+>       : ^^^^^^^^^^^^^
 
  export interface IMode {
   
@@ -10,6 +11,7 @@ module _modes {
  
  class Mode {
 >Mode : Mode
+>     : ^^^^
   
  }
 }
@@ -19,12 +21,15 @@ module _modes {
 module editor {
  import modes = _modes;
 >modes : typeof modes
+>      : ^^^^^^^^^^^^
 >_modes : typeof modes
+>       : ^^^^^^^^^^^^
 
 }
 
 var m : _modes;
 >m : _modes
+>  : ^^^^^^
 
 
 

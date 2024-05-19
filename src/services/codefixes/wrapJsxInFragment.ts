@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     BinaryExpression,
     Diagnostics,
     factory,
@@ -11,12 +16,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixID = "wrapJsxInFragment";
 const errorCodes = [Diagnostics.JSX_expressions_must_have_one_parent_element.code];
@@ -30,11 +30,12 @@ registerCodeFix({
         return [createCodeFixAction(fixID, changes, Diagnostics.Wrap_in_JSX_fragment, fixID, Diagnostics.Wrap_all_unparented_JSX_in_JSX_fragment)];
     },
     fixIds: [fixID],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const node = findNodeToFix(context.sourceFile, diag.start);
-        if (!node) return undefined;
-        doChange(changes, context.sourceFile, node);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const node = findNodeToFix(context.sourceFile, diag.start);
+            if (!node) return undefined;
+            doChange(changes, context.sourceFile, node);
+        }),
 });
 
 function findNodeToFix(sourceFile: SourceFile, pos: number): BinaryExpression | undefined {

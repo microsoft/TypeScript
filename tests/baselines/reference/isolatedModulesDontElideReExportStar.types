@@ -3,6 +3,7 @@
 === /a.ts ===
 export type T = number;
 >T : number
+>  : ^^^^^^
 
 === /b.ts ===
 

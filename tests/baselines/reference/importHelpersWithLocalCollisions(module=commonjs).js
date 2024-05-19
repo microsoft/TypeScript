@@ -22,8 +22,9 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
 const tslib_1 = require("tslib");
-let A = exports.A = class A {
+let A = class A {
 };
+exports.A = A;
 exports.A = A = tslib_1.__decorate([
     dec
 ], A);

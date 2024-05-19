@@ -1,0 +1,40 @@
+b.ts(2,16): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+b.ts(3,30): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+b.ts(5,25): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+c.ts(2,16): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+c.ts(3,30): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+c.ts(5,25): error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+
+
+==== a.ts (0 errors) ====
+    export class A {}
+    
+==== a.d.ts (0 errors) ====
+    export class A {}
+    
+==== b.ts (3 errors) ====
+    import type { A } from "./a.ts"; // ok
+    import {} from "./a.ts"; // error
+                   ~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    import { type A as _A } from "./a.ts"; // error
+                                 ~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    type __A = import("./a.ts").A; // ok
+    const aPromise = import("./a.ts"); // error
+                            ~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    
+==== c.ts (3 errors) ====
+    import type { A } from "./a.d.ts"; // ok
+    import {} from "./a.d.ts"; // error
+                   ~~~~~~~~~~
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+    import { type A as _A } from "./a.d.ts"; // error
+                                 ~~~~~~~~~~
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+    type __A = import("./a.d.ts").A; // ok
+    const aPromise = import("./a.d.ts"); // error
+                            ~~~~~~~~~~
+!!! error TS2846: A declaration file cannot be imported without 'import type'. Did you mean to import an implementation file './a.js' instead?
+    

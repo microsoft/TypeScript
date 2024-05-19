@@ -11,6 +11,7 @@ import {
     ExportAssignment,
     ExportDeclaration,
     Expression,
+    ExpressionStatement,
     GeneratedIdentifierFlags,
     getEmitFlags,
     getEmitModuleKind,
@@ -48,7 +49,7 @@ import {
     visitEachChild,
     visitNodes,
     VisitResult,
-} from "../../_namespaces/ts";
+} from "../../_namespaces/ts.js";
 
 /** @internal */
 export function transformECMAScriptModule(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -88,7 +89,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     setTextRange(factory.createNodeArray(insertStatementsAfterCustomPrologue(result.statements.slice(), importRequireStatements)), result.statements),
                 );
             }
-            if (!isExternalModule(node) || some(result.statements, isExternalModuleIndicator)) {
+            if (!isExternalModule(node) || getEmitModuleKind(compilerOptions) === ModuleKind.Preserve || some(result.statements, isExternalModuleIndicator)) {
                 return result;
             }
             return factory.updateSourceFile(
@@ -110,7 +111,8 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             return factory.updateSourceFile(
                 node,
-                setTextRange(factory.createNodeArray(statements), node.statements));
+                setTextRange(factory.createNodeArray(statements), node.statements),
+            );
         }
         else {
             return visitEachChild(node, visitor, context);
@@ -127,7 +129,7 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
             case SyntaxKind.ExportAssignment:
                 return visitExportAssignment(node as ExportAssignment);
             case SyntaxKind.ExportDeclaration:
-                const exportDecl = (node as ExportDeclaration);
+                const exportDecl = node as ExportDeclaration;
                 return visitExportDeclaration(exportDecl);
         }
 
@@ -139,11 +141,14 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
      *
      * @param importNode The declaration to import.
      */
-     function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
+    function createRequireCall(importNode: ImportDeclaration | ImportEqualsDeclaration | ExportDeclaration) {
         const moduleName = getExternalModuleNameLiteral(factory, importNode, Debug.checkDefined(currentSourceFile), host, resolver, compilerOptions);
         const args: Expression[] = [];
         if (moduleName) {
             args.push(moduleName);
+        }
+        if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+            return factory.createCallExpression(factory.createIdentifier("require"), /*typeArguments*/ undefined, args);
         }
 
         if (!importRequireStatements) {
@@ -154,10 +159,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                     /*isTypeOnly*/ false,
                     /*name*/ undefined,
                     factory.createNamedImports([
-                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName)
-                    ])
+                        factory.createImportSpecifier(/*isTypeOnly*/ false, factory.createIdentifier("createRequire"), createRequireName),
+                    ]),
                 ),
-                factory.createStringLiteral("module")
+                factory.createStringLiteral("module"),
+                /*attributes*/ undefined,
             );
             const requireHelperName = factory.createUniqueName("__require", GeneratedIdentifierFlags.Optimistic | GeneratedIdentifierFlags.FileLevel);
             const requireStatement = factory.createVariableStatement(
@@ -169,15 +175,14 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                             /*exclamationToken*/ undefined,
                             /*type*/ undefined,
                             factory.createCallExpression(factory.cloneNode(createRequireName), /*typeArguments*/ undefined, [
-                                factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url"))
-                            ])
-                        )
+                                factory.createPropertyAccessExpression(factory.createMetaProperty(SyntaxKind.ImportKeyword, factory.createIdentifier("meta")), factory.createIdentifier("url")),
+                            ]),
+                        ),
                     ],
-                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                )
+                    /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                ),
             );
             importRequireStatements = [importStatement, requireStatement];
-
         }
 
         const name = importRequireStatements[1].declarationList.declarations[0].name;
@@ -194,7 +199,8 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
         Debug.assert(isExternalModuleImportEqualsDeclaration(node), "import= for internal module references should be handled in an earlier transformer.");
 
         let statements: Statement[] | undefined;
-        statements = append(statements,
+        statements = append(
+            statements,
             setOriginalNode(
                 setTextRange(
                     factory.createVariableStatement(
@@ -205,15 +211,16 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                                     factory.cloneNode(node.name),
                                     /*exclamationToken*/ undefined,
                                     /*type*/ undefined,
-                                    createRequireCall(node)
-                                )
+                                    createRequireCall(node),
+                                ),
                             ],
-                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None
-                        )
+                            /*flags*/ languageVersion >= ScriptTarget.ES2015 ? NodeFlags.Const : NodeFlags.None,
+                        ),
                     ),
-                    node),
-                node
-            )
+                    node,
+                ),
+                node,
+            ),
         );
 
         statements = appendExportsOfImportEqualsDeclaration(statements, node);
@@ -223,18 +230,39 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
 
     function appendExportsOfImportEqualsDeclaration(statements: Statement[] | undefined, node: ImportEqualsDeclaration) {
         if (hasSyntacticModifier(node, ModifierFlags.Export)) {
-            statements = append(statements, factory.createExportDeclaration(
-                /*modifiers*/ undefined,
-                node.isTypeOnly,
-                factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))])
-            ));
+            statements = append(
+                statements,
+                factory.createExportDeclaration(
+                    /*modifiers*/ undefined,
+                    node.isTypeOnly,
+                    factory.createNamedExports([factory.createExportSpecifier(/*isTypeOnly*/ false, /*propertyName*/ undefined, idText(node.name))]),
+                ),
+            );
         }
         return statements;
     }
 
-    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | undefined> {
-        // Elide `export=` as it is not legal with --module ES6
-        return node.isExportEquals ? undefined : node;
+    function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment | ExpressionStatement | undefined> {
+        if (node.isExportEquals) {
+            if (getEmitModuleKind(compilerOptions) === ModuleKind.Preserve) {
+                const statement = setOriginalNode(
+                    factory.createExpressionStatement(
+                        factory.createAssignment(
+                            factory.createPropertyAccessExpression(
+                                factory.createIdentifier("module"),
+                                "exports",
+                            ),
+                            node.expression,
+                        ),
+                    ),
+                    node,
+                );
+                return statement;
+            }
+            // Elide `export=` as it is not legal with --module ES6
+            return undefined;
+        }
+        return node;
     }
 
     function visitExportDeclaration(node: ExportDeclaration) {
@@ -256,11 +284,11 @@ export function transformECMAScriptModule(context: TransformationContext): (x: S
                 /*isTypeOnly*/ false,
                 /*name*/ undefined,
                 factory.createNamespaceImport(
-                    synthName
-                )
+                    synthName,
+                ),
             ),
             node.moduleSpecifier,
-            node.assertClause
+            node.attributes,
         );
         setOriginalNode(importDecl, node.exportClause);
 

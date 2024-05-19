@@ -1,0 +1,315 @@
+//// [tests/cases/compiler/distributiveConditionalTypeConstraints.ts] ////
+
+=== distributiveConditionalTypeConstraints.ts ===
+type IsArray<T> = T extends unknown[] ? true : false;
+>IsArray : IsArray<T>
+>        : ^^^^^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+function f1<T extends object>(x: IsArray<T>) {
+>f1 : <T extends object>(x: IsArray<T>) => void
+>   : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let t: true = x;   // Error
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : boolean
+>  : ^^^^^^^
+
+    let f: false = x;  // Error
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : boolean
+>  : ^^^^^^^
+}
+
+function f2<T extends unknown[]>(x: IsArray<T>) {
+>f2 : <T extends unknown[]>(x: IsArray<T>) => void
+>   : ^ ^^^^^^^^^         ^^ ^^          ^^^^^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let t: true = x;
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let f: false = x;  // Error
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+}
+
+function f3<T extends string[]>(x: IsArray<T>) {
+>f3 : <T extends string[]>(x: IsArray<T>) => void
+>   : ^ ^^^^^^^^^        ^^ ^^          ^^^^^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let t: true = x;
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let f: false = x;  // Error
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+}
+
+function f4<T extends Function>(x: IsArray<T>) {
+>f4 : <T extends Function>(x: IsArray<T>) => void
+>   : ^ ^^^^^^^^^        ^^ ^^          ^^^^^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let t: true = x;   // Error
+>t : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+
+    let f: false = x;
+>f : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : IsArray<T>
+>  : ^^^^^^^^^^
+}
+
+type ZeroOf<T> =
+>ZeroOf : ZeroOf<T>
+>       : ^^^^^^^^^
+
+    T extends null ? null :
+    T extends undefined ? undefined :
+    T extends string ? "" :
+    T extends number ? 0 :
+    T extends boolean ? false :
+>false : false
+>      : ^^^^^
+
+    never;
+
+function f10<T extends {}>(x: ZeroOf<T>) {
+>f10 : <T extends {}>(x: ZeroOf<T>) => void
+>    : ^ ^^^^^^^^^  ^^ ^^         ^^^^^^^^^
+>x : ZeroOf<T>
+>  : ^^^^^^^^^
+
+    let t: "" | 0 | false = x;
+>t : false | "" | 0
+>  : ^^^^^^^^^^^^^^
+>false : false
+>      : ^^^^^
+>x : false | "" | 0
+>  : ^^^^^^^^^^^^^^
+}
+
+type Foo<T> = T extends "abc" | 42 ? true : false;
+>Foo : Foo<T>
+>    : ^^^^^^
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+function f20<T extends string>(x: Foo<T>) {
+>f20 : <T extends string>(x: Foo<T>) => void
+>    : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
+>x : Foo<T>
+>  : ^^^^^^
+
+    let t: false = x;  // Error
+>t : false
+>  : ^^^^^
+>false : false
+>      : ^^^^^
+>x : boolean
+>  : ^^^^^^^
+}
+
+// Modified repro from #30152
+
+interface A { foo(): void; }
+>foo : () => void
+>    : ^^^^^^    
+
+interface B { bar(): void; }
+>bar : () => void
+>    : ^^^^^^    
+
+interface C { foo(): void, bar(): void }
+>foo : () => void
+>    : ^^^^^^    
+>bar : () => void
+>    : ^^^^^^    
+
+function test1<T extends A>(y: T extends B ? number : string) {
+>test1 : <T extends A>(y: T extends B ? number : string) => void
+>      : ^ ^^^^^^^^^ ^^ ^^                             ^^^^^^^^^
+>y : T extends B ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof y == 'string') {
+>typeof y == 'string' : boolean
+>                     : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : T extends B ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        y;  // T extends B ? number : string
+>y : T extends B ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    else {
+        y;  // never
+>y : never
+>  : ^^^^^
+    }
+    const newY: string | number = y;
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+>y : T extends B ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    newY;  // string
+>newY : string
+>     : ^^^^^^
+}
+
+function test2<T extends A>(y: T extends B ? string : number) {
+>test2 : <T extends A>(y: T extends B ? string : number) => void
+>      : ^ ^^^^^^^^^ ^^ ^^                             ^^^^^^^^^
+>y : T extends B ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof y == 'string') {
+>typeof y == 'string' : boolean
+>                     : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : T extends B ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        y;  // never
+>y : never
+>  : ^^^^^
+    }
+    else {
+        y;  // T extends B ? string : number
+>y : T extends B ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    const newY: string | number = y;
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+>y : T extends B ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    newY;  // number 
+>newY : number
+>     : ^^^^^^
+}
+
+function test3<T extends A>(y: T extends C ? number : string) {
+>test3 : <T extends A>(y: T extends C ? number : string) => void
+>      : ^ ^^^^^^^^^ ^^ ^^                             ^^^^^^^^^
+>y : T extends C ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof y == 'string') {
+>typeof y == 'string' : boolean
+>                     : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : T extends C ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        y;  // (T extends C ? number : string) & string
+>y : (T extends C ? number : string) & string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    else {
+        y;  // T extends C ? number : string
+>y : T extends C ? number : string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    const newY: string | number = y;
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    newY;  // string | number
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+}
+
+function test4<T extends A>(y: T extends C ? string : number) {
+>test4 : <T extends A>(y: T extends C ? string : number) => void
+>      : ^ ^^^^^^^^^ ^^ ^^                             ^^^^^^^^^
+>y : T extends C ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    if (typeof y == 'string') {
+>typeof y == 'string' : boolean
+>                     : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : T extends C ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+        y;  // (T extends C ? string : number) & string
+>y : (T extends C ? string : number) & string
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    else {
+        y;  // T extends C ? string : number
+>y : T extends C ? string : number
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    }
+    const newY: string | number = y;
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    newY;  // string | number
+>newY : string | number
+>     : ^^^^^^^^^^^^^^^
+}
+

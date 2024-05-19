@@ -1,5 +1,5 @@
 currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/a/lib/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
 Before request
 //// [/tsconfig.json]
 { "compilerOptions": { "module": "commonjs" } }
@@ -534,11 +534,11 @@ Info seq  [hh:mm:ss:mss] request:
     }
 Info seq  [hh:mm:ss:mss] response:
     {
-     "seq": 0,
-     "type": "response",
-     "command": "configure",
-     "request_seq": 1,
-     "success": true
+      "seq": 0,
+      "type": "response",
+      "command": "configure",
+      "request_seq": 1,
+      "success": true
     }
 Info seq  [hh:mm:ss:mss] response:
     {
@@ -557,10 +557,19 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Search path: /
-Info seq  [hh:mm:ss:mss] For info: /index.ts :: Config file name: /tsconfig.json
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /index.ts ProjectRootPath: undefined:: Result: /tsconfig.json
 Info seq  [hh:mm:ss:mss] Creating configuration project /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tsconfig.json 2000 undefined Project: /tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/tsconfig.json",
+        "reason": "Creating possible configured project for /index.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] Config: /tsconfig.json : {
  "rootNames": [
   "/index.ts",
@@ -774,7 +783,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_98.ts 500 undef
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib/a_99.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined Project: /tsconfig.json WatchType: Missing file
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (101)
 	/index.ts SVC-1-0 ""
@@ -1085,11 +1094,11 @@ Info seq  [hh:mm:ss:mss] 	Files (101)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /package.json 250 undefined WatchType: package.json file
-Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies in * ms
+Info seq  [hh:mm:ss:mss] AutoImportProviderProject: found 1 root files in 1 dependencies 0 referenced projects in * ms
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/autoImportProviderProject1*
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* Version: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/autoImportProviderProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/autoImportProviderProject1*' (AutoImportProvider)
 Info seq  [hh:mm:ss:mss] 	Files (51)
 	/node_modules/dep-a/file_0.ts Text-1 "export const depA_0__0 = 0;"
@@ -1249,6 +1258,115 @@ Info seq  [hh:mm:ss:mss] 	Files (51)
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingFinish",
+      "body": {
+        "projectName": "/tsconfig.json"
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "telemetry",
+      "body": {
+        "telemetryEventName": "projectInfo",
+        "payload": {
+          "projectId": "aace87d7c1572ff43c6978074161b586788b4518c7a9d06c79c03e613b6ce5a3",
+          "fileStats": {
+            "js": 0,
+            "jsSize": 0,
+            "jsx": 0,
+            "jsxSize": 0,
+            "ts": 101,
+            "tsSize": 2590,
+            "tsx": 0,
+            "tsxSize": 0,
+            "dts": 0,
+            "dtsSize": 0,
+            "deferred": 0,
+            "deferredSize": 0
+          },
+          "compilerOptions": {
+            "module": "commonjs"
+          },
+          "typeAcquisition": {
+            "enable": false,
+            "include": false,
+            "exclude": false
+          },
+          "extends": false,
+          "files": false,
+          "include": false,
+          "exclude": false,
+          "compileOnSave": false,
+          "configFileName": "tsconfig.json",
+          "projectType": "configured",
+          "languageServiceEnabled": true,
+          "version": "FakeVersion"
+        }
+      }
+    }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "configFileDiag",
+      "body": {
+        "triggerFile": "/index.ts",
+        "configFile": "/tsconfig.json",
+        "diagnostics": [
+          {
+            "text": "File '/a/lib/lib.d.ts' not found.\n  The file is in the program because:\n    Default library for target 'es5'",
+            "code": 6053,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Array'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Boolean'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Function'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'IArguments'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Number'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'Object'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'RegExp'.",
+            "code": 2318,
+            "category": "error"
+          },
+          {
+            "text": "Cannot find global type 'String'.",
+            "code": 2318,
+            "category": "error"
+          }
+        ]
+      }
+    }
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (101)
 
@@ -1482,6 +1600,625 @@ FsWatchesRecursive::
 /node_modules: *new*
   {}
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *new*
+    projectStateVersion: 1
+    projectProgramVersion: 1
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/index.ts (Open) *new*
+    version: SVC-1-0
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/dep-a/file_0.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_1.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_10.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_11.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_12.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_13.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_14.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_15.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_16.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_17.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_18.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_19.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_20.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_21.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_22.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_23.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_24.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_25.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_26.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_27.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_28.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_29.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_30.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_31.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_32.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_33.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_34.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_35.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_36.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_37.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_38.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_39.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_40.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_41.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_42.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_43.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_44.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_45.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_46.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_47.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_48.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_49.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1517,6 +2254,626 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-1 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/dep-a/file_0.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_1.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_10.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_11.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_12.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_13.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_14.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_15.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_16.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_17.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_18.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_19.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_20.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_21.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_22.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_23.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_24.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_25.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_26.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_27.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_28.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_29.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_30.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_31.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_32.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_33.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_34.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_35.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_36.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_37.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_38.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_39.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_40.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_41.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_42.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_43.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_44.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_45.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_46.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_47.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_48.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_49.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -1531,7 +2888,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (101)
 	/index.ts SVC-1-1 "a"
@@ -2038,6 +3395,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -2082,7 +3445,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_0__0",
-              "exportMapKey": "aa_0__0|*|",
+              "exportMapKey": "7 * aa_0__0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -2102,9 +3465,169 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_1__0",
-              "exportMapKey": "aa_1__0|*|",
+              "exportMapKey": "7 * aa_1__0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "7 * aa_2__0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "7 * aa_3__0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "7 * aa_4__0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "7 * aa_5__0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "7 * aa_6__0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "7 * aa_7__0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "7 * aa_8__0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "7 * aa_9__0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -2122,7 +3645,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_10__0",
-              "exportMapKey": "aa_10__0|*|",
+              "exportMapKey": "8 * aa_10__0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -2142,7 +3665,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_11__0",
-              "exportMapKey": "aa_11__0|*|",
+              "exportMapKey": "8 * aa_11__0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -2162,7 +3685,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_12__0",
-              "exportMapKey": "aa_12__0|*|",
+              "exportMapKey": "8 * aa_12__0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -2182,7 +3705,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_13__0",
-              "exportMapKey": "aa_13__0|*|",
+              "exportMapKey": "8 * aa_13__0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -2202,7 +3725,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_14__0",
-              "exportMapKey": "aa_14__0|*|",
+              "exportMapKey": "8 * aa_14__0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -2222,7 +3745,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_15__0",
-              "exportMapKey": "aa_15__0|*|",
+              "exportMapKey": "8 * aa_15__0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -2242,7 +3765,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_16__0",
-              "exportMapKey": "aa_16__0|*|",
+              "exportMapKey": "8 * aa_16__0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -2262,7 +3785,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_17__0",
-              "exportMapKey": "aa_17__0|*|",
+              "exportMapKey": "8 * aa_17__0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -2282,7 +3805,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_18__0",
-              "exportMapKey": "aa_18__0|*|",
+              "exportMapKey": "8 * aa_18__0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -2302,29 +3825,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_19__0",
-              "exportMapKey": "aa_19__0|*|",
+              "exportMapKey": "8 * aa_19__0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
-            }
-          },
-          {
-            "name": "aa_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_2__0",
-              "exportMapKey": "aa_2__0|*|",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
             }
           },
           {
@@ -2342,7 +3845,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_20__0",
-              "exportMapKey": "aa_20__0|*|",
+              "exportMapKey": "8 * aa_20__0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -2362,7 +3865,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_21__0",
-              "exportMapKey": "aa_21__0|*|",
+              "exportMapKey": "8 * aa_21__0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -2382,7 +3885,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_22__0",
-              "exportMapKey": "aa_22__0|*|",
+              "exportMapKey": "8 * aa_22__0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -2402,7 +3905,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_23__0",
-              "exportMapKey": "aa_23__0|*|",
+              "exportMapKey": "8 * aa_23__0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -2422,7 +3925,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_24__0",
-              "exportMapKey": "aa_24__0|*|",
+              "exportMapKey": "8 * aa_24__0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -2442,7 +3945,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_25__0",
-              "exportMapKey": "aa_25__0|*|",
+              "exportMapKey": "8 * aa_25__0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -2462,7 +3965,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_26__0",
-              "exportMapKey": "aa_26__0|*|",
+              "exportMapKey": "8 * aa_26__0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -2482,7 +3985,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_27__0",
-              "exportMapKey": "aa_27__0|*|",
+              "exportMapKey": "8 * aa_27__0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -2502,7 +4005,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_28__0",
-              "exportMapKey": "aa_28__0|*|",
+              "exportMapKey": "8 * aa_28__0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -2522,29 +4025,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_29__0",
-              "exportMapKey": "aa_29__0|*|",
+              "exportMapKey": "8 * aa_29__0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "aa_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_3__0",
-              "exportMapKey": "aa_3__0|*|",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -2562,7 +4045,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_30__0",
-              "exportMapKey": "aa_30__0|*|",
+              "exportMapKey": "8 * aa_30__0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -2582,7 +4065,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_31__0",
-              "exportMapKey": "aa_31__0|*|",
+              "exportMapKey": "8 * aa_31__0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -2602,7 +4085,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_32__0",
-              "exportMapKey": "aa_32__0|*|",
+              "exportMapKey": "8 * aa_32__0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -2622,7 +4105,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_33__0",
-              "exportMapKey": "aa_33__0|*|",
+              "exportMapKey": "8 * aa_33__0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -2642,7 +4125,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_34__0",
-              "exportMapKey": "aa_34__0|*|",
+              "exportMapKey": "8 * aa_34__0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -2662,7 +4145,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_35__0",
-              "exportMapKey": "aa_35__0|*|",
+              "exportMapKey": "8 * aa_35__0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -2682,7 +4165,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_36__0",
-              "exportMapKey": "aa_36__0|*|",
+              "exportMapKey": "8 * aa_36__0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -2702,7 +4185,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_37__0",
-              "exportMapKey": "aa_37__0|*|",
+              "exportMapKey": "8 * aa_37__0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -2722,7 +4205,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_38__0",
-              "exportMapKey": "aa_38__0|*|",
+              "exportMapKey": "8 * aa_38__0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -2742,29 +4225,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_39__0",
-              "exportMapKey": "aa_39__0|*|",
+              "exportMapKey": "8 * aa_39__0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
-            }
-          },
-          {
-            "name": "aa_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_4__0",
-              "exportMapKey": "aa_4__0|*|",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
             }
           },
           {
@@ -2782,7 +4245,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_40__0",
-              "exportMapKey": "aa_40__0|*|",
+              "exportMapKey": "8 * aa_40__0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -2802,7 +4265,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_41__0",
-              "exportMapKey": "aa_41__0|*|",
+              "exportMapKey": "8 * aa_41__0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -2822,7 +4285,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_42__0",
-              "exportMapKey": "aa_42__0|*|",
+              "exportMapKey": "8 * aa_42__0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -2842,7 +4305,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_43__0",
-              "exportMapKey": "aa_43__0|*|",
+              "exportMapKey": "8 * aa_43__0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -2862,7 +4325,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_44__0",
-              "exportMapKey": "aa_44__0|*|",
+              "exportMapKey": "8 * aa_44__0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -2882,7 +4345,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_45__0",
-              "exportMapKey": "aa_45__0|*|",
+              "exportMapKey": "8 * aa_45__0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -2902,7 +4365,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_46__0",
-              "exportMapKey": "aa_46__0|*|",
+              "exportMapKey": "8 * aa_46__0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -2922,7 +4385,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_47__0",
-              "exportMapKey": "aa_47__0|*|",
+              "exportMapKey": "8 * aa_47__0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -2942,7 +4405,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_48__0",
-              "exportMapKey": "aa_48__0|*|",
+              "exportMapKey": "8 * aa_48__0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -2962,29 +4425,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_49__0",
-              "exportMapKey": "aa_49__0|*|",
+              "exportMapKey": "8 * aa_49__0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "aa_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_5__0",
-              "exportMapKey": "aa_5__0|*|",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -3002,7 +4445,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_50__0",
-              "exportMapKey": "aa_50__0|*|",
+              "exportMapKey": "8 * aa_50__0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -3022,7 +4465,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_51__0",
-              "exportMapKey": "aa_51__0|*|",
+              "exportMapKey": "8 * aa_51__0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -3042,7 +4485,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_52__0",
-              "exportMapKey": "aa_52__0|*|",
+              "exportMapKey": "8 * aa_52__0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -3062,7 +4505,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_53__0",
-              "exportMapKey": "aa_53__0|*|",
+              "exportMapKey": "8 * aa_53__0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -3082,7 +4525,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_54__0",
-              "exportMapKey": "aa_54__0|*|",
+              "exportMapKey": "8 * aa_54__0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -3102,7 +4545,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_55__0",
-              "exportMapKey": "aa_55__0|*|",
+              "exportMapKey": "8 * aa_55__0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -3122,7 +4565,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_56__0",
-              "exportMapKey": "aa_56__0|*|",
+              "exportMapKey": "8 * aa_56__0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -3142,7 +4585,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_57__0",
-              "exportMapKey": "aa_57__0|*|",
+              "exportMapKey": "8 * aa_57__0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -3162,7 +4605,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_58__0",
-              "exportMapKey": "aa_58__0|*|",
+              "exportMapKey": "8 * aa_58__0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -3182,29 +4625,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_59__0",
-              "exportMapKey": "aa_59__0|*|",
+              "exportMapKey": "8 * aa_59__0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
-            }
-          },
-          {
-            "name": "aa_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_6__0",
-              "exportMapKey": "aa_6__0|*|",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
             }
           },
           {
@@ -3222,7 +4645,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_60__0",
-              "exportMapKey": "aa_60__0|*|",
+              "exportMapKey": "8 * aa_60__0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -3242,7 +4665,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_61__0",
-              "exportMapKey": "aa_61__0|*|",
+              "exportMapKey": "8 * aa_61__0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -3262,7 +4685,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_62__0",
-              "exportMapKey": "aa_62__0|*|",
+              "exportMapKey": "8 * aa_62__0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -3282,7 +4705,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_63__0",
-              "exportMapKey": "aa_63__0|*|",
+              "exportMapKey": "8 * aa_63__0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -3302,7 +4725,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_64__0",
-              "exportMapKey": "aa_64__0|*|",
+              "exportMapKey": "8 * aa_64__0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -3322,7 +4745,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_65__0",
-              "exportMapKey": "aa_65__0|*|",
+              "exportMapKey": "8 * aa_65__0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -3342,7 +4765,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_66__0",
-              "exportMapKey": "aa_66__0|*|",
+              "exportMapKey": "8 * aa_66__0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -3362,7 +4785,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_67__0",
-              "exportMapKey": "aa_67__0|*|",
+              "exportMapKey": "8 * aa_67__0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -3382,7 +4805,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_68__0",
-              "exportMapKey": "aa_68__0|*|",
+              "exportMapKey": "8 * aa_68__0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -3402,29 +4825,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_69__0",
-              "exportMapKey": "aa_69__0|*|",
+              "exportMapKey": "8 * aa_69__0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "aa_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_7__0",
-              "exportMapKey": "aa_7__0|*|",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -3442,7 +4845,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_70__0",
-              "exportMapKey": "aa_70__0|*|",
+              "exportMapKey": "8 * aa_70__0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -3462,7 +4865,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_71__0",
-              "exportMapKey": "aa_71__0|*|",
+              "exportMapKey": "8 * aa_71__0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -3482,7 +4885,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_72__0",
-              "exportMapKey": "aa_72__0|*|",
+              "exportMapKey": "8 * aa_72__0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -3502,7 +4905,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_73__0",
-              "exportMapKey": "aa_73__0|*|",
+              "exportMapKey": "8 * aa_73__0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -3522,7 +4925,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_74__0",
-              "exportMapKey": "aa_74__0|*|",
+              "exportMapKey": "8 * aa_74__0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -3542,7 +4945,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_75__0",
-              "exportMapKey": "aa_75__0|*|",
+              "exportMapKey": "8 * aa_75__0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -3562,7 +4965,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_76__0",
-              "exportMapKey": "aa_76__0|*|",
+              "exportMapKey": "8 * aa_76__0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -3582,7 +4985,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_77__0",
-              "exportMapKey": "aa_77__0|*|",
+              "exportMapKey": "8 * aa_77__0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -3602,7 +5005,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_78__0",
-              "exportMapKey": "aa_78__0|*|",
+              "exportMapKey": "8 * aa_78__0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -3622,29 +5025,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_79__0",
-              "exportMapKey": "aa_79__0|*|",
+              "exportMapKey": "8 * aa_79__0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
-            }
-          },
-          {
-            "name": "aa_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_8__0",
-              "exportMapKey": "aa_8__0|*|",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
             }
           },
           {
@@ -3662,7 +5045,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_80__0",
-              "exportMapKey": "aa_80__0|*|",
+              "exportMapKey": "8 * aa_80__0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -3682,7 +5065,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_81__0",
-              "exportMapKey": "aa_81__0|*|",
+              "exportMapKey": "8 * aa_81__0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -3702,7 +5085,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_82__0",
-              "exportMapKey": "aa_82__0|*|",
+              "exportMapKey": "8 * aa_82__0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -3722,7 +5105,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_83__0",
-              "exportMapKey": "aa_83__0|*|",
+              "exportMapKey": "8 * aa_83__0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -3742,7 +5125,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_84__0",
-              "exportMapKey": "aa_84__0|*|",
+              "exportMapKey": "8 * aa_84__0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -3762,7 +5145,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_85__0",
-              "exportMapKey": "aa_85__0|*|",
+              "exportMapKey": "8 * aa_85__0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -3782,7 +5165,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_86__0",
-              "exportMapKey": "aa_86__0|*|",
+              "exportMapKey": "8 * aa_86__0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -3802,7 +5185,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_87__0",
-              "exportMapKey": "aa_87__0|*|",
+              "exportMapKey": "8 * aa_87__0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -3822,7 +5205,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_88__0",
-              "exportMapKey": "aa_88__0|*|",
+              "exportMapKey": "8 * aa_88__0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -3842,29 +5225,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_89__0",
-              "exportMapKey": "aa_89__0|*|",
+              "exportMapKey": "8 * aa_89__0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "aa_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_9__0",
-              "exportMapKey": "aa_9__0|*|",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -3882,7 +5245,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_90__0",
-              "exportMapKey": "aa_90__0|*|",
+              "exportMapKey": "8 * aa_90__0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -3902,7 +5265,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_91__0",
-              "exportMapKey": "aa_91__0|*|",
+              "exportMapKey": "8 * aa_91__0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -3922,7 +5285,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_92__0",
-              "exportMapKey": "aa_92__0|*|",
+              "exportMapKey": "8 * aa_92__0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -3942,7 +5305,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_93__0",
-              "exportMapKey": "aa_93__0|*|",
+              "exportMapKey": "8 * aa_93__0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -3962,7 +5325,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_94__0",
-              "exportMapKey": "aa_94__0|*|",
+              "exportMapKey": "8 * aa_94__0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -3982,7 +5345,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_95__0",
-              "exportMapKey": "aa_95__0|*|",
+              "exportMapKey": "8 * aa_95__0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -4002,7 +5365,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_96__0",
-              "exportMapKey": "aa_96__0|*|",
+              "exportMapKey": "8 * aa_96__0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -4022,7 +5385,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_97__0",
-              "exportMapKey": "aa_97__0|*|",
+              "exportMapKey": "8 * aa_97__0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -4042,7 +5405,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_98__0",
-              "exportMapKey": "aa_98__0|*|",
+              "exportMapKey": "8 * aa_98__0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -4062,7 +5425,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_99__0",
-              "exportMapKey": "aa_99__0|*|",
+              "exportMapKey": "8 * aa_99__0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -4077,7 +5440,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_0__0",
-              "exportMapKey": "depA_0__0|*|",
+              "exportMapKey": "9 * depA_0__0 ",
               "fileName": "/node_modules/dep-a/file_0.ts",
               "isPackageJsonImport": true
             }
@@ -4092,158 +5455,8 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_1__0",
-              "exportMapKey": "depA_1__0|*|",
+              "exportMapKey": "9 * depA_1__0 ",
               "fileName": "/node_modules/dep-a/file_1.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_10__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_10",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_10__0",
-              "exportMapKey": "depA_10__0|*|",
-              "fileName": "/node_modules/dep-a/file_10.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_11__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_11",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_11__0",
-              "exportMapKey": "depA_11__0|*|",
-              "fileName": "/node_modules/dep-a/file_11.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_12__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_12",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_12__0",
-              "exportMapKey": "depA_12__0|*|",
-              "fileName": "/node_modules/dep-a/file_12.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_13__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_13",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_13__0",
-              "exportMapKey": "depA_13__0|*|",
-              "fileName": "/node_modules/dep-a/file_13.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_14__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_14",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_14__0",
-              "exportMapKey": "depA_14__0|*|",
-              "fileName": "/node_modules/dep-a/file_14.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_15__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_15",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_15__0",
-              "exportMapKey": "depA_15__0|*|",
-              "fileName": "/node_modules/dep-a/file_15.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_16__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_16",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_16__0",
-              "exportMapKey": "depA_16__0|*|",
-              "fileName": "/node_modules/dep-a/file_16.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_17__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_17",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_17__0",
-              "exportMapKey": "depA_17__0|*|",
-              "fileName": "/node_modules/dep-a/file_17.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_18__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_18",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_18__0",
-              "exportMapKey": "depA_18__0|*|",
-              "fileName": "/node_modules/dep-a/file_18.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_19__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_19",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_19__0",
-              "exportMapKey": "depA_19__0|*|",
-              "fileName": "/node_modules/dep-a/file_19.ts",
               "isPackageJsonImport": true
             }
           },
@@ -4257,158 +5470,8 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_2__0",
-              "exportMapKey": "depA_2__0|*|",
+              "exportMapKey": "9 * depA_2__0 ",
               "fileName": "/node_modules/dep-a/file_2.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_20__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_20",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_20__0",
-              "exportMapKey": "depA_20__0|*|",
-              "fileName": "/node_modules/dep-a/file_20.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_21__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_21",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_21__0",
-              "exportMapKey": "depA_21__0|*|",
-              "fileName": "/node_modules/dep-a/file_21.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_22__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_22",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_22__0",
-              "exportMapKey": "depA_22__0|*|",
-              "fileName": "/node_modules/dep-a/file_22.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_23__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_23",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_23__0",
-              "exportMapKey": "depA_23__0|*|",
-              "fileName": "/node_modules/dep-a/file_23.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_24__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_24",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_24__0",
-              "exportMapKey": "depA_24__0|*|",
-              "fileName": "/node_modules/dep-a/file_24.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_25__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_25",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_25__0",
-              "exportMapKey": "depA_25__0|*|",
-              "fileName": "/node_modules/dep-a/file_25.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_26__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_26",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_26__0",
-              "exportMapKey": "depA_26__0|*|",
-              "fileName": "/node_modules/dep-a/file_26.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_27__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_27",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_27__0",
-              "exportMapKey": "depA_27__0|*|",
-              "fileName": "/node_modules/dep-a/file_27.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_28__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_28",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_28__0",
-              "exportMapKey": "depA_28__0|*|",
-              "fileName": "/node_modules/dep-a/file_28.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_29__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_29",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_29__0",
-              "exportMapKey": "depA_29__0|*|",
-              "fileName": "/node_modules/dep-a/file_29.ts",
               "isPackageJsonImport": true
             }
           },
@@ -4422,158 +5485,8 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_3__0",
-              "exportMapKey": "depA_3__0|*|",
+              "exportMapKey": "9 * depA_3__0 ",
               "fileName": "/node_modules/dep-a/file_3.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_30__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_30",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_30__0",
-              "exportMapKey": "depA_30__0|*|",
-              "fileName": "/node_modules/dep-a/file_30.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_31__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_31",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_31__0",
-              "exportMapKey": "depA_31__0|*|",
-              "fileName": "/node_modules/dep-a/file_31.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_32__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_32",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_32__0",
-              "exportMapKey": "depA_32__0|*|",
-              "fileName": "/node_modules/dep-a/file_32.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_33__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_33",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_33__0",
-              "exportMapKey": "depA_33__0|*|",
-              "fileName": "/node_modules/dep-a/file_33.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_34__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_34",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_34__0",
-              "exportMapKey": "depA_34__0|*|",
-              "fileName": "/node_modules/dep-a/file_34.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_35__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_35",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_35__0",
-              "exportMapKey": "depA_35__0|*|",
-              "fileName": "/node_modules/dep-a/file_35.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_36__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_36",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_36__0",
-              "exportMapKey": "depA_36__0|*|",
-              "fileName": "/node_modules/dep-a/file_36.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_37__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_37",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_37__0",
-              "exportMapKey": "depA_37__0|*|",
-              "fileName": "/node_modules/dep-a/file_37.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_38__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_38",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_38__0",
-              "exportMapKey": "depA_38__0|*|",
-              "fileName": "/node_modules/dep-a/file_38.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_39__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_39",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_39__0",
-              "exportMapKey": "depA_39__0|*|",
-              "fileName": "/node_modules/dep-a/file_39.ts",
               "isPackageJsonImport": true
             }
           },
@@ -4587,158 +5500,8 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_4__0",
-              "exportMapKey": "depA_4__0|*|",
+              "exportMapKey": "9 * depA_4__0 ",
               "fileName": "/node_modules/dep-a/file_4.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_40__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_40",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_40__0",
-              "exportMapKey": "depA_40__0|*|",
-              "fileName": "/node_modules/dep-a/file_40.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_41__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_41",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_41__0",
-              "exportMapKey": "depA_41__0|*|",
-              "fileName": "/node_modules/dep-a/file_41.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_42__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_42",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_42__0",
-              "exportMapKey": "depA_42__0|*|",
-              "fileName": "/node_modules/dep-a/file_42.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_43__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_43",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_43__0",
-              "exportMapKey": "depA_43__0|*|",
-              "fileName": "/node_modules/dep-a/file_43.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_44__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_44",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_44__0",
-              "exportMapKey": "depA_44__0|*|",
-              "fileName": "/node_modules/dep-a/file_44.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_45__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_45",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_45__0",
-              "exportMapKey": "depA_45__0|*|",
-              "fileName": "/node_modules/dep-a/file_45.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_46__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_46",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_46__0",
-              "exportMapKey": "depA_46__0|*|",
-              "fileName": "/node_modules/dep-a/file_46.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_47__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_47",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_47__0",
-              "exportMapKey": "depA_47__0|*|",
-              "fileName": "/node_modules/dep-a/file_47.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_48__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_48",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_48__0",
-              "exportMapKey": "depA_48__0|*|",
-              "fileName": "/node_modules/dep-a/file_48.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_49__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "/node_modules/dep-a/file_49",
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_49__0",
-              "exportMapKey": "depA_49__0|*|",
-              "fileName": "/node_modules/dep-a/file_49.ts",
               "isPackageJsonImport": true
             }
           },
@@ -4752,7 +5515,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_5__0",
-              "exportMapKey": "depA_5__0|*|",
+              "exportMapKey": "9 * depA_5__0 ",
               "fileName": "/node_modules/dep-a/file_5.ts",
               "isPackageJsonImport": true
             }
@@ -4767,7 +5530,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_6__0",
-              "exportMapKey": "depA_6__0|*|",
+              "exportMapKey": "9 * depA_6__0 ",
               "fileName": "/node_modules/dep-a/file_6.ts",
               "isPackageJsonImport": true
             }
@@ -4782,7 +5545,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_7__0",
-              "exportMapKey": "depA_7__0|*|",
+              "exportMapKey": "9 * depA_7__0 ",
               "fileName": "/node_modules/dep-a/file_7.ts",
               "isPackageJsonImport": true
             }
@@ -4797,7 +5560,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_8__0",
-              "exportMapKey": "depA_8__0|*|",
+              "exportMapKey": "9 * depA_8__0 ",
               "fileName": "/node_modules/dep-a/file_8.ts",
               "isPackageJsonImport": true
             }
@@ -4812,8 +5575,608 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_9__0",
-              "exportMapKey": "depA_9__0|*|",
+              "exportMapKey": "9 * depA_9__0 ",
               "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_10",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_10__0",
+              "exportMapKey": "10 * depA_10__0 ",
+              "fileName": "/node_modules/dep-a/file_10.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_11",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_11__0",
+              "exportMapKey": "10 * depA_11__0 ",
+              "fileName": "/node_modules/dep-a/file_11.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_12",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_12__0",
+              "exportMapKey": "10 * depA_12__0 ",
+              "fileName": "/node_modules/dep-a/file_12.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_13",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_13__0",
+              "exportMapKey": "10 * depA_13__0 ",
+              "fileName": "/node_modules/dep-a/file_13.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_14",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_14__0",
+              "exportMapKey": "10 * depA_14__0 ",
+              "fileName": "/node_modules/dep-a/file_14.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_15",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_15__0",
+              "exportMapKey": "10 * depA_15__0 ",
+              "fileName": "/node_modules/dep-a/file_15.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_16",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_16__0",
+              "exportMapKey": "10 * depA_16__0 ",
+              "fileName": "/node_modules/dep-a/file_16.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_17",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_17__0",
+              "exportMapKey": "10 * depA_17__0 ",
+              "fileName": "/node_modules/dep-a/file_17.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_18",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_18__0",
+              "exportMapKey": "10 * depA_18__0 ",
+              "fileName": "/node_modules/dep-a/file_18.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_19",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_19__0",
+              "exportMapKey": "10 * depA_19__0 ",
+              "fileName": "/node_modules/dep-a/file_19.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_20",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_20__0",
+              "exportMapKey": "10 * depA_20__0 ",
+              "fileName": "/node_modules/dep-a/file_20.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_21",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_21__0",
+              "exportMapKey": "10 * depA_21__0 ",
+              "fileName": "/node_modules/dep-a/file_21.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_22",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_22__0",
+              "exportMapKey": "10 * depA_22__0 ",
+              "fileName": "/node_modules/dep-a/file_22.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_23",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_23__0",
+              "exportMapKey": "10 * depA_23__0 ",
+              "fileName": "/node_modules/dep-a/file_23.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_24",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_24__0",
+              "exportMapKey": "10 * depA_24__0 ",
+              "fileName": "/node_modules/dep-a/file_24.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_25",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_25__0",
+              "exportMapKey": "10 * depA_25__0 ",
+              "fileName": "/node_modules/dep-a/file_25.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_26",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_26__0",
+              "exportMapKey": "10 * depA_26__0 ",
+              "fileName": "/node_modules/dep-a/file_26.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_27",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_27__0",
+              "exportMapKey": "10 * depA_27__0 ",
+              "fileName": "/node_modules/dep-a/file_27.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_28",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_28__0",
+              "exportMapKey": "10 * depA_28__0 ",
+              "fileName": "/node_modules/dep-a/file_28.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_29",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_29__0",
+              "exportMapKey": "10 * depA_29__0 ",
+              "fileName": "/node_modules/dep-a/file_29.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_30",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_30__0",
+              "exportMapKey": "10 * depA_30__0 ",
+              "fileName": "/node_modules/dep-a/file_30.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_31",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_31__0",
+              "exportMapKey": "10 * depA_31__0 ",
+              "fileName": "/node_modules/dep-a/file_31.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_32",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_32__0",
+              "exportMapKey": "10 * depA_32__0 ",
+              "fileName": "/node_modules/dep-a/file_32.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_33",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_33__0",
+              "exportMapKey": "10 * depA_33__0 ",
+              "fileName": "/node_modules/dep-a/file_33.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_34",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_34__0",
+              "exportMapKey": "10 * depA_34__0 ",
+              "fileName": "/node_modules/dep-a/file_34.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_35",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_35__0",
+              "exportMapKey": "10 * depA_35__0 ",
+              "fileName": "/node_modules/dep-a/file_35.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_36",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_36__0",
+              "exportMapKey": "10 * depA_36__0 ",
+              "fileName": "/node_modules/dep-a/file_36.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_37",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_37__0",
+              "exportMapKey": "10 * depA_37__0 ",
+              "fileName": "/node_modules/dep-a/file_37.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_38",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_38__0",
+              "exportMapKey": "10 * depA_38__0 ",
+              "fileName": "/node_modules/dep-a/file_38.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_39",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_39__0",
+              "exportMapKey": "10 * depA_39__0 ",
+              "fileName": "/node_modules/dep-a/file_39.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_40",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_40__0",
+              "exportMapKey": "10 * depA_40__0 ",
+              "fileName": "/node_modules/dep-a/file_40.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_41",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_41__0",
+              "exportMapKey": "10 * depA_41__0 ",
+              "fileName": "/node_modules/dep-a/file_41.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_42",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_42__0",
+              "exportMapKey": "10 * depA_42__0 ",
+              "fileName": "/node_modules/dep-a/file_42.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_43",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_43__0",
+              "exportMapKey": "10 * depA_43__0 ",
+              "fileName": "/node_modules/dep-a/file_43.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_44",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_44__0",
+              "exportMapKey": "10 * depA_44__0 ",
+              "fileName": "/node_modules/dep-a/file_44.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_45",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_45__0",
+              "exportMapKey": "10 * depA_45__0 ",
+              "fileName": "/node_modules/dep-a/file_45.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_46",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_46__0",
+              "exportMapKey": "10 * depA_46__0 ",
+              "fileName": "/node_modules/dep-a/file_46.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_47",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_47__0",
+              "exportMapKey": "10 * depA_47__0 ",
+              "fileName": "/node_modules/dep-a/file_47.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_48",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_48__0",
+              "exportMapKey": "10 * depA_48__0 ",
+              "fileName": "/node_modules/dep-a/file_48.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "/node_modules/dep-a/file_49",
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_49__0",
+              "exportMapKey": "10 * depA_49__0 ",
+              "fileName": "/node_modules/dep-a/file_49.ts",
               "isPackageJsonImport": true
             }
           },
@@ -4827,7 +6190,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "default",
-              "exportMapKey": "main|*|",
+              "exportMapKey": "4 * main ",
               "fileName": "/node_modules/dep-a/index.d.ts",
               "isPackageJsonImport": true
             }
@@ -4837,6 +6200,16 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 2
+    projectProgramVersion: 1
+    dirty: false *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -4873,6 +6246,626 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3 *changed*
+    projectProgramVersion: 1
+    dirty: true *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
+
+ScriptInfos::
+/index.ts (Open) *changed*
+    version: SVC-1-2 *changed*
+    containingProjects: 1
+        /tsconfig.json *default*
+/lib/a_0.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_1.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_10.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_11.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_12.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_13.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_14.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_15.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_16.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_17.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_18.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_19.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_2.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_20.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_21.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_22.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_23.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_24.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_25.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_26.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_27.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_28.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_29.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_3.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_30.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_31.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_32.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_33.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_34.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_35.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_36.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_37.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_38.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_39.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_4.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_40.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_41.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_42.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_43.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_44.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_45.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_46.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_47.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_48.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_49.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_5.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_50.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_51.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_52.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_53.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_54.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_55.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_56.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_57.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_58.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_59.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_6.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_60.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_61.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_62.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_63.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_64.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_65.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_66.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_67.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_68.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_69.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_7.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_70.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_71.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_72.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_73.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_74.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_75.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_76.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_77.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_78.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_79.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_8.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_80.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_81.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_82.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_83.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_84.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_85.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_86.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_87.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_88.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_89.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_9.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_90.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_91.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_92.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_93.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_94.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_95.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_96.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_97.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_98.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/lib/a_99.ts
+    version: Text-1
+    containingProjects: 1
+        /tsconfig.json
+/node_modules/dep-a/file_0.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_1.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_10.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_11.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_12.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_13.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_14.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_15.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_16.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_17.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_18.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_19.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_2.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_20.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_21.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_22.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_23.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_24.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_25.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_26.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_27.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_28.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_29.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_3.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_30.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_31.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_32.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_33.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_34.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_35.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_36.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_37.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_38.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_39.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_4.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_40.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_41.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_42.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_43.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_44.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_45.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_46.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_47.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_48.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_49.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_5.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_6.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_7.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_8.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/file_9.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+/node_modules/dep-a/index.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/autoImportProviderProject1*
+
 Before request
 
 Info seq  [hh:mm:ss:mss] request:
@@ -4888,7 +6881,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json Version: 3 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (101)
 	/index.ts SVC-1-2 "a_"
@@ -5387,6 +7380,12 @@ Info seq  [hh:mm:ss:mss] response:
             "sortText": "15"
           },
           {
+            "name": "using",
+            "kind": "keyword",
+            "kindModifiers": "",
+            "sortText": "15"
+          },
+          {
             "name": "var",
             "kind": "keyword",
             "kindModifiers": "",
@@ -5431,7 +7430,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_0__0",
-              "exportMapKey": "aa_0__0|*|",
+              "exportMapKey": "7 * aa_0__0 ",
               "moduleSpecifier": "./lib/a_0",
               "fileName": "/lib/a_0.ts"
             }
@@ -5451,9 +7450,169 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_1__0",
-              "exportMapKey": "aa_1__0|*|",
+              "exportMapKey": "7 * aa_1__0 ",
               "moduleSpecifier": "./lib/a_1",
               "fileName": "/lib/a_1.ts"
+            }
+          },
+          {
+            "name": "aa_2__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_2",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_2",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_2__0",
+              "exportMapKey": "7 * aa_2__0 ",
+              "moduleSpecifier": "./lib/a_2",
+              "fileName": "/lib/a_2.ts"
+            }
+          },
+          {
+            "name": "aa_3__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_3",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_3",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_3__0",
+              "exportMapKey": "7 * aa_3__0 ",
+              "moduleSpecifier": "./lib/a_3",
+              "fileName": "/lib/a_3.ts"
+            }
+          },
+          {
+            "name": "aa_4__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_4",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_4",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_4__0",
+              "exportMapKey": "7 * aa_4__0 ",
+              "moduleSpecifier": "./lib/a_4",
+              "fileName": "/lib/a_4.ts"
+            }
+          },
+          {
+            "name": "aa_5__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_5",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_5",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_5__0",
+              "exportMapKey": "7 * aa_5__0 ",
+              "moduleSpecifier": "./lib/a_5",
+              "fileName": "/lib/a_5.ts"
+            }
+          },
+          {
+            "name": "aa_6__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_6",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_6",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_6__0",
+              "exportMapKey": "7 * aa_6__0 ",
+              "moduleSpecifier": "./lib/a_6",
+              "fileName": "/lib/a_6.ts"
+            }
+          },
+          {
+            "name": "aa_7__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_7",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_7",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_7__0",
+              "exportMapKey": "7 * aa_7__0 ",
+              "moduleSpecifier": "./lib/a_7",
+              "fileName": "/lib/a_7.ts"
+            }
+          },
+          {
+            "name": "aa_8__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_8",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_8",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_8__0",
+              "exportMapKey": "7 * aa_8__0 ",
+              "moduleSpecifier": "./lib/a_8",
+              "fileName": "/lib/a_8.ts"
+            }
+          },
+          {
+            "name": "aa_9__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "./lib/a_9",
+            "sourceDisplay": [
+              {
+                "text": "./lib/a_9",
+                "kind": "text"
+              }
+            ],
+            "data": {
+              "exportName": "aa_9__0",
+              "exportMapKey": "7 * aa_9__0 ",
+              "moduleSpecifier": "./lib/a_9",
+              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -5471,7 +7630,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_10__0",
-              "exportMapKey": "aa_10__0|*|",
+              "exportMapKey": "8 * aa_10__0 ",
               "moduleSpecifier": "./lib/a_10",
               "fileName": "/lib/a_10.ts"
             }
@@ -5491,7 +7650,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_11__0",
-              "exportMapKey": "aa_11__0|*|",
+              "exportMapKey": "8 * aa_11__0 ",
               "moduleSpecifier": "./lib/a_11",
               "fileName": "/lib/a_11.ts"
             }
@@ -5511,7 +7670,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_12__0",
-              "exportMapKey": "aa_12__0|*|",
+              "exportMapKey": "8 * aa_12__0 ",
               "moduleSpecifier": "./lib/a_12",
               "fileName": "/lib/a_12.ts"
             }
@@ -5531,7 +7690,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_13__0",
-              "exportMapKey": "aa_13__0|*|",
+              "exportMapKey": "8 * aa_13__0 ",
               "moduleSpecifier": "./lib/a_13",
               "fileName": "/lib/a_13.ts"
             }
@@ -5551,7 +7710,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_14__0",
-              "exportMapKey": "aa_14__0|*|",
+              "exportMapKey": "8 * aa_14__0 ",
               "moduleSpecifier": "./lib/a_14",
               "fileName": "/lib/a_14.ts"
             }
@@ -5571,7 +7730,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_15__0",
-              "exportMapKey": "aa_15__0|*|",
+              "exportMapKey": "8 * aa_15__0 ",
               "moduleSpecifier": "./lib/a_15",
               "fileName": "/lib/a_15.ts"
             }
@@ -5591,7 +7750,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_16__0",
-              "exportMapKey": "aa_16__0|*|",
+              "exportMapKey": "8 * aa_16__0 ",
               "moduleSpecifier": "./lib/a_16",
               "fileName": "/lib/a_16.ts"
             }
@@ -5611,7 +7770,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_17__0",
-              "exportMapKey": "aa_17__0|*|",
+              "exportMapKey": "8 * aa_17__0 ",
               "moduleSpecifier": "./lib/a_17",
               "fileName": "/lib/a_17.ts"
             }
@@ -5631,7 +7790,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_18__0",
-              "exportMapKey": "aa_18__0|*|",
+              "exportMapKey": "8 * aa_18__0 ",
               "moduleSpecifier": "./lib/a_18",
               "fileName": "/lib/a_18.ts"
             }
@@ -5651,29 +7810,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_19__0",
-              "exportMapKey": "aa_19__0|*|",
+              "exportMapKey": "8 * aa_19__0 ",
               "moduleSpecifier": "./lib/a_19",
               "fileName": "/lib/a_19.ts"
-            }
-          },
-          {
-            "name": "aa_2__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_2",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_2",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_2__0",
-              "exportMapKey": "aa_2__0|*|",
-              "moduleSpecifier": "./lib/a_2",
-              "fileName": "/lib/a_2.ts"
             }
           },
           {
@@ -5691,7 +7830,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_20__0",
-              "exportMapKey": "aa_20__0|*|",
+              "exportMapKey": "8 * aa_20__0 ",
               "moduleSpecifier": "./lib/a_20",
               "fileName": "/lib/a_20.ts"
             }
@@ -5711,7 +7850,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_21__0",
-              "exportMapKey": "aa_21__0|*|",
+              "exportMapKey": "8 * aa_21__0 ",
               "moduleSpecifier": "./lib/a_21",
               "fileName": "/lib/a_21.ts"
             }
@@ -5731,7 +7870,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_22__0",
-              "exportMapKey": "aa_22__0|*|",
+              "exportMapKey": "8 * aa_22__0 ",
               "moduleSpecifier": "./lib/a_22",
               "fileName": "/lib/a_22.ts"
             }
@@ -5751,7 +7890,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_23__0",
-              "exportMapKey": "aa_23__0|*|",
+              "exportMapKey": "8 * aa_23__0 ",
               "moduleSpecifier": "./lib/a_23",
               "fileName": "/lib/a_23.ts"
             }
@@ -5771,7 +7910,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_24__0",
-              "exportMapKey": "aa_24__0|*|",
+              "exportMapKey": "8 * aa_24__0 ",
               "moduleSpecifier": "./lib/a_24",
               "fileName": "/lib/a_24.ts"
             }
@@ -5791,7 +7930,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_25__0",
-              "exportMapKey": "aa_25__0|*|",
+              "exportMapKey": "8 * aa_25__0 ",
               "moduleSpecifier": "./lib/a_25",
               "fileName": "/lib/a_25.ts"
             }
@@ -5811,7 +7950,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_26__0",
-              "exportMapKey": "aa_26__0|*|",
+              "exportMapKey": "8 * aa_26__0 ",
               "moduleSpecifier": "./lib/a_26",
               "fileName": "/lib/a_26.ts"
             }
@@ -5831,7 +7970,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_27__0",
-              "exportMapKey": "aa_27__0|*|",
+              "exportMapKey": "8 * aa_27__0 ",
               "moduleSpecifier": "./lib/a_27",
               "fileName": "/lib/a_27.ts"
             }
@@ -5851,7 +7990,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_28__0",
-              "exportMapKey": "aa_28__0|*|",
+              "exportMapKey": "8 * aa_28__0 ",
               "moduleSpecifier": "./lib/a_28",
               "fileName": "/lib/a_28.ts"
             }
@@ -5871,29 +8010,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_29__0",
-              "exportMapKey": "aa_29__0|*|",
+              "exportMapKey": "8 * aa_29__0 ",
               "moduleSpecifier": "./lib/a_29",
               "fileName": "/lib/a_29.ts"
-            }
-          },
-          {
-            "name": "aa_3__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_3",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_3",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_3__0",
-              "exportMapKey": "aa_3__0|*|",
-              "moduleSpecifier": "./lib/a_3",
-              "fileName": "/lib/a_3.ts"
             }
           },
           {
@@ -5911,7 +8030,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_30__0",
-              "exportMapKey": "aa_30__0|*|",
+              "exportMapKey": "8 * aa_30__0 ",
               "moduleSpecifier": "./lib/a_30",
               "fileName": "/lib/a_30.ts"
             }
@@ -5931,7 +8050,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_31__0",
-              "exportMapKey": "aa_31__0|*|",
+              "exportMapKey": "8 * aa_31__0 ",
               "moduleSpecifier": "./lib/a_31",
               "fileName": "/lib/a_31.ts"
             }
@@ -5951,7 +8070,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_32__0",
-              "exportMapKey": "aa_32__0|*|",
+              "exportMapKey": "8 * aa_32__0 ",
               "moduleSpecifier": "./lib/a_32",
               "fileName": "/lib/a_32.ts"
             }
@@ -5971,7 +8090,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_33__0",
-              "exportMapKey": "aa_33__0|*|",
+              "exportMapKey": "8 * aa_33__0 ",
               "moduleSpecifier": "./lib/a_33",
               "fileName": "/lib/a_33.ts"
             }
@@ -5991,7 +8110,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_34__0",
-              "exportMapKey": "aa_34__0|*|",
+              "exportMapKey": "8 * aa_34__0 ",
               "moduleSpecifier": "./lib/a_34",
               "fileName": "/lib/a_34.ts"
             }
@@ -6011,7 +8130,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_35__0",
-              "exportMapKey": "aa_35__0|*|",
+              "exportMapKey": "8 * aa_35__0 ",
               "moduleSpecifier": "./lib/a_35",
               "fileName": "/lib/a_35.ts"
             }
@@ -6031,7 +8150,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_36__0",
-              "exportMapKey": "aa_36__0|*|",
+              "exportMapKey": "8 * aa_36__0 ",
               "moduleSpecifier": "./lib/a_36",
               "fileName": "/lib/a_36.ts"
             }
@@ -6051,7 +8170,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_37__0",
-              "exportMapKey": "aa_37__0|*|",
+              "exportMapKey": "8 * aa_37__0 ",
               "moduleSpecifier": "./lib/a_37",
               "fileName": "/lib/a_37.ts"
             }
@@ -6071,7 +8190,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_38__0",
-              "exportMapKey": "aa_38__0|*|",
+              "exportMapKey": "8 * aa_38__0 ",
               "moduleSpecifier": "./lib/a_38",
               "fileName": "/lib/a_38.ts"
             }
@@ -6091,29 +8210,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_39__0",
-              "exportMapKey": "aa_39__0|*|",
+              "exportMapKey": "8 * aa_39__0 ",
               "moduleSpecifier": "./lib/a_39",
               "fileName": "/lib/a_39.ts"
-            }
-          },
-          {
-            "name": "aa_4__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_4",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_4",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_4__0",
-              "exportMapKey": "aa_4__0|*|",
-              "moduleSpecifier": "./lib/a_4",
-              "fileName": "/lib/a_4.ts"
             }
           },
           {
@@ -6131,7 +8230,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_40__0",
-              "exportMapKey": "aa_40__0|*|",
+              "exportMapKey": "8 * aa_40__0 ",
               "moduleSpecifier": "./lib/a_40",
               "fileName": "/lib/a_40.ts"
             }
@@ -6151,7 +8250,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_41__0",
-              "exportMapKey": "aa_41__0|*|",
+              "exportMapKey": "8 * aa_41__0 ",
               "moduleSpecifier": "./lib/a_41",
               "fileName": "/lib/a_41.ts"
             }
@@ -6171,7 +8270,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_42__0",
-              "exportMapKey": "aa_42__0|*|",
+              "exportMapKey": "8 * aa_42__0 ",
               "moduleSpecifier": "./lib/a_42",
               "fileName": "/lib/a_42.ts"
             }
@@ -6191,7 +8290,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_43__0",
-              "exportMapKey": "aa_43__0|*|",
+              "exportMapKey": "8 * aa_43__0 ",
               "moduleSpecifier": "./lib/a_43",
               "fileName": "/lib/a_43.ts"
             }
@@ -6211,7 +8310,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_44__0",
-              "exportMapKey": "aa_44__0|*|",
+              "exportMapKey": "8 * aa_44__0 ",
               "moduleSpecifier": "./lib/a_44",
               "fileName": "/lib/a_44.ts"
             }
@@ -6231,7 +8330,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_45__0",
-              "exportMapKey": "aa_45__0|*|",
+              "exportMapKey": "8 * aa_45__0 ",
               "moduleSpecifier": "./lib/a_45",
               "fileName": "/lib/a_45.ts"
             }
@@ -6251,7 +8350,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_46__0",
-              "exportMapKey": "aa_46__0|*|",
+              "exportMapKey": "8 * aa_46__0 ",
               "moduleSpecifier": "./lib/a_46",
               "fileName": "/lib/a_46.ts"
             }
@@ -6271,7 +8370,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_47__0",
-              "exportMapKey": "aa_47__0|*|",
+              "exportMapKey": "8 * aa_47__0 ",
               "moduleSpecifier": "./lib/a_47",
               "fileName": "/lib/a_47.ts"
             }
@@ -6291,7 +8390,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_48__0",
-              "exportMapKey": "aa_48__0|*|",
+              "exportMapKey": "8 * aa_48__0 ",
               "moduleSpecifier": "./lib/a_48",
               "fileName": "/lib/a_48.ts"
             }
@@ -6311,29 +8410,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_49__0",
-              "exportMapKey": "aa_49__0|*|",
+              "exportMapKey": "8 * aa_49__0 ",
               "moduleSpecifier": "./lib/a_49",
               "fileName": "/lib/a_49.ts"
-            }
-          },
-          {
-            "name": "aa_5__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_5",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_5",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_5__0",
-              "exportMapKey": "aa_5__0|*|",
-              "moduleSpecifier": "./lib/a_5",
-              "fileName": "/lib/a_5.ts"
             }
           },
           {
@@ -6351,7 +8430,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_50__0",
-              "exportMapKey": "aa_50__0|*|",
+              "exportMapKey": "8 * aa_50__0 ",
               "moduleSpecifier": "./lib/a_50",
               "fileName": "/lib/a_50.ts"
             }
@@ -6371,7 +8450,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_51__0",
-              "exportMapKey": "aa_51__0|*|",
+              "exportMapKey": "8 * aa_51__0 ",
               "moduleSpecifier": "./lib/a_51",
               "fileName": "/lib/a_51.ts"
             }
@@ -6391,7 +8470,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_52__0",
-              "exportMapKey": "aa_52__0|*|",
+              "exportMapKey": "8 * aa_52__0 ",
               "moduleSpecifier": "./lib/a_52",
               "fileName": "/lib/a_52.ts"
             }
@@ -6411,7 +8490,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_53__0",
-              "exportMapKey": "aa_53__0|*|",
+              "exportMapKey": "8 * aa_53__0 ",
               "moduleSpecifier": "./lib/a_53",
               "fileName": "/lib/a_53.ts"
             }
@@ -6431,7 +8510,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_54__0",
-              "exportMapKey": "aa_54__0|*|",
+              "exportMapKey": "8 * aa_54__0 ",
               "moduleSpecifier": "./lib/a_54",
               "fileName": "/lib/a_54.ts"
             }
@@ -6451,7 +8530,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_55__0",
-              "exportMapKey": "aa_55__0|*|",
+              "exportMapKey": "8 * aa_55__0 ",
               "moduleSpecifier": "./lib/a_55",
               "fileName": "/lib/a_55.ts"
             }
@@ -6471,7 +8550,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_56__0",
-              "exportMapKey": "aa_56__0|*|",
+              "exportMapKey": "8 * aa_56__0 ",
               "moduleSpecifier": "./lib/a_56",
               "fileName": "/lib/a_56.ts"
             }
@@ -6491,7 +8570,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_57__0",
-              "exportMapKey": "aa_57__0|*|",
+              "exportMapKey": "8 * aa_57__0 ",
               "moduleSpecifier": "./lib/a_57",
               "fileName": "/lib/a_57.ts"
             }
@@ -6511,7 +8590,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_58__0",
-              "exportMapKey": "aa_58__0|*|",
+              "exportMapKey": "8 * aa_58__0 ",
               "moduleSpecifier": "./lib/a_58",
               "fileName": "/lib/a_58.ts"
             }
@@ -6531,29 +8610,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_59__0",
-              "exportMapKey": "aa_59__0|*|",
+              "exportMapKey": "8 * aa_59__0 ",
               "moduleSpecifier": "./lib/a_59",
               "fileName": "/lib/a_59.ts"
-            }
-          },
-          {
-            "name": "aa_6__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_6",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_6",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_6__0",
-              "exportMapKey": "aa_6__0|*|",
-              "moduleSpecifier": "./lib/a_6",
-              "fileName": "/lib/a_6.ts"
             }
           },
           {
@@ -6571,7 +8630,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_60__0",
-              "exportMapKey": "aa_60__0|*|",
+              "exportMapKey": "8 * aa_60__0 ",
               "moduleSpecifier": "./lib/a_60",
               "fileName": "/lib/a_60.ts"
             }
@@ -6591,7 +8650,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_61__0",
-              "exportMapKey": "aa_61__0|*|",
+              "exportMapKey": "8 * aa_61__0 ",
               "moduleSpecifier": "./lib/a_61",
               "fileName": "/lib/a_61.ts"
             }
@@ -6611,7 +8670,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_62__0",
-              "exportMapKey": "aa_62__0|*|",
+              "exportMapKey": "8 * aa_62__0 ",
               "moduleSpecifier": "./lib/a_62",
               "fileName": "/lib/a_62.ts"
             }
@@ -6631,7 +8690,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_63__0",
-              "exportMapKey": "aa_63__0|*|",
+              "exportMapKey": "8 * aa_63__0 ",
               "moduleSpecifier": "./lib/a_63",
               "fileName": "/lib/a_63.ts"
             }
@@ -6651,7 +8710,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_64__0",
-              "exportMapKey": "aa_64__0|*|",
+              "exportMapKey": "8 * aa_64__0 ",
               "moduleSpecifier": "./lib/a_64",
               "fileName": "/lib/a_64.ts"
             }
@@ -6671,7 +8730,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_65__0",
-              "exportMapKey": "aa_65__0|*|",
+              "exportMapKey": "8 * aa_65__0 ",
               "moduleSpecifier": "./lib/a_65",
               "fileName": "/lib/a_65.ts"
             }
@@ -6691,7 +8750,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_66__0",
-              "exportMapKey": "aa_66__0|*|",
+              "exportMapKey": "8 * aa_66__0 ",
               "moduleSpecifier": "./lib/a_66",
               "fileName": "/lib/a_66.ts"
             }
@@ -6711,7 +8770,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_67__0",
-              "exportMapKey": "aa_67__0|*|",
+              "exportMapKey": "8 * aa_67__0 ",
               "moduleSpecifier": "./lib/a_67",
               "fileName": "/lib/a_67.ts"
             }
@@ -6731,7 +8790,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_68__0",
-              "exportMapKey": "aa_68__0|*|",
+              "exportMapKey": "8 * aa_68__0 ",
               "moduleSpecifier": "./lib/a_68",
               "fileName": "/lib/a_68.ts"
             }
@@ -6751,29 +8810,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_69__0",
-              "exportMapKey": "aa_69__0|*|",
+              "exportMapKey": "8 * aa_69__0 ",
               "moduleSpecifier": "./lib/a_69",
               "fileName": "/lib/a_69.ts"
-            }
-          },
-          {
-            "name": "aa_7__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_7",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_7",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_7__0",
-              "exportMapKey": "aa_7__0|*|",
-              "moduleSpecifier": "./lib/a_7",
-              "fileName": "/lib/a_7.ts"
             }
           },
           {
@@ -6791,7 +8830,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_70__0",
-              "exportMapKey": "aa_70__0|*|",
+              "exportMapKey": "8 * aa_70__0 ",
               "moduleSpecifier": "./lib/a_70",
               "fileName": "/lib/a_70.ts"
             }
@@ -6811,7 +8850,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_71__0",
-              "exportMapKey": "aa_71__0|*|",
+              "exportMapKey": "8 * aa_71__0 ",
               "moduleSpecifier": "./lib/a_71",
               "fileName": "/lib/a_71.ts"
             }
@@ -6831,7 +8870,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_72__0",
-              "exportMapKey": "aa_72__0|*|",
+              "exportMapKey": "8 * aa_72__0 ",
               "moduleSpecifier": "./lib/a_72",
               "fileName": "/lib/a_72.ts"
             }
@@ -6851,7 +8890,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_73__0",
-              "exportMapKey": "aa_73__0|*|",
+              "exportMapKey": "8 * aa_73__0 ",
               "moduleSpecifier": "./lib/a_73",
               "fileName": "/lib/a_73.ts"
             }
@@ -6871,7 +8910,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_74__0",
-              "exportMapKey": "aa_74__0|*|",
+              "exportMapKey": "8 * aa_74__0 ",
               "moduleSpecifier": "./lib/a_74",
               "fileName": "/lib/a_74.ts"
             }
@@ -6891,7 +8930,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_75__0",
-              "exportMapKey": "aa_75__0|*|",
+              "exportMapKey": "8 * aa_75__0 ",
               "moduleSpecifier": "./lib/a_75",
               "fileName": "/lib/a_75.ts"
             }
@@ -6911,7 +8950,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_76__0",
-              "exportMapKey": "aa_76__0|*|",
+              "exportMapKey": "8 * aa_76__0 ",
               "moduleSpecifier": "./lib/a_76",
               "fileName": "/lib/a_76.ts"
             }
@@ -6931,7 +8970,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_77__0",
-              "exportMapKey": "aa_77__0|*|",
+              "exportMapKey": "8 * aa_77__0 ",
               "moduleSpecifier": "./lib/a_77",
               "fileName": "/lib/a_77.ts"
             }
@@ -6951,7 +8990,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_78__0",
-              "exportMapKey": "aa_78__0|*|",
+              "exportMapKey": "8 * aa_78__0 ",
               "moduleSpecifier": "./lib/a_78",
               "fileName": "/lib/a_78.ts"
             }
@@ -6971,29 +9010,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_79__0",
-              "exportMapKey": "aa_79__0|*|",
+              "exportMapKey": "8 * aa_79__0 ",
               "moduleSpecifier": "./lib/a_79",
               "fileName": "/lib/a_79.ts"
-            }
-          },
-          {
-            "name": "aa_8__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_8",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_8",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_8__0",
-              "exportMapKey": "aa_8__0|*|",
-              "moduleSpecifier": "./lib/a_8",
-              "fileName": "/lib/a_8.ts"
             }
           },
           {
@@ -7011,7 +9030,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_80__0",
-              "exportMapKey": "aa_80__0|*|",
+              "exportMapKey": "8 * aa_80__0 ",
               "moduleSpecifier": "./lib/a_80",
               "fileName": "/lib/a_80.ts"
             }
@@ -7031,7 +9050,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_81__0",
-              "exportMapKey": "aa_81__0|*|",
+              "exportMapKey": "8 * aa_81__0 ",
               "moduleSpecifier": "./lib/a_81",
               "fileName": "/lib/a_81.ts"
             }
@@ -7051,7 +9070,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_82__0",
-              "exportMapKey": "aa_82__0|*|",
+              "exportMapKey": "8 * aa_82__0 ",
               "moduleSpecifier": "./lib/a_82",
               "fileName": "/lib/a_82.ts"
             }
@@ -7071,7 +9090,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_83__0",
-              "exportMapKey": "aa_83__0|*|",
+              "exportMapKey": "8 * aa_83__0 ",
               "moduleSpecifier": "./lib/a_83",
               "fileName": "/lib/a_83.ts"
             }
@@ -7091,7 +9110,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_84__0",
-              "exportMapKey": "aa_84__0|*|",
+              "exportMapKey": "8 * aa_84__0 ",
               "moduleSpecifier": "./lib/a_84",
               "fileName": "/lib/a_84.ts"
             }
@@ -7111,7 +9130,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_85__0",
-              "exportMapKey": "aa_85__0|*|",
+              "exportMapKey": "8 * aa_85__0 ",
               "moduleSpecifier": "./lib/a_85",
               "fileName": "/lib/a_85.ts"
             }
@@ -7131,7 +9150,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_86__0",
-              "exportMapKey": "aa_86__0|*|",
+              "exportMapKey": "8 * aa_86__0 ",
               "moduleSpecifier": "./lib/a_86",
               "fileName": "/lib/a_86.ts"
             }
@@ -7151,7 +9170,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_87__0",
-              "exportMapKey": "aa_87__0|*|",
+              "exportMapKey": "8 * aa_87__0 ",
               "moduleSpecifier": "./lib/a_87",
               "fileName": "/lib/a_87.ts"
             }
@@ -7171,7 +9190,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_88__0",
-              "exportMapKey": "aa_88__0|*|",
+              "exportMapKey": "8 * aa_88__0 ",
               "moduleSpecifier": "./lib/a_88",
               "fileName": "/lib/a_88.ts"
             }
@@ -7191,29 +9210,9 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_89__0",
-              "exportMapKey": "aa_89__0|*|",
+              "exportMapKey": "8 * aa_89__0 ",
               "moduleSpecifier": "./lib/a_89",
               "fileName": "/lib/a_89.ts"
-            }
-          },
-          {
-            "name": "aa_9__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "./lib/a_9",
-            "sourceDisplay": [
-              {
-                "text": "./lib/a_9",
-                "kind": "text"
-              }
-            ],
-            "data": {
-              "exportName": "aa_9__0",
-              "exportMapKey": "aa_9__0|*|",
-              "moduleSpecifier": "./lib/a_9",
-              "fileName": "/lib/a_9.ts"
             }
           },
           {
@@ -7231,7 +9230,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_90__0",
-              "exportMapKey": "aa_90__0|*|",
+              "exportMapKey": "8 * aa_90__0 ",
               "moduleSpecifier": "./lib/a_90",
               "fileName": "/lib/a_90.ts"
             }
@@ -7251,7 +9250,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_91__0",
-              "exportMapKey": "aa_91__0|*|",
+              "exportMapKey": "8 * aa_91__0 ",
               "moduleSpecifier": "./lib/a_91",
               "fileName": "/lib/a_91.ts"
             }
@@ -7271,7 +9270,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_92__0",
-              "exportMapKey": "aa_92__0|*|",
+              "exportMapKey": "8 * aa_92__0 ",
               "moduleSpecifier": "./lib/a_92",
               "fileName": "/lib/a_92.ts"
             }
@@ -7291,7 +9290,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_93__0",
-              "exportMapKey": "aa_93__0|*|",
+              "exportMapKey": "8 * aa_93__0 ",
               "moduleSpecifier": "./lib/a_93",
               "fileName": "/lib/a_93.ts"
             }
@@ -7311,7 +9310,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_94__0",
-              "exportMapKey": "aa_94__0|*|",
+              "exportMapKey": "8 * aa_94__0 ",
               "moduleSpecifier": "./lib/a_94",
               "fileName": "/lib/a_94.ts"
             }
@@ -7331,7 +9330,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_95__0",
-              "exportMapKey": "aa_95__0|*|",
+              "exportMapKey": "8 * aa_95__0 ",
               "moduleSpecifier": "./lib/a_95",
               "fileName": "/lib/a_95.ts"
             }
@@ -7351,7 +9350,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_96__0",
-              "exportMapKey": "aa_96__0|*|",
+              "exportMapKey": "8 * aa_96__0 ",
               "moduleSpecifier": "./lib/a_96",
               "fileName": "/lib/a_96.ts"
             }
@@ -7371,7 +9370,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_97__0",
-              "exportMapKey": "aa_97__0|*|",
+              "exportMapKey": "8 * aa_97__0 ",
               "moduleSpecifier": "./lib/a_97",
               "fileName": "/lib/a_97.ts"
             }
@@ -7391,7 +9390,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_98__0",
-              "exportMapKey": "aa_98__0|*|",
+              "exportMapKey": "8 * aa_98__0 ",
               "moduleSpecifier": "./lib/a_98",
               "fileName": "/lib/a_98.ts"
             }
@@ -7411,7 +9410,7 @@ Info seq  [hh:mm:ss:mss] response:
             ],
             "data": {
               "exportName": "aa_99__0",
-              "exportMapKey": "aa_99__0|*|",
+              "exportMapKey": "8 * aa_99__0 ",
               "moduleSpecifier": "./lib/a_99",
               "fileName": "/lib/a_99.ts"
             }
@@ -7432,7 +9431,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_0__0",
-              "exportMapKey": "depA_0__0|*|",
+              "exportMapKey": "9 * depA_0__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_0.ts",
               "isPackageJsonImport": true
@@ -7454,229 +9453,9 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_1__0",
-              "exportMapKey": "depA_1__0|*|",
+              "exportMapKey": "9 * depA_1__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_1.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_10__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_10__0",
-              "exportMapKey": "depA_10__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_10.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_11__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_11__0",
-              "exportMapKey": "depA_11__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_11.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_12__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_12__0",
-              "exportMapKey": "depA_12__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_12.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_13__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_13__0",
-              "exportMapKey": "depA_13__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_13.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_14__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_14__0",
-              "exportMapKey": "depA_14__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_14.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_15__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_15__0",
-              "exportMapKey": "depA_15__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_15.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_16__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_16__0",
-              "exportMapKey": "depA_16__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_16.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_17__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_17__0",
-              "exportMapKey": "depA_17__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_17.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_18__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_18__0",
-              "exportMapKey": "depA_18__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_18.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_19__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_19__0",
-              "exportMapKey": "depA_19__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_19.ts",
               "isPackageJsonImport": true
             }
           },
@@ -7696,229 +9475,9 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_2__0",
-              "exportMapKey": "depA_2__0|*|",
+              "exportMapKey": "9 * depA_2__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_2.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_20__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_20__0",
-              "exportMapKey": "depA_20__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_20.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_21__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_21__0",
-              "exportMapKey": "depA_21__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_21.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_22__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_22__0",
-              "exportMapKey": "depA_22__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_22.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_23__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_23__0",
-              "exportMapKey": "depA_23__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_23.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_24__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_24__0",
-              "exportMapKey": "depA_24__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_24.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_25__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_25__0",
-              "exportMapKey": "depA_25__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_25.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_26__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_26__0",
-              "exportMapKey": "depA_26__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_26.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_27__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_27__0",
-              "exportMapKey": "depA_27__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_27.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_28__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_28__0",
-              "exportMapKey": "depA_28__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_28.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_29__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_29__0",
-              "exportMapKey": "depA_29__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_29.ts",
               "isPackageJsonImport": true
             }
           },
@@ -7938,229 +9497,9 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_3__0",
-              "exportMapKey": "depA_3__0|*|",
+              "exportMapKey": "9 * depA_3__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_3.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_30__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_30__0",
-              "exportMapKey": "depA_30__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_30.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_31__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_31__0",
-              "exportMapKey": "depA_31__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_31.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_32__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_32__0",
-              "exportMapKey": "depA_32__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_32.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_33__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_33__0",
-              "exportMapKey": "depA_33__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_33.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_34__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_34__0",
-              "exportMapKey": "depA_34__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_34.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_35__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_35__0",
-              "exportMapKey": "depA_35__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_35.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_36__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_36__0",
-              "exportMapKey": "depA_36__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_36.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_37__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_37__0",
-              "exportMapKey": "depA_37__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_37.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_38__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_38__0",
-              "exportMapKey": "depA_38__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_38.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_39__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_39__0",
-              "exportMapKey": "depA_39__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_39.ts",
               "isPackageJsonImport": true
             }
           },
@@ -8180,229 +9519,9 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_4__0",
-              "exportMapKey": "depA_4__0|*|",
+              "exportMapKey": "9 * depA_4__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_4.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_40__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_40__0",
-              "exportMapKey": "depA_40__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_40.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_41__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_41__0",
-              "exportMapKey": "depA_41__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_41.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_42__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_42__0",
-              "exportMapKey": "depA_42__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_42.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_43__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_43__0",
-              "exportMapKey": "depA_43__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_43.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_44__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_44__0",
-              "exportMapKey": "depA_44__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_44.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_45__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_45__0",
-              "exportMapKey": "depA_45__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_45.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_46__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_46__0",
-              "exportMapKey": "depA_46__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_46.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_47__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_47__0",
-              "exportMapKey": "depA_47__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_47.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_48__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_48__0",
-              "exportMapKey": "depA_48__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_48.ts",
-              "isPackageJsonImport": true
-            }
-          },
-          {
-            "name": "depA_49__0",
-            "kind": "const",
-            "kindModifiers": "export",
-            "sortText": "16",
-            "hasAction": true,
-            "source": "dep-a",
-            "sourceDisplay": [
-              {
-                "text": "dep-a",
-                "kind": "text"
-              }
-            ],
-            "isPackageJsonImport": true,
-            "data": {
-              "exportName": "depA_49__0",
-              "exportMapKey": "depA_49__0|*|",
-              "moduleSpecifier": "dep-a",
-              "fileName": "/node_modules/dep-a/file_49.ts",
               "isPackageJsonImport": true
             }
           },
@@ -8422,7 +9541,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_5__0",
-              "exportMapKey": "depA_5__0|*|",
+              "exportMapKey": "9 * depA_5__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_5.ts",
               "isPackageJsonImport": true
@@ -8444,7 +9563,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_6__0",
-              "exportMapKey": "depA_6__0|*|",
+              "exportMapKey": "9 * depA_6__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_6.ts",
               "isPackageJsonImport": true
@@ -8466,7 +9585,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_7__0",
-              "exportMapKey": "depA_7__0|*|",
+              "exportMapKey": "9 * depA_7__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_7.ts",
               "isPackageJsonImport": true
@@ -8488,7 +9607,7 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_8__0",
-              "exportMapKey": "depA_8__0|*|",
+              "exportMapKey": "9 * depA_8__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_8.ts",
               "isPackageJsonImport": true
@@ -8510,9 +9629,889 @@ Info seq  [hh:mm:ss:mss] response:
             "isPackageJsonImport": true,
             "data": {
               "exportName": "depA_9__0",
-              "exportMapKey": "depA_9__0|*|",
+              "exportMapKey": "9 * depA_9__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_9.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_10__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_10__0",
+              "exportMapKey": "10 * depA_10__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_10.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_11__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_11__0",
+              "exportMapKey": "10 * depA_11__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_11.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_12__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_12__0",
+              "exportMapKey": "10 * depA_12__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_12.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_13__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_13__0",
+              "exportMapKey": "10 * depA_13__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_13.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_14__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_14__0",
+              "exportMapKey": "10 * depA_14__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_14.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_15__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_15__0",
+              "exportMapKey": "10 * depA_15__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_15.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_16__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_16__0",
+              "exportMapKey": "10 * depA_16__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_16.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_17__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_17__0",
+              "exportMapKey": "10 * depA_17__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_17.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_18__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_18__0",
+              "exportMapKey": "10 * depA_18__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_18.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_19__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_19__0",
+              "exportMapKey": "10 * depA_19__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_19.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_20__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_20__0",
+              "exportMapKey": "10 * depA_20__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_20.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_21__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_21__0",
+              "exportMapKey": "10 * depA_21__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_21.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_22__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_22__0",
+              "exportMapKey": "10 * depA_22__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_22.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_23__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_23__0",
+              "exportMapKey": "10 * depA_23__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_23.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_24__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_24__0",
+              "exportMapKey": "10 * depA_24__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_24.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_25__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_25__0",
+              "exportMapKey": "10 * depA_25__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_25.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_26__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_26__0",
+              "exportMapKey": "10 * depA_26__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_26.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_27__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_27__0",
+              "exportMapKey": "10 * depA_27__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_27.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_28__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_28__0",
+              "exportMapKey": "10 * depA_28__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_28.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_29__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_29__0",
+              "exportMapKey": "10 * depA_29__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_29.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_30__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_30__0",
+              "exportMapKey": "10 * depA_30__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_30.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_31__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_31__0",
+              "exportMapKey": "10 * depA_31__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_31.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_32__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_32__0",
+              "exportMapKey": "10 * depA_32__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_32.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_33__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_33__0",
+              "exportMapKey": "10 * depA_33__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_33.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_34__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_34__0",
+              "exportMapKey": "10 * depA_34__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_34.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_35__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_35__0",
+              "exportMapKey": "10 * depA_35__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_35.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_36__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_36__0",
+              "exportMapKey": "10 * depA_36__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_36.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_37__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_37__0",
+              "exportMapKey": "10 * depA_37__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_37.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_38__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_38__0",
+              "exportMapKey": "10 * depA_38__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_38.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_39__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_39__0",
+              "exportMapKey": "10 * depA_39__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_39.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_40__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_40__0",
+              "exportMapKey": "10 * depA_40__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_40.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_41__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_41__0",
+              "exportMapKey": "10 * depA_41__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_41.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_42__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_42__0",
+              "exportMapKey": "10 * depA_42__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_42.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_43__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_43__0",
+              "exportMapKey": "10 * depA_43__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_43.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_44__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_44__0",
+              "exportMapKey": "10 * depA_44__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_44.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_45__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_45__0",
+              "exportMapKey": "10 * depA_45__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_45.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_46__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_46__0",
+              "exportMapKey": "10 * depA_46__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_46.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_47__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_47__0",
+              "exportMapKey": "10 * depA_47__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_47.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_48__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_48__0",
+              "exportMapKey": "10 * depA_48__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_48.ts",
+              "isPackageJsonImport": true
+            }
+          },
+          {
+            "name": "depA_49__0",
+            "kind": "const",
+            "kindModifiers": "export",
+            "sortText": "16",
+            "hasAction": true,
+            "source": "dep-a",
+            "sourceDisplay": [
+              {
+                "text": "dep-a",
+                "kind": "text"
+              }
+            ],
+            "isPackageJsonImport": true,
+            "data": {
+              "exportName": "depA_49__0",
+              "exportMapKey": "10 * depA_49__0 ",
+              "moduleSpecifier": "dep-a",
+              "fileName": "/node_modules/dep-a/file_49.ts",
               "isPackageJsonImport": true
             }
           }
@@ -8521,6 +10520,16 @@ Info seq  [hh:mm:ss:mss] response:
       "responseRequired": true
     }
 After request
+
+Projects::
+/dev/null/autoImportProviderProject1* (AutoImportProvider)
+    projectStateVersion: 1
+    projectProgramVersion: 1
+/tsconfig.json (Configured) *changed*
+    projectStateVersion: 3
+    projectProgramVersion: 1
+    dirty: false *changed*
+    autoImportProviderHost: /dev/null/autoImportProviderProject1*
 
 Before request
 
@@ -8537,7 +10546,7 @@ Info seq  [hh:mm:ss:mss] request:
             "source": "dep-a",
             "data": {
               "exportName": "depA_0__0",
-              "exportMapKey": "depA_0__0|*|",
+              "exportMapKey": "9 * depA_0__0 ",
               "moduleSpecifier": "dep-a",
               "fileName": "/node_modules/dep-a/file_0.ts",
               "isPackageJsonImport": true

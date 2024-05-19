@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     cast,
     Diagnostics,
     emptyArray,
@@ -21,12 +26,7 @@ import {
     TypeAliasDeclaration,
     TypeLiteralNode,
     TypeNode,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixConvertToMappedObjectType";
 const errorCodes = [Diagnostics.An_index_signature_parameter_type_cannot_be_a_literal_type_or_generic_type_Consider_using_a_mapped_object_type_instead.code];
@@ -44,13 +44,17 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, [Diagnostics.Convert_0_to_mapped_object_type, name], fixId, [Diagnostics.Convert_0_to_mapped_object_type, name])];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, diag.start);
-        if (info) doChange(changes, diag.file, info);
-    })
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, diag.start);
+            if (info) doChange(changes, diag.file, info);
+        }),
 });
 
-interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }
+interface Info {
+    readonly indexSignature: IndexSignatureDeclaration;
+    readonly container: FixableDeclaration;
+}
 function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
     const token = getTokenAtPosition(sourceFile, pos);
     const indexSignature = tryCast(token.parent.parent, isIndexSignatureDeclaration);
@@ -77,7 +81,8 @@ function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, { 
         /*nameType*/ undefined,
         indexSignature.questionToken,
         indexSignature.type,
-        /*members*/ undefined);
+        /*members*/ undefined,
+    );
     const intersectionType = factory.createIntersectionTypeNode([
         ...getAllSuperTypeNodes(container),
         mappedIntersectionType,

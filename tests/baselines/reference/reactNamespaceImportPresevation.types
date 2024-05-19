@@ -3,12 +3,14 @@
 === modules.d.ts ===
 declare module "my-React-Lib" {
 >"my-React-Lib" : typeof import("my-React-Lib")
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     var a: any;
 >a : any
 
     export = a;
 >a : any
+>  : ^^^
 }
 
 === test.tsx ===
@@ -21,5 +23,7 @@ declare var foo: any;
 <foo data/>;
 ><foo data/> : error
 >foo : any
+>    : ^^^
 >data : true
+>     : ^^^^
 

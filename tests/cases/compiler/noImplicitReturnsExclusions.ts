@@ -58,3 +58,39 @@ function f16(b: boolean) {  // Error
     if (b) return 42;
     if (b) return;
 }
+
+declare class HistoryItem {
+  input: {
+    location: {
+      uri: string;
+    };
+  };
+}
+
+interface Thenable<T> {
+  then<TResult>(
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+    onrejected?: (reason: any) => TResult | Thenable<TResult>
+  ): Thenable<TResult>;
+  then<TResult>(
+    onfulfilled?: (value: T) => TResult | Thenable<TResult>,
+    onrejected?: (reason: any) => void
+  ): Thenable<TResult>;
+}
+
+export declare function executeCommand<T = unknown>(
+  command: string,
+  ...rest: any[]
+): Thenable<T>;
+
+export declare function registerCommand(
+  command: string,
+  callback: (...args: any[]) => any,
+  thisArg?: any
+): void;
+
+registerCommand("_references-view.showHistoryItem", async (item) => { // Error, contextual return type of Promise<unknown>
+  if (item instanceof HistoryItem) {
+    return executeCommand("vscode.open", item.input.location.uri);
+  }
+});

@@ -1,0 +1,29 @@
+//// [tests/cases/conformance/es2023/intlNumberFormatES5UseGrouping.ts] ////
+
+=== intlNumberFormatES5UseGrouping.ts ===
+new Intl.NumberFormat('en-GB', { useGrouping: true });
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>useGrouping : Symbol(useGrouping, Decl(intlNumberFormatES5UseGrouping.ts, 0, 32))
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'true' }); // expect error
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>useGrouping : Symbol(useGrouping, Decl(intlNumberFormatES5UseGrouping.ts, 1, 32))
+
+new Intl.NumberFormat('en-GB', { useGrouping: 'always' }); // expect error
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>useGrouping : Symbol(useGrouping, Decl(intlNumberFormatES5UseGrouping.ts, 2, 32))
+
+const { useGrouping } = new Intl.NumberFormat('en-GB').resolvedOptions();
+>useGrouping : Symbol(useGrouping, Decl(intlNumberFormatES5UseGrouping.ts, 4, 7))
+>new Intl.NumberFormat('en-GB').resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --))
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>resolvedOptions : Symbol(Intl.NumberFormat.resolvedOptions, Decl(lib.es5.d.ts, --, --))
+

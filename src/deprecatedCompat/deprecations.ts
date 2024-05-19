@@ -2,8 +2,8 @@ import {
     hasProperty,
     UnionToIntersection,
     Version,
-} from "./_namespaces/ts";
-import { deprecate } from "./deprecate";
+} from "./_namespaces/ts.js";
+import { deprecate } from "./deprecate.js";
 
 /** @internal */
 export interface DeprecationOptions {
@@ -15,7 +15,6 @@ export interface DeprecationOptions {
     typeScriptVersion?: Version | string;
     name?: string;
 }
-
 
 // The following are deprecations for the public API. Deprecated exports are removed from the compiler itself
 // and compatible implementations are added here, along with an appropriate deprecation warning using
@@ -145,9 +144,9 @@ export function buildOverload(name: string): OverloadBuilder {
             bind: binder => ({
                 finish: () => createOverload(name, overloads, binder),
                 deprecate: deprecations => ({
-                    finish: () => createOverload(name, overloads, binder, deprecations)
-                })
-            })
-        })
+                    finish: () => createOverload(name, overloads, binder, deprecations),
+                }),
+            }),
+        }),
     };
 }

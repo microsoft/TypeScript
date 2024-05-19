@@ -1,0 +1,57 @@
+//// [tests/cases/conformance/externalModules/verbatimModuleSyntaxConstEnumUsage.ts] ////
+
+=== foo.ts ===
+export enum Foo {
+>Foo : Foo
+>    : ^^^
+
+    a = 1,
+>a : Foo.a
+>  : ^^^^^
+>1 : 1
+>  : ^
+
+    b,
+>b : Foo.b
+>  : ^^^^^
+
+    c,
+>c : Foo.c
+>  : ^^^^^
+}
+
+=== bar.ts ===
+import {Foo} from './foo.js';
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+export enum Bar {
+>Bar : Bar
+>    : ^^^
+
+    a = Foo.a,
+>a : Bar.a
+>  : ^^^^^
+>Foo.a : Foo.a
+>      : ^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>a : Foo.a
+>  : ^^^^^
+
+    c = Foo.c,
+>c : Bar.c
+>  : ^^^^^
+>Foo.c : Foo.c
+>      : ^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>c : Foo.c
+>  : ^^^^^
+
+    e = 5,
+>e : Bar.e
+>  : ^^^^^
+>5 : 5
+>  : ^
+}

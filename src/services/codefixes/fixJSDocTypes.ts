@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     append,
     AsExpression,
     CallSignatureDeclaration,
@@ -30,12 +35,7 @@ import {
     TypeFlags,
     TypeNode,
     VariableDeclaration,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixIdPlain = "fixJSDocTypes_plain";
 const fixIdNullable = "fixJSDocTypes_nullable";
@@ -78,25 +78,21 @@ registerCodeFix({
             const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
             doChange(changes, sourceFile, typeNode, fixedType, checker);
         });
-    }
+    },
 });
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
     changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode, /*flags*/ undefined)!); // TODO: GH#18217
 }
 
-function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
+function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode; readonly type: Type; } | undefined {
     const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
     const typeNode = decl && decl.type;
     return typeNode && { typeNode, type: getType(checker, typeNode) };
 }
 
 // TODO: GH#19856 Node & { type: TypeNode }
-type TypeContainer =
-    | AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration
-    | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration
-    | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration
-    | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
+type TypeContainer = AsExpression | CallSignatureDeclaration | ConstructSignatureDeclaration | FunctionDeclaration | GetAccessorDeclaration | IndexSignatureDeclaration | MappedTypeNode | MethodDeclaration | MethodSignature | ParameterDeclaration | PropertyDeclaration | PropertySignature | SetAccessorDeclaration | TypeAliasDeclaration | TypeAssertion | VariableDeclaration;
 function isTypeContainer(node: Node): node is TypeContainer {
     // NOTE: Some locations are not handled yet:
     // MappedTypeNode.typeParameters and SignatureDeclaration.typeParameters, as well as CallExpression.typeArguments
@@ -130,7 +126,8 @@ function getType(checker: TypeChecker, node: TypeNode) {
             return type;
         }
         return checker.getUnionType(
-            append([type, checker.getUndefinedType()], node.postfix ? undefined : checker.getNullType()));
+            append([type, checker.getUndefinedType()], node.postfix ? undefined : checker.getNullType()),
+        );
     }
     return checker.getTypeFromTypeNode(node);
 }

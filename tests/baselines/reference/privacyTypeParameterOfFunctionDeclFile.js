@@ -443,7 +443,11 @@ module privateModule {
 //// [privacyTypeParameterOfFunctionDeclFile.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.publicModule = exports.publicFunctionWithPrivateMopduleTypeParameters = exports.publicClassWithWithPrivateModuleTypeParameters = exports.publicFunctionWithPublicTypeParametersWithoutExtends = exports.publicClassWithWithPublicTypeParametersWithoutExtends = exports.publicFunctionWithPublicTypeParameters = exports.publicFunctionWithPrivateTypeParameters = exports.publicClassWithWithPublicTypeParameters = exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
+exports.publicModule = exports.publicClassWithWithPrivateModuleTypeParameters = exports.publicClassWithWithPublicTypeParametersWithoutExtends = exports.publicClassWithWithPublicTypeParameters = exports.publicClassWithWithPrivateTypeParameters = exports.publicClass = void 0;
+exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;
+exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
+exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
+exports.publicFunctionWithPrivateMopduleTypeParameters = publicFunctionWithPrivateMopduleTypeParameters;
 var privateClass = /** @class */ (function () {
     function privateClass() {
     }
@@ -511,10 +515,8 @@ var privateClassWithWithPublicTypeParameters = /** @class */ (function () {
 }());
 function publicFunctionWithPrivateTypeParameters() {
 }
-exports.publicFunctionWithPrivateTypeParameters = publicFunctionWithPrivateTypeParameters;
 function publicFunctionWithPublicTypeParameters() {
 }
-exports.publicFunctionWithPublicTypeParameters = publicFunctionWithPublicTypeParameters;
 function privateFunctionWithPrivateTypeParameters() {
 }
 function privateFunctionWithPublicTypeParameters() {
@@ -548,7 +550,6 @@ var privateClassWithWithPublicTypeParametersWithoutExtends = /** @class */ (func
 }());
 function publicFunctionWithPublicTypeParametersWithoutExtends() {
 }
-exports.publicFunctionWithPublicTypeParametersWithoutExtends = publicFunctionWithPublicTypeParametersWithoutExtends;
 function privateFunctionWithPublicTypeParametersWithoutExtends() {
 }
 var publicClassWithWithPrivateModuleTypeParameters = /** @class */ (function () {
@@ -563,7 +564,6 @@ var publicClassWithWithPrivateModuleTypeParameters = /** @class */ (function () 
 exports.publicClassWithWithPrivateModuleTypeParameters = publicClassWithWithPrivateModuleTypeParameters;
 function publicFunctionWithPrivateMopduleTypeParameters() {
 }
-exports.publicFunctionWithPrivateMopduleTypeParameters = publicFunctionWithPrivateMopduleTypeParameters;
 var privateClassWithWithPrivateModuleTypeParameters = /** @class */ (function () {
     function privateClassWithWithPrivateModuleTypeParameters() {
     }
@@ -872,7 +872,7 @@ export declare class publicClassWithWithPrivateModuleTypeParameters {
     myPublicMethod<T extends privateModule.publicClass>(): void;
 }
 export declare function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
-export declare module publicModule {
+export declare namespace publicModule {
     class privateClass {
     }
     export class publicClass {
@@ -925,7 +925,7 @@ export declare module publicModule {
     export function publicFunctionWithPrivateMopduleTypeParameters<T extends privateModule.publicClass>(): void;
     export {};
 }
-declare module privateModule {
+declare namespace privateModule {
     class privateClass {
     }
     export class publicClass {

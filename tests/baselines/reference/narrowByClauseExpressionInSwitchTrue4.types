@@ -1,0 +1,37 @@
+//// [tests/cases/compiler/narrowByClauseExpressionInSwitchTrue4.ts] ////
+
+=== narrowByClauseExpressionInSwitchTrue4.ts ===
+declare const f: 'a' | 'b' | 'c';
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+
+switch (true) {
+>true : true
+>     : ^^^^
+
+  case f === "a":
+>f === "a" : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+  default:
+    f;
+>f : "a" | "c"
+>  : ^^^^^^^^^
+
+  case f === "b":
+>f === "b" : boolean
+>          : ^^^^^^^
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+>"b" : "b"
+>    : ^^^
+
+    f;
+>f : "a" | "b" | "c"
+>  : ^^^^^^^^^^^^^^^
+}
+

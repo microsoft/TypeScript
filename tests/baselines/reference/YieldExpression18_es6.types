@@ -3,9 +3,13 @@
 === YieldExpression18_es6.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 yield(foo);
 >yield(foo) : any
+>           : ^^^
 >yield : any
+>      : ^^^
 >foo : any
+>    : ^^^
 

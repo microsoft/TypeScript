@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     getTokenAtPosition,
     isIdentifier,
@@ -7,12 +12,7 @@ import {
     SyntaxKind,
     textChanges,
     tryAddToSet,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "addMissingDeclareProperty";
 const errorCodes = [
@@ -40,8 +40,10 @@ function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: Source
         return;
     }
     const declaration = token.parent;
-    if (declaration.kind === SyntaxKind.PropertyDeclaration &&
-        (!fixedNodes || tryAddToSet(fixedNodes, declaration))) {
+    if (
+        declaration.kind === SyntaxKind.PropertyDeclaration &&
+        (!fixedNodes || tryAddToSet(fixedNodes, declaration))
+    ) {
         changeTracker.insertModifierBefore(sourceFile, SyntaxKind.DeclareKeyword, declaration);
     }
 }

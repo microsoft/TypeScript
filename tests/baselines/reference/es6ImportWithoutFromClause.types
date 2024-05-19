@@ -3,7 +3,9 @@
 === es6ImportWithoutFromClause_0.ts ===
 export var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 === es6ImportWithoutFromClause_1.ts ===
 

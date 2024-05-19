@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     findAncestor,
@@ -10,12 +15,7 @@ import {
     Type,
     TypeChecker,
     TypeNode,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixReturnTypeInAsyncFunction";
 const errorCodes = [
@@ -42,17 +42,20 @@ registerCodeFix({
         const { returnTypeNode, returnType, promisedTypeNode, promisedType } = info;
         const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, returnTypeNode, promisedTypeNode));
         return [createCodeFixAction(
-            fixId, changes,
-            [Diagnostics.Replace_0_with_Promise_1,
-             checker.typeToString(returnType), checker.typeToString(promisedType)],
-            fixId, Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions)];
+            fixId,
+            changes,
+            [Diagnostics.Replace_0_with_Promise_1, checker.typeToString(returnType), checker.typeToString(promisedType)],
+            fixId,
+            Diagnostics.Fix_all_incorrect_return_type_of_an_async_functions,
+        )];
     },
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const info = getInfo(diag.file, context.program.getTypeChecker(), diag.start);
-        if (info) {
-            doChange(changes, diag.file, info.returnTypeNode, info.promisedTypeNode);
-        }
-    })
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const info = getInfo(diag.file, context.program.getTypeChecker(), diag.start);
+            if (info) {
+                doChange(changes, diag.file, info.returnTypeNode, info.promisedTypeNode);
+            }
+        }),
 });
 
 function getInfo(sourceFile: SourceFile, checker: TypeChecker, pos: number): Info | undefined {

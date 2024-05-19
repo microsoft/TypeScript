@@ -1,0 +1,64 @@
+//// [tests/cases/conformance/esDecorators/esDecorators-privateFieldAccess.ts] ////
+
+=== esDecorators-privateFieldAccess.ts ===
+declare let dec: any;
+>dec : Symbol(dec, Decl(esDecorators-privateFieldAccess.ts, 0, 11))
+
+@dec(x => x.#foo) // error
+>dec : Symbol(dec, Decl(esDecorators-privateFieldAccess.ts, 0, 11))
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 2, 5))
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 2, 5))
+
+class A {
+>A : Symbol(A, Decl(esDecorators-privateFieldAccess.ts, 0, 21))
+
+    #foo = 3;
+>#foo : Symbol(A.#foo, Decl(esDecorators-privateFieldAccess.ts, 3, 9))
+
+    @dec(this, (x: A) => x.#foo) // ok
+>dec : Symbol(dec, Decl(esDecorators-privateFieldAccess.ts, 0, 11))
+>this : Symbol(globalThis)
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 6, 16))
+>A : Symbol(A, Decl(esDecorators-privateFieldAccess.ts, 0, 21))
+>x.#foo : Symbol(A.#foo, Decl(esDecorators-privateFieldAccess.ts, 3, 9))
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 6, 16))
+
+    m() {}
+>m : Symbol(A.m, Decl(esDecorators-privateFieldAccess.ts, 4, 13))
+}
+
+@dec((x: B) => x.#foo) // error
+>dec : Symbol(dec, Decl(esDecorators-privateFieldAccess.ts, 0, 11))
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 10, 6))
+>B : Symbol(B, Decl(esDecorators-privateFieldAccess.ts, 8, 1))
+>x : Symbol(x, Decl(esDecorators-privateFieldAccess.ts, 10, 6))
+
+class B {
+>B : Symbol(B, Decl(esDecorators-privateFieldAccess.ts, 8, 1))
+
+    #foo = 3;
+>#foo : Symbol(B.#foo, Decl(esDecorators-privateFieldAccess.ts, 11, 9))
+}
+
+class C {
+>C : Symbol(C, Decl(esDecorators-privateFieldAccess.ts, 13, 1))
+
+    #foo = 2;
+>#foo : Symbol(C.#foo, Decl(esDecorators-privateFieldAccess.ts, 15, 9))
+
+    m() {
+>m : Symbol(C.m, Decl(esDecorators-privateFieldAccess.ts, 16, 13))
+
+        @dec(() => this.#foo) // ok
+>dec : Symbol(dec, Decl(esDecorators-privateFieldAccess.ts, 0, 11))
+>this.#foo : Symbol(C.#foo, Decl(esDecorators-privateFieldAccess.ts, 15, 9))
+>this : Symbol(C, Decl(esDecorators-privateFieldAccess.ts, 13, 1))
+
+        class D {}
+>D : Symbol(D, Decl(esDecorators-privateFieldAccess.ts, 17, 9))
+
+        return D;
+>D : Symbol(D, Decl(esDecorators-privateFieldAccess.ts, 17, 9))
+    }
+}
+

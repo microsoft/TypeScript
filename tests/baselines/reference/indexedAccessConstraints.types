@@ -1,0 +1,88 @@
+//// [tests/cases/compiler/indexedAccessConstraints.ts] ////
+
+=== indexedAccessConstraints.ts ===
+function foo<T extends object>(a: T[keyof T]) {
+>foo : <T extends object>(a: T[keyof T]) => void
+>    : ^ ^^^^^^^^^      ^^ ^^          ^^^^^^^^^
+>a : T[keyof T]
+>  : ^^^^^^^^^^
+
+    let b: number = a;  // Error
+>b : number
+>  : ^^^^^^
+>a : T[keyof T]
+>  : ^^^^^^^^^^
+}
+
+// Repro from #54522
+
+export function methodFnLength<T extends {}, K extends keyof T>(obj: T, methodKey: K): number {
+>methodFnLength : <T extends {}, K extends keyof T>(obj: T, methodKey: K) => number
+>               : ^ ^^^^^^^^^  ^^ ^^^^^^^^^       ^^   ^^ ^^         ^^ ^^^^^      
+>obj : T
+>    : ^
+>methodKey : K
+>          : ^
+
+    const fn = obj[methodKey];
+>fn : T[K]
+>   : ^^^^
+>obj[methodKey] : T[K]
+>               : ^^^^
+>obj : T
+>    : ^
+>methodKey : K
+>          : ^
+
+    if (typeof fn !== 'function') {
+>typeof fn !== 'function' : boolean
+>                         : ^^^^^^^
+>typeof fn : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : T[K]
+>   : ^^^^
+>'function' : "function"
+>           : ^^^^^^^^^^
+
+        return 0;
+>0 : 0
+>  : ^
+    }
+    return fn.length;
+>fn.length : number
+>          : ^^^^^^
+>fn : T[K] & Function
+>   : ^^^^^^^^^^^^^^^
+>length : number
+>       : ^^^^^^
+}
+
+// Repro from #54837
+
+function getField<T extends object>(x: T | null, k: keyof T) {
+>getField : <T extends object>(x: T | null, k: keyof T) => T[keyof T] | null
+>         : ^ ^^^^^^^^^      ^^ ^^        ^^ ^^       ^^^^^^^^^^^^^^^^^^^^^^
+>x : T | null
+>  : ^^^^^^^^
+>k : keyof T
+>  : ^^^^^^^
+
+    const result = x ? x[k] : null;
+>result : T[keyof T] | null
+>       : ^^^^^^^^^^^^^^^^^
+>x ? x[k] : null : T[keyof T] | null
+>                : ^^^^^^^^^^^^^^^^^
+>x : T | null
+>  : ^^^^^^^^
+>x[k] : T[keyof T]
+>     : ^^^^^^^^^^
+>x : T
+>  : ^
+>k : keyof T
+>  : ^^^^^^^
+
+    return result;  // T[keyof T] | null
+>result : T[keyof T] | null
+>       : ^^^^^^^^^^^^^^^^^
+}
+

@@ -3,14 +3,17 @@
 === constructorTypeWithTypeParameters.ts ===
 declare var X: {
 >X : new <T>() => number
+>  : ^^^^^^^^^^^^^      
 
     new <T>(): number;
 }
 declare var Y: {
 >Y : new () => number
+>  : ^^^^^^^^^^      
 
     new (): number;
 }
 var anotherVar: new <T>() => number;
 >anotherVar : new <T>() => number
+>           : ^^^^^^^^^^^^^      
 

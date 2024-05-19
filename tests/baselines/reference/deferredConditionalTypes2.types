@@ -1,0 +1,77 @@
+//// [tests/cases/compiler/deferredConditionalTypes2.ts] ////
+
+=== deferredConditionalTypes2.ts ===
+// https://github.com/microsoft/TypeScript/issues/56270
+
+type PositiveInfinity = 1e999;
+>PositiveInfinity : Infinity
+>                 : ^^^^^^^^
+
+type NegativeInfinity = -1e999;
+>NegativeInfinity : -Infinity
+>                 : ^^^^^^^^^
+>-1e999 : -Infinity
+>       : ^^^^^^^^^
+>1e999 : Infinity
+>      : ^^^^^^^^
+
+export type IsEqual<A, B> = (<G>() => G extends A ? 1 : 2) extends <
+>IsEqual : IsEqual<A, B>
+>        : ^^^^^^^^^^^^^
+
+  G,
+>() => G extends B ? 1 : 2
+  ? true
+>true : true
+>     : ^^^^
+
+  : false;
+>false : false
+>      : ^^^^^
+
+export type Add<A extends number, B extends number> = [
+>Add : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  IsEqual<A, PositiveInfinity>,
+  IsEqual<A, NegativeInfinity>,
+  IsEqual<B, PositiveInfinity>,
+  IsEqual<B, NegativeInfinity>,
+] extends infer R extends [boolean, boolean, boolean, boolean]
+  ? [true, false] extends ([R[0], R[3]])
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    ? PositiveInfinity
+    : "failed"
+  : never;
+
+export type AddWithoutParentheses<A extends number, B extends number> = [
+>AddWithoutParentheses : [true, false] extends [IsEqual<A, Infinity>, IsEqual<B, -Infinity>] ? Infinity : "failed"
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  IsEqual<A, PositiveInfinity>,
+  IsEqual<A, NegativeInfinity>,
+  IsEqual<B, PositiveInfinity>,
+  IsEqual<B, NegativeInfinity>,
+] extends infer R extends [boolean, boolean, boolean, boolean]
+  ? [true, false] extends [R[0], R[3]]
+>true : true
+>     : ^^^^
+>false : false
+>      : ^^^^^
+
+    ? PositiveInfinity
+    : "failed"
+  : never;
+
+type AddTest0 = Add<PositiveInfinity, PositiveInfinity>;
+>AddTest0 : Infinity
+>         : ^^^^^^^^
+
+type AddTest1 = AddWithoutParentheses<PositiveInfinity, PositiveInfinity>;
+>AddTest1 : Infinity
+>         : ^^^^^^^^
+

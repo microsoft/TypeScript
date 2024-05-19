@@ -1,0 +1,40 @@
+//// [tests/cases/compiler/fakeInfinity3.ts] ////
+
+=== fakeInfinity3.ts ===
+export enum Foo {
+>Foo : Symbol(Foo, Decl(fakeInfinity3.ts, 0, 0))
+
+    A = 1e999,
+>A : Symbol(Foo.A, Decl(fakeInfinity3.ts, 0, 17))
+
+    B = -1e999,
+>B : Symbol(Foo.B, Decl(fakeInfinity3.ts, 1, 14))
+}
+
+namespace X {
+>X : Symbol(X, Decl(fakeInfinity3.ts, 3, 1))
+
+    type A = 1e999;
+>A : Symbol(A, Decl(fakeInfinity3.ts, 5, 13))
+
+    type B = 2e999;
+>B : Symbol(B, Decl(fakeInfinity3.ts, 6, 19))
+
+    export function f(): A {
+>f : Symbol(f, Decl(fakeInfinity3.ts, 7, 19))
+>A : Symbol(A, Decl(fakeInfinity3.ts, 5, 13))
+
+        throw new Error()
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+export const m = X.f();
+>m : Symbol(m, Decl(fakeInfinity3.ts, 14, 12))
+>X.f : Symbol(X.f, Decl(fakeInfinity3.ts, 7, 19))
+>X : Symbol(X, Decl(fakeInfinity3.ts, 3, 1))
+>f : Symbol(X.f, Decl(fakeInfinity3.ts, 7, 19))
+
+export const Infinity = "oops";
+>Infinity : Symbol(Infinity, Decl(fakeInfinity3.ts, 16, 12))
+

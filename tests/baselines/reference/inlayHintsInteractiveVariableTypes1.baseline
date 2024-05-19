@@ -1,0 +1,184 @@
+// === Inlay Hints ===
+ const m = () => 123;
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "number"
+    }
+  ],
+  "position": 331,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const o = () => -1 as const;
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "-"
+    },
+    {
+      "text": "1"
+    }
+  ],
+  "position": 363,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const p = ([a]: Foo[]) => a;
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "["
+    },
+    {
+      "text": "a"
+    },
+    {
+      "text": "]"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 57,
+        "length": 3
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveVariableTypes1.ts"
+    },
+    {
+      "text": "[]"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 57,
+        "length": 3
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveVariableTypes1.ts"
+    }
+  ],
+  "position": 393,
+  "kind": "Type",
+  "whitespaceBefore": true
+}
+
+ const q = ({ a }: { a: Foo }) => a;
+        ^
+{
+  "text": "",
+  "displayParts": [
+    {
+      "text": ": "
+    },
+    {
+      "text": "("
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "a"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "{"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "a"
+    },
+    {
+      "text": ": "
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 57,
+        "length": 3
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveVariableTypes1.ts"
+    },
+    {
+      "text": " "
+    },
+    {
+      "text": "}"
+    },
+    {
+      "text": ")"
+    },
+    {
+      "text": " => "
+    },
+    {
+      "text": "Foo",
+      "span": {
+        "start": 57,
+        "length": 3
+      },
+      "file": "/tests/cases/fourslash/inlayHintsInteractiveVariableTypes1.ts"
+    }
+  ],
+  "position": 423,
+  "kind": "Type",
+  "whitespaceBefore": true
+}

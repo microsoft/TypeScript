@@ -1,4 +1,3 @@
-const { TSESTree } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
 
 module.exports = createRule({
@@ -6,14 +5,13 @@ module.exports = createRule({
     meta: {
         docs: {
             description: ``,
-            recommended: "error",
         },
         messages: {
             internalCommentInNonJSDocError: `@internal should not appear in non-JSDoc comment for declaration.`,
             internalCommentNotLastError: `@internal should only appear in final JSDoc comment for declaration.`,
             multipleJSDocError: `Declaration has multiple JSDoc comments.`,
             internalCommentOnParameterProperty: `@internal cannot appear on a JSDoc comment; use a declared property and an assignment in the constructor instead.`,
-            misalignedJSDocComment: `This JSDoc comment is misaligned.`,
+            internalCommentOnUnexported: `@internal should not appear on an unexported declaration.`,
         },
         schema: [],
         type: "problem",
@@ -26,12 +24,37 @@ module.exports = createRule({
         const atInternal = "@internal";
         const jsdocStart = "/**";
 
+        /** @type {Map<import("@typescript-eslint/utils").TSESTree.Node, boolean>} */
+        const isExportedCache = new Map();
+
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => boolean} */
+        function isExported(node) {
+            const exported = isExportedCache.get(node);
+            if (exported !== undefined) {
+                return exported;
+            }
+
+            /** @type {import("@typescript-eslint/utils").TSESTree.Node | undefined} */
+            let current = node;
+            while (current) {
+                // https://github.com/typescript-eslint/typescript-eslint/blob/e44a1a280f08f9fd0d29f74e5c3e73b7b64a9606/packages/eslint-plugin/src/util/collectUnusedVariables.ts#L440
+                if (current.type.startsWith("Export")) {
+                    isExportedCache.set(node, true);
+                    return true;
+                }
+                isExportedCache.set(current, false);
+                current = current.parent;
+            }
+
+            return false;
+        }
+
         /** @type {(text: string) => boolean} */
         function isJSDocText(text) {
             return text.startsWith(jsdocStart);
         }
 
-        /** @type {(c: TSESTree.Comment, indexInComment: number) => TSESTree.SourceLocation} */
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment, indexInComment: number) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
         const getAtInternalLoc = (c, indexInComment) => {
             const line = c.loc.start.line;
             return {
@@ -46,8 +69,8 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(c: TSESTree.Comment) => TSESTree.SourceLocation} */
-        const getJSDocStartLoc = (c) => {
+        /** @type {(c: import("@typescript-eslint/utils").TSESTree.Comment) => import("@typescript-eslint/utils").TSESTree.SourceLocation} */
+        const getJSDocStartLoc = c => {
             return {
                 start: c.loc.start,
                 end: {
@@ -57,8 +80,8 @@ module.exports = createRule({
             };
         };
 
-        /** @type {(node: TSESTree.Node) => void} */
-        const checkDeclaration = (node) => {
+        /** @type {(node: import("@typescript-eslint/utils").TSESTree.Node) => void} */
+        const checkDeclaration = node => {
             const blockComments = sourceCode.getCommentsBefore(node).filter(c => c.type === "Block");
             if (blockComments.length === 0) {
                 return;
@@ -84,76 +107,19 @@ module.exports = createRule({
                 if (!isJSDoc) {
                     context.report({ messageId: "internalCommentInNonJSDocError", node: c, loc: getAtInternalLoc(c, indexInComment) });
                 }
-                else if (i !== last) {
-                    context.report({ messageId: "internalCommentNotLastError", node: c, loc: getAtInternalLoc(c, indexInComment) });
-                }
                 else if (node.type === "TSParameterProperty") {
                     context.report({ messageId: "internalCommentOnParameterProperty", node: c, loc: getAtInternalLoc(c, indexInComment) });
                 }
-            }
-        };
-
-        /** @type {(node: TSESTree.Node) => void} */
-        const checkProgram = () => {
-            const comments = sourceCode.getAllComments();
-
-            for (const c of comments) {
-                if (c.type !== "Block") {
-                    continue;
+                else if (!isExported(node)) {
+                    context.report({ messageId: "internalCommentOnUnexported", node: c, loc: getAtInternalLoc(c, indexInComment) });
                 }
-
-                const rawComment = sourceCode.getText(c);
-                if (!isJSDocText(rawComment)) {
-                    continue;
-                }
-
-                const expected = c.loc.start.column + 2;
-                const split = rawComment.split(/\r?\n/g);
-                for (let i = 1; i < split.length; i++) {
-                    const line = split[i];
-                    const match = /^ *\*/.exec(line);
-                    if (!match) {
-                        continue;
-                    }
-
-                    const actual = match[0].length;
-                    const diff = actual - expected;
-                    if (diff !== 0) {
-                        const line = c.loc.start.line + i;
-                        context.report({
-                            messageId: "misalignedJSDocComment",
-                            node: c,
-                            loc: {
-                                start: {
-                                    line,
-                                    column: 0,
-                                },
-                                end: {
-                                    line,
-                                    column: actual - 1,
-                                }
-                            },
-                            fix: (fixer) => {
-                                if (diff > 0) {
-                                    // Too many
-                                    const start = sourceCode.getIndexFromLoc({ line, column: expected - 1 });
-                                    return fixer.removeRange([start, start + diff]);
-                                }
-                                else {
-                                    // Too few
-                                    const start = sourceCode.getIndexFromLoc({ line, column: 0 });
-                                    return fixer.insertTextAfterRange([start, start], " ".repeat(-diff));
-                                }
-                            },
-                        });
-                        break;
-                    }
+                else if (i !== last) {
+                    context.report({ messageId: "internalCommentNotLastError", node: c, loc: getAtInternalLoc(c, indexInComment) });
                 }
             }
         };
 
         return {
-            Program: checkProgram,
             ClassDeclaration: checkDeclaration,
             FunctionDeclaration: checkDeclaration,
             TSEnumDeclaration: checkDeclaration,

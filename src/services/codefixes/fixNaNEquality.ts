@@ -1,4 +1,10 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    findAncestorMatchingSpan,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     BinaryExpression,
     createTextSpan,
     DiagnosticMessageChain,
@@ -14,13 +20,7 @@ import {
     SyntaxKind,
     textChanges,
     TextSpan,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    findAncestorMatchingSpan,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "fixNaNEquality";
 const errorCodes = [
@@ -46,7 +46,7 @@ registerCodeFix({
                 doChange(changes, diag.file, info.arg, info.expression);
             }
         });
-    }
+    },
 });
 
 interface Info {
@@ -73,14 +73,20 @@ function getInfo(program: Program, sourceFile: SourceFile, span: TextSpan): Info
 
 function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, arg: Expression, expression: BinaryExpression) {
     const callExpression = factory.createCallExpression(
-        factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")), /*typeArguments*/ undefined, [arg]);
-    const operator = expression.operatorToken.kind ;
-    changes.replaceNode(sourceFile, expression,
+        factory.createPropertyAccessExpression(factory.createIdentifier("Number"), factory.createIdentifier("isNaN")),
+        /*typeArguments*/ undefined,
+        [arg],
+    );
+    const operator = expression.operatorToken.kind;
+    changes.replaceNode(
+        sourceFile,
+        expression,
         operator === SyntaxKind.ExclamationEqualsEqualsToken || operator === SyntaxKind.ExclamationEqualsToken
-            ? factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, callExpression) : callExpression);
+            ? factory.createPrefixUnaryExpression(SyntaxKind.ExclamationToken, callExpression) : callExpression,
+    );
 }
 
 function getSuggestion(messageText: string | DiagnosticMessageChain) {
-    const [_, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/\'(.*)\'/) || [];
+    const [, suggestion] = flattenDiagnosticMessageText(messageText, "\n", 0).match(/'(.*)'/) || [];
     return suggestion;
 }

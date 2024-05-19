@@ -3,14 +3,19 @@
 === getAndSetNotIdenticalType.ts ===
 class C {
 >C : C
+>  : ^
 
     get x(): number {
 >x : number
+>  : ^^^^^^
 
         return 1;
 >1 : 1
+>  : ^
     }
     set x(v: string) { }
 >x : number
+>  : ^^^^^^
 >v : string
+>  : ^^^^^^
 }

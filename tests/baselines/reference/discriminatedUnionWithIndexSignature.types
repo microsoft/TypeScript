@@ -1,0 +1,73 @@
+//// [tests/cases/compiler/discriminatedUnionWithIndexSignature.ts] ////
+
+=== discriminatedUnionWithIndexSignature.ts ===
+export interface UnionAltA {
+    type?: 'text';
+>type : "text" | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+}
+
+export interface UnionAltB {
+    type?: 'image' | 'video' | 'document';
+>type : "image" | "video" | "document" | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+export type ValueUnion = UnionAltA | UnionAltB;
+>ValueUnion : ValueUnion
+>           : ^^^^^^^^^^
+
+export type MapOrSingleton =
+>MapOrSingleton : MapOrSingleton
+>               : ^^^^^^^^^^^^^^
+
+    | {
+        [key: string]: ValueUnion;
+>key : string
+>    : ^^^^^^
+    }
+    | ValueUnion;
+
+const withoutAsConst: MapOrSingleton = {
+>withoutAsConst : MapOrSingleton
+>               : ^^^^^^^^^^^^^^
+>{    1: {        type: 'text' /*as const*/,    },} : { 1: { type: "text"; }; }
+>                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    1: {
+>1 : { type: "text"; }
+>  : ^^^^^^^^^^^^^^^^^
+>{        type: 'text' /*as const*/,    } : { type: "text"; }
+>                                         : ^^^^^^^^^^^^^^^^^
+
+        type: 'text' /*as const*/,
+>type : "text"
+>     : ^^^^^^
+>'text' : "text"
+>       : ^^^^^^
+
+    },
+};
+
+const withAsConst: MapOrSingleton = {
+>withAsConst : MapOrSingleton
+>            : ^^^^^^^^^^^^^^
+>{    1: {        type: 'text' as const,    },} : { 1: { type: "text"; }; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    1: {
+>1 : { type: "text"; }
+>  : ^^^^^^^^^^^^^^^^^
+>{        type: 'text' as const,    } : { type: "text"; }
+>                                     : ^^^^^^^^^^^^^^^^^
+
+        type: 'text' as const,
+>type : "text"
+>     : ^^^^^^
+>'text' as const : "text"
+>                : ^^^^^^
+>'text' : "text"
+>       : ^^^^^^
+
+    },
+};

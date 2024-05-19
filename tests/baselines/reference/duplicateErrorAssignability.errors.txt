@@ -1,0 +1,22 @@
+duplicateErrorAssignability.ts(10,11): error TS2741: Property 'x' is missing in type 'B' but required in type 'A'.
+duplicateErrorAssignability.ts(12,5): error TS2538: Type 'B' cannot be used as an index type.
+
+
+==== duplicateErrorAssignability.ts (2 errors) ====
+    interface A {
+        x: number;
+    }
+    interface B {
+        y: string;
+    }
+    
+    declare let b: B;
+    declare let a: A;
+    const x = a = b;
+              ~
+!!! error TS2741: Property 'x' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 duplicateErrorAssignability.ts:2:5: 'x' is declared here.
+    let obj: { 3: string } = { 3: "three" };
+    obj[x];
+        ~
+!!! error TS2538: Type 'B' cannot be used as an index type.

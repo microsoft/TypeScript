@@ -1,12 +1,9 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    dedent
-} from "../../_namespaces/Utils";
-import { compilerOptionsToConfigJson } from "../helpers/contents";
-import {
-    verifyTsc,
-} from "../helpers/tsc";
-import { loadProjectFromFiles } from "../helpers/vfs";
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { compilerOptionsToConfigJson } from "../helpers/contents.js";
+import { verifyTsc } from "../helpers/tsc.js";
+import { loadProjectFromFiles } from "../helpers/vfs.js";
 
 describe("unittests:: tsbuild:: fileDelete::", () => {
     function fs(childOptions: ts.CompilerOptions, mainOptions?: ts.CompilerOptions) {
@@ -21,7 +18,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                 export function child2() {
                 }
             `,
-            "/src/child/tsconfig.json": JSON.stringify({
+            "/src/child/tsconfig.json": jsonToReadableText({
                 compilerOptions: compilerOptionsToConfigJson(childOptions),
             }),
             ...(mainOptions ? {
@@ -31,7 +28,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
                         child();
                     }
                 `,
-                "/src/main/tsconfig.json": JSON.stringify({
+                "/src/main/tsconfig.json": jsonToReadableText({
                     compilerOptions: compilerOptionsToConfigJson(mainOptions),
                     references: [{ path: "../child" }],
                 }),
@@ -54,7 +51,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
             discrepancyExplanation: () => [
                 "Clean build will not have latestChangedDtsFile as there was no emit and emitSignatures as undefined for files",
                 "Incremental will store the past latestChangedDtsFile and emitSignatures",
-            ]
+            ],
         }],
     });
 
@@ -65,7 +62,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
         fs: () => fs({ composite: true, outFile: "../childResult.js", module: ts.ModuleKind.AMD }, { composite: true, outFile: "../mainResult.js", module: ts.ModuleKind.AMD }),
         edits: [{
             caption: "delete child2 file",
-            edit: fs => fs.rimrafSync("/src/child/child2.ts")
+            edit: fs => fs.rimrafSync("/src/child/child2.ts"),
         }],
     });
 
@@ -79,7 +76,7 @@ describe("unittests:: tsbuild:: fileDelete::", () => {
             edit: fs => {
                 fs.rimrafSync("/src/child/child2.ts");
                 fs.rimrafSync("/src/child/child2.js");
-            }
+            },
         }],
     });
 

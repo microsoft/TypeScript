@@ -1,4 +1,8 @@
 import {
+    createCodeFixActionWithoutFixAll,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     emptyArray,
     factory,
@@ -26,11 +30,7 @@ import {
     TextSpan,
     TypeChecker,
     UnionTypeNode,
-} from "../_namespaces/ts";
-import {
-    createCodeFixActionWithoutFixAll,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const addOptionalPropertyUndefined = "addOptionalPropertyUndefined";
 
@@ -79,7 +79,7 @@ function shouldUseParentTypeOfProperty(sourceNode: Node, targetNode: Node, check
  * Find the source and target of the incorrect assignment.
  * The call is recursive for property assignments.
  */
-function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node, target: Node } | undefined {
+function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { source: Node; target: Node; } | undefined {
     if (!errorNode) {
         return undefined;
     }
@@ -98,8 +98,10 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
         const name = (n.valueDeclaration as any as SignatureDeclaration).parameters[i].name;
         if (isIdentifier(name)) return { source: errorNode, target: name };
     }
-    else if (isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
-        isShorthandPropertyAssignment(errorNode.parent)) {
+    else if (
+        isPropertyAssignment(errorNode.parent) && isIdentifier(errorNode.parent.name) ||
+        isShorthandPropertyAssignment(errorNode.parent)
+    ) {
         const parentTarget = getSourceTarget(errorNode.parent.parent, checker);
         if (!parentTarget) return undefined;
         const prop = checker.getPropertyOfType(checker.getTypeAtLocation(parentTarget.target), (errorNode.parent.name as Identifier).text);
@@ -107,7 +109,7 @@ function getSourceTarget(errorNode: Node | undefined, checker: TypeChecker): { s
         if (!declaration) return undefined;
         return {
             source: isPropertyAssignment(errorNode.parent) ? errorNode.parent.initializer : errorNode.parent.name,
-            target: declaration
+            target: declaration,
         };
     }
     return undefined;
@@ -119,7 +121,7 @@ function addUndefinedToOptionalProperty(changes: textChanges.ChangeTracker, toAd
         if (d && (isPropertySignature(d) || isPropertyDeclaration(d)) && d.type) {
             const t = factory.createUnionTypeNode([
                 ...d.type.kind === SyntaxKind.UnionType ? (d.type as UnionTypeNode).types : [d.type],
-                factory.createTypeReferenceNode("undefined")
+                factory.createTypeReferenceNode("undefined"),
             ]);
             changes.replaceNode(d.getSourceFile(), d.type, t);
         }

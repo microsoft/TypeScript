@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Diagnostics,
     factory,
     getContainingClass,
@@ -9,12 +14,7 @@ import {
     SourceFile,
     SyntaxKind,
     textChanges,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "extendsInterfaceBecomesImplements";
 const errorCodes = [Diagnostics.Cannot_extend_an_interface_0_Did_you_mean_implements.code];
@@ -29,10 +29,11 @@ registerCodeFix({
         return [createCodeFixAction(fixId, changes, Diagnostics.Change_extends_to_implements, fixId, Diagnostics.Change_all_extended_interfaces_to_implements)];
     },
     fixIds: [fixId],
-    getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-        const nodes = getNodes(diag.file, diag.start);
-        if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
-    }),
+    getAllCodeActions: context =>
+        codeFixAll(context, errorCodes, (changes, diag) => {
+            const nodes = getNodes(diag.file, diag.start);
+            if (nodes) doChanges(changes, diag.file, nodes.extendsToken, nodes.heritageClauses);
+        }),
 });
 
 function getNodes(sourceFile: SourceFile, pos: number) {
@@ -46,10 +47,11 @@ function doChanges(changes: textChanges.ChangeTracker, sourceFile: SourceFile, e
     changes.replaceNode(sourceFile, extendsToken, factory.createToken(SyntaxKind.ImplementsKeyword));
 
     // If there is already an implements clause, replace the implements keyword with a comma.
-    if (heritageClauses.length === 2 &&
+    if (
+        heritageClauses.length === 2 &&
         heritageClauses[0].token === SyntaxKind.ExtendsKeyword &&
-        heritageClauses[1].token === SyntaxKind.ImplementsKeyword) {
-
+        heritageClauses[1].token === SyntaxKind.ImplementsKeyword
+    ) {
         const implementsToken = heritageClauses[1].getFirstToken()!;
         const implementsFullStart = implementsToken.getFullStart();
         changes.replaceRange(sourceFile, { pos: implementsFullStart, end: implementsFullStart }, factory.createToken(SyntaxKind.CommaToken));
