@@ -19,6 +19,27 @@ interface ArrayBuffer {
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/resize)
      */
     resize(newByteLength: number): undefined;
+
+    /**
+     * Returns a boolean indicating whether or not this buffer has been detached (transferred).
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/detached)
+     */
+    get detached(): boolean;
+
+    /**
+     * Creates a new ArrayBuffer with the same byte content as this buffer, then detaches this buffer.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/transfer)
+     */
+    transfer(newByteLength?: number): ArrayBuffer;
+
+    /**
+     * Creates a new non-resizable ArrayBuffer with the same byte content as this buffer, then detaches this buffer.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/transferToFixedLength)
+     */
+    transferToFixedLength(newByteLength?: number): ArrayBuffer;
 }
 
 interface ArrayBufferConstructor {
