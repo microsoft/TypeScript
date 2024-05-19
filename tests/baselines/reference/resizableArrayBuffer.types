@@ -1,0 +1,27 @@
+//// [tests/cases/conformance/es2024/resizableArrayBuffer.ts] ////
+
+=== resizableArrayBuffer.ts ===
+const buffer = new ArrayBuffer(8, { maxByteLength: 16 });
+>buffer : ArrayBuffer
+>       : ^^^^^^^^^^^
+>new ArrayBuffer(8, { maxByteLength: 16 }) : ArrayBuffer
+>                                          : ^^^^^^^^^^^
+>ArrayBuffer : ArrayBufferConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>8 : 8
+>  : ^
+>{ maxByteLength: 16 } : { maxByteLength: number; }
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>maxByteLength : number
+>              : ^^^^^^
+>16 : 16
+>   : ^^
+
+buffer.resizable;
+>buffer.resizable : boolean
+>                 : ^^^^^^^
+>buffer : ArrayBuffer
+>       : ^^^^^^^^^^^
+>resizable : boolean
+>          : ^^^^^^^
+
