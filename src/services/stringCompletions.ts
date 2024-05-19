@@ -555,7 +555,8 @@ function getStringLiteralTypes(type: Type | undefined, uniques = new Map<string,
     type = skipConstraint(type);
     if (type.isUnion()) {
         return flatMap(type.types, t => getStringLiteralTypes(t, uniques));
-    } else {
+    }
+    else {
         return type.isStringLiteral() && !(type.flags & TypeFlags.EnumLiteral) && addToSeen(uniques, type.value) ? [type] : emptyArray;
     }
 }

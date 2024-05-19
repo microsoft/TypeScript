@@ -3415,7 +3415,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
         case SyntaxKind.CaseClause:
             return getSwitchedType(parent as CaseClause, checker);
         case SyntaxKind.ArrayLiteralExpression:
-            const typedParent = parent as ArrayLiteralExpression
+            const typedParent = parent as ArrayLiteralExpression;
             const parentType = checker.getContextualType(typedParent, contextFlags);
             if (parentType && parentType.flags & TypeFlags.Union) {
                 // If there is a union of tuples, filter down to only valid
@@ -3429,7 +3429,7 @@ export function getContextualTypeFromParent(node: Expression, checker: TypeCheck
                     return typeArguments && typeArguments.length > nodeNdx;
                 });
 
-                for(let i = 0; i < nodeNdx; i++) {
+                for (let i = 0; i < nodeNdx; i++) {
                     const element = typedParent.elements[i];
                     const typeToFilterBy = checker.getTypeAtLocation(element);
                     // Filter down to only types that match the preceding elements
