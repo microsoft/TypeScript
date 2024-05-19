@@ -4,6 +4,7 @@
 const buffer = new ArrayBuffer(8, { maxByteLength: 16 });
 buffer.resizable;
 
+
 //// [resizableArrayBuffer.js]
 var buffer = new ArrayBuffer(8, { maxByteLength: 16 });
 buffer.resizable;
