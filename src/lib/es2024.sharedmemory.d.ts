@@ -18,10 +18,9 @@ interface SharedArrayBuffer {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/grow)
      */
-    grow(newByteLength: number): undefined;
+    grow(newByteLength?: number): void;
 }
 
 interface SharedArrayBufferConstructor {
-    new ();
     new (byteLength: number, options?: { maxByteLength?: number; }): SharedArrayBuffer;
 }

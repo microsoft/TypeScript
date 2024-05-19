@@ -18,7 +18,7 @@ interface ArrayBuffer {
      *
      * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/resize)
      */
-    resize(newByteLength: number): undefined;
+    resize(newByteLength?: number): void;
 
     /**
      * Returns a boolean indicating whether or not this buffer has been detached (transferred).
