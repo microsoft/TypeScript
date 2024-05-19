@@ -186,7 +186,6 @@ const libEntries: [string, string][] = [
     ["es2016.array.include", "lib.es2016.array.include.d.ts"],
     ["es2016.intl", "lib.es2016.intl.d.ts"],
     ["es2017.arraybuffer", "lib.es2017.arraybuffer.d.ts"],
-    ["es2017.dataview", "lib.es2017.dataview.d.ts"],
     ["es2017.date", "lib.es2017.date.d.ts"],
     ["es2017.object", "lib.es2017.object.d.ts"],
     ["es2017.sharedmemory", "lib.es2017.sharedmemory.d.ts"],

@@ -1,3 +1,0 @@
-interface DataViewConstructor {
-    new (): DataView;
-}

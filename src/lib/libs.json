@@ -35,7 +35,6 @@
         "es2016.array.include",
         "es2016.intl",
         "es2017.arraybuffer",
-        "es2017.dataview",
         "es2017.date",
         "es2017.object",
         "es2017.sharedmemory",
