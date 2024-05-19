@@ -1,58 +1,54 @@
 interface ArrayBuffer {
-	/**
-	 * Read-only. The maximum length that this ArrayBuffer can be resized to (in bytes).
-	 */
-	readonly maxByteLength: number;
+    /**
+     * If this ArrayBuffer is resizable, returns the maximum byte length given during construction; returns the byte length if not.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/maxByteLength)
+     */
+    get maxByteLength(): number;
 
-	/**
-	 * Read-only. Whether this ArrayBuffer can be resized or not.
-	 */
-	readonly resizable: boolean;
+    /**
+     * Returns true if this ArrayBuffer can be resized.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/resizable)
+     */
+    get resizable(): boolean;
 
-	/**
-	 * Resizes the ArrayBuffer to the specified size (in bytes).
-	 * @param newLength The new length, in bytes, to resize the ArrayBuffer to.
-	 */
-	resize(newLength: number): undefined;
-}
-
-/**
- * ArrayBuffer constructor options
- */
-interface ArrayBufferOptions {
-	maxByteLength?: number;
+    /**
+     * Resizes the ArrayBuffer to the specified size (in bytes).
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer/resize)
+     */
+    resize(newByteLength: number): undefined;
 }
 
 interface ArrayBufferConstructor {
-	new(byteLength: number, options?: ArrayBufferOptions): ArrayBuffer;
+    new (byteLength: number, options?: { maxByteLength?: number; }): ArrayBuffer;
 }
 
 interface SharedArrayBuffer {
-	/**
-	 * Read-only. Whether this SharedArrayBuffer can be grow or not.
-	 */
-	readonly growable: number;
+    /**
+     * Returns true if this SharedArrayBuffer can be grown.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/growable)
+     */
+    get growable(): number;
 
-	/**
-	 * Read-only. The maximum length that this SharedArrayBuffer can be grown to (in bytes).
-	 */
-	readonly maxByteLength: number;
+    /**
+     * If this SharedArrayBuffer is growable, returns the maximum byte length given during construction; returns the byte length if not.
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/maxByteLength)
+     */
+    get maxByteLength(): number;
 
-	/**
-	 * Grows the SharedArrayBuffer to the specified size (in bytes).
-	 * @param newLength The new length, in bytes, to resize the SharedArrayBuffer to.
-	 */
-	grow(newLength: number): undefined;
-}
-
-/**
- * ArrayBuffer constructor options
- */
-interface SharedArrayBufferOptions {
-	maxByteLength?: number;
+    /**
+     * Grows the SharedArrayBuffer to the specified size (in bytes).
+     *
+     * [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer/grow)
+     */
+    grow(newByteLength: number): undefined;
 }
 
 interface SharedArrayBufferConstructor {
-	new();
-	new(byteLength: number, options?: SharedArrayBufferOptions): SharedArrayBuffer;
+    new ();
+    new (byteLength: number, options?: { maxByteLength?: number; }): SharedArrayBuffer;
 }
