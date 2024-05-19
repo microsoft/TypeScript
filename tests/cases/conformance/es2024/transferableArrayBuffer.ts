@@ -1,4 +1,4 @@
-// @lib: es2024.arraybuffer
+// @lib: es2023,es2024.arraybuffer
 
 const buffer = new ArrayBuffer(8);
 const buffer2 = buffer.transfer();
