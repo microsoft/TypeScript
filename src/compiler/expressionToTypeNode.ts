@@ -351,7 +351,7 @@ export function createSyntacticTypeNodeBuilder(options: CompilerOptions, resolve
             }
             else if (prop.name.kind === SyntaxKind.ComputedPropertyName) {
                 const expression = prop.name.expression;
-                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false) && !isEntityNameExpression(expression)) {
+                if (!isPrimitiveLiteralValue(expression, /*includeBigInt*/ false)) {
                     context.tracker.reportInferenceFallback(prop.name);
                     result = false;
                 }
