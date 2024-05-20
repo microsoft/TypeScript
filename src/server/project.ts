@@ -2238,8 +2238,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     /** @internal */
     runWithTemporaryFileUpdate(rootFile: string, updatedText: string, cb: (updatedProgram: Program, originalProgram: Program | undefined, updatedFile: SourceFile) => void) {
         const originalProgram = this.program;
-        const originalText = this.program?.getSourceFile(rootFile)?.getText();
-        Debug.assert(this.program && this.program.getSourceFile(rootFile) && originalText);
+        const originalText = Debug.checkDefined(this.program?.getSourceFile(rootFile)?.getText());
+        Debug.assert(this.program && this.program.getSourceFile(rootFile));
 
         this.getScriptInfo(rootFile)?.editContent(0, this.program.getSourceFile(rootFile)!.getText().length, updatedText);
         this.updateGraph();
