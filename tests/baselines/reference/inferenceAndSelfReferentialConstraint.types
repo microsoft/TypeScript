@@ -16,7 +16,7 @@ type Test<K extends keyof any> = {
 
 function test<T extends Test<keyof T>>(arg: T) {
 >test : <T extends Test<keyof T>>(arg: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>     : ^ ^^^^^^^^^             ^^   ^^ ^^^^^^
 >arg : T
 >    : ^
 
@@ -31,7 +31,7 @@ const res1 = test({
 >test({  foo: true,  bar() {  }}) : { foo: true; bar(): void; }
 >                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends Test<keyof T>>(arg: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>     : ^ ^^^^^^^^^             ^^   ^^ ^^^^^^
 >{  foo: true,  bar() {  }} : { foo: true; bar(): void; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -53,7 +53,7 @@ const res2 = test({
 >test({  foo: true,  bar: function () {  }}) : { foo: true; bar: () => void; }
 >                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends Test<keyof T>>(arg: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>     : ^ ^^^^^^^^^             ^^   ^^ ^^^^^^
 >{  foo: true,  bar: function () {  }} : { foo: true; bar: () => void; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -77,7 +77,7 @@ const res3 = test({
 >test({  foo: true,  bar: () => {  }}) : { foo: true; bar: () => void; }
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T extends Test<keyof T>>(arg: T) => T
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^
+>     : ^ ^^^^^^^^^             ^^   ^^ ^^^^^^
 >{  foo: true,  bar: () => {  }} : { foo: true; bar: () => void; }
 >                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

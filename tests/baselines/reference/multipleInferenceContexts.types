@@ -21,7 +21,7 @@ interface ComponentOptionsProperties<Data> {
 interface Instance<Data> {
     get<K extends keyof Data>(name: K): unknown;
 >get : <K extends keyof Data>(name: K) => unknown
->    : ^ ^^^^^^^^^^^^^^^^^^^^^    ^^ ^^^^^       
+>    : ^ ^^^^^^^^^          ^^    ^^ ^^^^^       
 >name : K
 >     : ^
 }

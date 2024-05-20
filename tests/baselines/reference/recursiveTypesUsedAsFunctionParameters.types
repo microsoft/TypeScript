@@ -66,7 +66,7 @@ function foo2<T>(x: any) {
 
 function other<T extends List<U>, U>() {
 >other : <T extends List<U>, U>() => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^       ^^ ^^^^^^^^^^^
 
     // error but wrong error
     // BUG 838247

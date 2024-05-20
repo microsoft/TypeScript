@@ -88,7 +88,7 @@ type FieldFuncArgs<Source, Type extends ObjectType<any>> = {
 
 declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->      : ^      ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^     ^^                           ^^^^^                  
+>      : ^      ^^    ^^^^^^^^^               ^^   ^^^^^^^^^      ^^     ^^                           ^^^^^                  
 
   field: FieldFuncArgs<Source, Type>
 >field : FieldFuncArgs<Source, Type>
@@ -137,7 +137,7 @@ const A = object<Something>()({
 >field({      type: A,      resolve() {        return {          foo: 100,        };      },    }) : Field<Something, "a">
 >                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^
 >field : <Source, Type extends ObjectType<any>, Key extends string>(field: FieldFuncArgs<Source, Type>) => Field<Source, Key>
->      : ^      ^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^     ^^                           ^^^^^                  
+>      : ^      ^^    ^^^^^^^^^               ^^   ^^^^^^^^^      ^^     ^^                           ^^^^^                  
 >{      type: A,      resolve() {        return {          foo: 100,        };      },    } : { type: ObjectType<Something>; resolve(): { foo: number; }; }
 >                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

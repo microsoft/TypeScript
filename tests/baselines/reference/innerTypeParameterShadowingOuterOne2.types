@@ -10,7 +10,7 @@ class C<T extends Date> {
 
     g<T extends Number>() {
 >g : <T extends Number>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^
 
         var x: T;
 >x : T
@@ -53,7 +53,7 @@ class C2<T extends Date, U extends Date> {
 
     g<T extends Number, U extends Number>() {
 >g : <T extends Number, U extends Number>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^
 
         var x: U;
 >x : U

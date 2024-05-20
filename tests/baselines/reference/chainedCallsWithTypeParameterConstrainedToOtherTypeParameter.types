@@ -11,7 +11,7 @@ class Chain<T extends A> {
 
     then<S extends T>(cb: (x: T) => S): Chain<S> {
 >then : <S extends T>(cb: (x: T) => S) => Chain<S>
->     : ^ ^^^^^^^^^^^^  ^^           ^^^^^        
+>     : ^ ^^^^^^^^^ ^^  ^^           ^^^^^        
 >cb : (x: T) => S
 >   : ^ ^^ ^^^^^ 
 >x : T

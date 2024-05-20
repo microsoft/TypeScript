@@ -267,7 +267,7 @@ function f8<T>(x: T) {
 
 function f9<T extends object>(x: T) {
 >f9 : <T extends object>(x: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 

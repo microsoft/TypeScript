@@ -204,16 +204,16 @@ const tmp1: MyInfo = null!;
 >      : ^^^^^
 
 function tmp2<N extends NeededInfo>(n: N) {}
->tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>tmp2 : <N extends NeededInfo>(n: N) => void
+>     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >n : N
 >  : ^
 
 tmp2(tmp1); // uncommenting this line removes a type error from a completely unrelated line ??
 >tmp2(tmp1) : void
 >           : ^^^^
->tmp2 : <N extends NeededInfo<{}>>(n: N) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>tmp2 : <N extends NeededInfo>(n: N) => void
+>     : ^ ^^^^^^^^^          ^^ ^^ ^^^^^^^^^
 >tmp1 : MyInfo
 >     : ^^^^^^
 

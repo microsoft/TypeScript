@@ -47,7 +47,7 @@ type P2 = __Awaited<InfinitePromise<number>>;  // Error
 
 function f11<T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) {
 >f11 : <T, U extends T>(tx: T, ta: __Awaited<T>, ux: U, ua: __Awaited<U>) => void
->    : ^ ^^ ^^^^^^^^^^^^  ^^ ^^  ^^            ^^  ^^ ^^  ^^            ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^ ^^  ^^ ^^  ^^            ^^  ^^ ^^  ^^            ^^^^^^^^^
 >tx : T
 >   : ^
 >ta : __Awaited<T>
@@ -156,7 +156,7 @@ type TT5 = TupleOf<number, 1000>;  // Depth error
 
 function f22<N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) {
 >f22 : <N extends number, M extends N>(tn: TupleOf<number, N>, tm: TupleOf<number, M>) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^  ^^                  ^^  ^^                  ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^^^^^^^^ ^^  ^^                  ^^  ^^                  ^^^^^^^^^
 >tn : TupleOf<number, N>
 >   : ^^^^^^^^^^^^^^^^^^
 >tm : TupleOf<number, M>
@@ -405,7 +405,7 @@ type Unpack2<T> = T extends (infer U)[] ? Unpack2<U> : T;
 
 function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^ ^^^^^^^^^^^^^^^ ^^          ^^ ^^          ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
 >x : Unpack1<T>
 >  : ^^^^^^^^^^
 >y : Unpack2<T>
@@ -431,7 +431,7 @@ function f20<T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) {
 >f20(y, x) : void
 >          : ^^^^
 >f20 : <T, U extends T>(x: Unpack1<T>, y: Unpack2<T>) => void
->    : ^ ^^^^^^^^^^^^^^^ ^^          ^^ ^^          ^^^^^^^^^
+>    : ^ ^^^^^^^^^^^^ ^^ ^^          ^^ ^^          ^^^^^^^^^
 >y : Unpack2<T>
 >  : ^^^^^^^^^^
 >x : Unpack1<T>
@@ -448,7 +448,7 @@ type Grow2<T extends unknown[], N extends number> = T['length'] extends N ? T : 
 
 function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^            ^^ ^^            ^^^^^^^^^
 >x : Grow1<[], T>
 >  : ^^^^^^^^^^^^
 >y : Grow2<[], T>
@@ -458,7 +458,7 @@ function f21<T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) {
 >f21(y, x) : void
 >          : ^^^^
 >f21 : <T extends number>(x: Grow1<[], T>, y: Grow2<[], T>) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^            ^^ ^^            ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^            ^^ ^^            ^^^^^^^^^
 >y : Grow2<[], T>
 >  : ^^^^^^^^^^^^
 >x : Grow1<[], T>
@@ -548,7 +548,7 @@ type Enumerate<N extends number> = number extends N
 
 function foo2<T extends unknown[]>(value: T): Enumerate<T['length']> {
 >foo2 : <T extends unknown[]>(value: T) => Enumerate<T["length"]>
->     : ^ ^^^^^^^^^^^^^^^^^^^^     ^^ ^^^^^                      
+>     : ^ ^^^^^^^^^         ^^     ^^ ^^^^^                      
 >value : T
 >      : ^
 

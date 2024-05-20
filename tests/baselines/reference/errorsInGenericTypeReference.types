@@ -130,7 +130,7 @@ class testClass6<T> {
 
     method<M extends { x: V }>(): void { } // error: could not find symbol V
 >method : <M extends { x: V; }>() => void
->       : ^^^^^^^^^^^^^^^^ ^^^^^^^^^^    
+>       : ^^^^^^^^^^^         ^^^^^^^    
 >x : V
 >  : ^
 }

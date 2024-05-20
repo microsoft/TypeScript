@@ -11,7 +11,7 @@ enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
->  : ^ ^^^^^^^^^^^^^^      ^^^^^  ^^ ^^  ^^   ^^^^^^^^^
+>  : ^ ^^^^^^^^^              ^^  ^^ ^^  ^^   ^^^^^^^^^
 >b : string
 >  : ^^^^^^
 >p1 : T

@@ -238,7 +238,7 @@ function f3(obj: Thing, key: keyof Thing) {
 
 function f4<K extends string>(obj: Record<K, string | undefined>, key: K) {
 >f4 : <K extends string>(obj: Record<K, string | undefined>, key: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^   ^^                             ^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^   ^^                             ^^   ^^ ^^^^^^^^^
 >obj : Record<K, string | undefined>
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K

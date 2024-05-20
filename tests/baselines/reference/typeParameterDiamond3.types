@@ -11,7 +11,7 @@ function diamondTop<Top>() {
 
         function diamondBottom<Bottom extends Top | T | U>() {
 >diamondBottom : <Bottom extends Top | T | U>() => void
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^           ^^^^^^^^^^^
 
             var top: Top;
 >top : Top

@@ -510,7 +510,7 @@ type KeySet<T extends Keys> = { [k in T]: true }
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 >hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
->       : ^ ^^^^^^^^^^^^^^^ ^^         ^^^^^                    
+>       : ^ ^^^^^^^^^    ^^ ^^         ^^^^^                    
 >x : KeySet<T>
 >  : ^^^^^^^^^
 

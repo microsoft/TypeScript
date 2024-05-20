@@ -377,7 +377,7 @@ const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
 
 const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 10);
 >f31 : <T extends Box<number>>(a: T[]) => T[]
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^ ^^   ^^^^^   
+>    : ^ ^^^^^^^^^           ^^ ^^   ^^^^^   
 >a : T[]
 >  : ^^^
 >arrayFilter(x => x.value > 10) : (a: T[]) => T[]

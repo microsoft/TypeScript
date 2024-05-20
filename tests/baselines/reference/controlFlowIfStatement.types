@@ -167,7 +167,7 @@ function c<T>(data: string | T): T {
 }
 function d<T extends string>(data: string | T): never {
 >d : <T extends string>(data: string | T) => never
->  : ^ ^^^^^^^^^^^^^^^^^    ^^          ^^^^^     
+>  : ^ ^^^^^^^^^      ^^    ^^          ^^^^^     
 >data : string | T
 >     : ^^^^^^^^^^
 

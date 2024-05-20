@@ -59,7 +59,7 @@ function f1<T>(x: T | (string extends T ? null | undefined : never)) {
 
 function f2<T, U extends null | undefined>(x: T | U) {
 >f2 : <T, U extends null | undefined>(x: T | U) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^     ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^                ^^ ^^     ^^^^^^^^^
 >x : T | U
 >  : ^^^^^
 

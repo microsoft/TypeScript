@@ -30,7 +30,7 @@ declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
 // Error
 function Bar<T extends {prop: number}>(arg: T) {
 >Bar : <T extends { prop: number; }>(arg: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^      ^^^^^   ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^                 ^^   ^^ ^^^^^^^^^
 >prop : number
 >     : ^^^^^^
 >arg : T

@@ -1655,8 +1655,8 @@ const checkIsTouchDevice = () =>
 // Repro from #51501
 
 function isHTMLTable<T extends object | null>(table: T): boolean {
->isHTMLTable : <T extends object>(table: T) => boolean
->            : ^ ^^^^^^^^^^^^^^^^^     ^^ ^^^^^       
+>isHTMLTable : <T extends object | null>(table: T) => boolean
+>            : ^ ^^^^^^^^^             ^^     ^^ ^^^^^       
 >table : T
 >      : ^
 
@@ -1681,9 +1681,9 @@ function isHTMLTable<T extends object | null>(table: T): boolean {
 
 const f = <P extends object>(a: P & {}) => {
 >f : <P extends object>(a: P & {}) => void
->  : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>  : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 ><P extends object>(a: P & {}) => {    "foo" in a;} : <P extends object>(a: P & {}) => void
->                                                   : ^ ^^^^^^^^^^^^^^^^^ ^^      ^^^^^^^^^
+>                                                   : ^ ^^^^^^^^^      ^^ ^^      ^^^^^^^^^
 >a : P
 >  : ^
 
@@ -1701,7 +1701,7 @@ const f = <P extends object>(a: P & {}) => {
 
 function test1<T extends any[] | Record<string, any>>(obj: T) {
 >test1 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1738,7 +1738,7 @@ function test1<T extends any[] | Record<string, any>>(obj: T) {
 
 function test2<T extends any[] | Record<string, any>>(obj: T) {
 >test2 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -1767,7 +1767,7 @@ function test2<T extends any[] | Record<string, any>>(obj: T) {
 
 function test3<T extends any[] | Record<string, any>>(obj: T) {
 >test3 : <T extends any[] | Record<string, any>>(obj: T) => void
->      : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^                           ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 

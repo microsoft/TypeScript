@@ -7,19 +7,19 @@ declare const x: any;
 
 declare function f03<T extends string = number>(): void; // error
 >f03 : <T extends string = number>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^    
 
 declare function f04<T extends string, U extends number = T>(): void; // error
 >f04 : <T extends string, U extends number = T>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^    
 
 declare function f05<T, U extends number = T>(): void; // error
 >f05 : <T, U extends number = T>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^^^^^^^^^^^^^^      ^^^^^^^^^^^    
 
 declare function f06<T, U extends T = number>(): void; // error
 >f06 : <T, U extends T = number>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    
+>    : ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^    
 
 declare function f11<T, U, V = number>(): void;
 >f11 : <T, U, V = number>() => void

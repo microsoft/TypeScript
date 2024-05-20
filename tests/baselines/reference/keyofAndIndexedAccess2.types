@@ -133,7 +133,7 @@ function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2:
 
 function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
 >f2 : <T extends { [key: string]: number; }>(a: { x: number; y: number; }, b: { [key: string]: number; }, c: T, k: keyof T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^                         ^^ ^^                          ^^ ^^ ^^ ^^       ^^^^^^^^^
+>   : ^ ^^^^^^^^^                          ^^ ^^                         ^^ ^^                          ^^ ^^ ^^ ^^       ^^^^^^^^^
 >key : string
 >    : ^^^^^^
 >a : { x: number; y: number; }
@@ -282,7 +282,7 @@ function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b:
 
 function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
 >f3 : <K extends string>(a: { [P in K]: number; }, b: { [key: string]: number; }, k: K) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [key: string]: number; }
@@ -331,7 +331,7 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 
 function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
 >f3b : <K extends string>(a: { [P in K]: number; }, b: { [P in string]: number; }, k: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^      ^^ ^^                     ^^ ^^                          ^^ ^^ ^^^^^^^^^
 >a : { [P in K]: number; }
 >  : ^^^^^^^^^^^^^^^^^^^^^
 >b : { [x: string]: number; }
@@ -358,7 +358,7 @@ function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: numb
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
 >f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^ ^^                             ^^ ^^      ^^^^^^^^^
+>   : ^ ^^^^^^^^^      ^^ ^^                             ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
 >key : string
@@ -393,7 +393,7 @@ type Item = { a: string, b: number };
 
 function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
 >f10 : <T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) => void
->    : ^ ^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^  ^^      ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^    ^^ ^^^^^^^^^       ^^   ^^ ^^  ^^      ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 >k1 : string
@@ -459,8 +459,8 @@ type Dict = Record<string, number>;
 >     : ^^^^
 
 function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
->f11 : <K extends string>(obj: Dict, k1: keyof Dict, k2: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^   ^^    ^^  ^^          ^^  ^^ ^^^^^^^^^
+>f11 : <K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) => void
+>    : ^ ^^^^^^^^^          ^^   ^^    ^^  ^^          ^^  ^^ ^^^^^^^^^
 >obj : Dict
 >    : ^^^^
 >k1 : string
@@ -507,7 +507,7 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 
 function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
 >f12 : <T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^   ^^ ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^^^^^^^^       ^^   ^^ ^^  ^^          ^^  ^^       ^^  ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 >k1 : string
@@ -595,7 +595,7 @@ export interface EntityState<E extends Entity> {
 
 export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 >getAllEntities : <E extends Entity>(state: EntityState<E>) => E[]
->               : ^ ^^^^^^^^^^^^^^^^^     ^^              ^^^^^   
+>               : ^ ^^^^^^^^^      ^^     ^^              ^^^^^   
 >state : EntityState<E>
 >      : ^^^^^^^^^^^^^^
 
@@ -630,7 +630,7 @@ export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
 
 export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
 >getEntity : <E extends Entity>(id: IdOf<E>, state: EntityState<E>) => E | undefined
->          : ^ ^^^^^^^^^^^^^^^^^  ^^       ^^     ^^              ^^^^^             
+>          : ^ ^^^^^^^^^      ^^  ^^       ^^     ^^              ^^^^^             
 >id : IdOf<E>
 >   : ^^^^^^^
 >state : EntityState<E>
@@ -686,7 +686,7 @@ interface Type {
 
 function get123<K extends keyof Type>(): Type[K] {
 >get123 : <K extends keyof Type>() => Type[K]
->       : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^       
+>       : ^ ^^^^^^^^^          ^^^^^^^       
 
     return 123;  // Error
 >123 : 123
@@ -715,7 +715,7 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
 >fn : <T extends { elements: Array<string>; } | { elements: Array<number>; }>(param: T, cb: (element: T["elements"][number]) => void) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^^^^^^             ^^^^^     ^^ ^^  ^^                                        ^^^^^^^^^
+>   : ^ ^^^^^^^^^                                                           ^^     ^^ ^^  ^^                                        ^^^^^^^^^
 >elements : string[]
 >         : ^^^^^^^^
 >elements : number[]
@@ -745,8 +745,8 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 }
 
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
->fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^     ^^ ^^  ^^                            ^^^^^^^^^
+>fn2 : <T extends Array<string>>(param: T, cb: (element: T[number]) => void) => void
+>    : ^ ^^^^^^^^^             ^^     ^^ ^^  ^^                            ^^^^^^^^^
 >param : T
 >      : ^
 >cb : (element: T[number]) => void
@@ -770,8 +770,8 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
 // Repro from #31149
 
 function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
->fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^ ^^  ^^                            ^^^^^^^^^
+>fn3 : <T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) => void
+>    : ^ ^^^^^^^^^                     ^^     ^^ ^^  ^^                            ^^^^^^^^^
 >param : T
 >      : ^
 >cb : (element: T[number]) => void
@@ -794,7 +794,7 @@ function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number])
 
 function fn4<K extends number>() {
 >fn4 : <K extends number>() => void
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^      ^^^^^^^^^^^
 
     let x: Array<string>[K] = 'abc';
 >x : string[][K]

@@ -39,7 +39,7 @@ var r = foo(a);
 
 function other<T extends Date>(arg: T) {
 >other : <T extends Date>(arg: T) => void
->      : ^ ^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^    ^^   ^^ ^^^^^^^^^
 >arg : T
 >    : ^
 

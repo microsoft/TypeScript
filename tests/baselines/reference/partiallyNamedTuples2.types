@@ -5,7 +5,7 @@
 interface MultiKeyMap<Keys extends readonly unknown[], Value> {
   get<Key extends GetKeys<Keys>>(...key: Key): GetResult<Keys, Key, Value>;
 >get : <Key extends GetKeys<Keys>>(...key: Key) => GetResult<Keys, Key, Value>
->    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^                           
+>    : ^   ^^^^^^^^^             ^^^^^   ^^   ^^^^^                           
 >key : Key
 >    : ^^^
 }

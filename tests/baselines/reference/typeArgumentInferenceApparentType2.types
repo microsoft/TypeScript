@@ -9,7 +9,7 @@ function method<T>(iterable: Iterable<T>): T {
 
     function inner<U extends Iterable<T>>() {
 >inner : <U extends Iterable<T>>() => void
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^           ^^^^^^^^^^^
 
         var u: U;
 >u : U

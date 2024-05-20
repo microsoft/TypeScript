@@ -198,24 +198,8 @@ function foo() {
 export {};
 //# sourceMappingURL=terminal.d.ts.map
 
-//// [/user/username/projects/project/out/common/input/keyboard.test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
-function testEvaluateKeyboardEvent() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
-}
-
-
-//// [/user/username/projects/project/out/common/input/keyboard.test.d.ts.map]
-{"version":3,"file":"keyboard.test.d.ts","sourceRoot":"","sources":["../../../src/common/input/keyboard.test.ts"],"names":[],"mappings":""}
-
-//// [/user/username/projects/project/out/common/input/keyboard.test.d.ts]
-export {};
-//# sourceMappingURL=keyboard.test.d.ts.map
-
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","../src/common/input/keyboard.test.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n","impliedFormat":1},{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[4,1],[3,1]],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./common/input/keyboard.test.d.ts"},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.test.ts","../src/common/input/keyboard.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n","impliedFormat":1},{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-3531856636-export {};\n","impliedFormat":1}],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"fileIdsList":[[2]],"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,4,3],"latestChangedDtsFile":"./terminal.d.ts"},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -224,7 +208,9 @@ export {};
       "../../../../../a/lib/lib.d.ts",
       "./input/keyboard.d.ts",
       "../src/terminal.ts",
-      "../src/common/input/keyboard.test.ts"
+      "./input/keyboard.test.d.ts",
+      "../src/common/input/keyboard.test.ts",
+      "../src/common/input/keyboard.ts"
     ],
     "fileNamesList": [
       [
@@ -262,13 +248,12 @@ export {};
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       },
-      "../src/common/input/keyboard.test.ts": {
+      "./input/keyboard.test.d.ts": {
         "original": {
-          "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
-          "signature": "-3531856636-export {};\n",
+          "version": "-3531856636-export {};\n",
           "impliedFormat": 1
         },
-        "version": "-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n",
+        "version": "-3531856636-export {};\n",
         "signature": "-3531856636-export {};\n",
         "impliedFormat": "commonjs"
       }
@@ -282,7 +267,29 @@ export {};
         [
           "./input/keyboard.d.ts",
           "../src/terminal.ts",
+          "./input/keyboard.test.d.ts"
+        ]
+      ]
+    ],
+    "resolvedRoot": [
+      [
+        [
+          4,
+          5
+        ],
+        [
+          "./input/keyboard.test.d.ts",
           "../src/common/input/keyboard.test.ts"
+        ]
+      ],
+      [
+        [
+          2,
+          6
+        ],
+        [
+          "./input/keyboard.d.ts",
+          "../src/common/input/keyboard.ts"
         ]
       ]
     ],
@@ -293,9 +300,6 @@ export {};
       "tsBuildInfoFile": "./src.tsconfig.tsbuildinfo"
     },
     "referencedMap": {
-      "../src/common/input/keyboard.test.ts": [
-        "./input/keyboard.d.ts"
-      ],
       "../src/terminal.ts": [
         "./input/keyboard.d.ts"
       ]
@@ -303,13 +307,13 @@ export {};
     "semanticDiagnosticsPerFile": [
       "../../../../../a/lib/lib.d.ts",
       "./input/keyboard.d.ts",
-      "../src/common/input/keyboard.test.ts",
+      "./input/keyboard.test.d.ts",
       "../src/terminal.ts"
     ],
-    "latestChangedDtsFile": "./common/input/keyboard.test.d.ts"
+    "latestChangedDtsFile": "./terminal.d.ts"
   },
   "version": "FakeTSVersion",
-  "size": 1411
+  "size": 1308
 }
 
 

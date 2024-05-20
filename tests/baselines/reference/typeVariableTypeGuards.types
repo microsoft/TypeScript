@@ -142,7 +142,7 @@ type Item = {
 
 function f1<T extends Item | undefined>(obj: T) {
 >f1 : <T extends Item | undefined>(obj: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^                ^^   ^^ ^^^^^^^^^
 >obj : T
 >    : ^
 
@@ -176,7 +176,7 @@ function f1<T extends Item | undefined>(obj: T) {
 
 function f2<T extends Item | undefined>(obj: T | undefined) {
 >f2 : <T extends Item | undefined>(obj: T | undefined) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^             ^^^^^^^^^
+>   : ^ ^^^^^^^^^                ^^   ^^             ^^^^^^^^^
 >obj : T | undefined
 >    : ^^^^^^^^^^^^^
 
@@ -210,7 +210,7 @@ function f2<T extends Item | undefined>(obj: T | undefined) {
 
 function f3<T extends Item | undefined>(obj: T | null) {
 >f3 : <T extends Item | undefined>(obj: T | null) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^        ^^^^^^^^^
+>   : ^ ^^^^^^^^^                ^^   ^^        ^^^^^^^^^
 >obj : T | null
 >    : ^^^^^^^^
 
@@ -244,7 +244,7 @@ function f3<T extends Item | undefined>(obj: T | null) {
 
 function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
 >f4 : <T extends string[] | undefined>(obj: T | undefined, x: number) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^             ^^ ^^      ^^^^^^^^^
+>   : ^ ^^^^^^^^^                    ^^   ^^             ^^ ^^      ^^^^^^^^^
 >obj : T | undefined
 >    : ^^^^^^^^^^^^^
 >x : number
@@ -270,7 +270,7 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
 
 function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 >f5 : <T, K extends keyof T>(obj: T | undefined, key: K) => void
->   : ^ ^^ ^^^^^^^^^^^^^^^^^^   ^^             ^^   ^^ ^^^^^^^^^
+>   : ^ ^^ ^^^^^^^^^       ^^   ^^             ^^   ^^ ^^^^^^^^^
 >obj : T | undefined
 >    : ^^^^^^^^^^^^^
 >key : K
@@ -294,7 +294,7 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 
 function f6<T extends string | (new () => {})>(a: T) {
 >f6 : <T extends string | (new () => {})>(a: T) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^ ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^                       ^^ ^^ ^^^^^^^^^
 >a : T
 >  : ^
 

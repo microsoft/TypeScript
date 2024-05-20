@@ -47,7 +47,7 @@ function call0(p: A | B) {
 
 function callN<T extends A | B>(p: T) {
 >callN : <T extends A | B>(p: T) => void
->      : ^ ^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>      : ^ ^^^^^^^^^     ^^ ^^ ^^^^^^^^^
 >p : T
 >  : ^
 

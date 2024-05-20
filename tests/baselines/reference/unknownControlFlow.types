@@ -162,7 +162,7 @@ function f11<T>(x: T) {
 
 function f12<T extends {}>(x: T) {
 >f12 : <T extends {}>(x: T) => void
->    : ^ ^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^  ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -373,7 +373,7 @@ function f21<T>(x: T) {
 
 function f22<T extends {} | undefined>(x: T) {
 >f22 : <T extends {} | undefined>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -600,7 +600,7 @@ function f31<T>(x: T) {
 
 function f32<T extends {} | undefined>(x: T) {
 >f32 : <T extends {} | undefined>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -1198,7 +1198,7 @@ function fx0<T>(value: T & ({} | null)) {
 
 function fx1<T extends unknown>(value: T & ({} | null)) {
 >fx1 : <T extends unknown>(value: T & ({} | null)) => void
->    : ^ ^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^     ^^               ^^^^^^^^^
 >value : T & ({} | null)
 >      : ^^^^^^^^^^^^^^^
 
@@ -1223,7 +1223,7 @@ function fx1<T extends unknown>(value: T & ({} | null)) {
 
 function fx2<T extends {}>(value: T & ({} | null)) {
 >fx2 : <T extends {}>(value: T & ({} | null)) => void
->    : ^ ^^^^^^^^^^^^^     ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^  ^^     ^^               ^^^^^^^^^
 >value : T
 >      : ^
 
@@ -1248,7 +1248,7 @@ function fx2<T extends {}>(value: T & ({} | null)) {
 
 function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 >fx3 : <T extends {} | undefined>(value: T & ({} | null)) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^              ^^     ^^               ^^^^^^^^^
 >value : T & {}
 >      : ^^^^^^
 
@@ -1273,7 +1273,7 @@ function fx3<T extends {} | undefined>(value: T & ({} | null)) {
 
 function fx4<T extends {} | null>(value: T & ({} | null)) {
 >fx4 : <T extends {} | null>(value: T & ({} | null)) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^         ^^     ^^               ^^^^^^^^^
 >value : T
 >      : ^
 
@@ -1298,7 +1298,7 @@ function fx4<T extends {} | null>(value: T & ({} | null)) {
 
 function fx5<T extends {} | null | undefined>(value: T & ({} | null)) {
 >fx5 : <T extends {} | null | undefined>(value: T & ({} | null)) => void
->    : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^               ^^^^^^^^^
+>    : ^ ^^^^^^^^^                     ^^     ^^               ^^^^^^^^^
 >value : T & ({} | null)
 >      : ^^^^^^^^^^^^^^^
 
@@ -1407,7 +1407,7 @@ function SendBlob(encoding: unknown) {
 
 function doSomething1<T extends unknown>(value: T): T {
 >doSomething1 : <T extends unknown>(value: T) => T
->             : ^ ^^^^^^^^^^^^^^^^^^     ^^ ^^^^^ 
+>             : ^ ^^^^^^^^^       ^^     ^^ ^^^^^ 
 >value : T
 >      : ^
 
@@ -1526,7 +1526,7 @@ type AB = "A" | "B";
 
 function x<T_AB extends AB>(x: T_AB & undefined, y: any) {
 >x : <T_AB extends AB>(x: T_AB & undefined, y: any) => void
->  : ^    ^^^^^^^^^^^^^ ^^                ^^ ^^   ^^^^^^^^^
+>  : ^    ^^^^^^^^^  ^^ ^^                ^^ ^^   ^^^^^^^^^
 >x : never
 >  : ^^^^^
 >y : any

@@ -37,15 +37,15 @@ x1.isElement;
 // This is a generic function
 var x2 = <T extends {}>() => {};
 >x2 : <T extends {}>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^  ^^^^^^^^^^^
 ><T extends {}>() => {} : <T extends {}>() => void
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>                       : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 x2();
 >x2() : void
 >     : ^^^^
 >x2 : <T extends {}>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^  ^^^^^^^^^^^
 
 // This is a generic function
 var x3 = <T, T1>() => {};

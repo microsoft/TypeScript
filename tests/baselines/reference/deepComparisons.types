@@ -7,7 +7,7 @@ Instantiation count: 2,500
 === deepComparisons.ts ===
 function f1<T, K1 extends keyof T, K2 extends keyof T[K1]>() {
 >f1 : <T, K1 extends keyof T, K2 extends keyof T[K1]>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^ ^^  ^^^^^^^^^       ^^^^^^^^^^^^^           ^^^^^^^^^^^
 
     let v1: Extract<T, string> = 0 as any as T;  // Error
 >v1 : Extract<T, string>

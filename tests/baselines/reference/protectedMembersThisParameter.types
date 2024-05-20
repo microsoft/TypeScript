@@ -95,7 +95,7 @@ class Z {
 
 function bA<T extends A>(this: T, arg: B) {
 >bA : <T extends A>(this: T, arg: B) => void
->   : ^ ^^^^^^^^^^^^    ^^ ^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
 >     : ^
 >arg : B
@@ -133,7 +133,7 @@ function bA<T extends A>(this: T, arg: B) {
 }
 function bB<T extends B>(this: T, arg: B) {
 >bB : <T extends B>(this: T, arg: B) => void
->   : ^ ^^^^^^^^^^^^    ^^ ^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
 >     : ^
 >arg : B
@@ -181,7 +181,7 @@ function bB<T extends B>(this: T, arg: B) {
 }
 function bC<T extends C>(this: T, arg: B) {
 >bC : <T extends C>(this: T, arg: B) => void
->   : ^ ^^^^^^^^^^^^    ^^ ^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
 >     : ^
 >arg : B
@@ -229,7 +229,7 @@ function bC<T extends C>(this: T, arg: B) {
 }
 function bZ<T extends Z>(this: T, arg: B) {
 >bZ : <T extends Z>(this: T, arg: B) => void
->   : ^ ^^^^^^^^^^^^    ^^ ^^   ^^ ^^^^^^^^^
+>   : ^ ^^^^^^^^^ ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
 >     : ^
 >arg : B
@@ -267,7 +267,7 @@ function bZ<T extends Z>(this: T, arg: B) {
 }
 function bString<T extends string>(this: T, arg: B) {
 >bString : <T extends string>(this: T, arg: B) => void
->        : ^ ^^^^^^^^^^^^^^^^^    ^^ ^^   ^^ ^^^^^^^^^
+>        : ^ ^^^^^^^^^      ^^    ^^ ^^   ^^ ^^^^^^^^^
 >this : T
 >     : ^
 >arg : B

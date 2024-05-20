@@ -6,11 +6,11 @@
 
 function f<T extends Date>() {
 >f : <T extends Date>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^    ^^^^^^^^^^^
 
     function g<T extends Number>() {
 >g : <T extends Number>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^
 
         var x: T;
 >x : T
@@ -43,11 +43,11 @@ function f<T extends Date>() {
 
 function f2<T extends Date, U extends Date>() {
 >f2 : <T extends Date, U extends Date>() => void
->   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   : ^^^^^^^^^^^    ^^^^^^^^^^^^    ^^^^^^^^^^^
 
     function g<T extends Number, U extends Number>() {
 >g : <T extends Number, U extends Number>() => void
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^^^      ^^^^^^^^^^^^      ^^^^^^^^^^^
 
         var x: U;
 >x : U

@@ -1,0 +1,85 @@
+//// [tests/cases/compiler/awaitedTypeNoLib.ts] ////
+
+=== awaitedTypeNoLib.ts ===
+type NotPromise<T> = T extends Thenable<unknown>
+>NotPromise : Symbol(NotPromise, Decl(awaitedTypeNoLib.ts, 0, 0))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+
+  ? T
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+
+  : T extends PromiseLike<unknown>
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+>PromiseLike : Symbol(PromiseLike)
+
+  ? never
+  : T;
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 0, 16))
+
+type Receiver<T> = (value: NotPromise<T>) => void;
+>Receiver : Symbol(Receiver, Decl(awaitedTypeNoLib.ts, 4, 6))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 6, 14))
+>value : Symbol(value, Decl(awaitedTypeNoLib.ts, 6, 20))
+>NotPromise : Symbol(NotPromise, Decl(awaitedTypeNoLib.ts, 0, 0))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 6, 14))
+
+class Thenable<T> {
+>Thenable : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 8, 15))
+
+  then(a: Receiver<T>) {}
+>then : Symbol(Thenable.then, Decl(awaitedTypeNoLib.ts, 8, 19))
+>a : Symbol(a, Decl(awaitedTypeNoLib.ts, 9, 7))
+>Receiver : Symbol(Receiver, Decl(awaitedTypeNoLib.ts, 4, 6))
+>T : Symbol(T, Decl(awaitedTypeNoLib.ts, 8, 15))
+
+  private handleResolve<TResult>(
+>handleResolve : Symbol(Thenable.handleResolve, Decl(awaitedTypeNoLib.ts, 9, 25))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 11, 24))
+
+    result: NotPromise<TResult> | Thenable<NotPromise<TResult>>,
+>result : Symbol(result, Decl(awaitedTypeNoLib.ts, 11, 33))
+>NotPromise : Symbol(NotPromise, Decl(awaitedTypeNoLib.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 11, 24))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+>NotPromise : Symbol(NotPromise, Decl(awaitedTypeNoLib.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 11, 24))
+
+    resolve: Receiver<TResult>,
+>resolve : Symbol(resolve, Decl(awaitedTypeNoLib.ts, 12, 64))
+>Receiver : Symbol(Receiver, Decl(awaitedTypeNoLib.ts, 4, 6))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 11, 24))
+
+  ) {
+    if (result instanceof Thenable) {
+>result : Symbol(result, Decl(awaitedTypeNoLib.ts, 11, 33))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+
+      //  #58547 This previously was a Debug Failure. False expression: type provided should not be a non-generic 'promise'-like.
+      this.resolvePromise(result, resolve);
+>this.resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+>this : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+>resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+>result : Symbol(result, Decl(awaitedTypeNoLib.ts, 11, 33))
+>resolve : Symbol(resolve, Decl(awaitedTypeNoLib.ts, 12, 64))
+    }
+  }
+
+  private resolvePromise<TResult>(
+>resolvePromise : Symbol(Thenable.resolvePromise, Decl(awaitedTypeNoLib.ts, 19, 3))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 21, 25))
+
+    result: Thenable<TResult>,
+>result : Symbol(result, Decl(awaitedTypeNoLib.ts, 21, 34))
+>Thenable : Symbol(Thenable, Decl(awaitedTypeNoLib.ts, 6, 50))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 21, 25))
+
+    resolve: Receiver<TResult>,
+>resolve : Symbol(resolve, Decl(awaitedTypeNoLib.ts, 22, 30))
+>Receiver : Symbol(Receiver, Decl(awaitedTypeNoLib.ts, 4, 6))
+>TResult : Symbol(TResult, Decl(awaitedTypeNoLib.ts, 21, 25))
+
+  ) {}
+}

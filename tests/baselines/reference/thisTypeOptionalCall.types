@@ -3,7 +3,7 @@
 === thisTypeOptionalCall.ts ===
 function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
 >maybeBind : <T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined) => ((...args: A) => R) | undefined
->          : ^ ^^ ^^^^^^^^^^^^^^^^ ^^   ^^ ^^  ^^                                        ^^^^^                               
+>          : ^ ^^ ^^^^^^^^^     ^^ ^^   ^^ ^^  ^^                                        ^^^^^                               
 >obj : T
 >    : ^
 >fn : ((this: T, ...args: A) => R) | undefined

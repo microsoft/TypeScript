@@ -485,7 +485,7 @@ function f22(x: unknown) {
 
 function f23<T extends unknown>(x: T) {
 >f23 : <T extends unknown>(x: T) => void
->    : ^ ^^^^^^^^^^^^^^^^^^ ^^ ^^^^^^^^^
+>    : ^ ^^^^^^^^^       ^^ ^^ ^^^^^^^^^
 >x : T
 >  : ^
 
@@ -678,7 +678,7 @@ class C1 {
 
 function f30<T, U extends unknown>(t: T, u: U) {
 >f30 : <T, U extends unknown>(t: T, u: U) => void
->    : ^ ^^ ^^^^^^^^^^^^^^^^^^ ^^ ^^ ^^ ^^^^^^^^^
+>    : ^ ^^ ^^^^^^^^^       ^^ ^^ ^^ ^^ ^^^^^^^^^
 >t : T
 >  : ^
 >u : U
@@ -721,7 +721,7 @@ type Test2 = IsDefinitelyDefined<unknown>;  // false
 
 function oops<T extends unknown>(arg: T): {} {
 >oops : <T extends unknown>(arg: T) => {}
->     : ^ ^^^^^^^^^^^^^^^^^^   ^^ ^^^^^  
+>     : ^ ^^^^^^^^^       ^^   ^^ ^^^^^  
 >arg : T
 >    : ^
 

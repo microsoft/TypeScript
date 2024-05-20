@@ -56,7 +56,7 @@ class MyClass { private x; }
 
 export function classExtender2<TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void): TFunction {
 >classExtender2 : <TFunction extends new (...args: string[]) => MyClass>(superClass: TFunction, _instanceModifier: (instance: any, args: any[]) => void) => TFunction
->               : ^         ^^^^^^^^^^^^^^^^^    ^^        ^^^^^       ^^          ^^         ^^                 ^^                                    ^^^^^         
+>               : ^         ^^^^^^^^^                                  ^^          ^^         ^^                 ^^                                    ^^^^^         
 >args : string[]
 >     : ^^^^^^^^
 >superClass : TFunction

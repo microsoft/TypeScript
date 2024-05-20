@@ -152,7 +152,7 @@ type Args2<T extends State> = {
 
 function doit<T extends State>() {
 >doit : <T extends State>() => void
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>     : ^^^^^^^^^^^     ^^^^^^^^^^^
 
     let previous: Partial<T> = Object.create(null);
 >previous : Partial<T>

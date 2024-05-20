@@ -20,7 +20,7 @@ type FunctionsObj<T> = {
 
 function g<
 >g : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>, x: A) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^  ^^                ^^ ^^ ^^^^^^^^^
+>  : ^ ^^^^^^^^^               ^^ ^^^^^^^^^       ^^  ^^                ^^ ^^ ^^^^^^^^^
 
     T extends FunctionsObj<T>,
     M extends keyof T
@@ -43,7 +43,7 @@ function g<
 
 function g2<
 >g2 : <T extends FunctionsObj<T>, M extends keyof T>(a2: ReturnType<T[M]>) => void
->   : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^  ^^                ^^^^^^^^^
+>   : ^ ^^^^^^^^^               ^^ ^^^^^^^^^       ^^  ^^                ^^^^^^^^^
 
     T extends FunctionsObj<T>,
     M extends keyof T
