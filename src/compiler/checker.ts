@@ -26900,6 +26900,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return propType && getConstituentTypeForKeyType(unionType, propType);
     }
 
+    function getMatchingUnionConstituentForArrayLiteral(unionType: UnionType, node: ArrayLiteralExpression) {
+        const resolvedElements = node.elements.map(el => getContextFreeTypeOfExpression(el));
+        for (const type of unionType.types) {
+            if (isTupleType(type)) {
+                const unionElements = getElementTypes(type);
+                const typesMatch = resolvedElements.every(
+                    (el, ndx) => isTypeAssignableTo(el, unionElements[ndx]),
+                );
+                if (typesMatch) {
+                    return type;
+                }
+            }
+        }
+        return undefined;
+    }
+
     function isOrContainsMatchingReference(source: Node, target: Node) {
         return isMatchingReference(source, target) || containsMatchingReference(source, target);
     }
@@ -31366,20 +31382,21 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const cached = getCachedType(key);
         if (cached) return cached;
 
-        // Create a discriminator for each element in the list
-        const discriminators = map(
-            node.elements,
-            (e, ndx) => [() => getContextFreeTypeOfExpression(e), "" + ndx as __String] as const,
-        );
-
-        return setCachedType(
-            key,
-            discriminateTypeByDiscriminableItems(
+        let discriminatedType: Type | undefined = getMatchingUnionConstituentForArrayLiteral(contextualType, node);
+        if (!discriminatedType) {
+            // Create a discriminator for each element in the list
+            const discriminators = map(
+                node.elements,
+                (e, ndx) => [() => getContextFreeTypeOfExpression(e), "" + ndx as __String] as const,
+            );
+            discriminatedType = discriminateTypeByDiscriminableItems(
                 contextualType,
                 discriminators,
                 isTypeAssignableTo,
-            ),
-        );
+            );
+        }
+
+        return setCachedType(key, discriminatedType);
     }
 
     // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
