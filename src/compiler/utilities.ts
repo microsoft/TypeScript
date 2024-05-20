@@ -10086,6 +10086,7 @@ export function skipTypeChecking(sourceFile: SourceFile, options: CompilerOption
         !canIncludeBindAndCheckDiagnsotics(sourceFile, options);
 }
 
+/** @internal */
 export function canIncludeBindAndCheckDiagnsotics(sourceFile: SourceFile, options: CompilerOptions) {
     if (!!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false) return false;
     if (
