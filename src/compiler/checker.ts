@@ -26903,15 +26903,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function getMatchingUnionConstituentForArrayLiteral(unionType: UnionType, node: ArrayLiteralExpression) {
         const resolvedElements = node.elements.map(el => getContextFreeTypeOfExpression(el));
         for (const type of unionType.types) {
-            if (isTupleType(type)) {
-                const unionElements = getElementTypes(type);
-                const typesMatch = resolvedElements.every(
-                    (el, ndx) => isTypeAssignableTo(el, unionElements[ndx]),
-                );
-                if (typesMatch) {
-                    return type;
-                }
-            }
+            if (!isTupleType(type)) continue;
+            const unionElements = getElementTypes(type);
+            if (unionElements.length !== resolvedElements.length) continue;
+            const typesMatch = resolvedElements.every(
+                (el, ndx) => isTypeAssignableTo(el, unionElements[ndx]),
+            );
+            if (typesMatch) return type;
         }
         return undefined;
     }
