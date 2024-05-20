@@ -17,7 +17,7 @@ import {
     libFile,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc:: builder cancellationToken:: sheetal", () => {
+describe("unittests:: tsc:: builder cancellationToken::", () => {
     verifyCancellation(/*useBuildInfo*/ true, "when emitting buildInfo");
     verifyCancellation(/*useBuildInfo*/ false, "when using state");
     function verifyCancellation(useBuildInfo: boolean, scenario: string) {
