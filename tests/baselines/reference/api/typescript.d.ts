@@ -2756,7 +2756,6 @@ declare namespace ts {
             private compilerOptions;
             compileOnSaveEnabled: boolean;
             protected watchOptions: WatchOptions | undefined;
-            private rootFiles;
             private rootFilesMap;
             private program;
             private externalFiles;
@@ -2837,7 +2836,7 @@ declare namespace ts {
             private detachScriptInfoIfNotRoot;
             isClosed(): boolean;
             hasRoots(): boolean;
-            getRootFiles(): ts.server.NormalizedPath[];
+            getRootFiles(): NormalizedPath[];
             getRootScriptInfos(): ts.server.ScriptInfo[];
             getScriptInfos(): ScriptInfo[];
             getExcludedFiles(): readonly NormalizedPath[];

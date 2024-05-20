@@ -88,7 +88,6 @@ import {
     noopFileWatcher,
     normalizePath,
     normalizeSlashes,
-    orderedRemoveItem,
     PackageJsonAutoImportPreference,
     PackageJsonInfo,
     ParsedCommandLine,
@@ -309,8 +308,7 @@ const enum TypingWatcherType {
 type TypingWatchers = Map<Path, FileWatcher> & { isInvoked?: boolean; };
 
 export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
-    private rootFiles: ScriptInfo[] = [];
-    private rootFilesMap = new Map<string, ProjectRootFile>();
+    private rootFilesMap = new Map<Path, ProjectRootFile>();
     private program: Program | undefined;
     private externalFiles: SortedReadonlyArray<string> | undefined;
     private missingFilesMap: Map<Path, FileWatcher> | undefined;
@@ -641,7 +639,7 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getScriptFileNames() {
-        if (!this.rootFiles) {
+        if (!this.rootFilesMap.size) {
             return ts.emptyArray;
         }
 
@@ -667,7 +665,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
             const existingValue = this.rootFilesMap.get(scriptInfo.path);
             if (existingValue && existingValue.info !== scriptInfo) {
                 // This was missing path earlier but now the file exists. Update the root
-                this.rootFiles.push(scriptInfo);
                 existingValue.info = scriptInfo;
             }
             scriptInfo.attachToProject(this);
@@ -1079,12 +1076,9 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         // Release external files
         forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
         // Always remove root files from the project
-        for (const root of this.rootFiles) {
-            root.detachFromProject(this);
-        }
+        this.rootFilesMap.forEach(root => root.info?.detachFromProject(this));
         this.projectService.pendingEnsureProjectForOpenFiles = true;
 
-        this.rootFiles = undefined!;
         this.rootFilesMap = undefined!;
         this.externalFiles = undefined;
         this.program = undefined;
@@ -1135,11 +1129,11 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     isClosed() {
-        return this.rootFiles === undefined;
+        return this.rootFilesMap === undefined;
     }
 
     hasRoots() {
-        return this.rootFiles && this.rootFiles.length > 0;
+        return !!this.rootFilesMap?.size;
     }
 
     /** @internal */
@@ -1147,8 +1141,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         return false;
     }
 
-    getRootFiles() {
-        return this.rootFiles && this.rootFiles.map(info => info.fileName);
+    getRootFiles(): NormalizedPath[] {
+        return this.rootFilesMap && arrayFrom(ts.mapDefinedIterator(this.rootFilesMap.values(), value => value.info?.fileName));
     }
 
     /** @internal */
@@ -1157,13 +1151,13 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     getRootScriptInfos() {
-        return this.rootFiles;
+        return arrayFrom(ts.mapDefinedIterator(this.rootFilesMap.values(), value => value.info));
     }
 
     getScriptInfos(): ScriptInfo[] {
         if (!this.languageServiceEnabled) {
             // if language service is not enabled - return just root files
-            return this.rootFiles;
+            return this.getRootScriptInfos();
         }
         return map(this.program!.getSourceFiles(), sourceFile => {
             const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
@@ -1256,13 +1250,12 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
     }
 
     isRoot(info: ScriptInfo) {
-        return this.rootFilesMap && this.rootFilesMap.get(info.path)?.info === info;
+        return this.rootFilesMap?.get(info.path)?.info === info;
     }
 
     // add a root file to project
     addRoot(info: ScriptInfo, fileName?: NormalizedPath) {
         Debug.assert(!this.isRoot(info));
-        this.rootFiles.push(info);
         this.rootFilesMap.set(info.path, { fileName: fileName || info.fileName, info });
         info.attachToProject(this);
 
@@ -1585,6 +1578,16 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
                     }
                 });
             }
+
+            // Update roots
+            this.rootFilesMap.forEach((value, path) => {
+                const file = this.program!.getSourceFileByPath(path);
+                const info = value.info;
+                if (!file || value.info?.path === file.resolvedPath) return;
+                value.info = this.projectService.getScriptInfo(file.fileName)!;
+                Debug.assert(value.info.isAttached(this));
+                info?.detachFromProject(this);
+            });
 
             // Update the missing file paths watcher
             updateMissingFilePathsWatch(
@@ -2006,7 +2009,6 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
 
     // remove a root file from project
     protected removeRoot(info: ScriptInfo): void {
-        orderedRemoveItem(this.rootFiles, info);
         this.rootFilesMap.delete(info.path);
     }
 
