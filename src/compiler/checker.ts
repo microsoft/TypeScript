@@ -31421,7 +31421,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (isUnion && isJsxAttributes(node)) {
                 return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
             }
-            else if (isUnion && isArrayLiteralExpression(node)) {
+            else if (contextFlags && contextFlags & ContextFlags.Completions && isUnion && isArrayLiteralExpression(node)) {
                 return discriminateContextualTypeByElements(node, apparentType as UnionType);
             }
             else {
