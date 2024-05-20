@@ -48,6 +48,7 @@ import {
     findIndex,
     flattenDiagnosticMessageText,
     forEach,
+    forEachEntry,
     forEachKey,
     ForegroundColorEscapeSequences,
     formatColorAndReset,
@@ -1734,6 +1735,7 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             };
         }
 
+        const inputPath = buildInfoProgram ? toPath(state, inputFile) : undefined;
         // If an buildInfo is older than the newest input, we can stop checking
         if (buildInfoTime && buildInfoTime < inputTime) {
             let version: string | undefined;
@@ -1741,8 +1743,9 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             if (buildInfoProgram) {
                 // Read files and see if they are same, read is anyways cached
                 if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-                version = buildInfoVersionMap.fileInfos.get(toPath(state, inputFile));
-                const text = version ? state.readFileWithCache(inputFile) : undefined;
+                const resolvedInputPath = buildInfoVersionMap.roots.get(inputPath!);
+                version = buildInfoVersionMap.fileInfos.get(resolvedInputPath ?? inputPath!);
+                const text = version ? state.readFileWithCache(resolvedInputPath ?? inputFile) : undefined;
                 currentVersion = text !== undefined ? getSourceFileVersionAsHashFromText(host, text) : undefined;
                 if (version && version === currentVersion) pseudoInputUpToDate = true;
             }
@@ -1761,20 +1764,22 @@ function getUpToDateStatusWorker<T extends BuilderProgram>(state: SolutionBuilde
             newestInputFileTime = inputTime;
         }
 
-        if (buildInfoProgram) seenRoots.add(toPath(state, inputFile));
+        if (buildInfoProgram) seenRoots.add(inputPath!);
     }
 
     if (buildInfoProgram) {
         if (!buildInfoVersionMap) buildInfoVersionMap = getBuildInfoFileVersionMap(buildInfoProgram, buildInfoPath!, host);
-        for (const existingRoot of buildInfoVersionMap.roots) {
-            if (!seenRoots.has(existingRoot)) {
-                // File was root file when project was built but its not any more
-                return {
-                    type: UpToDateStatusType.OutOfDateRoots,
-                    buildInfoFile: buildInfoPath!,
-                    inputFile: existingRoot,
-                };
-            }
+        const existingRoot = forEachEntry(
+            buildInfoVersionMap.roots,
+            // File was root file when project was built but its not any more
+            (_resolved, existingRoot) => !seenRoots.has(existingRoot) ? existingRoot : undefined,
+        );
+        if (existingRoot) {
+            return {
+                type: UpToDateStatusType.OutOfDateRoots,
+                buildInfoFile: buildInfoPath!,
+                inputFile: existingRoot,
+            };
         }
     }
 
