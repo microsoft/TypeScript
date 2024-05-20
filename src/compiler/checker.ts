@@ -2148,7 +2148,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     };
 
     var anyIterationTypes = createIterationTypes(anyType, anyType, anyType);
-    var anyIterationTypesExceptNext = createIterationTypes(anyType, anyType, unknownType);
 
     var asyncIterationTypesResolver: IterationTypesResolver = {
         iterableCacheKey: "iterationTypesOfAsyncIterable",
@@ -37721,6 +37720,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (isGenerator) { // Generator or AsyncGenerator function
+            if (strictBuiltinIteratorReturn) {
+                fallbackReturnType = undefinedType;
+            }
             const returnTypes = checkAndAggregateReturnExpressionTypes(func, checkMode);
             if (!returnTypes) {
                 fallbackReturnType = neverType;
@@ -44519,8 +44521,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             : undefined;
 
         if (isTypeAny(methodType)) {
-            // `return()` and `throw()` don't provide a *next* type.
-            return methodName === "next" ? anyIterationTypes : anyIterationTypesExceptNext;
+            return anyIterationTypes;
         }
 
         // Both async and non-async iterators *must* have a `next` method.

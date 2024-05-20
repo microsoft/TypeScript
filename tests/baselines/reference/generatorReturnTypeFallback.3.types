@@ -2,8 +2,8 @@
 
 === generatorReturnTypeFallback.3.ts ===
 function* f() {
->f : () => IterableIterator<number, void, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : () => IterableIterator<number, undefined, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     const x: string = yield 1;
 >x : string
