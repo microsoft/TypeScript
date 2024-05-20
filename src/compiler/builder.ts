@@ -73,7 +73,6 @@ import {
     returnUndefined,
     sameMap,
     SemanticDiagnosticsBuilderProgram,
-    shouldPreserveConstEnums,
     SignatureInfo,
     skipAlias,
     skipTypeChecking,
