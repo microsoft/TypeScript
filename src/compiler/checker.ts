@@ -2428,10 +2428,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return visitEachChild(node, markAsSynthetic, /*context*/ undefined);
     }
 
-    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
+    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, skipCheck?: boolean) {
         // Ensure we have all the type information in place for this file so that all the
         // emitter questions of this resolver will return the right information.
-        getDiagnostics(sourceFile, cancellationToken);
+        getDiagnostics(sourceFile, cancellationToken, skipCheck);
         return emitResolver;
     }
 
@@ -47483,10 +47483,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         tracing?.pop();
     }
 
-    function checkSourceFile(node: SourceFile) {
+    function checkSourceFile(node: SourceFile, skipCheck: boolean | undefined) {
         tracing?.push(tracing.Phase.Check, "checkSourceFile", { path: node.path }, /*separateBeginAndEnd*/ true);
         performance.mark("beforeCheck");
-        checkSourceFileWorker(node);
+        checkSourceFileWorker(node, skipCheck);
         performance.mark("afterCheck");
         performance.measure("Check", "beforeCheck", "afterCheck");
         tracing?.pop();
@@ -47511,10 +47511,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     // Fully type check a source file and collect the relevant diagnostics.
-    function checkSourceFileWorker(node: SourceFile) {
+    function checkSourceFileWorker(node: SourceFile, skipCheck: boolean | undefined) {
         const links = getNodeLinks(node);
         if (!(links.flags & NodeCheckFlags.TypeChecked)) {
-            if (skipTypeChecking(node, compilerOptions, host)) {
+            if (skipCheck || skipTypeChecking(node, compilerOptions, host)) {
                 return;
             }
 
@@ -47578,13 +47578,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         }
     }
 
-    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken): Diagnostic[] {
+    function getDiagnostics(sourceFile: SourceFile, ct: CancellationToken, skipCheck?: boolean): Diagnostic[] {
         try {
             // Record the cancellation token so it can be checked later on during checkSourceElement.
             // Do this in a finally block so we can ensure that it gets reset back to nothing after
             // this call is done.
             cancellationToken = ct;
-            return getDiagnosticsWorker(sourceFile);
+            return getDiagnosticsWorker(sourceFile, skipCheck);
         }
         finally {
             cancellationToken = undefined;
@@ -47599,7 +47599,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         deferredDiagnosticsCallbacks = [];
     }
 
-    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile) {
+    function checkSourceFileWithEagerDiagnostics(sourceFile: SourceFile, skipCheck?: boolean) {
         ensurePendingDiagnosticWorkComplete();
         // then setup diagnostics for immediate invocation (as we are about to collect them, and
         // this avoids the overhead of longer-lived callbacks we don't need to allocate)
@@ -47608,11 +47608,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // thus much more likely retaining the same union ordering as before we had lazy diagnostics)
         const oldAddLazyDiagnostics = addLazyDiagnostic;
         addLazyDiagnostic = cb => cb();
-        checkSourceFile(sourceFile);
+        checkSourceFile(sourceFile, skipCheck);
         addLazyDiagnostic = oldAddLazyDiagnostics;
     }
 
-    function getDiagnosticsWorker(sourceFile: SourceFile): Diagnostic[] {
+    function getDiagnosticsWorker(sourceFile: SourceFile, skipCheck: boolean | undefined): Diagnostic[] {
         if (sourceFile) {
             ensurePendingDiagnosticWorkComplete();
             // Some global diagnostics are deferred until they are needed and
@@ -47621,7 +47621,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
             const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
 
-            checkSourceFileWithEagerDiagnostics(sourceFile);
+            checkSourceFileWithEagerDiagnostics(sourceFile, skipCheck);
 
             const semanticDiagnostics = diagnostics.getDiagnostics(sourceFile.fileName);
             const currentGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
@@ -47642,7 +47642,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         // Global diagnostics are always added when a file is not provided to
         // getDiagnostics
-        forEach(host.getSourceFiles(), checkSourceFileWithEagerDiagnostics);
+        forEach(host.getSourceFiles(), sourceFile => checkSourceFileWithEagerDiagnostics(sourceFile, skipCheck));
         return diagnostics.getDiagnostics();
     }
 
