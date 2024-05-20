@@ -273,7 +273,7 @@ Operation ws cancelled:: true
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n","impliedFormat":1},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,4,3,5],"changeFileSet":[2]},"version":"FakeTSVersion"}
+{"program":{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts","./d.ts"],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true,"impliedFormat":1},{"version":"840271342-export class C {\n    d = 1;\n}export function foo() {}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n","impliedFormat":1},{"version":"-6441446591-import {C} from './c';\nexport class B {\n    c = new C();\n}","signature":"-165097315-import { C } from './c';\nexport declare class B {\n    c: C;\n}\n","impliedFormat":1},{"version":"4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);","signature":"-3531856636-export {};\n","impliedFormat":1},{"version":"-7804761415-export class D { }","signature":"-8611429667-export declare class D {\n}\n","impliedFormat":1}],"root":[[2,5]],"options":{"declaration":true},"fileIdsList":[[3],[2]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[1,3,5],"affectedFilesPendingEmit":[[4],2],"changeFileSet":[2]},"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -373,16 +373,27 @@ Operation ws cancelled:: true
     },
     "semanticDiagnosticsPerFile": [
       "../../../../a/lib/lib.d.ts",
-      "./a.ts",
       "./b.ts",
       "./d.ts"
+    ],
+    "affectedFilesPendingEmit": [
+      [
+        [
+          "./a.ts"
+        ],
+        "Dts"
+      ],
+      [
+        "./c.ts",
+        "Js | Dts"
+      ]
     ],
     "changeFileSet": [
       "./c.ts"
     ]
   },
   "version": "FakeTSVersion",
-  "size": 1366
+  "size": 1399
 }
 
 
@@ -407,8 +418,12 @@ Program files::
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/c.ts
+/user/username/projects/myproject/a.ts
 
-No shapes updated in the builder::
+Shape signatures in builder refreshed for::
+/user/username/projects/myproject/c.ts (computed .d.ts)
+/user/username/projects/myproject/b.ts (computed .d.ts)
+/user/username/projects/myproject/a.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
