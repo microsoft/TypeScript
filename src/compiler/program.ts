@@ -2870,7 +2870,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is because in the -out scenario all files need to be emitted, and therefore all
         // files need to be type checked. And the way to specify that all files need to be type
         // checked is to not pass the file to getEmitResolver.
-        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken);
+        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken, forceDtsEmit);
 
         performance.mark("beforeEmit");
 
