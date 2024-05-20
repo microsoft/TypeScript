@@ -2870,11 +2870,7 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is because in the -out scenario all files need to be emitted, and therefore all
         // files need to be type checked. And the way to specify that all files need to be type
         // checked is to not pass the file to getEmitResolver.
-        const emitResolver = getTypeChecker().getEmitResolver(
-            options.outFile ? undefined : sourceFile,
-            cancellationToken,
-            forceDtsEmit && sourceFile && !canIncludeBindAndCheckDiagnsotics(sourceFile),
-        );
+        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken);
 
         performance.mark("beforeEmit");
 
@@ -3015,30 +3011,15 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
             // - plain JS: .js files with no // ts-check and checkJs: undefined
             // - check JS: .js files with either // ts-check or checkJs: true
             // - external: files that are added by plugins
-            const includeBindAndCheckDiagnostics = canIncludeBindAndCheckDiagnsotics(sourceFile);
-            let bindDiagnostics: readonly Diagnostic[] = includeBindAndCheckDiagnostics ? sourceFile.bindDiagnostics : emptyArray;
-            let checkDiagnostics = includeBindAndCheckDiagnostics ? typeChecker.getDiagnostics(sourceFile, cancellationToken) : emptyArray;
+            let bindDiagnostics = sourceFile.bindDiagnostics;
+            let checkDiagnostics = typeChecker.getDiagnostics(sourceFile, cancellationToken);
             if (isPlainJs) {
                 bindDiagnostics = filter(bindDiagnostics, d => plainJSErrors.has(d.code));
                 checkDiagnostics = filter(checkDiagnostics, d => plainJSErrors.has(d.code));
             }
             // skip ts-expect-error errors in plain JS files, and skip JSDoc errors except in checked JS
-            return getMergedBindAndCheckDiagnostics(sourceFile, includeBindAndCheckDiagnostics && !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
+            return getMergedBindAndCheckDiagnostics(sourceFile, !isPlainJs, bindDiagnostics, checkDiagnostics, isCheckJs ? sourceFile.jsDocDiagnostics : undefined);
         });
-    }
-
-    function canIncludeBindAndCheckDiagnsotics(sourceFile: SourceFile) {
-        const isJs = sourceFile.scriptKind === ScriptKind.JS || sourceFile.scriptKind === ScriptKind.JSX;
-        const isCheckJs = isJs && isCheckJsEnabledForFile(sourceFile, options);
-        const isPlainJs = isPlainJsFile(sourceFile, options.checkJs);
-        const isTsNoCheck = !!sourceFile.checkJsDirective && sourceFile.checkJsDirective.enabled === false;
-
-        // By default, only type-check .ts, .tsx, Deferred, plain JS, checked JS and External
-        // - plain JS: .js files with no // ts-check and checkJs: undefined
-        // - check JS: .js files with either // ts-check or checkJs: true
-        // - external: files that are added by plugins
-        return !isTsNoCheck && (sourceFile.scriptKind === ScriptKind.TS || sourceFile.scriptKind === ScriptKind.TSX
-            || sourceFile.scriptKind === ScriptKind.External || isPlainJs || isCheckJs || sourceFile.scriptKind === ScriptKind.Deferred);
     }
 
     function getMergedBindAndCheckDiagnostics(sourceFile: SourceFile, includeBindAndCheckDiagnostics: boolean, ...allDiagnostics: (readonly Diagnostic[] | undefined)[]) {

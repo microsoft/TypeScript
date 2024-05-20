@@ -21,6 +21,7 @@ import {
     CallExpression,
     CallSignatureDeclaration,
     canHaveLocals,
+    canIncludeBindAndCheckDiagnsotics,
     CaseBlock,
     CaseClause,
     CaseOrDefaultClause,
@@ -848,11 +849,18 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if ((emitOnly && !getEmitDeclarations(compilerOptions)) || compilerOptions.noCheck) {
-            // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
-            // Do that here when emitting only dts files
-            filesForEmit.forEach(collectLinkedAliases);
-        }
+        // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
+        // Do that here when emitting only dts files
+        filesForEmit.forEach(sourceFile => {
+            if (
+                (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+                compilerOptions.noCheck ||
+                !canIncludeBindAndCheckDiagnsotics(sourceFile, compilerOptions)
+            ) {
+                collectLinkedAliases(sourceFile);
+            }
+        });
+
         const declarationTransform = transformNodes(resolver, host, factory, compilerOptions, inputListOrBundle, declarationTransformers, /*allowDtsFiles*/ false);
         if (length(declarationTransform.diagnostics)) {
             for (const diagnostic of declarationTransform.diagnostics!) {
