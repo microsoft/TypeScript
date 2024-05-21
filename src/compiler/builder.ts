@@ -50,6 +50,7 @@ import {
     getOptionsNameMap,
     getOwnKeys,
     getRelativePathFromDirectory,
+    getSourceFileOfNode,
     getTsBuildInfoEmitOutputFilePath,
     handleNoEmitOptions,
     HostForComputeHash,
@@ -74,10 +75,13 @@ import {
     sameMap,
     SemanticDiagnosticsBuilderProgram,
     SignatureInfo,
+    skipAlias,
     skipTypeChecking,
+    some,
     SourceFile,
     sourceFileMayBeEmitted,
     SourceMapEmitResult,
+    SymbolFlags,
     toPath,
     tryAddToSet,
     WriteFileCallback,
@@ -762,6 +766,7 @@ function handleDtsMayChangeOfAffectedFile(
 function handleDtsMayChangeOf(
     state: BuilderProgramState,
     path: Path,
+    invalidateJsFiles: boolean,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): void {
@@ -785,7 +790,10 @@ function handleDtsMayChangeOf(
                 /*useFileVersionAsSignature*/ true,
             );
             // If not dts emit, nothing more to do
-            if (getEmitDeclarations(state.compilerOptions)) {
+            if (invalidateJsFiles) {
+                addToAffectedFilesPendingEmit(state, path, getBuilderFileEmit(state.compilerOptions));
+            }
+            else if (getEmitDeclarations(state.compilerOptions)) {
                 addToAffectedFilesPendingEmit(state, path, state.compilerOptions.declarationMap ? BuilderFileEmit.AllDts : BuilderFileEmit.Dts);
             }
         }
@@ -814,6 +822,7 @@ function isChangedSignature(state: BuilderProgramState, path: Path) {
 function handleDtsMayChangeOfGlobalScope(
     state: BuilderProgramState,
     filePath: Path,
+    invalidateJsFiles: boolean,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): boolean {
@@ -824,6 +833,7 @@ function handleDtsMayChangeOfGlobalScope(
             handleDtsMayChangeOf(
                 state,
                 file.resolvedPath,
+                invalidateJsFiles,
                 cancellationToken,
                 host,
             )
@@ -856,8 +866,16 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
             const currentPath = queue.pop()!;
             if (!seenFileNamesMap.has(currentPath)) {
                 seenFileNamesMap.set(currentPath, true);
-                if (handleDtsMayChangeOfGlobalScope(state, currentPath, cancellationToken, host)) return;
-                handleDtsMayChangeOf(state, currentPath, cancellationToken, host);
+                if (
+                    handleDtsMayChangeOfGlobalScope(
+                        state,
+                        currentPath,
+                        /*invalidateJsFiles*/ false,
+                        cancellationToken,
+                        host,
+                    )
+                ) return;
+                handleDtsMayChangeOf(state, currentPath, /*invalidateJsFiles*/ false, cancellationToken, host);
                 if (isChangedSignature(state, currentPath)) {
                     const currentSourceFile = Debug.checkDefined(state.program).getSourceFileByPath(currentPath)!;
                     queue.push(...BuilderState.getReferencedByPaths(state, currentSourceFile.resolvedPath));
@@ -867,14 +885,26 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
     }
 
     const seenFileAndExportsOfFile = new Set<string>();
+    // If exported const enum, we need to ensure that js files are emitted as well since the const enum value changed
+    const invalidateJsFiles = !!affectedFile.symbol?.exports && !!forEachEntry(
+        affectedFile.symbol.exports,
+        exported => {
+            if ((exported.flags & SymbolFlags.ConstEnum) !== 0) return true;
+            const aliased = skipAlias(exported, state.program!.getTypeChecker());
+            if (aliased === exported) return false;
+            return (aliased.flags & SymbolFlags.ConstEnum) !== 0 &&
+                some(aliased.declarations, d => getSourceFileOfNode(d) === affectedFile);
+        },
+    );
     // Go through files that reference affected file and handle dts emit and semantic diagnostics for them and their references
     state.referencedMap.getKeys(affectedFile.resolvedPath)?.forEach(exportedFromPath => {
-        if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, cancellationToken, host)) return true;
+        if (handleDtsMayChangeOfGlobalScope(state, exportedFromPath, invalidateJsFiles, cancellationToken, host)) return true;
         const references = state.referencedMap!.getKeys(exportedFromPath);
         return references && forEachKey(references, filePath =>
             handleDtsMayChangeOfFileAndExportsOfFile(
                 state,
                 filePath,
+                invalidateJsFiles,
                 seenFileAndExportsOfFile,
                 cancellationToken,
                 host,
@@ -889,20 +919,22 @@ function handleDtsMayChangeOfReferencingExportOfAffectedFile(
 function handleDtsMayChangeOfFileAndExportsOfFile(
     state: BuilderProgramState,
     filePath: Path,
+    invalidateJsFiles: boolean,
     seenFileAndExportsOfFile: Set<string>,
     cancellationToken: CancellationToken | undefined,
     host: BuilderProgramHost,
 ): boolean | undefined {
     if (!tryAddToSet(seenFileAndExportsOfFile, filePath)) return undefined;
 
-    if (handleDtsMayChangeOfGlobalScope(state, filePath, cancellationToken, host)) return true;
-    handleDtsMayChangeOf(state, filePath, cancellationToken, host);
+    if (handleDtsMayChangeOfGlobalScope(state, filePath, invalidateJsFiles, cancellationToken, host)) return true;
+    handleDtsMayChangeOf(state, filePath, invalidateJsFiles, cancellationToken, host);
 
     // Remove the diagnostics of files that import this file and handle all its exports too
     state.referencedMap!.getKeys(filePath)?.forEach(referencingFilePath =>
         handleDtsMayChangeOfFileAndExportsOfFile(
             state,
             referencingFilePath,
+            invalidateJsFiles,
             seenFileAndExportsOfFile,
             cancellationToken,
             host,
