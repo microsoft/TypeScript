@@ -30,3 +30,4 @@ typedArray[2] = 0xCC;
 const a = {1n: 123};
 const b = {[1n]: 456};
 const c = {[bigNum]: 789};
+{ ({1n: 123}); };

@@ -2,11 +2,10 @@ a.ts(2,6): error TS1268: An index signature parameter type must be 'string', 'nu
 a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
 a.ts(14,1): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
 a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
-b.ts(2,12): error TS1136: Property assignment expected.
-b.ts(2,14): error TS1005: ';' expected.
-b.ts(2,19): error TS1128: Declaration or statement expected.
+b.ts(2,12): error TS18057: A bigint literal cannot be used as a property name.
 b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+b.ts(5,5): error TS18057: A bigint literal cannot be used as a property name.
 
 
 ==== a.ts (4 errors) ====
@@ -42,19 +41,18 @@ b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'nu
     typedArray[2] = 0xCC;
     
     // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-==== b.ts (5 errors) ====
+==== b.ts (4 errors) ====
     // BigInt cannot be used as an object literal property
     const a = {1n: 123};
                ~~
-!!! error TS1136: Property assignment expected.
-                 ~
-!!! error TS1005: ';' expected.
-                      ~
-!!! error TS1128: Declaration or statement expected.
+!!! error TS18057: A bigint literal cannot be used as a property name.
     const b = {[1n]: 456};
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     const c = {[bigNum]: 789};
                ~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+    { ({1n: 123}); };
+        ~~
+!!! error TS18057: A bigint literal cannot be used as a property name.
     

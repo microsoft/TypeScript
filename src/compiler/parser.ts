@@ -14,6 +14,7 @@ import {
     attachFileToDiagnostics,
     AwaitExpression,
     BaseNodeFactory,
+    BigIntLiteral,
     BinaryExpression,
     BinaryOperatorToken,
     BindingElement,
@@ -2697,7 +2698,8 @@ namespace Parser {
     function isLiteralPropertyName(): boolean {
         return tokenIsIdentifierOrKeyword(token()) ||
             token() === SyntaxKind.StringLiteral ||
-            token() === SyntaxKind.NumericLiteral;
+            token() === SyntaxKind.NumericLiteral ||
+            token() === SyntaxKind.BigIntLiteral;
     }
 
     function isImportAttributeName(): boolean {
@@ -2707,6 +2709,12 @@ namespace Parser {
     function parsePropertyNameWorker(allowComputedPropertyNames: boolean): PropertyName {
         if (token() === SyntaxKind.StringLiteral || token() === SyntaxKind.NumericLiteral) {
             const node = parseLiteralNode() as StringLiteral | NumericLiteral;
+            node.text = internIdentifier(node.text);
+            return node;
+        }
+        if (token() === SyntaxKind.BigIntLiteral) {
+            parseErrorAtCurrentToken(Diagnostics.A_bigint_literal_cannot_be_used_as_a_property_name);
+            const node = parseLiteralNode() as BigIntLiteral;
             node.text = internIdentifier(node.text);
             return node;
         }

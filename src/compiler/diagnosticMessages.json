@@ -8309,5 +8309,9 @@
     "Enum member following a non-literal numeric member must have an initializer when 'isolatedModules' is enabled.": {
         "category": "Error",
         "code": 18056
+    },
+    "A bigint literal cannot be used as a property name.": {
+        "category": "Error",
+        "code": 18057
     }
 }
