@@ -2240,8 +2240,8 @@ export abstract class Project implements LanguageServiceHost, ModuleResolutionHo
         const originalProgram = this.program;
         const rootSourceFile = Debug.checkDefined(this.program?.getSourceFile(rootFile), "Expected file to be part of program");
         const originalText = Debug.checkDefined(rootSourceFile.getText());
-        
-        this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText)
+
+        this.getScriptInfo(rootFile)?.editContent(0, originalText.length, updatedText);
         this.updateGraph();
         cb(this.program!, originalProgram, (this.program?.getSourceFile(rootFile))!);
         this.getScriptInfo(rootFile)?.editContent(0, this.program!.getSourceFile(rootFile)!.getText().length, originalText);
