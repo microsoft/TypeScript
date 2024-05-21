@@ -2713,7 +2713,7 @@ namespace Parser {
             return node;
         }
         if (token() === SyntaxKind.BigIntLiteral) {
-            parseErrorAtCurrentToken(Diagnostics.A_bigint_literal_cannot_be_used_as_a_property_name);
+            parseErrorAtCurrentToken(Diagnostics.A_bigint_literal_may_not_be_used_as_a_property_name);
             const node = parseLiteralNode() as BigIntLiteral;
             node.text = internIdentifier(node.text);
             return node;

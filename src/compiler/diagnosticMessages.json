@@ -8310,7 +8310,7 @@
         "category": "Error",
         "code": 18056
     },
-    "A bigint literal cannot be used as a property name.": {
+    "A bigint literal may not be used as a property name.": {
         "category": "Error",
         "code": 18057
     }
