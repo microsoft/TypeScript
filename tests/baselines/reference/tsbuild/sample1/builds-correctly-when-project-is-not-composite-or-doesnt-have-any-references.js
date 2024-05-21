@@ -101,7 +101,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/anotherModule.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output file 'core/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/user/username/projects/sample1/core/tsconfig.json'...
 
@@ -141,4 +141,13 @@ exports.someString = "HELLO WORLD";
 function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
 
+
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 

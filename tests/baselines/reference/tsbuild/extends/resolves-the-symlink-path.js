@@ -110,6 +110,7 @@ Program options: {
   "composite": true,
   "removeComments": true,
   "extendedDiagnostics": true,
+  "tscBuild": true,
   "configFilePath": "/users/user/projects/myproject/src/tsconfig.json"
 }
 Program structureReused: Not

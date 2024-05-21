@@ -128,7 +128,7 @@ packages/a/index.js
 packages/a/test/index.js
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'packages/a/package.json' has field "type" with value "module"
-[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output 'packages/b/index.js' is older than input 'packages/a'
+[[90mHH:MM:SS AM[0m] Project 'packages/b/tsconfig.json' is out of date because output file 'packages/b/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/projects/project/packages/b/tsconfig.json'...
 
@@ -240,5 +240,14 @@ export {};
   "latestChangedDtsFile": "./test/index.d.ts",
   "version": "FakeTSVersion",
   "size": 983
+}
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/projects/project/packages/b/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
 }
 

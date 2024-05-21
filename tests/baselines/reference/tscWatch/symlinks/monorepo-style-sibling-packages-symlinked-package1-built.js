@@ -91,6 +91,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 /a/lib/tsc.js --w -p packages/package2 --extendedDiagnostics
 Output::
@@ -489,6 +498,8 @@ exitCode:: ExitStatus.undefined
 Change:: Build package1
 
 Input::
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/packages/package1/dist/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -523,7 +534,6 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions
 
-Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update

@@ -74,7 +74,7 @@ Output::
     * src/projects/a/tsconfig.json
     * src/projects/b/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/projects/a/tsconfig.json' is out of date because output file 'src/projects/a/src/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/projects/a/tsconfig.json' is out of date because output file 'src/projects/a/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/projects/a/tsconfig.json'...
 
@@ -102,7 +102,7 @@ src/projects/a/src/index.ts
   Matched by default include pattern '**/*'
 src/projects/node_modules/@types/pg/index.d.ts
   Entry point for implicit type library 'pg'
-[[90mHH:MM:SS AM[0m] Project 'src/projects/b/tsconfig.json' is out of date because output file 'src/projects/b/src/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/projects/b/tsconfig.json' is out of date because output file 'src/projects/b/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/projects/b/tsconfig.json'...
 
@@ -151,10 +151,28 @@ exitCode:: ExitStatus.Success
 "use strict";
 
 
+//// [/src/projects/a/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/projects/a/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 //// [/src/projects/b/src/index.js]
 import pg from "pg";
 pg.foo();
 
+
+//// [/src/projects/b/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/projects/b/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 

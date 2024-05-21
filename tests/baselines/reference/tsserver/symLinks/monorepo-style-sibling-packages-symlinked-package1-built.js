@@ -92,6 +92,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Info seq  [hh:mm:ss:mss] request:
     {
@@ -837,6 +846,8 @@ Info seq  [hh:mm:ss:mss] Scheduled: /home/src/projects/project/packages/package2
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules/package1/dist/index.d.ts :: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Before running Timeout callback:: count: 1
 10: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/project/packages/package1/dist/index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

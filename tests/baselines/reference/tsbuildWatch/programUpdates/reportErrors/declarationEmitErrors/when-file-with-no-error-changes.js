@@ -155,6 +155,7 @@ Program root files: [
 Program options: {
   "composite": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
 }
 Program structureReused: Not
@@ -285,6 +286,7 @@ Program root files: [
 Program options: {
   "composite": true,
   "watch": true,
+  "tscBuild": true,
   "configFilePath": "/user/username/projects/solution/app/tsconfig.json"
 }
 Program structureReused: Not

@@ -73,7 +73,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/index.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/project/tsconfig.json' is out of date because output file 'src/project/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/project/tsconfig.json'...
 
@@ -82,6 +82,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/tsconfig.tsbuildinfo
 lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 src/project/node_modules/ky/distribution/index.d.ts
@@ -95,6 +96,15 @@ Found 1 error.
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
+
+//// [/src/project/tsconfig.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 
@@ -116,6 +126,7 @@ Output::
 [7m2[0m export const api = ky.extend({});
 [7m [0m [91m             ~~~[0m
 
+TSFILE: /src/project/tsconfig.tsbuildinfo
 lib/lib.esnext.full.d.ts
   Default library for target 'esnext'
 src/project/node_modules/ky/distribution/index.d.ts
@@ -130,3 +141,5 @@ Found 1 error.
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 
+//// [/src/project/tsconfig.tsbuildinfo] file written with same contents
+//// [/src/project/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents

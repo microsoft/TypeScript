@@ -42,7 +42,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * src/child/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/child/tsconfig.json' is out of date because output file 'src/childResult.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/child/tsconfig.json'...
 
@@ -85,6 +85,15 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
     }
 });
 
+
+//// [/src/childResult.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/childResult.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
 
 
 

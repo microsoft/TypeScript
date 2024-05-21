@@ -4617,6 +4617,10 @@
         "category": "Error",
         "code": 5110
     },
+    "Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.": {
+        "category": "Error",
+        "code": 5111
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

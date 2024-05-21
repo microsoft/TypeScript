@@ -145,7 +145,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/src/second/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'src/third/tsconfig.json' is out of date because output file 'src/third/thirdjs/output/third-output.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/src/third/tsconfig.json'...
 
@@ -1084,6 +1084,15 @@ sourceFile:../../third_part1.ts
 ---
 >>>//# sourceMappingURL=third-output.js.map
 
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{"version":"FakeTSVersion"}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.readable.baseline.txt]
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 
 Change:: incremental-declaration-doesnt-change
@@ -1388,3 +1397,4 @@ sourceFile:../first_part3.ts
 //// [/src/third/thirdjs/output/third-output.d.ts.map] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js] file changed its modified time
 //// [/src/third/thirdjs/output/third-output.js.map] file changed its modified time
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo] file changed its modified time

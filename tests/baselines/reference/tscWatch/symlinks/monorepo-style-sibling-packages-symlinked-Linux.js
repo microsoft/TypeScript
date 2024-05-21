@@ -303,6 +303,15 @@ export type FooType = "foo";
 export type BarType = "bar";
 
 
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 27
+{"version":"FakeTSVersion"}
+
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 28
+{
+  "version": "FakeTSVersion",
+  "size": 27
+}
+
 
 Output::
 File '/home/src/projects/project/packages/package1/src/package.json' does not exist.
@@ -313,11 +322,12 @@ File '/package.json' does not exist.
 
 
 Timeout callback:: count: 1
-2: timerToUpdateChildWatches *new*
+6: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 1
-2: timerToUpdateChildWatches
+6: timerToUpdateChildWatches
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 DirectoryWatcher:: Triggered with /home/src/projects/project/node_modules :: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -376,10 +386,10 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-4: timerToInvalidateFailedLookupResolutions *new*
+8: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-4: timerToInvalidateFailedLookupResolutions
+8: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -389,10 +399,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-5: timerToUpdateProgram *new*
+9: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-5: timerToUpdateProgram
+9: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -605,12 +615,12 @@ FsWatches *deleted*::
   {"inode":26}
 
 Timeout callback:: count: 2
-6: timerToUpdateProgram *new*
-10: timerToUpdateChildWatches *new*
+10: timerToUpdateProgram *new*
+14: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 2
-6: timerToUpdateProgram
-10: timerToUpdateChildWatches
+10: timerToUpdateProgram
+14: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 1
 Output::
@@ -773,7 +783,7 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-12: timerToInvalidateFailedLookupResolutions *new*
+16: timerToInvalidateFailedLookupResolutions *new*
 
 
 Program root files: [
@@ -813,7 +823,7 @@ Change:: After updating childs
 Input::
 
 Before running Timeout callback:: count: 1
-12: timerToInvalidateFailedLookupResolutions
+16: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -823,10 +833,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-13: timerToUpdateProgram *new*
+17: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-13: timerToUpdateProgram
+17: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -960,12 +970,14 @@ exitCode:: ExitStatus.undefined
 Change:: Build package1
 
 Input::
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 28
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 27
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 28
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 30
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 29
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 31
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -980,10 +992,10 @@ File '/package.json' does not exist.
 
 
 Timeout callback:: count: 1
-15: timerToUpdateChildWatches *new*
+19: timerToUpdateChildWatches *new*
 
 Before running Timeout callback:: count: 1
-15: timerToUpdateChildWatches
+19: timerToUpdateChildWatches
 
 After running Timeout callback:: count: 1
 Output::
@@ -1024,7 +1036,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":27}
+  {"inode":29}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1043,10 +1055,10 @@ FsWatches::
   {"inode":13}
 
 Timeout callback:: count: 1
-17: timerToInvalidateFailedLookupResolutions *new*
+21: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-17: timerToInvalidateFailedLookupResolutions
+21: timerToInvalidateFailedLookupResolutions
 
 Host is moving to new time
 After running Timeout callback:: count: 1
@@ -1056,10 +1068,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-18: timerToUpdateProgram *new*
+22: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-18: timerToUpdateProgram
+22: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1147,9 +1159,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":27}
-/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"inode":29}
+/home/src/projects/project/packages/package1/dist/index.d.ts: *new*
+  {"inode":31}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
