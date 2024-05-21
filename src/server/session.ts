@@ -1305,6 +1305,13 @@ export class Session<TMessage = string> implements EventSender {
         return !!perf && perf > 1000;
     }
 
+    /** @internal */
+    private cleanUpSemanticCheckPerformance(closedFiles: string[] | undefined): void {
+        if (closedFiles) {
+            closedFiles.forEach(file => this.semanticCheckPerformance.delete(toNormalizedPath(file)));
+        }
+    }
+
     private sendDiagnosticsEvent(file: NormalizedPath, project: Project, diagnostics: readonly Diagnostic[], kind: protocol.DiagnosticEventKind, spans?: TextSpan[]): void {
         try {
             const scriptInfo = Debug.checkDefined(project.getScriptInfo(file));
@@ -3331,6 +3338,7 @@ export class Session<TMessage = string> implements EventSender {
                 })),
                 request.arguments.closedFiles,
             );
+            this.cleanUpSemanticCheckPerformance(request.arguments.closedFiles);
             return this.requiredResponse(/*response*/ true);
         },
         [protocol.CommandTypes.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
@@ -3344,6 +3352,7 @@ export class Session<TMessage = string> implements EventSender {
                 })),
                 request.arguments.closedFiles,
             );
+            this.cleanUpSemanticCheckPerformance(request.arguments.closedFiles);
             // TODO: report errors
             return this.requiredResponse(/*response*/ true);
         },
