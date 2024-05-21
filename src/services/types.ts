@@ -1590,13 +1590,6 @@ export interface OutliningSpan {
     kind: OutliningSpanKind;
 }
 
-/** @internal */
-export interface MapCodeDocumentMapping {
-    fileName: string;
-    focusLocations?: TextSpan[][];
-    contents: string[];
-}
-
 export const enum OutliningSpanKind {
     /** Single or multi-line comments */
     Comment = "comment",
