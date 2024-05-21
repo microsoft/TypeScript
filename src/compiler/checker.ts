@@ -2428,10 +2428,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         return visitEachChild(node, markAsSynthetic, /*context*/ undefined);
     }
 
-    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
+    function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken, skipDiagnostics?: boolean) {
         // Ensure we have all the type information in place for this file so that all the
         // emitter questions of this resolver will return the right information.
-        getDiagnostics(sourceFile, cancellationToken);
+        if (!skipDiagnostics) getDiagnostics(sourceFile, cancellationToken);
         return emitResolver;
     }
 
@@ -5862,9 +5862,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return { accessibility: SymbolAccessibility.Accessible };
         }
 
+        if (!symbol) {
+            return {
+                accessibility: SymbolAccessibility.NotResolved,
+                errorSymbolName: getTextOfNode(firstIdentifier),
+                errorNode: firstIdentifier,
+            };
+        }
         // Verify if the symbol is accessible
-        return (symbol && hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)) || {
-            accessibility: SymbolAccessibility.NotResolved,
+        return hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible) || {
+            accessibility: SymbolAccessibility.NotAccessible,
             errorSymbolName: getTextOfNode(firstIdentifier),
             errorNode: firstIdentifier,
         };

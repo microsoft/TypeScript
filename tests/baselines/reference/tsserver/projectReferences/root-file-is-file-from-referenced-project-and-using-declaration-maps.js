@@ -701,7 +701,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/src/common/tsconfig.json,/user/username/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/src/common/tsconfig.json
 Info seq  [hh:mm:ss:mss] 	FileName: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined
 Info seq  [hh:mm:ss:mss] 		Projects: /user/username/projects/project/src/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
@@ -777,16 +777,14 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/tsconfig.json
-/user/username/projects/project/src/common/input/keyboard.test.ts *changed*
+/user/username/projects/project/src/common/input/keyboard.test.ts
     version: Text-1
-    containingProjects: 2 *changed*
+    containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json *new*
-/user/username/projects/project/src/common/input/keyboard.ts (Open) *changed*
+/user/username/projects/project/src/common/input/keyboard.ts (Open)
     version: SVC-1-0
-    containingProjects: 2 *changed*
+    containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json *default*
-        /user/username/projects/project/src/tsconfig.json *new*
 /user/username/projects/project/src/terminal.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
@@ -972,9 +970,8 @@ Projects::
     projectProgramVersion: 1
     documentPositionMappers: 1 *changed*
         /user/username/projects/project/out/input/keyboard.d.ts: DocumentPositionMapper1 *new*
-    originalConfiguredProjects: 2 *changed*
+    originalConfiguredProjects: 1 *changed*
         /user/username/projects/project/src/common/tsconfig.json *new*
-        /user/username/projects/project/src/tsconfig.json *new*
 
 ScriptInfos::
 /a/lib/lib.d.ts
@@ -1000,14 +997,12 @@ ScriptInfos::
         /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/src/common/input/keyboard.test.ts
     version: Text-1
-    containingProjects: 2
+    containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
-        /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/src/common/input/keyboard.ts (Open)
     version: SVC-1-0
-    containingProjects: 2
+    containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json *default*
-        /user/username/projects/project/src/tsconfig.json
 /user/username/projects/project/src/terminal.ts (Open)
     version: SVC-1-0
     containingProjects: 1
