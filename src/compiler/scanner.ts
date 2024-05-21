@@ -4476,7 +4476,6 @@ function commentScan(text: string, start: number, end: number, stopOnSignificant
     }
 }
 
-/** @internal */
 function codePointAt(s: string, i: number): number {
     // TODO(jakebailey): this is wrong and should have ?? 0; but all users are okay with it
     return s.codePointAt(i)!;
