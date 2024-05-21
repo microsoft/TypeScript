@@ -1299,6 +1299,7 @@ export class Session<TMessage = string> implements EventSender {
     }
 
     // We should only do the region-based semantic check if we think it would be considerably faster than a whole-file semantic check
+    /** @internal */
     protected shouldDoRegionCheck(file: NormalizedPath): boolean {
         const perf = this.semanticCheckPerformance.get(file);
         return !!perf && perf > 1000;

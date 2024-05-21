@@ -165,6 +165,10 @@ export class TestSession extends ts.server.Session {
         request.type = "request";
         return this.executeCommand(request);
     }
+
+    protected override shouldDoRegionCheck(_file: ts.server.NormalizedPath): boolean {
+        return true;
+    }
 }
 
 export function createSessionWithCustomEventHandler(

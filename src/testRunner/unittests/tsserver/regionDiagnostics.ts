@@ -2,7 +2,6 @@ import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     TestSession,
-    TestSessionConstructorOptions,
 } from "../helpers/tsserver";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
@@ -19,7 +18,7 @@ describe("unittests:: tsserver:: regionDiagnostics", () => {
 foo(10, 50);`,
         };
         const host = createServerHost([file1]);
-        const session = new RegionTestSession(host);
+        const session = new TestSession(host);
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
             command: ts.server.protocol.CommandTypes.Open,
@@ -63,14 +62,4 @@ function verifyGetErrRegionRequest(request: VerifyGetErrRegionRequest): void {
     session.host.runQueuedImmediateCallbacks();
     // Run suggestion diagnostics
     session.host.runQueuedImmediateCallbacks();
-}
-
-class RegionTestSession extends TestSession {
-    constructor(optsOrHost: TestSessionConstructorOptions) {
-        super(optsOrHost);
-    }
-
-    protected override shouldDoRegionCheck(_file: ts.server.NormalizedPath): boolean {
-        return true;
-    }
 }

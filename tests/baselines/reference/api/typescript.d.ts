@@ -3417,7 +3417,6 @@ declare namespace ts {
             private syntacticCheck;
             private suggestionCheck;
             private regionSemanticCheck;
-            protected shouldDoRegionCheck(file: NormalizedPath): boolean;
             private sendDiagnosticsEvent;
             /** It is the caller's responsibility to verify that `!this.suppressDiagnosticEvents`. */
             private updateErrorCheck;
