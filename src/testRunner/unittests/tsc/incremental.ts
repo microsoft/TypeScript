@@ -1005,10 +1005,18 @@ console.log(a);`,
     });
 
     describe("with const enums", () => {
-        function verify(withAlias: boolean, preserveConstEnums: boolean) {
+        enum AliasType {
+            None = "",
+            SameFile = "aliased ",
+            DifferentFile = "aliased in different file ",
+        }
+        function fileWithEnum(withAlias: AliasType) {
+            return withAlias !== AliasType.DifferentFile ? "/src/project/b.d.ts" : "/src/project/worker.d.ts";
+        }
+        function verify(withAlias: AliasType, preserveConstEnums: boolean) {
             verifyTsc({
                 scenario: "incremental",
-                subScenario: `with ${withAlias ? "aliased " : ""}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
+                subScenario: `with ${withAlias}const enums${preserveConstEnums ? " with preserveConstEnums" : ""}`,
                 commandLineArgs: ["-i", `/src/project/a.ts`, "--tsbuildinfofile", "/src/project/a.tsbuildinfo", ...preserveConstEnums ? ["--preserveConstEnums"] : []],
                 fs: () =>
                     loadProjectFromFiles({
@@ -1016,12 +1024,16 @@ console.log(a);`,
                             import {A} from "./c"
                             let a = A.ONE
                         `,
-                        "/src/project/b.d.ts": withAlias ?
+                        "/src/project/b.d.ts": withAlias === AliasType.SameFile ?
                             dedent`
                                 declare const enum AWorker {
                                     ONE = 1
                                 }
                                 export { AWorker as A };
+                            ` :
+                            withAlias === AliasType.DifferentFile ?
+                            dedent`
+                                export { AWorker as A } from "./worker";
                             ` :
                             dedent`
                                 export const enum A {
@@ -1033,22 +1045,37 @@ console.log(a);`,
                             let b = A.ONE
                             export {A}
                         `,
+                        "/src/project/worker.d.ts": dedent`
+                            export const enum AWorker {
+                                ONE = 1
+                            }
+                        `,
                     }),
                 edits: [
                     {
                         caption: "change enum value",
-                        edit: fs => replaceText(fs, "/src/project/b.d.ts", "1", "2"),
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "1", "2"),
                     },
                     {
                         caption: "change enum value again",
-                        edit: fs => replaceText(fs, "/src/project/b.d.ts", "2", "3"),
+                        edit: fs => replaceText(fs, fileWithEnum(withAlias), "2", "3"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing = 10;"),
+                    },
+                    {
+                        caption: "something else changes in b.d.ts again",
+                        edit: fs => appendText(fs, "/src/project/b.d.ts", "export const randomThing2 = 10;"),
                     },
                 ],
             });
         }
-        verify(/*withAlias*/ false, /*preserveConstEnums*/ false);
-        verify(/*withAlias*/ true, /*preserveConstEnums*/ false);
-        verify(/*withAlias*/ false, /*preserveConstEnums*/ true);
-        verify(/*withAlias*/ true, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ false);
+        verify(/*withAlias*/ AliasType.None, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.SameFile, /*preserveConstEnums*/ true);
+        verify(/*withAlias*/ AliasType.DifferentFile, /*preserveConstEnums*/ true);
     });
 });
