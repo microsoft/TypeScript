@@ -5862,9 +5862,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             return { accessibility: SymbolAccessibility.Accessible };
         }
 
+        if (!symbol) {
+            return {
+                accessibility: SymbolAccessibility.NotResolved,
+                errorSymbolName: getTextOfNode(firstIdentifier),
+                errorNode: firstIdentifier,
+            };
+        }
         // Verify if the symbol is accessible
-        return (symbol && hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible)) || {
-            accessibility: SymbolAccessibility.NotResolved,
+        return hasVisibleDeclarations(symbol, shouldComputeAliasToMakeVisible) || {
+            accessibility: SymbolAccessibility.NotAccessible,
             errorSymbolName: getTextOfNode(firstIdentifier),
             errorNode: firstIdentifier,
         };
