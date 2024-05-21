@@ -12658,7 +12658,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     links.instantiations.set(getTypeListId(typeParameters), type);
                 }
                 if (type === intrinsicMarkerType && symbol.escapedName === "BuiltinIteratorReturn") {
-                    type = strictBuiltinIteratorReturn ? undefinedType : anyType;
+                    type = strictBuiltinIteratorReturn ? voidType : anyType;
                 }
             }
             else {
@@ -37720,9 +37720,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
         }
         else if (isGenerator) { // Generator or AsyncGenerator function
-            if (strictBuiltinIteratorReturn) {
-                fallbackReturnType = undefinedType;
-            }
             const returnTypes = checkAndAggregateReturnExpressionTypes(func, checkMode);
             if (!returnTypes) {
                 fallbackReturnType = neverType;
