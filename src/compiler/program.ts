@@ -68,6 +68,7 @@ import {
     EmitHost,
     emitModuleKindIsNonNodeESM,
     EmitOnly,
+    emitResolverSkipsTypeChecking,
     EmitResult,
     emptyArray,
     ensureTrailingDirectorySeparator,
@@ -2870,18 +2871,27 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
         // This is because in the -out scenario all files need to be emitted, and therefore all
         // files need to be type checked. And the way to specify that all files need to be type
         // checked is to not pass the file to getEmitResolver.
-        const emitResolver = getTypeChecker().getEmitResolver(options.outFile ? undefined : sourceFile, cancellationToken);
+        const typeChecker = getTypeChecker();
+        const emitResolver = typeChecker.getEmitResolver(
+            options.outFile ? undefined : sourceFile,
+            cancellationToken,
+            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit),
+        );
 
         performance.mark("beforeEmit");
 
-        const emitResult = emitFiles(
-            emitResolver,
-            getEmitHost(writeFileCallback),
-            sourceFile,
-            getTransformers(options, customTransformers, emitOnly),
-            emitOnly,
-            /*onlyBuildInfo*/ false,
-            forceDtsEmit,
+        const emitResult = typeChecker.runWithCancellationToken(
+            cancellationToken,
+            () =>
+                emitFiles(
+                    emitResolver,
+                    getEmitHost(writeFileCallback),
+                    sourceFile,
+                    getTransformers(options, customTransformers, emitOnly),
+                    emitOnly,
+                    /*onlyBuildInfo*/ false,
+                    forceDtsEmit,
+                ),
         );
 
         performance.mark("afterEmit");

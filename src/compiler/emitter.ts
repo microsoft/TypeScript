@@ -718,6 +718,11 @@ export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase:
 }
 
 /** @internal */
+export function emitResolverSkipsTypeChecking(emitOnly: boolean | EmitOnly | undefined, forceDtsEmit: boolean | undefined) {
+    return !!forceDtsEmit && !!emitOnly;
+}
+
+/** @internal */
 // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
 export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, { scriptTransformers, declarationTransformers }: EmitTransformers, emitOnly?: boolean | EmitOnly, onlyBuildInfo?: boolean, forceDtsEmit?: boolean): EmitResult {
     // Why var? It avoids TDZ checks in the runtime which can be costly.
@@ -848,7 +853,11 @@ export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFi
         const filesForEmit = forceDtsEmit ? sourceFiles : filter(sourceFiles, isSourceFileNotJson);
         // Setup and perform the transformation to retrieve declarations from the input files
         const inputListOrBundle = compilerOptions.outFile ? [factory.createBundle(filesForEmit)] : filesForEmit;
-        if ((emitOnly && !getEmitDeclarations(compilerOptions)) || compilerOptions.noCheck) {
+        if (
+            (emitOnly && !getEmitDeclarations(compilerOptions)) ||
+            compilerOptions.noCheck ||
+            emitResolverSkipsTypeChecking(emitOnly, forceDtsEmit)
+        ) {
             // Checker wont collect the linked aliases since thats only done when declaration is enabled and checking is performed.
             // Do that here when emitting only dts files
             filesForEmit.forEach(collectLinkedAliases);
