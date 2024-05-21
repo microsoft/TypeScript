@@ -1556,9 +1556,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                 if (isRegularExpression || shouldEmitInvalidEscapeError) {
                     const code = parseInt(text.substring(start + 1, pos), 8);
-                    if (isRegularExpression !== "annex-b") {
-                        error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
-                    }
+                    error(Diagnostics.Octal_escape_sequences_are_not_allowed_Use_the_syntax_0, start, pos - start, "\\x" + code.toString(16).padStart(2, "0"));
                     return String.fromCharCode(code);
                 }
                 return text.substring(start, pos);
@@ -2426,6 +2424,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
             // Quickly get to the end of regex such that we know the flags
             let p = tokenStart + 1;
             let inEscape = false;
+            let namedCaptureGroups = false;
             // Although nested character classes are allowed in Unicode Sets mode,
             // an unescaped slash is nevertheless invalid even in a character class in Unicode mode.
             // Additionally, parsing nested character classes will misinterpret regexes like `/[[]/`
@@ -2469,6 +2468,15 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 else if (ch === CharacterCodes.closeBracket) {
                     inCharacterClass = false;
                 }
+                else if (
+                    ch === CharacterCodes.openParen
+                    && charCodeUnchecked(p + 1) === CharacterCodes.question
+                    && charCodeUnchecked(p + 2) === CharacterCodes.lessThan
+                    && charCodeUnchecked(p + 3) !== CharacterCodes.equals
+                    && charCodeUnchecked(p + 3) !== CharacterCodes.exclamation
+                ) {
+                    namedCaptureGroups = true;
+                }
                 p++;
             }
             const isUnterminated = !!(tokenFlags & TokenFlags.Unterminated);
@@ -2505,7 +2513,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                 const saveEnd = end;
                 pos = tokenStart + 1;
                 end = endOfBody;
-                scanRegularExpressionWorker(regExpFlags, isUnterminated, /*annexB*/ true);
+                scanRegularExpressionWorker(regExpFlags, isUnterminated, /*annexB*/ true, namedCaptureGroups);
                 tokenStart = saveTokenStart;
                 tokenFlags = saveTokenFlags;
                 pos = savePos;
@@ -2517,7 +2525,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         return token;
     }
 
-    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean) {
+    function scanRegularExpressionWorker(regExpFlags: RegularExpressionFlags, isUnterminated: boolean, annexB: boolean, namedCaptureGroups: boolean) {
         // Why var? It avoids TDZ checks in the runtime which can be costly.
         // See: https://github.com/microsoft/TypeScript/issues/52924
         /* eslint-disable no-var */
@@ -2527,10 +2535,8 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         /** Grammar parameter */
         var unicodeMode = !!(regExpFlags & RegularExpressionFlags.UnicodeMode);
 
-        if (unicodeMode) {
-            // Annex B treats any unicode mode as the strict syntax.
-            annexB = false;
-        }
+        // Annex B treats any unicode mode as the strict syntax.
+        var anyUnicodeModeOrNonAnnexB = unicodeMode || !annexB;
 
         /** @see {scanClassSetExpression} */
         var mayContainStrings = false;
@@ -2626,7 +2632,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                 case CharacterCodes.exclamation:
                                     pos++;
                                     // In Annex B, `(?=Disjunction)` and `(?!Disjunction)` are quantifiable
-                                    isPreviousTermQuantifiable = annexB;
+                                    isPreviousTermQuantifiable = !anyUnicodeModeOrNonAnnexB;
                                     break;
                                 case CharacterCodes.lessThan:
                                     const groupNameStart = pos;
@@ -2675,7 +2681,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         const digitsStart = pos;
                         scanDigits();
                         const min = tokenValue;
-                        if (annexB && !min) {
+                        if (!anyUnicodeModeOrNonAnnexB && !min) {
                             isPreviousTermQuantifiable = true;
                             break;
                         }
@@ -2693,25 +2699,25 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                                     break;
                                 }
                             }
-                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (!annexB || text.charCodeAt(pos) === CharacterCodes.closeBrace)) {
+                            else if (max && Number.parseInt(min) > Number.parseInt(max) && (anyUnicodeModeOrNonAnnexB || text.charCodeAt(pos) === CharacterCodes.closeBrace)) {
                                 error(Diagnostics.Numbers_out_of_order_in_quantifier, digitsStart, pos - digitsStart);
                             }
                         }
                         else if (!min) {
-                            if (!annexB) {
+                            if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, start, 1, String.fromCharCode(ch));
                             }
                             isPreviousTermQuantifiable = true;
                             break;
                         }
                         if (charCodeChecked(pos) !== CharacterCodes.closeBrace) {
-                            if (annexB) {
-                                isPreviousTermQuantifiable = true;
-                                break;
-                            }
-                            else {
+                            if (anyUnicodeModeOrNonAnnexB) {
                                 error(Diagnostics._0_expected, pos, 0, String.fromCharCode(CharacterCodes.closeBrace));
                                 pos--;
+                            }
+                            else {
+                                isPreviousTermQuantifiable = true;
+                                break;
                             }
                         }
                     // falls through
@@ -2754,7 +2760,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             // Assume what starting from the character to be outside of the regex
                             return;
                         }
-                        if (!annexB || ch === CharacterCodes.closeParen) {
+                        if (anyUnicodeModeOrNonAnnexB || ch === CharacterCodes.closeParen) {
                             error(Diagnostics.Unexpected_0_Did_you_mean_to_escape_it_with_backslash, pos, 1, String.fromCharCode(ch));
                         }
                         pos++;
@@ -2811,10 +2817,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         scanGroupName(/*isReference*/ true);
                         scanExpectedChar(CharacterCodes.greaterThan);
                     }
-                    else {
-                        // This is actually allowed in Annex B if there are no named capturing groups in the regex,
-                        // but if we were going to suppress these errors, we would have to record the positions of all '\k's
-                        // and defer the errors until after the scanning to know if the regex has any named capturing groups.
+                    else if (namedCaptureGroups) {
                         error(Diagnostics.k_must_be_followed_by_a_capturing_group_name_enclosed_in_angle_brackets, pos - 2, 2);
                     }
                     break;
@@ -2864,7 +2867,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         pos++;
                         return String.fromCharCode(ch & 0x1f);
                     }
-                    if (!annexB) {
+                    if (anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.c_must_be_followed_by_an_ASCII_letter, pos - 2, 2);
                     }
                     else if (atomEscape) {
@@ -2900,7 +2903,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                         return "\\";
                     }
                     pos--;
-                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ annexB ? "annex-b" : true);
+                    return scanEscapeSequence(/*shouldEmitInvalidEscapeError*/ unicodeMode, /*isRegularExpression*/ anyUnicodeModeOrNonAnnexB || "annex-b");
             }
         }
 
@@ -2949,12 +2952,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                     if (isClassContentExit(ch)) {
                         return;
                     }
-                    if (!minCharacter && !annexB) {
+                    if (!minCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, minStart, pos - 1 - minStart);
                     }
                     const maxStart = pos;
                     const maxCharacter = scanClassAtom();
-                    if (!maxCharacter && !annexB) {
+                    if (!maxCharacter && anyUnicodeModeOrNonAnnexB) {
                         error(Diagnostics.A_character_class_range_must_not_be_bounded_by_another_character_class, maxStart, pos - maxStart);
                         continue;
                     }
@@ -3450,12 +3453,12 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
                             error(Diagnostics.Unicode_property_value_expressions_are_only_available_when_the_Unicode_u_flag_or_the_Unicode_Sets_v_flag_is_set, start, pos - start);
                         }
                     }
-                    else if (annexB) {
-                        pos--;
-                        return false;
+                    else if (anyUnicodeModeOrNonAnnexB) {
+                        error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
                     }
                     else {
-                        error(Diagnostics._0_must_be_followed_by_a_Unicode_property_value_expression_enclosed_in_braces, pos - 2, 2, String.fromCharCode(ch));
+                        pos--;
+                        return false;
                     }
                     return true;
             }
@@ -3500,7 +3503,7 @@ export function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean
         forEach(decimalEscapes, escape => {
             // in AnnexB, if a DecimalEscape is greater than the number of capturing groups then it is treated as
             // either a LegacyOctalEscapeSequence or IdentityEscape
-            if (!annexB && escape.value > numberOfCapturingGroups) {
+            if (anyUnicodeModeOrNonAnnexB && escape.value > numberOfCapturingGroups) {
                 if (numberOfCapturingGroups) {
                     error(Diagnostics.This_backreference_refers_to_a_group_that_does_not_exist_There_are_only_0_capturing_groups_in_this_regular_expression, escape.pos, escape.end - escape.pos, numberOfCapturingGroups);
                 }

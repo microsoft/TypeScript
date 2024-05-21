@@ -1,5 +1,4 @@
 regularExpressionAnnexB.ts(2,8): error TS1125: Hexadecimal digit expected.
-regularExpressionAnnexB.ts(2,12): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
 regularExpressionAnnexB.ts(2,22): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(2,28): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(3,9): error TS1125: Hexadecimal digit expected.
@@ -8,7 +7,6 @@ regularExpressionAnnexB.ts(3,29): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(7,4): error TS1535: This character cannot be escaped in a regular expression.
 regularExpressionAnnexB.ts(7,8): error TS1125: Hexadecimal digit expected.
 regularExpressionAnnexB.ts(7,10): error TS1512: '\c' must be followed by an ASCII letter.
-regularExpressionAnnexB.ts(7,12): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
 regularExpressionAnnexB.ts(7,14): error TS1535: This character cannot be escaped in a regular expression.
 regularExpressionAnnexB.ts(7,18): error TS1535: This character cannot be escaped in a regular expression.
 regularExpressionAnnexB.ts(7,22): error TS1125: Hexadecimal digit expected.
@@ -75,13 +73,11 @@ regularExpressionAnnexB.ts(42,5): error TS1506: Numbers out of order in quantifi
 regularExpressionAnnexB.ts(42,10): error TS1507: There is nothing available for repetition.
 
 
-==== regularExpressionAnnexB.ts (75 errors) ====
+==== regularExpressionAnnexB.ts (73 errors) ====
     const regexes: RegExp[] = [
       /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
            
 !!! error TS1125: Hexadecimal digit expected.
-               ~~
-!!! error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
                          
 !!! error TS1125: Hexadecimal digit expected.
                                
@@ -103,8 +99,6 @@ regularExpressionAnnexB.ts(42,10): error TS1507: There is nothing available for 
 !!! error TS1125: Hexadecimal digit expected.
              ~~
 !!! error TS1512: '\c' must be followed by an ASCII letter.
-               ~~
-!!! error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
                  ~~
 !!! error TS1535: This character cannot be escaped in a regular expression.
                      ~~

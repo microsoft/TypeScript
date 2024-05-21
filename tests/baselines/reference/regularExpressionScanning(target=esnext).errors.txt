@@ -14,6 +14,11 @@ regularExpressionScanning.ts(5,6): error TS1499: Unknown regular expression flag
 regularExpressionScanning.ts(5,7): error TS1509: This regular expression flag cannot be toggled within a subpattern.
 regularExpressionScanning.ts(5,10): error TS1509: This regular expression flag cannot be toggled within a subpattern.
 regularExpressionScanning.ts(5,11): error TS1500: Duplicate regular expression flag.
+regularExpressionScanning.ts(12,24): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+regularExpressionScanning.ts(12,26): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+regularExpressionScanning.ts(12,29): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x53'.
+regularExpressionScanning.ts(12,37): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+regularExpressionScanning.ts(12,43): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
 regularExpressionScanning.ts(13,9): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
 regularExpressionScanning.ts(13,24): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
 regularExpressionScanning.ts(13,26): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
@@ -176,7 +181,7 @@ regularExpressionScanning.ts(47,5): error TS1518: Anything that would possibly m
 regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
 
 
-==== regularExpressionScanning.ts (176 errors) ====
+==== regularExpressionScanning.ts (181 errors) ====
     const regexes: RegExp[] = [
     	// Flags
     	/foo/visualstudiocode,
@@ -221,6 +226,16 @@ regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly 
     	/(hi)\1/,
     	/(hi) (hello) \2/,
     	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/,
+    	                      ~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+    	                        ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+    	                           ~~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x53'.
+    	                                   ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+    	                                         ~~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
     	/\2()(\12)(foo)\1\0[\0\1\01\123](\3\03)\5\005/u,
     	       ~~
 !!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
