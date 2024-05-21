@@ -4,6 +4,7 @@ import {
     createLoggerWithInMemoryLogs,
     LoggerWithInMemoryLogs,
 } from "../../../harness/tsserverLogger";
+import { FileRangesRequestArgs } from "../../../server/protocol";
 import { patchHostForBuildInfoReadWrite } from "../../_namespaces/fakes";
 import * as Harness from "../../_namespaces/Harness";
 import * as ts from "../../_namespaces/ts";
@@ -370,14 +371,22 @@ export interface VerifyGetErrRequestBase {
     existingTimeouts?: boolean;
 }
 export interface VerifyGetErrRequest extends VerifyGetErrRequestBase {
-    files: readonly (string | File)[];
+    files: readonly (string | File | FileRangesRequestArgs)[];
     skip?: CheckAllErrors["skip"];
 }
 export function verifyGetErrRequest(request: VerifyGetErrRequest) {
     const { session, files } = request;
     session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
         command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: { delay: 0, files: files.map(filePath) },
+        arguments: {
+            delay: 0,
+            files: files.map(file => {
+                if (typeof file !== "string" && !(file as FileRangesRequestArgs).ranges) {
+                    return filePath(file as File);
+                }
+                return file as string | FileRangesRequestArgs;
+            }),
+        },
     });
     checkAllErrors(request);
 }
@@ -393,6 +402,10 @@ export interface CheckAllErrors extends VerifyGetErrRequestBase {
 function checkAllErrors({ session, existingTimeouts, files, skip }: CheckAllErrors) {
     for (let i = 0; i < files.length; i++) {
         session.host.runQueuedTimeoutCallbacks(existingTimeouts ? session.host.getNextTimeoutId() - 1 : undefined);
+        if (files[i].ranges) {
+            session.host.runQueuedImmediateCallbacks();
+            session.host.runQueuedTimeoutCallbacks();
+        }
         if (!skip?.[i]?.semantic) session.host.runQueuedImmediateCallbacks();
         if (!skip?.[i]?.suggestion) session.host.runQueuedImmediateCallbacks();
     }

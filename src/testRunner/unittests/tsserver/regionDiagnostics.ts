@@ -2,6 +2,7 @@ import * as ts from "../../_namespaces/ts";
 import {
     baselineTsserverLogs,
     TestSession,
+    verifyGetErrRequest,
 } from "../helpers/tsserver";
 import { createServerHost } from "../helpers/virtualFileSystemWithWatch";
 
@@ -25,7 +26,7 @@ foo(10, 50);`,
             arguments: { file: file1.path },
         });
 
-        verifyGetErrRegionRequest({
+        verifyGetErrRequest({
             session,
             files: [{
                 file: file1.path,
@@ -36,30 +37,3 @@ foo(10, 50);`,
         baselineTsserverLogs("regionDiagnostics", "diagnostics for select nodes", session);
     });
 });
-
-interface VerifyGetErrRegionRequest {
-    session: TestSession;
-    files: ts.server.protocol.FileRangesRequestArgs[];
-}
-
-function verifyGetErrRegionRequest(request: VerifyGetErrRegionRequest): void {
-    const { session, files } = request;
-
-    session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
-        command: ts.server.protocol.CommandTypes.Geterr,
-        arguments: {
-            delay: 0,
-            files,
-        },
-    });
-
-    // Run syntax diagnostics
-    session.host.runQueuedTimeoutCallbacks();
-    // Run region semantic diagnostics
-    session.host.runQueuedImmediateCallbacks();
-    // Run full semantic diagnostics
-    session.host.runQueuedTimeoutCallbacks();
-    session.host.runQueuedImmediateCallbacks();
-    // Run suggestion diagnostics
-    session.host.runQueuedImmediateCallbacks();
-}
