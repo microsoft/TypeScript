@@ -352,28 +352,6 @@ Info seq  [hh:mm:ss:mss] response:
       "body": [
         {
           "fixName": "import",
-          "description": "Add import from \"./env/browser.js\"",
-          "changes": [
-            {
-              "fileName": "/src/a.ts",
-              "textChanges": [
-                {
-                  "start": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "end": {
-                    "line": 1,
-                    "offset": 1
-                  },
-                  "newText": "import { isBrowser } from \"./env/browser.js\";\r\n\r\n"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "fixName": "import",
           "description": "Add import from \"#is-browser\"",
           "changes": [
             {
@@ -389,6 +367,28 @@ Info seq  [hh:mm:ss:mss] response:
                     "offset": 1
                   },
                   "newText": "import { isBrowser } from \"#is-browser\";\r\n\r\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "fixName": "import",
+          "description": "Add import from \"./env/browser.js\"",
+          "changes": [
+            {
+              "fileName": "/src/a.ts",
+              "textChanges": [
+                {
+                  "start": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "offset": 1
+                  },
+                  "newText": "import { isBrowser } from \"./env/browser.js\";\r\n\r\n"
                 }
               ]
             }
