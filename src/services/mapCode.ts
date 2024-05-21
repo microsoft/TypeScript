@@ -170,9 +170,8 @@ function placeClassNodeGroup(
     }
 
     if (!classOrInterface) {
-        throw new Error(
-            "Failed to find a class or interface to map the given code into.",
-        );
+        // No class? don't insert.
+        return;
     }
 
     const firstMatch = classOrInterface.members.find(member => changes.some(change => matchNode(change, member)));
