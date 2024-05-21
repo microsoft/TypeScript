@@ -3111,9 +3111,6 @@ export function createProgram(rootNamesOrOptions: readonly string[] | CreateProg
     which goes and traverses the subtree of our current node, looking for all leaves, then it'll run the scanner
     across those leaves, asking the scanner at each step if the leaf was inside or outside of a TS comment.
     If all leaves were inside a TS comment, we'll skip reporting a "this can only be used in JS files" error.
-
-    There's also a fair amount of work that goes into tracking the exact boundaries of TypeScript syntax,
-    so if we wish to convert a TypeScript file to JavaScript+comment, we'd be able to do so.
     */
 
     function getJSSyntacticDiagnosticsForFile(sourceFile: SourceFile): DiagnosticWithLocation[] {
